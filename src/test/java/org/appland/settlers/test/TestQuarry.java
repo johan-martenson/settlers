@@ -605,7 +605,7 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
 
         /* Verify that the stone mason hasn't understood that there are no resources available */
-        assertFalse(quarry.outOfNaturalResources());
+        assertFalse(quarry.isOutOfNaturalResources());
 
         /* Step once to verify that the stonemason stays inside */
         map.stepTime();
@@ -613,7 +613,7 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
 
         /* Verify that the quarry is out of natural resources */
-        assertTrue(quarry.outOfNaturalResources());
+        assertTrue(quarry.isOutOfNaturalResources());
     }
 
     @Test

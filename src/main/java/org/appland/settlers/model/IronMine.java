@@ -26,4 +26,9 @@ public class IronMine extends Building {
     public IronMine(Player player0) {
         super(player0);
     }
+
+    @Override
+    boolean isMine() {
+        return true;
+    }
 }

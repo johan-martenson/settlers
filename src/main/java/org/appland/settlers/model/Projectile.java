@@ -12,9 +12,9 @@ import java.util.Random;
  * @author johan
  */
 public class Projectile {
-    private final static double FAIL_RATE = 0.25;
-    private final static int    SPEED     = 5;
-    private final static Random RANDOM    = new Random(1);
+    private static final double FAIL_RATE = 0.25;
+    private static final int    SPEED     = 5;
+    private static final Random RANDOM    = new Random(1);
 
     private final Building  target;
     private final Catapult  source;

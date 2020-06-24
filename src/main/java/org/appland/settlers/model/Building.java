@@ -17,9 +17,10 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements EndPoint {
+
+    private static final int TIME_TO_PROMOTE_SOLDIER = 100;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -135,10 +136,7 @@ public class Building implements EndPoint {
     }
 
     boolean isMine() {
-        return (this instanceof GoldMine ||
-                this instanceof IronMine ||
-                this instanceof CoalMine ||
-                this instanceof GraniteMine);
+        return false;
     }
 
     private int getMaxCoins() {
@@ -302,7 +300,7 @@ public class Building implements EndPoint {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
+    public void putCargo(Cargo cargo) {
 
         Material material = cargo.getMaterial();
 
@@ -351,7 +349,7 @@ public class Building implements EndPoint {
 
         /* Start the promotion countdown if it's a coin */
         if (material == COIN && isMilitaryBuilding()) {
-            countdown.countFrom(PROMOTION_DELAY - 1);
+            countdown.countFrom(TIME_TO_PROMOTE_SOLDIER - 1);
         }
     }
 
@@ -366,24 +364,24 @@ public class Building implements EndPoint {
     }
 
     private String buildingToString() {
-        StringBuilder str = new StringBuilder(" at " + flag + " with ");
+        StringBuilder stringBuilder = new StringBuilder(" at " + flag + " with ");
 
         boolean hasReceivedMaterial = false;
         for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
             if (pair.getValue() != 0) {
-                str.append(pair.getKey()).append(": ").append(pair.getValue());
+                stringBuilder.append(pair.getKey()).append(": ").append(pair.getValue());
 
                 hasReceivedMaterial = true;
             }
         }
 
         if (hasReceivedMaterial) {
-            str.append("in queue and ");
+            stringBuilder.append("in queue and ");
         } else {
-            str.append("nothing in queue and ");
+            stringBuilder.append("nothing in queue and ");
         }
 
-        return str.toString();
+        return stringBuilder.toString();
     }
 
     public void promiseDelivery(Material material) {
@@ -986,7 +984,7 @@ public class Building implements EndPoint {
         outOfResources = true;
     }
 
-    public boolean outOfNaturalResources() {
+    public boolean isOutOfNaturalResources() {
         return outOfResources;
     }
 

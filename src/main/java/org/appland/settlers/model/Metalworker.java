@@ -21,8 +21,8 @@ import static org.appland.settlers.model.Metalworker.State.WALKING_TO_TARGET;
 @Walker(speed = 10)
 public class Metalworker extends Worker {
 
-    private final static int PRODUCTION_TIME = 49;
-    private final static int RESTING_TIME = 99;
+    private static final int PRODUCTION_TIME = 49;
+    private static final int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
@@ -61,9 +61,7 @@ public class Metalworker extends Worker {
 
         /* Reset the production period if needed */
         boolean quotaLeft = false;
-        for (int i = 0; i < TOOLS.size(); i++) {
-            Material tool = TOOLS.get(i);
-
+        for (Material tool : TOOLS) {
             if (getPlayer().getProductionQuotaForTool(tool) > producedDuringPeriod.getOrDefault(tool, 0)) {
                 quotaLeft = true;
 
@@ -78,7 +76,9 @@ public class Metalworker extends Worker {
         }
 
         /* Find the next tool to produce */
-        for (int i = 0; i < TOOLS.size(); i++) {
+        int amountTools = TOOLS.size();
+
+        for (int i = 0; i < amountTools; i++) {
             int toolIndex = (currentToolIndex + i) % TOOLS.size();
 
             Material tool = TOOLS.get(toolIndex);

@@ -29,7 +29,7 @@ public abstract class Worker {
         IDLE_HALF_WAY
     }
 
-    private final static int SPEED_ADJUST = 1;
+    private static final int SPEED_ADJUST = 1;
 
     private final Player player;
     private final Countdown walkCountdown;
@@ -228,7 +228,7 @@ public abstract class Worker {
             Building building = getTargetBuilding();
 
             /* Enter the building for non-military workers. soldiers enter on their own */
-            if ( !(this instanceof Military)) {
+            if ( !isMilitary()) {
 
                 /* Go back to storage if the building is not ok to enter */
                 if (building.isBurningDown() || building.isDestroyed()) {
@@ -259,6 +259,10 @@ public abstract class Worker {
 
             throw invalidGameLogicException;
         }
+    }
+
+    boolean isMilitary() {
+        return false;
     }
 
     public void setPosition(Point point) {

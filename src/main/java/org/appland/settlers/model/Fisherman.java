@@ -77,7 +77,7 @@ public class Fisherman extends Worker {
     @Override
     protected void onIdle() throws InvalidRouteException {
         if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (!getHome().outOfNaturalResources()) {
+            if (!getHome().isOutOfNaturalResources()) {
                 if (countdown.hasReachedZero()) {
                     Point point = getFishingSpot();
 

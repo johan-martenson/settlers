@@ -741,7 +741,7 @@ public class Player {
     }
 
     public void reportWorkerWithNewTarget(Worker worker) {
-        if (worker.getPlannedPath().isEmpty() || worker.getPlannedPath().isEmpty()) {
+        if (worker.getPlannedPath().isEmpty()) {
             return;
         }
 

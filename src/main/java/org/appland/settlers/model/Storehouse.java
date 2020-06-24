@@ -1,7 +1,5 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.policy.ProductionDelays;
-
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -60,6 +58,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Storehouse extends Building {
 
+    private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
     private final Countdown draftCountdown;
     private final Map<Material, Material> workerToToolMap;
     private final Set<Material> materialToPushOut;
@@ -121,11 +120,11 @@ public class Storehouse extends Building {
         if (isDraftPossible(inventory)) {
             if (draftCountdown.hasReachedZero()) {
                 draftMilitary();
-                draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
+                draftCountdown.countFrom(TIME_TO_CREATE_NEW_SOLDIER);
             } else if (draftCountdown.isCounting()) {
                 draftCountdown.step();
             } else {
-                draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
+                draftCountdown.countFrom(TIME_TO_CREATE_NEW_SOLDIER);
             }
         }
 
@@ -344,7 +343,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
+    public void putCargo(Cargo cargo) {
         if (!isWorking()) {
             super.putCargo(cargo);
         } else {

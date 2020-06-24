@@ -39,9 +39,9 @@ import static org.appland.settlers.model.Material.WHEAT;
  */
 @Walker(speed = 10)
 public class Farmer extends Worker {
-    private final static int TIME_TO_REST    = 99;
-    private final static int TIME_TO_PLANT   = 19;
-    private final static int TIME_TO_HARVEST = 19;
+    private static final int TIME_TO_REST    = 99;
+    private static final int TIME_TO_PLANT   = 19;
+    private static final int TIME_TO_HARVEST = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;

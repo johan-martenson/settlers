@@ -24,7 +24,7 @@ import static org.appland.settlers.model.Material.PLANK;
 @Walker(speed = 10)
 public class StorageWorker extends Worker {
 
-    private final static int RESTING_TIME = 19;
+    private static final int RESTING_TIME = 19;
 
     private final Countdown countdown;
     private final Map<Class<? extends Building>, Integer> assignedFood;
@@ -261,11 +261,11 @@ public class StorageWorker extends Worker {
             /* Reset count if all building types have reached their quota */
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
-            if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, material)  ||
+            if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, COAL)  ||
                   overQuota(IronSmelter.class))                                    &&
-                (!needyConsumerExists(reachableBuildings, Mint.class, material)         ||
+                (!needyConsumerExists(reachableBuildings, Mint.class, COAL)         ||
                   overQuota(Mint.class))                                           &&
-                (!needyConsumerExists(reachableBuildings, Armory.class, material)       ||
+                (!needyConsumerExists(reachableBuildings, Armory.class, COAL)       ||
                   overQuota(Armory.class))) {
                 assignedCoal.put(IronSmelter.class, 0);
                 assignedCoal.put(Mint.class, 0);

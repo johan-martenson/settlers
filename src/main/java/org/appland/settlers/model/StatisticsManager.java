@@ -2,18 +2,20 @@ package org.appland.settlers.model;
 
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
@@ -22,7 +24,7 @@ import static org.appland.settlers.model.Material.WOOD;
 
 public class StatisticsManager {
 
-    private final List<Material> PRODUCTION_STATISTICS_MATERIALS = Arrays.asList(
+    private final Set<Material> PRODUCTION_STATISTICS_MATERIALS = EnumSet.copyOf(Arrays.asList(
         WOOD,
         STONE,
         PLANK,
@@ -37,8 +39,7 @@ public class StatisticsManager {
         GENERAL,
         COAL,
         GOLD,
-        IRON
-    );
+        IRON));
 
     private final Map<Material, ProductionDataSeries> productionStatistics;
     private final LandStatistics landStatistics;
@@ -68,7 +69,9 @@ public class StatisticsManager {
         for (Material material : PRODUCTION_STATISTICS_MATERIALS) {
             int[] measurement = new int[players.size()];
 
-            for (int i = 0; i < players.size(); i++) {
+            int amountPlayers = players.size();
+
+            for (int i = 0; i < amountPlayers; i++) {
                 measurement[i] = players.get(i).getProducedMaterial(material);
             }
 
@@ -83,7 +86,10 @@ public class StatisticsManager {
     public void collectLandStatisticsFromPlayers(long time, List<Player> players) {
 
         int[] measurement = new int[players.size()];
-        for (int i = 0; i < players.size(); i++) {
+
+        int amountPlayer = players.size();
+
+        for (int i = 0; i < amountPlayer; i++) {
 
             measurement[i] = players.get(i).getLandInPoints().size();
         }

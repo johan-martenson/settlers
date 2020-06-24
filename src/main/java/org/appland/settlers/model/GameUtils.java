@@ -756,14 +756,17 @@ public class GameUtils {
                     Road road = cameVia.get(currentPoint);
 
                     /* Follow the road and add up the points */
+                    int numberWayPoints = road.getWayPoints().size();
+
                     if (road.getStart().equals(currentPoint)) {
-                        for (int i = 1; i < road.getWayPoints().size(); i++) {
+
+                        for (int i = 1; i < numberWayPoints; i++) {
                             path.add(0, road.getWayPoints().get(i));
                         }
 
                         currentPoint = road.getEnd();
                     } else {
-                        for (int i = road.getWayPoints().size() - 2; i >= 0; i--) {
+                        for (int i = numberWayPoints - 2; i >= 0; i--) {
                             path.add(0, road.getWayPoints().get(i));
                         }
 
@@ -864,7 +867,7 @@ public class GameUtils {
                     currentEstimatedCost = tmpEstimatedCost;
                     currentPoint = iteratedPoint;
 
-                    if (currentEstimatedCost == bestCaseCost) {
+                    if (currentEstimatedCost == bestCaseCost) { // FIXME: compares two doubles
                         break;
                     }
                 }
@@ -1087,7 +1090,7 @@ public class GameUtils {
         return storehouse;
     }
 
-    static public Set<Building> getBuildingsWithinReach(Flag startFlag) {
+    public static Set<Building> getBuildingsWithinReach(Flag startFlag) {
         List<Point>   toEvaluate = new LinkedList<>();
         Set<Point>    visited    = new HashSet<>();
         Set<Building> reachable  = new HashSet<>();

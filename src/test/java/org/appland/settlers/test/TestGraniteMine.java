@@ -535,7 +535,7 @@ public class TestGraniteMine {
         Utils.fastForward(100, map);
 
         /* Wait for the miner to mine granite */
-        assertFalse(mine.outOfNaturalResources());
+        assertFalse(mine.isOutOfNaturalResources());
 
         Utils.fastForward(50, map);
 
@@ -561,7 +561,7 @@ public class TestGraniteMine {
         }
 
         /* Verify that the granite mine can run out of resources */
-        assertTrue(mine.outOfNaturalResources());
+        assertTrue(mine.isOutOfNaturalResources());
     }
 
     @Test

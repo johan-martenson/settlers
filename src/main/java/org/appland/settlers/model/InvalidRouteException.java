@@ -2,8 +2,8 @@ package org.appland.settlers.model;
 
 public class InvalidRouteException extends Exception {
 
-    public InvalidRouteException(String string) {
-        super(string);
+    public InvalidRouteException(String message) {
+        super(message);
     }
 
     /**

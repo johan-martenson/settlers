@@ -34,8 +34,8 @@ public class Miller extends Worker {
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, WAITING_FOR_SPACE_ON_FLAG
     }
 
-    private final static int PRODUCTION_TIME = 49;
-    private final static int RESTING_TIME = 99;
+    private static final int PRODUCTION_TIME = 49;
+    private static final int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;

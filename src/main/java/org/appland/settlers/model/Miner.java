@@ -7,13 +7,9 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Miner.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.State.GOING_OUT_TO_FLAG;
 import static org.appland.settlers.model.Miner.State.MINING;
@@ -28,8 +24,8 @@ import static org.appland.settlers.model.Miner.State.WALKING_TO_TARGET;
  */
 @Walker (speed = 10)
 public class Miner extends Worker {
-    private final static int RESTING_TIME = 99;
-    private final static int TIME_TO_MINE = 49;
+    private static final int RESTING_TIME = 99;
+    private static final int TIME_TO_MINE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
@@ -82,15 +78,7 @@ public class Miner extends Worker {
             setHome(building);
         }
 
-        if (building instanceof GoldMine) {
-            mineral = GOLD;
-        } else if (building instanceof IronMine) {
-            mineral = IRON;
-        } else if (building instanceof CoalMine) {
-            mineral = COAL;
-        } else if (building instanceof GraniteMine) {
-            mineral = STONE;
-        }
+        mineral = building.getProducedMaterial()[0];
 
         state = RESTING_IN_HOUSE;
 

@@ -206,7 +206,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException, InvalidRouteException, InvalidUserActionException {
+    protected void onArrival() throws InvalidRouteException, InvalidUserActionException {
 
         if (state == WALKING_TO_TARGET) {
 
@@ -611,5 +611,10 @@ public class Military extends Worker {
 
             returnToStorage();
         }
+    }
+
+    @Override
+    boolean isMilitary() {
+        return true;
     }
 }

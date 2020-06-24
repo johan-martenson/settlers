@@ -359,7 +359,7 @@ public class TestMessages {
         assertTrue(fisherman.isFishing());
 
         /* Wait for the fisherman to finish fishing */
-        assertFalse(fishery.outOfNaturalResources());
+        assertFalse(fishery.isOutOfNaturalResources());
 
         Utils.fastForward(20, map);
 
@@ -787,7 +787,7 @@ public class TestMessages {
         /* Wait for the miner to mine gold */
         Utils.fastForward(50, map);
 
-        assertFalse(mine.outOfNaturalResources());
+        assertFalse(mine.isOutOfNaturalResources());
 
         /* Wait for the miner to leave the gold at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
@@ -817,7 +817,7 @@ public class TestMessages {
         assertEquals(message.getBuilding(), mine);
 
         /* Verify that the mine is out of resources */
-        assertTrue(mine.outOfNaturalResources());
+        assertTrue(mine.isOutOfNaturalResources());
     }
 
     @Test
@@ -872,7 +872,7 @@ public class TestMessages {
         /* Wait for the miner to mine gold */
         Utils.fastForward(50, map);
 
-        assertFalse(mine.outOfNaturalResources());
+        assertFalse(mine.isOutOfNaturalResources());
 
         /* Wait for the miner to leave the gold at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());

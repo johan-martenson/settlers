@@ -18,7 +18,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Terrain;
-import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;

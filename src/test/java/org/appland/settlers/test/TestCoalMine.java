@@ -580,7 +580,7 @@ public class TestCoalMine {
         /* Wait for the miner to mine gold */
         Utils.fastForward(50, map);
 
-        assertFalse(mine.outOfNaturalResources());
+        assertFalse(mine.isOutOfNaturalResources());
 
         /* Wait for the miner to leave the gold at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
@@ -604,7 +604,7 @@ public class TestCoalMine {
         }
 
         /* Verify that the mine is out of resources */
-        assertTrue(mine.outOfNaturalResources());
+        assertTrue(mine.isOutOfNaturalResources());
     }
 
     @Test

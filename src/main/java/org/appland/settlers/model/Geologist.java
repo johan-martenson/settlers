@@ -34,9 +34,9 @@ public class Geologist extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    private final static int TIME_TO_INVESTIGATE   = 19;
-    private final static int RADIUS_TO_INVESTIGATE = 7;
-    private final static Random RANDOM = new Random(1);
+    private static final int TIME_TO_INVESTIGATE   = 19;
+    private static final int RADIUS_TO_INVESTIGATE = 7;
+    private static final Random RANDOM = new Random(1);
 
     private final Countdown countdown;
 
@@ -97,7 +97,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
+    protected void onArrival() throws InvalidRouteException {
         if (state == WALKING_TO_TARGET) {
             flagPoint = getPosition();
 

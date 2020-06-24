@@ -16,9 +16,9 @@ import static org.appland.settlers.model.Size.LARGE;
  */
 @Walker(speed = 10)
 public class WoodcutterWorker extends Worker {
-    private final static int TIME_TO_REST     = 99;
-    private final static int TIME_TO_CUT_TREE = 49;
-    private final static int RANGE            = 7;
+    private static final int TIME_TO_REST     = 99;
+    private static final int TIME_TO_CUT_TREE = 49;
+    private static final int RANGE            = 7;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;

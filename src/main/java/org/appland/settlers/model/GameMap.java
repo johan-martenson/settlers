@@ -100,7 +100,7 @@ public class GameMap {
      * @param players The players in the new game
      * @param width The width of the new game map
      * @param height The height of the new game map
-     * @throws Exception An exception is thrown if the given width and height are too small or too large
+     * @throws InvalidUserActionException An exception is thrown if the given width and height are too small or too large
      */
     public GameMap(List<Player> players, int width, int height) throws InvalidUserActionException {
 
@@ -213,7 +213,7 @@ public class GameMap {
             public Iterable<Point> getPossibleConnections(Point point, Point goal) {
                 try {
                     return getPossibleAdjacentRoadConnections(player, point, goal);
-                } catch (Exception ex) {
+                } catch (RuntimeException ex) {
                     Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -657,7 +657,9 @@ public class GameMap {
      * @param point The position of the house
      * @param <T> The type of house
      * @return The house placed
-     * @throws Exception Any exceptions encountered while placing the building
+     * @throws InvalidUserActionException Any exceptions encountered while placing the building
+     * @throws InvalidEndPointException Any exceptions encountered while placing the building
+     * @throws InvalidRouteException Any exceptions encountered while placing the building
      */
     public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
@@ -1115,7 +1117,8 @@ public class GameMap {
      * @param start The starting point of the road
      * @param end The end point of the road
      * @return The newly placed road
-     * @throws Exception Any exception encountered while placing the road
+     * @throws InvalidEndPointException Any exception encountered while placing the road
+     * @throws InvalidUserActionException Any exception encountered while placing the road
      */
     public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws InvalidEndPointException, InvalidUserActionException {
         return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
@@ -1128,7 +1131,8 @@ public class GameMap {
      * @param start The start of the road
      * @param end The end of the road
      * @return The newly placed road
-     * @throws Exception Any exception encountered while placing the new road
+     * @throws InvalidEndPointException Any exception encountered while placing the new road
+     * @throws InvalidUserActionException Any exception encountered while placing the new road
      */
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws InvalidEndPointException, InvalidUserActionException {
 
@@ -1947,7 +1951,7 @@ public class GameMap {
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
                 try {
                     return getPossibleAdjacentOffRoadConnections(start);
-                } catch (Exception ex) {
+                } catch (RuntimeException ex) {
                     Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -2046,7 +2050,7 @@ public class GameMap {
      *
      * @param point The point to place the crop on
      * @return The placed crop
-     * @throws Exception Throws exception if the crop cannot be placed
+     * @throws InvalidUserActionException Throws exception if the crop cannot be placed
      */
     public Crop placeCrop(Point point) throws InvalidUserActionException {
         MapPoint mp = pointToGameObject.get(point);
@@ -2270,7 +2274,6 @@ public class GameMap {
      *
      * @param point Where to catch the fish
      * @return A cargo containing the fish
-     * @throws Exception Thrown if there was no fish to catch
      */
     public Cargo catchFishAtPoint(Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
@@ -2290,7 +2293,6 @@ public class GameMap {
      * @param mineral the type of mineral to attempt to mine
      * @param point the point to mine at
      * @return a cargo containing the mined ore
-     * @throws Exception is thrown if there is no ore to mine
      */
     public Cargo mineMineralAtPoint(Material mineral, Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
@@ -2793,7 +2795,7 @@ public class GameMap {
         return projectiles;
     }
 
-    void placeProjectile(Projectile projectile, Point position) {
+    void placeProjectile(Projectile projectile) {
         projectiles.add(projectile);
     }
 

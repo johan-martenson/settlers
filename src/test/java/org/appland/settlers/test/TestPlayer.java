@@ -15,7 +15,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 

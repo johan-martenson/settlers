@@ -29,7 +29,7 @@ public class Barracks extends Building {
     }
 
     @Override
-    protected void doUpgradeBuilding() throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException, InvalidRouteException {
+    protected void doUpgradeBuilding() throws InvalidRouteException {
         Building upgraded = new GuardHouse(getPlayer());
 
         /* Set the map in the upgraded building */
@@ -67,7 +67,8 @@ public class Barracks extends Building {
         }
 
         /* Move the coins to the new building */
-        for (int i = 0; i < getAmount(COIN); i++) {
+        int amountCoins = getAmount(COIN);
+        for (int i = 0; i < amountCoins; i++) {
 
             /* Put one coin in the new building */
             Cargo coinCargo = new Cargo(COIN, getMap());

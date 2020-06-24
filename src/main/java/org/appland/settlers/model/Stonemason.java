@@ -17,8 +17,8 @@ import static org.appland.settlers.model.Material.STONEMASON;
 @Walker(speed = 10)
 public class Stonemason extends Worker {
 
-    private final static int TIME_TO_REST = 99;
-    private final static int TIME_TO_GET_STONE = 49;
+    private static final int TIME_TO_REST = 99;
+    private static final int TIME_TO_GET_STONE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
@@ -128,7 +128,7 @@ public class Stonemason extends Worker {
                     productivityMeasurer.reportUnproductivity();
 
                     /* Only report once */
-                    if (!getHome().outOfNaturalResources()) {
+                    if (!getHome().isOutOfNaturalResources()) {
                         getHome().reportNoMoreNaturalResources();
                         getPlayer().reportNoMoreResourcesForBuilding(getHome());
                     }

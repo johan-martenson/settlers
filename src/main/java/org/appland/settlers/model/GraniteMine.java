@@ -26,4 +26,9 @@ public class GraniteMine extends Building {
     public GraniteMine(Player player0) {
         super(player0);
     }
+
+    @Override
+    boolean isMine() {
+        return true;
+    }
 }

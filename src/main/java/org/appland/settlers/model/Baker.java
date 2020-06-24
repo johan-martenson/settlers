@@ -28,8 +28,8 @@ import static org.appland.settlers.model.Material.WATER;
 @Walker(speed = 10)
 public class Baker extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private final static int PRODUCTION_TIME = 49;
-    private final static int RESTING_TIME    = 99;
+    private static final int PRODUCTION_TIME = 49;
+    private static final int RESTING_TIME    = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;

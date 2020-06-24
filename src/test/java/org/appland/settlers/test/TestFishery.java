@@ -974,7 +974,7 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
 
         /* Wait for the fisherman to finish fishing */
-        assertFalse(fishery.outOfNaturalResources());
+        assertFalse(fishery.isOutOfNaturalResources());
 
         Utils.fastForward(20, map);
 
@@ -1008,7 +1008,7 @@ public class TestFishery {
         }
 
         /* Verify that the fishery can run out of fish */
-        assertTrue(fishery.outOfNaturalResources());
+        assertTrue(fishery.isOutOfNaturalResources());
     }
 
     @Test

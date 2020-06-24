@@ -71,7 +71,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
+    protected void onArrival() throws InvalidRouteException {
 
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 

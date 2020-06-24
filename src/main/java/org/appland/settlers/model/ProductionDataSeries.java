@@ -22,7 +22,9 @@ public class ProductionDataSeries {
 
         int[] initialMeasurement = new int[players.size()];
 
-        for (int i = 0; i < players.size(); i++) {
+        int amountPlayers = players.size();
+
+        for (int i = 0; i < amountPlayers; i++) {
             initialMeasurement[i] = 0;
         }
 

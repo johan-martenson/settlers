@@ -22,8 +22,8 @@ public class Crop {
         JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
     }
 
-    private final static int TIME_TO_GROW = 199;
-    private final static int TIME_TO_WITHER = 199;
+    private static final int TIME_TO_GROW = 199;
+    private static final int TIME_TO_WITHER = 199;
 
     private final Countdown growthCountdown;
     private final Point     position;

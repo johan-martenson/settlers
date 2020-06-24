@@ -19,9 +19,9 @@ import static org.appland.settlers.model.Tile.Vegetation.LAVA;
 @Walker(speed = 10)
 public class WildAnimal extends Worker {
 
-    private final static int TIME_TO_STAND = 9;
-    private final static int MAX_TRIES = 5;
-    private final static int RANGE = 10;
+    private static final int TIME_TO_STAND = 9;
+    private static final int MAX_TRIES = 5;
+    private static final int RANGE = 10;
 
     private final Random random;
     private final Countdown countdown;

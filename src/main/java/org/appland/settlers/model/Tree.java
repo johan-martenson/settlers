@@ -15,6 +15,8 @@ import static org.appland.settlers.model.Size.SMALL;
  * @author johan
  */
 public class Tree {
+    private static final int TIME_TO_GROW_TREE_ONE_STEP = 200;
+
     private final Countdown countdown;
     private final Point position;
 
@@ -27,7 +29,7 @@ public class Tree {
 
         countdown = new Countdown();
 
-        countdown.countFrom(200);
+        countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
     }
 
     public void stepTime() {
@@ -39,11 +41,11 @@ public class Tree {
             if (size == MEDIUM) {
                 size = LARGE;
 
-                countdown.countFrom(200);
+                countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
             } else if (size == SMALL) {
                 size = MEDIUM;
 
-                countdown.countFrom(200);
+                countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
             }
         } else {
             countdown.step();
