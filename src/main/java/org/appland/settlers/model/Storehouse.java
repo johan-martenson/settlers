@@ -30,10 +30,12 @@ import static org.appland.settlers.model.Material.METALWORKER;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.ROLLING_PIN;
 import static org.appland.settlers.model.Material.SAW;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
@@ -50,6 +52,8 @@ import static org.appland.settlers.model.Material.TONGS;
 import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -587,9 +591,15 @@ public class Storehouse extends Building {
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);
             military = new Military(getPlayer(), PRIVATE_RANK, getMap());
+        } else if (hasAtLeastOne(PRIVATE_FIRST_CLASS)) {
+            retrieveOneFromInventory(PRIVATE_FIRST_CLASS);
+            military = new Military(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
         } else if (hasAtLeastOne(SERGEANT)) {
             retrieveOneFromInventory(SERGEANT);
             military = new Military(getPlayer(), SERGEANT_RANK, getMap());
+        } else if (hasAtLeastOne(OFFICER)) {
+            retrieveOneFromInventory(OFFICER);
+            military = new Military(getPlayer(), OFFICER_RANK, getMap());
         } else if (hasAtLeastOne(GENERAL)) {
             retrieveOneFromInventory(GENERAL);
             military = new Military(getPlayer(), GENERAL_RANK, getMap());

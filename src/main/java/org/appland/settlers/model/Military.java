@@ -1,7 +1,9 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
@@ -227,6 +229,8 @@ public class Military extends Worker {
 
             storage.putCargo(new Cargo(rankToMaterial(rank), map));
 
+            map.removeWorker(this);
+
             state = IN_STORAGE;
         } else if (state == WALKING_TO_ATTACK) {
 
@@ -395,8 +399,12 @@ public class Military extends Worker {
         switch (rank) {
         case PRIVATE_RANK:
             return PRIVATE;
+        case PRIVATE_FIRST_CLASS_RANK:
+            return PRIVATE_FIRST_CLASS;
         case SERGEANT_RANK:
             return SERGEANT;
+        case OFFICER_RANK:
+            return OFFICER;
         case GENERAL_RANK:
             return GENERAL;
         default:

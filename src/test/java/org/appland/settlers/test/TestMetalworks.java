@@ -863,8 +863,6 @@ public class TestMetalworks {
             }
         }
 
-        System.out.println(toolCount);
-
         assertEquals((int)toolCount.get(AXE), 10);
         assertEquals((int)toolCount.get(FISHING_ROD), 5);
     }

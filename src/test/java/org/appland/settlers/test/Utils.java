@@ -12,6 +12,8 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -1758,6 +1760,31 @@ public class Utils {
                 break;
             default:
                 break;
+        }
+    }
+
+    public static void waitForWorkersToDisappearFromMap(List<Worker> workers, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+
+        boolean stillOnMap;
+        for (int i = 0; i < 5000; i++) {
+
+            stillOnMap = false;
+
+            for (Worker worker : workers) {
+                if (map.getWorkers().contains(worker)) {
+                    stillOnMap = true;
+                }
+            }
+
+            if (!stillOnMap) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Worker worker : workers) {
+            assertFalse(map.getWorkers().contains(worker));
         }
     }
 

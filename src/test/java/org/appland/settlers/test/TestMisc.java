@@ -5,6 +5,7 @@ import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
@@ -27,7 +28,11 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -618,5 +623,79 @@ public class TestMisc {
         assertTrue(attacker.isInsideBuilding());
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+    }
+
+    @Test
+    public void testAllRanksCanReturnToStorage() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(20, 16);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player), point1);
+
+        /* Connect the fortress with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player, fortress0.getFlag(), headquarter0.getFlag());
+
+        /* Ensure that there is one soldier of each rank in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 1);
+
+        /* Wait for the fortress to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 5);
+
+        /* Verify that when the fortress is burned down, all of the soldiers go back and get stored properly */
+        assertEquals(headquarter0.getAmount(PRIVATE), 0);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+        assertEquals(headquarter0.getAmount(OFFICER), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
+
+        fortress0.tearDown();
+
+        List<Military> soldiers = Utils.waitForWorkersOutsideBuilding(Military.class, 5, player);
+
+        boolean stillOnMap;
+        for (int i = 0; i < 5000; i++) {
+
+            stillOnMap = false;
+
+            for (Military soldier : soldiers) {
+                if (map.getWorkers().contains(soldier)) {
+                    stillOnMap = true;
+
+                    break;
+                }
+            }
+
+            if (!stillOnMap) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Military soldier : soldiers) {
+            assertFalse(map.getWorkers().contains(soldier));
+        }
+
+        assertEquals(headquarter0.getAmount(PRIVATE), 1);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 1);
+        assertEquals(headquarter0.getAmount(SERGEANT), 1);
+        assertEquals(headquarter0.getAmount(OFFICER), 1);
+        assertEquals(headquarter0.getAmount(GENERAL), 1);
+
     }
 }
