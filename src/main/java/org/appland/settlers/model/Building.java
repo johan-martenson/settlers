@@ -87,9 +87,7 @@ public class Building implements EndPoint {
 
         flag.setPlayer(player);
 
-        /* Initialize goods required for production if the building does any
-           any production
-        */
+        /* Initialize goods required for production if the building does any any production */
         requiredGoodsForProduction = new EnumMap<>(Material.class);
         Production production = getClass().getAnnotation(Production.class);
 

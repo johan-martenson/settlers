@@ -243,7 +243,7 @@ public class TestScout {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(5, 23);
+        Point point1 = new Point(5, 25);
         Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
@@ -272,7 +272,17 @@ public class TestScout {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         /* Verify that the scout goes north toward the border */
-        assertTrue(scout.getTarget().getY() > scout.getPosition().getY());
+        assertTrue(scout.getTarget().y > scout.getPosition().y);
+
+        for (int i = 0; i < 200; i++) {
+            if (scout.getPosition().y > flag.getPosition().y + 4) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(scout.getPosition().y > flag.getPosition().y + 4);
     }
 
     @Test
@@ -1172,7 +1182,10 @@ public class TestScout {
                 assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().downLeft()));
                 assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().down()));
                 assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().downLeft().down()));
-                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().down().down()));
+                assertTrue(
+                        !map.isWithinMap(scout.getPosition().down().down()) ||
+                        player0.getDiscoveredLand().contains(scout.getPosition().down().down())
+                );
 
                 assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().downRight()));
                 assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().down()));

@@ -1574,7 +1574,6 @@ public class GameMap {
     }
 
     private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
-        Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
 
         /* Houses can only be left via the driveway so handle this case separately */
@@ -1585,10 +1584,24 @@ public class GameMap {
         }
 
         /* Find out which adjacent points are possible off-road connections */
+        Point[] adjacentPoints  = from.getAdjacentPoints();
+
+        boolean cannotWalkOnTileUpLeft    = !canWalkOn(terrain.getTileUpLeft(from));
+        boolean cannotWalkOnTileDownLeft  = !canWalkOn(terrain.getTileDownLeft(from));
+        boolean cannotWalkOnTileUpRight   = !canWalkOn(terrain.getTileUpRight(from));
+        boolean cannotWalkOnTileDownRight = !canWalkOn(terrain.getTileDownRight(from));
+        boolean cannotWalkOnTileAbove     = !canWalkOn(terrain.getTileAbove(from));
+        boolean cannotWalkOnTileBelow     = !canWalkOn(terrain.getTileBelow(from));
+
         for (Point point : adjacentPoints) {
 
             /* Filter points outside the map */
             if (!isWithinMap(point)) {
+                continue;
+            }
+
+            /* Filter points with stones */
+            if (isStoneAtPoint(point)) {
                 continue;
             }
 
@@ -1598,29 +1611,27 @@ public class GameMap {
             }
 
             /* Filter points separated by vegetation that can't be walked on */
-            if ((point.isLeftOf(from)                       &&
-                 !canWalkOn(terrain.getTileUpLeft(from))    &&
-                 !canWalkOn(terrain.getTileDownLeft(from)))      ||
-                (point.isUpLeftOf(from)                     &&
-                 !canWalkOn(terrain.getTileUpLeft(from))    &&
-                 !canWalkOn(terrain.getTileAbove(from)))         ||
-                (point.isUpRightOf(from)                    &&
-                 !canWalkOn(terrain.getTileUpRight(from))   &&
-                 !canWalkOn(terrain.getTileAbove(from)))         ||
-                (point.isRightOf(from)                      &&
-                 !canWalkOn(terrain.getTileUpRight(from))   &&
-                 !canWalkOn(terrain.getTileDownRight(from)))     ||
-                (point.isDownRightOf(from)                  &&
-                 !canWalkOn(terrain.getTileDownRight(from)) &&
-                 !canWalkOn(terrain.getTileBelow(from)))         ||
-                (point.isDownLeftOf(from)                   &&
-                 !canWalkOn(terrain.getTileDownLeft(from))  &&
-                 !canWalkOn(terrain.getTileBelow(from)))) {
+            if (point.isLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
                 continue;
             }
 
-            /* Filter points with stones */
-            if (isStoneAtPoint(point)) {
+            if (point.isUpLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
+                continue;
+            }
+
+            if (point.isUpRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
+                continue;
+            }
+
+            if (point.isRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
+                continue;
+            }
+
+            if (point.isDownRightOf(from) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
+                continue;
+            }
+
+            if (point.isDownLeftOf(from) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
                 continue;
             }
 

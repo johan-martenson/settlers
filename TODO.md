@@ -23,6 +23,8 @@ LARGER CHANGES
 
 * Correct range for workers
 
+* Reduce the amount of wild animals and make sure new wild animals only appear in forests
+
 
 SMALLER CHANGES
 ===============

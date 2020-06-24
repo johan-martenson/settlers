@@ -197,6 +197,20 @@ public class GameUtils {
         public double getYForX(int x) {
             return k * x + m;
         }
+
+        public Point goFromPointWithPositiveXWithLength(Point position, int length) {
+            double x = Math.sqrt(length * length / (1 + k * k));
+            double y = k * x;
+
+            return Point.fitToGamePoint(position.x + x, position.y + y);
+        }
+
+        public Point goFromPointWithNegativeXWithLength(Point position, int length) {
+            double x = - Math.sqrt(length * length / (1 + k * k));
+            double y = k * x;
+
+            return Point.fitToGamePoint(position.x + x, position.y + y);
+        }
     }
 
     static boolean isUnique(List<Point> wayPoints) {

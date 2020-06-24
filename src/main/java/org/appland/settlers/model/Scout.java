@@ -29,9 +29,10 @@ import static org.appland.settlers.model.Scout.State.WORKING_IN_LOOKOUT_TOWER;
 public class Scout extends Worker {
 
     private static final int DISCOVERY_RADIUS = 4;
-    private static final int LENGTH_TO_PLAN_HEAD = 4;
+    private static final int LENGTH_TO_PLAN_HEAD = 7;
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final int MINIMUM_DISTANCE_TO_BORDER = 6;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -72,21 +73,23 @@ public class Scout extends Worker {
 
     @Override
     protected void onArrival() throws InvalidRouteException {
-
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
         if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER) {
             enterBuilding(getTargetBuilding());
         } else if (state == WALKING_TO_TARGET) {
 
+            /* Remember where the scouting started so the scout can go back */
             flagPoint = getPosition();
 
-            Point borderPoint = findDirectionToBorder();
-
             /* Calculate direction */
-            directionX = borderPoint.x - getPosition().x;
-            directionY = borderPoint.y - getPosition().y;
+            Point borderPoint = findDirectionToBorder();
+            calculateDirection(borderPoint);
 
+            /* Update direction if the scout is too close to the border */
+            avoidGoingTooCloseToBorder();
+
+            /* Find the first point to go to */
             Point point = findNextPoint();
 
             if (!map.isWithinMap(point)) {
@@ -109,6 +112,8 @@ public class Scout extends Worker {
 
                 return;
             }
+
+            avoidGoingTooCloseToBorder();
 
             Point point = findNextPoint();
 
@@ -165,6 +170,27 @@ public class Scout extends Worker {
         }
     }
 
+    private void calculateDirection(Point borderPoint) {
+        directionX = borderPoint.x - getPosition().x;
+        directionY = borderPoint.y - getPosition().y;
+    }
+
+    private void avoidGoingTooCloseToBorder() {
+        Point position = getPosition();
+
+        if (position.x < MINIMUM_DISTANCE_TO_BORDER && directionX < 0) {
+            directionX = -directionX;
+        } else if (map.getWidth() - position.x < MINIMUM_DISTANCE_TO_BORDER && directionX > 0) {
+            directionX = -directionX;
+        }
+
+        if (position.y < MINIMUM_DISTANCE_TO_BORDER && directionY < 0) {
+            directionY = -directionY;
+        } else if (map.getHeight() - position.y < MINIMUM_DISTANCE_TO_BORDER && directionY > 0) {
+            directionY = -directionY;
+        }
+    }
+
     @Override
     public void onSetTargetBuilding(Building building) {
 
@@ -213,71 +239,112 @@ public class Scout extends Worker {
     private Point findNextPoint() {
 
         Point position = getPosition();
-        Point targetPoint;
 
-        if (Math.abs(directionX) > 0.001) {
+        /* Find the point to aim for */
+        Point targetPoint = getPointInDirection(position, LENGTH_TO_PLAN_HEAD, directionX, directionY);
 
-            GameUtils.Line direction = new GameUtils.Line(position, directionX, directionY);
+        /* Try to find a position somewhere between the scout's current position and the target point */
+        List<Point> points = findBoxOfPointsAroundPoint(targetPoint, 5);
 
-            int targetX;
-            final double scale = Math.sqrt(LENGTH_TO_PLAN_HEAD * LENGTH_TO_PLAN_HEAD - directionX * directionX - directionY * directionY);
-            targetX = position.x + (int) (scale * directionX);
+        Point target = findRandomPointToWalkToOffroad(points, position);
 
-            targetPoint = Point.fitToGamePoint(targetX, direction.getYForX(targetX));
-        } else {
-
-            if (directionY > 0) {
-                targetPoint = new Point(position.x, position.y + LENGTH_TO_PLAN_HEAD);
-            } else {
-                targetPoint = new Point(position.x, position.y - LENGTH_TO_PLAN_HEAD);
-            }
+        /* Return the point if it's found */
+        if (target != null) {
+            return target;
         }
 
-        /* Set a box around the target point and try to pick any point inside the box */
-        List<Point> possibleTargets = new ArrayList<>();
-        for (int i = targetPoint.x - 5; i < targetPoint.x + 5; i++) {
-            for (int j = targetPoint.y - 5; j < targetPoint.y + 5; j++) {
+        /* Try again with a larger box and return null if there is no point found */
+        points = findBoxOfPointsAroundPoint(targetPoint, 7);
+
+        return findRandomPointToWalkToOffroad(points, position);
+    }
+
+    private List<Point> findBoxOfPointsAroundPoint(Point point, int distance) {
+        List<Point> points = new ArrayList<>();
+
+        for (int i = point.x - distance; i < point.x + distance; i++) {
+            for (int j = point.y - distance; j < point.y + distance; j++) {
 
                 /* Filter not allowed points */
                 if (!Point.isValid(i, j)) {
                     continue;
                 }
 
-                /* Filter points outside the map */
-                Point possibleTarget = new Point(i, j);
-                if (!map.isWithinMap(possibleTarget)) {
-                    continue;
-                }
-
-                /* Filter the current position */
-                if (position.equals(possibleTarget)) {
-                    continue;
-                }
-
-                /* Filter points the scout cannot reach */
-                if (map.findWayOffroad(position, possibleTarget, null) != null) {
-                    possibleTargets.add(possibleTarget);
-                }
+                points.add(new Point(i, j));
             }
         }
 
-        if (possibleTargets.isEmpty()) {
-            return null;
+        return points;
+    }
+
+    private Point findRandomPointToWalkToOffroad(List<Point> points, Point position) {
+
+        int offset = random.nextInt(points.size());
+        Point target = null;
+
+        for (int i = 0; i < points.size(); i++) {
+            int index = i + offset;
+
+            if (index >= points.size()) {
+                index = index - points.size();
+            }
+
+            /* Filter points outside the map */
+            Point point = points.get(index);
+
+            if (!map.isWithinMap(point)) {
+                continue;
+            }
+
+            /* Filter the current position */
+            if (position.equals(point)) {
+                continue;
+            }
+
+            /* Filter points the scout cannot reach */
+            if (map.findWayOffroad(position, point, null) == null) {
+                continue;
+            }
+
+            return point;
         }
 
-        /* Pick one of the possible targets */
-        Point target = possibleTargets.get((int)Math.floor(possibleTargets.size() * random.nextDouble()));
+        return null;
+    }
 
-        return target;
+    private Point getPointInDirection(Point position, int length, int dirX, int dirY) {
+        Point targetPoint;
+        if (Math.abs(dirX) > 0.001) {
+
+            GameUtils.Line direction = new GameUtils.Line(position, dirX, dirY);
+
+            if (dirX > 0) {
+                targetPoint = direction.goFromPointWithPositiveXWithLength(position, length);
+            } else {
+                targetPoint = direction.goFromPointWithNegativeXWithLength(position, length);
+            }
+        } else {
+
+            if (dirY > 0) {
+                targetPoint = Point.fitToGamePoint(position.x, position.y + length);
+            } else {
+                targetPoint = Point.fitToGamePoint(position.x, position.y - length);
+            }
+        }
+
+        return targetPoint;
     }
 
     private Point findDirectionToBorder() {
-        Point closestPointOnBorder      = null;
-        double distanceToBorder         = Integer.MAX_VALUE;
+        Point position = getPosition();
+        Point closestPointOnBorder = null;
+        double distanceToBorder = Integer.MAX_VALUE;
 
         for (Point point : getPlayer().getBorderPoints()) {
-            if (getPosition().distance(point) < distanceToBorder) {
-                distanceToBorder = getPosition().distance(point);
+            double distanceForPoint = position.distance(point);
+
+            if (distanceForPoint < distanceToBorder) {
+                distanceToBorder = distanceForPoint;
                 closestPointOnBorder = point;
             }
         }
