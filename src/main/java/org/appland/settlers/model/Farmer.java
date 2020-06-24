@@ -82,9 +82,7 @@ public class Farmer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storehouse) {
-            return;
-        } else if (building instanceof Farm) {
+        if (building instanceof Farm) {
             setHome(building);
         }
 

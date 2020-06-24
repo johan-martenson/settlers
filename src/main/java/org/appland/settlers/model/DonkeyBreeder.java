@@ -62,9 +62,7 @@ public class DonkeyBreeder extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storehouse) {
-            return;
-        } else if (building instanceof DonkeyFarm) {
+        if (building instanceof DonkeyFarm) {
             setHome(building);
         }
 
