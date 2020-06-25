@@ -12,7 +12,7 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
  *
  * @author johan
  */
-public class Tile {
+public class Tile { // FIXME: is this class needed or can all members be moved to MapPoint and the tiles are just vegetation enums?
     private static final int DEFAULT_AMOUNT_FISH   = 10;
     private static final int SMALL_AMOUNT_OF_GOLD  = 5;
     private static final int MEDIUM_AMOUNT_OF_GOLD = 10;

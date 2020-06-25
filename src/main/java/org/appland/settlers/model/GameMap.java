@@ -1573,6 +1573,7 @@ public class GameMap {
         return resultList;
     }
 
+    // FIXME: HOTSPOT - allocations
     private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         List<Point>  resultList = new ArrayList<>();
 
@@ -1584,7 +1585,7 @@ public class GameMap {
         }
 
         /* Find out which adjacent points are possible off-road connections */
-        Point[] adjacentPoints  = from.getAdjacentPoints();
+        Point[] adjacentPoints  = from.getAdjacentPointsExceptAboveAndBelow();
 
         boolean cannotWalkOnTileUpLeft    = !canWalkOn(terrain.getTileUpLeft(from));
         boolean cannotWalkOnTileDownLeft  = !canWalkOn(terrain.getTileDownLeft(from));
@@ -1638,10 +1639,6 @@ public class GameMap {
             /* Add the point to the list if it passed the filters */
             resultList.add(point);
         }
-
-        resultList.remove(from.up());
-
-        resultList.remove(from.down());
 
         return resultList;
     }

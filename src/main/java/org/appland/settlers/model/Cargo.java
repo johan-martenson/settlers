@@ -44,6 +44,7 @@ public class Cargo {
         return path.get(0);
     }
 
+    // FIXME: HOTSPOT
     public void setPosition(Point point) {
 
         if (map.isFlagAtPoint(point) || map.isBuildingAtPoint(point)) {

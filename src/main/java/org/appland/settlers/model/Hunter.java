@@ -58,6 +58,7 @@ public class Hunter extends Worker {
         countdown.countFrom(TIME_TO_REST);
     }
 
+    // FIXME: HOTSPOT
     @Override
     protected void onIdle() throws InvalidRouteException {
 

@@ -81,6 +81,7 @@ public class WildAnimal extends Worker {
         }
     }
 
+    // FIXME: HOTSPOT
     private boolean canGoTo(Point point) {
 
         if (!map.isWithinMap(point)) {
@@ -106,6 +107,7 @@ public class WildAnimal extends Worker {
         return true;
     }
 
+    // FIXME: HOTSPOT - allocations
     private Point findNextPoint() {
 
         /* Get surrounding points */

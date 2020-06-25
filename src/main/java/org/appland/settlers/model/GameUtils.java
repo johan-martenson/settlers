@@ -245,6 +245,7 @@ public class GameUtils {
         }
     }
 
+    // FIXME: HOTSPOT
     static List<Point> findShortestPath(Point start, Point goal, Collection<Point> avoid, ConnectionsProvider connectionProvider) {
         Set<Point>          evaluated         = new HashSet<>();
         Set<Point>          toEvaluate        = new HashSet<>();

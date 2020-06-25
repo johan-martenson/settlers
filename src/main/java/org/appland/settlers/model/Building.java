@@ -571,6 +571,7 @@ public class Building implements EndPoint {
         }
     }
 
+    // FIXME: HOTSPOT - allocations
     private Map<Material, Integer> getMaterialsToBuildHouse() {
         HouseSize houseSize              = getClass().getAnnotation(HouseSize.class);
         Material[] materialsArray        = houseSize.material();

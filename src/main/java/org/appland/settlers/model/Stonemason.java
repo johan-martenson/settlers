@@ -66,6 +66,7 @@ public class Stonemason extends Worker {
         countdown.countFrom(TIME_TO_REST);
     }
 
+    // FIXME: HOTSPOT - allocations
     @Override
     protected void onIdle() throws InvalidRouteException {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {

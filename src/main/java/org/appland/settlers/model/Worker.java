@@ -370,6 +370,7 @@ public abstract class Worker {
         setOffroadTarget(point, null);
     }
 
+    // FIXME: HOTSPOT - allocations
     void setOffroadTarget(Point point, Point via) throws InvalidRouteException {
         boolean wasInside = false;
 
