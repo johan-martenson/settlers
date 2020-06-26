@@ -1646,8 +1646,8 @@ public class GameMap {
         return resultList;
     }
 
-    private boolean canBuildFlagOn(Tile tile) {
-        switch (tile.getVegetationType()) {
+    private boolean canBuildFlagOn(Tile.Vegetation vegetation) {
+        switch (vegetation) {
             case SWAMP:
             case SNOW:
             case WATER:
@@ -1659,9 +1659,9 @@ public class GameMap {
         }
     }
 
-    private boolean canWalkOn(Tile tile) {
+    private boolean canWalkOn(Tile.Vegetation vegetation) {
 
-        switch (tile.getVegetationType()) {
+        switch (vegetation) {
             case WATER:
             case SWAMP:
             case DEEP_WATER:
@@ -2279,12 +2279,12 @@ public class GameMap {
     }
 
     private boolean isConnectedToWater(Point point) {
-        Tile.Vegetation vegetationAbove = terrain.getTileAbove(point).getVegetationType();
-        Tile.Vegetation vegetationUpRight = terrain.getTileUpRight(point).getVegetationType();
-        Tile.Vegetation vegetationDownRight = terrain.getTileDownRight(point).getVegetationType();
-        Tile.Vegetation vegetationBelow = terrain.getTileBelow(point).getVegetationType();
-        Tile.Vegetation vegetationDownLeft = terrain.getTileDownLeft(point).getVegetationType();
-        Tile.Vegetation vegetationUpLeft = terrain.getTileUpLeft(point).getVegetationType();
+        Tile.Vegetation vegetationAbove = terrain.getTileAbove(point);
+        Tile.Vegetation vegetationUpRight = terrain.getTileUpRight(point);
+        Tile.Vegetation vegetationDownRight = terrain.getTileDownRight(point);
+        Tile.Vegetation vegetationBelow = terrain.getTileBelow(point);
+        Tile.Vegetation vegetationDownLeft = terrain.getTileDownLeft(point);
+        Tile.Vegetation vegetationUpLeft = terrain.getTileUpLeft(point);
 
         if (vegetationAbove == WATER || vegetationAbove == DEEP_WATER || vegetationAbove == SHALLOW_WATER) {
             return true;
@@ -2715,11 +2715,11 @@ public class GameMap {
 
         /* A large building needs a larger free area on buildable vegetation */
         // TODO: check if it's possible to also build large house close to other sides where only flags&roads are possible
-        if (!terrain.getTileUpLeft(point.upLeft()).getVegetationType().canBuildFlags()   ||
-            !terrain.getTileAbove(point.upLeft()).getVegetationType().canBuildFlags()    ||
-            !terrain.getTileUpLeft(point.upRight()).getVegetationType().canBuildFlags()  ||
-            !terrain.getTileAbove(point.upRight()).getVegetationType().canBuildFlags()   ||
-            !terrain.getTileUpRight(point.upRight()).getVegetationType().canBuildFlags() ||
+        if (!terrain.getTileUpLeft(point.upLeft()).canBuildFlags()   ||
+            !terrain.getTileAbove(point.upLeft()).canBuildFlags()    ||
+            !terrain.getTileUpLeft(point.upRight()).canBuildFlags()  ||
+            !terrain.getTileAbove(point.upRight()).canBuildFlags()   ||
+            !terrain.getTileUpRight(point.upRight()).canBuildFlags() ||
             !terrain.isOnBuildable(point.left())      || !terrain.isOnBuildable(point.right()) ||
             !terrain.isOnBuildable(point.downRight()) || !terrain.isOnBuildable(point.downLeft())) {
             return MEDIUM;

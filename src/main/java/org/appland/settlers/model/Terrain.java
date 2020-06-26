@@ -25,8 +25,8 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
  */
 public class Terrain {
 
-    private final Map<Integer, Tile> tileBelowMap;
-    private final Map<Integer, Tile> tileDownRightMap;
+    private final Map<Integer, Vegetation> tileBelowMap;
+    private final Map<Integer, Vegetation> tileDownRightMap;
     private final int width;
     private final int height;
 
@@ -46,8 +46,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileAbove(Point point) {
+    public Vegetation getTileAbove(Point point) {
         return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public void setTileAbove(Point point, Vegetation vegetation) {
+        tileDownRightMap.put((point.y + 1) * width + point.x - 1, vegetation);
     }
 
     /**
@@ -56,8 +60,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileBelow(Point point) {
+    public Vegetation getTileBelow(Point point) {
         return tileBelowMap.get(point.y * width + point.x);
+    }
+
+    public void setTileBelow(Point point, Vegetation vegetation) {
+        tileBelowMap.put(point.y * width + point.x, vegetation);
     }
 
     /**
@@ -66,8 +74,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileDownRight(Point point) {
+    public Vegetation getTileDownRight(Point point) {
         return tileDownRightMap.get(point.y * width + point.x);
+    }
+
+    public void setTileDownRight(Point point, Vegetation vegetation) {
+        tileDownRightMap.put(point.y * width + point.x, vegetation);
     }
 
     /**
@@ -76,8 +88,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileDownLeft(Point point) {
+    public Vegetation getTileDownLeft(Point point) {
         return tileDownRightMap.get(point.y * width + point.x - 2);
+    }
+
+    public void setTileDownLeft(Point point, Vegetation vegetation) {
+        tileDownRightMap.put(point.y * width + point.x - 2, vegetation);
     }
 
     /**
@@ -86,8 +102,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileUpRight(Point point) {
+    public Vegetation getTileUpRight(Point point) {
         return tileBelowMap.get((point.y + 1) * width + point.x + 1);
+    }
+
+    public void setTileUpRight(Point point, Vegetation vegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x + 1, vegetation);
     }
 
     /**
@@ -96,8 +116,12 @@ public class Terrain {
      * @param point
      * @return
      */
-    public Tile getTileUpLeft(Point point) {
+    public Vegetation getTileUpLeft(Point point) {
         return tileBelowMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public void setTileUpLeft(Point point, Vegetation vegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x - 1, vegetation);
     }
 
     private void constructDefaultTiles() {
@@ -114,11 +138,8 @@ public class Terrain {
             }
 
             for (x = xStart; x <= xEnd + 1; x++) {
-                Tile tile = new Tile(GRASS);
-                Tile tile2 = new Tile(GRASS);
-
-                tileBelowMap.put(y * width + x, tile);
-                tileDownRightMap.put(y * width + x, tile2);
+                tileBelowMap.put(y * width + x, GRASS);
+                tileDownRightMap.put(y * width + x, GRASS);
             }
         }
     }
@@ -165,12 +186,12 @@ public class Terrain {
 
     private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) {
 
-        return getTileUpLeft(point).getVegetationType()    == vegetation ||
-               getTileAbove(point).getVegetationType()     == vegetation ||
-               getTileUpRight(point).getVegetationType()   == vegetation ||
-               getTileDownRight(point).getVegetationType() == vegetation ||
-               getTileBelow(point).getVegetationType()     == vegetation ||
-               getTileDownLeft(point).getVegetationType()  == vegetation;
+        return getTileUpLeft(point)    == vegetation ||
+               getTileAbove(point)     == vegetation ||
+               getTileUpRight(point)   == vegetation ||
+               getTileDownRight(point) == vegetation ||
+               getTileBelow(point)     == vegetation ||
+               getTileDownLeft(point)  == vegetation;
     }
 
     /**
@@ -180,22 +201,22 @@ public class Terrain {
      * @param vegetation
      */
     public void surroundWithVegetation(Point point, Tile.Vegetation vegetation) {
-        getTileUpLeft(point).setVegetationType(vegetation);
-        getTileAbove(point).setVegetationType(vegetation);
-        getTileUpRight(point).setVegetationType(vegetation);
-        getTileDownRight(point).setVegetationType(vegetation);
-        getTileBelow(point).setVegetationType(vegetation);
-        getTileDownLeft(point).setVegetationType(vegetation);
+        setTileUpLeft(point, vegetation);
+        setTileAbove(point, vegetation);
+        setTileUpRight(point, vegetation);
+        setTileDownRight(point, vegetation);
+        setTileBelow(point, vegetation);
+        setTileDownLeft(point, vegetation);
     }
 
     boolean isSurroundedBy(Point point, Vegetation vegetation) {
 
-        return getTileUpLeft(point).getVegetationType()    == vegetation &&
-               getTileAbove(point).getVegetationType()     == vegetation &&
-               getTileUpRight(point).getVegetationType()   == vegetation &&
-               getTileDownRight(point).getVegetationType() == vegetation &&
-               getTileBelow(point).getVegetationType()     == vegetation &&
-               getTileDownLeft(point).getVegetationType()  == vegetation;
+        return getTileUpLeft(point)    == vegetation &&
+               getTileAbove(point)     == vegetation &&
+               getTileUpRight(point)   == vegetation &&
+               getTileDownRight(point) == vegetation &&
+               getTileBelow(point)     == vegetation &&
+               getTileDownLeft(point)  == vegetation;
     }
 
     /**
@@ -204,51 +225,51 @@ public class Terrain {
      * @param center
      * @return
      */
-    public List<Tile> getSurroundingTiles(Point center) {
-        List<Tile> result   = new LinkedList<>();
+    public List<Vegetation> getSurroundingTiles(Point center) {
+        List<Vegetation> result = new LinkedList<>();
 
         /* This method is called frequently. Treat the tiles one-by-one to avoid creating a temporary list */
 
         /* Tile down right */
-        Tile tile = getTileDownRight(center);
+        Vegetation vegetation = getTileDownRight(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         /* Tile below */
-        tile = getTileBelow(center);
+        vegetation = getTileBelow(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         /* Tile down left */
-        tile = getTileDownLeft(center);
+        vegetation = getTileDownLeft(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         /* Tile up left */
-        tile = getTileUpLeft(center);
+        vegetation = getTileUpLeft(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         /* Tile above */
-        tile = getTileAbove(center);
+        vegetation = getTileAbove(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         /* Tile up right */
-        tile = getTileUpRight(center);
+        vegetation = getTileUpRight(center);
 
-        if (tile != null) {
-            result.add(tile);
+        if (vegetation != null) {
+            result.add(vegetation);
         }
 
         return result;
@@ -264,11 +285,11 @@ public class Terrain {
         boolean nonMatchFound = false;
 
         /* Go through the surrounding tiles and verify that they contain at least on matching and one non-matching */
-        for (Tile tile : getSurroundingTiles(point)) {
+        for (Vegetation vegetation1 : getSurroundingTiles(point)) {
 
-            if (tile.getVegetationType() == vegetation) {
+            if (vegetation1 == vegetation) {
                 matchFound = true;
-            } else if (tile.getVegetationType() != vegetation) {
+            } else if (vegetation1 != vegetation) {
                 nonMatchFound = true;
             }
         }
@@ -383,19 +404,29 @@ public class Terrain {
      * @return
      */
     public boolean isOnBuildable(Point point) {
-        return getTileUpLeft(point).getVegetationType().isBuildable()    &&
-               getTileAbove(point).getVegetationType().isBuildable()     &&
-               getTileUpRight(point).getVegetationType().isBuildable()   &&
-               getTileDownRight(point).getVegetationType().isBuildable() &&
-               getTileBelow(point).getVegetationType().isBuildable()     &&
-               getTileDownLeft(point).getVegetationType().isBuildable();
+        return getTileUpLeft(point).isBuildable()    &&
+               getTileAbove(point).isBuildable()     &&
+               getTileUpRight(point).isBuildable()   &&
+               getTileDownRight(point).isBuildable() &&
+               getTileBelow(point).isBuildable()     &&
+               getTileDownLeft(point).isBuildable();
     }
 
-    public Collection<Tile> getTilesBelow() {
+    public Collection<Vegetation> getTilesBelow() {
         return tileBelowMap.values();
     }
 
-    public Collection<Tile> getTilesDownRight() {
+    public Collection<Vegetation> getTilesDownRight() {
         return tileDownRightMap.values();
+    }
+
+    public void fillMapWithVegetation(Vegetation vegetation) {
+        for (Map.Entry<Integer, Vegetation> entry : tileBelowMap.entrySet()) {
+            tileBelowMap.put(entry.getKey(), vegetation);
+        }
+
+        for (Map.Entry<Integer, Vegetation> entry : tileDownRightMap.entrySet()) {
+            tileDownRightMap.put(entry.getKey(), vegetation);
+        }
     }
 }

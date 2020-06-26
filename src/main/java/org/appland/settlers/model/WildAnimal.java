@@ -45,10 +45,8 @@ public class WildAnimal extends Worker {
         random.setSeed(1);
     }
 
-    public static boolean cannotWalkOn(List<Tile> surroundingTiles) {
-        for (Tile tile : surroundingTiles) {
-            Tile.Vegetation vegetation = tile.getVegetationType();
-
+    public static boolean cannotWalkOn(List<Tile.Vegetation> surroundingTiles) {
+        for (Tile.Vegetation vegetation : surroundingTiles) {
             return (vegetation == WATER || vegetation == DEEP_WATER || vegetation == LAVA);
         }
 

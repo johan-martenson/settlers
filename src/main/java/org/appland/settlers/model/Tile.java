@@ -11,17 +11,8 @@ package org.appland.settlers.model;
  * @author johan
  */
 public class Tile { // FIXME: is this class needed or can all members be moved to MapPoint and the tiles are just vegetation enums?
-    private static final int DEFAULT_AMOUNT_FISH   = 10;
-    private static final int SMALL_AMOUNT_OF_GOLD  = 5;
-    private static final int MEDIUM_AMOUNT_OF_GOLD = 10;
-    private static final int LARGE_AMOUNT_OF_GOLD  = 15;
 
     private Vegetation vegetationType;
-    private int        amountGold;
-    private int        amountFish;
-    private int        amountIron;
-    private int        amountGranite;
-    private int        amountCoal;
 
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;

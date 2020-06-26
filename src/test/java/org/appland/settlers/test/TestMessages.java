@@ -305,7 +305,7 @@ public class TestMessages {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+        map.getTerrain().setTileBelow(point2, WATER);
 
         /* Remove fishes until there is only one left */
         Utils.removeAllFish(map, point1);

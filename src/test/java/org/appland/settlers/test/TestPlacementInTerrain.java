@@ -96,12 +96,12 @@ public class TestPlacementInTerrain {
 
         Terrain terrain = map.getTerrain();
 
-        assertEquals(terrain.getTileDownLeft(fishery0.getFlag().getPosition()).getVegetationType(), WATER);
-        assertEquals(terrain.getTileBelow(fishery0.getFlag().getPosition()).getVegetationType(), WATER);
+        assertEquals(terrain.getTileDownLeft(fishery0.getFlag().getPosition()), WATER);
+        assertEquals(terrain.getTileBelow(fishery0.getFlag().getPosition()), WATER);
 
-        assertEquals(terrain.getTileDownLeft(point7).getVegetationType(), WATER);
-        assertEquals(terrain.getTileBelow(point7).getVegetationType(), WATER);
-        assertEquals(terrain.getTileDownRight(point7).getVegetationType(), GRASS);
+        assertEquals(terrain.getTileDownLeft(point7), WATER);
+        assertEquals(terrain.getTileBelow(point7), WATER);
+        assertEquals(terrain.getTileDownRight(point7), GRASS);
 
         assertFalse(terrain.isOnGrass(fishery0.getFlag().getPosition()));
         assertFalse(terrain.isOnGrass(fishery1.getFlag().getPosition()));
@@ -794,8 +794,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), SNOW);
-        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), SNOW);
+        assertEquals(map.getTerrain().getTileAbove(point6), SNOW);
+        assertEquals(map.getTerrain().getTileBelow(point7), SNOW);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3221,8 +3221,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), LAVA);
-        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), LAVA);
+        assertEquals(map.getTerrain().getTileAbove(point6), LAVA);
+        assertEquals(map.getTerrain().getTileBelow(point7), LAVA);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3616,8 +3616,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), DEEP_WATER);
-        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), DEEP_WATER);
+        assertEquals(map.getTerrain().getTileAbove(point6), DEEP_WATER);
+        assertEquals(map.getTerrain().getTileBelow(point7), DEEP_WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4011,8 +4011,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), WATER);
-        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(point6), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point7), WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4406,8 +4406,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), SWAMP);
-        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), SWAMP);
+        assertEquals(map.getTerrain().getTileAbove(point6), SWAMP);
+        assertEquals(map.getTerrain().getTileBelow(point7), SWAMP);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {

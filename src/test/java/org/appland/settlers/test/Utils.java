@@ -998,12 +998,12 @@ public class Utils {
     static void surroundPointWithVegetation(Point point, Tile.Vegetation vegetation, GameMap map) {
         map.getTerrain().surroundWithVegetation(point, vegetation);
 
-        assertEquals(map.getTerrain().getTileUpLeft(point).getVegetationType(), vegetation);
-        assertEquals(map.getTerrain().getTileAbove(point).getVegetationType(), vegetation);
-        assertEquals(map.getTerrain().getTileUpRight(point).getVegetationType(), vegetation);
-        assertEquals(map.getTerrain().getTileDownRight(point).getVegetationType(), vegetation);
-        assertEquals(map.getTerrain().getTileBelow(point).getVegetationType(), vegetation);
-        assertEquals(map.getTerrain().getTileDownLeft(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileUpLeft(point), vegetation);
+        assertEquals(map.getTerrain().getTileAbove(point), vegetation);
+        assertEquals(map.getTerrain().getTileUpRight(point), vegetation);
+        assertEquals(map.getTerrain().getTileDownRight(point), vegetation);
+        assertEquals(map.getTerrain().getTileBelow(point), vegetation);
+        assertEquals(map.getTerrain().getTileDownLeft(point), vegetation);
     }
 
     public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws Exception {
@@ -1071,13 +1071,7 @@ public class Utils {
     }
 
     public static void fillMapWithVegetation(GameMap map, Tile.Vegetation vegetation) {
-        for (Tile tile : map.getTerrain().getTilesBelow()) {
-            tile.setVegetationType(vegetation);
-        }
-
-        for (Tile tile : map.getTerrain().getTilesDownRight()) {
-            tile.setVegetationType(vegetation);
-        }
+        map.getTerrain().fillMapWithVegetation(vegetation);
     }
 
     public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws Exception {
