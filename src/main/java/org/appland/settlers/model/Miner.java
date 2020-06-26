@@ -107,6 +107,7 @@ public class Miner extends Worker {
             }
         } else if (state == MINING) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
+
                 if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
 

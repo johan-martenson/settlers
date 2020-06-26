@@ -275,19 +275,19 @@ public class Utils {
     }
 
     public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) {
-        map.getTerrain().surroundPointWithMineral(point, GOLD, size);
+        map.surroundPointWithMineral(point, GOLD, size);
     }
 
     public static void putIronAtSurroundingTiles(Point point, Size size, GameMap map) {
-        map.getTerrain().surroundPointWithMineral(point, IRON, size);
+        map.surroundPointWithMineral(point, IRON, size);
     }
 
     public static void putCoalAtSurroundingTiles(Point point, Size size, GameMap map) {
-        map.getTerrain().surroundPointWithMineral(point, COAL, size);
+        map.surroundPointWithMineral(point, COAL, size);
     }
 
     public static void putGraniteAtSurroundingTiles(Point point, Size size, GameMap map) {
-        map.getTerrain().surroundPointWithMineral(point, STONE, size);
+        map.surroundPointWithMineral(point, STONE, size);
     }
 
     public static void createMountainWithinRadius(Point point, int radius, GameMap map) {
@@ -298,7 +298,7 @@ public class Utils {
 
     public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) {
         for (Point p : map.getPointsWithinRadius(point1, radius - 1)) {
-            map.getTerrain().surroundPointWithMineral(p, mineral, LARGE);
+            map.surroundPointWithMineral(p, mineral, LARGE);
         }
     }
 
@@ -1786,6 +1786,18 @@ public class Utils {
         for (Worker worker : workers) {
             assertFalse(map.getWorkers().contains(worker));
         }
+    }
+
+    public static void removeAllFish(GameMap map, Point point1) {
+        for (int i = 0; i < 1000; i++) {
+            if (map.getAmountFishAtPoint(point1) == 0) {
+                break;
+            }
+
+            map.catchFishAtPoint(point1);
+        }
+
+        assertEquals(map.getAmountFishAtPoint(point1), 0);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

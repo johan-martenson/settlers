@@ -1936,6 +1936,10 @@ public class TestCoalMine {
 
         for (int i = 0; i < 5000; i++) {
             map.stepTime();
+
+            if (coalMine.getProductivity() == 0) {
+                break;
+            }
         }
 
         assertEquals(coalMine.getProductivity(), 0);

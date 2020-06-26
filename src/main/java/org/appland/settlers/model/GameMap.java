@@ -26,7 +26,10 @@ import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.Tile.Vegetation.DEEP_WATER;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.SHALLOW_WATER;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
 
 public class GameMap {
 
@@ -2252,13 +2255,9 @@ public class GameMap {
      * @return The amount of the given mineral at the given point
      */
     public int getAmountOfMineralAtPoint(Material mineral, Point point) {
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return terrain.getTileUpLeft(point).getAmountOfMineral(mineral)    +
-               terrain.getTileAbove(point).getAmountOfMineral(mineral)     +
-               terrain.getTileUpRight(point).getAmountOfMineral(mineral)   +
-               terrain.getTileDownRight(point).getAmountOfMineral(mineral) +
-               terrain.getTileBelow(point).getAmountOfMineral(mineral)     +
-               terrain.getTileDownLeft(point).getAmountOfMineral(mineral);
+        return mapPoint.getAmountOfMineral(mineral);
     }
 
     /**
@@ -2269,12 +2268,49 @@ public class GameMap {
      */
     public int getAmountFishAtPoint(Point point) {
 
-        return terrain.getTileUpLeft(point).getAmountFish()   +
-               terrain.getTileAbove(point).getAmountFish()    +
-               terrain.getTileUpRight(point).getAmountFish()  +
-               terrain.getTileDownLeft(point).getAmountFish() +
-               terrain.getTileBelow(point).getAmountFish()    +
-               terrain.getTileDownLeft(point).getAmountFish();
+        /* Return zero if the point is not next to any water */
+        if (!isConnectedToWater(point)) {
+            return 0;
+        }
+
+        MapPoint mapPoint = pointToGameObject.get(point);
+
+        return mapPoint.getAmountOfFish();
+    }
+
+    private boolean isConnectedToWater(Point point) {
+        Tile.Vegetation vegetationAbove = terrain.getTileAbove(point).getVegetationType();
+        Tile.Vegetation vegetationUpRight = terrain.getTileUpRight(point).getVegetationType();
+        Tile.Vegetation vegetationDownRight = terrain.getTileDownRight(point).getVegetationType();
+        Tile.Vegetation vegetationBelow = terrain.getTileBelow(point).getVegetationType();
+        Tile.Vegetation vegetationDownLeft = terrain.getTileDownLeft(point).getVegetationType();
+        Tile.Vegetation vegetationUpLeft = terrain.getTileUpLeft(point).getVegetationType();
+
+        if (vegetationAbove == WATER || vegetationAbove == DEEP_WATER || vegetationAbove == SHALLOW_WATER) {
+            return true;
+        }
+
+        if (vegetationUpRight == WATER || vegetationUpRight == DEEP_WATER || vegetationUpRight == SHALLOW_WATER) {
+            return true;
+        }
+
+        if (vegetationDownRight == WATER || vegetationDownRight == DEEP_WATER || vegetationDownRight == SHALLOW_WATER) {
+            return true;
+        }
+
+        if (vegetationBelow == WATER || vegetationBelow == DEEP_WATER || vegetationBelow == SHALLOW_WATER) {
+            return true;
+        }
+
+        if (vegetationDownLeft == WATER || vegetationDownLeft == DEEP_WATER || vegetationDownLeft == SHALLOW_WATER) {
+            return true;
+        }
+
+        if (vegetationUpLeft == WATER || vegetationUpLeft == DEEP_WATER || vegetationUpLeft == SHALLOW_WATER) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -2284,15 +2320,15 @@ public class GameMap {
      * @return A cargo containing the fish
      */
     public Cargo catchFishAtPoint(Point point) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            if (tile.getAmountFish() > 0) {
-                tile.consumeFish();
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-                return new Cargo(FISH, this);
-            }
+        if (mapPoint.getAmountOfFish() ==0) {
+            throw new InvalidGameLogicException("Can't find any fish to catch at " + point);
         }
 
-        throw new InvalidGameLogicException("Can't find any fish to catch at " + point);
+        mapPoint.consumeOneFish();
+
+        return new Cargo(FISH, this);
     }
 
     /**
@@ -2303,15 +2339,11 @@ public class GameMap {
      * @return a cargo containing the mined ore
      */
     public Cargo mineMineralAtPoint(Material mineral, Point point) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            if (tile.getAmountOfMineral(mineral) > 0) {
-                tile.mine(mineral);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-                return new Cargo(mineral, this);
-            }
-        }
+        mapPoint.mineMineral();
 
-        throw new InvalidGameLogicException("Can't find any gold to mine at " + point);
+        return new Cargo(mineral, this);
     }
 
     /**
@@ -3102,5 +3134,44 @@ public class GameMap {
 
     public void reportPromotedRoad(Road road) {
         promotedRoads.add(road);
+    }
+
+    public void setMineralAmount(Point point, Material mineral, Size amount) {
+        MapPoint mapPoint = pointToGameObject.get(point);
+
+        mapPoint.setMineralAmount(mineral, amount);
+    }
+
+    /**
+     * Changes the tiles surrounding the given point to contain large amounts of
+     * the given mineral.
+     *
+     * @param point Point to surround with large quantities of mineral
+     * @param mineral The type of mineral
+     */
+    public void surroundPointWithMineral(Point point, Material mineral) {
+        surroundPointWithMineral(point, mineral, LARGE);
+    }
+
+    public void surroundPointWithMineral(Point point, Material mineral, Size amount) {
+        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPointDownLeft = pointToGameObject.get(point.downLeft());
+        MapPoint mapPointLeft = pointToGameObject.get(point.left());
+        MapPoint mapPointUpLeft = pointToGameObject.get(point.upLeft());
+        MapPoint mapPointAbove = pointToGameObject.get(point.up());
+        MapPoint mapPointUpRight = pointToGameObject.get(point.upRight());
+        MapPoint mapPointRight = pointToGameObject.get(point.right());
+        MapPoint mapPointDownRight = pointToGameObject.get(point.downRight());
+        MapPoint mapPointBelow = pointToGameObject.get(point.down());
+
+        mapPoint.setMineralAmount(mineral, amount);
+        mapPointDownLeft.setMineralAmount(mineral, amount);
+        mapPointLeft.setMineralAmount(mineral, amount);
+        mapPointUpLeft.setMineralAmount(mineral, amount);
+        mapPointAbove.setMineralAmount(mineral, amount);
+        mapPointUpRight.setMineralAmount(mineral, amount);
+        mapPointRight.setMineralAmount(mineral, amount);
+        mapPointDownRight.setMineralAmount(mineral, amount);
+        mapPointBelow.setMineralAmount(mineral, amount);
     }
 }

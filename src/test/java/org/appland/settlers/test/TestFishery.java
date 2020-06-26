@@ -54,6 +54,8 @@ import static org.junit.Assert.fail;
  */
 public class TestFishery {
 
+    // FIXME: test fishing in different types of water!
+
     @Test
     public void testFisheryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
@@ -923,6 +925,9 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Remove fishes until there is only one left */
+        Utils.removeAllFish(map, point1);
+        Utils.removeAllFish(map, point2);
+
         for (int i = 0; i < 1000; i++) {
             if (map.getAmountFishAtPoint(point0) == 1) {
                 break;

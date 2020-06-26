@@ -1081,6 +1081,10 @@ public class Building implements EndPoint {
 
     public int getProductivity() {
 
+        if (isOutOfNaturalResources()) {
+            return 0;
+        }
+
         /* An unoccupied building has no productivity */
         if (worker == null) {
             return 0;

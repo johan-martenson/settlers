@@ -18,6 +18,12 @@ import java.util.Set;
  * @author johan
  */
 class MapPoint {
+    private static final int DEFAULT_AMOUNT_FISH   = 10;
+    private static final int SMALL_AMOUNT_OF_MINERAL = 5;
+    private static final int MEDIUM_AMOUNT_OF_MINERAL = 10;
+    private static final int LARGE_AMOUNT_OF_MINERAL = 15;
+
+
     private final Point      point;
     private final Set<Point> connectedNeighbors;
     private final Set<Road>  connectedRoads;
@@ -30,6 +36,9 @@ class MapPoint {
     private Crop     crop;
     private Sign     sign;
     private int      height;
+    private int      mineralAmount;
+    private Material mineral;
+    private int      fishAmount;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -45,6 +54,8 @@ class MapPoint {
 
         /* Set the default height */
         height = Constants.DEFAULT_HEIGHT;
+
+        fishAmount = DEFAULT_AMOUNT_FISH;
     }
 
     void setBuilding(Building building) {
@@ -235,5 +246,44 @@ class MapPoint {
 
     public boolean isBuildingOfSize(Size size) {
         return building != null && building.getSize() == size;
+    }
+
+    public void setMineralAmount(Material mineral, Size amount) {
+        this.mineral = mineral;
+
+        switch (amount) {
+            case SMALL:
+                mineralAmount = SMALL_AMOUNT_OF_MINERAL;
+                break;
+            case MEDIUM:
+                mineralAmount = MEDIUM_AMOUNT_OF_MINERAL;
+                break;
+            case LARGE:
+                mineralAmount = LARGE_AMOUNT_OF_MINERAL;
+        }
+    }
+
+    public void mineMineral() {
+        if (mineralAmount == 0) {
+            throw new InvalidGameLogicException("Can't find any " + mineral + " to mine at " + point);
+        }
+
+        mineralAmount = mineralAmount - 1;
+    }
+
+    public int getAmountOfMineral(Material mineral) {
+        if (mineral == this.mineral) {
+            return mineralAmount;
+        }
+
+        return 0;
+    }
+
+    public int getAmountOfFish() {
+        return fishAmount;
+    }
+
+    public void consumeOneFish() {
+        fishAmount = fishAmount - 1;
     }
 }
