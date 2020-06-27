@@ -21,7 +21,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -1989,12 +1989,12 @@ public class TestQuarry {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
-        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.WATER, map);
-        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.WATER, map);
-        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.WATER, map);
-        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.WATER, map);
-        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point4, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point5, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point6, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point7, Vegetation.WATER, map);
 
         /* Construct the quarry */
         constructHouse(quarry0);

@@ -40,10 +40,10 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Tile.Vegetation.DESERT;
-import static org.appland.settlers.model.Tile.Vegetation.GRASS;
-import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.DESERT;
+import static org.appland.settlers.model.Vegetation.GRASS;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -2310,15 +2310,6 @@ public class TestPlacement {
 
         /* Verify that there are no available house points on the edge */
         for (Point point : edgePoints) {
-            System.out.println(point);
-
-            System.out.println(map.getTerrain().getTileUpLeft(point));
-            System.out.println(map.getTerrain().getTileAbove(point));
-            System.out.println(map.getTerrain().getTileUpRight(point));
-            System.out.println(map.getTerrain().getTileDownRight(point));
-            System.out.println(map.getTerrain().getTileBelow(point));
-            System.out.println(map.getTerrain().getTileDownLeft(point));
-
             assertNull(map.isAvailableHousePoint(player0, point));
             assertFalse(map.getAvailableHousePoints(player0).containsKey(point));
         }

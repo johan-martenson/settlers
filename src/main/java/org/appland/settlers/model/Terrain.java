@@ -6,18 +6,16 @@
 
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.Tile.Vegetation;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Tile.Vegetation.GRASS;
-import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.GRASS;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.SWAMP;
+import static org.appland.settlers.model.Vegetation.WATER;
 
 /**
  *
@@ -200,7 +198,7 @@ public class Terrain {
      * @param point
      * @param vegetation
      */
-    public void surroundWithVegetation(Point point, Tile.Vegetation vegetation) {
+    public void surroundWithVegetation(Point point, Vegetation vegetation) {
         setTileUpLeft(point, vegetation);
         setTileAbove(point, vegetation);
         setTileUpRight(point, vegetation);

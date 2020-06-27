@@ -8,9 +8,9 @@ package org.appland.settlers.model;
 import java.util.List;
 import java.util.Random;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
-import static org.appland.settlers.model.Tile.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Tile.Vegetation.LAVA;
+import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.DEEP_WATER;
+import static org.appland.settlers.model.Vegetation.LAVA;
 
 /**
  *
@@ -45,8 +45,8 @@ public class WildAnimal extends Worker {
         random.setSeed(1);
     }
 
-    public static boolean cannotWalkOn(List<Tile.Vegetation> surroundingTiles) {
-        for (Tile.Vegetation vegetation : surroundingTiles) {
+    public static boolean cannotWalkOn(List<Vegetation> surroundingTiles) {
+        for (Vegetation vegetation : surroundingTiles) {
             return (vegetation == WATER || vegetation == DEEP_WATER || vegetation == LAVA);
         }
 

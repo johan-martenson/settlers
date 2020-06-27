@@ -62,7 +62,7 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

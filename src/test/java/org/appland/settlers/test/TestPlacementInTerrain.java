@@ -26,8 +26,27 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Tile.Vegetation.*;
-import static org.junit.Assert.*;
+import static org.appland.settlers.model.Vegetation.BUILDABLE_MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.DEEP_WATER;
+import static org.appland.settlers.model.Vegetation.DESERT;
+import static org.appland.settlers.model.Vegetation.GRASS;
+import static org.appland.settlers.model.Vegetation.LAVA;
+import static org.appland.settlers.model.Vegetation.MAGENTA;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN_MEADOW;
+import static org.appland.settlers.model.Vegetation.SAVANNAH;
+import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
+import static org.appland.settlers.model.Vegetation.SNOW;
+import static org.appland.settlers.model.Vegetation.STEPPE;
+import static org.appland.settlers.model.Vegetation.SWAMP;
+import static org.appland.settlers.model.Vegetation.WATER;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *

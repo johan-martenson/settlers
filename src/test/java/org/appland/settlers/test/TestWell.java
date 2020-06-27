@@ -18,7 +18,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Worker;
@@ -1408,7 +1408,7 @@ public class TestWell {
 
         /* Place a buildable mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Place well */
         Building well = map.placeBuilding(new Well(player0), point1);

@@ -26,8 +26,8 @@ import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 
@@ -71,9 +71,9 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.SWAMP;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
@@ -995,7 +995,7 @@ public class Utils {
 
     }
 
-    static void surroundPointWithVegetation(Point point, Tile.Vegetation vegetation, GameMap map) {
+    static void surroundPointWithVegetation(Point point, Vegetation vegetation, GameMap map) {
         map.getTerrain().surroundWithVegetation(point, vegetation);
 
         assertEquals(map.getTerrain().getTileUpLeft(point), vegetation);
@@ -1070,7 +1070,7 @@ public class Utils {
         }
     }
 
-    public static void fillMapWithVegetation(GameMap map, Tile.Vegetation vegetation) {
+    public static void fillMapWithVegetation(GameMap map, Vegetation vegetation) {
         map.getTerrain().fillMapWithVegetation(vegetation);
     }
 

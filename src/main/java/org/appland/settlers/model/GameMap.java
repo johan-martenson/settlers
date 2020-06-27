@@ -26,10 +26,10 @@ import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Tile.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Tile.Vegetation.SHALLOW_WATER;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.DEEP_WATER;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 
 public class GameMap {
 
@@ -1646,7 +1646,7 @@ public class GameMap {
         return resultList;
     }
 
-    private boolean canBuildFlagOn(Tile.Vegetation vegetation) {
+    private boolean canBuildFlagOn(Vegetation vegetation) {
         switch (vegetation) {
             case SWAMP:
             case SNOW:
@@ -1659,7 +1659,7 @@ public class GameMap {
         }
     }
 
-    private boolean canWalkOn(Tile.Vegetation vegetation) {
+    private boolean canWalkOn(Vegetation vegetation) {
 
         switch (vegetation) {
             case WATER:
@@ -2279,12 +2279,12 @@ public class GameMap {
     }
 
     private boolean isConnectedToWater(Point point) {
-        Tile.Vegetation vegetationAbove = terrain.getTileAbove(point);
-        Tile.Vegetation vegetationUpRight = terrain.getTileUpRight(point);
-        Tile.Vegetation vegetationDownRight = terrain.getTileDownRight(point);
-        Tile.Vegetation vegetationBelow = terrain.getTileBelow(point);
-        Tile.Vegetation vegetationDownLeft = terrain.getTileDownLeft(point);
-        Tile.Vegetation vegetationUpLeft = terrain.getTileUpLeft(point);
+        Vegetation vegetationAbove = terrain.getTileAbove(point);
+        Vegetation vegetationUpRight = terrain.getTileUpRight(point);
+        Vegetation vegetationDownRight = terrain.getTileDownRight(point);
+        Vegetation vegetationBelow = terrain.getTileBelow(point);
+        Vegetation vegetationDownLeft = terrain.getTileDownLeft(point);
+        Vegetation vegetationUpLeft = terrain.getTileUpLeft(point);
 
         if (vegetationAbove == WATER || vegetationAbove == DEEP_WATER || vegetationAbove == SHALLOW_WATER) {
             return true;
