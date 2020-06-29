@@ -1804,6 +1804,7 @@ public class Utils {
             availableConstruction = new HashMap<>();
         }
 
+        // FIXME: HOTSPOT
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
             gameChanges.add(gameChangesList);

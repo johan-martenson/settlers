@@ -70,7 +70,7 @@ public class WildAnimal extends Worker {
 
                     /* Walk if there is an available spot */
                     if (nextPoint != null) {
-                        setOffroadTarget(nextPoint);
+                        setOffroadTarget(nextPoint); // FIXME: HOTSPOT
                     }
                 }
             } else {

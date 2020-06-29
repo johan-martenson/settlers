@@ -66,6 +66,7 @@ public class StorageWorker extends Worker {
         assignedCoal.put(Armory.class, 0);
     }
 
+    // FIXME: HOTSPOT
     private Cargo tryToStartDelivery() throws InvalidRouteException {
 
         for (Material material : getPlayer().getTransportPriorityList()) {

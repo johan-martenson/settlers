@@ -6,7 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +22,7 @@ import static org.appland.settlers.model.Vegetation.WATER;
  */
 public class Terrain {
 
+    // FIXME: change to use Vegetation arrays instead to make access faster
     private final Map<Integer, Vegetation> tileBelowMap;
     private final Map<Integer, Vegetation> tileDownRightMap;
     private final int width;
@@ -408,14 +408,6 @@ public class Terrain {
                getTileDownRight(point).isBuildable() &&
                getTileBelow(point).isBuildable()     &&
                getTileDownLeft(point).isBuildable();
-    }
-
-    public Collection<Vegetation> getTilesBelow() {
-        return tileBelowMap.values();
-    }
-
-    public Collection<Vegetation> getTilesDownRight() {
-        return tileDownRightMap.values();
     }
 
     public void fillMapWithVegetation(Vegetation vegetation) {
