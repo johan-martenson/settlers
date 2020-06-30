@@ -76,8 +76,13 @@ public class StorageWorker extends Worker {
                 continue;
             }
 
+            /* Don't try to deliver workers - that's done by the storehouse itself */
+            if (material.isWorker()) {
+                continue;
+            }
+
             /* Send out the material if it's ordered to be pushed out */
-            if (!material.isWorker() && ((Storehouse)getHome()).isPushedOut(material)) {
+            if (ownStorehouse.isPushedOut(material)) {
 
                 /* Find receiving storehouse */
                 Storehouse receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());

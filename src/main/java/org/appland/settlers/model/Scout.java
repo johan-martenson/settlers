@@ -280,7 +280,6 @@ public class Scout extends Worker {
     private Point findRandomPointToWalkToOffroad(List<Point> points, Point position) {
 
         int offset = random.nextInt(points.size());
-        Point target = null;
 
         for (int i = 0; i < points.size(); i++) {
             int index = i + offset;

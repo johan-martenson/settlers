@@ -20,7 +20,6 @@ import static org.appland.settlers.model.Vegetation.LAVA;
 public class WildAnimal extends Worker {
 
     private static final int TIME_TO_STAND = 9;
-    private static final int MAX_TRIES = 5;
     private static final int RANGE = 10;
 
     private final Random random;
@@ -79,55 +78,46 @@ public class WildAnimal extends Worker {
         }
     }
 
-    // FIXME: HOTSPOT
-    private boolean canGoTo(Point point) {
-
-        if (!map.isWithinMap(point)) {
-            return false;
-        }
-
-        if (map.isBuildingAtPoint(point)) {
-            return false;
-        }
-
-        if (map.isStoneAtPoint(point)) {
-            return false;
-        }
-
-        if (map.getTerrain().isInWater(point)) {
-            return false;
-        }
-
-        if (map.findWayOffroad(getPosition(), point, null) == null) {
-            return false;
-        }
-
-        return true;
-    }
-
     // FIXME: HOTSPOT - allocations
     private Point findNextPoint() {
 
         /* Get surrounding points */
         List<Point> adjacentPoints = map.getPointsWithinRadius(getPosition(), RANGE);
 
-        /* Try choosing the next point randomly */
-        for (int tries = 0; tries < MAX_TRIES; tries++) {
+        int offset = random.nextInt(adjacentPoints.size());
 
-            int index = random.nextInt(adjacentPoints.size());
+        /* Start at a random place in the list and look for points to go to */
+        for (int i = 0; i < adjacentPoints.size(); i++) {
+            int index = i + offset;
+
+            if (index >= adjacentPoints.size()) {
+                index = index - adjacentPoints.size();
+            }
 
             Point point = adjacentPoints.get(index);
 
-            if (canGoTo(point)) {
-                return point;
+            /* Filter points outside of the map */
+            if (!map.isWithinMap(point)) {
+                continue;
             }
-        }
 
-        /* Give up and search through all available points sequentially */
-        for (Point point : adjacentPoints) {
+            /* Filter points with buildings */
+            if (map.isBuildingAtPoint(point)) {
+                continue;
+            }
 
-            /* Filter points where the animal cannot stand */
-            if (!canGoTo(point)) {
+            /* Filter points with stones */
+            if (map.isStoneAtPoint(point)) {
+                continue;
+            }
+
+            /* Filter points in water */
+            if (map.getTerrain().isInWater(point)) {
+                continue;
+            }
+
+            /* Filter un-reachable points (expensive) */
+            if (map.findWayOffroad(getPosition(), point, null) == null) {
                 continue;
             }
 
