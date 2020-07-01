@@ -21,6 +21,10 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 public class Building implements EndPoint {
 
     private static final int TIME_TO_PROMOTE_SOLDIER = 100;
+    private final Map<Material, Integer> materialsToBuildHouse;
+    private final Map<Material, Integer> totalAmountNeededForProduction;
+    private final Map<Material, Integer> totalAmountNeededForUpgrade;
+    private final int maxCoins;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -99,6 +103,25 @@ public class Building implements EndPoint {
                 );
             }
         }
+
+        /* Keep the materials to build house in a map to avoid calling the method over and over again */
+        materialsToBuildHouse = getMaterialsToBuildHouse();
+        totalAmountNeededForProduction = getMaterialNeededForProduction();
+        totalAmountNeededForUpgrade = getMaterialNeededForUpgrade();
+        maxCoins = getMaxCoins();
+    }
+
+    private Map<Material, Integer> getMaterialNeededForUpgrade() {
+        Map<Material, Integer> materialNeeded = new EnumMap<>(Material.class);
+
+        UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
+
+        if (upgradeCost != null) {
+            materialNeeded.put(STONE, upgradeCost.stones());
+            materialNeeded.put(PLANK, upgradeCost.planks());
+        }
+
+        return materialNeeded;
     }
 
     void setFlag(Flag flagAtPoint) {
@@ -140,7 +163,11 @@ public class Building implements EndPoint {
     private int getMaxCoins() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        return militaryBuilding.maxCoins();
+        if (militaryBuilding != null) {
+            return militaryBuilding.maxCoins();
+        }
+
+        return 0;
     }
 
     void setMap(GameMap map) throws InvalidRouteException {
@@ -923,7 +950,7 @@ public class Building implements EndPoint {
 
         if (state == State.UNDER_CONSTRUCTION) {
 
-            return getMaterialsToBuildHouse().getOrDefault(material, 0);
+            return materialsToBuildHouse.getOrDefault(material, 0);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
             return getTotalAmountOfMaterialNeededForProduction(material);
         }
@@ -932,16 +959,56 @@ public class Building implements EndPoint {
     }
 
     private int getLackingAmountWithProjected(Material material) {
+
+        /* Handle buildings that are under construction */
         if (state == State.UNDER_CONSTRUCTION) {
 
-            if (!getMaterialsToBuildHouse().containsKey(material)) {
+            if (!materialsToBuildHouse.containsKey(material)) {
                 return 0;
             }
 
-            return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+            int total = materialsToBuildHouse.get(material);
+            int promised = promisedDeliveries.getOrDefault(material, 0);
+            int received = receivedMaterial.getOrDefault(material, 0);
 
-            return getTotalAmountNeeded(material) - getProjectedAmount(material);
+            return total - promised - received;
+
+        /* Handle military buildings that are being upgraded */
+        } else if (isMilitaryBuilding() && isReady()) {
+
+            /* Fully built military buildings can only need planks, stones, and coins */
+            if (material != PLANK && material != STONE && material != COIN) {
+                return 0;
+            }
+
+            int total = 0;
+
+            /* Handle coins for promotions */
+            if (material == COIN && enablePromotions) {
+                total = maxCoins;
+
+            /* Handle planks and stones for upgrades */
+            } else if (isUpgrading()){
+                total = totalAmountNeededForUpgrade.getOrDefault(material, 0);
+            }
+
+            if (total > 0) {
+
+                int promised = promisedDeliveries.getOrDefault(material, 0);
+                int received = receivedMaterial.getOrDefault(material, 0);
+
+                return total - promised - received;
+            }
+
+            return 0;
+
+        /* Handle buildings that are ready and are not military buildings */
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+            int total = totalAmountNeededForProduction.getOrDefault(material, 0);
+            int promised = promisedDeliveries.getOrDefault(material, 0);
+            int received = receivedMaterial.getOrDefault(material, 0);
+
+            return total - promised - received;
         }
 
         return 0;
@@ -1107,6 +1174,24 @@ public class Building implements EndPoint {
         }
 
         return getClass().getAnnotation(Production.class).output();
+    }
+
+    private Map<Material, Integer> getMaterialNeededForProduction() {
+        Map<Material, Integer> materialNeeded = new EnumMap(Material.class);
+
+        Production production = getClass().getAnnotation(Production.class);
+
+        if (production != null) {
+            for (Material material : production.requiredGoods()) {
+                int amount = materialNeeded.getOrDefault(material, 0);
+
+                amount = amount + 1;
+
+                materialNeeded.put(material, amount);
+            }
+        }
+
+        return materialNeeded;
     }
 
     public Collection<Material> getMaterialNeeded() {

@@ -54,7 +54,7 @@ import static org.junit.Assert.fail;
  */
 public class TestFishery {
 
-    // FIXME: test fishing in different types of water!
+    // FIXME: test fishing in different types of water! Upwards and downwards facing triangles
 
     @Test
     public void testFisheryOnlyNeedsTwoPlanksForConstruction() throws Exception {

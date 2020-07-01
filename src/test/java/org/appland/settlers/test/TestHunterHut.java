@@ -2114,6 +2114,8 @@ public class TestHunterHut {
         assertEquals(hunterHut0.getWorker(), hunter0);
 
         /* Verify that the worker goes to the storage when the hunter hut is torn down */
+        Utils.waitForWorkerToBeInside(hunter0, map);
+
         headquarter0.blockDeliveryOfMaterial(HUNTER);
 
         hunterHut0.tearDown();
@@ -2178,6 +2180,8 @@ public class TestHunterHut {
         assertEquals(hunterHut0.getWorker(), hunter0);
 
         /* Verify that the worker goes to the storage off-road when the hunter hut is torn down */
+        Utils.waitForWorkerToBeInside(hunter0, map);
+
         headquarter0.blockDeliveryOfMaterial(HUNTER);
 
         hunterHut0.tearDown();

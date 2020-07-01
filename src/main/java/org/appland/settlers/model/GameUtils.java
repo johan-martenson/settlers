@@ -971,6 +971,7 @@ public class GameUtils {
         return getClosestStorageConnectedByRoads(point, null, player);
     }
 
+    // FIXME: HOTSPOT
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) throws InvalidRouteException {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;

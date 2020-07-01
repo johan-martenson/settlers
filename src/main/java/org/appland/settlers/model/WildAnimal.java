@@ -65,11 +65,11 @@ public class WildAnimal extends Worker {
                     countdown.countFrom(TIME_TO_STAND);
                 } else {
 
-                    Point nextPoint = findNextPoint();
+                    List<Point> pathToNextPoint = findNextPoint();
 
                     /* Walk if there is an available spot */
-                    if (nextPoint != null) {
-                        setOffroadTarget(nextPoint); // FIXME: HOTSPOT
+                    if (pathToNextPoint != null) {
+                        setOffroadTargetWithPath(pathToNextPoint); // FIXME: HOTSPOT
                     }
                 }
             } else {
@@ -79,7 +79,7 @@ public class WildAnimal extends Worker {
     }
 
     // FIXME: HOTSPOT - allocations
-    private Point findNextPoint() {
+    private List<Point> findNextPoint() {
 
         /* Get surrounding points */
         List<Point> adjacentPoints = map.getPointsWithinRadius(getPosition(), RANGE);
@@ -117,12 +117,13 @@ public class WildAnimal extends Worker {
             }
 
             /* Filter un-reachable points (expensive) */
-            if (map.findWayOffroad(getPosition(), point, null) == null) {
+            List<Point> path = map.findWayOffroad(getPosition(), point, null);
+            if (path == null) {
                 continue;
             }
 
-            /* Return the found point */
-            return point;
+            /* Return the found path */
+            return path;
         }
 
         /* Return null if there is no available point */

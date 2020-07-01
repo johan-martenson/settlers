@@ -410,6 +410,22 @@ public abstract class Worker {
         }
     }
 
+    protected void setOffroadTargetWithPath(List<Point> pathToWalk) throws InvalidRouteException {
+        target = pathToWalk.get(pathToWalk.size() - 1);
+        path = pathToWalk;
+
+        if (position.equals(target)) {
+            state = IDLE_OUTSIDE;
+
+            handleArrival();
+        } else {
+            state = WALKING_AND_EXACTLY_AT_POINT;
+
+            /* Report the new target so it can be monitored */
+            getMap().reportWorkerWithNewTarget(this);
+        }
+    }
+
     void setTarget(Point point) throws InvalidRouteException {
         if (state == IDLE_INSIDE) {
             if (!point.equals(home.getFlag().getPosition())) {

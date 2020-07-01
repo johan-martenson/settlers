@@ -76,11 +76,6 @@ public class StorageWorker extends Worker {
                 continue;
             }
 
-            /* Don't try to deliver workers - that's done by the storehouse itself */
-            if (material.isWorker()) {
-                continue;
-            }
-
             /* Send out the material if it's ordered to be pushed out */
             if (ownStorehouse.isPushedOut(material)) {
 
@@ -103,7 +98,7 @@ public class StorageWorker extends Worker {
 
             /* Iterate over all buildings, instead of just the ones that can be reached from the headquarter
 
-               This will perform the quick tests first and only perform the expensive test if the quick ones pass
+               This will perform the fast tests first and only perform the expensive test if the quick ones pass
             */
             for (Building building : getPlayer().getBuildings()) {
 
@@ -117,7 +112,7 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                /* Make sure planks are only used for plank production if the limit is critically low */
+                /* Make sure planks are only used for plank production if the amount is critically low */
                 if (material == PLANK) {
 
                     if (getPlayer().isTreeConservationProgramActive() &&

@@ -94,7 +94,7 @@ public class Player {
         coalQuota.put(Armory.class, 1);
 
         /* Set the initial transport priority */
-        transportPriorities.addAll(Arrays.asList(Material.values()));
+        transportPriorities.addAll(Material.TRANSPORTABLE_GOODS);
 
         /* There are no messages at start */
         messages = new ArrayList<>();

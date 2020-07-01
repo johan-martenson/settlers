@@ -74,7 +74,13 @@ public class Hunter extends Worker {
                     }
 
                     /* Filter animals that can't be reached */
-                    List<Point> path = getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
+                    List<Point> path;
+
+                    if (getPosition().equals(getHome().getPosition())) {
+                        path = getMap().findWayOffroad(getPosition(), animal.getPosition(), getHome().getFlag().getPosition(), null);
+                    } else {
+                        path = getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
+                    }
 
                     if (path == null) {
                         continue;
@@ -83,7 +89,7 @@ public class Hunter extends Worker {
                     /* Start hunting the prey */
                     prey = animal;
 
-                    setOffroadTarget(path.get(1));
+                    setOffroadTargetWithPath(path.subList(0, 2));
 
                     state = State.TRACKING;
 

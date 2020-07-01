@@ -1,6 +1,8 @@
 LARGER CHANGES
 ==============
 
+* Add missing upgrades for other military buildings that barracks
+
 * Add the two missing states for house construction - digging planned, building planned
 
 * Add builders and diggers

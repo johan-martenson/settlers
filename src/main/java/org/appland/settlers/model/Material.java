@@ -57,7 +57,40 @@ public enum Material {
     OFFICER,
     PRIVATE_FIRST_CLASS, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE, METALWORKER;
 
-    private static final List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
+    public static final Set<? extends Material> TRANSPORTABLE_GOODS = EnumSet.copyOf(Arrays.asList(
+            SWORD,
+            SHIELD,
+            BEER,
+            GOLD,
+            IRON,
+            COAL,
+            WOOD,
+            PLANK,
+            STONE,
+            WHEAT,
+            WATER,
+            FLOUR,
+            BREAD,
+            IRON_BAR,
+            FISH,
+            COIN,
+            PIG,
+            MEAT,
+            AXE,
+            SHOVEL,
+            PICK_AXE,
+            FISHING_ROD,
+            BOW,
+            SAW,
+            CLEAVER,
+            ROLLING_PIN,
+            CRUCIBLE,
+            TONGS,
+            SCYTHE
+    )
+    );
+
+    private static final List<Material> MINERALS = Arrays.asList(GOLD, IRON, COAL, STONE);
 
     static final List<Material> TOOLS = Arrays.asList(
             AXE,
@@ -100,7 +133,7 @@ public enum Material {
     }
 
     static Iterable<Material> getMinerals() {
-        return minerals;
+        return MINERALS;
     }
 
     public static boolean isTool(Material tool) {
