@@ -3,7 +3,7 @@ package org.appland.settlers.model;
 import org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import org.appland.settlers.policy.Constants;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,7 +21,6 @@ import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
-import static org.appland.settlers.model.GameUtils.getDistanceInGameSteps;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -208,8 +207,7 @@ public class GameMap {
      * @param avoid Points that the road must avoid
      * @return A path a new road can follow
      */
-    public List<Point> findAutoSelectedRoad(final Player player, Point start,
-                                            Point goal, Collection<Point> avoid) {
+    public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Set<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
             @Override
@@ -224,13 +222,8 @@ public class GameMap {
             }
 
             @Override
-            public Double realDistance(Point currentPoint, Point neighbor) {
-                return (double)1;
-            }
-
-            @Override
-            public Double estimateDistance(Point from, Point to) {
-                return (double)getDistanceInGameSteps(from, to);
+            public int realDistance(Point currentPoint, Point neighbor) {
+                return 1;
             }
         });
     }
@@ -1920,8 +1913,7 @@ public class GameMap {
      * @param avoid The points to avoid
      * @return The path found or null
      */
-    public List<Point> findWayOffroad(Point start, Point goal, Point via,
-            Collection<Point> avoid) {
+    public List<Point> findWayOffroad(Point start, Point goal, Point via, Set<Point> avoid) {
 
         /* Handle the case where the "via" point is equal to the start or the goal */
         if (start.equals(via)) {
@@ -1955,7 +1947,7 @@ public class GameMap {
      * @param avoid The points to avoid
      * @return The path found or null if there is no way
      */
-    public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
+    public List<Point> findWayOffroad(Point start, Point goal, Set<Point> avoid) {
         return findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
             @Override
@@ -1970,13 +1962,8 @@ public class GameMap {
             }
 
             @Override
-            public Double realDistance(Point currentPoint, Point neighbor) {
-                return (double)1;
-            }
-
-            @Override
-            public Double estimateDistance(Point from, Point to) {
-                return from.distance(to);
+            public int realDistance(Point currentPoint, Point neighbor) {
+                return 1;
             }
         });
     }

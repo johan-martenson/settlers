@@ -223,9 +223,7 @@ public class GameUtils {
     interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
 
-        Double realDistance(Point currentPoint, Point neighbor);
-
-        Double estimateDistance(Point from, Point to);
+        int realDistance(Point currentPoint, Point neighbor);
     }
 
     static class SortPointsByY implements Comparator<Point> {
@@ -246,33 +244,32 @@ public class GameUtils {
     }
 
     // FIXME: HOTSPOT
-    static List<Point> findShortestPath(Point start, Point goal, Collection<Point> avoid, ConnectionsProvider connectionProvider) {
+    static List<Point> findShortestPath(Point start, Point goal, Set<Point> avoid, ConnectionsProvider connectionProvider) {
         Set<Point>          evaluated         = new HashSet<>();
         Set<Point>          toEvaluate        = new HashSet<>();
-        Map<Point, Double>  realCostToPoint   = new HashMap<>();
-        Map<Point, Double>  estimatedFullCost = new HashMap<>();
+        Map<Point, Integer> costToGetToPoint  = new HashMap<>();
+        Map<Point, Integer> estimatedFullCost = new HashMap<>();
         Map<Point, Point>   cameFrom          = new HashMap<>();
-        double              bestCaseCost;
+        int                 bestCaseCost;
 
         /* Define starting parameters */
         bestCaseCost = getDistanceInGameSteps(start, goal);
         toEvaluate.add(start);
-        realCostToPoint.put(start, (double)0);
+        costToGetToPoint.put(start, 0);
         estimatedFullCost.put(start, bestCaseCost);
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point currentPoint;
-        double currentEstimatedCost;
+        int currentEstimatedCost;
+        int tmpEstimatedCost;
+        int tentativeCost;
 
-        double tmpEstimatedCost;
-
-        double tentativeCost;
-
+        /* Keep going through points yet to be evaluated until either a perfect match is found or all points have been done */
         while (!toEvaluate.isEmpty()) {
             currentPoint = null;
-            currentEstimatedCost = Double.MAX_VALUE;
+            currentEstimatedCost = Integer.MAX_VALUE;
 
-            /* Find the point with the lowest estimated full cost */
+            /* Find the point to evaluate with the lowest estimated full cost */
             for (Point iteratedPoint : toEvaluate) {
 
                 tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
@@ -288,7 +285,7 @@ public class GameUtils {
             }
 
             /* Handle if the goal is reached */
-            if (currentPoint.equals(goal)) {
+            if (goal.equals(currentPoint)) {
                 List<Point> path = new ArrayList<>();
 
                 /* Re-construct the path taken */
@@ -321,22 +318,24 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = realCostToPoint.get(currentPoint) + connectionProvider.realDistance(currentPoint, neighbor);
+                tentativeCost = costToGetToPoint.get(currentPoint) + connectionProvider.realDistance(currentPoint, neighbor);
+
+                /* Add the neighbor to the evaluation list */
+                toEvaluate.add(neighbor);
 
                 /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
-                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
+                int currentCost = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
+
+                if (tentativeCost < currentCost) {
 
                     /* Keep track of how the neighbor was reached */
                     cameFrom.put(neighbor, currentPoint);
 
                     /* Remember the cost to reach the neighbor */
-                    realCostToPoint.put(neighbor, tentativeCost);
+                    costToGetToPoint.put(neighbor, tentativeCost);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
-
-                    /* Add the neighbor to the evaluation list */
-                    toEvaluate.add(neighbor);
+                    estimatedFullCost.put(neighbor, costToGetToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
                 }
             }
         }
@@ -444,13 +443,8 @@ public class GameUtils {
         }
 
         @Override
-        public Double realDistance(Point currentPoint, Point neighbor) {
-            return (double)1;
-        }
-
-        @Override
-        public Double estimateDistance(Point from, Point to) {
-            return (double)getDistanceInGameSteps(from, to);
+        public int realDistance(Point currentPoint, Point neighbor) {
+            return 1;
         }
     }
 
@@ -470,7 +464,7 @@ public class GameUtils {
         }
 
         @Override
-        public Double realDistance(Point currentPoint, Point neighbor) {
+        public int realDistance(Point currentPoint, Point neighbor) {
 
             MapPoint mp = pointToGameObject.get(currentPoint);
 
@@ -494,16 +488,11 @@ public class GameUtils {
                 }
 
                 if (distance == 2) {
-                    return (double)2;
+                    return 2;
                 }
             }
 
-            return (double)distance;
-        }
-
-        @Override
-        public Double estimateDistance(Point from, Point to) {
-            return (double)getDistanceInGameSteps(from, to);
+            return distance;
         }
     }
 
