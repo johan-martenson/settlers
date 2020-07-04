@@ -25,8 +25,10 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
@@ -37,9 +39,12 @@ import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Vegetation.DEEP_WATER;
 import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
 import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
+import static org.appland.settlers.test.Utils.occupyBuilding;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -2805,5 +2810,515 @@ public class TestFishery {
         }
 
         assertFalse(map.getWorkers().contains(fisherman));
+    }
+
+    @Test
+    public void testFishermanFishNextToShallowWaterOnTileBelow() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(5, 5);
+        map.getTerrain().setTileBelow(point0, SHALLOW_WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.downLeft());
+        Utils.removeAllFishExceptOne(map, point0.downRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.downLeft()) || target.equals(point0.downRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.downLeft()));
+        assertTrue(visited.contains(point0.downRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFishermanFishNextToShallowWaterOnTileAbove() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(6, 4);
+        map.getTerrain().setTileAbove(point0, SHALLOW_WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.upLeft());
+        Utils.removeAllFishExceptOne(map, point0.upRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.upLeft()) || target.equals(point0.upRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.upLeft()));
+        assertTrue(visited.contains(point0.upRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFishermanFishNextToNormalWaterOnTileBelow() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(5, 5);
+        map.getTerrain().setTileBelow(point0, WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.downLeft());
+        Utils.removeAllFishExceptOne(map, point0.downRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.downLeft()) || target.equals(point0.downRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.downLeft()));
+        assertTrue(visited.contains(point0.downRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFishermanFishNextToNormalWaterOnTileAbove() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(6, 4);
+        map.getTerrain().setTileAbove(point0, WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.upLeft());
+        Utils.removeAllFishExceptOne(map, point0.upRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.upLeft()) || target.equals(point0.upRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.upLeft()));
+        assertTrue(visited.contains(point0.upRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFishermanFishNextToDeepWaterOnTileBelow() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(5, 5);
+        map.getTerrain().setTileBelow(point0, DEEP_WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.downLeft());
+        Utils.removeAllFishExceptOne(map, point0.downRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.downLeft()) || target.equals(point0.downRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.downLeft()));
+        assertTrue(visited.contains(point0.downRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFishermanFishNextToDeepWaterOnTileAbove() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a small lake on one tile */
+        Point point0 = new Point(6, 4);
+        map.getTerrain().setTileAbove(point0, DEEP_WATER);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Construct and occupy the fishery */
+        constructHouse(fishery);
+        Fisherman fisherman = occupyBuilding(new Fisherman(player0, map), fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Remove all but one fish in the three points around the small lake */
+        Utils.removeAllFishExceptOne(map, point0);
+        Utils.removeAllFishExceptOne(map, point0.upLeft());
+        Utils.removeAllFishExceptOne(map, point0.upRight());
+
+        /* Verify that the fisherman fishes from the three points around the small lake and then has no more fish */
+        Set<Point> visited = new HashSet<>();
+
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the worker to go outside */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the worker to go to a point on the lake */
+            Point target = fisherman.getTarget();
+
+            assertNotNull(target);
+            assertTrue(target.equals(point0) || target.equals(point0.upLeft()) || target.equals(point0.upRight()));
+            assertFalse(visited.contains(target));
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, target);
+
+            assertTrue(fisherman.isFishing());
+
+            visited.add(target);
+
+            /* Wait for the worker to go back to the fishery */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            assertFalse(fisherman.isFishing());
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            map.stepTime();
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(visited.size(), 3);
+        assertTrue(visited.contains(point0));
+        assertTrue(visited.contains(point0.upLeft()));
+        assertTrue(visited.contains(point0.upRight()));
+
+        /* Verify that the worker stays indoors when there is no more fish to catch */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+
+            map.stepTime();
+        }
     }
 }

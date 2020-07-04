@@ -79,6 +79,7 @@ public class Fisherman extends Worker {
         if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (!getHome().isOutOfNaturalResources()) {
                 if (countdown.hasReachedZero()) {
+
                     Point point = getFishingSpot();
 
                     if (point == null) {
@@ -278,7 +279,7 @@ public class Fisherman extends Worker {
                 continue;
             }
 
-            if (!map.getTerrain().isNextToWater(point)) {
+            if (!map.isNextToAnyWater(point)) {
                 continue;
             }
 

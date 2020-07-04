@@ -39,4 +39,8 @@ public enum Vegetation {
     public boolean canBuildFlags() {
         return canPlaceFlag;
     }
+
+    public boolean isAnyWater() {
+        return this == SHALLOW_WATER || this == WATER || this == DEEP_WATER;
+    }
 }

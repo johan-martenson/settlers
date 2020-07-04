@@ -3161,4 +3161,39 @@ public class GameMap {
         mapPointDownRight.setMineralAmount(mineral, amount);
         mapPointBelow.setMineralAmount(mineral, amount);
     }
+
+    boolean isNextToAnyWater(Point point) {
+        Vegetation vegetationUpLeft    = terrain.getTileUpLeft(point);
+        Vegetation vegetationAbove     = terrain.getTileAbove(point);
+        Vegetation vegetationUpRight   = terrain.getTileUpRight(point);
+        Vegetation vegetationDownRight = terrain.getTileDownRight(point);
+        Vegetation vegetationBelow     = terrain.getTileBelow(point);
+        Vegetation vegetationDownLeft  = terrain.getTileDownLeft(point);
+
+        if (vegetationUpLeft.isAnyWater()) {
+            return true;
+        }
+
+        if (vegetationAbove.isAnyWater()) {
+            return true;
+        }
+
+        if (vegetationUpRight.isAnyWater()) {
+            return true;
+        }
+
+        if (vegetationDownRight.isAnyWater()) {
+            return true;
+        }
+
+        if (vegetationBelow.isAnyWater()) {
+            return true;
+        }
+
+        if (vegetationDownLeft.isAnyWater()) {
+            return true;
+        }
+
+        return false;
+    }
 }

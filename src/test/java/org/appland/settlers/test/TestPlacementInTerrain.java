@@ -1664,7 +1664,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
 
-        /* Verify that there is an available house point on the buildable */
+        /* Verify that there is an available house point next to the buildable water */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
     }
 

@@ -7,6 +7,7 @@ import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farmer;
+import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
@@ -1792,6 +1793,30 @@ public class Utils {
         }
 
         assertEquals(map.getAmountFishAtPoint(point1), 0);
+    }
+
+    public static void removeAllFishExceptOne(GameMap map, Point point0) {
+        for (int i = 0; i < 1000; i++) {
+            if (map.getAmountFishAtPoint(point0) <= 1) {
+                break;
+            }
+
+            map.catchFishAtPoint(point0);
+        }
+
+        assertEquals(map.getAmountFishAtPoint(point0), 1);
+    }
+
+    public static void waitForFishermanToStopFishing(Fisherman fisherman, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (!fisherman.isFishing()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(fisherman.isFishing());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
