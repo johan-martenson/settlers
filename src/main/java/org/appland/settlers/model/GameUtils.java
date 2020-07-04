@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import static java.lang.Math.abs;
@@ -243,56 +244,65 @@ public class GameUtils {
         }
     }
 
+    static class PointAndCost implements Comparable<PointAndCost> {
+
+        private final Point point;
+        private int estimatedFullCostThroughPoint;
+
+        PointAndCost(Point point, int estimatedFullCostThroughPoint) {
+            this.point = point;
+            this.estimatedFullCostThroughPoint = estimatedFullCostThroughPoint;
+        }
+
+        @Override
+        public int compareTo(PointAndCost pointAndCost) {
+            if (estimatedFullCostThroughPoint < pointAndCost.estimatedFullCostThroughPoint) {
+                return -1;
+            } else if (estimatedFullCostThroughPoint > pointAndCost.estimatedFullCostThroughPoint) {
+                return 1;
+            }
+
+            return 0;
+        }
+    }
+
     // FIXME: HOTSPOT
     static List<Point> findShortestPath(Point start, Point goal, Set<Point> avoid, ConnectionsProvider connectionProvider) {
-        Set<Point>          evaluated         = new HashSet<>();
-        Set<Point>          toEvaluate        = new HashSet<>();
-        Map<Point, Integer> costToGetToPoint  = new HashMap<>();
-        Map<Point, Integer> estimatedFullCost = new HashMap<>();
-        Map<Point, Point>   cameFrom          = new HashMap<>();
+        Set<Point>          evaluated        = new HashSet<>();
+        Map<Point, Integer> costToGetToPoint = new HashMap<>();
+        Map<Point, Point>   cameFrom         = new HashMap<>();
         int                 bestCaseCost;
+
+        PriorityQueue<PointAndCost> toEvaluatePriorityQueue = new PriorityQueue<>();
 
         /* Define starting parameters */
         bestCaseCost = getDistanceInGameSteps(start, goal);
-        toEvaluate.add(start);
         costToGetToPoint.put(start, 0);
-        estimatedFullCost.put(start, bestCaseCost);
+
+        PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
+
+        toEvaluatePriorityQueue.add(startingPointAndCost);
 
         /* Declare variables outside of the loop to keep memory churn down */
-        Point currentPoint;
-        int currentEstimatedCost;
-        int tmpEstimatedCost;
-        int tentativeCost;
+        PointAndCost currentPoint;
+        int newCostToGetToPoint;
 
         /* Keep going through points yet to be evaluated until either a perfect match is found or all points have been done */
-        while (!toEvaluate.isEmpty()) {
-            currentPoint = null;
-            currentEstimatedCost = Integer.MAX_VALUE;
+        while (!toEvaluatePriorityQueue.isEmpty()) {
 
             /* Find the point to evaluate with the lowest estimated full cost */
-            for (Point iteratedPoint : toEvaluate) {
-
-                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
-
-                if (currentEstimatedCost > tmpEstimatedCost) {
-                    currentEstimatedCost = tmpEstimatedCost;
-                    currentPoint = iteratedPoint;
-
-                    if (currentEstimatedCost == bestCaseCost) {
-                        break;
-                    }
-                }
-            }
+            currentPoint = toEvaluatePriorityQueue.poll();
 
             /* Handle if the goal is reached */
-            if (goal.equals(currentPoint)) {
+            if (goal.equals(currentPoint.point)) {
+                Point previousPoint = currentPoint.point;
                 List<Point> path = new ArrayList<>();
 
                 /* Re-construct the path taken */
-                while (currentPoint != start) {
-                    path.add(0, currentPoint);
+                while (previousPoint != start) {
+                    path.add(0, previousPoint);
 
-                    currentPoint = cameFrom.get(currentPoint);
+                    previousPoint = cameFrom.get(previousPoint);
                 }
 
                 path.add(0, start);
@@ -301,11 +311,10 @@ public class GameUtils {
             }
 
             /* Do not re-evaluate the same point */
-            toEvaluate.remove(currentPoint);
-            evaluated.add(currentPoint);
+            evaluated.add(currentPoint.point);
 
             /* Evaluate each direct neighbor */
-            for (Point neighbor : connectionProvider.getPossibleConnections(currentPoint, goal)) {
+            for (Point neighbor : connectionProvider.getPossibleConnections(currentPoint.point, goal)) {
 
                 /* Skip already evaluated points */
                 if (evaluated.contains(neighbor)) {
@@ -318,24 +327,25 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = costToGetToPoint.get(currentPoint) + connectionProvider.realDistance(currentPoint, neighbor);
-
-                /* Add the neighbor to the evaluation list */
-                toEvaluate.add(neighbor);
+                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + connectionProvider.realDistance(currentPoint.point, neighbor);
 
                 /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
-                int currentCost = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
+                int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
 
-                if (tentativeCost < currentCost) {
-
+                if (newCostToGetToPoint < currentCostToGetToPoint) {
                     /* Keep track of how the neighbor was reached */
-                    cameFrom.put(neighbor, currentPoint);
+                    cameFrom.put(neighbor, currentPoint.point);
 
                     /* Remember the cost to reach the neighbor */
-                    costToGetToPoint.put(neighbor, tentativeCost);
+                    costToGetToPoint.put(neighbor, newCostToGetToPoint);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estimatedFullCost.put(neighbor, costToGetToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
+                    int estimatedFullCostThroughPoint = costToGetToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal);
+
+                    /* Add the neighbor to the evaluation list */
+                    PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
+
+                    toEvaluatePriorityQueue.add(neighborPointAndCost);
                 }
             }
         }
