@@ -122,6 +122,7 @@ public class Terrain {
         tileBelowMap.put((point.y + 1) * width + point.x - 1, vegetation);
     }
 
+    // FIXME: HOTSPOT FOR ALLOCATION
     private void constructDefaultTiles() {
         int x, y;
 

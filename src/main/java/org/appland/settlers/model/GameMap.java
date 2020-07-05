@@ -383,6 +383,8 @@ public class GameMap {
         /* Resume transport of stuck cargo */
         for (Flag flag : flags) {
             for (Cargo cargo : flag.getStackedCargo()) {
+
+                // FIXME: do we need to re-route all cargos each time?
                 cargo.rerouteIfNeeded();
             }
         }
@@ -2977,6 +2979,7 @@ public class GameMap {
      * @param end The flag or building to reach
      * @return the list of points with flags or buildings to pass by
      */
+    //FIXME: ALLOCATION HOTSPOT
     public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, EndPoint end) {
         return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject);
     }

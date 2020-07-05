@@ -121,6 +121,7 @@ public class Cargo {
         }
     }
 
+    // FIXME: ALLOCATION HOTSPOT
     void rerouteIfNeeded() throws InvalidRouteException {
 
         /* Handle the case where the targeted building cannot receive the cargo */

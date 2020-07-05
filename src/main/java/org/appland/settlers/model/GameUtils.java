@@ -517,6 +517,7 @@ public class GameUtils {
      * @param mapPoints The map with information about each point on the map
      * @return the list of flag points to pass (included the starting point) required to travel from start to goal
      */
+    // FIXME: ALLOCATION HOTSPOT
     static List<Point> findShortestPathViaRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
