@@ -160,6 +160,45 @@ public class GameUtils {
         return storehouse;
     }
 
+    public static boolean isAll(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
+        for (Vegetation vegetationInList : surroundingVegetation) {
+            if (vegetationInList != vegetation) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isAny(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
+        for (Vegetation vegetationInList : surroundingVegetation) {
+            if (vegetationInList == vegetation) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isSomeButNotAll(Collection<Vegetation> surroundingVegetation, Vegetation mountain) {
+        boolean foundMatch = false;
+        boolean foundNotMatch = false;
+
+        for (Vegetation vegetationInList : surroundingVegetation) {
+            if (vegetationInList == mountain) {
+                foundMatch = true;
+
+                continue;
+            }
+
+            if (vegetationInList != mountain) {
+                foundNotMatch = true;
+            }
+        }
+
+        return foundMatch && foundNotMatch;
+    }
+
     static class Line {
         final double k;
         final double m;

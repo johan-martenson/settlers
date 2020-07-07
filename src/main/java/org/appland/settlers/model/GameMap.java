@@ -21,13 +21,21 @@ import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
+import static org.appland.settlers.model.GameUtils.isAll;
+import static org.appland.settlers.model.GameUtils.isAny;
+import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Vegetation.DEEP_WATER;
+import static org.appland.settlers.model.Vegetation.DESERT;
+import static org.appland.settlers.model.Vegetation.LAVA;
+import static org.appland.settlers.model.Vegetation.MAGENTA;
 import static org.appland.settlers.model.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
+import static org.appland.settlers.model.Vegetation.SNOW;
+import static org.appland.settlers.model.Vegetation.SWAMP;
 import static org.appland.settlers.model.Vegetation.WATER;
 
 public class GameMap {
@@ -2506,15 +2514,22 @@ public class GameMap {
     }
 
     private Size isAvailableHousePoint(Player player, Point point, boolean isFirstHouse) {
-        Point flagPoint = point.downRight();
+        Point pointDown = point.down();
+        Point pointDownRight = point.downRight();
+        Point pointUpRight = point.upRight();
+        Point pointUpRightUpRight = point.upRightUpRight();
+        Point pointDownLeftDownLeft = point.downLeftDownLeft();
+        Point pointDownRightDownRight = point.downRightDownRight();
+        Point pointDownLeftLeft = point.downLeftLeft();
+
         MapPoint houseMapPoint = getMapPoint(point);
-        MapPoint flagMapPoint = getMapPoint(point.downRight());
-        MapPoint mapPointDown = pointToGameObject.get(point.down());
-        MapPoint mapPointUpRight = pointToGameObject.get(point.upRight());
-        MapPoint mapPointUpRightUpRight = pointToGameObject.get(point.up().right());
-        MapPoint mapPointDownLeftDownLeft = getMapPoint(point.downLeft().downLeft());
-        MapPoint mapPointDownRightDownRight = getMapPoint(point.down().right());
-        MapPoint mapPointDownLeftLeft = pointToGameObject.get(point.downLeft().left());
+        MapPoint mapPointDown = pointToGameObject.get(pointDown);
+        MapPoint mapPointDownRight = getMapPoint(pointDownRight);
+        MapPoint mapPointUpRight = pointToGameObject.get(pointUpRight);
+        MapPoint mapPointUpRightUpRight = pointToGameObject.get(pointUpRightUpRight);
+        MapPoint mapPointDownLeftDownLeft = getMapPoint(pointDownLeftDownLeft);
+        MapPoint mapPointDownRightDownRight = getMapPoint(pointDownRightDownRight);
+        MapPoint mapPointDownLeftLeft = pointToGameObject.get(pointDownLeftLeft);
 
         /* ALL CONDITIONS FOR SMALL */
 
@@ -2524,7 +2539,7 @@ public class GameMap {
         }
 
         /* The flag point also needs to be on the map */
-        if (flagMapPoint == null) {
+        if (mapPointDownRight == null) {
             return null;
         }
 
@@ -2549,52 +2564,7 @@ public class GameMap {
             return null;
         }
 
-        // Future improvement collapse these to avoid iterating through tiles over and over again
-        if (terrain.isOnMountain(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToDeepWater(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToMagenta(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToSwamp(point)) {
-            return null;
-        }
-
-        if (terrain.isInDeepWater(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToWater(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToDesert(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToSnow(point)) {
-            return null;
-        }
-
-        if (terrain.isNextToLava(point)) {
-            return null;
-        }
-
-        if (terrain.isOnEdgeOf(point, MOUNTAIN)) {
-            return null;
-        }
-
         if (houseMapPoint.isRoad()) {
-            return null;
-        }
-
-        if (!flagMapPoint.isFlag() && !isAvailableFlagPoint(player, flagPoint, !isFirstHouse)) {
             return null;
         }
 
@@ -2602,41 +2572,130 @@ public class GameMap {
             return null;
         }
 
+        /* Check that the surrounding vegetation allows for placing a small house */
+        Collection<Vegetation> surroundingVegetation = terrain.getSurroundingTiles(point);
+
+        if (isAll(surroundingVegetation, MOUNTAIN)) {
+            return null;
+        }
+
+        if (isAll(surroundingVegetation, DEEP_WATER)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, MAGENTA)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, SWAMP)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, WATER)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, DESERT)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, SNOW)) {
+            return null;
+        }
+
+        if (isAny(surroundingVegetation, LAVA)) {
+            return null;
+        }
+
+        if (isSomeButNotAll(surroundingVegetation, MOUNTAIN)) {
+            return null;
+        }
+
+        /* It must be possible to place a flag for a new building if there isn't already a flag */
+        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, pointDownRight, !isFirstHouse)) {
+            return null;
+        }
+
         /* It's not possible to build a house left/right or diagonally of a stone or building */
-        for (Point d : point.getDiagonalPointsAndSides()) {
-            if (!player.isWithinBorder(d)) {
-                continue;
-            }
+        Point pointLeft = point.left();
+        Point pointRight = point.right();
+        Point pointUpLeft = point.upLeft();
+        Point pointDownLeft = point.downLeft();
 
-            MapPoint adjacentMapPoint = getMapPoint(d);
+        MapPoint mapPointLeft = getMapPoint(pointLeft);
+        MapPoint mapPointRight = getMapPoint(pointRight);
+        MapPoint mapPointUpLeft = getMapPoint(pointUpLeft);
+        MapPoint mapPointDownLeft = getMapPoint(pointDownLeft);
 
-            /* It's not possible to build a house next to another house */
-            if (adjacentMapPoint.isBuilding()) {
-                return null;
-            }
-
-            /* It's not possible to build a house next to a stone */
-            if (adjacentMapPoint.isStone()) {
-                return null;
-            }
-        }
-
-        if (player.isWithinBorder(point.upRight()) && mapPointUpRight.isFlag()) {
+        if (mapPointLeft != null && mapPointLeft.isBuilding()) {
             return null;
         }
 
-        if (player.isWithinBorder(point.up().right()) && mapPointUpRightUpRight.isBuildingOfSize(LARGE)) {
+        if (mapPointLeft != null && mapPointLeft.isStone()) {
             return null;
         }
 
-        if (player.isWithinBorder(point.down()) && mapPointDown.isBuildingOfSize(LARGE)) {
+        if (mapPointUpLeft != null && mapPointUpLeft.isBuilding()) {
             return null;
         }
 
-        if (player.isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
-            if (getBuildingAtPoint(point.downRight().right()).getSize() == LARGE) {
-                return null;
-            }
+        if (mapPointUpLeft != null && mapPointUpLeft.isStone()) {
+            return null;
+        }
+
+        if (mapPointUpRight != null && mapPointUpRight.isBuilding()) {
+            return null;
+        }
+
+        if (mapPointUpRight != null && mapPointUpRight.isStone()) {
+            return null;
+        }
+
+        if (mapPointRight != null && mapPointRight.isBuilding()) {
+            return null;
+        }
+
+        if (mapPointRight != null && mapPointRight.isStone()) {
+            return null;
+        }
+
+        if (mapPointDownRight != null && mapPointDownRight.isBuilding()) {
+            return null;
+        }
+
+        if (mapPointDownRight != null && mapPointDownRight.isStone()) {
+            return null;
+        }
+
+        if (mapPointDownLeft != null && mapPointDownLeft.isBuilding()) {
+            return null;
+        }
+
+        if (mapPointDownLeft != null && mapPointDownLeft.isStone()) {
+            return null;
+        }
+
+        /* Cannot place a house down-left of a flag */
+        if (player.isWithinBorder(pointUpRight) && mapPointUpRight.isFlag()) {
+            return null;
+        }
+
+        /* Cannot place a house down-left-down-left of a large house */
+        if (player.isWithinBorder(pointUpRightUpRight) && mapPointUpRightUpRight.isBuildingOfSize(LARGE)) {
+            return null;
+        }
+
+        /* Cannot place a house above another large house */
+        if (player.isWithinBorder(pointDown) && mapPointDown.isBuildingOfSize(LARGE)) {
+            return null;
+        }
+
+        /* Cannot place a house up-left-left of a large house */
+        Point pointDownRightRight = point.downRightRight();
+        MapPoint mapPointDownRightRight = getMapPoint(pointDownRightRight);
+
+        if (player.isWithinBorder(pointDownRightRight) && mapPointDownRightRight.isBuildingOfSize(LARGE)) {
+            return null;
         }
 
         /* Can't place a building up-left-up-left of a large building */
@@ -2651,18 +2710,29 @@ public class GameMap {
 
         /* ADDITIONAL CONDITIONS FOR MEDIUM */
 
-        /* A large building can't have a tree directly left or right */
-        if ((isWithinMap(point.left())  && isTreeAtPoint(point.left())) ||
-            (isWithinMap(point.right()) && isTreeAtPoint(point.right()))) {
+        /* A large building can't have a tree directly left, right, or diagonally */
+        if (mapPointLeft != null && mapPointLeft.isTree()) {
             return SMALL;
         }
 
-        for (Point d : point.getDiagonalPoints()) {
+        if (mapPointRight != null && mapPointRight.isTree()) {
+            return SMALL;
+        }
 
-            /* It's not possible to build a medium house next to a tree */
-            if (isTreeAtPoint(d)) {
-                return SMALL;
-            }
+        if (mapPointUpLeft != null && mapPointUpLeft.isTree()) {
+            return SMALL;
+        }
+
+        if (mapPointUpRight != null && mapPointUpRight.isTree()) {
+            return SMALL;
+        }
+
+        if (mapPointDownLeft != null && mapPointDownLeft.isTree()) {
+            return SMALL;
+        }
+
+        if (mapPointDownRight != null && mapPointDownRight.isTree()) {
+            return SMALL;
         }
 
         /* Can only place small building up-right-right of large building */
@@ -2672,34 +2742,38 @@ public class GameMap {
 
         /* ADDITIONAL CONDITIONS FOR LARGE */
 
-        if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
+        if (player.isWithinBorder(pointUpLeft) && mapPointUpLeft.isFlag()) {
             return MEDIUM;
         }
 
-        if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+        if (player.isWithinBorder(pointDown) && mapPointDown.isBuilding()) {
             return MEDIUM;
         }
 
-        if (player.isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
+        if (player.isWithinBorder(pointLeft) && mapPointLeft.isFlag()) {
             return MEDIUM;
         }
 
-        if (player.isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
-            if (getBuildingAtPoint(point.upRight().right()).getSize() != SMALL) {
+        Point pointUpRightRight = point.upRightRight();
+        MapPoint mapPointUpRightRight = getMapPoint(pointUpRightRight);
+
+        if (player.isWithinBorder(pointUpRightRight) && mapPointUpRightRight.isBuilding()) {
+            if (!mapPointUpRightRight.isBuildingOfSize(SMALL)) {
                 return MEDIUM;
             }
         }
 
-        if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-            if (getBuildingAtPoint(point.up().right()).getSize() != SMALL) {
+        if (player.isWithinBorder(pointUpRightUpRight) && mapPointUpRightUpRight.isBuilding()) {
+            if (!mapPointUpRightUpRight.isBuildingOfSize(SMALL)) {
                 return MEDIUM;
             }
         }
 
-        if (player.isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
-            if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
-                return MEDIUM;
-            }
+        Point pointRightRight = point.rightRight();
+        MapPoint mapPointRightRight = getMapPoint(pointRightRight);
+
+        if (player.isWithinBorder(pointRightRight) && mapPointRightRight.isBuildingOfSize(LARGE)) {
+            return MEDIUM;
         }
 
         /* A large building needs a larger free area on buildable vegetation */
@@ -2709,8 +2783,10 @@ public class GameMap {
             !terrain.getTileUpLeft(point.upRight()).canBuildFlags()  ||
             !terrain.getTileAbove(point.upRight()).canBuildFlags()   ||
             !terrain.getTileUpRight(point.upRight()).canBuildFlags() ||
-            !terrain.isOnBuildable(point.left())      || !terrain.isOnBuildable(point.right()) ||
-            !terrain.isOnBuildable(point.downRight()) || !terrain.isOnBuildable(point.downLeft())) {
+            !terrain.isOnBuildable(point.left())                     ||
+            !terrain.isOnBuildable(point.right())                    ||
+            !terrain.isOnBuildable(point.downRight())                ||
+            !terrain.isOnBuildable(point.downLeft())) {
             return MEDIUM;
         }
 
@@ -2719,13 +2795,13 @@ public class GameMap {
         }
 
         /* Large buildings cannot be built if the height difference to close points is too large */
-        int heightAtPoint = getHeightAtPoint(point);
-        if (Math.abs(heightAtPoint - getHeightAtPoint(point.left()))      > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-            Math.abs(heightAtPoint - getHeightAtPoint(point.upLeft()))    > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-            Math.abs(heightAtPoint - getHeightAtPoint(point.upRight()))   > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-            Math.abs(heightAtPoint - getHeightAtPoint(point.right()))     > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-            Math.abs(heightAtPoint - getHeightAtPoint(point.downRight())) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-            Math.abs(heightAtPoint - getHeightAtPoint(point.downLeft()))  > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE) {
+        int heightAtPoint = houseMapPoint.getHeight();
+        if (Math.abs(heightAtPoint - mapPointLeft.getHeight())      > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - mapPointUpLeft.getHeight())    > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - mapPointUpRight.getHeight())   > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - mapPointRight.getHeight())     > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - mapPointDownRight.getHeight()) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - mapPointDownLeft.getHeight())  > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE) {
             return MEDIUM;
         }
 

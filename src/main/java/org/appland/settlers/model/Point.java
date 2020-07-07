@@ -211,4 +211,44 @@ public class Point extends java.awt.Point {
     public boolean isDownLeftOf(Point from) {
         return x == from.x - 1 && y == from.y - 1;
     }
+
+    public Point upRightUpRight() {
+        return new Point(x + 2, y + 2);
+    }
+
+    public Point downLeftDownLeft() {
+        return new Point(x - 2, y - 2);
+    }
+
+    public Point downRightDownRight() {
+        return new Point(x + 2, y - 2);
+    }
+
+    public Point downLeftLeft() {
+        return new Point(x - 3, y - 1);
+    }
+
+    public Point downRightRight() {
+        return new Point(x + 3, y - 1);
+    }
+
+    public Point upRightRight() {
+        return new Point(x + 3, y + 1);
+    }
+
+    public Point rightRight() {
+        return new Point(x + 4, y);
+    }
+
+    public Point leftLeft() {
+        return new Point(x - 4, y);
+    }
+
+    public Point upLeftLeft() {
+        return new Point(x - 3, y + 1);
+    }
+
+    public Point upLeftUpLeft() {
+        return new Point(x - 2, y + 2);
+    }
 }

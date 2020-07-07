@@ -1,8 +1,7 @@
 package org.appland.settlers.model;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -1028,24 +1027,24 @@ public class Player {
     private void addChangedAvailableConstructionForLargeBuilding(Building building) {
         Point point = building.getPosition();
 
-        changedAvailableConstruction.add(point.left().downLeft()); // Only medium building or flag
-        changedAvailableConstruction.add(point.left().left()); // Only medium building or flag
-        changedAvailableConstruction.add(point.left().upLeft()); // Only flag
-        changedAvailableConstruction.add(point.upLeft().upLeft()); // Only flag
+        changedAvailableConstruction.add(point.downLeftLeft()); // Only medium building or flag
+        changedAvailableConstruction.add(point.leftLeft()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upLeftLeft()); // Only flag
+        changedAvailableConstruction.add(point.upLeftUpLeft()); // Only flag
         changedAvailableConstruction.add(point.up()); // Only medium building or flag
-        changedAvailableConstruction.add(point.upRight().upRight()); // Only flag
-        changedAvailableConstruction.add(point.upRight().right()); // Only small building or flag
-        changedAvailableConstruction.add(point.right().right()); // Only small building or flag
+        changedAvailableConstruction.add(point.upRightUpRight()); // Only flag
+        changedAvailableConstruction.add(point.upRightRight()); // Only small building or flag
+        changedAvailableConstruction.add(point.rightRight()); // Only small building or flag
 
         // Not certain
-        changedAvailableConstruction.add(point.downLeft().downLeft()); // ?
+        changedAvailableConstruction.add(point.downLeftDownLeft()); // ?
     }
 
     private void addChangedAvailableConstructionForMediumBuilding(Building building) {
         Point point = building.getPosition();
 
-        changedAvailableConstruction.add(point.left().downLeft()); // _SEEMS LIKE_ only medium building or flag
-        changedAvailableConstruction.add(point.downLeft().downLeft()); // _SEEMS LIKE_ only medium building or flag
+        changedAvailableConstruction.add(point.downLeftLeft()); // _SEEMS LIKE_ only medium building or flag
+        changedAvailableConstruction.add(point.downLeftDownLeft()); // _SEEMS LIKE_ only medium building or flag
     }
 
     private void addChangedAvailableConstructionForSmallBuilding(Building building) {
@@ -1061,9 +1060,9 @@ public class Player {
         changedAvailableConstruction.add(point.up()); // Medium building or flag (?)
 
         // TODO: add tests for these!
-        changedAvailableConstruction.add(point.upLeft().upLeft()); // Only medium building or flag
-        changedAvailableConstruction.add(point.upRight().upRight()); // Only medium building or flag
-        changedAvailableConstruction.add(point.upLeft().left()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upLeftUpLeft()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upRightUpRight()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upLeftLeft()); // Only medium building or flag
     }
 
     private void addChangedAvailableConstructionForTree(Tree newTree) {
@@ -1095,10 +1094,10 @@ public class Player {
         changedAvailableConstruction.add(point.downLeft()); // Change to medium building, not flag
         changedAvailableConstruction.add(point.right()); // Change to medium building, not flag
         changedAvailableConstruction.add(point.left()); // Change to nothing allowed
-        changedAvailableConstruction.add(point.left().upLeft()); // Change from small building to flag
+        changedAvailableConstruction.add(point.upLeftLeft()); // Change from small building to flag
         changedAvailableConstruction.add(point.upLeft()); // Change to only allow buildings (too close for flag)
         changedAvailableConstruction.add(point.upRight()); // Change from mine to none
-        changedAvailableConstruction.add(point.upLeft().upLeft()); // Change to only flag
+        changedAvailableConstruction.add(point.upLeftUpLeft()); // Change to only flag
     }
 
     public Set<Point> getBorderPoints() {

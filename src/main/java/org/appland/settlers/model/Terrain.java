@@ -221,54 +221,41 @@ public class Terrain {
     /**
      * Returns a list of the tiles surrounding the given point
      *
-     * @param center
+     * @param point
      * @return
      */
-    public List<Vegetation> getSurroundingTiles(Point center) {
+    public List<Vegetation> getSurroundingTiles(Point point) {
         List<Vegetation> result = new LinkedList<>();
 
-        /* This method is called frequently. Treat the tiles one-by-one to avoid creating a temporary list */
+        Vegetation vegetationUpLeft    = getTileUpLeft(point);
+        Vegetation vegetationAbove     = getTileAbove(point);
+        Vegetation vegetationUpRight   = getTileUpRight(point);
+        Vegetation vegetationDownRight = getTileDownRight(point);
+        Vegetation vegetationBelow     = getTileBelow(point);
+        Vegetation vegetationDownLeft  = getTileDownLeft(point);
 
-        /* Tile down right */
-        Vegetation vegetation = getTileDownRight(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationUpLeft != null) {
+            result.add(vegetationUpLeft);
         }
 
-        /* Tile below */
-        vegetation = getTileBelow(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationAbove != null) {
+            result.add(vegetationAbove);
         }
 
-        /* Tile down left */
-        vegetation = getTileDownLeft(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationUpRight != null) {
+            result.add(vegetationUpRight);
         }
 
-        /* Tile up left */
-        vegetation = getTileUpLeft(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationDownRight != null) {
+            result.add(vegetationDownRight);
         }
 
-        /* Tile above */
-        vegetation = getTileAbove(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationBelow != null) {
+            result.add(vegetationBelow);
         }
 
-        /* Tile up right */
-        vegetation = getTileUpRight(center);
-
-        if (vegetation != null) {
-            result.add(vegetation);
+        if (vegetationDownLeft != null) {
+            result.add(vegetationDownLeft);
         }
 
         return result;
