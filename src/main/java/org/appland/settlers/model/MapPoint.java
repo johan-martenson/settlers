@@ -286,4 +286,8 @@ class MapPoint {
     public void consumeOneFish() {
         fishAmount = fishAmount - 1;
     }
+
+    public boolean isUnHarvestedCrop() {
+        return crop != null && crop.getGrowthState() != Crop.GrowthState.HARVESTED;
+    }
 }

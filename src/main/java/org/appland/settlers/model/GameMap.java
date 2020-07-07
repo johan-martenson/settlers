@@ -1428,6 +1428,8 @@ public class GameMap {
     }
 
     private boolean isAvailableFlagPoint(Player player, Point point, boolean checkBorder) {
+        MapPoint mapPoint = getMapPoint(point);
+
         if (!isWithinMap(point)) {
             return false;
         }
@@ -1436,15 +1438,19 @@ public class GameMap {
             return false;
         }
 
-        if (isFlagAtPoint(point)) {
+        if (mapPoint.isFlag()) {
             return false;
         }
 
-        if (isStoneAtPoint(point)) {
+        if (mapPoint.isStone()) {
             return false;
         }
 
-        if (isTreeAtPoint(point)) {
+        if (mapPoint.isTree()) {
+            return false;
+        }
+
+        if (mapPoint.isBuilding()) {
             return false;
         }
 
@@ -1458,45 +1464,58 @@ public class GameMap {
             return false;
         }
 
-        if (isCropAtPoint(point) &&
-            getCropAtPoint(point).getGrowthState() != HARVESTED) {
+        if (mapPoint.isUnHarvestedCrop()) {
             return false;
         }
 
-        for (Point d : point.getDiagonalPoints()) {
-            if (player.isWithinBorder(d) && isFlagAtPoint(d)) {
-                return false;
-            }
-        }
+        Point pointRight = point.right();
+        Point pointLeft = point.left();
+        Point pointUpLeft = point.upLeft();
+        Point pointUpRight = point.upRight();
+        Point pointDownRight = point.downRight();
+        Point pointDownLeft = point.downLeft();
 
-        if (player.isWithinBorder(point.right()) && isFlagAtPoint(point.right())) {
+        MapPoint mapPointRight = getMapPoint(pointRight);
+        MapPoint mapPointLeft = getMapPoint(pointLeft);
+        MapPoint mapPointUpLeft = getMapPoint(pointUpLeft);
+        MapPoint mapPointUpRight = getMapPoint(pointUpRight);
+        MapPoint mapPointDownRight = getMapPoint(pointDownRight);
+        MapPoint mapPointDownLeft = getMapPoint(pointDownLeft);
+
+        if (player.isWithinBorder(pointUpLeft) && mapPointUpLeft.isFlag()) {
             return false;
         }
 
-        if (player.isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
+        if (player.isWithinBorder(pointUpRight) && mapPointUpRight.isFlag()) {
             return false;
         }
 
-        if (isBuildingAtPoint(point)) {
+        if (player.isWithinBorder(pointDownRight) && mapPointDownRight.isFlag()) {
             return false;
         }
 
-        if (player.isWithinBorder(point.downRight()) && isBuildingAtPoint(point.downRight())) {
-            if (getBuildingAtPoint(point.downRight()).getSize() == LARGE) {
-                return false;
-            }
+        if (player.isWithinBorder(pointDownLeft) && mapPointDownLeft.isFlag()) {
+            return false;
         }
 
-        if (player.isWithinBorder(point.right()) && isBuildingAtPoint(point.right())) {
-            if (getBuildingAtPoint(point.right()).getSize() == LARGE) {
-                return false;
-            }
+        if (player.isWithinBorder(pointRight) && mapPointRight.isFlag()) {
+            return false;
         }
 
-        if (player.isWithinBorder(point.downLeft()) && isBuildingAtPoint(point.downLeft())) {
-            if (getBuildingAtPoint(point.downLeft()).getSize() == LARGE) {
-                return false;
-            }
+        if (player.isWithinBorder(pointLeft) && mapPointLeft.isFlag()) {
+            return false;
+        }
+
+        if (player.isWithinBorder(pointDownRight) && mapPointDownRight.isBuildingOfSize(LARGE)) {
+            return false;
+        }
+
+        if (player.isWithinBorder(pointRight) && mapPointRight.isBuildingOfSize(LARGE)) {
+            return false;
+        }
+
+        if (player.isWithinBorder(pointDownLeft) && mapPointDownLeft.isBuildingOfSize(LARGE)) {
+            return false;
         }
 
         return true;
