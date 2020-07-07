@@ -136,4 +136,9 @@ public class Headquarter extends Storehouse {
         /* Destroy the headquarter if it's captured */
         super.tearDown();
     }
+
+    @Override
+    public boolean isMilitaryBuilding() {
+        return true;
+    }
 }

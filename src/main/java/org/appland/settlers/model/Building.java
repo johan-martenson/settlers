@@ -25,6 +25,9 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> totalAmountNeededForProduction;
     private final Map<Material, Integer> totalAmountNeededForUpgrade;
     private final int maxCoins;
+    private final int maxHostedSoldiers;
+    private Collection<Point> defendedLand;
+    private final int defenceRadius;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -109,6 +112,19 @@ public class Building implements EndPoint {
         totalAmountNeededForProduction = getMaterialNeededForProduction();
         totalAmountNeededForUpgrade = getMaterialNeededForUpgrade();
         maxCoins = getMaxCoins();
+
+        /* Remember how many soldiers can be hosted to avoid repeated lookups */
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
+
+        if (militaryBuilding != null) {
+            maxHostedSoldiers = militaryBuilding.maxHostedMilitary();
+            defenceRadius = militaryBuilding.defenceRadius();
+        } else  {
+            maxHostedSoldiers = 0;
+            defenceRadius = 0;
+        }
+
+        defendedLand = null;
     }
 
     private Map<Material, Integer> getMaterialNeededForUpgrade() {
@@ -131,13 +147,15 @@ public class Building implements EndPoint {
     }
 
     int getDefenceRadius() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
-
-        return militaryBuilding.defenceRadius();
+        return defenceRadius;
     }
 
     public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(getPosition(), getDefenceRadius() - 1, getMap());
+        if (defendedLand == null) {
+            defendedLand = GameUtils.getHexagonAreaAroundPoint(position, defenceRadius - 1, player.getMap());
+        }
+
+        return defendedLand;
     }
 
     public int getAmount(Material material) {
@@ -179,19 +197,11 @@ public class Building implements EndPoint {
     }
 
     public boolean isMilitaryBuilding() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
-
-        return militaryBuilding != null;
+        return false;
     }
 
     public int getMaxHostedMilitary() {
-        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
-
-        if (militaryBuilding == null) {
-            return 0;
-        } else {
-            return militaryBuilding.maxHostedMilitary();
-        }
+        return maxHostedSoldiers;
     }
 
     public int getNumberOfHostedMilitary() {

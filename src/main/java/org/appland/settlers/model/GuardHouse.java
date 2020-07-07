@@ -26,4 +26,9 @@ public class GuardHouse extends Building {
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in barracks.");
     }
+
+    @Override
+    public boolean isMilitaryBuilding() {
+        return true;
+    }
 }

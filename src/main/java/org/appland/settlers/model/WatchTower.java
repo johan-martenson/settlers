@@ -26,4 +26,9 @@ public class WatchTower extends Building {
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in watch tower.");
     }
+
+    @Override
+    public boolean isMilitaryBuilding() {
+        return true;
+    }
 }

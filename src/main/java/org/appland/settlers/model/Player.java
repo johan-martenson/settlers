@@ -33,7 +33,7 @@ public class Player {
     private final List<Building> buildings;
     private final Set<Point> discoveredLand;
     private final List<Material> transportPriorities;
-    private final Collection<Point> ownedLand;
+    private final Set<Point> ownedLand;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
     private final Map<Material, Integer> producedMaterials;
@@ -74,7 +74,7 @@ public class Player {
         buildings           = new LinkedList<>();
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
-        ownedLand           = new ArrayList<>();
+        ownedLand           = new HashSet<>();
         producedMaterials   = new EnumMap<>(Material.class);
 
         /* Create the food quota and set it to equal distribution */
@@ -353,7 +353,7 @@ public class Player {
         }
 
         /* Update full list of owned land and the list of borders */
-        List<Point> updatedOwnedLand = new ArrayList<>();
+        Set<Point> updatedOwnedLand = new HashSet<>();
 
         borderPoints.clear();
 
@@ -372,10 +372,10 @@ public class Player {
         }
 
         /* Calculate and remember the new owned land */
-        List<Point> calcNewOwnedLand = new ArrayList<>(updatedOwnedLand);
+        Set<Point> calcNewOwnedLand = new HashSet<>(updatedOwnedLand);
         calcNewOwnedLand.removeAll(ownedLand);
 
-        List<Point> calcNewLostLand = new ArrayList<>(ownedLand);
+        Set<Point> calcNewLostLand = new HashSet<>(ownedLand);
         calcNewLostLand.removeAll(updatedOwnedLand);
 
         /* Report lost land */

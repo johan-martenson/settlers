@@ -26,4 +26,9 @@ public class Fortress extends Building {
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in fortress.");
     }
+
+    @Override
+    public boolean isMilitaryBuilding() {
+        return true;
+    }
 }

@@ -78,4 +78,9 @@ public class Barracks extends Building {
             upgraded.putCargo(coinCargo);
         }
     }
+
+    @Override
+    public boolean isMilitaryBuilding() {
+        return true;
+    }
 }

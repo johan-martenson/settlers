@@ -1266,6 +1266,7 @@ public class TestMessages {
 
         /* Verify a message is sent when the barracks is populated so player 1 loses land */
         Point point3 = new Point(14, 22);
+
         assertTrue(player1.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());

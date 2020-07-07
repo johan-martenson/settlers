@@ -776,7 +776,7 @@ public class GameMap {
         /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building>    claims       = new HashMap<>();
         Map<Player, List<Land>> updatedLands = new HashMap<>();
-        List<Building>          allBuildings = new LinkedList<>();
+        Set<Building>           allBuildings = new HashSet<>();
 
         allBuildings.addAll(getBuildings());
         allBuildings.addAll(buildingsToAdd);
@@ -790,14 +790,12 @@ public class GameMap {
                 continue;
             }
 
-            /* Store the claim for each military building.
-
-               This iterates over a collection and the order may be non-deterministic
-            */
+            /* Store the claim for each military building. This iterates over a collection and the order may be non-deterministic */
             for (Point point : building.getDefendedLand()) {
-                if (!claims.containsKey(point)) {
-                    claims.put(point, building);
-                } else if (calculateClaim(building, point) > calculateClaim(claims.get(point), point)) {
+
+                claims.putIfAbsent(point, building);
+
+                if (calculateClaim(building, point) > calculateClaim(claims.get(point), point)) {
                     claims.put(point, building);
                 }
             }
@@ -942,7 +940,7 @@ public class GameMap {
             }
         }
 
-        /* Remove the flags */
+        /* Remove the flags now outside of any border */
         for (Flag flag : flagsToRemove) {
             removeFlagWithoutSideEffects(flag);
         }
@@ -1602,8 +1600,10 @@ public class GameMap {
     private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         List<Point>  resultList = new ArrayList<>();
 
+        MapPoint mapPoint = getMapPoint(from);
+
         /* Houses can only be left via the driveway so handle this case separately */
-        if (isBuildingAtPoint(from) && getBuildingAtPoint(from).getPosition().equals(from)) {
+        if (mapPoint.isBuilding() /*&& getBuildingAtPoint(from).getPosition().equals(from)*/) {
             resultList.add(from.downRight());
 
             return resultList;
@@ -1619,50 +1619,53 @@ public class GameMap {
         boolean cannotWalkOnTileAbove     = !canWalkOn(terrain.getTileAbove(from));
         boolean cannotWalkOnTileBelow     = !canWalkOn(terrain.getTileBelow(from));
 
-        for (Point point : adjacentPoints) {
+        for (Point adjacentPoint : adjacentPoints) {
+
+            MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
 
             /* Filter points outside the map */
-            if (!isWithinMap(point)) {
+            if (!isWithinMap(adjacentPoint)) {
                 continue;
             }
 
             /* Filter points with stones */
-            if (isStoneAtPoint(point)) {
+            if (mapPointAdjacent.isStone()) {
                 continue;
             }
 
             /* Buildings can only be reached from their flags */
-            if (isBuildingAtPoint(point) && !getBuildingAtPoint(point).getFlag().getPosition().equals(from)) {
+            if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(from)) {
                 continue;
             }
 
             /* Filter points separated by vegetation that can't be walked on */
-            if (point.isLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
+
+            if (adjacentPoint.isLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
                 continue;
             }
 
-            if (point.isUpLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
+            if (adjacentPoint.isUpLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
                 continue;
             }
 
-            if (point.isUpRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
+            if (adjacentPoint.isUpRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
                 continue;
             }
 
-            if (point.isRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
+            if (adjacentPoint.isRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
                 continue;
             }
 
-            if (point.isDownRightOf(from) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
+            if (adjacentPoint.isDownRightOf(from) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
                 continue;
             }
 
-            if (point.isDownLeftOf(from) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
+            if (adjacentPoint.isDownLeftOf(from) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
                 continue;
             }
 
             /* Add the point to the list if it passed the filters */
-            resultList.add(point);
+            resultList.add(adjacentPoint);
         }
 
         return resultList;
@@ -1905,7 +1908,9 @@ public class GameMap {
      * @return true if there is a building on the given point
      */
     public boolean isBuildingAtPoint(Point point) {
-        return getBuildingAtPoint(point) != null;
+        MapPoint mapPoint = getMapPoint(point);
+
+        return mapPoint.isBuilding();
     }
 
     /**
@@ -2630,11 +2635,6 @@ public class GameMap {
             return null;
         }
 
-        /* It must be possible to place a flag for a new building if there isn't already a flag */
-        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, pointDownRight, !isFirstHouse)) {
-            return null;
-        }
-
         /* It's not possible to build a house left/right or diagonally of a stone or building */
         Point pointLeft = point.left();
         Point pointRight = point.right();
@@ -2724,6 +2724,11 @@ public class GameMap {
 
         /* Can't place a building up-right-up-right of a large building */
         if (mapPointDownLeftDownLeft != null && mapPointDownLeftDownLeft.isBuildingOfSize(LARGE)) {
+            return null;
+        }
+
+        /* It must be possible to place a flag for a new building if there isn't already a flag */
+        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, pointDownRight, !isFirstHouse)) {
             return null;
         }
 
