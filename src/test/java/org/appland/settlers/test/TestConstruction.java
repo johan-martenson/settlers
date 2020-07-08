@@ -283,7 +283,7 @@ public class TestConstruction {
     }
 
     @Test
-    public void testInvalidDeliveryToUnfinishedSawmill() throws Exception {
+    public void testInvalidDeliveryToUnfinishedSawmill() {
         Sawmill sawmill0 = new Sawmill(null);
 
         try {

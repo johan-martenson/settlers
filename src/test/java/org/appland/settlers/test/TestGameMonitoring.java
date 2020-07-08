@@ -4532,7 +4532,7 @@ public class TestGameMonitoring {
     }
 
     @Test
-    public void testMonitoringEventWhenMilitaryBuildingIsUpgraded() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testMonitoringEventWhenMilitaryBuildingIsUpgraded() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -4585,7 +4585,7 @@ public class TestGameMonitoring {
     }
 
     @Test
-    public void testMonitoringEventWhenMilitaryBuildingIsUpgradedIsOnlySentOnce() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testMonitoringEventWhenMilitaryBuildingIsUpgradedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

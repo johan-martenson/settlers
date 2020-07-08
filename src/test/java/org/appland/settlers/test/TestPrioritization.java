@@ -2025,7 +2025,7 @@ public class TestPrioritization {
     }
 
     @Test
-    public void testCourierPicksUpCargoOfHighestPriority() throws Exception, InvalidUserActionException {
+    public void testCourierPicksUpCargoOfHighestPriority() throws Exception {
 
         /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2133,7 +2133,7 @@ public class TestPrioritization {
     }
 
     @Test
-    public void testStorageWorkerHandsOutCargoOfHighestPriority() throws Exception, InvalidUserActionException {
+    public void testStorageWorkerHandsOutCargoOfHighestPriority() throws Exception {
 
         /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2283,7 +2283,7 @@ public class TestPrioritization {
     }
 
     @Test
-    public void testReprioritizedMaterialsDoNotGetDuplicated() throws Exception, InvalidUserActionException {
+    public void testReprioritizedMaterialsDoNotGetDuplicated() throws Exception {
 
         /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

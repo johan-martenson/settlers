@@ -206,7 +206,7 @@ public class Storehouse extends Building {
 
                 getMap().placeWorker(geologist, this);
                 geologist.setTarget(flag.getPosition());
-                flag.geologistSent(geologist);
+                flag.geologistSent();
 
                 return true;
             }

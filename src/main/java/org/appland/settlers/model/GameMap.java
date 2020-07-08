@@ -968,10 +968,11 @@ public class GameMap {
                 if (road.getWayPoints().size() == 2) {
 
                     /* Check if the connected building is military */
-                    if ((isBuildingAtPoint(road.getStart()) &&
-                         getBuildingAtPoint(road.getStart()).isMilitaryBuilding()) ||
-                        (isBuildingAtPoint(road.getEnd())   &&
-                         getBuildingAtPoint(road.getEnd()).isMilitaryBuilding())) {
+                    MapPoint mapPointStart = getMapPoint(road.getStart());
+                    MapPoint mapPointEnd = getMapPoint(road.getEnd());
+
+                    // FIXME: this should end up also not removing roads to unfinished/unoccupied military buildings. Test and fix.
+                    if (mapPointStart.isMilitaryBuilding() || mapPointEnd.isMilitaryBuilding()) {
                         continue;
                     }
                 }
@@ -1603,7 +1604,7 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(from);
 
         /* Houses can only be left via the driveway so handle this case separately */
-        if (mapPoint.isBuilding() /*&& getBuildingAtPoint(from).getPosition().equals(from)*/) {
+        if (mapPoint.isBuilding()) {
             resultList.add(from.downRight());
 
             return resultList;
@@ -3030,8 +3031,10 @@ public class GameMap {
 
     void replaceBuilding(Building upgradedBuilding, Point position) {
 
+        MapPoint mapPoint = getMapPoint(position);
+
         /* Plan to remove the pre-upgrade building */
-        Building oldBuilding = getBuildingAtPoint(position);
+        Building oldBuilding = mapPoint.getBuilding();
         buildingsToRemove.add(oldBuilding);
 
         /* Put the upgraded building in place  */
@@ -3039,8 +3042,8 @@ public class GameMap {
         upgradedBuilding.setFlag(oldBuilding.getFlag());
 
         /* Update the map point */
-        getMapPoint(position).removeBuilding();
-        getMapPoint(position).setBuilding(upgradedBuilding);
+        mapPoint.removeBuilding();
+        mapPoint.setBuilding(upgradedBuilding);
 
         /* Update the player's list of buildings */
         upgradedBuilding.getPlayer().removeBuilding(oldBuilding);

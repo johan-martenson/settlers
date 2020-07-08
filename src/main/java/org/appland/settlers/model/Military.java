@@ -117,7 +117,7 @@ public class Military extends Worker {
         if (state == DEFENDING || state == ATTACKING) {
 
             /* Hit the opponent if the military is involved in a fight */
-            opponent.hit(this);
+            opponent.hit();
         } else if (state == WAITING_FOR_DEFENDING_OPPONENT) {
 
             if (buildingToAttack.getPlayer().equals(getPlayer())) {
@@ -495,7 +495,7 @@ public class Military extends Worker {
         }
     }
 
-    private void hit(Military military) {
+    private void hit() {
 
         /* Decrease health */
         health--;

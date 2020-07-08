@@ -121,7 +121,7 @@ public class Flag implements EndPoint {
         geologistsCalled++;
     }
 
-    void geologistSent(Geologist geologist) {
+    void geologistSent() {
         geologistsCalled--;
     }
 

@@ -2063,7 +2063,7 @@ public class TestStorehouse {
     }
 
     @Test
-    public void testPushedOutMaterialFollowsPriorityOrder() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testPushedOutMaterialFollowsPriorityOrder() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

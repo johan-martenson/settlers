@@ -57,7 +57,7 @@ public class TestPlacementInTerrain {
     // TODO: test placement on borders between vegetation areas
 
     @Test
-    public void testPathCloseToLake() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testPathCloseToLake() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

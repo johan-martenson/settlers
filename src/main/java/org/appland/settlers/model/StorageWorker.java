@@ -337,9 +337,7 @@ public class StorageWorker extends Worker {
         return false;
     }
 
-    private boolean needyConsumerExists(Collection<Building> buildings,
-            Class<? extends Building> aClass,
-            Material material) {
+    private boolean needyConsumerExists(Collection<Building> buildings, Class<? extends Building> aClass, Material material) {
 
         for (Building building : buildings) {
             if (building.getClass().equals(aClass) &&

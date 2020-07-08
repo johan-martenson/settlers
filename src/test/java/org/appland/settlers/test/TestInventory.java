@@ -102,7 +102,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testDepositRetrieveDeadMatter() throws Exception {
+    public void testDepositRetrieveDeadMatter() {
 
         storehouse.putCargo(new Cargo(SWORD, null));
         assertEquals(storehouse.getAmount(SWORD), 1);
@@ -162,7 +162,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testDepositRetrieveWorkers() throws Exception {
+    public void testDepositRetrieveWorkers() {
         storehouse.depositWorker(new Forester(null, null));
         assertEquals(storehouse.getAmount(FORESTER), 1);
         assertTrue(storehouse.isInStock(FORESTER));
@@ -172,7 +172,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testDepositRetrieveMilitary() throws Exception {
+    public void testDepositRetrieveMilitary() {
 
         assertNoMilitaryInInventory(storehouse);
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
@@ -198,7 +198,7 @@ public class TestInventory {
     }
 
     @Test(expected=Exception.class)
-    public void testRetrieveWoodFromEmptyInventory() throws Exception {
+    public void testRetrieveWoodFromEmptyInventory() {
         storehouse.retrieve(WOOD);
     }
 
@@ -223,7 +223,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveAnyMilitary() throws Exception {
+    public void testRetrieveAnyMilitary() {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertTrue(storehouse.isInStock(PRIVATE));
 
@@ -277,7 +277,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveCourierLikeWorker() throws Exception {
+    public void testRetrieveCourierLikeWorker() {
         storehouse.depositWorker(new Courier(null, null));
 
         try {
@@ -288,7 +288,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testDepositAndRetrieveMilitaryOfEachKind() throws Exception {
+    public void testDepositAndRetrieveMilitaryOfEachKind() {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertEquals(storehouse.getAmount(PRIVATE), 1);
         storehouse.retrieveMilitary(PRIVATE);
@@ -306,7 +306,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveMilitaryAsWorker() throws Exception {
+    public void testRetrieveMilitaryAsWorker() {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
 
         try {

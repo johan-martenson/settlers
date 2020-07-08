@@ -290,4 +290,8 @@ class MapPoint {
     public boolean isUnHarvestedCrop() {
         return crop != null && crop.getGrowthState() != Crop.GrowthState.HARVESTED;
     }
+
+    public boolean isMilitaryBuilding() {
+        return building != null && building.isMilitaryBuilding();
+    }
 }

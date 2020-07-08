@@ -67,7 +67,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testUnreachableRoute() throws Exception, org.appland.settlers.model.InvalidRouteException {
+    public void testUnreachableRoute() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -98,7 +98,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testFindRouteWithSingleRoad() throws Exception, org.appland.settlers.model.InvalidRouteException {
+    public void testFindRouteWithSingleRoad() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -131,7 +131,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testFindRoute() throws Exception, org.appland.settlers.model.InvalidRouteException {
+    public void testFindRoute() throws Exception {
         /*
          * x: 3        x: 11                x: 23                  x: ?
          * F--x--F1--x--F2--x--F3--x--F4--x--F10----------------|  y: 3
@@ -489,7 +489,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testPossibleDirectConnectionsFromFlag() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testPossibleDirectConnectionsFromFlag() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -523,7 +523,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testPossibleDirectConnectionsInCorners() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testPossibleDirectConnectionsInCorners() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -593,7 +593,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testAvailableFlagPointOnRoadIsPossibleDirectConnection() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testAvailableFlagPointOnRoadIsPossibleDirectConnection() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -628,7 +628,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testPossibleDirectConnectionsOnSides() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testPossibleDirectConnectionsOnSides() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -702,7 +702,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -745,7 +745,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionUnderBuilding() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionUnderBuilding() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -771,7 +771,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionUnderStone() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionUnderStone() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -796,7 +796,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionUnderTree() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionUnderTree() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -821,7 +821,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionsAtAndOutsideBorder() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionsAtAndOutsideBorder() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);
@@ -854,7 +854,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNoPossibleConnectionThroughNewCrop() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testNoPossibleConnectionThroughNewCrop() throws Exception {
 
         /* Create game map */
         Player player0 = new Player("Player 0", BLUE);
@@ -1648,7 +1648,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception, org.appland.settlers.model.InvalidRouteException {
+    public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

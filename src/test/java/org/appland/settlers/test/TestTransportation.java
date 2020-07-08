@@ -579,7 +579,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCourierIsAssignedToNewRoad() throws Exception, InvalidRouteException {
+    public void testCourierIsAssignedToNewRoad() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

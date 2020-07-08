@@ -99,16 +99,6 @@ public class Metalworker extends Worker {
         return null;
     }
 
-    private boolean anyToolHasQuotaAssigned() {
-        for (Material tool : TOOLS) {
-            if (getPlayer().getProductionQuotaForTool(tool) > 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @Override
     protected void onEnterBuilding(Building building) {
         if (building instanceof Metalworks) {

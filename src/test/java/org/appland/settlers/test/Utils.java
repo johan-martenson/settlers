@@ -112,7 +112,7 @@ public class Utils {
         return result;
     }
 
-    public static void fillUpInventory(Storehouse storehouse, Material material, int amount) throws Exception {
+    public static void fillUpInventory(Storehouse storehouse, Material material, int amount) {
         Cargo cargo = new Cargo(material, null);
 
         for (int i = 0; i < amount; i++) {
@@ -314,7 +314,7 @@ public class Utils {
         return courier;
     }
 
-    public static void adjustInventoryTo(Storehouse storehouse, Material material, int amount) throws Exception {
+    public static void adjustInventoryTo(Storehouse storehouse, Material material, int amount) {
         GameMap map = storehouse.getMap();
 
         for (int i = 0; i < 1000; i++) {
@@ -821,7 +821,7 @@ public class Utils {
         assertEquals(building.getAmount(material), amount);
     }
 
-    static void deliverCargo(Building building, Material material) throws Exception {
+    static void deliverCargo(Building building, Material material) {
         GameMap map = building.getMap();
         Cargo cargo = new Cargo(material, map);
 
@@ -1612,7 +1612,7 @@ public class Utils {
         assertEquals(building.getAmount(material), targetAmount);
     }
 
-    public static void putCargoToBuilding(Building mill, Material material) throws Exception {
+    public static void putCargoToBuilding(Building mill, Material material) {
         mill.promiseDelivery(material);
         mill.putCargo(new Cargo(material, mill.getMap()));
     }
@@ -1768,6 +1768,8 @@ public class Utils {
             for (Worker worker : workers) {
                 if (map.getWorkers().contains(worker)) {
                     stillOnMap = true;
+
+                    break;
                 }
             }
 

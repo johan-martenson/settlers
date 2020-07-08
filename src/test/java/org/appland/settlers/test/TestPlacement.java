@@ -1269,7 +1269,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testRoadConnectionSuggestionsDoNotIncludePointsInWater() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testRoadConnectionSuggestionsDoNotIncludePointsInWater() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);

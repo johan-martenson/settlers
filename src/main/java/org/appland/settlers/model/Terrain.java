@@ -275,9 +275,11 @@ public class Terrain {
 
             if (vegetation1 == vegetation) {
                 matchFound = true;
-            } else if (vegetation1 != vegetation) {
-                nonMatchFound = true;
+
+                continue;
             }
+
+            nonMatchFound = true;
         }
 
         return matchFound && nonMatchFound;

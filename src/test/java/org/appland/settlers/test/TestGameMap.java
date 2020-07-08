@@ -434,7 +434,7 @@ public class TestGameMap {
     }
 
     @Test
-    public void testFindWayBetweenHouseAndItsFlag() throws Exception, InvalidRouteException {
+    public void testFindWayBetweenHouseAndItsFlag() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

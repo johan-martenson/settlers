@@ -376,11 +376,11 @@ public class Building implements EndPoint {
         }
 
         /* Update the list of received materials and the list of promised deliveries */
-        int existingQuantity = receivedMaterial.getOrDefault(material, 0);
-        receivedMaterial.put(material, existingQuantity + 1);
+        int received = receivedMaterial.getOrDefault(material, 0);
+        receivedMaterial.put(material, received + 1);
 
-        existingQuantity = promisedDeliveries.getOrDefault(material, 0);
-        promisedDeliveries.put(material, existingQuantity - 1);
+        int promised = promisedDeliveries.getOrDefault(material, 0);
+        promisedDeliveries.put(material, promised - 1);
 
         /* Start the promotion countdown if it's a coin */
         if (material == COIN && isMilitaryBuilding()) {
@@ -389,7 +389,6 @@ public class Building implements EndPoint {
     }
 
     public boolean needsMaterial(Material material) {
-
         return getLackingAmountWithProjected(material) > 0;
     }
 
@@ -952,10 +951,6 @@ public class Building implements EndPoint {
         promisedDeliveries.put(cargo.getMaterial(), amount - 1);
     }
 
-    private Integer getProjectedAmount(Material material) {
-        return promisedDeliveries.getOrDefault(material, 0) + getAmount(material);
-    }
-
     public int getTotalAmountNeeded(Material material) {
 
         if (state == State.UNDER_CONSTRUCTION) {
@@ -1019,27 +1014,6 @@ public class Building implements EndPoint {
             int received = receivedMaterial.getOrDefault(material, 0);
 
             return total - promised - received;
-        }
-
-        return 0;
-    }
-
-    private int getLackingAmountWithoutProjected(Material material) {
-
-        if (state == State.UNDER_CONSTRUCTION) {
-
-            if (!getMaterialsToBuildHouse().containsKey(material)) {
-                return 0;
-            }
-
-            return getMaterialsToBuildHouse().get(material) - getAmount(material);
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-
-            if (!isAccepted(material)) {
-                return 0;
-            } else {
-                return getTotalAmountNeeded(material) - getAmount(material);
-            }
         }
 
         return 0;

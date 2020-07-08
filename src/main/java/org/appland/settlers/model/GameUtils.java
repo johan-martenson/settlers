@@ -180,20 +180,18 @@ public class GameUtils {
         return false;
     }
 
-    public static boolean isSomeButNotAll(Collection<Vegetation> surroundingVegetation, Vegetation mountain) {
+    public static boolean isSomeButNotAll(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
         boolean foundMatch = false;
         boolean foundNotMatch = false;
 
         for (Vegetation vegetationInList : surroundingVegetation) {
-            if (vegetationInList == mountain) {
+            if (vegetationInList == vegetation) {
                 foundMatch = true;
 
                 continue;
             }
 
-            if (vegetationInList != mountain) {
-                foundNotMatch = true;
-            }
+            foundNotMatch = true;
         }
 
         return foundMatch && foundNotMatch;
@@ -286,7 +284,7 @@ public class GameUtils {
     static class PointAndCost implements Comparable<PointAndCost> {
 
         private final Point point;
-        private int estimatedFullCostThroughPoint;
+        private final int estimatedFullCostThroughPoint;
 
         PointAndCost(Point point, int estimatedFullCostThroughPoint) {
             this.point = point;

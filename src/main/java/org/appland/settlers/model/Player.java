@@ -167,10 +167,6 @@ public class Player {
         return ownedLand;
     }
 
-    private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {
-        return GameUtils.hullWanderer(discoveredLand);
-    }
-
     private void updateDiscoveredLand() {
         for (Building building : buildings) {
             if (building.isMilitaryBuilding() && building.isOccupied()) {

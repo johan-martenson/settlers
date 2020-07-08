@@ -333,7 +333,7 @@ public class TestScenarios {
     }
 
     @Test
-    public void testGameStartFromScratchWithUserInput() throws Exception, org.appland.settlers.model.InvalidUserActionException {
+    public void testGameStartFromScratchWithUserInput() throws Exception {
 
         /* Create initial game setup */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
