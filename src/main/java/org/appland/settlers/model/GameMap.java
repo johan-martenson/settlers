@@ -19,7 +19,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.GameUtils.isAny;
@@ -100,8 +99,7 @@ public class GameMap {
     private boolean winnerReported;
 
     enum PointInformation {
-        NONE,
-        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP
+        NONE, STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP
     }
 
     /**
@@ -248,12 +246,14 @@ public class GameMap {
      */
     public Road getRoadAtPoint(Point point) {
 
+        MapPoint mapPoint = getMapPoint(point);
+
         /* Don't include start and end points of roads so ignore the point if there is a flag */
-        if (isFlagAtPoint(point)) {
+        if (mapPoint.isFlag()) {
             return null;
         }
 
-        Set<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
+        Set<Road> connectedRoads = mapPoint.getConnectedRoads();
 
         /* Return null if there is no connected road */
         if (connectedRoads.isEmpty()) {
@@ -384,8 +384,10 @@ public class GameMap {
             }
         }
 
+        stones.removeAll(stonesToRemove);
+
         for (Stone stone : stonesToRemove) {
-            removeStone(stone);
+            getMapPoint(stone.getPosition()).removeStone();
         }
 
         /* Resume transport of stuck cargo */
@@ -493,7 +495,6 @@ public class GameMap {
             }
 
             for (Building building : changedBuildings) {
-
                 if (!player.getDiscoveredLand().contains(building.getPosition())) {
                     continue;
                 }
@@ -646,8 +647,8 @@ public class GameMap {
         List<BorderChange> borderChanges;
         borderChanges = new ArrayList<>();
 
-        for (Player player1 : players) {
-            BorderChange borderChange = player1.getBorderChange();
+        for (Player player : players) {
+            BorderChange borderChange = player.getBorderChange();
 
             if (borderChange != null) {
                 borderChanges.add(borderChange);
@@ -669,8 +670,6 @@ public class GameMap {
      */
     public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
-        boolean firstHouse = false;
-
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
             throw new InvalidUserActionException("Can't place " + house + " as it is already placed.");
@@ -682,39 +681,33 @@ public class GameMap {
         }
 
         /* Handle the first building separately */
-        if (house.getPlayer().getBuildings().isEmpty()) {
-            if (! (house instanceof Headquarter)) {
-                throw new InvalidUserActionException("Can not place " + house + " as initial building");
-            }
+        boolean isFirstHouse = house.getPlayer().getBuildings().isEmpty();
 
-            firstHouse = true;
+        /* The first building place by each player must be a headquarter */
+        if (isFirstHouse && !(house instanceof Headquarter)) {
+            throw new InvalidUserActionException("Can not place " + house + " as initial building");
         }
 
         /* Only one headquarter can be placed per player */
-        if (house instanceof Headquarter) {
-            for (Building building : house.getPlayer().getBuildings()) {
-                if (building instanceof Headquarter) {
-                    throw new InvalidUserActionException("Can only have one headquarter placed per player");
-                }
-            }
+        if (house instanceof Headquarter && !isFirstHouse) {
+            throw new InvalidUserActionException("Can only have one headquarter placed per player");
         }
 
         /* Verify that the point is available for the chosen building */
         if (house.isMine()) {
             if (!isAvailableMinePoint(house.getPlayer(), point)) {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
-
             }
         } else {
-            Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, firstHouse);
+            Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
 
             if (buildingAvailable == null || !buildingAvailable.contains(house.getSize())) {
                 throw new InvalidUserActionException("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
             }
         }
 
-        /* In case of headquarter, verify that the building is not placed within another player's border -- normally
-        *  this is done by isAvailableHousePoint
+        /* In case of headquarter, verify that the building is not placed within another player's border
+        *     -- normally this is done by isAvailableHousePoint
         */
         if (house instanceof Headquarter) {
             for (Player player : players) {
@@ -724,20 +717,23 @@ public class GameMap {
             }
         }
 
+        MapPoint mapPoint = getMapPoint(point);
+        MapPoint mapPointDownRight = getMapPoint(point.downRight());
+
         /* Handle the case where there is a sign at the site */
-        if (isSignAtPoint(point)) {
+        if (mapPoint.isSign()) {
             removeSign(getSignAtPoint(point));
         }
 
         /* Use the existing flag if it exists, otherwise place a new flag */
-        if (isFlagAtPoint(point.downRight())) {
+        if (mapPointDownRight.isFlag()) {
             house.setFlag(getFlagAtPoint(point.downRight()));
         } else {
             Flag flag = house.getFlag();
 
             flag.setPosition(point.downRight());
 
-            if (firstHouse) {
+            if (isFirstHouse) {
                 placeFlagRegardlessOfBorder(flag);
             } else {
                 placeFlag(flag);
@@ -755,12 +751,12 @@ public class GameMap {
         house.getPlayer().addBuilding(house);
 
         /* Initialize the border if it's the first house */
-        if (firstHouse) {
+        if (isFirstHouse) {
             updateBorder(house, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
         }
 
         /* Store in the point that there is now a building there */
-        getMapPoint(point).setBuilding(house);
+        mapPoint.setBuilding(house);
 
         /* Create a road between the flag and the building */
         placeDriveWay(house);
@@ -1055,11 +1051,14 @@ public class GameMap {
         Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
-        if (!isFlagAtPoint(start)) {
+        MapPoint mapPointStart = getMapPoint(start);
+        MapPoint mapPointEnd = getMapPoint(end);
+
+        if (!mapPointStart.isFlag()) {
             throw new InvalidEndPointException(start);
         }
 
-        if (!isFlagAtPoint(end)) {
+        if (!mapPointEnd.isFlag()) {
             throw new InvalidEndPointException(end);
         }
 
@@ -1067,16 +1066,12 @@ public class GameMap {
             throw new InvalidEndPointException();
         }
 
-
         /* Verify that the road does not overlap itself */
         if (!GameUtils.isUnique(wayPoints)) {
             throw new InvalidUserActionException("Cannot create a road that overlaps itself");
         }
 
-        /*
-           Verify that the road has at least one free point between the
-           endpoints so the courier has somewhere to stand
-        */
+        /* Verify that the road has at least one free point between the endpoints so the courier has somewhere to stand */
         if (wayPoints.size() < 3) {
             throw new InvalidUserActionException("Road " + wayPoints + " is too short.");
         }
@@ -1097,8 +1092,8 @@ public class GameMap {
             throw new InvalidUserActionException(point + " in road is invalid");
         }
 
-        Flag startFlag = getFlagAtPoint(start);
-        Flag endFlag   = getFlagAtPoint(end);
+        Flag startFlag = mapPointStart.getFlag();
+        Flag endFlag   = mapPointEnd.getFlag();
 
         Road road = new Road(player, startFlag, wayPoints, endFlag);
 
@@ -1216,7 +1211,7 @@ public class GameMap {
      * @param end The end point of the road
      * @return A road between the two endpoints if any exists, otherwise null.
      */
-    // TODO: this doesn't work for flags, where multiple roads intersect. Verify who uses this method.
+    // FIXME: this doesn't work for flags, where multiple roads intersect. Verify who uses this method.
     public Road getRoad(Point start, Point end) {
         for (Road road : roads) {
             if ((road.getStart().equals(start) && road.getEnd().equals(end)) ||
@@ -1257,20 +1252,21 @@ public class GameMap {
     private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
         Point flagPoint = flag.getPosition();
+        MapPoint mapPoint = getMapPoint(flagPoint);
 
         if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint, checkBorder)) {
             throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
         }
 
         /* Handle the case where the flag is placed on a sign */
-        if (isSignAtPoint(flagPoint)) {
+        if (mapPoint.isSign()) {
             removeSign(getSignAtPoint(flagPoint));
         }
 
         /* Handle the case where the flag is on an existing road that will be split */
-        if (pointIsOnRoad(flagPoint)) {
+        if (mapPoint.isRoad()) {
 
-            Road existingRoad = getRoadAtPoint(flagPoint);
+            Road existingRoad = mapPoint.getRoad();
             Courier courier   = existingRoad.getCourier();
 
             List<Point> points = existingRoad.getWayPoints();
@@ -1279,7 +1275,7 @@ public class GameMap {
 
             removeRoadButNotWorker(existingRoad);
 
-            pointToGameObject.get(flag.getPosition()).setFlag(flag);
+            mapPoint.setFlag(flag);
             flags.add(flag);
 
             Road newRoad1 = placeRoad(flag.getPlayer(), points.subList(0, index + 1));
@@ -1304,10 +1300,13 @@ public class GameMap {
                     Point lastPoint = courier.getLastPoint();
                     Point nextPoint = courier.getNextPoint();
 
+                    MapPoint mapPointLast = getMapPoint(lastPoint);
+                    MapPoint mapPointNext = getMapPoint(nextPoint);
+
                     /* If the courier is on the road between one of the flags and a building, pick the road with the flag */
 
                     /*    - Courier walking from flag to building */
-                    if (isFlagAtPoint(lastPoint) && isBuildingAtPoint(nextPoint) && nextPoint.equals(lastPoint.upLeft())) {
+                    if (mapPointLast.isFlag() && mapPointNext.isBuilding() && nextPoint.equals(lastPoint.upLeft())) {
                         if (lastPoint.equals(newRoad1.getStart()) || lastPoint.equals(newRoad1.getEnd())) {
                             roadToAssign = newRoad1;
                         } else {
@@ -1315,7 +1314,7 @@ public class GameMap {
                         }
 
                     /*    - Courier walking from building to flag */
-                    } else if (isBuildingAtPoint(lastPoint) && isFlagAtPoint(nextPoint)) {
+                    } else if (mapPointLast.isBuilding() && mapPointNext.isFlag()) {
                         if (nextPoint.equals(newRoad1.getStart()) || nextPoint.equals(newRoad1.getEnd())) {
                             roadToAssign = newRoad1;
                         } else {
@@ -1339,14 +1338,13 @@ public class GameMap {
                                 roadToAssign = newRoad2;
                             }
                         }
-
                     }
                 }
 
                 courier.assignToRoad(roadToAssign);
             }
         } else {
-            pointToGameObject.get(flag.getPosition()).setFlag(flag);
+            mapPoint.setFlag(flag);
             flags.add(flag);
         }
 
@@ -1567,8 +1565,8 @@ public class GameMap {
             Size result = isAvailableHousePoint(player, point);
 
             if (result != null) {
-                    housePoints.put(point, result);
-                }
+                housePoints.put(point, result);
+            }
         }
 
         return housePoints;
@@ -1744,9 +1742,9 @@ public class GameMap {
      * @return Returns the flag at the given point, or null if there is no flag at the given point
      */
     public Flag getFlagAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getFlag();
+        return mapPoint.getFlag();
     }
 
     private boolean isPossibleAsEndPointInRoad(Player player, Point point) {
@@ -1755,13 +1753,13 @@ public class GameMap {
             return false;
         }
 
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        if (mp.isFlag() && player.isWithinBorder(point)) {
+        if (mapPoint.isFlag() && player.isWithinBorder(point)) {
             return true;
         }
 
-        if (isRoadAtPoint(point) && isAvailableFlagPoint(player, point)) {
+        if (mapPoint.isRoad() && isAvailableFlagPoint(player, point)) {
             return true;
         }
 
@@ -1773,33 +1771,33 @@ public class GameMap {
     }
 
     private boolean isPossibleAsAnyPointInRoad(Player player, Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
         if (!isWithinMap(point)) {
             return false;
         }
 
-        if (mp.isRoad()) {
+        if (mapPoint.isRoad()) {
             return false;
         }
 
-        if (mp.isFlag()) {
+        if (mapPoint.isFlag()) {
             return false;
         }
 
-        if (mp.isStone()) {
+        if (mapPoint.isStone()) {
             return false;
         }
 
-        if (mp.isBuilding()) {
+        if (mapPoint.isBuilding()) {
             return false;
         }
 
-        if (mp.isTree()) {
+        if (mapPoint.isTree()) {
             return false;
         }
 
-        if (mp.isCrop()) {
+        if (mapPoint.isCrop()) {
             return false;
         }
 
@@ -1843,18 +1841,38 @@ public class GameMap {
      * @return A list of the adjacent points that it's possible to build a road to from the given point
      */
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point from) {
-        Point[] adjacentPoints  = from.getAdjacentPoints();
-        List<Point>  resultList = new ArrayList<>();
+        List<Point> resultList = new ArrayList<>();
 
-        for (Point point : adjacentPoints) {
-            if (isPossibleAsAnyPointInRoad(player, point)) {
-                resultList.add(point);
-            }
+        Point pointUpLeft = from.upLeft();
+        Point pointUpRight = from.upRight();
+        Point pointRight = from.right();
+        Point pointDownRight = from.downRight();
+        Point pointDownLeft = from.downLeft();
+        Point pointLeft = from.left();
+
+        if (isPossibleAsAnyPointInRoad(player, pointUpLeft)) {
+            resultList.add(pointUpLeft);
         }
 
-        resultList.remove(from.up());
+        if (isPossibleAsAnyPointInRoad(player, pointUpRight)) {
+            resultList.add(pointUpRight);
+        }
 
-        resultList.remove(from.down());
+        if (isPossibleAsAnyPointInRoad(player, pointRight)) {
+            resultList.add(pointRight);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointDownRight)) {
+            resultList.add(pointDownRight);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointDownLeft)) {
+            resultList.add(pointDownLeft);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointLeft)) {
+            resultList.add(pointLeft);
+        }
 
         return resultList;
     }
@@ -1868,24 +1886,42 @@ public class GameMap {
      * @return A list of the adjacent points that it's possible to build a road to
      */
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) throws InvalidUserActionException {
-        Point[] adjacentPoints  = from.getAdjacentPoints();
-        List<Point>  resultList = new ArrayList<>();
-
         if (!isWithinMap(from)) {
             throw new InvalidUserActionException("Cannot get adjacent road connections from a point outside the map");
         }
 
-        for (Point point : adjacentPoints) {
-            if (isPossibleAsEndPointInRoad(player, point)) {
-                resultList.add(point);
-            } else if (isPossibleAsAnyPointInRoad(player, point)) {
-                resultList.add(point);
-            }
+        List<Point> resultList = new ArrayList<>();
+
+        Point pointUpLeft = from.upLeft();
+        Point pointUpRight = from.upRight();
+        Point pointRight = from.right();
+        Point pointDownRight = from.downRight();
+        Point pointDownLeft = from.downLeft();
+        Point pointLeft = from.left();
+
+        if (isPossibleAsAnyPointInRoad(player, pointUpLeft) || isPossibleAsEndPointInRoad(player, pointUpLeft)) {
+            resultList.add(pointUpLeft);
         }
 
-        resultList.remove(from.up());
+        if (isPossibleAsAnyPointInRoad(player, pointUpRight) || isPossibleAsEndPointInRoad(player, pointUpRight)) {
+            resultList.add(pointUpRight);
+        }
 
-        resultList.remove(from.down());
+        if (isPossibleAsAnyPointInRoad(player, pointRight) || isPossibleAsEndPointInRoad(player, pointRight)) {
+            resultList.add(pointRight);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointDownRight) || isPossibleAsEndPointInRoad(player, pointDownRight)) {
+            resultList.add(pointDownRight);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointDownLeft) || isPossibleAsEndPointInRoad(player, pointDownLeft)) {
+            resultList.add(pointDownLeft);
+        }
+
+        if (isPossibleAsAnyPointInRoad(player, pointLeft) || isPossibleAsEndPointInRoad(player, pointLeft)) {
+            resultList.add(pointLeft);
+        }
 
         return resultList;
     }
@@ -1897,9 +1933,9 @@ public class GameMap {
      * @return the building at the given point
      */
     public Building getBuildingAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getBuilding();
+        return mapPoint.getBuilding();
     }
 
     /**
@@ -1921,9 +1957,9 @@ public class GameMap {
      * @return true if there is a road at the given point
      */
     public boolean isRoadAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return !mp.getConnectedNeighbors().isEmpty();
+        return !mapPoint.getConnectedNeighbors().isEmpty();
     }
 
     /**
@@ -1933,9 +1969,9 @@ public class GameMap {
      * @return true if there is a tree at the point
      */
     public boolean isTreeAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getTree() != null;
+        return mapPoint.getTree() != null;
     }
 
     /**
@@ -2010,19 +2046,19 @@ public class GameMap {
      * @throws Exception Throws exception if the tree cannot be placed
      */
     public Tree placeTree(Point point) throws InvalidUserActionException {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        if (mp.isFlag()) {
+        if (mapPoint.isFlag()) {
             throw new InvalidUserActionException("Can't place tree on " + point + " on existing flag");
-        } else if (mp.isRoad()) {
+        } else if (mapPoint.isRoad()) {
             throw new InvalidUserActionException("Can't place tree on " + point + " on existing road");
-        } else if (mp.isStone()) {
+        } else if (mapPoint.isStone()) {
             throw new InvalidUserActionException("Can't place tree on " + point + " on existing stone");
         }
 
         Tree tree = new Tree(point);
 
-        mp.setTree(tree);
+        mapPoint.setTree(tree);
 
         trees.add(tree);
 
@@ -2042,11 +2078,11 @@ public class GameMap {
     }
 
     void removeTree(Point position) {
-        MapPoint mp = pointToGameObject.get(position);
+        MapPoint mapPoint = pointToGameObject.get(position);
 
-        Tree tree = mp.getTree();
+        Tree tree = mapPoint.getTree();
 
-        mp.removeTree();
+        mapPoint.removeTree();
 
         trees.remove(tree);
 
@@ -2055,9 +2091,9 @@ public class GameMap {
     }
 
     public Tree getTreeAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getTree();
+        return mapPoint.getTree();
     }
 
     /**
@@ -2067,11 +2103,11 @@ public class GameMap {
      * @return The placed stone
      */
     public Stone placeStone(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
         Stone stone = new Stone(point);
 
-        mp.setStone(stone);
+        mapPoint.setStone(stone);
 
         stones.add(stone);
 
@@ -2086,19 +2122,15 @@ public class GameMap {
      * @throws InvalidUserActionException Throws exception if the crop cannot be placed
      */
     public Crop placeCrop(Point point) throws InvalidUserActionException {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        if (isCropAtPoint(point)) {
-            Crop crop = mp.getCrop();
-
-            if (crop.getGrowthState() != HARVESTED) {
-                throw new InvalidUserActionException("Can't place crop on non-harvested crop at " + point);
-            }
+        if (mapPoint.isUnHarvestedCrop()) {
+            throw new InvalidUserActionException("Can't place crop on non-harvested crop at " + point);
         }
 
         Crop crop = new Crop(point, this);
 
-        mp.setCrop(crop);
+        mapPoint.setCrop(crop);
 
         crops.add(crop);
 
@@ -2115,9 +2147,9 @@ public class GameMap {
      * @return True if there is a crop at the point
      */
     public boolean isCropAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getCrop() != null;
+        return mapPoint.getCrop() != null;
     }
 
     /**
@@ -2127,15 +2159,15 @@ public class GameMap {
      * @return True if there is a stone at the point
      */
     public boolean isStoneAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
+        MapPoint mapPoint = pointToGameObject.get(point);
 
-        return mp.getStone() != null;
+        return mapPoint.getStone() != null;
     }
 
     Cargo removePartOfStone(Point position) {
-        MapPoint mp = pointToGameObject.get(position);
+        MapPoint mapPoint = pointToGameObject.get(position);
 
-        Stone stone = mp.getStone();
+        Stone stone = mapPoint.getStone();
 
         if (stone.noMoreStone()) {
             return null;
@@ -2144,7 +2176,7 @@ public class GameMap {
         stone.removeOnePart();
 
         if (stone.noMoreStone()) {
-            mp.setStone(null);
+            mapPoint.setStone(null);
 
             /* Report that the stone was removed */
             removedStones.add(stone);
@@ -2216,9 +2248,9 @@ public class GameMap {
     }
 
     private void removeStone(Stone stone) {
-        MapPoint mp = pointToGameObject.get(stone.getPosition());
+        MapPoint mapPoint = pointToGameObject.get(stone.getPosition());
 
-        mp.setStone(null);
+        mapPoint.setStone(null);
 
         stones.remove(stone);
     }
@@ -2230,12 +2262,12 @@ public class GameMap {
      * @throws Exception Throws exception if there is a fault when removing connected roads
      */
     public void removeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
-        MapPoint mpUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
-        MapPoint mp = pointToGameObject.get(flag.getPosition());
+        MapPoint mapPointUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
+        MapPoint mapPoint = pointToGameObject.get(flag.getPosition());
 
         /* Destroy the house if the flag is connected to a house */
-        if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
-            Building attachedBuilding = mpUpLeft.getBuilding();
+        if (mapPointUpLeft.isBuilding() && flag.equals(mapPointUpLeft.getBuilding().getFlag())) {
+            Building attachedBuilding = mapPointUpLeft.getBuilding();
 
             if (!attachedBuilding.isBurningDown() && !attachedBuilding.isDestroyed()) {
                 attachedBuilding.tearDown();
@@ -2244,7 +2276,7 @@ public class GameMap {
 
         /* Remove the road if the flag is an endpoint to a road */
         List<Road> roadsToRemove = new LinkedList<>();
-        for (Road road : mp.getConnectedRoads()) {
+        for (Road road : mapPoint.getConnectedRoads()) {
             if (road.getStartFlag().equals(flag) || road.getEndFlag().equals(flag)) {
                 roadsToRemove.add(road);
             }
@@ -2258,10 +2290,10 @@ public class GameMap {
     }
 
     private void removeFlagWithoutSideEffects(Flag flag) {
-        MapPoint mp = pointToGameObject.get(flag.getPosition());
+        MapPoint mapPoint = pointToGameObject.get(flag.getPosition());
 
         /* Remove the flag */
-        mp.removeFlag();
+        mapPoint.removeFlag();
 
         /* Report the removed flag */
         reportRemovedFlag(flag);
@@ -2391,9 +2423,11 @@ public class GameMap {
      * @return The placed sign
      */
     public Sign placeSign(Material mineral, Size amount, Point point) {
+        MapPoint mapPoint = getMapPoint(point);
+
         Sign sign = new Sign(mineral, amount, point, this);
 
-        getMapPoint(point).setSign(sign);
+        mapPoint.setSign(sign);
 
         signs.add(sign);
 
@@ -2431,9 +2465,9 @@ public class GameMap {
     }
 
     void removeSignWithinStepTime(Sign sign) {
-        MapPoint mp = getMapPoint(sign.getPosition());
+        MapPoint mapPoint = getMapPoint(sign.getPosition());
 
-        mp.setSign(null);
+        mapPoint.setSign(null);
 
         signsToRemove.add(sign);
 
@@ -2442,9 +2476,9 @@ public class GameMap {
     }
 
     private void removeSign(Sign sign) {
-        MapPoint mp = getMapPoint(sign.getPosition());
+        MapPoint mapPoint = getMapPoint(sign.getPosition());
 
-        mp.setSign(null);
+        mapPoint.setSign(null);
 
         signs.remove(sign);
 
@@ -2460,9 +2494,9 @@ public class GameMap {
     }
 
     void removeBuilding(Building building) {
-        MapPoint mp = getMapPoint(building.getPosition());
+        MapPoint mapPoint = getMapPoint(building.getPosition());
 
-        mp.removeBuilding();
+        mapPoint.removeBuilding();
 
         buildingsToRemove.add(building);
     }
@@ -2873,19 +2907,22 @@ public class GameMap {
         }
 
         /* Return false if the point is on a flag */
-        if (isFlagAtPoint(point)) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        if (mapPoint.isFlag()) {
             return false;
         }
 
         /* Return false if the point is on a road */
-        if (isRoadAtPoint(point)) {
+        if (mapPoint.isRoad()) {
             return false;
         }
 
         /* Return false if it's not possible to place a flag */
         Point flagPoint = point.downRight();
+        MapPoint mapPointDownRight = getMapPoint(flagPoint);
 
-        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint)) {
+        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, flagPoint)) {
             return false;
         }
 
@@ -2910,8 +2947,8 @@ public class GameMap {
 
             /* Add the point if it's possible to build a mine there */
             if (isAvailableMinePoint(player, point)) {
-                    availableMinePoints.add(point);
-                }
+                availableMinePoints.add(point);
+            }
         }
 
         return availableMinePoints;
@@ -2995,13 +3032,15 @@ public class GameMap {
         /* Go through the full map and look for a suitable point */
         for (Point p : getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR)) {
 
+            MapPoint mapPoint = getMapPoint(p);
+
             /* Filter buildings */
-            if (isBuildingAtPoint(p)) {
+            if (mapPoint.isBuilding()) {
                 continue;
             }
 
             /* Filter stones */
-            if (isStoneAtPoint(p)) {
+            if (mapPoint.isStone()) {
                 continue;
             }
 
@@ -3183,42 +3222,42 @@ public class GameMap {
     }
 
     PointInformation whatIsAtPoint(Point point) {
-        MapPoint mp = getMapPoint(point);
+        MapPoint mapPoint = getMapPoint(point);
 
-        if (mp == null) {
+        if (mapPoint == null) {
             return PointInformation.OUTSIDE_MAP;
         }
 
-        if (mp.isTree()) {
+        if (mapPoint.isTree()) {
             return PointInformation.TREE;
         }
 
-        if (mp.isStone()) {
+        if (mapPoint.isStone()) {
             return PointInformation.STONE;
         }
 
-        if (mp.isFlag()) {
+        if (mapPoint.isFlag()) {
 
-            if (mp.isRoad()) {
+            if (mapPoint.isRoad()) {
                 return PointInformation.FLAG_AND_ROADS;
             }
 
             return PointInformation.FLAG;
         }
 
-        if (mp.isBuilding()) {
+        if (mapPoint.isBuilding()) {
             return PointInformation.BUILDING;
         }
 
-        if (mp.isRoad()) {
+        if (mapPoint.isRoad()) {
             return PointInformation.ROAD;
         }
 
-        if (mp.isSign()) {
+        if (mapPoint.isSign()) {
             return PointInformation.SIGN;
         }
 
-        if (mp.isCrop()) {
+        if (mapPoint.isCrop()) {
             return PointInformation.CROP;
         }
 

@@ -649,6 +649,8 @@ public class TestQuarry {
         /* Verify that the stone is gone when the final part is removed */
         stone0.removeOnePart();
 
+        assertEquals(stone0.getAmount(), 0);
+
         map.stepTime();
 
         assertFalse(map.isStoneAtPoint(point1));

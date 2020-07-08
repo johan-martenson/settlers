@@ -294,4 +294,23 @@ class MapPoint {
     public boolean isMilitaryBuilding() {
         return building != null && building.isMilitaryBuilding();
     }
+
+    public Road getRoad() {
+        /* Don't include start and end points of roads so ignore the point if there is a flag */
+        if (isFlag()) {
+            return null;
+        }
+
+        /* Return null if there is no connected road */
+        if (connectedRoads.isEmpty()) {
+            return null;
+        }
+
+        /* Return the first found connected road */
+        return connectedRoads.iterator().next();
+    }
+
+    public void removeStone() {
+        stone = null;
+    }
 }
