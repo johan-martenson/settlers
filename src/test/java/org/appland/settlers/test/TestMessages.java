@@ -1265,7 +1265,7 @@ public class TestMessages {
         assertNotNull(military);
 
         /* Verify a message is sent when the barracks is populated so player 1 loses land */
-        Point point3 = new Point(14, 22);
+        Point point3 = new Point(14, 20);
 
         assertTrue(player1.getBorderPoints().contains(point3));
 

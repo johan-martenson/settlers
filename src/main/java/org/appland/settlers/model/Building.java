@@ -28,6 +28,7 @@ public class Building implements EndPoint {
     private final int maxHostedSoldiers;
     private Collection<Point> defendedLand;
     private final int defenceRadius;
+    private long generation;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -1214,4 +1215,12 @@ public class Building implements EndPoint {
 
     /* Intended to be overridden by subclasses if needed */
     void onConstructionFinished() { }
+
+    void setGeneration(long generation) {
+        this.generation = generation;
+    }
+
+    public long getGeneration() {
+        return generation;
+    }
 }

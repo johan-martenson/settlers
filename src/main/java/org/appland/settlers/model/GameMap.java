@@ -761,6 +761,9 @@ public class GameMap {
         /* Create a road between the flag and the building */
         placeDriveWay(house);
 
+        /* Note when the building was placed so we can compare the age of buildings */
+        house.setGeneration(time);
+
         /* Report the placed building */
         reportPlacedBuilding(house);
 
@@ -789,11 +792,23 @@ public class GameMap {
             /* Store the claim for each military building. This iterates over a collection and the order may be non-deterministic */
             for (Point point : building.getDefendedLand()) {
 
-                claims.putIfAbsent(point, building);
+                Building previousBuilding = claims.get(point);
 
-                if (calculateClaim(building, point) > calculateClaim(claims.get(point), point)) {
-                    claims.put(point, building);
+                if (previousBuilding != null) {
+
+                    double previousClaim = calculateClaim(previousBuilding, point);
+                    double currentClaim = calculateClaim(building, point);
+
+                    if (currentClaim < previousClaim) {
+                        continue;
+                    }
+
+                    if (currentClaim == previousClaim && building.getGeneration() > previousBuilding.getGeneration()) {
+                        continue;
+                    }
                 }
+
+                claims.put(point, building);
             }
         }
 
