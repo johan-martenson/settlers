@@ -186,7 +186,6 @@ public class TestMisc {
         }
     }
 
-
     @Test
     public void testPlaceFirstBuildingOnEdgeOfScreen() throws Exception {
 
@@ -697,5 +696,119 @@ public class TestMisc {
         assertEquals(headquarter0.getAmount(OFFICER), 1);
         assertEquals(headquarter0.getAmount(GENERAL), 1);
 
+    }
+
+    @Test
+    public void testUnoccupiedMilitaryBuildingIsTornDownWhenAreaIsLost() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(21, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1);
+
+        /* Place a second barracks for player 1 */
+        Point point4 = new Point(13, 15);
+        Barracks barracks2 = map.placeBuilding(new Barracks(player1), point4);
+
+        /* Construct the new barracks */
+        Utils.constructHouse(barracks2);
+
+        /* Remove all soldiers from the headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter1, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
+
+        /* Place a road that connects the two barracks for player 1 */
+        Road road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), barracks2.getFlag());
+
+        /* Empty barracks 1 */
+        Road road1 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+
+        barracks1.evacuate();
+
+        Military military = Utils.waitForMilitaryOutsideBuilding(player1);
+
+        assertEquals(military.getTarget(), headquarter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter1.getPosition());
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+
+        /* Verify that the second barracks is destroyed, its road, and the road between the barracks are removed */
+        Road road2 = map.getRoad(barracks2.getPosition(), barracks2.getFlag().getPosition());
+
+        assertTrue(map.getRoads().contains(road0));
+        assertTrue(map.getRoads().contains(road2));
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+        assertTrue(barracks1.isReady());
+        assertTrue(barracks1.isEvacuated());
+        assertTrue(barracks2.isUnoccupied());
+        assertEquals(barracks2.getPlayer(), player1);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertEquals(barracks1.getPlayer(), player0);
+        assertFalse(map.getRoads().contains(road0));
+        assertFalse(map.getRoads().contains(road2));
+        assertTrue(player0.getLandInPoints().contains(barracks2.getPosition()));
+        assertTrue(player0.getLandInPoints().contains(barracks2.getFlag().getPosition()));
+        assertFalse(player1.isWithinBorder(barracks2.getPosition()));
+        assertTrue(barracks2.isBurningDown());
     }
 }

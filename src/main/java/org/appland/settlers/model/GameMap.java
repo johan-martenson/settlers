@@ -784,8 +784,18 @@ public class GameMap {
         /* Calculate claims for all military buildings */
         for (Building building : allBuildings) {
 
-            /* Filter non-military buildings and un-occupied military buildings */
-            if (!building.isMilitaryBuilding() || !building.isReady() || !building.isOccupied()) {
+            /* Filter non-military buildings */
+            if (!building.isMilitaryBuilding()) {
+                continue;
+            }
+
+            /* Filter buildings that are not yet fully built */
+            if (!building.isReady()) {
+                continue;
+            }
+
+            /* Filter buildings that are not yet occupied */
+            if (!building.isOccupied()) {
                 continue;
             }
 
@@ -794,20 +804,24 @@ public class GameMap {
 
                 Building previousBuilding = claims.get(point);
 
+                /* Handle the case where there is an existing claim for the point */
                 if (previousBuilding != null) {
 
                     double previousClaim = calculateClaim(previousBuilding, point);
                     double currentClaim = calculateClaim(building, point);
 
+                    /* Do nothing if the existing claim is stronger than the new claim */
                     if (currentClaim < previousClaim) {
                         continue;
                     }
 
+                    /* Do nothing if the claims are equal but the existing building is older */
                     if (currentClaim == previousClaim && building.getGeneration() > previousBuilding.getGeneration()) {
                         continue;
                     }
                 }
 
+                /* Set the new claim for the building */
                 claims.put(point, building);
             }
         }
@@ -916,7 +930,7 @@ public class GameMap {
             player.setLands(new ArrayList<>(), buildingCausedUpdate, cause);
         }
 
-        /* Destroy buildings now outside of the borders */
+        /* Destroy buildings now outside of their player's borders */
         for (Building building : buildings) {
             if (building.isBurningDown()) {
                 continue;
@@ -928,15 +942,17 @@ public class GameMap {
 
             Player player = building.getPlayer();
 
-            if (!player.isWithinBorder(building.getPosition()) || !player.isWithinBorder(building.getFlag().getPosition())) {
-                try {
-                    building.tearDown();
-                } catch (InvalidUserActionException | InvalidRouteException e) {
-                    InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
-                    invalidGameLogicException.initCause(e);
+            if (player.isWithinBorder(building.getPosition()) && player.isWithinBorder(building.getFlag().getPosition())) {
+                continue;
+            }
 
-                    throw invalidGameLogicException;
-                }
+            try {
+                building.tearDown();
+            } catch (InvalidUserActionException | InvalidRouteException e) {
+                InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
+                invalidGameLogicException.initCause(e);
+
+                throw invalidGameLogicException;
             }
         }
 

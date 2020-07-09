@@ -718,7 +718,7 @@ public class Building implements EndPoint {
         state = State.UNOCCUPIED;
     }
 
-    private boolean isUnoccupied() {
+    public boolean isUnoccupied() {
         return state == State.UNOCCUPIED;
     }
 
