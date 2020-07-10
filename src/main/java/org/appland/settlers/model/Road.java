@@ -48,11 +48,7 @@ public class Road {
 
     @Override
     public String toString() {
-        if (courier == null) {
-            return "Road " + start + " to " + end + " with no courier";
-        } else {
-            return "Road " + start + " to " + end + " with courier";
-        }
+        return "Road " + start.getPosition() + " - " + end.getPosition();
     }
 
     public EndPoint[] getFlags() {
@@ -178,10 +174,6 @@ public class Road {
 
     public Player getPlayer() {
         return player;
-    }
-
-    void setPlayer(Player player) {
-        this.player = player;
     }
 
     public void setMap(GameMap gameMap) {

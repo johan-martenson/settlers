@@ -1223,4 +1223,12 @@ public class Building implements EndPoint {
     public long getGeneration() {
         return generation;
     }
+
+    public String getSimpleName() {
+        String className = getClass().getSimpleName();
+        String nameWithSpaces = className.replace("_", " ");
+        String nameLowerCase = nameWithSpaces.toLowerCase();
+
+        return nameLowerCase.substring(0, 1).toUpperCase() + nameLowerCase.substring(1);
+    }
 }

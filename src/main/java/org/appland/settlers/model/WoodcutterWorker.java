@@ -75,10 +75,6 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Woodcutter) {
-            setHome(building);
-        }
-
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);

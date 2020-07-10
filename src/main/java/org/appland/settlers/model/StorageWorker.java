@@ -157,11 +157,7 @@ public class StorageWorker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storehouse) {
-            setHome(building);
-
-            ownStorehouse = (Storehouse)building;
-        }
+        ownStorehouse = (Storehouse)building;
 
         state = State.RESTING_IN_HOUSE;
     }

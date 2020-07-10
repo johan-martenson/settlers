@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.GameUtils.ConnectionsProvider;
-import org.appland.settlers.policy.Constants;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,8 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
@@ -44,6 +41,8 @@ public class GameMap {
     private static final int MINIMUM_HEIGHT = 5;
     private static final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
+    private static final double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
+    private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
 
     private final List<Worker>         workers;
     private final int                  height;
@@ -218,13 +217,7 @@ public class GameMap {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point point, Point goal) {
-                try {
-                    return getPossibleAdjacentRoadConnections(player, point, goal);
-                } catch (RuntimeException ex) {
-                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                return new LinkedList<>();
+                return getPossibleAdjacentRoadConnections(player, point, goal);
             }
 
             @Override
@@ -232,10 +225,6 @@ public class GameMap {
                 return 1;
             }
         });
-    }
-
-    private boolean pointIsOnRoad(Point point) {
-        return getRoadAtPoint(point) != null;
     }
 
     /**
@@ -2054,13 +2043,7 @@ public class GameMap {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                try {
-                    return getPossibleAdjacentOffRoadConnections(start);
-                } catch (RuntimeException ex) {
-                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                return new LinkedList<>();
+                return getPossibleAdjacentOffRoadConnections(start);
             }
 
             @Override
@@ -2276,14 +2259,6 @@ public class GameMap {
      */
     public Iterable<Crop> getCrops() {
         return crops;
-    }
-
-    private void removeStone(Stone stone) {
-        MapPoint mapPoint = pointToGameObject.get(stone.getPosition());
-
-        mapPoint.setStone(null);
-
-        stones.remove(stone);
     }
 
     /**
@@ -3030,7 +3005,7 @@ public class GameMap {
 
         double density = (double)wildAnimals.size() / (width * height);
 
-        if (density < Constants.WILD_ANIMAL_NATURAL_DENSITY) {
+        if (density < WILD_ANIMAL_NATURAL_DENSITY) {
             if (animalCountdown.hasReachedZero()) {
 
                 /* Find point to place new wild animal on */
@@ -3043,9 +3018,9 @@ public class GameMap {
                 /* Place the new wild animal */
                 placeWildAnimal(point);
 
-                animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
+                animalCountdown.countFrom(WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
             } else if (!animalCountdown.isActive()) {
-                animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
+                animalCountdown.countFrom(WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
             } else {
                 animalCountdown.step();
             }

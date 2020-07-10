@@ -33,7 +33,22 @@ public class Military extends Worker {
         PRIVATE_RANK,
         SERGEANT_RANK,
         OFFICER_RANK,
-        PRIVATE_FIRST_CLASS_RANK, GENERAL_RANK
+        PRIVATE_FIRST_CLASS_RANK,
+        GENERAL_RANK;
+
+        public String getSimpleName() {
+            if (this == PRIVATE_RANK) {
+                return "Private";
+            } else if (this == PRIVATE_FIRST_CLASS_RANK) {
+                return "Private first class";
+            } else if (this == SERGEANT_RANK) {
+                return "Sergeant";
+            } else if (this == OFFICER_RANK) {
+                return "Officer";
+            } else {
+                return "General";
+            }
+        }
     }
 
     protected enum State {
@@ -93,7 +108,7 @@ public class Military extends Worker {
         case PRIVATE_RANK:
             rank = PRIVATE_FIRST_CLASS_RANK;
             break;
-            case PRIVATE_FIRST_CLASS_RANK:
+        case PRIVATE_FIRST_CLASS_RANK:
             rank = SERGEANT_RANK;
             break;
         case SERGEANT_RANK:
@@ -108,7 +123,12 @@ public class Military extends Worker {
 
     @Override
     public String toString() {
-        return rank.name() + " " + state + " at " + getPosition();
+
+        if (isExactlyAtPoint()) {
+            return rank.getSimpleName() + " soldier " + getPosition();
+        } else {
+            return rank.getSimpleName() + " soldier " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override
@@ -367,13 +387,10 @@ public class Military extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) throws InvalidRouteException {
-        if (building.isMilitaryBuilding()) {
-            setHome(building);
-        }
 
-	if (state == WALKING_TO_TARGET             ||
-	    state == WALKING_TO_TAKE_OVER_BUILDING ||
-	    state == WALKING_HOME_AFTER_FIGHT      ||
+        if (state == WALKING_TO_TARGET             ||
+            state == WALKING_TO_TAKE_OVER_BUILDING ||
+            state == WALKING_HOME_AFTER_FIGHT      ||
             state == DEPLOYED) {
             building.deployMilitary(this);
         }

@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import org.appland.settlers.policy.Constants;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +20,7 @@ class MapPoint {
     private static final int SMALL_AMOUNT_OF_MINERAL = 5;
     private static final int MEDIUM_AMOUNT_OF_MINERAL = 10;
     private static final int LARGE_AMOUNT_OF_MINERAL = 15;
-
+    public static final int DEFAULT_HEIGHT = 10;
 
     private final Point      point;
     private final Set<Point> connectedNeighbors;
@@ -53,28 +51,16 @@ class MapPoint {
         connectedFlagsAndBuildings = new HashSet<>();
 
         /* Set the default height */
-        height = Constants.DEFAULT_HEIGHT;
+        height = DEFAULT_HEIGHT;
 
         fishAmount = DEFAULT_AMOUNT_FISH;
     }
 
     void setBuilding(Building building) {
-        if (flag != null) {
-            throw new InvalidGameLogicException(this + " is already occupied by flag " + flag);
-        }
-
-        if (this.building != null) {
-            throw new InvalidGameLogicException(this + " is already occupied by building " + this.building);
-        }
-
         this.building = building;
     }
 
     void setFlag(Flag flag) {
-        if (isOccupied()) {
-            throw new InvalidGameLogicException(this + " is already occupied");
-        }
-
         this.flag = flag;
     }
 
@@ -108,10 +94,6 @@ class MapPoint {
     }
 
     void removeConnectingRoad(Road road) {
-//        if (!connectedRoads.contains(road)) {
-//            throw new Exception(road + " is not connected to " + this);
-//        }
-
         connectedRoads.remove(road);
 
         if (road.getEnd().equals(point)) {
@@ -133,10 +115,6 @@ class MapPoint {
 
             previous = current;
         }
-    }
-
-    private boolean isOccupied() {
-        return flag != null || building != null;
     }
 
     @Override
@@ -296,6 +274,7 @@ class MapPoint {
     }
 
     public Road getRoad() {
+
         /* Don't include start and end points of roads so ignore the point if there is a flag */
         if (isFlag()) {
             return null;

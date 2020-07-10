@@ -581,18 +581,6 @@ public class Player {
         return false;
     }
 
-    public Collection<Point> getAvailableFlagPoints() {
-        return map.getAvailableFlagPoints(this);
-    }
-
-    public Map<Point, Size> getAvailableHousePoints() {
-        return map.getAvailableHousePoints(this);
-    }
-
-    public Collection<Point> getAvailableMiningPoints() {
-        return map.getAvailableMinePoints(this);
-    }
-
     public void setColor(Color color) {
         this.color = color;
     }
@@ -736,10 +724,6 @@ public class Player {
     }
 
     public void reportWorkerWithNewTarget(Worker worker) {
-        if (worker.getPlannedPath().isEmpty()) {
-            return;
-        }
-
         workersWithNewTargets.add(worker);
     }
 

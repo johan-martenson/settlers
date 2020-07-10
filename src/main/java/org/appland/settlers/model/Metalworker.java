@@ -101,10 +101,6 @@ public class Metalworker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Metalworks) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
     }

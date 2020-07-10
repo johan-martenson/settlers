@@ -660,11 +660,28 @@ public class Storehouse extends Building {
     }
 
     private boolean hasMilitary() {
-        if (!hasAtLeastOne(PRIVATE) && !hasAtLeastOne(SERGEANT) && !hasAtLeastOne(GENERAL)) {
-            return false;
+
+        if (hasAtLeastOne(PRIVATE)) {
+            return true;
         }
 
-        return true;
+        if (hasAtLeastOne(PRIVATE_FIRST_CLASS)) {
+            return true;
+        }
+
+        if (hasAtLeastOne(SERGEANT)) {
+            return true;
+        }
+
+        if (hasAtLeastOne(OFFICER)) {
+            return true;
+        }
+
+        if (hasAtLeastOne(GENERAL)) {
+            return true;
+        }
+
+        return false;
     }
 
     private boolean isWorking() {

@@ -45,10 +45,6 @@ public class WellWorker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Well) {
-            setHome(building);
-        }
-
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(RESTING_TIME);

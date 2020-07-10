@@ -29,10 +29,6 @@ public class BorderChange {
 
     @Override
     public String toString() {
-        return "BorderChange{" +
-                "player=" + player +
-                ", newBorder=" + newBorder +
-                ", removedBorder=" + removedBorder +
-                '}';
+        return "Border change for " + player + ", added " + newBorder + ", removed " + removedBorder;
     }
 }

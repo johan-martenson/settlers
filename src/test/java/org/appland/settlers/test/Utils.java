@@ -57,9 +57,11 @@ import static org.appland.settlers.model.Material.FISHING_ROD;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.ROLLING_PIN;
 import static org.appland.settlers.model.Material.SAW;
 import static org.appland.settlers.model.Material.SCYTHE;
@@ -325,7 +327,7 @@ public class Utils {
 
             if (storehouse.getAmount(material) > amount) {
 
-                if (material == PRIVATE || material == SERGEANT || material == GENERAL) {
+                if (isSoldier(material)) {
                     storehouse.retrieveMilitary(material);
                 } else {
                     storehouse.retrieve(material);
@@ -336,6 +338,30 @@ public class Utils {
         }
 
         assertEquals(storehouse.getAmount(material), amount);
+    }
+
+    private static boolean isSoldier(Material material) {
+        if (material == PRIVATE) {
+            return true;
+        }
+
+        if (material == PRIVATE_FIRST_CLASS) {
+            return true;
+        }
+
+        if (material == SERGEANT) {
+            return true;
+        }
+
+        if (material == OFFICER) {
+            return true;
+        }
+
+        if (material == GENERAL) {
+            return true;
+        }
+
+        return false;
     }
 
     public static void constructHouse(Building building) throws Exception {
@@ -519,14 +545,14 @@ public class Utils {
     public static Military findMilitaryOutsideBuilding(Player player) {
         GameMap map = player.getMap();
 
-        Military attacker = null;
+        Military soldier = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                attacker = (Military)worker;
+                soldier = (Military)worker;
             }
         }
 
-        return attacker;
+        return soldier;
     }
 
     public static List<Military> findSoldiersOutsideBuilding(Player player) {

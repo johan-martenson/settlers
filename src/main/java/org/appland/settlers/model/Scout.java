@@ -201,9 +201,6 @@ public class Scout extends Worker {
     @Override
     void onEnterBuilding(Building building) {
 
-        /* The scout has reached the lookout tower it's assigned to */
-        setHome(building);
-
         /* Discover the area around the tower */
         for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
             getPlayer().discover(point);

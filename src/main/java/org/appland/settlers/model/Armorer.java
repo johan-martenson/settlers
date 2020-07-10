@@ -66,10 +66,6 @@ public class Armorer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Armory) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
     }

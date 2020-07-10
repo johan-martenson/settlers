@@ -5,9 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.lang.Math.abs;
 
 /**
@@ -162,30 +159,6 @@ public class Point extends java.awt.Point {
         adjacentPoints[5] = new Point(x - 1, y - 1);
 
         return adjacentPoints;
-    }
-
-    Iterable<Point> getDiagonalPoints() {
-        List<Point> result = new ArrayList<>();
-
-        result.add(upRight());
-        result.add(downRight());
-        result.add(upLeft());
-        result.add(downLeft());
-
-        return result;
-    }
-
-    List<Point> getDiagonalPointsAndSides() {
-        List<Point> result = new ArrayList<>();
-
-        result.add(upRight());
-        result.add(downRight());
-        result.add(upLeft());
-        result.add(downLeft());
-        result.add(left());
-        result.add(right());
-
-        return result;
     }
 
     public boolean isLeftOf(Point from) {

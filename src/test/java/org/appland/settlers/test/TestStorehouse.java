@@ -1034,6 +1034,42 @@ public class TestStorehouse {
     }
 
     @Test
+    public void testProductionInStorageCannotBeResumed() throws Exception {
+
+        /* Create game map */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage */
+        Point point1 = new Point(10, 6);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storage and the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter.getFlag());
+
+        /* Finish the storage */
+        Utils.constructHouse(storage0);
+
+        /* Assign a worker to the storage */
+        StorageWorker storageWorker = new StorageWorker(player0, map);
+
+        Utils.occupyBuilding(storageWorker, storage0);
+
+        /* Verify that production can't be resumed */
+        try {
+            storage0.resumeProduction();
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
     public void testAssignedStorageWorkerHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */

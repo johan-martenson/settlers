@@ -82,10 +82,6 @@ public class Farmer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Farm) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);

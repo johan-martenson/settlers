@@ -54,10 +54,6 @@ public class Minter extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Mint) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
     }

@@ -64,10 +64,6 @@ public class Fisherman extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         if (building.isReady()) {
-            if (building instanceof Fishery) {
-                setHome(building);
-            }
-
             state = RESTING_IN_HOUSE;
 
             countdown.countFrom(TIME_TO_REST);

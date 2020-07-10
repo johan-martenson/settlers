@@ -52,10 +52,6 @@ public class Butcher extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof SlaughterHouse) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
     }

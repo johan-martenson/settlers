@@ -74,10 +74,6 @@ public class Miner extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building.isMine()) {
-            setHome(building);
-        }
-
         mineral = building.getProducedMaterial()[0];
 
         state = RESTING_IN_HOUSE;

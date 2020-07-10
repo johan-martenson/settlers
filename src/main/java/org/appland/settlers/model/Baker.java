@@ -58,11 +58,6 @@ public class Baker extends Worker {
     @Override
     protected void onEnterBuilding(Building building) throws InvalidRouteException {
         if (building.isReady()) {
-
-            if (building instanceof Bakery) {
-                setHome(building);
-            }
-
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
         } else {

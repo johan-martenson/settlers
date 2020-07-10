@@ -98,10 +98,6 @@ public class Forester extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof ForesterHut) {
-            setHome(building);
-        }
-
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);

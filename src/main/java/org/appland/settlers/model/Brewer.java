@@ -56,10 +56,6 @@ public class Brewer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Brewery) {
-            setHome(building);
-        }
-
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
     }
