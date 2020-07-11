@@ -3,6 +3,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
@@ -11,6 +12,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -30,14 +32,17 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.OFFICER;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -810,5 +815,112 @@ public class TestMisc {
         assertTrue(player0.getLandInPoints().contains(barracks2.getFlag().getPosition()));
         assertFalse(player1.isWithinBorder(barracks2.getPosition()));
         assertTrue(barracks2.isBurningDown());
+    }
+
+    @Test
+    public void testCourierDeliveringToBuildingMakesCargoDisappearIfTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a courier to come to the road */
+        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+
+        /* Wait for the courier to carry a cargo to the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+
+        /* Verify that the courier goes to the woodcutter and the cargo disappears if the woodcutter is torn down and it cannot be returned */
+        headquarter0.blockDeliveryOfMaterial(courier.getCargo().getMaterial());
+
+        woodcutter.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+
+        assertEquals(woodcutter.getAmount(PLANK), 0);
+        assertEquals(woodcutter.getAmount(STONE), 0);
+        assertEquals(courier.getPosition(), woodcutter.getFlag().getPosition());
+        assertNull(courier.getCargo());
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
+    }
+
+    @Test
+    public void testCourierDeliveringToFlagMakesCargoDisappearIfTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(17, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag */
+        Point point2 = new Point(14, 4);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the flag with the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
+
+        /* Wait for the first road to get assigned a courier */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier to carry a cargo intended for the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+
+        /* Verify that the courier goes to the flag and the cargo disappears if the woodcutter is torn down and it cannot be returned */
+        Cargo cargo = courier.getCargo();
+
+        headquarter0.blockDeliveryOfMaterial(courier.getCargo().getMaterial());
+
+        woodcutter.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+
+        assertEquals(woodcutter.getAmount(PLANK), 0);
+        assertEquals(woodcutter.getAmount(STONE), 0);
+        assertEquals(courier.getPosition(), flag0.getPosition());
+        assertNull(courier.getCargo());
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
+        assertFalse(flag0.getStackedCargo().contains(cargo));
+        assertEquals(courier.getTarget(), flag0.getPosition().left());
     }
 }

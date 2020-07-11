@@ -167,12 +167,12 @@ public class Utils {
         }
     }
 
-    public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws Exception {
+    public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws InvalidRouteException, InvalidUserActionException {
         assertNotNull(target);
         assertNotNull(worker);
         assertNotNull(map);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 20000; i++) {
 
             if (worker.isAt(target)) {
                 break;
@@ -638,7 +638,7 @@ public class Utils {
         return workers;
     }
 
-    public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws Exception {
+    public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
@@ -856,7 +856,7 @@ public class Utils {
         building.putCargo(cargo);
     }
 
-    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws Exception {
+    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidRouteException, InvalidUserActionException {
 
         for (int i = 0; i < 2000; i++) {
 
@@ -1101,7 +1101,7 @@ public class Utils {
         map.getTerrain().fillMapWithVegetation(vegetation);
     }
 
-    public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws Exception {
+    public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws InvalidRouteException, InvalidUserActionException {
         Courier courier = null;
 
         for (int i = 0; i < 10000; i++) {
@@ -1845,6 +1845,20 @@ public class Utils {
         }
 
         assertFalse(fisherman.isFishing());
+    }
+
+    public static void waitForPointToBeNext(GameMap map, Courier courier, Point position) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+
+            if (!courier.isExactlyAtPoint() && courier.getNextPoint().equals(position)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isExactlyAtPoint());
+        assertEquals(courier.getNextPoint(), position);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

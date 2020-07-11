@@ -265,14 +265,29 @@ public class Courier extends Worker {
             map.isFlagAtPoint(getPosition()) &&
             (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {
 
-            Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+            Point position = getPosition();
+            Material material = getCargo().getMaterial();
 
-            Cargo cargo = getCargo();
+            Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
-            cargo.setTarget(storage);
+            /* Return the cargo to the storage if possible */
+            if (storage != null) {
 
-            /* Deliver the cargo either to the storage's flag or directly to the storage */
-            deliverToFlagOrBuilding(cargo);
+                Cargo cargo = getCargo();
+
+                cargo.setTarget(storage);
+
+                /* Deliver the cargo either to the storage's flag or directly to the storage */
+                deliverToFlagOrBuilding(cargo);
+
+            /* Drop the cargo if it cannot be delivered or returned */
+            } else  {
+                setCargo(null);
+
+                state = RETURNING_TO_IDLE_SPOT;
+
+                setTarget(idlePoint);
+            }
         }
     }
 
