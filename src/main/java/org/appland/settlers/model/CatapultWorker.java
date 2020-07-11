@@ -79,7 +79,11 @@ public class CatapultWorker extends Worker {
 
     @Override
     public String toString() {
-        return "Catapult worker " + state;
+        if (isExactlyAtPoint()) {
+            return "Catapult worker " + getPosition();
+        } else {
+            return "Catapult worker " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override

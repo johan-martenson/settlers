@@ -223,7 +223,11 @@ public class Armorer extends Worker {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + state.name().toLowerCase();
+        if (isExactlyAtPoint()) {
+            return "Armorer " + getPosition();
+        } else {
+            return "Armorer " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override

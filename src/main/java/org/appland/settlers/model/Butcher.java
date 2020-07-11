@@ -175,7 +175,11 @@ public class Butcher extends Worker {
 
     @Override
     public String toString() {
-        return "Butcher " + state;
+        if (isExactlyAtPoint()) {
+            return "Butcher " + getPosition();
+        } else {
+            return "Butcher " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override

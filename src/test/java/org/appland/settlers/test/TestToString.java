@@ -1,12 +1,19 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Armorer;
+import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.Baker;
+import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BombardedByCatapultMessage;
 import org.appland.settlers.model.BorderChange;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.BuildingCapturedMessage;
 import org.appland.settlers.model.BuildingLostMessage;
+import org.appland.settlers.model.Butcher;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
+import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameEndedMessage;
@@ -24,6 +31,9 @@ import org.appland.settlers.model.NoMoreResourcesMessage;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.Storehouse;
@@ -38,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
@@ -494,5 +505,198 @@ public class TestToString {
 
         /* Verify that the toString() method returns the correct string */
         assertEquals(cargo.toString(), "Cargo of gold to Headquarter (10, 10), at (11, 9)");
+    }
+
+    @Test
+    public void testCatapultWorkerToString() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place catapult */
+        Point point3 = new Point(7, 9);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Place a road between the headquarter and the catapult */
+        Road road0 = map.placeAutoSelectedRoad(player0, catapult.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult);
+
+        assertTrue(catapult.needsWorker());
+
+        /* Verify that a catapult worker leaves the headquarter */
+        CatapultWorker catapultWorker = Utils.waitForWorkerOutsideBuilding(CatapultWorker.class, player0);
+
+        assertTrue(map.getWorkers().contains(catapultWorker));
+
+        /* Verify that the toString() method is correct */
+        assertTrue(catapultWorker.isExactlyAtPoint());
+        assertEquals(catapultWorker.toString(), "Catapult worker (6, 4)");
+
+        map.stepTime();
+
+        assertFalse(catapultWorker.isExactlyAtPoint());
+        assertEquals(catapultWorker.toString(), "Catapult worker (6, 4) - (7, 5)");
+    }
+
+    @Test
+    public void testBakeryToString() throws Exception {
+
+        /* Create new single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point3 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
+
+        /* Connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery);
+
+        assertTrue(bakery.needsWorker());
+
+        /* Verify that a bakery worker leaves the headquarter */
+        Baker baker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
+
+        /* Verify that the toString() method is correct */
+        assertTrue(baker.isExactlyAtPoint());
+        assertEquals(baker.toString(), "Baker (6, 4)");
+
+        map.stepTime();
+
+        assertFalse(baker.isExactlyAtPoint());
+        assertEquals(baker.toString(), "Baker (6, 4) - (7, 5)");
+    }
+
+    @Test
+    public void testButcherToString() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point3 = new Point(7, 9);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
+
+        /* Connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse);
+
+        assertTrue(slaughterHouse.needsWorker());
+
+        /* Verify that a bakery worker leaves the headquarter */
+        Butcher butcher = Utils.waitForWorkerOutsideBuilding(Butcher.class, player0);
+
+        /* Verify that the toString() method is correct */
+        assertTrue(butcher.isExactlyAtPoint());
+        assertEquals(butcher.toString(), "Butcher (6, 4)");
+
+        map.stepTime();
+
+        assertFalse(butcher.isExactlyAtPoint());
+        assertEquals(butcher.toString(), "Butcher (6, 4) - (7, 5)");
+    }
+
+    @Test
+    public void testArmorerToString() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Place road to connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory0);
+
+        assertTrue(armory0.needsWorker());
+
+        /* Wait for an armorer to start walking to the armory */
+        Armorer armorer = Utils.waitForWorkerOutsideBuilding(Armorer.class, player0);
+
+        /* Verify that the toString() method is correct */
+        assertTrue(armorer.isExactlyAtPoint());
+        assertEquals(armorer.toString(), "Armorer (6, 4)");
+
+        map.stepTime();
+
+        assertFalse(armorer.isExactlyAtPoint());
+        assertEquals(armorer.toString(), "Armorer (6, 4) - (7, 5)");
+    }
+
+    @Test
+    public void testSawmillWorkerToString() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point3 = new Point(7, 9);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        /* Place a road between the headquarter and the sawmill */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill);
+
+        assertTrue(sawmill.needsWorker());
+
+        /* Wait for a sawmill worker to start walking to the sawmill */
+        SawmillWorker sawmillWorker = Utils.waitForWorkerOutsideBuilding(SawmillWorker.class, player0);
+
+        /* Verify that the toString() method is correct */
+        assertTrue(sawmillWorker.isExactlyAtPoint());
+        assertEquals(sawmillWorker.toString(), "Sawmill worker (6, 4)");
+
+        map.stepTime();
+
+        assertFalse(sawmillWorker.isExactlyAtPoint());
+        assertEquals(sawmillWorker.toString(), "Sawmill worker (6, 4) - (7, 5)");
     }
 }

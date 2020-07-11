@@ -217,7 +217,11 @@ public class Baker extends Worker {
 
     @Override
     public String toString() {
-        return "Baker " + state;
+        if (isExactlyAtPoint()) {
+            return "Baker " + getPosition();
+        } else {
+            return "Baker " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override

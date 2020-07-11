@@ -175,7 +175,11 @@ public class SawmillWorker extends Worker {
 
     @Override
     public String toString() {
-        return "Sawmill worker " + state;
+        if (isExactlyAtPoint()) {
+            return "Sawmill worker " + getPosition();
+        } else {
+            return "Sawmill worker " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override
