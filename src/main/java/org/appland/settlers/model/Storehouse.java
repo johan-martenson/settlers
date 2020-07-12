@@ -295,7 +295,7 @@ public class Storehouse extends Building {
 
                     Worker worker = storehouse.retrieveWorker(material);
 
-                    getMap().placeWorker(worker, storehouse.getFlag());
+                    getMap().placeWorker(worker, storehouse);
                     worker.setTargetBuilding(building);
                     building.promiseWorker(worker);
 

@@ -180,7 +180,11 @@ public class Minter extends Worker {
 
     @Override
     public String toString() {
-        return "Minter " + state;
+        if (isExactlyAtPoint()) {
+            return "Minter " + getPosition();
+        } else {
+            return "Minter " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override

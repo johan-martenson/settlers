@@ -27,6 +27,8 @@ import org.appland.settlers.model.Military;
 import org.appland.settlers.model.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.MilitaryBuildingReadyMessage;
+import org.appland.settlers.model.Mint;
+import org.appland.settlers.model.Minter;
 import org.appland.settlers.model.NoMoreResourcesMessage;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -540,12 +542,12 @@ public class TestToString {
 
         /* Verify that the toString() method is correct */
         assertTrue(catapultWorker.isExactlyAtPoint());
-        assertEquals(catapultWorker.toString(), "Catapult worker (6, 4)");
+        assertEquals(catapultWorker.toString(), "Catapult worker (5, 5)");
 
         map.stepTime();
 
         assertFalse(catapultWorker.isExactlyAtPoint());
-        assertEquals(catapultWorker.toString(), "Catapult worker (6, 4) - (7, 5)");
+        assertEquals(catapultWorker.toString(), "Catapult worker (5, 5) - (6, 4)");
     }
 
     @Test
@@ -578,12 +580,12 @@ public class TestToString {
 
         /* Verify that the toString() method is correct */
         assertTrue(baker.isExactlyAtPoint());
-        assertEquals(baker.toString(), "Baker (6, 4)");
+        assertEquals(baker.toString(), "Baker (5, 5)");
 
         map.stepTime();
 
         assertFalse(baker.isExactlyAtPoint());
-        assertEquals(baker.toString(), "Baker (6, 4) - (7, 5)");
+        assertEquals(baker.toString(), "Baker (5, 5) - (6, 4)");
     }
 
     @Test
@@ -616,12 +618,12 @@ public class TestToString {
 
         /* Verify that the toString() method is correct */
         assertTrue(butcher.isExactlyAtPoint());
-        assertEquals(butcher.toString(), "Butcher (6, 4)");
+        assertEquals(butcher.toString(), "Butcher (5, 5)");
 
         map.stepTime();
 
         assertFalse(butcher.isExactlyAtPoint());
-        assertEquals(butcher.toString(), "Butcher (6, 4) - (7, 5)");
+        assertEquals(butcher.toString(), "Butcher (5, 5) - (6, 4)");
     }
 
     @Test
@@ -654,12 +656,12 @@ public class TestToString {
 
         /* Verify that the toString() method is correct */
         assertTrue(armorer.isExactlyAtPoint());
-        assertEquals(armorer.toString(), "Armorer (6, 4)");
+        assertEquals(armorer.toString(), "Armorer (5, 5)");
 
         map.stepTime();
 
         assertFalse(armorer.isExactlyAtPoint());
-        assertEquals(armorer.toString(), "Armorer (6, 4) - (7, 5)");
+        assertEquals(armorer.toString(), "Armorer (5, 5) - (6, 4)");
     }
 
     @Test
@@ -692,11 +694,49 @@ public class TestToString {
 
         /* Verify that the toString() method is correct */
         assertTrue(sawmillWorker.isExactlyAtPoint());
-        assertEquals(sawmillWorker.toString(), "Sawmill worker (6, 4)");
+        assertEquals(sawmillWorker.toString(), "Sawmill worker (5, 5)");
 
         map.stepTime();
 
         assertFalse(sawmillWorker.isExactlyAtPoint());
-        assertEquals(sawmillWorker.toString(), "Sawmill worker (6, 4) - (7, 5)");
+        assertEquals(sawmillWorker.toString(), "Sawmill worker (5, 5) - (6, 4)");
+    }
+
+    @Test
+    public void testMintToString() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point3 = new Point(7, 9);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
+
+        /* Connect the mint with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint);
+
+        assertTrue(mint.needsWorker());
+
+        /* Wait for a minter to leave the headquarter */
+        Minter minter = Utils.waitForWorkerOutsideBuilding(Minter.class, player0);
+
+        /* Verify that toString is correct */
+        assertTrue(minter.isExactlyAtPoint());
+        assertEquals(minter.toString(), "Minter (5, 5)");
+
+        map.stepTime();
+
+        assertFalse(minter.isExactlyAtPoint());
+        assertEquals(minter.toString(), "Minter (5, 5) - (6, 4)");
     }
 }
