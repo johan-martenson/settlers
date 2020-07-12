@@ -1148,16 +1148,18 @@ public class GameUtils {
             point = toEvaluate.get(0);
             toEvaluate.remove(point);
 
+            MapPoint mapPoint = map.getMapPoint(point);
+
             /* Test if this point is connected to a building */
-            if (map.isBuildingAtPoint(point)) {
-                reachable.add(map.getBuildingAtPoint(point));
+            if (mapPoint.isBuilding()) {
+                reachable.add(mapPoint.getBuilding());
             }
 
             /* Remember that this point has been tested */
             visited.add(point);
 
             /* Go through the neighbors and add the new points to the list to be evaluated */
-            for (Road road : map.getMapPoint(point).getConnectedRoads()) {
+            for (Road road : mapPoint.getConnectedRoads()) {
 
                 oppositePoint = road.getOtherPoint(point);
 

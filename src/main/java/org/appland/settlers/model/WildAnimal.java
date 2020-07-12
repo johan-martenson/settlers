@@ -5,12 +5,15 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+
+import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Vegetation.DEEP_WATER;
 import static org.appland.settlers.model.Vegetation.LAVA;
+import static org.appland.settlers.model.Vegetation.WATER;
 
 /**
  *
@@ -95,29 +98,33 @@ public class WildAnimal extends Worker {
             }
 
             Point point = adjacentPoints.get(index);
+            MapPoint mapPoint = map.getMapPoint(point);
 
             /* Filter points outside of the map */
-            if (!map.isWithinMap(point)) {
+            if (mapPoint == null) {
                 continue;
             }
 
             /* Filter points with buildings */
-            if (map.isBuildingAtPoint(point)) {
+            if (mapPoint.isBuilding()) {
                 continue;
             }
 
             /* Filter points with stones */
-            if (map.isStoneAtPoint(point)) {
+            if (mapPoint.isStone()) {
                 continue;
             }
 
+            Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+
             /* Filter points in water */
-            if (map.isInWater(point)) {
+            if (isAll(surroundingVegetation, WATER)) {
                 continue;
             }
 
             /* Filter un-reachable points (expensive) */
             List<Point> path = map.findWayOffroad(getPosition(), point, null);
+
             if (path == null) {
                 continue;
             }

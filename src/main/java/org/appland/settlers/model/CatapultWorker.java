@@ -110,12 +110,14 @@ public class CatapultWorker extends Worker {
 
         for (Point point : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
 
+            MapPoint mapPoint = map.getMapPoint(point);
+
             /* Filter points without a building */
-            if (!map.isBuildingAtPoint(point)) {
+            if (!mapPoint.isBuilding()) {
                 continue;
             }
 
-            Building building = map.getBuildingAtPoint(point);
+            Building building = mapPoint.getBuilding();
 
             /* Filter buildings belonging to the same player */
             if (building.getPlayer().equals(getPlayer())) {

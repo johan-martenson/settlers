@@ -7,7 +7,12 @@ package org.appland.settlers.model;
 
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
+import java.util.Collection;
+
+import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.WATER;
 
 @Walker(speed = 10)
 public class Forester extends Worker {
@@ -21,43 +26,46 @@ public class Forester extends Worker {
     private State state;
 
     private boolean spotIsClearForTree(Point point) {
-        if (map.isBuildingAtPoint(point)) {
+
+        MapPoint mapPoint = map.getMapPoint(point);
+
+        if (mapPoint.isBuilding()) {
             return false;
         }
 
-        if (map.isFlagAtPoint(point)) {
+        if (mapPoint.isFlag()) {
             return false;
         }
 
-        if (map.isRoadAtPoint(point)) {
+        if (mapPoint.isRoad()) {
             return false;
         }
 
-        if (map.isTreeAtPoint(point)) {
+        if (mapPoint.isTree()) {
             return false;
         }
 
-        if (map.isStoneAtPoint(point)) {
+        if (mapPoint.isStone()) {
             return false;
         }
 
-        if (map.isOnMountain(point)) {
+        Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+
+        if (isAll(surroundingVegetation, MOUNTAIN)) {
             return false;
         }
 
-        if (map.isInWater(point)) {
+        if (isAll(surroundingVegetation, WATER)) {
             return false;
         }
 
-        if (map.findWayOffroad(
-                getHome().getFlag().getPosition(),
-                point,
-                null) == null) {
+        if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
             return false;
         }
 
         return true;
     }
+
     private Point getTreeSpot() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 

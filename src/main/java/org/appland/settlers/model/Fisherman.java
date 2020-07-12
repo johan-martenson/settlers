@@ -263,11 +263,14 @@ public class Fisherman extends Worker {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
 
         for (Point point : adjacentPoints) {
-            if (map.isBuildingAtPoint(point)) {
+
+            MapPoint mapPoint = map.getMapPoint(point);
+
+            if (mapPoint.isBuilding()) {
                 continue;
             }
 
-            if (map.isStoneAtPoint(point)) {
+            if (mapPoint.isStone()) {
                 continue;
             }
 

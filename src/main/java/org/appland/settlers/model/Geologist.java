@@ -193,23 +193,25 @@ public class Geologist extends Worker {
                 continue;
             }
 
-            if (map.isSignAtPoint(point)) {
+            MapPoint mapPoint = map.getMapPoint(point);
+
+            if (mapPoint.isSign()) {
                 continue;
             }
 
-            if (map.isTreeAtPoint(point)) {
+            if (mapPoint.isTree()) {
                 continue;
             }
 
-            if (map.isStoneAtPoint(point)) {
+            if (mapPoint.isStone()) {
                 continue;
             }
 
-            if (map.isFlagAtPoint(point)) {
+            if (mapPoint.isFlag()) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(point)) {
+            if (mapPoint.isBuilding()) {
                 continue;
             }
 

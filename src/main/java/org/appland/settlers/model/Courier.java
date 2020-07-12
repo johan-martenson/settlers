@@ -332,13 +332,14 @@ public class Courier extends Worker {
 
     private void planAfterDelivery() throws InvalidRouteException {
         Point currentPosition = getPosition();
-
         EndPoint flag;
 
-        if (map.isBuildingAtPoint(currentPosition)) {
-            flag = getEndPointAtPoint(currentPosition.downRight());
+        MapPoint mapPointCurrent = map.getMapPoint(currentPosition);
+
+        if (mapPointCurrent.isBuilding()) {
+            flag = mapPointCurrent.getBuilding().getFlag();
         } else {
-            flag = getEndPointAtPoint(currentPosition);
+            flag = mapPointCurrent.getFlag();
         }
 
         Flag otherEnd = map.getFlagAtPoint(assignedRoad.getOtherPoint(flag.getPosition()));

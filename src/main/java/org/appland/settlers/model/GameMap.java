@@ -1843,27 +1843,29 @@ public class GameMap {
             return false;
         }
 
-        if (isInWater(point)) {
+        Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
+
+        if (isAll(surroundingVegetation, WATER)) {
             return false;
         }
 
         /* Can't build road on snow */
-        if (isOnSnow(point)) {
+        if (isAll(surroundingVegetation, SNOW)) {
             return false;
         }
 
         /* Can't build road on lava */
-        if (isOnLava(point)) {
+        if (isAll(surroundingVegetation, LAVA)) {
             return false;
         }
 
         /* Can't place road in deep water */
-        if (isInDeepWater(point)) {
+        if (isAll(surroundingVegetation, DEEP_WATER)) {
             return false;
         }
 
         /* Can't place road in swamp */
-        if (isInSwamp(point)) {
+        if (isAll(surroundingVegetation, SWAMP)) {
             return false;
         }
 
@@ -3471,16 +3473,6 @@ public class GameMap {
     }
 
     /**
-     * Returns true if the given point is surrounded by swamp tiles
-     *
-     * @param point
-     * @return
-     */
-    public boolean isInSwamp(Point point) {
-        return isSurroundedBy(point, SWAMP);
-    }
-
-    /**
      * Returns true if the given point is surrounded by grass tiles
      *
      * @param point
@@ -3508,11 +3500,11 @@ public class GameMap {
     boolean isSurroundedBy(Point point, Vegetation vegetation) {
 
         return getTileUpLeft(point)    == vegetation &&
-                getTileAbove(point)     == vegetation &&
-                getTileUpRight(point)   == vegetation &&
-                getTileDownRight(point) == vegetation &&
-                getTileBelow(point)     == vegetation &&
-                getTileDownLeft(point)  == vegetation;
+               getTileAbove(point)     == vegetation &&
+               getTileUpRight(point)   == vegetation &&
+               getTileDownRight(point) == vegetation &&
+               getTileBelow(point)     == vegetation &&
+               getTileDownLeft(point)  == vegetation;
     }
 
     /**
@@ -3559,43 +3551,13 @@ public class GameMap {
     }
 
     /**
-     * Returns true if the given tile is surrounded by snow
-     *
-     * @param point
-     * @return
-     */
-    public boolean isOnSnow(Point point) {
-        return isSurroundedBy(point, Vegetation.SNOW);
-    }
-
-    /**
-     * Returns true if the given point is surrounded by lava
-     *
-     * @param point
-     * @return
-     */
-    public boolean isOnLava(Point point) {
-        return isSurroundedBy(point, Vegetation.LAVA);
-    }
-
-    /**
-     * Returns true if the given point is in deep water
-     *
-     * @param site
-     * @return
-     */
-    public boolean isInDeepWater(Point site) {
-        return isSurroundedBy(site, Vegetation.DEEP_WATER);
-    }
-
-    /**
      * Returns true if the given point is on vegetation where houses can be built
      *
      * @param point
      * @return
      */
     public boolean isOnBuildable(Point point) {
-        return getTileUpLeft(point).isBuildable()    &&
+        return getTileUpLeft(point).isBuildable()     &&
                 getTileAbove(point).isBuildable()     &&
                 getTileUpRight(point).isBuildable()   &&
                 getTileDownRight(point).isBuildable() &&

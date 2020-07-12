@@ -336,22 +336,18 @@ public class Farmer extends Worker {
     }
 
     private Point getFreeSpotToPlant() {
-        Point chosenPoint = null;
 
         for (Point point : getSurroundingSpotsForCrops()) {
 
+            MapPoint mapPoint = map.getMapPoint(point);
+
             /* Filter points that's not possible to plant on */
-            if (map.isBuildingAtPoint(point) ||
-                    map.isFlagAtPoint(point)     ||
-                    map.isRoadAtPoint(point)     ||
-                    map.isTreeAtPoint(point)) {
+            if (mapPoint.isBuilding() || mapPoint.isFlag() || mapPoint.isRoad() ||  mapPoint.isTree()) {
                 continue;
             }
 
-            /* Filter previous crops that aren't harvested yet. It is possible
-               to plant on harvested crops.
-               */
-            if (map.isCropAtPoint(point)) {
+            /* Filter previous crops that aren't harvested yet. It is possible to plant on harvested crops. */
+            if (mapPoint.isCrop()) {
                 Crop crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() != HARVESTED) {
@@ -364,11 +360,10 @@ public class Farmer extends Worker {
                 continue;
             }
 
-            chosenPoint = point;
-            break;
+            return point;
         }
 
-        return chosenPoint;
+        return null;
     }
 
     private Crop findCropToHarvest() {

@@ -47,10 +47,14 @@ public class Cargo {
     // FIXME: HOTSPOT
     public void setPosition(Point point) {
 
-        if (map.isFlagAtPoint(point) || map.isBuildingAtPoint(point)) {
+        MapPoint mapPoint = map.getMapPoint(point);
+
+        if (mapPoint.isFlag() || mapPoint.isBuilding()) {
             if (position != null && position != point) {
 
-                if (map.isFlagAtPoint(position) || map.isBuildingAtPoint(position)) {
+                MapPoint mapPointCurrent = map.getMapPoint(position);
+
+                if (mapPointCurrent.isFlag() || mapPointCurrent.isBuilding()) {
                     Road road = map.getRoad(point, position);
 
                     if (road != null) {
