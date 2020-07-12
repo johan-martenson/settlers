@@ -101,10 +101,7 @@ public class Building implements EndPoint {
 
         if (production != null) {
             for (Material material : production.requiredGoods()) {
-                requiredGoodsForProduction.put(
-                        material,
-                        requiredGoodsForProduction.getOrDefault(material, 0) + 1
-                );
+                requiredGoodsForProduction.put(material, requiredGoodsForProduction.getOrDefault(material, 0) + 1);
             }
         }
 
@@ -285,7 +282,6 @@ public class Building implements EndPoint {
         if (isOccupied()) {
             throw new InvalidGameLogicException("Building " + this + " is already occupied.");
         }
-
 
         this.worker = worker;
         promisedWorker = null;
@@ -920,9 +916,7 @@ public class Building implements EndPoint {
     }
 
     boolean isDefenseLess() {
-        if (getNumberOfHostedMilitary() == 0  &&
-            getRemoteDefenders().isEmpty()    &&
-            ownDefender == null) {
+        if (getNumberOfHostedMilitary() == 0 && getRemoteDefenders().isEmpty() && ownDefender == null) {
             return true;
         }
 
@@ -1079,7 +1073,6 @@ public class Building implements EndPoint {
         int stoneNeeded   = upgradeCost.stones();
 
         /* Get available resources */
-
         int plankAvailable = receivedMaterial.getOrDefault(PLANK, 0);
         int stoneAvailable = receivedMaterial.getOrDefault(STONE, 0);
 
@@ -1094,16 +1087,12 @@ public class Building implements EndPoint {
     private int getTotalAmountNeededForUpgrade(Material material) {
         UpgradeCost upgrade = getClass().getAnnotation(UpgradeCost.class);
 
-        /* Only need material for upgrades if the building is actually being
-           upgraded
-        */
+        /* Only need material for upgrades if the building is actually being upgraded */
         if (!isUpgrading()) {
             return 0;
         }
 
-        /* Only require material for upgrades if the building is capable of
-           upgrades
-        */
+        /* Only require material for upgrades if the building is capable of upgrades */
         if (upgrade == null) {
             return 0;
         }

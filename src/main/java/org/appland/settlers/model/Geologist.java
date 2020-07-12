@@ -8,6 +8,8 @@ package org.appland.settlers.model;
 
 import java.util.List;
 import java.util.Random;
+
+import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.Geologist.State.GOING_TO_NEXT_SITE;
 import static org.appland.settlers.model.Geologist.State.INVESTIGATING;
 import static org.appland.settlers.model.Geologist.State.RETURNING_TO_FLAG;
@@ -18,6 +20,8 @@ import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.Vegetation.GRASS;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN;
 
 /**
  *
@@ -144,12 +148,14 @@ public class Geologist extends Worker {
         boolean placedSign = false;
         Material foundMaterial = null;
 
-        if (map.isOnGrass(point)) {
+        List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+
+        if (isAll(surroundingVegetation, GRASS)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
 
             foundMaterial = WATER;
-        } else if (map.isOnMountain(point)) {
+        } else if (isAll(surroundingVegetation, MOUNTAIN)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 

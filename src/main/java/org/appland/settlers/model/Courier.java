@@ -415,11 +415,13 @@ public class Courier extends Worker {
         return state == IDLE_AT_ROAD;
     }
 
-    private EndPoint getEndPointAtPoint(Point currentPosition) {
-        if (map.isFlagAtPoint(currentPosition)) {
-            return map.getFlagAtPoint(currentPosition);
+    private EndPoint getEndPointAtPoint(Point point) {
+        MapPoint mapPoint = map.getMapPoint(point);
+
+        if (mapPoint.isFlag()) {
+            return mapPoint.getFlag();
         }
 
-        return map.getBuildingAtPoint(currentPosition);
+        return mapPoint.getBuilding();
     }
 }
