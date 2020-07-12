@@ -17,7 +17,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
@@ -113,17 +112,15 @@ public class TestPlacementInTerrain {
         Point point7 = new Point(7, 5);
         Point point8 = new Point(8, 4);
 
-        Terrain terrain = map.getTerrain();
+        assertEquals(map.getTileDownLeft(fishery0.getFlag().getPosition()), WATER);
+        assertEquals(map.getTileBelow(fishery0.getFlag().getPosition()), WATER);
 
-        assertEquals(terrain.getTileDownLeft(fishery0.getFlag().getPosition()), WATER);
-        assertEquals(terrain.getTileBelow(fishery0.getFlag().getPosition()), WATER);
+        assertEquals(map.getTileDownLeft(point7), WATER);
+        assertEquals(map.getTileBelow(point7), WATER);
+        assertEquals(map.getTileDownRight(point7), GRASS);
 
-        assertEquals(terrain.getTileDownLeft(point7), WATER);
-        assertEquals(terrain.getTileBelow(point7), WATER);
-        assertEquals(terrain.getTileDownRight(point7), GRASS);
-
-        assertFalse(terrain.isOnGrass(fishery0.getFlag().getPosition()));
-        assertFalse(terrain.isOnGrass(fishery1.getFlag().getPosition()));
+        assertFalse(map.isOnGrass(fishery0.getFlag().getPosition()));
+        assertFalse(map.isOnGrass(fishery1.getFlag().getPosition()));
 
         /* First, define the road like a player would */
         assertTrue(
@@ -813,8 +810,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6), SNOW);
-        assertEquals(map.getTerrain().getTileBelow(point7), SNOW);
+        assertEquals(map.getTileAbove(point6), SNOW);
+        assertEquals(map.getTileBelow(point7), SNOW);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3240,8 +3237,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6), LAVA);
-        assertEquals(map.getTerrain().getTileBelow(point7), LAVA);
+        assertEquals(map.getTileAbove(point6), LAVA);
+        assertEquals(map.getTileBelow(point7), LAVA);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3635,8 +3632,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6), DEEP_WATER);
-        assertEquals(map.getTerrain().getTileBelow(point7), DEEP_WATER);
+        assertEquals(map.getTileAbove(point6), DEEP_WATER);
+        assertEquals(map.getTileBelow(point7), DEEP_WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4030,8 +4027,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6), WATER);
-        assertEquals(map.getTerrain().getTileBelow(point7), WATER);
+        assertEquals(map.getTileAbove(point6), WATER);
+        assertEquals(map.getTileBelow(point7), WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4425,8 +4422,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getTerrain().getTileAbove(point6), SWAMP);
-        assertEquals(map.getTerrain().getTileBelow(point7), SWAMP);
+        assertEquals(map.getTileAbove(point6), SWAMP);
+        assertEquals(map.getTileBelow(point7), SWAMP);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {

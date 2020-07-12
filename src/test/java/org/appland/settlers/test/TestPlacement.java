@@ -951,8 +951,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create water and grass tiles */
-        map.getTerrain().setTileDownRight(waterPoint, WATER);
-        map.getTerrain().setTileBelow(grassPoint, GRASS);
+        map.setTileDownRight(waterPoint, WATER);
+        map.setTileBelow(grassPoint, GRASS);
 
         /* Verify that it's possible to place flags next to the water */
         Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
@@ -977,12 +977,12 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(centerPoint, WATER, map);
 
         /* Verify that the center point is in the middle of the lake */
-        assertEquals(map.getTerrain().getTileUpLeft(centerPoint), WATER);
-        assertEquals(map.getTerrain().getTileAbove(centerPoint), WATER);
-        assertEquals(map.getTerrain().getTileUpRight(centerPoint), WATER);
-        assertEquals(map.getTerrain().getTileDownRight(centerPoint), WATER);
-        assertEquals(map.getTerrain().getTileBelow(centerPoint), WATER);
-        assertEquals(map.getTerrain().getTileDownLeft(centerPoint), WATER);
+        assertEquals(map.getTileUpLeft(centerPoint), WATER);
+        assertEquals(map.getTileAbove(centerPoint), WATER);
+        assertEquals(map.getTileUpRight(centerPoint), WATER);
+        assertEquals(map.getTileDownRight(centerPoint), WATER);
+        assertEquals(map.getTileBelow(centerPoint), WATER);
+        assertEquals(map.getTileDownLeft(centerPoint), WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 9);
@@ -1008,10 +1008,10 @@ public class TestPlacement {
         /* Set a tile's vegetation to mountain */
         Point top = new Point(2, 2);
 
-        map.getTerrain().setTileBelow(top, MOUNTAIN);
+        map.setTileBelow(top, MOUNTAIN);
 
         /* Verify that the tile's vegetation is set to mountain */
-        assertEquals(map.getTerrain().getTileBelow(top), MOUNTAIN);
+        assertEquals(map.getTileBelow(top), MOUNTAIN);
     }
 
     @Test
@@ -1241,12 +1241,12 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTerrain().getTileUpLeft(point0), WATER);
-        assertEquals(map.getTerrain().getTileAbove(point0), WATER);
-        assertEquals(map.getTerrain().getTileUpRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileBelow(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownLeft(point0), WATER);
+        assertEquals(map.getTileUpLeft(point0), WATER);
+        assertEquals(map.getTileAbove(point0), WATER);
+        assertEquals(map.getTileUpRight(point0), WATER);
+        assertEquals(map.getTileDownRight(point0), WATER);
+        assertEquals(map.getTileBelow(point0), WATER);
+        assertEquals(map.getTileDownLeft(point0), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(4, 4);
@@ -1282,12 +1282,12 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTerrain().getTileUpLeft(point0), WATER);
-        assertEquals(map.getTerrain().getTileAbove(point0), WATER);
-        assertEquals(map.getTerrain().getTileUpRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileBelow(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownLeft(point0), WATER);
+        assertEquals(map.getTileUpLeft(point0), WATER);
+        assertEquals(map.getTileAbove(point0), WATER);
+        assertEquals(map.getTileUpRight(point0), WATER);
+        assertEquals(map.getTileDownRight(point0), WATER);
+        assertEquals(map.getTileBelow(point0), WATER);
+        assertEquals(map.getTileDownLeft(point0), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(10, 10);
@@ -1950,12 +1950,12 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTerrain().getTileUpLeft(point0), WATER);
-        assertEquals(map.getTerrain().getTileAbove(point0), WATER);
-        assertEquals(map.getTerrain().getTileUpRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownRight(point0), WATER);
-        assertEquals(map.getTerrain().getTileBelow(point0), WATER);
-        assertEquals(map.getTerrain().getTileDownLeft(point0), WATER);
+        assertEquals(map.getTileUpLeft(point0), WATER);
+        assertEquals(map.getTileAbove(point0), WATER);
+        assertEquals(map.getTileUpRight(point0), WATER);
+        assertEquals(map.getTileDownRight(point0), WATER);
+        assertEquals(map.getTileBelow(point0), WATER);
+        assertEquals(map.getTileDownLeft(point0), WATER);
 
         /* Placing headquarter for player0 */
         Point point46 = new Point(5, 5);

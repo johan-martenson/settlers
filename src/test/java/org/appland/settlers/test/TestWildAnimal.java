@@ -577,7 +577,7 @@ public class TestWildAnimal {
                 Point point = new Point(x, y);
 
                 /* Filter points that are next to at least one invalid/undefined tile */
-                if (map.getTerrain().getSurroundingTiles(point).size() != 6) {
+                if (map.getSurroundingTiles(point).size() != 6) {
                     continue;
                 }
 

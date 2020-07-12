@@ -112,7 +112,7 @@ public class WildAnimal extends Worker {
             }
 
             /* Filter points in water */
-            if (map.getTerrain().isInWater(point)) {
+            if (map.isInWater(point)) {
                 continue;
             }
 

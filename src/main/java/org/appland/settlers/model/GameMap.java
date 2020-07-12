@@ -26,6 +26,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Vegetation.DEEP_WATER;
 import static org.appland.settlers.model.Vegetation.DESERT;
+import static org.appland.settlers.model.Vegetation.GRASS;
 import static org.appland.settlers.model.Vegetation.LAVA;
 import static org.appland.settlers.model.Vegetation.MAGENTA;
 import static org.appland.settlers.model.Vegetation.MOUNTAIN;
@@ -62,7 +63,6 @@ public class GameMap {
     private final List<Sign>           signsToRemove;
     private final List<Worker>         workersToRemove;
     private final List<Crop>           cropsToRemove;
-    private final Terrain              terrain;
     private final Map<Point, MapPoint> pointToGameObject;
     private final List<Tree>           trees;
     private final List<Stone>          stones;
@@ -73,6 +73,8 @@ public class GameMap {
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
     private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
     private final int                  statisticsCollectionPeriod;
+    private final Map<Integer, Vegetation> tileBelowMap;
+    private final Map<Integer, Vegetation> tileDownRightMap;
 
     private final StatisticsManager statisticsManager;
     private final Set<Worker> workersWithNewTargets;
@@ -137,7 +139,6 @@ public class GameMap {
         signsToRemove       = new LinkedList<>();
         workers             = new ArrayList<>();
         workersToRemove     = new LinkedList<>();
-        terrain             = new Terrain(width, height);
         trees               = new ArrayList<>();
         stones              = new ArrayList<>();
         crops               = new ArrayList<>();
@@ -145,6 +146,8 @@ public class GameMap {
         animalCountdown     = new Countdown();
         random              = new Random();
         startingPoints      = new ArrayList<>();
+        tileBelowMap        = new HashMap<>();
+        tileDownRightMap    = new HashMap<>();
 
         statisticsManager   = new StatisticsManager();
 
@@ -152,6 +155,9 @@ public class GameMap {
 
         pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
         connectedFlagsAndBuildingsProvider = new GameUtils.ConnectedFlagsAndBuildingsProvider(pointToGameObject);
+
+        /* Set grass as vegetation on all tiles */
+        constructDefaultTiles();
 
         /* Add initial measurement */
         statisticsManager.addZeroInitialMeasurementForPlayers(players);
@@ -197,6 +203,27 @@ public class GameMap {
         promotedRoads = new HashSet<>();
 
         winnerReported = false;
+    }
+
+    // FIXME: HOTSPOT FOR ALLOCATION
+    private void constructDefaultTiles() {
+        int x, y;
+
+        for (y = 0; y <= height; y++) {
+
+            int xStart = 0;
+            int xEnd   = width;
+
+            if (y % 2 == 1) {
+                xStart = -1;
+                xEnd   = width + 1;
+            }
+
+            for (x = xStart; x <= xEnd + 1; x++) {
+                tileBelowMap.put(y * width + x, GRASS);
+                tileDownRightMap.put(y * width + x, GRASS);
+            }
+        }
     }
 
     void reportBuildingConstructed(Building building) {
@@ -1472,12 +1499,12 @@ public class GameMap {
         }
 
         /* Cannot build flag if construction is not possible on all adjacent tiles */
-        if (!canBuildFlagOn(terrain.getTileAbove(point)) &&
-            !canBuildFlagOn(terrain.getTileUpRight(point)) &&
-            !canBuildFlagOn(terrain.getTileDownRight(point)) &&
-            !canBuildFlagOn(terrain.getTileBelow(point)) &&
-            !canBuildFlagOn(terrain.getTileDownLeft(point)) &&
-            !canBuildFlagOn(terrain.getTileUpLeft(point))) {
+        if (!canBuildFlagOn(getTileAbove(point))     &&
+            !canBuildFlagOn(getTileUpRight(point))   &&
+            !canBuildFlagOn(getTileDownRight(point)) &&
+            !canBuildFlagOn(getTileBelow(point))     &&
+            !canBuildFlagOn(getTileDownLeft(point))  &&
+            !canBuildFlagOn(getTileUpLeft(point))) {
             return false;
         }
 
@@ -1536,15 +1563,6 @@ public class GameMap {
         }
 
         return true;
-    }
-
-    /**
-     * Returns the terrain instance that's used to read and modify the vegetation
-     *
-     * @return Returns the terrain object for the game map
-     */
-    public Terrain getTerrain() {
-        return terrain;
     }
 
     private List<Point> buildFullGrid() {
@@ -1631,12 +1649,12 @@ public class GameMap {
         /* Find out which adjacent points are possible off-road connections */
         Point[] adjacentPoints  = from.getAdjacentPointsExceptAboveAndBelow();
 
-        boolean cannotWalkOnTileUpLeft    = !canWalkOn(terrain.getTileUpLeft(from));
-        boolean cannotWalkOnTileDownLeft  = !canWalkOn(terrain.getTileDownLeft(from));
-        boolean cannotWalkOnTileUpRight   = !canWalkOn(terrain.getTileUpRight(from));
-        boolean cannotWalkOnTileDownRight = !canWalkOn(terrain.getTileDownRight(from));
-        boolean cannotWalkOnTileAbove     = !canWalkOn(terrain.getTileAbove(from));
-        boolean cannotWalkOnTileBelow     = !canWalkOn(terrain.getTileBelow(from));
+        boolean cannotWalkOnTileUpLeft    = !canWalkOn(getTileUpLeft(from));
+        boolean cannotWalkOnTileDownLeft  = !canWalkOn(getTileDownLeft(from));
+        boolean cannotWalkOnTileUpRight   = !canWalkOn(getTileUpRight(from));
+        boolean cannotWalkOnTileDownRight = !canWalkOn(getTileDownRight(from));
+        boolean cannotWalkOnTileAbove     = !canWalkOn(getTileAbove(from));
+        boolean cannotWalkOnTileBelow     = !canWalkOn(getTileBelow(from));
 
         for (Point adjacentPoint : adjacentPoints) {
 
@@ -1825,27 +1843,27 @@ public class GameMap {
             return false;
         }
 
-        if (terrain.isInWater(point)) {
+        if (isInWater(point)) {
             return false;
         }
 
         /* Can't build road on snow */
-        if (terrain.isOnSnow(point)) {
+        if (isOnSnow(point)) {
             return false;
         }
 
         /* Can't build road on lava */
-        if (terrain.isOnLava(point)) {
+        if (isOnLava(point)) {
             return false;
         }
 
         /* Can't place road in deep water */
-        if (terrain.isInDeepWater(point)) {
+        if (isInDeepWater(point)) {
             return false;
         }
 
         /* Can't place road in swamp */
-        if (terrain.isInSwamp(point)) {
+        if (isInSwamp(point)) {
             return false;
         }
 
@@ -2339,12 +2357,12 @@ public class GameMap {
     }
 
     private boolean isConnectedToWater(Point point) {
-        Vegetation vegetationAbove = terrain.getTileAbove(point);
-        Vegetation vegetationUpRight = terrain.getTileUpRight(point);
-        Vegetation vegetationDownRight = terrain.getTileDownRight(point);
-        Vegetation vegetationBelow = terrain.getTileBelow(point);
-        Vegetation vegetationDownLeft = terrain.getTileDownLeft(point);
-        Vegetation vegetationUpLeft = terrain.getTileUpLeft(point);
+        Vegetation vegetationAbove = getTileAbove(point);
+        Vegetation vegetationUpRight = getTileUpRight(point);
+        Vegetation vegetationDownRight = getTileDownRight(point);
+        Vegetation vegetationBelow = getTileBelow(point);
+        Vegetation vegetationDownLeft = getTileDownLeft(point);
+        Vegetation vegetationUpLeft = getTileUpLeft(point);
 
         if (vegetationAbove == WATER || vegetationAbove == DEEP_WATER || vegetationAbove == SHALLOW_WATER) {
             return true;
@@ -2638,7 +2656,7 @@ public class GameMap {
         }
 
         /* Check that the surrounding vegetation allows for placing a small house */
-        Collection<Vegetation> surroundingVegetation = terrain.getSurroundingTiles(point);
+        Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
 
         if (isAll(surroundingVegetation, MOUNTAIN)) {
             return null;
@@ -2843,19 +2861,19 @@ public class GameMap {
 
         /* A large building needs a larger free area on buildable vegetation */
         // TODO: check if it's possible to also build large house close to other sides where only flags&roads are possible
-        if (!terrain.getTileUpLeft(point.upLeft()).canBuildFlags()   ||
-            !terrain.getTileAbove(point.upLeft()).canBuildFlags()    ||
-            !terrain.getTileUpLeft(point.upRight()).canBuildFlags()  ||
-            !terrain.getTileAbove(point.upRight()).canBuildFlags()   ||
-            !terrain.getTileUpRight(point.upRight()).canBuildFlags() ||
-            !terrain.isOnBuildable(point.left())                     ||
-            !terrain.isOnBuildable(point.right())                    ||
-            !terrain.isOnBuildable(point.downRight())                ||
-            !terrain.isOnBuildable(point.downLeft())) {
+        if (!getTileUpLeft(point.upLeft()).canBuildFlags()   ||
+            !getTileAbove(point.upLeft()).canBuildFlags()    ||
+            !getTileUpLeft(point.upRight()).canBuildFlags()  ||
+            !getTileAbove(point.upRight()).canBuildFlags()   ||
+            !getTileUpRight(point.upRight()).canBuildFlags() ||
+            !isOnBuildable(point.left())                     ||
+            !isOnBuildable(point.right())                    ||
+            !isOnBuildable(point.downRight())                ||
+            !isOnBuildable(point.downLeft())) {
             return MEDIUM;
         }
 
-        if (!terrain.isOnBuildable(point)) {
+        if (!isOnBuildable(point)) {
             return MEDIUM;
         }
 
@@ -2908,7 +2926,7 @@ public class GameMap {
         }
 
         /* Return false if the point is not on a mountain */
-        if (!getTerrain().isOnMountain(point)) {
+        if (!isOnMountain(point)) {
             return false;
         }
 
@@ -3051,7 +3069,7 @@ public class GameMap {
             }
 
             /* Filter terrain the animal can't walk on */
-            if (WildAnimal.cannotWalkOn(getTerrain().getSurroundingTiles(p))) {
+            if (WildAnimal.cannotWalkOn(getSurroundingTiles(p))) {
                 continue;
             }
 
@@ -3314,12 +3332,12 @@ public class GameMap {
     }
 
     boolean isNextToAnyWater(Point point) {
-        Vegetation vegetationUpLeft    = terrain.getTileUpLeft(point);
-        Vegetation vegetationAbove     = terrain.getTileAbove(point);
-        Vegetation vegetationUpRight   = terrain.getTileUpRight(point);
-        Vegetation vegetationDownRight = terrain.getTileDownRight(point);
-        Vegetation vegetationBelow     = terrain.getTileBelow(point);
-        Vegetation vegetationDownLeft  = terrain.getTileDownLeft(point);
+        Vegetation vegetationUpLeft    = getTileUpLeft(point);
+        Vegetation vegetationAbove     = getTileAbove(point);
+        Vegetation vegetationUpRight   = getTileUpRight(point);
+        Vegetation vegetationDownRight = getTileDownRight(point);
+        Vegetation vegetationBelow     = getTileBelow(point);
+        Vegetation vegetationDownLeft  = getTileDownLeft(point);
 
         if (vegetationUpLeft.isAnyWater()) {
             return true;
@@ -3346,5 +3364,252 @@ public class GameMap {
         }
 
         return false;
+    }
+
+    /**
+     * Returns the tile above the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileAbove(Point point) {
+        return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public void setTileAbove(Point point, Vegetation vegetation) {
+        tileDownRightMap.put((point.y + 1) * width + point.x - 1, vegetation);
+    }
+
+    /**
+     * Returns the tile below the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileBelow(Point point) {
+        return tileBelowMap.get(point.y * width + point.x);
+    }
+
+    public void setTileBelow(Point point, Vegetation vegetation) {
+        tileBelowMap.put(point.y * width + point.x, vegetation);
+    }
+
+    /**
+     * Returns the tile down to the right of the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileDownRight(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x);
+    }
+
+    public void setTileDownRight(Point point, Vegetation vegetation) {
+        tileDownRightMap.put(point.y * width + point.x, vegetation);
+    }
+
+    /**
+     * Returns the tile dow to the left of the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileDownLeft(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x - 2);
+    }
+
+    public void setTileDownLeft(Point point, Vegetation vegetation) {
+        tileDownRightMap.put(point.y * width + point.x - 2, vegetation);
+    }
+
+    /**
+     * Returns the tile up to the right of the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileUpRight(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x + 1);
+    }
+
+    public void setTileUpRight(Point point, Vegetation vegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x + 1, vegetation);
+    }
+
+    /**
+     * Returns the tile up to the left of the given point
+     *
+     * @param point
+     * @return
+     */
+    public Vegetation getTileUpLeft(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public void setTileUpLeft(Point point, Vegetation vegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x - 1, vegetation);
+    }
+
+    /**
+     * Returns true if the given point is surrounded by mountain tiles
+     *
+     * @param point
+     * @return
+     */
+    public boolean isOnMountain(Point point) {
+        return isSurroundedBy(point, MOUNTAIN);
+    }
+
+    /**
+     * Returns true if the given point is surrounded by water tiles
+     *
+     * @param point
+     * @return
+     */
+    public boolean isInWater(Point point) {
+        return isSurroundedBy(point, WATER);
+    }
+
+    /**
+     * Returns true if the given point is surrounded by swamp tiles
+     *
+     * @param point
+     * @return
+     */
+    public boolean isInSwamp(Point point) {
+        return isSurroundedBy(point, SWAMP);
+    }
+
+    /**
+     * Returns true if the given point is surrounded by grass tiles
+     *
+     * @param point
+     * @return
+     */
+    public boolean isOnGrass(Point point) {
+        return isSurroundedBy(point, GRASS);
+    }
+
+    /**
+     * Surrounds the given point with the chosen type of vegetation
+     *
+     * @param point
+     * @param vegetation
+     */
+    public void surroundWithVegetation(Point point, Vegetation vegetation) {
+        setTileUpLeft(point, vegetation);
+        setTileAbove(point, vegetation);
+        setTileUpRight(point, vegetation);
+        setTileDownRight(point, vegetation);
+        setTileBelow(point, vegetation);
+        setTileDownLeft(point, vegetation);
+    }
+
+    boolean isSurroundedBy(Point point, Vegetation vegetation) {
+
+        return getTileUpLeft(point)    == vegetation &&
+                getTileAbove(point)     == vegetation &&
+                getTileUpRight(point)   == vegetation &&
+                getTileDownRight(point) == vegetation &&
+                getTileBelow(point)     == vegetation &&
+                getTileDownLeft(point)  == vegetation;
+    }
+
+    /**
+     * Returns a list of the tiles surrounding the given point
+     *
+     * @param point
+     * @return
+     */
+    public List<Vegetation> getSurroundingTiles(Point point) {
+        List<Vegetation> result = new LinkedList<>();
+
+        Vegetation vegetationUpLeft    = getTileUpLeft(point);
+        Vegetation vegetationAbove     = getTileAbove(point);
+        Vegetation vegetationUpRight   = getTileUpRight(point);
+        Vegetation vegetationDownRight = getTileDownRight(point);
+        Vegetation vegetationBelow     = getTileBelow(point);
+        Vegetation vegetationDownLeft  = getTileDownLeft(point);
+
+        if (vegetationUpLeft != null) {
+            result.add(vegetationUpLeft);
+        }
+
+        if (vegetationAbove != null) {
+            result.add(vegetationAbove);
+        }
+
+        if (vegetationUpRight != null) {
+            result.add(vegetationUpRight);
+        }
+
+        if (vegetationDownRight != null) {
+            result.add(vegetationDownRight);
+        }
+
+        if (vegetationBelow != null) {
+            result.add(vegetationBelow);
+        }
+
+        if (vegetationDownLeft != null) {
+            result.add(vegetationDownLeft);
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns true if the given tile is surrounded by snow
+     *
+     * @param point
+     * @return
+     */
+    public boolean isOnSnow(Point point) {
+        return isSurroundedBy(point, Vegetation.SNOW);
+    }
+
+    /**
+     * Returns true if the given point is surrounded by lava
+     *
+     * @param point
+     * @return
+     */
+    public boolean isOnLava(Point point) {
+        return isSurroundedBy(point, Vegetation.LAVA);
+    }
+
+    /**
+     * Returns true if the given point is in deep water
+     *
+     * @param site
+     * @return
+     */
+    public boolean isInDeepWater(Point site) {
+        return isSurroundedBy(site, Vegetation.DEEP_WATER);
+    }
+
+    /**
+     * Returns true if the given point is on vegetation where houses can be built
+     *
+     * @param point
+     * @return
+     */
+    public boolean isOnBuildable(Point point) {
+        return getTileUpLeft(point).isBuildable()    &&
+                getTileAbove(point).isBuildable()     &&
+                getTileUpRight(point).isBuildable()   &&
+                getTileDownRight(point).isBuildable() &&
+                getTileBelow(point).isBuildable()     &&
+                getTileDownLeft(point).isBuildable();
+    }
+
+    public void fillMapWithVegetation(Vegetation vegetation) {
+        for (Map.Entry<Integer, Vegetation> entry : tileBelowMap.entrySet()) {
+            tileBelowMap.put(entry.getKey(), vegetation);
+        }
+
+        for (Map.Entry<Integer, Vegetation> entry : tileDownRightMap.entrySet()) {
+            tileDownRightMap.put(entry.getKey(), vegetation);
+        }
     }
 }

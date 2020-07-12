@@ -41,11 +41,11 @@ public class Forester extends Worker {
             return false;
         }
 
-        if (map.getTerrain().isOnMountain(point)) {
+        if (map.isOnMountain(point)) {
             return false;
         }
 
-        if (map.getTerrain().isInWater(point)) {
+        if (map.isInWater(point)) {
             return false;
         }
 

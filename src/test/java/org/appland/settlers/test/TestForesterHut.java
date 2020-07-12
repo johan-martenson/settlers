@@ -752,7 +752,7 @@ public class TestForesterHut {
                     map.isFlagAtPoint(point)  ||
                     map.isRoadAtPoint(point)  ||
                     map.isStoneAtPoint(point) ||
-                    map.getTerrain().isInWater(point)) {
+                    map.isInWater(point)) {
                 continue;
             }
 
@@ -808,7 +808,7 @@ public class TestForesterHut {
                     map.isFlagAtPoint(point)  ||
                     map.isRoadAtPoint(point)  ||
                     map.isStoneAtPoint(point) ||
-                    map.getTerrain().isInWater(point)) {
+                    map.isInWater(point)) {
                 continue;
             }
 
@@ -914,7 +914,7 @@ public class TestForesterHut {
                 map.isFlagAtPoint(point)     ||
                 map.isRoadAtPoint(point)     ||
                 map.isStoneAtPoint(point)    ||
-                map.getTerrain().isOnMountain(point)) {
+                map.isOnMountain(point)) {
                 continue;
             }
 

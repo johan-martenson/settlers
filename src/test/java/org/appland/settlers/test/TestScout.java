@@ -14,7 +14,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -1093,9 +1092,8 @@ public class TestScout {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Place the sea that the scout should walk along side */
-        Terrain terrain = map.getTerrain();
         for (int i = 0; i < 40; i += 2) {
-            terrain.surroundWithVegetation(new Point(i, 24), Vegetation.WATER);
+            map.surroundWithVegetation(new Point(i, 24), Vegetation.WATER);
         }
 
         /* Call scout from the flag */

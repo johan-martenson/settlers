@@ -141,16 +141,15 @@ public class Geologist extends Worker {
     }
 
     private Material placeSignWithResult(Point point) {
-        Terrain terrain = map.getTerrain();
         boolean placedSign = false;
         Material foundMaterial = null;
 
-        if (terrain.isOnGrass(point)) {
+        if (map.isOnGrass(point)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
 
             foundMaterial = WATER;
-        } else if (terrain.isOnMountain(point)) {
+        } else if (map.isOnMountain(point)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 

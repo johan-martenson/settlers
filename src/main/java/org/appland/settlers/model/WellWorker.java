@@ -215,7 +215,7 @@ public class WellWorker extends Worker {
     private boolean isWaterInGround() {
 
         /* The well worker can't produce water in a desert */
-        if (map.getTerrain().isSurroundedBy(getHome().getPosition(), BUILDABLE_MOUNTAIN)) {
+        if (map.isSurroundedBy(getHome().getPosition(), BUILDABLE_MOUNTAIN)) {
             return false;
         }
 
