@@ -282,10 +282,6 @@ public abstract class Worker {
         return false;
     }
 
-    public void setMap(GameMap map) {
-        this.map = map;
-    }
-
     public boolean isTraveling() {
         return state == WALKING_AND_EXACTLY_AT_POINT || state == WALKING_BETWEEN_POINTS;
     }

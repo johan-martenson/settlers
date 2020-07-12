@@ -20,20 +20,7 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
 
-    private static final int TIME_TO_PROMOTE_SOLDIER = 100;
-    private final Map<Material, Integer> materialsToBuildHouse;
-    private final Map<Material, Integer> totalAmountNeededForProduction;
-    private final Map<Material, Integer> totalAmountNeededForUpgrade;
-    private final int maxCoins;
-    private final int maxHostedSoldiers;
-    private Collection<Point> defendedLand;
-    private final int defenceRadius;
-    private long generation;
-
-    private enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
-    }
-
+    private static final int TIME_TO_PROMOTE_SOLDIER               = 100;
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
     private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 149;
     private static final int TIME_TO_BUILD_LARGE_HOUSE             = 199;
@@ -41,6 +28,29 @@ public class Building implements EndPoint {
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
     private static final int TIME_TO_UPGRADE                       = 99;
 
+    private final Map<Material, Integer> materialsToBuildHouse;
+    private final Map<Material, Integer> totalAmountNeededForProduction;
+    private final Map<Material, Integer> totalAmountNeededForUpgrade;
+    private final int                    maxCoins;
+    private final int                    maxHostedSoldiers;
+    private final int                    defenceRadius;
+    private final Map<Material, Integer> requiredGoodsForProduction;
+    private final List<Military>         attackers;
+    private final List<Military>         waitingAttackers;
+    private final List<Military>         defenders;
+    private final Countdown              countdown;
+    private final Countdown              upgradeCountdown;
+    private final Map<Material, Integer> promisedDeliveries;
+    private final List<Military>         hostedMilitary;
+    private final List<Military>         promisedMilitary;
+    private final Map<Material, Integer> receivedMaterial;
+
+    private enum State {
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
+    }
+
+    private Collection<Point> defendedLand;
+    private long     generation;
     private GameMap  map;
     private Player   player;
     private State    state;
@@ -55,17 +65,6 @@ public class Building implements EndPoint {
     private Military ownDefender;
     private Military primaryAttacker;
     private boolean  outOfResources;
-
-    private final Map<Material, Integer> requiredGoodsForProduction;
-    private final List<Military>         attackers;
-    private final List<Military>         waitingAttackers;
-    private final List<Military>         defenders;
-    private final Countdown              countdown;
-    private final Countdown              upgradeCountdown;
-    private final Map<Material, Integer> promisedDeliveries;
-    private final List<Military>         hostedMilitary;
-    private final List<Military>         promisedMilitary;
-    private final Map<Material, Integer> receivedMaterial;
 
     public Building(Player player) {
         receivedMaterial      = new EnumMap<>(Material.class);

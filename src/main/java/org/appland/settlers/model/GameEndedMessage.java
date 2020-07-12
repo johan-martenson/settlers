@@ -4,10 +4,10 @@ import static org.appland.settlers.model.Message.MessageType.GAME_ENDED;
 
 public class GameEndedMessage implements Message {
 
-    private final Player winnner;
+    private final Player winner;
 
-    public GameEndedMessage(Player winnner) {
-        this.winnner = winnner;
+    public GameEndedMessage(Player winner) {
+        this.winner = winner;
     }
 
     @Override
@@ -16,11 +16,11 @@ public class GameEndedMessage implements Message {
     }
 
     public Player getWinner() {
-        return winnner;
+        return winner;
     }
 
     @Override
     public String toString() {
-        return "Message: Game ended with " + winnner.getName() + " as winner";
+        return "Message: Game ended with " + winner.getName() + " as winner";
     }
 }

@@ -164,7 +164,7 @@ public class TestDonkeyFarm {
     @Test
     public void testUnfinishedDonkeyFarmNeedsNoDonkeyBreeder() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -185,7 +185,7 @@ public class TestDonkeyFarm {
     @Test
     public void testFinishedDonkeyFarmNeedsDonkeyBreeder() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -238,7 +238,7 @@ public class TestDonkeyFarm {
     @Test
     public void testDonkeyBreederRestsInDonkeyFarmThenLeaves() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);

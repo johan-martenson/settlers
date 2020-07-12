@@ -31,7 +31,7 @@ LARGER CHANGES
 SMALLER CHANGES
 ===============
 
-* Test that each military type goes back to headquarter (one missing)
+* Test each military type goes back to headquarter (one missing)
 
 
 RE-FACTOR

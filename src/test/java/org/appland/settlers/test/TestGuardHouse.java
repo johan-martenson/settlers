@@ -295,7 +295,7 @@ public class TestGuardHouse {
     }
 
     @Test
-    public void testGuardHouseOnlyNeedsThreesoldiers() throws Exception {
+    public void testGuardHouseOnlyNeedsThreeSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -323,7 +323,7 @@ public class TestGuardHouse {
     }
 
     @Test
-    public void testGuardHouseCannotHoldsoldiersBeforeFinished() throws Exception {
+    public void testGuardHouseCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -354,7 +354,7 @@ public class TestGuardHouse {
     }
 
     @Test
-    public void testGuardHouseCannotHoldMoreThanThreesoldiers() throws Exception {
+    public void testGuardHouseCannotHoldMoreThanThreeSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

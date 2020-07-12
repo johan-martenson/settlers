@@ -7,7 +7,6 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -264,23 +263,6 @@ public class GameUtils {
         int realDistance(Point currentPoint, Point neighbor);
     }
 
-    static class SortPointsByY implements Comparator<Point> {
-
-        @Override
-        public int compare(Point t, Point t1) {
-            if (t.y < t1.y) {
-                return -1;
-            }
-
-            if (t.y > t1.y) {
-                return 1;
-            }
-
-            return Integer.compare(t.x, t1.x);
-
-        }
-    }
-
     static class PointAndCost implements Comparable<PointAndCost> {
 
         private final Point point;
@@ -389,58 +371,6 @@ public class GameUtils {
         }
 
         return null;
-    }
-
-    public static List<Point> hullWanderer(Collection<Point> points) {
-        List<Point> hull = new LinkedList<>();
-
-        /* Sort the points bottom to top, and left to right */
-        List<Point> sortedPoints = new ArrayList<>(points);
-
-        sortedPoints.sort(new SortPointsByY());
-
-        /* Start with the bottom left point */
-        Point bottomLeft = sortedPoints.get(0);
-        Point current = bottomLeft;
-        Point previous = bottomLeft.downRight();
-        while (true) {
-            hull.add(current);
-
-            for (Point it : getSurroundingPointsCounterClockwise(current, previous)) {
-                if (points.contains(it)) {
-                    previous = current;
-                    current = it;
-                    break;
-                }
-            }
-
-            if (current.equals(bottomLeft)) {
-                break;
-            }
-        }
-
-        return hull;
-    }
-
-    private static Iterable<Point> getSurroundingPointsCounterClockwise(Point center, Point arm) {
-        List<Point> surrounding = new LinkedList<>();
-        List<Point> result = new LinkedList<>();
-
-        surrounding.add(center.down());
-        surrounding.add(center.downRight());
-        surrounding.add(center.right());
-        surrounding.add(center.upRight());
-        surrounding.add(center.up());
-        surrounding.add(center.upLeft());
-        surrounding.add(center.left());
-        surrounding.add(center.downLeft());
-
-        int armIndex = surrounding.indexOf(arm);
-
-        result.addAll(surrounding.subList(armIndex + 1, surrounding.size()));
-        result.addAll(surrounding.subList(0, armIndex + 1));
-
-        return result;
     }
 
     public static Point getClosestPoint(double px, double py) {

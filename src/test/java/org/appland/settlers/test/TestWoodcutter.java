@@ -395,7 +395,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarer */
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 

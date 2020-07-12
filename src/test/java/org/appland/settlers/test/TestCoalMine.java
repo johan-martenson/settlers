@@ -135,7 +135,7 @@ public class TestCoalMine {
     @Test
     public void testConstructCoalMine() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -162,7 +162,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineIsNotMilitary() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -190,7 +190,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineUnderConstructionNotNeedsMiner() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -214,7 +214,7 @@ public class TestCoalMine {
     @Test
     public void testFinishedCoalmineNeedsMiner() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -240,7 +240,7 @@ public class TestCoalMine {
     @Test
     public void testMinerIsAssignedToFinishedCoalmine() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -281,7 +281,7 @@ public class TestCoalMine {
     @Test
     public void testMinerIsCreatedFromPickAxe() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -326,7 +326,7 @@ public class TestCoalMine {
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -349,7 +349,7 @@ public class TestCoalMine {
     @Test
     public void testArrivedMinerRests() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -392,7 +392,7 @@ public class TestCoalMine {
     @Test
     public void testMinerMinesCoal() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -446,7 +446,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineGoesToFlagWithCargoAndBack() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -508,7 +508,7 @@ public class TestCoalMine {
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -610,7 +610,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineWithoutCoalProducesNothing() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -661,7 +661,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineWithoutFoodProducesNothing() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -705,7 +705,7 @@ public class TestCoalMine {
     @Test
     public void testMiningConsumesFood() throws Exception {
 
-        /* Create single player gmae */
+        /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);

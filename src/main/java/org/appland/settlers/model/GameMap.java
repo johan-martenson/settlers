@@ -71,7 +71,6 @@ public class GameMap {
     private final Random               random;
     private final List<Point>          startingPoints;
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
-    private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
     private final int                  statisticsCollectionPeriod;
     private final Map<Integer, Vegetation> tileBelowMap;
     private final Map<Integer, Vegetation> tileDownRightMap;
@@ -154,7 +153,6 @@ public class GameMap {
         pointToGameObject   = populateMapPoints(buildFullGrid());
 
         pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
-        connectedFlagsAndBuildingsProvider = new GameUtils.ConnectedFlagsAndBuildingsProvider(pointToGameObject);
 
         /* Set grass as vegetation on all tiles */
         constructDefaultTiles();
