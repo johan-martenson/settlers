@@ -14,6 +14,7 @@ import org.appland.settlers.model.Butcher;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameEndedMessage;
@@ -23,6 +24,8 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.IronFounder;
+import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
@@ -738,5 +741,78 @@ public class TestToString {
 
         assertFalse(minter.isExactlyAtPoint());
         assertEquals(minter.toString(), "Minter (5, 5) - (6, 4)");
+    }
+
+    @Test
+    public void testIronFounderToString() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point3 = new Point(7, 9);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
+
+        /* Place a road between the headquarter and the iron smelter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter);
+
+        assertTrue(ironSmelter.needsWorker());
+
+        /* Wait for an iron founder to leave the headquarter */
+        IronFounder ironFounder0 = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
+
+        /* Verify toString */
+        assertNotNull(ironFounder0);
+        assertTrue(ironFounder0.isExactlyAtPoint());
+        assertEquals(ironFounder0.toString(), "Iron founder (5, 5)");
+
+        map.stepTime();
+
+        assertFalse(ironFounder0.isExactlyAtPoint());
+        assertEquals(ironFounder0.toString(), "Iron founder (5, 5) - (6, 4)");
+    }
+
+    @Test
+    public void testCourierToString() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(19, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter.getFlag());
+
+        /* Wait for a courier to get assigned to the road */
+        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+
+        /* Verify that toString is correct */
+        assertNotNull(courier);
+        assertTrue(courier.isExactlyAtPoint());
+        assertEquals(courier.toString(), "Courier (19, 5)");
+
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+        assertEquals(courier.toString(), "Courier (19, 5) - (20, 4)");
     }
 }

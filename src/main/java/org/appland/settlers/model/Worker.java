@@ -43,7 +43,7 @@ public abstract class Worker {
     private Point       target;
     private Building    home;
 
-    GameMap map;
+    final GameMap map;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;

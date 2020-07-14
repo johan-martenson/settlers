@@ -298,9 +298,9 @@ public class GameMap {
         roads.remove(road);
 
         for (Point point : road.getWayPoints()) {
-            MapPoint mp = pointToGameObject.get(point);
+            MapPoint mapPoint = getMapPoint(point);
 
-            mp.removeConnectingRoad(road);
+            mapPoint.removeConnectingRoad(road);
         }
 
         /* Report that the road is removed */
@@ -1740,7 +1740,7 @@ public class GameMap {
      * @return Returns true if there is a flag at the given point, otherwise false
      */
     public boolean isFlagAtPoint(Point point) {
-        return pointToGameObject.get(point).isFlag();
+        return getMapPoint(point).isFlag();
     }
 
     /**
@@ -1755,7 +1755,7 @@ public class GameMap {
 
     private void addRoadToMapPoints(Road road) {
         for (Point point : road.getWayPoints()) {
-            MapPoint mapPoint = pointToGameObject.get(point);
+            MapPoint mapPoint = getMapPoint(point);
 
             mapPoint.addConnectingRoad(road);
         }
@@ -1778,7 +1778,7 @@ public class GameMap {
      * @return Returns the flag at the given point, or null if there is no flag at the given point
      */
     public Flag getFlagAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getFlag();
     }
@@ -1789,7 +1789,7 @@ public class GameMap {
             return false;
         }
 
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag() && player.isWithinBorder(point)) {
             return true;
@@ -1807,7 +1807,7 @@ public class GameMap {
     }
 
     private boolean isPossibleAsAnyPointInRoad(Player player, Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         if (!isWithinMap(point)) {
             return false;
@@ -1971,7 +1971,7 @@ public class GameMap {
      * @return the building at the given point
      */
     public Building getBuildingAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getBuilding();
     }
@@ -1995,7 +1995,7 @@ public class GameMap {
      * @return true if there is a road at the given point
      */
     public boolean isRoadAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return !mapPoint.getConnectedNeighbors().isEmpty();
     }
@@ -2007,7 +2007,7 @@ public class GameMap {
      * @return true if there is a tree at the point
      */
     public boolean isTreeAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getTree() != null;
     }
@@ -2078,7 +2078,7 @@ public class GameMap {
      * @throws Exception Throws exception if the tree cannot be placed
      */
     public Tree placeTree(Point point) throws InvalidUserActionException {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag()) {
             throw new InvalidUserActionException("Can't place tree on " + point + " on existing flag");
@@ -2110,7 +2110,7 @@ public class GameMap {
     }
 
     void removeTree(Point position) {
-        MapPoint mapPoint = pointToGameObject.get(position);
+        MapPoint mapPoint = getMapPoint(position);
 
         Tree tree = mapPoint.getTree();
 
@@ -2123,7 +2123,7 @@ public class GameMap {
     }
 
     public Tree getTreeAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getTree();
     }
@@ -2135,7 +2135,7 @@ public class GameMap {
      * @return The placed stone
      */
     public Stone placeStone(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         Stone stone = new Stone(point);
 
@@ -2154,7 +2154,7 @@ public class GameMap {
      * @throws InvalidUserActionException Throws exception if the crop cannot be placed
      */
     public Crop placeCrop(Point point) throws InvalidUserActionException {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isUnHarvestedCrop()) {
             throw new InvalidUserActionException("Can't place crop on non-harvested crop at " + point);
@@ -2179,7 +2179,7 @@ public class GameMap {
      * @return True if there is a crop at the point
      */
     public boolean isCropAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getCrop() != null;
     }
@@ -2191,13 +2191,13 @@ public class GameMap {
      * @return True if there is a stone at the point
      */
     public boolean isStoneAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getStone() != null;
     }
 
     Cargo removePartOfStone(Point position) {
-        MapPoint mapPoint = pointToGameObject.get(position);
+        MapPoint mapPoint = getMapPoint(position);
 
         Stone stone = mapPoint.getStone();
 
@@ -2267,7 +2267,7 @@ public class GameMap {
      * @return The crops at the given point
      */
     public Crop getCropAtPoint(Point point) {
-        return pointToGameObject.get(point).getCrop();
+        return getMapPoint(point).getCrop();
     }
 
     /**
@@ -2286,8 +2286,8 @@ public class GameMap {
      * @throws Exception Throws exception if there is a fault when removing connected roads
      */
     public void removeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
-        MapPoint mapPointUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
-        MapPoint mapPoint = pointToGameObject.get(flag.getPosition());
+        MapPoint mapPointUpLeft = getMapPoint(flag.getPosition().upLeft());
+        MapPoint mapPoint = getMapPoint(flag.getPosition());
 
         /* Destroy the house if the flag is connected to a house */
         if (mapPointUpLeft.isBuilding() && flag.equals(mapPointUpLeft.getBuilding().getFlag())) {
@@ -2314,7 +2314,7 @@ public class GameMap {
     }
 
     private void removeFlagWithoutSideEffects(Flag flag) {
-        MapPoint mapPoint = pointToGameObject.get(flag.getPosition());
+        MapPoint mapPoint = getMapPoint(flag.getPosition());
 
         /* Remove the flag */
         mapPoint.removeFlag();
@@ -2333,7 +2333,7 @@ public class GameMap {
      * @return The amount of the given mineral at the given point
      */
     public int getAmountOfMineralAtPoint(Material mineral, Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getAmountOfMineral(mineral);
     }
@@ -2351,7 +2351,7 @@ public class GameMap {
             return 0;
         }
 
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getAmountOfFish();
     }
@@ -2398,7 +2398,7 @@ public class GameMap {
      * @return A cargo containing the fish
      */
     public Cargo catchFishAtPoint(Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.getAmountOfFish() ==0) {
             throw new InvalidGameLogicException("Can't find any fish to catch at " + point);
@@ -2417,7 +2417,7 @@ public class GameMap {
      * @return a cargo containing the mined ore
      */
     public Cargo mineMineralAtPoint(Material mineral, Point point) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         mapPoint.mineMineral();
 
@@ -2606,13 +2606,13 @@ public class GameMap {
         Point pointDownLeftLeft = point.downLeftLeft();
 
         MapPoint houseMapPoint = getMapPoint(point);
-        MapPoint mapPointDown = pointToGameObject.get(pointDown);
+        MapPoint mapPointDown = getMapPoint(pointDown);
         MapPoint mapPointDownRight = getMapPoint(pointDownRight);
-        MapPoint mapPointUpRight = pointToGameObject.get(pointUpRight);
-        MapPoint mapPointUpRightUpRight = pointToGameObject.get(pointUpRightUpRight);
+        MapPoint mapPointUpRight = getMapPoint(pointUpRight);
+        MapPoint mapPointUpRightUpRight = getMapPoint(pointUpRightUpRight);
         MapPoint mapPointDownLeftDownLeft = getMapPoint(pointDownLeftDownLeft);
         MapPoint mapPointDownRightDownRight = getMapPoint(pointDownRightDownRight);
-        MapPoint mapPointDownLeftLeft = pointToGameObject.get(pointDownLeftLeft);
+        MapPoint mapPointDownLeftLeft = getMapPoint(pointDownLeftLeft);
 
         /* ALL CONDITIONS FOR SMALL */
 
@@ -3161,7 +3161,7 @@ public class GameMap {
         for (Point point : points) {
 
             if (previous != null) {
-                MapPoint mp = pointToGameObject.get(previous);
+                MapPoint mp = getMapPoint(previous);
 
                 if (!mp.getConnectedFlagsAndBuildings().contains(point)) {
                     return false;
@@ -3293,7 +3293,7 @@ public class GameMap {
     }
 
     public void setMineralAmount(Point point, Material mineral, Size amount) {
-        MapPoint mapPoint = pointToGameObject.get(point);
+        MapPoint mapPoint = getMapPoint(point);
 
         mapPoint.setMineralAmount(mineral, amount);
     }
@@ -3310,15 +3310,15 @@ public class GameMap {
     }
 
     public void surroundPointWithMineral(Point point, Material mineral, Size amount) {
-        MapPoint mapPoint = pointToGameObject.get(point);
-        MapPoint mapPointDownLeft = pointToGameObject.get(point.downLeft());
-        MapPoint mapPointLeft = pointToGameObject.get(point.left());
-        MapPoint mapPointUpLeft = pointToGameObject.get(point.upLeft());
-        MapPoint mapPointAbove = pointToGameObject.get(point.up());
-        MapPoint mapPointUpRight = pointToGameObject.get(point.upRight());
-        MapPoint mapPointRight = pointToGameObject.get(point.right());
-        MapPoint mapPointDownRight = pointToGameObject.get(point.downRight());
-        MapPoint mapPointBelow = pointToGameObject.get(point.down());
+        MapPoint mapPoint = getMapPoint(point);
+        MapPoint mapPointDownLeft = getMapPoint(point.downLeft());
+        MapPoint mapPointLeft = getMapPoint(point.left());
+        MapPoint mapPointUpLeft = getMapPoint(point.upLeft());
+        MapPoint mapPointAbove = getMapPoint(point.up());
+        MapPoint mapPointUpRight = getMapPoint(point.upRight());
+        MapPoint mapPointRight = getMapPoint(point.right());
+        MapPoint mapPointDownRight = getMapPoint(point.downRight());
+        MapPoint mapPointBelow = getMapPoint(point.down());
 
         mapPoint.setMineralAmount(mineral, amount);
         mapPointDownLeft.setMineralAmount(mineral, amount);
@@ -3564,12 +3564,8 @@ public class GameMap {
     }
 
     public void fillMapWithVegetation(Vegetation vegetation) {
-        for (Map.Entry<Integer, Vegetation> entry : tileBelowMap.entrySet()) {
-            tileBelowMap.put(entry.getKey(), vegetation);
-        }
+        tileBelowMap.replaceAll((k, v) -> vegetation);
 
-        for (Map.Entry<Integer, Vegetation> entry : tileDownRightMap.entrySet()) {
-            tileDownRightMap.put(entry.getKey(), vegetation);
-        }
+        tileDownRightMap.replaceAll((k, v) -> vegetation);
     }
 }

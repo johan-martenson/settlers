@@ -330,7 +330,7 @@ public class Storehouse extends Building {
                 }
 
                 Courier courier = storehouse.retrieveCourier();
-                getMap().placeWorker(courier, storehouse.getFlag());
+                getMap().placeWorker(courier, storehouse);
                 courier.assignToRoad(road);
 
                 return true;

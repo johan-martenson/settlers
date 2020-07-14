@@ -72,10 +72,6 @@ public class Military extends Worker {
         DEAD
     }
 
-    private static final int PRIVATE_FIGHT_DURATION  = 100;
-    private static final int SERGEANT_FIGHT_DURATION = 200;
-    private static final int GENERAL_FIGHT_DURATION  = 300;
-
     private static final int PRIVATE_HEALTH  = 20;
     private static final int PRIVATE_FIRST_CLASS_HEALTH = 70;
     private static final int SERGEANT_HEALTH = 220;
@@ -443,19 +439,6 @@ public class Military extends Worker {
         /* Become the primary attacker if the meeting point is the building's flag */
         if (buildingToAttack.getFlag().getPosition().equals(meetingPoint)) {
             buildingToAttack.setPrimaryAttacker(this);
-        }
-    }
-
-    int getFightTime() {
-        switch (getRank()) {
-        case PRIVATE_RANK:
-            return PRIVATE_FIGHT_DURATION;
-        case SERGEANT_RANK:
-            return SERGEANT_FIGHT_DURATION;
-        case GENERAL_RANK:
-            return GENERAL_FIGHT_DURATION;
-        default:
-            return -1;
         }
     }
 

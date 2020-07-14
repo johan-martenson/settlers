@@ -314,7 +314,11 @@ public class Courier extends Worker {
 
     @Override
     public String toString() {
-        return "Courier " + state;
+        if (isExactlyAtPoint()) {
+            return "Courier " + getPosition();
+        } else {
+            return "Courier " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     private void deliverCargo() throws InvalidRouteException {

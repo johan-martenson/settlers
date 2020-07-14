@@ -415,9 +415,9 @@ public class GameUtils {
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            MapPoint mp = pointToGameObject.get(start);
+            MapPoint mapPoint = pointToGameObject.get(start);
 
-            return mp.getConnectedNeighbors();
+            return mapPoint.getConnectedNeighbors();
         }
 
         @Override
@@ -436,20 +436,20 @@ public class GameUtils {
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            MapPoint mp = pointToGameObject.get(start);
+            MapPoint mapPoint = pointToGameObject.get(start);
 
-            return mp.getConnectedFlagsAndBuildings();
+            return mapPoint.getConnectedFlagsAndBuildings();
         }
 
         @Override
         public int realDistance(Point currentPoint, Point neighbor) {
 
-            MapPoint mp = pointToGameObject.get(currentPoint);
+            MapPoint mapPoint = pointToGameObject.get(currentPoint);
 
             int distance = Integer.MAX_VALUE;
 
             /* Find the shortest road that connects the two points */
-            for (Road road : mp.getConnectedRoads()) {
+            for (Road road : mapPoint.getConnectedRoads()) {
                 if (!road.getStart().equals(currentPoint) && !road.getEnd().equals(currentPoint)) {
                     continue;
                 }
@@ -532,8 +532,8 @@ public class GameUtils {
             evaluated.add(currentPoint.point);
 
             /* Evaluate each neighbor directly connected by a road */
-            MapPoint mp = mapPoints.get(currentPoint.point);
-            for (Road road : mp.getConnectedRoads()) {
+            MapPoint mapPoint = mapPoints.get(currentPoint.point);
+            for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint.point);
 
@@ -629,8 +629,8 @@ public class GameUtils {
             evaluated.add(currentPoint);
 
             /* Evaluate each direct neighbor */
-            MapPoint mp = mapPoints.get(currentPoint);
-            for (Road road : mp.getConnectedRoads()) {
+            MapPoint mapPoint = mapPoints.get(currentPoint);
+            for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint);
 
@@ -753,8 +753,8 @@ public class GameUtils {
             evaluated.add(currentPoint);
 
             /* Evaluate each direct neighbor */
-            MapPoint mp = mapPoints.get(currentPoint);
-            for (Road road : mp.getConnectedRoads()) {
+            MapPoint mapPoint = mapPoints.get(currentPoint);
+            for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint);
 
@@ -798,8 +798,7 @@ public class GameUtils {
      * @param mapPoints The map with information about each point on the game map
      * @return true if the start and end are connected
      */
-    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint,
-            Map<Point, MapPoint> mapPoints) {
+    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint, Map<Point, MapPoint> mapPoints) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();
@@ -852,8 +851,8 @@ public class GameUtils {
             evaluated.add(currentPoint);
 
             /* Evaluate each direct neighbor */
-            MapPoint mp = mapPoints.get(currentPoint);
-            for (Road road : mp.getConnectedRoads()) {
+            MapPoint mapPoint = mapPoints.get(currentPoint);
+            for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint);
 

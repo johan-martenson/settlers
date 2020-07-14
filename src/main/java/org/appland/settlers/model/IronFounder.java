@@ -181,7 +181,11 @@ public class IronFounder extends Worker {
 
     @Override
     public String toString() {
-        return "Iron founder " + state;
+        if (isExactlyAtPoint()) {
+            return "Iron founder " + getPosition();
+        } else {
+            return "Iron founder " + getPosition() + " - " + getNextPoint();
+        }
     }
 
     @Override
