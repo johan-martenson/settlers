@@ -22,7 +22,7 @@ import static org.appland.settlers.model.Vegetation.WATER;
 @Walker(speed = 10)
 public class WildAnimal extends Worker {
 
-    private static final int TIME_TO_STAND = 9;
+    private static final int TIME_TO_STAND = 39;
     private static final int RANGE = 10;
 
     private final Random random;

@@ -45,6 +45,19 @@ public class GameMap {
     private static final double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
     private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
 
+    private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = new ConnectionsProvider() {
+
+        @Override
+        public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+            return getPossibleAdjacentOffRoadConnections(start);
+        }
+
+        @Override
+        public int realDistance(Point currentPoint, Point neighbor) {
+            return 1;
+        }
+    };
+
     private final List<Worker>         workers;
     private final int                  height;
     private final int                  width;
@@ -2057,18 +2070,7 @@ public class GameMap {
      * @return The path found or null if there is no way
      */
     public List<Point> findWayOffroad(Point start, Point goal, Set<Point> avoid) {
-        return findShortestPath(start, goal, avoid, new ConnectionsProvider() {
-
-            @Override
-            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                return getPossibleAdjacentOffRoadConnections(start);
-            }
-
-            @Override
-            public int realDistance(Point currentPoint, Point neighbor) {
-                return 1;
-            }
-        });
+        return findShortestPath(start, goal, avoid, OFFROAD_CONNECTIONS_PROVIDER);
     }
 
     /**

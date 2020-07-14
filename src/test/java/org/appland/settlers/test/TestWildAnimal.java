@@ -71,6 +71,7 @@ public class TestWildAnimal {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Wait for an animal to appear */
@@ -118,7 +119,7 @@ public class TestWildAnimal {
                 timeInSamePlace++;
             }
 
-            assertTrue(timeInSamePlace < 80);
+            assertTrue(timeInSamePlace < 200);
 
             map.stepTime();
         }

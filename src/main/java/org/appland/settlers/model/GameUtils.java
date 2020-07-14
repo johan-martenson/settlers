@@ -287,7 +287,6 @@ public class GameUtils {
 
     // FIXME: HOTSPOT
     static List<Point> findShortestPath(Point start, Point goal, Set<Point> avoid, ConnectionsProvider connectionProvider) {
-        Set<Point>          evaluated        = new HashSet<>();
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         Map<Point, Point>   cameFrom         = new HashMap<>();
         int                 bestCaseCost;
@@ -329,16 +328,8 @@ public class GameUtils {
                 return path;
             }
 
-            /* Do not re-evaluate the same point */
-            evaluated.add(currentPoint.point);
-
             /* Evaluate each direct neighbor */
             for (Point neighbor : connectionProvider.getPossibleConnections(currentPoint.point, goal)) {
-
-                /* Skip already evaluated points */
-                if (evaluated.contains(neighbor)) {
-                    continue;
-                }
 
                 /* Skip points we should avoid */
                 if (avoid != null && avoid.contains(neighbor)) {
@@ -937,10 +928,8 @@ public class GameUtils {
                 continue;
             }
 
-            /* Filter buildings that are destroyed */
-            if (building.isBurningDown() ||
-                building.isDestroyed()   ||
-                building.isUnderConstruction()) {
+            /* Filter buildings that are under construction or destroyed */
+            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
                 continue;
             }
 
@@ -950,8 +939,16 @@ public class GameUtils {
                     break;
                 }
 
+                /* Filter buildings that cannot be closer than the current */
+                int bestCaseDistance = getDistanceInGameSteps(point, building.getFlag().getPosition()) + 1;
+
+                if (bestCaseDistance > distance) {
+                    continue;
+                }
+
                 List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
 
+                /* Filter points that can't be reached */
                 if (path == null) {
                     continue;
                 }
@@ -981,7 +978,7 @@ public class GameUtils {
                 continue;
             }
 
-            /* Filter buildings that are destroyed */
+            /* Filter buildings that are under construction or destroyed */
             if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
                 continue;
             }
@@ -995,6 +992,13 @@ public class GameUtils {
             if (building.getFlag().getPosition().equals(point)) {
                 storehouse = (Storehouse)building;
                 break;
+            }
+
+            /* Filter buildings that cannot be closer than the current */
+            int bestCaseDistance = getDistanceInGameSteps(point, building.getFlag().getPosition()) + 1;
+
+            if (bestCaseDistance > distance) {
+                continue;
             }
 
             List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());

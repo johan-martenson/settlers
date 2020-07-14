@@ -1644,7 +1644,7 @@ public class Utils {
     }
 
     public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws Exception {
-        for (int i = 0; i < 5000; i++) {
+        for (int i = 0; i < 20000; i++) {
             if (flag.getStackedCargo().size() == amount) {
                 break;
             }
