@@ -2606,4 +2606,37 @@ public class TestRoads {
 
         assertNotEquals(road1, road2);
     }
+
+    @Test
+    public void testGetOtherEndPoint() throws Exception {
+
+        /* Create player */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter for player0 */
+        Point point17 = new Point(8, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point17);
+
+        /* Place flag */
+        Point point0 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Place road between the flag and the headquarter's flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Verify that we can get the other endpoints for the new road */
+        assertEquals(road0.getOtherEndPoint(flag0), headquarter0.getFlag());
+        assertEquals(road0.getOtherEndPoint(headquarter0.getFlag()), flag0);
+
+        /* Verify that we can get the other endpoints for the driveway for the headquarter */
+        Road road1 = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
+
+        assertEquals(road1.getOtherEndPoint(headquarter0), headquarter0.getFlag());
+        assertEquals(road1.getOtherEndPoint(headquarter0.getFlag()), headquarter0);
+    }
 }

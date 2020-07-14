@@ -90,7 +90,6 @@ public class StorageWorker extends Worker {
                     receivingStorehouse.promiseDelivery(material);
 
                     cargo.setTarget(receivingStorehouse);
-
                 }
 
                 return cargo;

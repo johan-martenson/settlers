@@ -123,14 +123,14 @@ public class Road {
         return end.getPosition();
     }
 
-    public EndPoint getOtherFlag(EndPoint flag) throws Exception {
+    public EndPoint getOtherEndPoint(EndPoint flag) throws Exception {
         if (flag.equals(start)) {
             return end;
         } else if (flag.equals(end)) {
             return start;
         }
 
-        throw new Exception(flag + " is not an endpoint to this road (" + this + ")");
+        throw new InvalidUserActionException(flag + " is not an endpoint to this road (" + this + ")");
     }
 
     void setDriveway() {
