@@ -1861,6 +1861,32 @@ public class Utils {
         assertEquals(courier.getNextPoint(), position);
     }
 
+    public static void waitForMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+        GameMap map = buildings[0].getMap();
+
+        for (int i = 0; i < 10000; i++) {
+            boolean allPopulated = true;
+
+            for (Building building : buildings) {
+                if (!building.isOccupied()) {
+                    allPopulated = false;
+
+                    break;
+                }
+            }
+
+            if (allPopulated) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Building building : buildings) {
+            assertTrue(building.isOccupied());
+        }
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

@@ -261,41 +261,77 @@ public class Storehouse extends Building {
 
     private boolean assignWorkerToUnoccupiedBuildings() throws InvalidRouteException {
         for (Building building : getPlayer().getBuildings()) {
+
+            if (building.equals(this)) {
+                continue;
+            }
+
+            if (building.isBurningDown()) {
+                continue;
+            }
+
+            if (building.isDestroyed()) {
+                continue;
+            }
+
             if (building.isMilitaryBuilding()) {
                 if (!hasMilitary()) {
                     continue;
                 }
 
-                if (building.needsMilitaryManning()) {
-                    if (!isClosestStorage(building)) {
-                        continue;
-                    }
-
-                    Military military = retrieveAnyMilitary();
-
-                    getMap().placeWorker(military, this);
-                    military.setTargetBuilding(building);
-                    building.promiseMilitary(military);
-
-                    return true;
+                if (!building.needsMilitaryManning()) {
+                    continue;
                 }
+
+                /* Filter buildings that cannot be reached from this storehouse */
+                if (getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                    continue;
+                }
+
+                /* Filter buildings that can get the worker assigned from a more local storehouse */
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+
+                if (storehouse != null && !this.equals(storehouse) && storehouse.hasMilitary()) {
+                    continue;
+                }
+
+                Military military = retrieveAnyMilitary();
+
+                getMap().placeWorker(military, this);
+                military.setTargetBuilding(building);
+                building.promiseMilitary(military);
+
+                return true;
             } else {
                 if (building.needsWorker()) {
-                    Material material = building.getWorkerType();
 
-                    if (!hasAtLeastOne(material) && !hasAtLeastOne(getToolForWorker(material))) {
+                    Material material = building.getWorkerType();
+                    Material toolForWorker = getToolForWorker(material);
+
+                    boolean hasWorker = hasAtLeastOne(material);
+                    boolean canMakeWorker = toolForWorker != null && hasAtLeastOne(toolForWorker);
+
+                    /* Filter buildings that need a worker that this storehouse cannot assign */
+                    if (!hasWorker && !canMakeWorker) {
                         continue;
                     }
 
+                    /* Filter buildings that cannot be reached from this storehouse */
+                    if (getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                        continue;
+                    }
+
+                    /* Filter buildings that can get the worker assigned from a more local storehouse */
                     Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
 
-                    if (!equals(storehouse)) {
+                    if (storehouse != null && !this.equals(storehouse) && storehouse.hasAtLeastOne(material)) {
                         continue;
                     }
 
-                    Worker worker = storehouse.retrieveWorker(material);
+                    /* Assign the worker */
+                    Worker worker = retrieveWorker(material);
 
-                    getMap().placeWorker(worker, storehouse);
+                    getMap().placeWorker(worker, this);
                     worker.setTargetBuilding(building);
                     building.promiseWorker(worker);
 

@@ -340,6 +340,7 @@ public class TestArmory {
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -356,6 +357,7 @@ public class TestArmory {
         /* Verify that the armory doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(armory.getFlag().getStackedCargo().isEmpty());
+
             map.stepTime();
         }
     }

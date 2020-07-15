@@ -66,7 +66,7 @@ public class TestStorehouse {
           - push out follows priority order DONE
       - material can be blocked:
           - deliveries go to another storehouse DONE
-          - test for each type of house/worker:
+          - test for each type of house/worker: (DONE)
             - flags fill up and then deliveries stop if there is nowhere to put them
             - push worker from headquarter without any place to store - worker goes away and dies
             - push worker from headquarter without blocking - worker goes out and in again
