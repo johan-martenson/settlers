@@ -110,6 +110,7 @@ public class GameMap {
     private Player winner;
     private long time;
     private boolean winnerReported;
+    private boolean isBorderUpdated;
 
     enum PointInformation {
         NONE, STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP
@@ -214,6 +215,8 @@ public class GameMap {
         promotedRoads = new HashSet<>();
 
         winnerReported = false;
+
+        isBorderUpdated = false;
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -499,11 +502,13 @@ public class GameMap {
                 continue;
             }
 
-            if (borderChanges == null) {
+            if (isBorderUpdated && borderChanges == null) {
                 borderChanges = collectBorderChangesFromEachPlayer();
             }
 
-            player.reportChangedBorders(borderChanges);
+            if (isBorderUpdated) {
+                player.reportChangedBorders(borderChanges);
+            }
 
             for (Worker worker : workersWithNewTargets) {
                 if (!player.getDiscoveredLand().contains(worker.getPosition())) {
@@ -665,6 +670,8 @@ public class GameMap {
         if (winner != null) {
             winnerReported = true;
         }
+
+        isBorderUpdated = false;
 
         /* Step the time keeper */
         time = time + 1;
@@ -940,6 +947,9 @@ public class GameMap {
             }
 
             updatedLands.get(player).add(new Land(pointsInLand, borders));
+
+            /* Remember that the border was updated so we can notify monitored players */
+            isBorderUpdated = true;
         }
 
         /* Update lands in each player */

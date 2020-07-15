@@ -126,7 +126,7 @@ public class Player {
         newDiscoveredLand = new HashSet<>();
         newBorder = new ArrayList<>();
         removedBorder = new ArrayList<>();
-        changedBorders = null;
+        changedBorders = new ArrayList<>();
         newStones = new ArrayList<>();
         borderPoints = new HashSet<>();
         newWorkers = new ArrayList<>();
@@ -328,25 +328,23 @@ public class Player {
     void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
 
         /* Report the new border and the removed border */
-        if (hasMonitor()) {
-            Set<Point> fullNewBorderCalc = new HashSet<>();
-            Set<Point> fullOldBorderCalc = new HashSet<>(borderPoints);
+        Set<Point> fullNewBorderCalc = new HashSet<>();
+        Set<Point> fullOldBorderCalc = new HashSet<>(borderPoints);
 
-            for (Land land : updatedLands) {
-                for (List<Point> border : land.getBorders()) {
-                    fullNewBorderCalc.addAll(border);
-                }
+        for (Land land : updatedLands) {
+            for (List<Point> border : land.getBorders()) {
+                fullNewBorderCalc.addAll(border);
             }
-
-            Set<Point> newBorderCalc = new HashSet<>(fullNewBorderCalc);
-            newBorderCalc.removeAll(fullOldBorderCalc);
-
-            Set<Point> removedBorderCalc = new HashSet<>(fullOldBorderCalc);
-            removedBorderCalc.removeAll(fullNewBorderCalc);
-
-            newBorder.addAll(newBorderCalc);
-            removedBorder.addAll(removedBorderCalc);
         }
+
+        Set<Point> newBorderCalc = new HashSet<>(fullNewBorderCalc);
+        newBorderCalc.removeAll(fullOldBorderCalc);
+
+        Set<Point> removedBorderCalc = new HashSet<>(fullOldBorderCalc);
+        removedBorderCalc.removeAll(fullNewBorderCalc);
+
+        newBorder.addAll(newBorderCalc);
+        removedBorder.addAll(removedBorderCalc);
 
         /* Update full list of owned land and the list of borders */
         Set<Point> updatedOwnedLand = new HashSet<>();
@@ -983,6 +981,7 @@ public class Player {
         newMessages.clear();
         newStones.clear();
         promotedRoads.clear();
+        changedBorders.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1145,7 +1144,37 @@ public class Player {
     }
 
     public void reportChangedBorders(List<BorderChange> borderChanges) {
-        changedBorders = borderChanges;
+
+        for (BorderChange borderChange : borderChanges) {
+            List<Point> added = new ArrayList<>();
+            List<Point> removed = new ArrayList<>();
+
+            if (borderChange.getPlayer().equals(this)) {
+                changedBorders.add(borderChange);
+
+                continue;
+            }
+
+            for (Point point : borderChange.getNewBorder()) {
+                if (discoveredLand.contains(point)) {
+                    added.add(point);
+                }
+            }
+
+            for (Point point : borderChange.getRemovedBorder()) {
+                if (discoveredLand.contains(point)) {
+                    removed.add(point);
+                }
+            }
+
+            if (added.isEmpty() && removed.isEmpty()) {
+                continue;
+            }
+
+            BorderChange borderChangeToAdd = new BorderChange(borderChange.getPlayer(), added, removed);
+
+            changedBorders.add(borderChangeToAdd);
+        }
     }
 
     public BorderChange getBorderChange() {

@@ -3932,6 +3932,10 @@ public class TestGameMonitoring {
         /* Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land */
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
+        for (Point point : player0.getBorderPoints()) {
+            assertFalse(player1.getDiscoveredLand().contains(point));
+        }
+
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.getChangedBorders().isEmpty());
         }

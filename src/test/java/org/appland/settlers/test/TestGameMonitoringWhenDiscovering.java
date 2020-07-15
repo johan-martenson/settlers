@@ -4,6 +4,7 @@ import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -17,7 +18,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class TestGameMonitoringWhenDiscovering {
     TODO:
      - flag+road
      - wild animals
+     - own border not being reported twice
      */
 
     @Test
@@ -1163,6 +1165,149 @@ public class TestGameMonitoringWhenDiscovering {
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
             assertEquals(newChanges.getNewWorkers().size(), 0);
             assertEquals(newChanges.getWorkersWithNewTargets().size(), 0);
+        }
+    }
+
+    @Test
+    public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansion() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 80, 40);
+
+        /* Place headquarter for player 0 */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter for player 1 */
+        Point point1 = new Point(51, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        map.stepTime();
+
+        /* Place a fortress for player 1 */
+        Point point2 = new Point(35, 5);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
+
+        /* Connect the fortress to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the fortress to get constructed */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        /* Verify that a game monitoring message is sent when player 0 discovers player 1's border */
+        for (Point point : player1.getBorderPoints()) {
+            assertFalse(player0.getDiscoveredLand().contains(point));
+        }
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0);
+
+        boolean canSeeEnemysBorder = false;
+
+        for (Point point : player1.getBorderPoints()) {
+            if (player0.getDiscoveredLand().contains(point)) {
+                canSeeEnemysBorder = true;
+
+                break;
+            }
+        }
+
+        assertTrue(canSeeEnemysBorder);
+
+        boolean otherBorderFound = false;
+
+        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
+            if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
+                otherBorderFound = true;
+
+                break;
+            }
+        }
+
+        assertTrue(otherBorderFound);
+    }
+
+    @Test
+    public void testMonitoringEventWhenDiscoveringBorderThroughEnemyExpansionIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 80, 40);
+
+        /* Place headquarter for player 0 */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter for player 1 */
+        Point point1 = new Point(51, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        map.stepTime();
+
+        /* Place a fortress for player 1 */
+        Point point2 = new Point(35, 5);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
+
+        /* Connect the fortress to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player1, fortress0.getFlag(), headquarter1.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the fortress to get constructed */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        /* Verify that a game monitoring message is sent when player 0 discovers player 1's border */
+        for (Point point : player1.getBorderPoints()) {
+            assertFalse(player0.getDiscoveredLand().contains(point));
+        }
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0);
+
+        boolean canSeeEnemysBorder = false;
+
+        for (Point point : player1.getBorderPoints()) {
+            if (player0.getDiscoveredLand().contains(point)) {
+                canSeeEnemysBorder = true;
+
+                break;
+            }
+        }
+
+        assertTrue(canSeeEnemysBorder);
+
+        boolean otherBorderFound = false;
+
+        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
+            if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
+                otherBorderFound = true;
+
+                break;
+            }
+        }
+
+        assertTrue(otherBorderFound);
+
+        /* Verify that the event is only sent once */
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        Utils.fastForward(100, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getChangedBorders().size(), 0);
         }
     }
 }
