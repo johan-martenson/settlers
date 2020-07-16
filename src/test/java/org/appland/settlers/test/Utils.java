@@ -30,6 +30,7 @@ import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WildAnimal;
+import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 
 import java.util.ArrayList;
@@ -1201,7 +1202,7 @@ public class Utils {
         assertTrue(amountMessages < player0.getMessages().size());
     }
 
-    public static void waitForBuildingToBeConstructed(Building building) throws Exception {
+    public static void waitForBuildingToBeConstructed(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 3000; i++) {
@@ -1884,6 +1885,61 @@ public class Utils {
 
         for (Building building : buildings) {
             assertTrue(building.isOccupied());
+        }
+    }
+
+    public static void constructHouses(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+        GameMap map = buildings[0].getMap();
+
+        for (Building building : buildings) {
+            assertTrue(building.isUnderConstruction());
+
+            for (int i = 0; i < 20; i++) {
+                if (building.needsMaterial(PLANK)) {
+                    try {
+                        Cargo cargo = new Cargo(PLANK, map);
+
+                        building.promiseDelivery(PLANK);
+                        building.putCargo(cargo);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                if (building.needsMaterial(STONE)) {
+                    try {
+                        Cargo cargo = new Cargo(STONE, map);
+
+                        building.promiseDelivery(STONE);
+                        building.putCargo(cargo);
+                    } catch (Exception ex) {
+                        Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < 500; i++) {
+
+            boolean allReady = true;
+
+            for (Building building : buildings) {
+                if (!building.isReady()) {
+                    allReady = false;
+
+                    break;
+                }
+            }
+
+            if (allReady) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Building building : buildings) {
+            assertTrue(building.isReady());
         }
     }
 

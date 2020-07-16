@@ -802,4 +802,9 @@ public class Storehouse extends Building {
     public boolean isDeliveryBlocked(Material material) {
         return materialBlockedForDelivery.contains(material);
     }
+
+    @Override
+    public boolean isStorehouse() {
+        return true;
+    }
 }

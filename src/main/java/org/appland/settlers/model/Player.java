@@ -417,7 +417,7 @@ public class Player {
                 continue;
             }
 
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -452,7 +452,7 @@ public class Player {
 
         for (Building building : getBuildings()) {
 
-            if ( !( building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -554,7 +554,7 @@ public class Player {
         for (Building building : buildings) {
 
             /* Filter non-storage buildings */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -1207,7 +1207,7 @@ public class Player {
         for (Building building : buildings) {
 
             /* Filter other houses */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 

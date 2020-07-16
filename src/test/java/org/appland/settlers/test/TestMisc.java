@@ -37,6 +37,7 @@ import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,8 +52,9 @@ public class TestMisc {
     /*
     TODO:
      - Coin delivery to upgraded building
-     - Evacuation of military building is disabled when a player takes over a military building
-
+     - Evacuation of military building is disabled when a player takes over a military building DONE
+     - Already destroyed building that is in area lost to enemy does not get torn down again DONE
+     - Remove flag with cargo on that is promised for delivery to a building resets the promise
      */
 
     @Test
@@ -922,5 +924,238 @@ public class TestMisc {
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
         assertFalse(flag0.getStackedCargo().contains(cargo));
         assertEquals(courier.getTarget(), flag0.getPosition().left());
+    }
+
+    @Test
+    public void testAttackerCapturesAreaWithAlreadyDestroyedBuilding() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Place woodcutter close to barracks 1 */
+        Point point4 = new Point(26, 14);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point4);
+
+        /* Finish construction */
+        Utils.constructHouses(barracks0, barracks1, woodcutter0);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Go forward a bit to time it so that the woodcutter is still on the map when the soldier takes over the building */
+        Utils.fastForward(30, map);
+
+        /* Find the military that was chosen to attack */
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        /* Tear down the woodcutter */
+        woodcutter0.tearDown();
+
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Wait for the general to beat the private */
+        Utils.waitForWorkerToDisappear(defender, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+
+        /* Verify that player 1's barracks is in player 1's border and not player 0's */
+        Utils.verifyPointIsNotWithinBorder(player0, barracks1.getPosition());
+        Utils.verifyPointIsWithinBorder(player1, barracks1.getPosition());
+
+        /* Wait for the attacker to return to the fixed point */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+
+        /* Wait for the attacker to go to the barracks */
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+        assertTrue(woodcutter0.isDestroyed());
+        assertTrue(map.getBuildings().contains(woodcutter0));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        /* Verify that the border is updated to include the captured building and that it's not in player 1's border anymore */
+        assertTrue(map.getBuildings().contains(woodcutter0));
+        assertTrue(woodcutter0.isDestroyed());
+        assertTrue(player0.getLandInPoints().contains(woodcutter0.getPosition()));
+
+        Utils.verifyPointIsWithinBorder(player0, barracks1.getPosition());
+        Utils.verifyPointIsNotWithinBorder(player1, barracks1.getPosition());
+        assertEquals(player0.getPlayerAtPoint(barracks1.getPosition()), player0);
+    }
+
+    @Test
+    public void testRemovingFlagWithCargoOnItResetsPromisedDelivery() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(14, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(17, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place road to connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place road to connect the flag with the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
+
+        /* Wait for courier to get assigned to the first road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier to hold a cargo for the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getTarget(), woodcutter);
+
+        Cargo cargo = courier.getCargo();
+
+        /* Wait for the courier to place the cargo on the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+
+        assertNull(courier.getCargo());
+        assertTrue(flag0.getStackedCargo().contains(cargo));
+
+        /* Remove the flag so the cargo disappears and the promise to deliver it is broken */
+        map.removeFlag(flag0);
+
+        /* Place a new road to connect the headquarter directly with the woodcutter */
+        Road road2 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the woodcutter gets all deliveries it needs and gets constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        assertTrue(woodcutter.isReady());
+    }
+
+    @Test
+    public void testRemovingRoadWithCourierCarryingCargoResetsPromisedDelivery() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(14, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(17, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place road to connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place road to connect the flag with the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter.getFlag());
+
+        /* Wait for courier to get assigned to the first road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier to hold a cargo for the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getTarget(), woodcutter);
+
+        Cargo cargo = courier.getCargo();
+
+        /* Wait for the courier to reach the middle of the road */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+
+        assertNotNull(courier.getCargo());
+
+        /* Remove the flag so the cargo disappears and the promise to deliver it is broken */
+        map.removeFlag(flag0);
+
+        /* Place a new road to connect the headquarter directly with the woodcutter */
+        Road road2 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the woodcutter gets all deliveries it needs and gets constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        assertTrue(woodcutter.isReady());
     }
 }

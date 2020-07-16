@@ -756,12 +756,12 @@ public class TestTransportation {
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(point3));
         assertNull(courier.getCargo());
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Step time to get the courier to notice the cargo */
         map.stepTime();
 
-        assertTrue(cargo.isDeliveryPromised());
+        assertTrue(cargo.isPickupPromised());
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         /* Fast forward until the courier picks up the cargo */
@@ -826,14 +826,14 @@ public class TestTransportation {
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(point1));
         assertNull(courier.getCargo());
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Make courier detect cargo */
         map.stepTime();
 
         assertNull(courier.getCargo());
         assertEquals(courier.getTarget(), point0);
-        assertTrue(cargo.isDeliveryPromised());
+        assertTrue(cargo.isPickupPromised());
 
         /* Let the courier reach the cargo and pick it up */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
@@ -842,7 +842,7 @@ public class TestTransportation {
         assertEquals(courier.getTarget(), flag1.getPosition());
         assertTrue(flag1.getStackedCargo().isEmpty());
         assertEquals(courier.getTarget(), point2);
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Fast forward until the courier reaches the other flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
@@ -912,12 +912,12 @@ public class TestTransportation {
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(point4));
         assertNull(courier.getCargo());
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Make the first courier detect the cargo */
         map.stepTime();
 
-        assertTrue(cargo.isDeliveryPromised());
+        assertTrue(cargo.isPickupPromised());
         assertEquals(courier.getTarget(), flag0.getPosition());
         assertFalse(flag0.getStackedCargo().isEmpty());
 
@@ -926,7 +926,7 @@ public class TestTransportation {
 
         assertEquals(courier.getCargo(), cargo);
         assertTrue(flag0.getStackedCargo().isEmpty());
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
     }
 
     @Test
@@ -1550,14 +1550,14 @@ public class TestTransportation {
 
         assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point0);
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Make courier detect cargo */
         map.stepTime();
 
         assertNull(road0.getCourier().getCargo());
         assertEquals(road0.getCourier().getTarget(), point0);
-        assertTrue(cargo.isDeliveryPromised());
+        assertTrue(cargo.isPickupPromised());
 
         /* Let the courier reach the cargo and pick it up */
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), point0);
@@ -1565,7 +1565,7 @@ public class TestTransportation {
         assertEquals(road0.getCourier().getCargo(), cargo);
         assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
         assertTrue(flag1.getStackedCargo().isEmpty());
-        assertFalse(cargo.isDeliveryPromised());
+        assertFalse(cargo.isPickupPromised());
 
         /* Let the courier start walking towards the next flag */
         map.stepTime();

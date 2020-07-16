@@ -141,4 +141,9 @@ public class Headquarter extends Storehouse {
     public boolean isMilitaryBuilding() {
         return true;
     }
+
+    @Override
+    public boolean isHeadquarter() {
+        return true;
+    }
 }

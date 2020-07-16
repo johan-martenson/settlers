@@ -2084,7 +2084,7 @@ public class TestPrioritization {
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(flag0.getPosition().left()));
         assertNull(courier.getCargo());
-        assertFalse(plankCargo.isDeliveryPromised());
+        assertFalse(plankCargo.isPickupPromised());
 
         /* Verify that the courier picks up the stone cargo first */
         assertNull(courier.getCargo());

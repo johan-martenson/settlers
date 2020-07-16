@@ -10,12 +10,12 @@ public class Cargo {
     private Building    target;
     private Point       position;
     private List<Point> path;
-    private boolean     deliveryPromised;
+    private boolean     pickupPromised;
 
     public Cargo(Material material, GameMap map) {
 
         this.material = material;
-        deliveryPromised = false;
+        pickupPromised = false;
         this.map = map;
     }
 
@@ -91,16 +91,16 @@ public class Cargo {
         return position;
     }
 
-    void promiseDelivery() {
-        deliveryPromised = true;
+    void promisePickUp() {
+        pickupPromised = true;
     }
 
-    public boolean isDeliveryPromised() {
-        return deliveryPromised;
+    public boolean isPickupPromised() {
+        return pickupPromised;
     }
 
-    void clearPromisedDelivery() {
-        deliveryPromised = false;
+    void cancelPromisedPickUp() {
+        pickupPromised = false;
     }
 
     void transportToStorage() throws InvalidRouteException {

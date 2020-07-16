@@ -718,12 +718,12 @@ public class GameMap {
         boolean isFirstHouse = house.getPlayer().getBuildings().isEmpty();
 
         /* The first building place by each player must be a headquarter */
-        if (isFirstHouse && !(house instanceof Headquarter)) {
+        if (isFirstHouse && !house.isHeadquarter()) {
             throw new InvalidUserActionException("Can not place " + house + " as initial building");
         }
 
         /* Only one headquarter can be placed per player */
-        if (house instanceof Headquarter && !isFirstHouse) {
+        if (house.isHeadquarter() && !isFirstHouse) {
             throw new InvalidUserActionException("Can only have one headquarter placed per player");
         }
 
@@ -743,7 +743,7 @@ public class GameMap {
         /* In case of headquarter, verify that the building is not placed within another player's border
         *     -- normally this is done by isAvailableHousePoint
         */
-        if (house instanceof Headquarter) {
+        if (house.isHeadquarter()) {
             for (Player player : players) {
                 if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
                     throw new InvalidUserActionException("Can't place building on " + point + " within another player's border");
@@ -969,7 +969,12 @@ public class GameMap {
 
         /* Destroy buildings now outside of their player's borders */
         for (Building building : buildings) {
+
             if (building.isBurningDown()) {
+                continue;
+            }
+
+            if (building.isDestroyed()) {
                 continue;
             }
 
@@ -2318,9 +2323,13 @@ public class GameMap {
             }
         }
 
+        /* Remove roads connected to the flag */
         for (Road road : roadsToRemove) {
             removeRoad(road);
         }
+
+        /* Break any promised deliveries */
+        flag.onRemove();
 
         removeFlagWithoutSideEffects(flag);
     }

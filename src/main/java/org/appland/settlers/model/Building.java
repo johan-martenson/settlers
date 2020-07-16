@@ -1219,4 +1219,12 @@ public class Building implements EndPoint {
 
         return nameLowerCase.substring(0, 1).toUpperCase() + nameLowerCase.substring(1);
     }
+
+    public boolean isStorehouse() {
+        return false;
+    }
+
+    public boolean isHeadquarter() {
+        return false;
+    }
 }

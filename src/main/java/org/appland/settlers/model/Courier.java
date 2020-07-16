@@ -72,7 +72,7 @@ public class Courier extends Worker {
     }
 
     private void planToPickUpCargo(Cargo cargo, EndPoint flag) throws InvalidRouteException {
-        cargo.promiseDelivery();
+        cargo.promisePickUp();
 
         intendedCargo = cargo;
 
@@ -92,13 +92,13 @@ public class Courier extends Worker {
 
         cargoToPickUp = flag.getCargoWaitingForRoad(road);
 
-        cargoToPickUp.promiseDelivery();
+        cargoToPickUp.promisePickUp();
 
         flag.retrieveCargo(cargoToPickUp);
 
         setCargo(cargoToPickUp);
 
-        getCargo().clearPromisedDelivery();
+        getCargo().cancelPromisedPickUp();
     }
 
     public Road getAssignedRoad() {
@@ -156,7 +156,7 @@ public class Courier extends Worker {
              */
             /* If the courier is going to pick up a new cargo, cancel and go to the new road */
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
-            intendedCargo.clearPromisedDelivery();
+            intendedCargo.cancelPromisedPickUp();
 
             intendedCargo = null;
 
@@ -293,15 +293,27 @@ public class Courier extends Worker {
 
     @Override
     protected void onReturnToStorage() throws InvalidRouteException {
-        Building storage = getPlayer().getClosestStorage(getPosition(), null);
 
+        /* Cancel any promised deliveries */
+        Cargo cargo = getCargo();
+
+        if (cargo != null && cargo.getTarget() != null) {
+            Building building = cargo.getTarget();
+
+            if (!building.isStorehouse()) {
+                building.cancelPromisedDelivery(cargo);
+            }
+        }
+
+        /* Return to storage */
+        Building storage = getPlayer().getClosestStorage(getPosition(), null);
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
             for (Building building : getPlayer().getBuildings()) {
-                if (building instanceof Storehouse) {
+                if (building.isStorehouse()) {
                     state = RETURNING_TO_STORAGE;
 
                     setOffroadTarget(building.getPosition());
@@ -373,7 +385,7 @@ public class Courier extends Worker {
             setCargo(endPoint.retrieveCargo(intendedCargo));
 
             intendedCargo = null;
-            getCargo().clearPromisedDelivery();
+            getCargo().cancelPromisedPickUp();
 
         /* Pick up the cargo where we stand if needed */
         } else if (endPoint.hasCargoWaitingForRoad(assignedRoad)) {

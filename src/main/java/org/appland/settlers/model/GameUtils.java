@@ -129,7 +129,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that are not storehouses */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -889,7 +889,7 @@ public class GameUtils {
             }
 
             /* Filter other buildings than storage buildings */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -933,7 +933,7 @@ public class GameUtils {
                 continue;
             }
 
-            if (building instanceof Storehouse) {
+            if (building.isStorehouse()) {
                 if (building.getFlag().getPosition().equals(point)) {
                     storehouse = (Storehouse)building;
                     break;
@@ -984,7 +984,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that are not storehouses */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 
@@ -1033,7 +1033,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that are not storehouses */
-            if (! (building instanceof Storehouse)) {
+            if (!building.isStorehouse()) {
                 continue;
             }
 

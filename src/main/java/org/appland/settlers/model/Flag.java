@@ -93,7 +93,7 @@ public class Flag implements EndPoint {
         int priority = Integer.MAX_VALUE;
 
         for (Cargo cargo : stackedCargo) {
-            if (cargo.isDeliveryPromised()) {
+            if (cargo.isPickupPromised()) {
                 continue;
             }
 
@@ -155,5 +155,20 @@ public class Flag implements EndPoint {
 
     public boolean hasPlaceForMoreCargo() {
         return stackedCargo.size() + promisedCargo < MAX_NUMBER_OF_STACKED_CARGO;
+    }
+
+    public void onRemove() {
+
+        /* Break delivery promises for any stacked cargo */
+        for (Cargo cargo : stackedCargo) {
+
+            if (!cargo.isPickupPromised()) {
+                continue;
+            }
+
+            Building building = cargo.getTarget();
+
+            building.cancelPromisedDelivery(cargo);
+        }
     }
 }

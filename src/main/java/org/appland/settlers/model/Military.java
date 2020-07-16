@@ -294,7 +294,7 @@ public class Military extends Worker {
                 getPlayer().reportBuildingCaptured(buildingToAttack);
 
                 /* Return home if it's a headquarter */
-                if (buildingToAttack instanceof Headquarter) {
+                if (buildingToAttack.isHeadquarter()) {
 
                     /* Can't occupy headquarter so return home or to storage */
                     returnAfterAttackIsOver();
