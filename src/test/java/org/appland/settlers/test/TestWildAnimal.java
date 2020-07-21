@@ -80,7 +80,7 @@ public class TestWildAnimal {
         /* Verify that the animal moves sometimes */
         Point origin = animal.getPosition();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
 
             /* Break if the animal has moved */
             if (!origin.equals(animal.getPosition())) {
