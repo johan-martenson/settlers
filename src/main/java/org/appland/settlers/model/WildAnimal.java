@@ -24,9 +24,9 @@ public class WildAnimal extends Worker {
 
     private static final int TIME_TO_STAND = 39;
     private static final int RANGE = 10;
-
-    private final Random random;
     private final Countdown countdown;
+
+    private static Random random;
 
     private State state;
 
@@ -43,8 +43,10 @@ public class WildAnimal extends Worker {
         countdown = new Countdown();
         countdown.countFrom(TIME_TO_STAND);
 
-        random = new Random();
-        random.setSeed(1);
+        if (random == null) {
+            random = new Random();
+            random.setSeed(1);
+        }
     }
 
     public static boolean cannotWalkOn(List<Vegetation> surroundingTiles) {

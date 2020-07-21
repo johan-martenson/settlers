@@ -1570,12 +1570,12 @@ public class TestHunterHut {
         /* Place a wild animal on the map */
         Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
 
-        /* Make the hunter hut produce some wild animals available */
+        /* Make the hunter hut produce meat when wild animals are close by */
         for (int i = 0; i < 2000; i++) {
             map.stepTime();
 
-            /* Put a new wild animal if the current one is gone */
-            if (map.getWildAnimals().isEmpty()) {
+            /* Add a new wild animal close to the hunter hut if there is only one left */
+            if (map.getWildAnimals().size() < 2) {
                 Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
             }
 
@@ -1589,8 +1589,8 @@ public class TestHunterHut {
 
         for (int i = 0; i < 1000; i++) {
 
-            /* Put a new wild animal if the current one is gone */
-            if (map.getWildAnimals().size() == 1) {
+            /* Make sure there are two wild animals close to the hunter hut */
+            if (map.getWildAnimals().size() < 2) {
                 Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
             }
 
