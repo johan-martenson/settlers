@@ -119,7 +119,7 @@ public class TestWildAnimal {
                 timeInSamePlace++;
             }
 
-            assertTrue(timeInSamePlace < 200);
+            assertTrue(timeInSamePlace < 250);
 
             map.stepTime();
         }
