@@ -302,7 +302,7 @@ public class GameMap {
      * Removes the given road from the map
      *
      * @param road The road to remove
-     * @throws Exception If there is a failure in making the courier return to storage or removing the road
+     * @throws InvalidRouteException If there is a failure in making the courier return to storage or removing the road
      */
     public void removeRoad(Road road) throws InvalidRouteException {
 

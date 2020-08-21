@@ -52,7 +52,7 @@ public class Stats {
         }
     }
 
-    class PeriodicCounterVariable extends Variable {
+    static class PeriodicCounterVariable extends Variable {
 
         private long sum;
 
