@@ -1,7 +1,8 @@
 package org.appland.settlers.model;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -27,9 +28,9 @@ public class Player {
     private Color              color;
     private String             name;
     private boolean            treeConservationProgramActive;
-    private List<BorderChange> changedBorders;
     private boolean            treeConservationProgramEnabled;
 
+    private final List<BorderChange> changedBorders;
     private final List<Building> buildings;
     private final Set<Point> discoveredLand;
     private final List<Material> transportPriorities;
@@ -67,6 +68,7 @@ public class Player {
     private final List<Message> newMessages;
     private final List<Road> promotedRoads;
     private final Map<Material, Integer> toolProductionQuotas;
+    private final List<TransportCategory> transportCategoryPriorities;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -93,7 +95,27 @@ public class Player {
         coalQuota.put(Armory.class, 1);
 
         /* Set the initial transport priority */
-        transportPriorities.addAll(Material.TRANSPORTABLE_GOODS);
+        transportCategoryPriorities = new ArrayList<>();
+
+        transportCategoryPriorities.add(TransportCategory.PLANK);
+        transportCategoryPriorities.add(TransportCategory.WOOD);
+        transportCategoryPriorities.add(TransportCategory.STONE);
+        transportCategoryPriorities.add(TransportCategory.COIN);
+        transportCategoryPriorities.add(TransportCategory.GOLD);
+        transportCategoryPriorities.add(TransportCategory.COAL);
+        transportCategoryPriorities.add(TransportCategory.WEAPONS);
+        transportCategoryPriorities.add(TransportCategory.IRON_BAR);
+        transportCategoryPriorities.add(TransportCategory.IRON);
+        transportCategoryPriorities.add(TransportCategory.FOOD);
+        transportCategoryPriorities.add(TransportCategory.WHEAT);
+        transportCategoryPriorities.add(TransportCategory.FLOUR);
+        transportCategoryPriorities.add(TransportCategory.WATER);
+        transportCategoryPriorities.add(TransportCategory.PIG);
+        transportCategoryPriorities.add(TransportCategory.TOOLS);
+        transportCategoryPriorities.add(TransportCategory.BEER);
+        transportCategoryPriorities.add(TransportCategory.WATER);
+
+        setTransportPriorityForMaterials();
 
         /* There are no messages at start */
         messages = new ArrayList<>();
@@ -140,6 +162,15 @@ public class Player {
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
             toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA);
+        }
+    }
+
+    private void setTransportPriorityForMaterials() {
+
+        transportPriorities.clear();
+
+        for (TransportCategory transportCategory : transportCategoryPriorities) {
+            transportPriorities.addAll(Arrays.asList(transportCategory.getMaterials()));
         }
     }
 
@@ -492,23 +523,21 @@ public class Player {
         return map;
     }
 
-    public void setTransportPriority(int priority, Material material) throws InvalidUserActionException {
-
-        /* Throw an exception if the material is a worker because worker transport priorities cannot be set */
-        if (material.isWorker()) {
-            throw new InvalidUserActionException("Cannot set priority for worker " + material);
-        }
+    public void setTransportPriority(int priority, TransportCategory category) throws InvalidUserActionException {
 
         /* Throw an exception if the priority is negative or too large */
         if (priority < 0) {
-            throw new InvalidUserActionException("Cannot set a negative transport priority (" + priority + ") for " + material);
+            throw new InvalidUserActionException("Cannot set a negative transport priority (" + priority + ") for " + category);
         } else if (priority >= Material.getTransportableItems().size()) {
             throw new InvalidUserActionException("Cannot set a higher transport priority (" + priority + ") than the amount of transportable items");
         }
 
-        transportPriorities.remove(material);
+        transportCategoryPriorities.remove(category);
+        transportCategoryPriorities.add(priority, category);
 
-        transportPriorities.add(priority, material);
+        transportPriorities.clear();
+
+        setTransportPriorityForMaterials();
     }
 
     int getTransportPriority(Cargo crop) {
@@ -525,7 +554,11 @@ public class Player {
         return Integer.MAX_VALUE;
     }
 
-    public List<Material> getTransportPriorityList() {
+    public List<TransportCategory> getTransportPriorities() {
+        return transportCategoryPriorities;
+    }
+
+    List<Material> getTransportPrioritiesForEachMaterial() {
         return transportPriorities;
     }
 
@@ -835,8 +868,6 @@ public class Player {
         }
 
         for (Building newBuilding : newBuildings) {
-            Point point = newBuilding.getPosition();
-
             addChangedAvailableConstructionForSmallBuilding(newBuilding);
 
             /* Handle medium building */

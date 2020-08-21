@@ -8,7 +8,7 @@ public class Stats {
 
     private final Map<String, Variable> variableMap;
 
-    class Variable {
+    static class Variable {
         public long latestValue;
         long numberOfMeasurements;
         double average;

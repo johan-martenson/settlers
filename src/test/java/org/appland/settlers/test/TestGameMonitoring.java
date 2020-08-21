@@ -50,10 +50,11 @@ import static org.junit.Assert.assertTrue;
 public class TestGameMonitoring {
 
     /*TODO:
-       catapulted stone,
-       available road connections (?),
-       road that becomes main road,
-       game events
+        - catapulted stone,
+        - available road connections (?),
+        - road that becomes main road,
+        - game events
+        - monitoring of couriers when road is split
     *  */
 
     @Test

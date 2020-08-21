@@ -9,7 +9,7 @@ public class Duration {
     private final List<Stamp> timestamps;
     private final long timestampAtStart;
 
-    class Stamp {
+    static class Stamp {
         private final String name;
         private final long timestamp;
 

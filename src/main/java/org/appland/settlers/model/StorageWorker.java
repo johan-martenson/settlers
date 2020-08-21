@@ -69,7 +69,7 @@ public class StorageWorker extends Worker {
     // FIXME: HOTSPOT
     private Cargo tryToStartDelivery() throws InvalidRouteException {
 
-        for (Material material : getPlayer().getTransportPriorityList()) {
+        for (Material material : getPlayer().getTransportPrioritiesForEachMaterial()) {
 
             /* Don't try to deliver materials that are not in stock */
             if (!ownStorehouse.isInStock(material)) {

@@ -44,6 +44,12 @@ import static org.junit.Assert.fail;
 
 public class TestTransportation {
 
+    /*
+    * Todo:
+    *  - That delivery considers materials included in each category
+    *  - That delivery follows priority list of categories
+    */
+
     @Test
     public void testCreateCargo() {
         for (Material military : Material.values()) {

@@ -21,6 +21,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -2135,8 +2136,8 @@ public class TestStorehouse {
         headquarter.pushOutAll(COIN);
 
         /* Set transport priority for fish above coin */
-        player0.setTransportPriority(0, FISH);
-        player0.setTransportPriority(1, COIN);
+        player0.setTransportPriority(0, TransportCategory.FOOD);
+        player0.setTransportPriority(1, TransportCategory.COIN);
 
         /* Verify that all the fish gets transported to the storehouse before the coins */
         assertEquals(storehouse.getAmount(FISH), 0);

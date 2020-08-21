@@ -22,7 +22,6 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Miner;
@@ -34,6 +33,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -43,48 +43,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.ARMORER;
-import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.BREWER;
-import static org.appland.settlers.model.Material.BUTCHER;
-import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.COURIER;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.SCOUT;
-import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STONEMASON;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -2025,6 +1998,28 @@ public class TestPrioritization {
     }
 
     @Test
+    public void testTransportationCategories() {
+        assertEquals(TransportCategory.values().length, 16);
+
+        assertEquals(TransportCategory.valueOf("WEAPONS"), TransportCategory.WEAPONS);
+        assertEquals(TransportCategory.valueOf("BEER"), TransportCategory.BEER);
+        assertEquals(TransportCategory.valueOf("COIN"), TransportCategory.COIN);
+        assertEquals(TransportCategory.valueOf("FOOD"), TransportCategory.FOOD);
+        assertEquals(TransportCategory.valueOf("WATER"), TransportCategory.WATER);
+        assertEquals(TransportCategory.valueOf("WHEAT"), TransportCategory.WHEAT);
+        assertEquals(TransportCategory.valueOf("FLOUR"), TransportCategory.FLOUR);
+        assertEquals(TransportCategory.valueOf("IRON"), TransportCategory.IRON);
+        assertEquals(TransportCategory.valueOf("IRON_BAR"), TransportCategory.IRON_BAR);
+        assertEquals(TransportCategory.valueOf("GOLD"), TransportCategory.GOLD);
+        assertEquals(TransportCategory.valueOf("COAL"), TransportCategory.COAL);
+        assertEquals(TransportCategory.valueOf("PLANK"), TransportCategory.PLANK);
+        assertEquals(TransportCategory.valueOf("WOOD"), TransportCategory.WOOD);
+        assertEquals(TransportCategory.valueOf("STONE"), TransportCategory.STONE);
+        assertEquals(TransportCategory.valueOf("TOOLS"), TransportCategory.TOOLS);
+        assertEquals(TransportCategory.valueOf("PIG"), TransportCategory.PIG);
+    }
+
+    @Test
     public void testCourierPicksUpCargoOfHighestPriority() throws Exception {
 
         /* Create new game map with one player */
@@ -2077,9 +2072,9 @@ public class TestPrioritization {
         flag0.putCargo(plankCargo);
 
         /* Set stone deliveries to highest priority */
-        player0.setTransportPriority(0, STONE);
-        player0.setTransportPriority(1, WOOD);
-        player0.setTransportPriority(2, PLANK);
+        player0.setTransportPriority(0, TransportCategory.STONE);
+        player0.setTransportPriority(1, TransportCategory.WOOD);
+        player0.setTransportPriority(2, TransportCategory.PLANK);
 
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(flag0.getPosition().left()));
@@ -2205,12 +2200,12 @@ public class TestPrioritization {
         assertNull(storageWorker.getCargo());
 
         /* Set the transport priority for the materials */
-        player0.setTransportPriority(0, WHEAT);
-        player0.setTransportPriority(1, PLANK);
-        player0.setTransportPriority(2, COAL);
-        player0.setTransportPriority(3, GOLD);
-        player0.setTransportPriority(4, WATER);
-        player0.setTransportPriority(5, FLOUR);
+        player0.setTransportPriority(0, TransportCategory.WHEAT);
+        player0.setTransportPriority(1, TransportCategory.PLANK);
+        player0.setTransportPriority(2, TransportCategory.COAL);
+        player0.setTransportPriority(3, TransportCategory.GOLD);
+        player0.setTransportPriority(4, TransportCategory.WATER);
+        player0.setTransportPriority(5, TransportCategory.FLOUR);
 
         /* Ensure the headquarter has all the materials and enough to avoid the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
@@ -2296,78 +2291,21 @@ public class TestPrioritization {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Count initial number of times planks appear */
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
 
         /* Put planks on top priority and verify that it appears only once */
-        player0.setTransportPriority(0, PLANK);
+        player0.setTransportPriority(0, TransportCategory.PLANK);
 
-        assertEquals(player0.getTransportPriorityList().get(0), PLANK);
-        assertNotEquals(player0.getTransportPriorityList().get(10), PLANK);
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
+        assertEquals(player0.getTransportPriorities().get(0), TransportCategory.PLANK);
+        assertNotEquals(player0.getTransportPriorities().get(10), TransportCategory.PLANK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
 
         /* Put planks on medium priority and verify that it appears only once */
-        player0.setTransportPriority(10, PLANK);
+        player0.setTransportPriority(10, TransportCategory.PLANK);
 
-        assertNotEquals(player0.getTransportPriorityList().get(0), PLANK);
-        assertEquals(player0.getTransportPriorityList().get(10), PLANK);
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
-    }
-
-    @Test
-    public void testCannotSetTransportPriorityForWorkers() throws Exception {
-
-        /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
-
-        /* Place headquarter */
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Verify that setting transport priority for a worker causes an invalid user action exception */
-        List<Material> workers = new ArrayList<>();
-
-        workers.add(DONKEY);
-        workers.add(PRIVATE);
-        workers.add(SERGEANT);
-        workers.add(GENERAL);
-        workers.add(COURIER);
-        workers.add(FORESTER);
-        workers.add(WOODCUTTER_WORKER);
-        workers.add(STONEMASON);
-        workers.add(FARMER);
-        workers.add(SAWMILL_WORKER);
-        workers.add(WELL_WORKER);
-        workers.add(MILLER);
-        workers.add(BAKER);
-        workers.add(STORAGE_WORKER);
-        workers.add(FISHERMAN);
-        workers.add(MINER);
-        workers.add(IRON_FOUNDER);
-        workers.add(BREWER);
-        workers.add(MINTER);
-        workers.add(ARMORER);
-        workers.add(PIG_BREEDER);
-        workers.add(BUTCHER);
-        workers.add(GEOLOGIST);
-        workers.add(DONKEY_BREEDER);
-        workers.add(CATAPULT_WORKER);
-        workers.add(SCOUT);
-        workers.add(HUNTER);
-        workers.add(OFFICER);
-        workers.add(PRIVATE_FIRST_CLASS);
-
-        for (Material worker : workers) {
-            try {
-                player0.setTransportPriority(3, worker);
-
-                fail();
-            } catch (InvalidUserActionException e) {
-
-            }
-        }
+        assertNotEquals(player0.getTransportPriorities().get(0), TransportCategory.PLANK);
+        assertEquals(player0.getTransportPriorities().get(10), TransportCategory.PLANK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
     }
 
     @Test
@@ -2385,7 +2323,7 @@ public class TestPrioritization {
 
         /* Verify that it's not possible to set transport priority for an item to a negative index */
         try {
-            player0.setTransportPriority(-1, WOOD);
+            player0.setTransportPriority(-1, TransportCategory.WOOD);
 
             fail();
         } catch (InvalidUserActionException e) {
@@ -2408,7 +2346,7 @@ public class TestPrioritization {
 
         /* There are 18 materials that the transport priority can be set for. Verify that it's not possible to set for an index higher than this */
         try {
-            player0.setTransportPriority(18, WOOD); // Priority starts on 0
+            player0.setTransportPriority(18, TransportCategory.WOOD); // Priority starts on 0
 
             fail();
         } catch (InvalidUserActionException e) {

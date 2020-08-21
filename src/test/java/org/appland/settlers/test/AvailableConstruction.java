@@ -1,13 +1,6 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Size;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class AvailableConstruction {
 

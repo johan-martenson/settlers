@@ -30,7 +30,6 @@ import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WildAnimal;
-import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 
 import java.util.ArrayList;
