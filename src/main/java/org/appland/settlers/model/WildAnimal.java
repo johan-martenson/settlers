@@ -9,11 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Vegetation.LAVA;
-import static org.appland.settlers.model.Vegetation.WATER;
 
 /**
  *
@@ -49,12 +45,14 @@ public class WildAnimal extends Worker {
         }
     }
 
-    public static boolean cannotWalkOn(List<Vegetation> surroundingTiles) {
+    public static boolean cannotWalkOnAny(Collection<Vegetation> surroundingTiles) {
         for (Vegetation vegetation : surroundingTiles) {
-            return (vegetation == WATER || vegetation == DEEP_WATER || vegetation == LAVA);
+            if (vegetation.canAnimalWalkOn()) {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     @Override
@@ -119,8 +117,8 @@ public class WildAnimal extends Worker {
 
             Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
-            /* Filter points in water */
-            if (isAll(surroundingVegetation, WATER)) {
+            /* Filter points where there is tile to walk on */
+            if (cannotWalkOnAny(surroundingVegetation)) {
                 continue;
             }
 

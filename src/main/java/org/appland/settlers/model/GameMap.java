@@ -3132,7 +3132,7 @@ public class GameMap {
             }
 
             /* Filter terrain the animal can't walk on */
-            if (WildAnimal.cannotWalkOn(getSurroundingTiles(p))) {
+            if (WildAnimal.cannotWalkOnAny(getSurroundingTiles(p))) {
                 continue;
             }
 
