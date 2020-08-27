@@ -4177,7 +4177,7 @@ public class TestGameMonitoring {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        GameMap map = new GameMap(players, 50, 50);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
@@ -4220,11 +4220,17 @@ public class TestGameMonitoring {
 
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
+
         Point discoveredPoint = null;
-        for (int i = 0; i < 8; i++) {
+
+        Set<Point> discoveredLandBefore = new HashSet<>();
+
+        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+
+        for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
 
-            if (!player0.getDiscoveredLand().contains(target)) {
+            if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
             }
 
@@ -4310,11 +4316,18 @@ public class TestGameMonitoring {
 
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
+
         Point discoveredPoint = null;
-        for (int i = 0; i < 8; i++) {
+
+
+        Set<Point> discoveredLandBefore = new HashSet<>();
+
+        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+
+        for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
 
-            if (!player0.getDiscoveredLand().contains(target)) {
+            if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
             }
 
@@ -4372,14 +4385,14 @@ public class TestGameMonitoring {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        GameMap map = new GameMap(players, 50, 50);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(19, 5);
+        Point point1 = new Point(21, 5);
         Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
@@ -4410,10 +4423,14 @@ public class TestGameMonitoring {
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        for (int i = 0; i < 8; i++) {
+        Set<Point> discoveredLandBefore = new HashSet<>();
+
+        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+
+        for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
 
-            if (!player0.getDiscoveredLand().contains(target)) {
+            if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
             }
 
@@ -4507,10 +4524,14 @@ public class TestGameMonitoring {
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        for (int i = 0; i < 8; i++) {
+        Set<Point> discoveredLandBefore = new HashSet<>();
+
+        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+
+        for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
 
-            if (!player0.getDiscoveredLand().contains(target)) {
+            if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
             }
 

@@ -10,9 +10,13 @@ import org.appland.settlers.utils.CumulativeDuration;
 import org.appland.settlers.utils.Stats;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import static org.appland.settlers.model.GameUtils.calculateAngle;
 import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Scout.State.DEAD;
 import static org.appland.settlers.model.Scout.State.GOING_TO_DIE;
@@ -38,6 +42,7 @@ public class Scout extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int MINIMUM_DISTANCE_TO_BORDER = 6;
     private static final Random random = new Random(4);
+    private static final int LENGTH_TO_WALK = 30;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -53,6 +58,7 @@ public class Scout extends Worker {
     private int   segmentCount;
     private int   directionX;
     private int   directionY;
+    private Point previousPosition;
 
     public Scout(Player player, GameMap map) {
         super(player, map);
@@ -120,12 +126,14 @@ public class Scout extends Worker {
                 setOffroadTarget(point);
             }
 
+            previousPosition = getPosition();
+
             duration.after("Set offroad target 0");
         } else if (state == GOING_TO_NEXT_POINT) {
 
             segmentCount++;
 
-            if (segmentCount == 8) {
+            if (segmentCount == LENGTH_TO_WALK) {
                 state = RETURNING_TO_FLAG;
 
                 setOffroadTarget(flagPoint);
@@ -150,6 +158,8 @@ public class Scout extends Worker {
 
                 setOffroadTarget(point);
             }
+
+            previousPosition = getPosition();
 
             duration.after("Set offroad target 1");
         } else if (state == RETURNING_TO_FLAG) {
@@ -275,117 +285,85 @@ public class Scout extends Worker {
         }
     }
 
+    static class EntityAndScore<T> {
+        T entity;
+        double score;
+
+        EntityAndScore(T entity, double score) {
+            this.entity = entity;
+            this.score = score;
+        }
+
+        public String toString() {
+            return "" + entity + ", " + score;
+        }
+    }
+
     private Point findNextPoint() {
 
-        CumulativeDuration duration = map.getStats().measureCumulativeDuration("Scout.findNextPoint", AGGREGATED_EACH_STEP_TIME_GROUP);
+        /* 1. Get list of available next adjacent offroad points */
+        Collection<Point> possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(getPosition());
+
+        /* 2. Calculate scores for each point based on how closely they match the existing direction */
+        List<EntityAndScore<Point>> pointsAndScores = new ArrayList<>();
+
+        double angleForExistingDirection = calculateAngle(directionX, directionY);
 
         Point position = getPosition();
 
-        /* Find the point to aim for */
-        Point targetPoint = getPointInDirection(position, LENGTH_TO_PLAN_HEAD, directionX, directionY);
+        for (Point point : possibleAdjacentNextSteps) {
+            int candidateDirectionX = point.x - position.x;
+            int candidateDirectionY = point.y - position.y;
 
-        duration.after("Got point in direction");
+            double angleForCandidateDirection = calculateAngle(candidateDirectionX, candidateDirectionY);
 
-        /* Try to find a position somewhere between the scout's current position and the target point */
-        List<Point> points = findBoxOfPointsAroundPoint(targetPoint, 5);
+            /* Calculate score - lower is better */
+            // FIXME: this doesn't correctly score angles that are close but on opposity side of the positive X axis
+            double score = Math.abs(angleForExistingDirection - angleForCandidateDirection);
 
-        Point target = findRandomPointToWalkToOffroad(points, position);
-
-        duration.after("Find point try 1");
-
-        /* Return the point if it's found */
-        if (target != null) {
-
-            duration.report();
-
-            return target;
+            pointsAndScores.add(new EntityAndScore<Point>(point, score));
         }
 
-        /* Try again with a larger box and return null if there is no point found */
-        points = findBoxOfPointsAroundPoint(targetPoint, 7);
-
-        target = findRandomPointToWalkToOffroad(points, position);
-
-        duration.after("Find point try 2");
-
-        duration.report();
-
-        return target;
-    }
-
-    private List<Point> findBoxOfPointsAroundPoint(Point point, int distance) {
-        List<Point> points = new ArrayList<>();
-
-        for (int i = point.x - distance; i < point.x + distance; i++) {
-            for (int j = point.y - distance; j < point.y + distance; j++) {
-
-                /* Filter not allowed points */
-                if (!Point.isValid(i, j)) {
-                    continue;
+        /* 3. Sort by how closely they match the existing direction */
+        Collections.sort(pointsAndScores, new Comparator<EntityAndScore<Point>>() {
+            @Override
+            public int compare(EntityAndScore<Point> pointEntityAndScore, EntityAndScore<Point> t1) {
+                if (pointEntityAndScore.score > t1.score) {
+                    return 1;
                 }
 
-                points.add(new Point(i, j));
+                if (t1.score > pointEntityAndScore.score) {
+                    return -1;
+                }
+
+                return 0;
+            }
+        });
+
+        /* 4. Go through the points and select which one to pick */
+        for (int i = 0; i < pointsAndScores.size(); i++) {
+            Point point = pointsAndScores.get(i).entity;
+
+            boolean isLastOption = i == pointsAndScores.size() - 1;
+
+            /* Don't go backwards unless it's the only option */
+            if (point.equals(previousPosition) && !isLastOption) {
+                continue;
+            }
+
+            /* If it's the last option - take it */
+            if (isLastOption) {
+                return point;
+            }
+
+            /* Select the point in the right direction most of the time but sometimes skip to a less suitable point */
+            if (random.nextInt(11) < 8) {
+                return point;
             }
         }
 
-        return points;
-    }
-
-    private Point findRandomPointToWalkToOffroad(List<Point> points, Point position) {
-
-        int offset = random.nextInt(points.size());
-
-        for (int i = 0; i < points.size(); i++) {
-            int index = i + offset;
-
-            if (index >= points.size()) {
-                index = index - points.size();
-            }
-
-            /* Filter points outside the map */
-            Point point = points.get(index);
-
-            if (!map.isWithinMap(point)) {
-                continue;
-            }
-
-            /* Filter the current position */
-            if (position.equals(point)) {
-                continue;
-            }
-
-            /* Filter points the scout cannot reach */
-            if (map.findWayOffroad(position, point, null) == null) {
-                continue;
-            }
-
-            return point;
-        }
-
+        /* 5. Return null if there is no point to go to */
         return null;
-    }
-
-    private Point getPointInDirection(Point position, int length, int dirX, int dirY) {
-        Point targetPoint;
-        if (Math.abs(dirX) > 0.001) {
-
-            GameUtils.Line direction = new GameUtils.Line(position, dirX, dirY);
-
-            if (dirX > 0) {
-                targetPoint = direction.goFromPointWithPositiveXWithLength(position, length);
-            } else {
-                targetPoint = direction.goFromPointWithNegativeXWithLength(position, length);
-            }
-        } else {
-
-            if (dirY > 0) {
-                targetPoint = Point.fitToGamePoint(position.x, position.y + length);
-            } else {
-                targetPoint = Point.fitToGamePoint(position.x, position.y - length);
-            }
-        }
-
-        return targetPoint;
     }
 
     private Point findDirectionToBorder() {

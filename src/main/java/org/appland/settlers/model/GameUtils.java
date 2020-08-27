@@ -1119,4 +1119,37 @@ public class GameUtils {
             return distanceY;
         }
     }
+
+    public static double calculateAngle(int directionX, int directionY) {
+        double angle;
+
+        if (directionX == 0 && directionY > 0) {
+            angle = Math.PI / 2;
+        } else if (directionX == 0 && directionY < 0) {
+            angle = 1.5 * Math.PI;
+        } else if (directionY == 0 && directionX > 0) {
+            angle = 0;
+        } else if (directionY == 0 && directionX < 0) {
+            angle = Math.PI;
+        } else {
+
+            double length = Math.sqrt(directionX*directionX + directionY*directionY);
+
+            angle = Math.atan((double)directionY / (double)directionX);
+
+            if (directionX < 0 && directionY > 0) {
+                angle = angle + Math.PI;
+            }
+
+            if (directionX < 0 && directionY < 0) {
+                angle = angle + Math.PI;
+            }
+
+            if (directionX > 0 && directionY < 0) {
+                angle = angle = 2*Math.PI;
+            }
+        }
+
+        return angle;
+    }
 }

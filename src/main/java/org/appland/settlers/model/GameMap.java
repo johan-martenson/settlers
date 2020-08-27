@@ -111,6 +111,7 @@ public class GameMap {
     private final Set<Crop> removedCrops;
     private final Set<Road> promotedRoads;
     private final Stats     stats;
+    private final Group     collectEachStepTimeGroup;
 
     private Player winner;
     private long time;
@@ -222,7 +223,11 @@ public class GameMap {
         winnerReported = false;
 
         isBorderUpdated = false;
+
+        /* Prepare for collecting statistics on execution */
         stats = new Stats();
+
+        collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -721,13 +726,12 @@ public class GameMap {
         duration.reportStats(stats);
 
         /* Collect variables accumulated during stepTime and reset their collection */
-        Group group = stats.getGroup(AGGREGATED_EACH_STEP_TIME_GROUP);
 
 /*        for (String aggregatedVariable : stats.getVariablesInGroup(AGGREGATED_EACH_STEP_TIME_GROUP)) {
             stats.resetCollectionPeriod(aggregatedVariable);
         }*/
 
-        group.collectionPeriodDone();
+        collectEachStepTimeGroup.collectionPeriodDone();
     }
 
     private List<BorderChange> collectBorderChangesFromEachPlayer() {
@@ -1713,7 +1717,7 @@ public class GameMap {
     }
 
     // FIXME: HOTSPOT - allocations
-    Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
+    Collection<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         List<Point>  resultList = new ArrayList<>();
 
         MapPoint mapPoint = getMapPoint(from);

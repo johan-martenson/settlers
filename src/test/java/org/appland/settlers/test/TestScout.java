@@ -34,6 +34,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestScout {
 
+    /**
+     * TODO:
+     *   - Test scout discovers points also on the way back to the storage
+     *   - Test scout cannot return to storage where delivery is not allowed
+     */
+
     @Test
     public void testScoutCanBeCalledFromFlag() throws Exception {
 
@@ -290,7 +296,7 @@ public class TestScout {
     }
 
     @Test
-    public void testScoutWalksEightByThreeSegmentsAndThenReturnsToFlag() throws Exception {
+    public void testScoutWalksThirtyStepsAndThenReturnsToFlag() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -331,11 +337,17 @@ public class TestScout {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that the scout walks eight by three segments */
-        for (int i = 0; i < 8; i++) {
+        /* Verify that the scout walks 30 steps */
+        for (int i = 0; i < 30; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+            assertTrue(scout.isExactlyAtPoint());
+
+            map.stepTime();
+
+            assertFalse(scout.isExactlyAtPoint());
+
+            Utils.waitForWorkerToBeExactlyOnPoint(scout, map);
         }
 
         assertEquals(scout.getTarget(), flag.getPosition());
@@ -445,7 +457,7 @@ public class TestScout {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         /* Verify that the scout discovers new ground */
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 30; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
@@ -503,7 +515,7 @@ public class TestScout {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         /* Verify that the scout discovers new ground */
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 30; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());

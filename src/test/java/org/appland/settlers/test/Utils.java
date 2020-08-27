@@ -1942,6 +1942,19 @@ public class Utils {
         }
     }
 
+    public static void waitForWorkerToBeExactlyOnPoint(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+
+        for (int i = 0; i < 500; i++) {
+            if (worker.isExactlyAtPoint()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isExactlyAtPoint());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
