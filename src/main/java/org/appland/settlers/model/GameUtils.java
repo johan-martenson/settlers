@@ -250,11 +250,11 @@ public class GameUtils {
         }
     }
 
-    static boolean isUnique(List<Point> wayPoints) {
+    static boolean areAllUnique(Collection<Point> points) {
 
-        Set<Point> pointsSet = new HashSet<>(wayPoints);
+        Set<Point> pointsSet = new HashSet<>(points);
 
-        return wayPoints.size() == pointsSet.size();
+        return points.size() == pointsSet.size();
     }
 
     interface ConnectionsProvider {

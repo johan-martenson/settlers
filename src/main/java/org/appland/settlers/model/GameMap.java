@@ -1,10 +1,10 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import org.appland.settlers.utils.Duration;
+import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,6 +22,7 @@ import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.GameUtils.isAny;
 import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
+import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -36,6 +37,7 @@ import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
 import static org.appland.settlers.model.Vegetation.SNOW;
 import static org.appland.settlers.model.Vegetation.SWAMP;
 import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
 
 public class GameMap {
 
@@ -717,6 +719,15 @@ public class GameMap {
         duration.after("Final updates");
 
         duration.reportStats(stats);
+
+        /* Collect variables accumulated during stepTime and reset their collection */
+        Group group = stats.getGroup(AGGREGATED_EACH_STEP_TIME_GROUP);
+
+/*        for (String aggregatedVariable : stats.getVariablesInGroup(AGGREGATED_EACH_STEP_TIME_GROUP)) {
+            stats.resetCollectionPeriod(aggregatedVariable);
+        }*/
+
+        group.collectionPeriodDone();
     }
 
     private List<BorderChange> collectBorderChangesFromEachPlayer() {
@@ -1182,7 +1193,7 @@ public class GameMap {
         }
 
         /* Verify that the road does not overlap itself */
-        if (!GameUtils.isUnique(wayPoints)) {
+        if (!GameUtils.areAllUnique(wayPoints)) {
             throw new InvalidUserActionException("Cannot create a road that overlaps itself");
         }
 
@@ -1702,7 +1713,7 @@ public class GameMap {
     }
 
     // FIXME: HOTSPOT - allocations
-    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
+    Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         List<Point>  resultList = new ArrayList<>();
 
         MapPoint mapPoint = getMapPoint(from);

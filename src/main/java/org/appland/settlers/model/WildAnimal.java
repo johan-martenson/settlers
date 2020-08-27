@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -81,59 +82,31 @@ public class WildAnimal extends Worker {
         }
     }
 
-    // FIXME: HOTSPOT - allocations
     private List<Point> findNextPoint() {
+        for (Point point : map.getPossibleAdjacentOffRoadConnections(getPosition())) {
 
-        /* Get surrounding points */
-        List<Point> adjacentPoints = map.getPointsWithinRadius(getPosition(), RANGE);
-
-        int offset = random.nextInt(adjacentPoints.size());
-
-        /* Start at a random place in the list and look for points to go to */
-        for (int i = 0; i < adjacentPoints.size(); i++) {
-            int index = i + offset;
-
-            if (index >= adjacentPoints.size()) {
-                index = index - adjacentPoints.size();
-            }
-
-            Point point = adjacentPoints.get(index);
             MapPoint mapPoint = map.getMapPoint(point);
 
-            /* Filter points outside of the map */
-            if (mapPoint == null) {
-                continue;
-            }
-
-            /* Filter points with buildings */
+            /* Filter buildings as animals can't walk into buildings */
             if (mapPoint.isBuilding()) {
                 continue;
             }
 
-            /* Filter points with stones */
-            if (mapPoint.isStone()) {
-                continue;
-            }
-
+            /* Filter points surrounded by shallow water as animals can't walk on water */
             Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
-            /* Filter points where there is tile to walk on */
             if (cannotWalkOnAny(surroundingVegetation)) {
                 continue;
             }
 
-            /* Filter un-reachable points (expensive) */
-            List<Point> path = map.findWayOffroad(getPosition(), point, null);
+            List<Point> step = new ArrayList<>();
 
-            if (path == null) {
-                continue;
-            }
+            step.add(getPosition());
+            step.add(point);
 
-            /* Return the found path */
-            return path;
+            return step;
         }
 
-        /* Return null if there is no available point */
         return null;
     }
 

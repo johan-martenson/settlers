@@ -5,6 +5,10 @@
  */
 package org.appland.settlers.model;
 
+import org.appland.settlers.utils.Duration;
+import org.appland.settlers.utils.Stats;
+import org.appland.settlers.utils.StatsConstants;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -126,6 +130,16 @@ public abstract class Worker {
 
     public void stepTime() throws InvalidRouteException, InvalidUserActionException {
 
+        Stats stats = map.getStats();
+
+        String counterName = "Worker." + getClass().getSimpleName() + ".stepTime";
+
+        stats.createVariableGroupIfAbsent(StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
+        stats.addPeriodicCounterVariableIfAbsent(counterName);
+        stats.addVariableToGroup(counterName, StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
+
+        Duration duration = new Duration(counterName);
+
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
 
             /* Arrival at target is already handled so in this branch the
@@ -186,6 +200,10 @@ public abstract class Worker {
         } else if (state == States.IDLE_HALF_WAY) {
             onIdle();
         }
+
+        duration.after("stepTime");
+
+        map.getStats().reportVariableValue(counterName, duration.getFullDuration());
     }
 
     @Override

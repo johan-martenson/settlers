@@ -6,6 +6,9 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.utils.CumulativeDuration;
+import org.appland.settlers.utils.Stats;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,6 +23,7 @@ import static org.appland.settlers.model.Scout.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Scout.State.WALKING_TO_ASSIGNED_LOOKOUT_TOWER;
 import static org.appland.settlers.model.Scout.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Scout.State.WORKING_IN_LOOKOUT_TOWER;
+import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
 
 /**
  *
@@ -33,6 +37,7 @@ public class Scout extends Worker {
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int MINIMUM_DISTANCE_TO_BORDER = 6;
+    private static final Random random = new Random(4);
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -42,7 +47,6 @@ public class Scout extends Worker {
     }
 
     private final Countdown countdown;
-    private final Random random;
 
     private State state;
     private Point flagPoint;
@@ -53,10 +57,9 @@ public class Scout extends Worker {
     public Scout(Player player, GameMap map) {
         super(player, map);
 
-        state        = WALKING_TO_TARGET;
+        state = WALKING_TO_TARGET;
         segmentCount = 0;
 
-        random = new Random(4);
         countdown = new Countdown();
     }
 
@@ -73,10 +76,16 @@ public class Scout extends Worker {
 
     @Override
     protected void onArrival() throws InvalidRouteException {
+        Stats stats = map.getStats();
+
+        CumulativeDuration duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
+
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
         if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER) {
             enterBuilding(getTargetBuilding());
+
+            duration.after("Enter lookout tower");
         } else if (state == WALKING_TO_TARGET) {
 
             /* Remember where the scouting started so the scout can go back */
@@ -84,13 +93,22 @@ public class Scout extends Worker {
 
             /* Calculate direction */
             Point borderPoint = findDirectionToBorder();
+
+            duration.after("Find direction to border");
+
             calculateDirection(borderPoint);
+
+            duration.after("Calculate direction");
 
             /* Update direction if the scout is too close to the border */
             avoidGoingTooCloseToBorder();
 
+            duration.after("Avoid going too close to border");
+
             /* Find the first point to go to */
             Point point = findNextPoint();
+
+            duration.after("Find next point");
 
             if (!map.isWithinMap(point)) {
                 state = RETURNING_TO_FLAG;
@@ -101,6 +119,8 @@ public class Scout extends Worker {
 
                 setOffroadTarget(point);
             }
+
+            duration.after("Set offroad target 0");
         } else if (state == GOING_TO_NEXT_POINT) {
 
             segmentCount++;
@@ -115,7 +135,11 @@ public class Scout extends Worker {
 
             avoidGoingTooCloseToBorder();
 
+            duration.after("Avoid going too close to border");
+
             Point point = findNextPoint();
+
+            duration.after("Find next point");
 
             if (point == null) {
                 state = RETURNING_TO_FLAG;
@@ -126,10 +150,15 @@ public class Scout extends Worker {
 
                 setOffroadTarget(point);
             }
+
+            duration.after("Set offroad target 1");
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
 
+            // FIXME: add test and fix so returning scout can't go to storage where storage is not allowed
             Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+
+            duration.after("Find closest storage connected by roads");
 
             if (storage != null) {
                 setTarget(storage.getPosition());
@@ -138,6 +167,8 @@ public class Scout extends Worker {
 
                 setOffroadTarget(storage.getPosition(), storage.getFlag().getPosition());
             }
+
+            duration.after("Set offroad target 2");
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
 
@@ -146,10 +177,15 @@ public class Scout extends Worker {
             enterBuilding(storage);
 
             map.removeWorker(this);
+
+            duration.after("Enter storage");
         } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             /* Go to the closest storage */
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
+
+            duration.after("Find closest storage connected by roads and delivery is possible");
+
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
 
@@ -161,6 +197,8 @@ public class Scout extends Worker {
 
                 setOffroadTarget(point);
             }
+
+            duration.after("Set offroad target 3");
         } else if (state == GOING_TO_DIE) {
             setDead();
 
@@ -168,6 +206,10 @@ public class Scout extends Worker {
 
             countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
+
+        duration.after("End of method");
+
+        duration.report();
     }
 
     private void calculateDirection(Point borderPoint) {
@@ -235,25 +277,40 @@ public class Scout extends Worker {
 
     private Point findNextPoint() {
 
+        CumulativeDuration duration = map.getStats().measureCumulativeDuration("Scout.findNextPoint", AGGREGATED_EACH_STEP_TIME_GROUP);
+
         Point position = getPosition();
 
         /* Find the point to aim for */
         Point targetPoint = getPointInDirection(position, LENGTH_TO_PLAN_HEAD, directionX, directionY);
+
+        duration.after("Got point in direction");
 
         /* Try to find a position somewhere between the scout's current position and the target point */
         List<Point> points = findBoxOfPointsAroundPoint(targetPoint, 5);
 
         Point target = findRandomPointToWalkToOffroad(points, position);
 
+        duration.after("Find point try 1");
+
         /* Return the point if it's found */
         if (target != null) {
+
+            duration.report();
+
             return target;
         }
 
         /* Try again with a larger box and return null if there is no point found */
         points = findBoxOfPointsAroundPoint(targetPoint, 7);
 
-        return findRandomPointToWalkToOffroad(points, position);
+        target = findRandomPointToWalkToOffroad(points, position);
+
+        duration.after("Find point try 2");
+
+        duration.report();
+
+        return target;
     }
 
     private List<Point> findBoxOfPointsAroundPoint(Point point, int distance) {
