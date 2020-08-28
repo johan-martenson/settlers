@@ -1,6 +1,9 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.Military.Rank;
+import org.appland.settlers.utils.Duration;
+import org.appland.settlers.utils.Stats;
+import org.appland.settlers.utils.StatsConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -422,6 +425,15 @@ public class Building implements EndPoint {
 
     void stepTime() throws InvalidRouteException {
 
+        Stats stats = map.getStats();
+
+        String counterName = "Building." + getClass().getSimpleName() + ".stepTime";
+
+        stats.addPeriodicCounterVariableIfAbsent(counterName);
+        stats.addVariableToGroup(counterName, StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
+
+        Duration duration = new Duration(counterName);
+
         if (isUnderAttack()) {
 
             /* There is nothing to do if the building has no hosted soldiers */
@@ -507,6 +519,10 @@ public class Building implements EndPoint {
                 upgradeCountdown.step();
             }
         }
+
+        duration.after("stepTime");
+
+        map.getStats().reportVariableValue(counterName, duration.getFullDuration());
     }
 
     public Flag getFlag() {
