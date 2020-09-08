@@ -102,4 +102,9 @@ class VariableImpl implements Variable {
     public boolean isLatestValueLowest() {
         return isLatestLowest;
     }
+
+    @Override
+    public long getLowestValue() {
+        return currentLowestValue;
+    }
 }

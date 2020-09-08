@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Stats {
 
-    private final Map<String, VariableImpl> variableMap;
+    private final Map<String, Variable> variableMap;
     private final Map<String, Long> upperThresholdsToBeSet;
     private final Map<String, GroupImpl> groups;
 
@@ -26,6 +26,28 @@ public class Stats {
 
             variable.setUpperThreshold(upperThresholdsToBeSet.get(name));
             upperThresholdsToBeSet.remove(name);
+        }
+
+        return variable;
+    }
+
+    public Variable addIncrementingVariableIfAbsent(String name) {
+        Variable variable = variableMap.get(name);
+
+        if (variable == null) {
+
+            System.out.println("Adding incrementing variable: " + name);
+
+            variable = new IncrementingVariableImpl(name);
+
+            variableMap.put(name, variable);
+
+            if (upperThresholdsToBeSet.containsKey(name)) {
+                System.out.println("Stored threshold exists: " + upperThresholdsToBeSet.get(name));
+
+                variable.setUpperThreshold(upperThresholdsToBeSet.get(name));
+                upperThresholdsToBeSet.remove(name);
+            }
         }
 
         return variable;
@@ -56,7 +78,7 @@ public class Stats {
     }
 
     public Variable addPeriodicCounterVariableIfAbsent(String name) {
-        VariableImpl periodicVariable = variableMap.get(name);
+        Variable periodicVariable = variableMap.get(name);
 
         if (periodicVariable == null) {
             System.out.println("Adding periodic counter variable: " + name);
@@ -70,7 +92,7 @@ public class Stats {
     }
 
     public void resetCollectionPeriod(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
 //        if (variable instanceof  PeriodicCounterVariable) {
             ((PeriodicCounterVariableImpl) variable).collectionPeriodDone();
@@ -78,51 +100,51 @@ public class Stats {
     }
 
     public void reportVariableValue(String name, long value) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         variable.reportValue(value);
     }
 
     public boolean isVariableLatestValueHighest(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         return variable.isLatestValueHighest();
     }
 
     public boolean isVariableLatestValueLowest(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         return variable.isLatestValueLowest();
     }
 
     public double getAverageForVariable(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
-        return variable.average;
+        return variable.getAverage();
     }
 
     public long getHighestValueForVariable(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
-        return variable.currentHighestValue;
+        return variable.getHighestValue();
     }
 
     public long getLowestValueForVariable(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
-        return variable.currentLowestValue;
+        return variable.getLowestValue();
     }
 
     public long getLatestValueForVariable(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
-        return variable.latestValue;
+        return variable.getLatestValue();
     }
 
     public void setUpperThreshold(String name, long upperThresholdValue) {
         System.out.println("Set upper threshold for " + name + " to " + upperThresholdValue);
 
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         if (variable == null) {
             System.out.println("Variable doesn't exist, storing this");
@@ -136,37 +158,48 @@ public class Stats {
     }
 
     public long getUpperThreshold(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         return variable.getUpperThreshold();
     }
 
     public boolean isVariableUpperThresholdExceeded(String name) {
-        VariableImpl variable = variableMap.get(name);
+        Variable variable = variableMap.get(name);
 
         return variable.isUpperThresholdExceeded();
     }
 
     public void printVariablesAsTable() {
-        String header = String.format("| %-60s | %-10s | %-10s | %-10s | %-10s |", "Variable", "Latest", "Average", "Max", "Min");
+
+        List<String> variableNames = new ArrayList<>(variableMap.keySet());
+
+        int longestVariableName = 0;
+
+        for (String name : variableNames) {
+            if (name.length() > longestVariableName) {
+                longestVariableName = name.length();
+            }
+        }
+
+        int variableColumnLength = Math.max(longestVariableName, 60);
+
+        String header = String.format("| %-" + variableColumnLength + "s | %-10s | %-10s | %-10s | %-10s |", "Variable", "Latest", "Average", "Max", "Min");
 
         System.out.println();
         System.out.println(header);
         System.out.println();
 
-        List<String> variableNames = new ArrayList<>(variableMap.keySet());
-
         java.util.Collections.sort(variableNames);
 
         for (String variableName : variableNames) {
-            VariableImpl variable = variableMap.get(variableName);
+            Variable variable = variableMap.get(variableName);
 
-            String valueRow = String.format("| %-60s | %10d | %10f | %10d | %10d |",
+            String valueRow = String.format("| %-" + variableColumnLength + "s | %10d | %10f | %10d | %10d |",
                     variableName,
-                    variable.latestValue,
-                    variable.average,
-                    variable.currentHighestValue,
-                    variable.currentLowestValue);
+                    variable.getLatestValue(),
+                    variable.getAverage(),
+                    variable.getHighestValue(),
+                    variable.getLatestValue());
 
             System.out.println(valueRow);
         }
@@ -175,9 +208,13 @@ public class Stats {
     }
 
     public Group createVariableGroupIfAbsent(String name) {
-        GroupImpl group = new GroupImpl(name, this);
+        GroupImpl group = groups.get(name);
 
-        groups.putIfAbsent(name, group);
+        if (group == null) {
+            group = new GroupImpl(name, this);
+
+            groups.put(name, group);
+        }
 
         return group;
     }

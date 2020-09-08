@@ -20,4 +20,6 @@ public interface Variable {
     String getName();
 
     boolean isLatestValueLowest();
+
+    long getLowestValue();
 }
