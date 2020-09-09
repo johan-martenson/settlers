@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author johan
  */
-class MapPoint {
+public class MapPoint {
     private static final int DEFAULT_AMOUNT_FISH   = 10;
     private static final int SMALL_AMOUNT_OF_MINERAL = 5;
     private static final int MEDIUM_AMOUNT_OF_MINERAL = 10;
@@ -122,11 +122,11 @@ class MapPoint {
         return "Map point " + point + " with " + building + " and " + flag;
     }
 
-    boolean isFlag() {
+    public boolean isFlag() {
         return flag != null;
     }
 
-    boolean isRoad() {
+    public boolean isRoad() {
         return !connectedNeighbors.isEmpty();
     }
 
