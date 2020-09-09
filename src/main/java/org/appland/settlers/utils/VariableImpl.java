@@ -34,21 +34,20 @@ class VariableImpl implements Variable {
         /* Keep track of the average */
         if (numberOfMeasurements == 0) {
             average = value;
-            isLatestHighest = true;
-            isLatestLowest = true;
         } else {
             average = (average * numberOfMeasurements + value) / (numberOfMeasurements + 1);
         }
 
         /* Check if this is the highest or lowest value reported so far */
-        isLatestHighest = value > currentHighestValue;
-        isLatestLowest = value < currentLowestValue;
+        if (value > currentHighestValue) {
+            isLatestHighest = true;
 
-        if (isLatestHighest) {
             currentHighestValue = value;
         }
 
-        if (isLatestLowest) {
+        if (value < currentLowestValue) {
+            isLatestLowest = true;
+
             currentLowestValue = value;
         }
 
