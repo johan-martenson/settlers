@@ -790,10 +790,13 @@ public class GameMap {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
             }
         } else {
-            Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
+            Size canBuild = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
 
-            if (buildingAvailable == null || !buildingAvailable.contains(house.getSize())) {
-                throw new InvalidUserActionException("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
+            if (canBuild == null || !canBuild.contains(house.getSize())) {
+                String name = house.getClass().getSimpleName();
+                Size size = house.getSize();
+
+                throw new InvalidUserActionException("Cannot place " + name + " of size " + size + " at " + point + ", only " + canBuild + ".");
             }
         }
 
@@ -2512,7 +2515,7 @@ public class GameMap {
         return getMapPoint(point).getSign();
     }
 
-    MapPoint getMapPoint(Point point) {
+    public MapPoint getMapPoint(Point point) {
         return pointToGameObject.get(point);
     }
 
