@@ -2759,7 +2759,7 @@ public class TestGameMonitoring {
 
             if (monitor.getEvents().size() > amountEvents) {
                 for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
-                    assertEquals(changes.getRemovedWorkers().size(), 0);
+                    assertEquals(changes.getNewSigns().size(), 0);
                 }
             }
         }
@@ -4367,12 +4367,12 @@ public class TestGameMonitoring {
         /* Verify that the event is sent only once */
         int amountEvents = monitor.getEvents().size();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
                 for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
-                    assertEquals(changes.getRemovedWorkers().size(), 0);
+                    assertEquals(changes.getNewDiscoveredLand().size(), 0);
                 }
             }
         }
