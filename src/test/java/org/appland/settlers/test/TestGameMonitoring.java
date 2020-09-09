@@ -3291,8 +3291,8 @@ public class TestGameMonitoring {
 
         assertEquals(gameChanges.getNewCrops().size(), 1);
         assertEquals(gameChanges.getNewCrops().get(0), map.getCropAtPoint(point));
-        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), farmer);
+        assertTrue(gameChanges.getWorkersWithNewTargets().size() > 0);
+        assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
 
         /* Verify that no more messages are sent before the farmer enters the farm */
         int amountEvents = monitor.getEvents().size();
@@ -3302,7 +3302,7 @@ public class TestGameMonitoring {
 
             if (monitor.getEvents().size() > amountEvents) {
                 for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
-                    assertEquals(changes.getNewTrees().size(), 0);
+                    assertEquals(changes.getNewCrops().size(), 0);
                 }
             }
         }
