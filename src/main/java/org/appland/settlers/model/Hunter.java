@@ -44,7 +44,7 @@ public class Hunter extends Worker {
 
         prey = null;
 
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_SHOOT);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_SHOOT, null);
     }
 
     @Override
@@ -52,6 +52,8 @@ public class Hunter extends Worker {
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     // FIXME: HOTSPOT

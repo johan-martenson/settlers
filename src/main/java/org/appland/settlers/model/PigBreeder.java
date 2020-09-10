@@ -56,7 +56,7 @@ public class PigBreeder extends Worker {
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
 
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_PIG);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_PIG, null);
     }
 
     public boolean isFeeding() {
@@ -68,6 +68,8 @@ public class PigBreeder extends Worker {
         state = RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override

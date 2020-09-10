@@ -48,7 +48,7 @@ public class Stonemason extends Worker {
         countdown = new Countdown();
         stoneTarget = null;
 
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_GET_STONE);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_GET_STONE, null);
     }
 
     public boolean isGettingStone() {
@@ -60,6 +60,8 @@ public class Stonemason extends Worker {
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     // FIXME: HOTSPOT - allocations

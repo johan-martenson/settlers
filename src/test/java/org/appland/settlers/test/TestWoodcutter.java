@@ -1569,7 +1569,6 @@ public class TestWoodcutter {
         assertEquals(worker.getPlayer(), player0);
     }
 
-
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 

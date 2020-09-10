@@ -230,8 +230,10 @@ public class TestScout {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that the scout goes south toward the border */
-        assertTrue(scout.getTarget().getX() > scout.getPosition().getX());
+        /* Verify that the scout goes east toward the border */
+        Utils.fastForward(100, map);
+
+        assertTrue(scout.getPosition().getX() > flag.getPosition().getX());
     }
 
     @Test

@@ -42,7 +42,6 @@ public class WoodcutterWorker extends Worker {
             if (map.findWayOffroad(point, getHome().getFlag().getPosition(), null) != null) {
                 return point;
             }
-
         }
 
         return null;
@@ -66,7 +65,7 @@ public class WoodcutterWorker extends Worker {
         state     = State.WALKING_TO_TARGET;
         countdown = new Countdown();
 
-        productivityMeasurer = new ProductivityMeasurer(2 * TIME_TO_REST);
+        productivityMeasurer = new ProductivityMeasurer(2 * TIME_TO_REST, null);
     }
 
     public boolean isCuttingTree() {
@@ -78,6 +77,8 @@ public class WoodcutterWorker extends Worker {
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override

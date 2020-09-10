@@ -31,7 +31,7 @@ public class WellWorker extends Worker {
         countdown = new Countdown();
         state     = State.WALKING_TO_TARGET;
 
-        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
     }
 
     private enum State {
@@ -48,6 +48,8 @@ public class WellWorker extends Worker {
         state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(RESTING_TIME);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class Miner extends Worker {
 
         state = WALKING_TO_TARGET;
 
-        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + TIME_TO_MINE);
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + TIME_TO_MINE, null);
     }
 
     public boolean isMining() {
@@ -79,6 +79,8 @@ public class Miner extends Worker {
         state = RESTING_IN_HOUSE;
 
         countdown.countFrom(RESTING_TIME);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override

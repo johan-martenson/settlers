@@ -900,6 +900,13 @@ public class Player {
         }
 
         for (Building changedBuilding : changedBuildings) {
+
+            /* Changes to buildings that are not military and not destroyed do not affect available construction */
+            if (!changedBuilding.isMilitaryBuilding() &&
+                (changedBuilding.isReady() || changedBuilding.isUnderConstruction())) {
+                continue;
+            }
+
             addChangedAvailableConstructionForSmallBuilding(changedBuilding);
         }
 

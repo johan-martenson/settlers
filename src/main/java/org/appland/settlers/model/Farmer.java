@@ -69,7 +69,7 @@ public class Farmer extends Worker {
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
 
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);
     }
 
     public boolean isHarvesting() {
@@ -85,6 +85,8 @@ public class Farmer extends Worker {
         state = RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override

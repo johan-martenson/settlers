@@ -94,7 +94,7 @@ import static org.junit.Assert.fail;
 
 public class Utils {
 
-    public static void fastForward(int time, GameMap map) throws Exception {
+    public static void fastForward(int time, GameMap map) throws InvalidRouteException, InvalidUserActionException {
 
         for (int i = 0; i < time; i++) {
             map.stepTime();
@@ -185,7 +185,7 @@ public class Utils {
         assertTrue(worker.isAt(target));
     }
 
-    public static <T extends Worker> T occupyBuilding(T worker, Building building) throws Exception {
+    public static <T extends Worker> T occupyBuilding(T worker, Building building) throws InvalidRouteException {
         GameMap map = building.getMap();
 
         map.placeWorker(worker, building);
@@ -364,7 +364,7 @@ public class Utils {
         return false;
     }
 
-    public static void constructHouse(Building building) throws Exception {
+    public static void constructHouse(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
         assertTrue(building.isUnderConstruction());

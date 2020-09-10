@@ -54,7 +54,7 @@ public class Fisherman extends Worker {
 
         countdown = new Countdown();
 
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_FISH + TIME_TO_REST);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_FISH + TIME_TO_REST, null);
     }
 
     public boolean isFishing() {
@@ -67,6 +67,8 @@ public class Fisherman extends Worker {
             state = RESTING_IN_HOUSE;
 
             countdown.countFrom(TIME_TO_REST);
+
+            productivityMeasurer.setBuilding(building);
         }
     }
 

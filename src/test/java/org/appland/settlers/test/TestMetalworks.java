@@ -1950,6 +1950,7 @@ public class TestMetalworks {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
     @Test
     public void testMetalworksWithoutResourcesHasZeroProductivity() throws Exception {
 

@@ -15,6 +15,9 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -35,11 +38,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -2197,16 +2202,6 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getRemovedTrees().size(), 1);
         assertEquals(gameChanges.getRemovedTrees().get(0), tree0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-
-        assertEquals(gameChanges.getNewTrees().size(), 0);
-        assertEquals(gameChanges.getNewFlags().size(), 0);
-        assertEquals(gameChanges.getRemovedRoads().size(), 0);
-        assertEquals(gameChanges.getNewRoads().size(), 0);
-
-        assertEquals(gameChanges.getNewBuildings().size(), 0);
-        assertEquals(gameChanges.getRemovedFlags().size(), 0);
-        assertEquals(gameChanges.getChangedBuildings().size(), 0);
-        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
     }
 
     @Test

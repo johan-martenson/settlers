@@ -1740,6 +1740,7 @@ public class TestGoldMine {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
     @Test
     public void testGoldMineWithoutResourcesHasZeroProductivity() throws Exception {
 

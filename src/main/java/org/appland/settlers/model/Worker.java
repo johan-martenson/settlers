@@ -51,13 +51,16 @@ public abstract class Worker {
 
     static class ProductivityMeasurer {
         private final int   cycleLength;
+        private Building building;
         private int   currentProductivityMeasurement;
         private int   productionCycle;
         private final int[] productiveTime;
         private int   currentUnproductivityMeasurement;
 
-        ProductivityMeasurer(int cycleLength) {
+        ProductivityMeasurer(int cycleLength, Building building) {
             this.cycleLength = cycleLength;
+            this.building = building;
+
             currentProductivityMeasurement = 0;
             productiveTime = new int[] {0, 0, 0, 0};
             productionCycle = 0;
@@ -66,13 +69,19 @@ public abstract class Worker {
 
         void nextProductivityCycle() {
 
-        /* Store the productivity measurement */
+            /* Store the productivity measurement */
+            int productionMeasurementToBeReplaced = productiveTime[productionCycle];
             productiveTime[productionCycle] = currentProductivityMeasurement;
+
+            /* Create a monitoring event if the productivity changed */
+            if (productionMeasurementToBeReplaced != currentProductivityMeasurement && building != null) {
+                building.getPlayer().reportChangedBuilding(building);
+            }
 
             currentProductivityMeasurement = 0;
             currentUnproductivityMeasurement = 0;
 
-        /* Sample the next production cycle */
+            /* Sample the next production cycle */
             productionCycle++;
 
             if (productionCycle >= productiveTime.length) {
@@ -109,6 +118,10 @@ public abstract class Worker {
 
         int getNumberOfCycles() {
             return productiveTime.length;
+        }
+
+        public void setBuilding(Building building) {
+            this.building = building;
         }
     }
 

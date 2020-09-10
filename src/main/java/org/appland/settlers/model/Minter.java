@@ -49,13 +49,15 @@ public class Minter extends Worker {
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
 
-        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
     }
 
     @Override
     protected void onEnterBuilding(Building building) {
         state = RESTING_IN_HOUSE;
         countdown.countFrom(RESTING_TIME);
+
+        productivityMeasurer.setBuilding(building);
     }
 
     @Override
