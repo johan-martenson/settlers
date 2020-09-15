@@ -6,6 +6,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -474,16 +475,25 @@ public class GameUtils {
      * @param start The point to start from
      * @param goal The point to reach
      * @param mapPoints The map with information about each point on the map
+     * @param avoid
      * @return the list of flag points to pass (included the starting point) required to travel from start to goal
      */
     // FIXME: ALLOCATION HOTSPOT
-    static List<Point> findShortestPathViaRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints) {
+    static List<Point> findShortestPathViaRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints, Point... avoid) {
         Set<Point>          evaluated        = new HashSet<>();
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         Map<Point, Point>   cameFrom         = new HashMap<>();
         int                 bestCaseCost;
 
         PriorityQueue<PointAndCost> toEvaluatePriorityQueue = new PriorityQueue<>();
+
+        Set<Point> avoidSet = null;
+
+        if (avoid.length != 0) {
+            avoidSet = new HashSet<>();
+
+            avoidSet.addAll(Arrays.asList(avoid));
+        }
 
         /* Define starting parameters */
         bestCaseCost = getDistanceInGameSteps(start, goal);
@@ -530,6 +540,11 @@ public class GameUtils {
 
                 /* Skip already evaluated points */
                 if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+
+                /* Skip points to avoid */
+                if (avoidSet != null && avoidSet.contains(neighbor)) {
                     continue;
                 }
 
@@ -640,13 +655,21 @@ public class GameUtils {
      * @param mapPoints The map with information about each point on the game map
      * @return a detailed list with the steps required to travel from the start to the goal.
      */
-    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, Map<Point, MapPoint> mapPoints) {
+    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, Map<Point, MapPoint> mapPoints, Point[] avoid) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();
         Map<Point, Double> estimatedFullCost = new HashMap<>();
         Map<Point, Road>   cameVia           = new HashMap<>();
         double             bestCaseCost;
+
+        Set<Point> avoidSet = null;
+
+        if (avoid.length != 0) {
+            avoidSet = new HashSet<>();
+
+            avoidSet.addAll(Arrays.asList(avoid));
+        }
 
         Point start = startEndPoint.getPosition();
         Point goal = goalEndPoint.getPosition();
@@ -713,8 +736,6 @@ public class GameUtils {
                     }
                 }
 
-                path.add(0, start);
-
                 return path;
             }
 
@@ -730,6 +751,11 @@ public class GameUtils {
 
                 /* Skip already evaluated points */
                 if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+
+                /* Skip points to avoid */
+                if (avoidSet != null && avoidSet.contains(neighbor)) {
                     continue;
                 }
 

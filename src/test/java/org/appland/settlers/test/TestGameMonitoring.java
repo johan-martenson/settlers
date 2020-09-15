@@ -15,9 +15,6 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -34,17 +31,18 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -54,7 +52,8 @@ import static org.junit.Assert.assertTrue;
 
 public class TestGameMonitoring {
 
-    /*TODO:
+    /*
+    TODO:
         - catapulted stone,
         - available road connections (?),
         - road that becomes main road,
@@ -4836,5 +4835,329 @@ public class TestGameMonitoring {
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
             assertFalse(newChanges.getPromotedRoads().contains(road0));
         }
+    }
+
+    @Test
+    public void testMonitoringWhenFlagGetsCargo() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(13, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag between the buildings */
+        Point point2 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        map.stepTime();
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the woodcutter with the flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+
+        /* Wait for the first road to get populated */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier of the first road to carry planks for the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when the courier puts the cargo down by the flag */
+        assertEquals(courier.getTarget(), flag0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+
+        assertTrue(monitor.getEvents().size() > 0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getChangedFlags().size() > 0);
+        assertTrue(gameChanges.getChangedFlags().contains(flag0));
+        assertFalse(gameChanges.getChangedFlags().contains(woodcutter0.getFlag()));
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+    }
+
+    @Test
+    public void testMonitoringWhenFlagGetsCargoIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(13, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag between the buildings */
+        Point point2 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        map.stepTime();
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the woodcutter with the flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+
+        /* Wait for the first road to get populated */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier of the first road to carry planks for the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when the courier puts the cargo down by the flag */
+        assertEquals(courier.getTarget(), flag0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+
+        assertTrue(monitor.getEvents().size() > 0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getChangedFlags().size() > 0);
+        assertTrue(gameChanges.getChangedFlags().contains(flag0));
+        assertFalse(gameChanges.getChangedFlags().contains(woodcutter0.getFlag()));
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(5, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getChangedFlags().size(), 0);
+        }
+    }
+
+    @Test
+    public void testMonitoringWhenCargoGetsPickedUpFromFlag() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(13, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag between the buildings */
+        Point point2 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        map.stepTime();
+
+        /* Change so there is only one plank in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 1);
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the woodcutter with the flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+
+        /* Wait for the first road to get populated */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier of the first road to go to the headquarter's flag to pick up a plank */
+        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+
+        assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that a monitoring event is sent when the courier picks up the plank from the flag */
+        assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
+        assertNull(monitor.getLastEvent());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getMaterial(), PLANK);
+        assertTrue(monitor.getEvents().size() > 0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getChangedFlags().size() > 0);
+        assertTrue(gameChanges.getChangedFlags().contains(headquarter0.getFlag()));
+        assertFalse(gameChanges.getChangedFlags().contains(flag0));
+        assertFalse(gameChanges.getChangedFlags().contains(woodcutter0.getFlag()));
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+    }
+
+    @Test
+    public void testMonitoringWhenCargoGetsPickedUpFromFlagIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(13, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag between the buildings */
+        Point point2 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        map.stepTime();
+
+        /* Change so there is only one plank in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 1);
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the woodcutter with the flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+
+        /* Wait for the first road to get populated */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier of the first road to go to the headquarter's flag to pick up a plank */
+        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+
+        assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that a monitoring event is sent when the courier picks up the plank from the flag */
+        assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
+        assertNull(monitor.getLastEvent());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getMaterial(), PLANK);
+        assertTrue(monitor.getEvents().size() > 0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getChangedFlags().size() > 0);
+        assertTrue(gameChanges.getChangedFlags().contains(headquarter0.getFlag()));
+        assertFalse(gameChanges.getChangedFlags().contains(flag0));
+        assertFalse(gameChanges.getChangedFlags().contains(woodcutter0.getFlag()));
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+
+        /* Verify that the message is only sent once */
+        Utils.fastForward(5, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getChangedFlags().size(), 0);
+        }
+    }
+
+    @Test
+    public void testMonitoringWhenCourierWaitsToDeliverWhenFlagIsFull() throws Exception {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag far away from the headquarter */
+        Point point1 = new Point(21, 5);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place flag closer to the headquarter */
+        Point point2 = new Point(17, 5);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place a short road to make a courier wait on */
+        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+
+        /* Place a long road to the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+
+        /* Wait for both roads to get their couriers assigned and standing idle */
+        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
+
+        Utils.waitForCouriersToBeIdle(map, couriers);
+
+        /* Place eight cargos on the flag between the roads targeting the headquarter */
+        Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
+
+        /* Place two cargos on the other flag */
+        Utils.placeCargo(map, IRON, flag0, headquarter0);
+
+        map.stepTime();
+
+        /* Wait for the courier of the short road to pick up a cargo */
+        assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
+        assertNull(road1.getCourier().getCargo());
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Wait for the courier for the short road to be one step away from the middle flag */
+        assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
+        assertNull(road1.getCourier().getCargo());
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
+
+        /* Verify that an event is sent when the courier waits because there is no space on the flag for more cargo */
+        assertEquals(flag1.getStackedCargo().size(), 8);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getWorkersWithNewTargets().size() > 0);
+        assertTrue(gameChanges.getWorkersWithNewTargets().contains(road0.getCourier()));
     }
 }

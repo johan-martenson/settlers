@@ -43,12 +43,16 @@ class VariableImpl implements Variable {
             isLatestHighest = true;
 
             currentHighestValue = value;
+        } else {
+            isLatestHighest = false;
         }
 
         if (value < currentLowestValue) {
             isLatestLowest = true;
 
             currentLowestValue = value;
+        } else {
+            isLatestLowest = false;
         }
 
         /* Count the number of reported measurements */

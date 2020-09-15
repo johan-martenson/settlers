@@ -18,11 +18,11 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.GameUtils.isAny;
 import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
-import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -112,6 +112,7 @@ public class GameMap {
     private final Set<Road> promotedRoads;
     private final Stats     stats;
     private final Group     collectEachStepTimeGroup;
+    private final Set<Flag> changedFlags;
 
     private Player winner;
     private long time;
@@ -219,6 +220,7 @@ public class GameMap {
         newCrops = new HashSet<>();
         removedCrops = new HashSet<>();
         promotedRoads = new HashSet<>();
+        changedFlags = new HashSet<>();
 
         winnerReported = false;
 
@@ -551,6 +553,14 @@ public class GameMap {
                 player.reportChangedBorders(borderChanges);
             }
 
+            for (Flag flag : changedFlags) {
+                if (!player.getDiscoveredLand().contains(flag.getPosition())) {
+                    continue;
+                }
+
+                player.reportChangedFlag(flag);
+            }
+
             for (Worker worker : workersWithNewTargets) {
                 if (!player.getDiscoveredLand().contains(worker.getPosition())) {
                     continue;
@@ -709,6 +719,7 @@ public class GameMap {
         newCrops.clear();
         removedCrops.clear();
         promotedRoads.clear();
+        changedFlags.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3227,8 +3238,8 @@ public class GameMap {
      * @return the list of points with flags or buildings to pass by
      */
     //FIXME: ALLOCATION HOTSPOT
-    public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, EndPoint end) {
-        return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject);
+    public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, EndPoint end, Point... avoid) {
+        return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject, avoid);
     }
 
     public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(Point... points) {
@@ -3652,5 +3663,13 @@ public class GameMap {
 
     public Stats getStats() {
         return stats;
+    }
+
+    void reportChangedFlag(Flag flag) {
+        changedFlags.add(flag);
+    }
+
+    public List<Point> findDetailedWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, Building end, Point... avoid) {
+        return GameUtils.findShortestDetailedPathViaRoads(start, end, pointToGameObject, avoid);
     }
 }

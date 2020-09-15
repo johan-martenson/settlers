@@ -69,6 +69,7 @@ public class Player {
     private final List<Road> promotedRoads;
     private final Map<Material, Integer> toolProductionQuotas;
     private final List<TransportCategory> transportCategoryPriorities;
+    private final Collection<Flag> changedFlags;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -158,6 +159,7 @@ public class Player {
         newMessages = new ArrayList<>();
         promotedRoads = new ArrayList<>();
         toolProductionQuotas = new EnumMap<>(Material.class);
+        changedFlags = new HashSet<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -768,7 +770,7 @@ public class Player {
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
-            newMessages.isEmpty() && promotedRoads.isEmpty()) {
+            newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty()) {
             return;
         }
 
@@ -986,7 +988,8 @@ public class Player {
                 new ArrayList<>(newStones), newWorkers,
                 new ArrayList<>(changedAvailableConstruction),
                 new ArrayList<>(newMessages),
-                new ArrayList<>(promotedRoads));
+                new ArrayList<>(promotedRoads),
+                new ArrayList<>(changedFlags));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1020,6 +1023,7 @@ public class Player {
         newStones.clear();
         promotedRoads.clear();
         changedBorders.clear();
+        changedFlags.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1333,5 +1337,9 @@ public class Player {
 
     public int getProductionQuotaForTool(Material tool) {
         return toolProductionQuotas.getOrDefault(tool, 0);
+    }
+
+    public void reportChangedFlag(Flag flag) {
+        changedFlags.add(flag);
     }
 }

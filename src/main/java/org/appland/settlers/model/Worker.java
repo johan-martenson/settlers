@@ -501,6 +501,9 @@ public abstract class Worker {
 
         path.clear();
         target = null;
+
+        /* Report that this worker stopped walking */
+        getMap().reportWorkerWithNewTarget(this);
     }
 
     public Point getTarget() {

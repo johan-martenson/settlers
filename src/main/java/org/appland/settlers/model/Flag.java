@@ -43,6 +43,16 @@ public class Flag implements EndPoint {
 
         /* Remove the promise for this cargo */
         promisedCargo = promisedCargo - 1;
+
+        /* Report that the flag has changed */
+        if (player != null) {
+            GameMap map = player.getMap();
+
+            if (map != null) {
+                player.getMap().reportChangedFlag(this);
+            }
+        }
+
     }
 
     @Override
@@ -81,6 +91,14 @@ public class Flag implements EndPoint {
 
             stackedCargo.remove(cargo);
 
+            if (player != null) {
+                GameMap map = player.getMap();
+
+                if (map != null) {
+                    player.getMap().reportChangedFlag(this);
+                }
+            }
+
             return cargo;
         }
 
@@ -93,12 +111,52 @@ public class Flag implements EndPoint {
         int priority = Integer.MAX_VALUE;
 
         for (Cargo cargo : stackedCargo) {
+
+            /* Filter cargos where pickup is already planned */
             if (cargo.isPickupPromised()) {
                 continue;
             }
 
-            if (!road.getEnd().equals(cargo.getNextFlagOrBuilding()) &&
-                !road.getStart().equals(cargo.getNextFlagOrBuilding())) {
+            /* Filter cargos without a target */
+            if (cargo.getTarget() == null) {
+                continue;
+            }
+
+            /* Filter cargos that will not benefit from going through the courier's road */
+            GameMap map = cargo.getMap();
+
+            Building target = cargo.getTarget();
+            EndPoint otherEndOfRoad = road.getOtherEndPoint(this);
+
+            List<Point> bestPath = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(this, target);
+            List<Point> pathThroughRoad = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(otherEndOfRoad, target, this.getPosition());
+
+            /* Filter cargos where there is no road available */
+            if (bestPath == null) {
+                continue;
+            }
+
+            /* Filter roads that don't lead to the target building */
+            if (pathThroughRoad == null) {
+                continue;
+            }
+
+            /* Let the best courier do the delivery if it's available */
+            Road optimalRoad = map.getRoadAtPoint(bestPath.get(1));
+
+            Courier courierForOptimalRoad = optimalRoad.getCourier();
+            Donkey donkeyForOptimalRoad = optimalRoad.getDonkey();
+
+            /* If the "asking road" is not the optimal road - see if the optimal courier or donkey is idle */
+            if (!road.equals(optimalRoad)) {
+                if ((courierForOptimalRoad != null && courierForOptimalRoad.isIdle()) ||
+                    (donkeyForOptimalRoad != null && donkeyForOptimalRoad.isIdle())) {
+                    continue;
+                }
+            }
+
+            /* Avoid roads that are more than double as long as the most optimal road */
+            if (pathThroughRoad.size() > bestPath.size() * 2) {
                 continue;
             }
 

@@ -206,4 +206,8 @@ public class Cargo {
 
         return true;
     }
+
+    GameMap getMap() {
+        return map;
+    }
 }

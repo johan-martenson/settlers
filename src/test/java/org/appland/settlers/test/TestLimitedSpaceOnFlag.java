@@ -19,6 +19,7 @@ import java.util.List;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.junit.Assert.assertEquals;
@@ -654,5 +655,74 @@ public class TestLimitedSpaceOnFlag {
 
             assertNull(mill.getWorker().getCargo());
         }
+    }
+
+    @Test
+    public void testPlaceNewRoadToContinueDeliveriesWhenRoadIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place mill */
+        Point point2 = new Point(13, 5);
+        Building mill = map.placeBuilding(new Mill(player0), point2);
+
+        /* Connect the headquarter with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+
+        /* Connect the flag with the mill */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mill.getFlag());
+
+        /* Wait for the first road to get assigned a courier */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Wait for the courier to carry cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Fill up the flag to make it impossible for the courier to put down the cargo */
+        Utils.placeCargos(map, STONE, 8, flag0, headquarter);
+
+        /* Wait for the courier to stop, unable to put down the cargo */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+
+        assertEquals(flag0.getStackedCargo().size(), 8);
+        assertTrue(courier.isExactlyAtPoint());
+        assertEquals(courier.getPosition(), flag0.getPosition().left());
+
+        map.stepTime();
+
+        assertEquals(flag0.getStackedCargo().size(), 8);
+        assertTrue(courier.isExactlyAtPoint());
+        assertEquals(courier.getPosition(), flag0.getPosition().left());
+
+        /* Wait for a cargo to be put on the headquarter flag for delivery to the mill */
+        Utils.waitForFlagToHaveCargoWaiting(map, headquarter.getFlag());
+
+        /* Place a second road to it possible to deliver cargos to the mill */
+        Road road3 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mill.getFlag());
+
+        /* Wait for a courier to get assigned to the new road */
+        Courier courier1 = Utils.waitForRoadToGetAssignedCourier(map, road3);
+
+        /* Verify that the new courier picks up the cargo waiting and delivers it to the mill */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1);
+
+        assertEquals(courier1.getPosition(), headquarter.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, mill.getPosition());
+
+        assertNull(courier1.getCargo());
     }
 }
