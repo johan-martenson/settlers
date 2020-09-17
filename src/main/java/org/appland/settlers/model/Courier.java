@@ -26,10 +26,16 @@ public class Courier extends Worker {
 
     protected enum States {
 
-        WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO,
-        GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,
-        GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO, RETURNING_TO_STORAGE
+        WALKING_TO_ROAD,
+        IDLE_AT_ROAD,
+        GOING_TO_FLAG_TO_PICK_UP_CARGO,
+        GOING_TO_FLAG_TO_DELIVER_CARGO,
+        RETURNING_TO_IDLE_SPOT,
+        GOING_TO_BUILDING_TO_DELIVER_CARGO,
+        GOING_BACK_TO_ROAD,
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO,
+        RETURNING_TO_STORAGE
     }
 
     public Courier(Player player, GameMap map) {
@@ -132,15 +138,12 @@ public class Courier extends Worker {
                 }
             }
 
-            /* Fulfill delivery if it has been started */
+        /* Fulfill delivery if it has been started */
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
             List<Point> plannedPath = getPlannedPath();
 
-            /* Deliver cargo to the closest flag in the road if none of the
-             flags are next to the current targeted building
-             */
-            if (!getTarget().equals(newRoad.getStart().upLeft())
-                    && !getTarget().equals(newRoad.getEnd().upLeft())) {
+            /* Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building */
+            if (!getTarget().equals(newRoad.getStart().upLeft()) && !getTarget().equals(newRoad.getEnd().upLeft())) {
                 int indexOfStart = plannedPath.indexOf(newRoad.getStart());
                 int indexOfEnd = plannedPath.indexOf(newRoad.getEnd());
 
@@ -153,10 +156,8 @@ public class Courier extends Worker {
                 }
             }
 
-            /* If the courier is on the road closest to the building, keep the state and target so that it goes to
-               the building and delivers the cargo
-             */
-            /* If the courier is going to pick up a new cargo, cancel and go to the new road */
+        /* If the courier is on the road closest to the building, keep the state and target so that it goes to the building and delivers the cargo */
+        /* If the courier is going to pick up a new cargo, cancel and go to the new road */
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             intendedCargo.cancelPromisedPickUp();
 
@@ -166,7 +167,7 @@ public class Courier extends Worker {
 
             setTarget(idlePoint);
 
-            /* For the other states, just go to the new road */
+        /* For the other states, just go to the new road */
         } else {
             state = WALKING_TO_ROAD;
 
@@ -239,6 +240,7 @@ public class Courier extends Worker {
             return;
         }
 
+        // TODO: verify that this call can be removed. There should be no need for cargos to know where they are when they are being carried
         getCargo().setPosition(getPosition());
 
         List<Point> plannedPath = getPlannedPath();
@@ -249,7 +251,7 @@ public class Courier extends Worker {
             Point nextPoint = plannedPath.get(0);
             Flag flag = map.getFlagAtPoint(nextPoint);
 
-            if (state == GOING_TO_FLAG_TO_DELIVER_CARGO && nextPoint.equals(getCargo().getNextFlagOrBuilding())) {
+            if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
 
                 /* Wait if there is no space at the flag to put down the cargo */
                 if (!flag.hasPlaceForMoreCargo()) {
@@ -263,6 +265,7 @@ public class Courier extends Worker {
         }
 
         /* Return the cargo to storage if the building is torn down */
+        // TODO: handle the case where the building has had time to get fully removed
         else if (state != RETURNING_TO_STORAGE &&
             map.isFlagAtPoint(getPosition()) &&
             (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {

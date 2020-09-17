@@ -39,7 +39,9 @@ public class SawmillWorker extends Worker {
         CUTTING_WOOD,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public SawmillWorker(Player player, GameMap map) {

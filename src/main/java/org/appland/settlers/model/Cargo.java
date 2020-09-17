@@ -4,6 +4,11 @@ import java.util.List;
 
 public class Cargo {
 
+    /*
+    * TODO: simplify re-routing to only look at if the existing target is reachable, otherwise return to storage
+    *
+    * */
+
     private final Material material;
     private final GameMap  map;
 
@@ -143,8 +148,7 @@ public class Cargo {
             returnToStorage();
         } else {
 
-            /* Re-evaluate the route if the current one is not optimal or if it's
-             * no longer available
+            /* Re-evaluate the route if the current one is not optimal or if it's no longer available
              *
              * Note: the path only contains flags and buildings. It does not contain each individual step
             */

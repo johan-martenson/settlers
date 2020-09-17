@@ -1655,7 +1655,7 @@ public class Utils {
         assertEquals(flag.getStackedCargo().size(), amount);
     }
 
-    public static void waitForBuildingsToBeConstructed(Building... buildings) throws Exception {
+    public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -1995,6 +1995,49 @@ public class Utils {
         }
 
         assertEquals(point, courier.getPosition());
+    }
+
+    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Material material, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 5000; i++) {
+
+            boolean allWorkersCarryCargo = true;
+
+            for (Worker worker : workers) {
+                if (worker.getCargo() == null || worker.getCargo().getMaterial() != material) {
+                    allWorkersCarryCargo = false;
+
+                    break;
+                }
+            }
+
+            if (allWorkersCarryCargo) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Worker worker : workers) {
+            assertNotNull(worker.getCargo());
+            assertEquals(worker.getCargo().getMaterial(), material);
+        }
+    }
+
+    public static void verifyWorkersDoNotMove(GameMap map, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+        Map<Worker, Point> positions = new HashMap<>();
+
+        for (Worker worker : workers) {
+            positions.put(worker, worker.getPosition());
+        }
+
+        for (int i = 0; i < 500; i++) {
+
+            map.stepTime();
+
+            for (Worker worker : workers) {
+                assertEquals(worker.getPosition(), positions.get(worker));
+            }
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

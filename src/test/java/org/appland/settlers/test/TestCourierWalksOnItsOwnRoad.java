@@ -25,17 +25,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class TestCourierWalksOnItsOwnRoad {
 
-    /*
-    * TODO: Verify that the courier walks on its own road when shorter alternatives exist in these cases...
-    *   - Flag 1 to flag 2
-    *   - Flag 2 to flag 1
-    *   - Flag 1 to building 2 DONE
-    *   - Flag 2 to building 1
-    *   - Building 1 to building 2
-    *   - Building 2 to building 1
-    *   - All of the above also for donkeys
-    * */
-
     @Test
     public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondFlag() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
@@ -351,8 +340,4 @@ public class TestCourierWalksOnItsOwnRoad {
                 headquarter.getFlag().getPosition().downRight(),
                 headquarter.getFlag().getPosition());
     }
-
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstBuildingToSecondBuilding() {}
-
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondBuildingToFirstBuilding() {}
 }
