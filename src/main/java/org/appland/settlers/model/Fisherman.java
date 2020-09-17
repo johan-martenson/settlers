@@ -124,7 +124,7 @@ public class Fisherman extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             } else {
                 state = WAITING_FOR_SPACE_ON_FLAG;
             }
@@ -135,7 +135,7 @@ public class Fisherman extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == Fisherman.State.DEAD) {
             if (countdown.hasReachedZero()) {

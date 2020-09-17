@@ -96,7 +96,7 @@ public class Armorer extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == PRODUCING_WEAPON) {
             if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
@@ -122,7 +122,7 @@ public class Armorer extends Worker {
 
                         setTarget(getHome().getFlag().getPosition());
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
                     }
                 } else {
                     countdown.step();

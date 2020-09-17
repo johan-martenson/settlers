@@ -527,7 +527,7 @@ public class Utils {
         }
     }
 
-    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) throws Exception {
+    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) throws InvalidRouteException {
         GameMap map = building.getMap();
         Player player = building.getPlayer();
 
@@ -1033,7 +1033,7 @@ public class Utils {
         assertEquals(map.getTileDownLeft(point), vegetation);
     }
 
-    public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws Exception {
+    public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
             assertEquals(worker.getHome().getPosition(), worker.getPosition());
@@ -1612,7 +1612,7 @@ public class Utils {
         cargo.setPosition(flag.getPosition());
         cargo.setTarget(building);
 
-        flag.promiseCargo();
+        flag.promiseCargo(cargo);
         flag.putCargo(cargo);
 
         return cargo;
@@ -1643,7 +1643,7 @@ public class Utils {
         mill.putCargo(new Cargo(material, mill.getMap()));
     }
 
-    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws Exception {
+    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws InvalidRouteException, InvalidUserActionException {
         for (int i = 0; i < 20000; i++) {
             if (flag.getStackedCargo().size() == amount) {
                 break;
@@ -1681,7 +1681,7 @@ public class Utils {
         }
     }
 
-    public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws Exception {
+    public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         for (int i = 0; i < 4000; i++) {
@@ -2038,6 +2038,50 @@ public class Utils {
                 assertEquals(worker.getPosition(), positions.get(worker));
             }
         }
+    }
+
+    public static void waitForCouriersToGetBlocked(GameMap map, Courier... couriers) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 20000; i++) {
+
+            boolean allCouriersBlocked = true;
+
+            for (Courier courier : couriers) {
+
+                if (courier.getCargo() != null && courier.getTarget() == null && !map.isFlagAtPoint(courier.getPosition())) {
+                    continue;
+                }
+
+                allCouriersBlocked = false;
+
+                break;
+            }
+
+            if (allCouriersBlocked) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Courier courier : couriers) {
+            assertNotNull(courier.getCargo());
+            assertNull(courier.getTarget());
+            assertFalse(map.isFlagAtPoint(courier.getPosition()));
+        }
+    }
+
+    public static void deliverCargos(Building building, Material material, int amount) {
+        for (int i = 0; i < amount; i++) {
+            deliverCargo(building, material);
+        }
+    }
+
+    public static Cargo retrieveOneCargo(Flag flag) {
+        Cargo cargo = flag.getStackedCargo().get(0);
+
+        flag.retrieveCargo(cargo);
+
+        return cargo;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

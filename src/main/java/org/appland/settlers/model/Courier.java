@@ -75,7 +75,7 @@ public class Courier extends Worker {
 
                 setTarget(flag.getPosition());
 
-                flag.promiseCargo();
+                flag.promiseCargo(getCargo());
             }
         }
     }
@@ -259,7 +259,7 @@ public class Courier extends Worker {
 
                     stopWalkingToTarget();
                 } else {
-                    flag.promiseCargo();
+                    flag.promiseCargo(getCargo());
                 }
             }
         }
@@ -428,7 +428,7 @@ public class Courier extends Worker {
             } else {
                 List<Point> toWalk = new LinkedList<>(assignedRoad.getWayPoints());
 
-                Collections.reverse(assignedRoad.getWayPoints());
+                Collections.reverse(toWalk);
 
                 setTargetWithPath(toWalk);
             }

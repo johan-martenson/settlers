@@ -84,7 +84,7 @@ public class WellWorker extends Worker {
 
                     state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                    getHome().getFlag().promiseCargo();
+                    getHome().getFlag().promiseCargo(getCargo());
                 } else {
                     state = WellWorker.State.WAITING_FOR_SPACE_ON_FLAG;
                 }
@@ -102,7 +102,7 @@ public class WellWorker extends Worker {
 
                 state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {

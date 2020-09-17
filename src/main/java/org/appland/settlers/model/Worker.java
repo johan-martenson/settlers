@@ -156,9 +156,7 @@ public abstract class Worker {
 
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
 
-            /* Arrival at target is already handled so in this branch the
-             * worker is at a fixed point but not the target point
-             * */
+            /* Arrival at target is already handled so in this branch the worker is at a fixed point but not the target point */
 
             /* Start the next part of the road */
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);

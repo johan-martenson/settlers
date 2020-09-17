@@ -12,6 +12,9 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
@@ -30,6 +33,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FLOUR;
+import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -2342,5 +2346,87 @@ public class TestMill {
         }
 
         assertFalse(map.getWorkers().contains(miller));
+    }
+
+    @Test
+    public void testWorkerCanDeliverAfterHavingWaited() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(7, 9);
+        Mill mill0 = map.placeBuilding(new Mill(player0), point1);
+
+        /* Place road to connect the mill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the mill to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(mill0);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(mill0);
+
+        /* Fill the mill's flag */
+        Utils.placeCargos(map, GOLD, 8, mill0.getFlag(), headquarter0);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Give the miller wheat to mill */
+        Utils.deliverCargo(mill0, WHEAT);
+
+        /* Wait for the miller to produce flour */
+        Utils.verifyWorkerStaysAtHome(mill0.getWorker(), map);
+
+        assertEquals(mill0.getFlag().getStackedCargo().size(), 8);
+
+        /* Remove one cargo so the miller can deliver */
+        Utils.retrieveOneCargo(mill0.getFlag());
+
+        assertEquals(mill0.getFlag().getStackedCargo().size(), 7);
+
+        /* Wait for the miller to deliver its cargo */
+        map.stepTime();
+
+        assertFalse(mill0.getWorker().isInsideBuilding());
+        assertNotNull(mill0.getWorker().getCargo());
+        assertEquals(mill0.getWorker().getTarget(), mill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mill0.getWorker(), mill0.getFlag().getPosition());
+
+        assertEquals(mill0.getFlag().getStackedCargo().size(), 8);
+        assertEquals(mill0.getWorker().getTarget(), mill0.getPosition());
+        assertNull(mill0.getWorker().getCargo());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mill0.getWorker(), mill0.getPosition());
+
+        /* Make the miller produce one more cargo and check that it can't be delivered */
+        Utils.deliverCargo(mill0, WHEAT);
+
+        Utils.verifyWorkerStaysAtHome(mill0.getWorker(), map);
+
+        /* Verify that the miller can deliver when one of the cargos is removed */
+        Utils.retrieveOneCargo(mill0.getFlag());
+
+        assertEquals(mill0.getFlag().getStackedCargo().size(), 7);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, mill0.getWorker());
+
+        assertFalse(mill0.getWorker().isInsideBuilding());
+        assertNotNull(mill0.getWorker().getCargo());
+        assertEquals(mill0.getWorker().getTarget(), mill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mill0.getWorker(), mill0.getFlag().getPosition());
+
+        assertEquals(mill0.getFlag().getStackedCargo().size(), 8);
+        assertEquals(mill0.getWorker().getTarget(), mill0.getPosition());
+        assertNull(mill0.getWorker().getCargo());
     }
 }

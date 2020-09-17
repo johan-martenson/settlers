@@ -131,7 +131,7 @@ public class Metalworker extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
 
         } else if (state == MAKING_TOOL) {
@@ -173,7 +173,7 @@ public class Metalworker extends Worker {
 
                         setTarget(getHome().getFlag().getPosition());
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
                     }
                 } else {
                     countdown.step();

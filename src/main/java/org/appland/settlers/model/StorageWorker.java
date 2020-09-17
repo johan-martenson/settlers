@@ -176,7 +176,7 @@ public class StorageWorker extends Worker {
 
                         state = State.DELIVERING_CARGO_TO_FLAG;
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
                     }
                 }
             } else {

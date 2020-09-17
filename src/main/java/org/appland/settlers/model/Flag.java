@@ -1,7 +1,9 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Flag implements EndPoint {
 
@@ -12,14 +14,14 @@ public class Flag implements EndPoint {
     private int    geologistsCalled;
     private int    scoutsCalled;
     private Player player;
-    private int    promisedCargo;
+    private Set<Cargo> promisedCargo;
 
     public Flag(Point point) {
         position         = point;
         stackedCargo     = new ArrayList<>();
         geologistsCalled = 0;
         scoutsCalled     = 0;
-        promisedCargo    = 0;
+        promisedCargo    = new HashSet<>();
     }
 
     Flag(Player player, Point point) {
@@ -42,7 +44,7 @@ public class Flag implements EndPoint {
         cargo.rerouteIfNeeded();
 
         /* Remove the promise for this cargo */
-        promisedCargo = promisedCargo - 1;
+        promisedCargo.remove(cargo);
 
         /* Report that the flag has changed */
         if (player != null) {
@@ -208,12 +210,12 @@ public class Flag implements EndPoint {
         this.player = player;
     }
 
-    public void promiseCargo() {
-        promisedCargo = promisedCargo + 1;
+    public void promiseCargo(Cargo cargo) {
+        promisedCargo.add(cargo);
     }
 
     public boolean hasPlaceForMoreCargo() {
-        return stackedCargo.size() + promisedCargo < MAX_NUMBER_OF_STACKED_CARGO;
+        return stackedCargo.size() + promisedCargo.size() < MAX_NUMBER_OF_STACKED_CARGO;
     }
 
     public void onRemove() {

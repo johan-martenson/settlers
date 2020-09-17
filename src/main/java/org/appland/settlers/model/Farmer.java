@@ -162,7 +162,7 @@ public class Farmer extends Worker {
                 state = GOING_OUT_TO_PUT_CARGO;
 
                 /* Tell the flag that the cargo will be delivered */
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             } else {
                 state = WAITING_FOR_SPACE_ON_FLAG;
             }
@@ -173,7 +173,7 @@ public class Farmer extends Worker {
                 setTarget(getHome().getFlag().getPosition());
 
                 /* Tell the flag that the cargo will be delivered */
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == DEAD) {
             if (countdown.hasReachedZero()) {

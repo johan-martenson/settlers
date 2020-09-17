@@ -122,7 +122,7 @@ public class PigBreeder extends Worker {
 
                     setTarget(getHome().getFlag().getPosition());
 
-                    getHome().getFlag().promiseCargo();
+                    getHome().getFlag().promiseCargo(getCargo());
                 } else {
                     state = WAITING_FOR_SPACE_ON_FLAG;
                 }
@@ -140,7 +140,7 @@ public class PigBreeder extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {

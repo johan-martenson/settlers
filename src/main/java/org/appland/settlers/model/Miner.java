@@ -123,7 +123,7 @@ public class Miner extends Worker {
 
                         state = GOING_OUT_TO_FLAG;
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     }
@@ -150,7 +150,7 @@ public class Miner extends Worker {
 
                 state = GOING_OUT_TO_FLAG;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {

@@ -174,7 +174,7 @@ public class Stonemason extends Worker {
 
                 state = State.GOING_OUT_TO_PUT_CARGO;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             } else {
                 state = Stonemason.State.WAITING_FOR_SPACE_ON_FLAG;
             }
@@ -186,7 +186,7 @@ public class Stonemason extends Worker {
 
                 state = State.GOING_OUT_TO_PUT_CARGO;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {

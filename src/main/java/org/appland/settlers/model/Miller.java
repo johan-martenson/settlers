@@ -73,15 +73,14 @@ public class Miller extends Worker {
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
 
             if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
                 Cargo cargo = new Cargo(FLOUR, map);
 
                 setCargo(cargo);
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
 
                 state = GOING_TO_FLAG_WITH_CARGO;
-
-                getHome().getFlag().promiseCargo();
 
                 setTarget(getHome().getFlag().getPosition());
             }
@@ -106,7 +105,7 @@ public class Miller extends Worker {
 
                         state = GOING_TO_FLAG_WITH_CARGO;
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
 
                     /* Wait for space on the flag if it's full */
                     } else {

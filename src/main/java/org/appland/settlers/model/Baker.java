@@ -92,7 +92,7 @@ public class Baker extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
 
         } else if (state == BAKING_BREAD) {
@@ -119,7 +119,7 @@ public class Baker extends Worker {
 
                         setTarget(getHome().getFlag().getPosition());
 
-                        getHome().getFlag().promiseCargo();
+                        getHome().getFlag().promiseCargo(getCargo());
                     }
                 } else {
                     countdown.step();

@@ -127,7 +127,7 @@ public class WoodcutterWorker extends Worker {
 
                 state = State.GOING_OUT_TO_PUT_CARGO;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             } else {
                 state = State.WAITING_FOR_PLACE_ON_FLAG;
             }
@@ -137,7 +137,7 @@ public class WoodcutterWorker extends Worker {
 
                 state = State.GOING_OUT_TO_PUT_CARGO;
 
-                getHome().getFlag().promiseCargo();
+                getHome().getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {

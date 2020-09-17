@@ -3,13 +3,21 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Well;
+import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,6 +26,7 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FLOUR;
+import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
@@ -724,5 +733,116 @@ public class TestLimitedSpaceOnFlag {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, mill.getPosition());
 
         assertNull(courier1.getCargo());
+    }
+
+    @Test
+    public void testFlagWithDirectBuildingAndBidirectionalTrafficCannotExceedLimit() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 7);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(17, 7);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place fortress */
+        Point point2 = new Point(19, 9);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0);
+
+        /* Place sawmill connected directly to the flag */
+        Mill mill = map.placeBuilding(new Mill(player0), flag0.getPosition().upLeft());
+
+        /* Place woodcutter */
+        Point point3 = new Point(22, 12);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point3);
+
+        /* Place forester */
+        Point point4 = new Point(26, 12);
+        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
+
+        /* Connect the woodcutter with the forester */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), foresterHut0.getFlag());
+
+        /* Place woodcutter */
+        Point point5 = new Point(22, 8);
+        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point5);
+
+        /* Place forester */
+        Point point6 = new Point(26, 8);
+        ForesterHut foresterHut1 = map.placeBuilding(new ForesterHut(player0), point6);
+
+        /* Connect the woodcutter with the forester */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), foresterHut1.getFlag());
+
+        /* Place woodcutter */
+        Point point7 = new Point(22, 4);
+        Woodcutter woodcutter2 = map.placeBuilding(new Woodcutter(player0), point7);
+
+        /* Place forester */
+        Point point8 = new Point(26, 4);
+        ForesterHut foresterHut2 = map.placeBuilding(new ForesterHut(player0), point8);
+
+        /* Connect the woodcutter with the forester */
+        Road road2 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), foresterHut2.getFlag());
+
+        /* Connect the first woodcutter with the flag */
+        Road road3 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), flag0);
+
+        /* Connect the second woodcutter with the flag */
+        Road road4 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), flag0);
+
+        /* Connect the third woodcutter with the flag */
+        Road road5 = map.placeAutoSelectedRoad(player0, woodcutter2.getFlag(), flag0);
+
+        /* Connect the flag with the headquarter */
+        Road road6 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
+
+        /* Wait for the buildings to get constructed */
+        Utils.waitForBuildingsToBeConstructed(mill, woodcutter0, foresterHut0, woodcutter1, foresterHut1, woodcutter2, foresterHut2);
+
+        /* Wait for the buildings to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(mill, woodcutter0, foresterHut0, woodcutter1, foresterHut1, woodcutter2, foresterHut2);
+
+        /* Put some initial load on the flag */
+        Utils.placeCargos(map, GOLD, 7, flag0, headquarter);
+        Utils.placeCargos(map, GOLD, 7, woodcutter0.getFlag(), headquarter);
+        Utils.placeCargos(map, GOLD, 7, woodcutter1.getFlag(), headquarter);
+        Utils.placeCargos(map, GOLD, 7, woodcutter2.getFlag(), headquarter);
+
+        /* Make wood the highest priority to transport */
+        player0.setTransportPriority(0, TransportCategory.WHEAT);
+
+        /* Make gold the lowest priority to transport */
+        player0.setTransportPriority(14, TransportCategory.GOLD);
+
+        /* Put a lot of wheat into the headquarter */
+        Utils.adjustInventoryTo(headquarter, WHEAT, 40);
+
+        /* Wait for the couriers to get blocked at the same time */
+        //Utils.waitForCouriersToGetBlocked(map, road6.getCourier(), road3.getCourier(), road4.getCourier(), road5.getCourier());
+
+        /* Wait for the flag to get full of cargos */
+        Utils.waitForFlagToGetStackedCargo(map, flag0, 8);
+
+        /* Verify that the flag stays full of cargos and that the amount of cargos stays at the limit */
+        for (int i = 0; i < 400; i++) {
+            assertTrue(flag0.getStackedCargo().size() < 9);
+
+            map.stepTime();
+        }
     }
 }
