@@ -129,6 +129,7 @@ public class Flag implements EndPoint {
             EndPoint otherEndOfRoad = road.getOtherEndPoint(this);
 
             List<Point> bestPath = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(this, target);
+
             List<Point> pathThroughRoad = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(otherEndOfRoad, target, this.getPosition());
 
             /* Filter cargos where there is no road available */

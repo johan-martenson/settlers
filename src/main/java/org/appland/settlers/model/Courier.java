@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
@@ -150,9 +153,8 @@ public class Courier extends Worker {
                 }
             }
 
-            /* If the courier is on the road closest to the building, keep
-             the state and target so that it goes to the building and
-             delivers the cargo
+            /* If the courier is on the road closest to the building, keep the state and target so that it goes to
+               the building and delivers the cargo
              */
             /* If the courier is going to pick up a new cargo, cancel and go to the new road */
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
@@ -178,7 +180,7 @@ public class Courier extends Worker {
         if (state == WALKING_TO_ROAD) {
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
-            pickUpCargo();
+            pickUpCargoAndGoDeliver();
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
 
             Building building = map.getBuildingAtPoint(getPosition());
@@ -203,13 +205,13 @@ public class Courier extends Worker {
             deliverCargo();
 
             if (map.getFlagAtPoint(getPosition()).hasCargoWaitingForRoad(assignedRoad)) {
-                pickUpCargo();
+                pickUpCargoAndGoDeliver();
             } else {
                 planAfterDelivery();
             }
         } else if (state == GOING_BACK_TO_ROAD) {
             if (map.getFlagAtPoint(getPosition()).hasCargoWaitingForRoad(assignedRoad)) {
-                pickUpCargo();
+                pickUpCargoAndGoDeliver();
             } else {
                 state = RETURNING_TO_IDLE_SPOT;
                 setTarget(idlePoint);
@@ -376,7 +378,7 @@ public class Courier extends Worker {
         }
     }
 
-    private void pickUpCargo() throws InvalidRouteException {
+    private void pickUpCargoAndGoDeliver() throws InvalidRouteException {
 
         Flag endPoint = map.getFlagAtPoint(getPosition());
 
@@ -405,11 +407,28 @@ public class Courier extends Worker {
             cargoTarget.downRight().equals(assignedRoad.getEnd())) {
             state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
-            setTarget(cargoTarget);
+            List<Point> roadPoints = assignedRoad.getWayPoints();
+            List<Point> toWalk = new ArrayList<>(roadPoints);
+
+            if (!roadPoints.get(0).equals(getPosition())) {
+                Collections.reverse(toWalk);
+            }
+
+            toWalk.add(cargoTarget);
+
+            setTargetWithPath(toWalk);
         } else {
             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-            setTarget(assignedRoad.getOtherPoint(getPosition()));
+            if (assignedRoad.getWayPoints().get(0).equals(getPosition())) {
+                setTargetWithPath(assignedRoad.getWayPoints());
+            } else {
+                List<Point> toWalk = new LinkedList<>(assignedRoad.getWayPoints());
+
+                Collections.reverse(assignedRoad.getWayPoints());
+
+                setTargetWithPath(toWalk);
+            }
         }
     }
 

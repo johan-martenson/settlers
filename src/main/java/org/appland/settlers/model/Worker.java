@@ -9,6 +9,7 @@ import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -440,6 +441,24 @@ public abstract class Worker {
     protected void setOffroadTargetWithPath(List<Point> pathToWalk) throws InvalidRouteException {
         target = pathToWalk.get(pathToWalk.size() - 1);
         path = pathToWalk;
+
+        if (position.equals(target)) {
+            state = IDLE_OUTSIDE;
+
+            handleArrival();
+        } else {
+            state = WALKING_AND_EXACTLY_AT_POINT;
+
+            /* Report the new target so it can be monitored */
+            getMap().reportWorkerWithNewTarget(this);
+        }
+    }
+
+    void setTargetWithPath(List<Point> pathToWalk) throws InvalidRouteException {
+        target = pathToWalk.get(pathToWalk.size() - 1);
+        path = new ArrayList<>(pathToWalk);
+
+        path.remove(0);
 
         if (position.equals(target)) {
             state = IDLE_OUTSIDE;

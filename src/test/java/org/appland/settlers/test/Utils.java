@@ -1606,7 +1606,7 @@ public class Utils {
         }
     }
 
-    public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) throws Exception {
+    public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) throws InvalidRouteException {
         Cargo cargo = new Cargo(material, map);
 
         cargo.setPosition(flag.getPosition());
@@ -1618,7 +1618,7 @@ public class Utils {
         return cargo;
     }
 
-    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) throws Exception {
+    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) throws InvalidRouteException {
         for (int i = 0; i < amount; i++) {
             placeCargo(map, material, flag, building);
         }
@@ -1953,6 +1953,48 @@ public class Utils {
         }
 
         assertTrue(worker.isExactlyAtPoint());
+    }
+
+    public static void verifyWorkerWalksOnPath(GameMap map, Worker worker, Point... points) throws InvalidRouteException, InvalidUserActionException {
+
+        System.out.println(Arrays.asList(points));
+
+        for (Point point : points) {
+
+            System.out.println(point);
+
+            assertTrue(worker.isExactlyAtPoint());
+            assertEquals(point, worker.getPosition());
+
+            if (worker.getPosition().equals(points[points.length - 1])) {
+                break;
+            }
+
+            map.stepTime();
+
+            for (int i = 0; i < 20; i++) {
+
+                if (worker.isExactlyAtPoint()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            waitForWorkerToBeExactlyOnPoint(worker, map);
+        }
+    }
+
+    public static void verifyWorkerDoesNotMove(GameMap map, Courier courier, int time) throws InvalidRouteException, InvalidUserActionException {
+        Point point = courier.getPosition();
+
+        for (int i = 0; i < time; i++) {
+            assertTrue(courier.isExactlyAtPoint());
+
+            map.stepTime();
+        }
+
+        assertEquals(point, courier.getPosition());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

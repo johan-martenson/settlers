@@ -711,30 +711,32 @@ public class GameUtils {
             if (currentPoint.equals(goal)) {
                 List<Point> path = new ArrayList<>();
 
-                /* Re-construct the path taken */
-                while (currentPoint != start) {
-                    path.add(0, currentPoint);
-
+                /* Re-construct the path taken, backwards from the goal */
+                while (!currentPoint.equals(start)) {
                     Road road = cameVia.get(currentPoint);
 
                     /* Follow the road and add up the points */
                     int numberWayPoints = road.getWayPoints().size();
 
-                    if (road.getStart().equals(currentPoint)) {
+                    List<Point> roadPoints = road.getWayPoints();
 
-                        for (int i = 1; i < numberWayPoints; i++) {
-                            path.add(0, road.getWayPoints().get(i));
+                    if (roadPoints.get(0).equals(currentPoint)) {
+
+                        for (int i = 0; i < numberWayPoints - 1; i++) {
+                            path.add(0, roadPoints.get(i));
                         }
 
-                        currentPoint = road.getEnd();
+                        currentPoint = roadPoints.get(roadPoints.size() - 1);
                     } else {
-                        for (int i = numberWayPoints - 2; i >= 0; i--) {
-                            path.add(0, road.getWayPoints().get(i));
+                        for (int i = numberWayPoints - 1; i > 0; i--) {
+                            path.add(0, roadPoints.get(i));
                         }
 
-                        currentPoint = road.getStart();
+                        currentPoint = roadPoints.get(0);
                     }
                 }
+
+                path.add(0, currentPoint);
 
                 return path;
             }
