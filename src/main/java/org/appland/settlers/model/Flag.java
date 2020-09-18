@@ -8,6 +8,7 @@ import java.util.Set;
 public class Flag implements EndPoint {
 
     private static final int MAX_NUMBER_OF_STACKED_CARGO = 8;
+
     private final List<Cargo> stackedCargo;
 
     private Point  position;

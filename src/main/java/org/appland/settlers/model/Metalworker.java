@@ -27,10 +27,10 @@ public class Metalworker extends Worker {
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+    private final Map<Material, Integer> producedDuringPeriod;
 
     private State state;
     private int currentToolIndex;
-    private final Map<Material, Integer> producedDuringPeriod;
 
     protected enum State {
         WALKING_TO_TARGET,
