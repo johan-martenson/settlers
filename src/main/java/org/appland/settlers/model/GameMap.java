@@ -795,6 +795,11 @@ public class GameMap {
             throw new InvalidUserActionException("Can only have one headquarter placed per player");
         }
 
+        /* Don't allow placing a headquarter so that it's flag ends up too close to the border */
+        if (isFirstHouse && (width - point.x < 4 || point.y < 4)) {
+            throw new InvalidUserActionException("Cannot place headquarter too close to the border so there is no space for its flag.");
+        }
+
         /* Verify that the point is available for the chosen building */
         if (house.isMine()) {
             if (!isAvailableMinePoint(house.getPlayer(), point)) {
@@ -1137,7 +1142,7 @@ public class GameMap {
         wayPoints.add(building.getPosition());
         wayPoints.add(building.getFlag().getPosition());
 
-        Road road = new Road(building.getPlayer(), building, wayPoints, building.getFlag());
+        Road road = new Road(building.getPlayer(), wayPoints);
 
         road.setMap(this);
         road.setDriveway();
@@ -1236,10 +1241,7 @@ public class GameMap {
             throw new InvalidUserActionException(point + " in road is invalid");
         }
 
-        Flag startFlag = mapPointStart.getFlag();
-        Flag endFlag   = mapPointEnd.getFlag();
-
-        Road road = new Road(player, startFlag, wayPoints, endFlag);
+        Road road = new Road(player, wayPoints);
 
         /* Set the map field in the road */
         road.setMap(this);

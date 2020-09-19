@@ -1158,4 +1158,42 @@ public class TestMisc {
 
         assertTrue(woodcutter.isReady());
     }
+
+    @Test
+    public void testCannotPlaceHeadquarterTooCloseToRightEdgeOfMap() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Verify that it's not possible to place a headquarter so that it's flag will be on the border */
+        Point point0 = new Point(7, 7);
+        try {
+            map.placeBuilding(new Headquarter(player0), point0);
+            fail();
+        } catch (InvalidUserActionException e) {}
+
+        assertEquals(map.getBuildings().size(), 0);
+    }
+
+    @Test
+    public void testCannotPlaceHeadquarterTooCloseToBottomEdgeOfMap() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Verify that it's not possible to place a headquarter so that it's flag will be on the border */
+        Point point0 = new Point(7, 3);
+        try {
+            map.placeBuilding(new Headquarter(player0), point0);
+            fail();
+        } catch (InvalidUserActionException e) {}
+
+        assertEquals(map.getBuildings().size(), 0);
+    }
 }

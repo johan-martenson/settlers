@@ -282,11 +282,11 @@ public class TestRoads {
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        GameMap map = new GameMap(players, 16, 16);
 
         /* Place headquarter */
         Point point0 = new Point(12, 4);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flags */
         Point point1 = new Point(3, 3);

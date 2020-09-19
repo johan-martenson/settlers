@@ -466,7 +466,7 @@ public class TestIronMine {
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        GameMap map = new GameMap(players, 12, 12);
 
         /* Place headquarter */
         Point point0 = new Point(7, 7);

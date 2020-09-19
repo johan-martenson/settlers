@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Road {
@@ -19,31 +19,43 @@ public class Road {
     private boolean isMainRoad;
     private GameMap map;
 
-    protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) {
+    protected Road(Player player, List<Point> wayPoints) {
+
         if (areRoadStepsTooLong(wayPoints)) {
             throw new InvalidGameLogicException("The steps are too long in " + wayPoints);
         }
 
-        this.start = start;
-        this.end = end;
+        this.player = player;
+        this.map = player.getMap();
+
+        steps = Collections.unmodifiableList(wayPoints);
+
+        Point pointStart = steps.get(0);
+        Point pointEnd = steps.get(steps.size() - 1);
+
+        MapPoint mapPointStart = map.getMapPoint(pointStart);
+        MapPoint mapPointEnd = map.getMapPoint(pointEnd);
+
+        if (mapPointStart.isFlag()) {
+            start = mapPointStart.getFlag();
+        } else {
+            start = mapPointStart.getBuilding();
+        }
+
+        if (mapPointEnd.isFlag()) {
+            end = mapPointEnd.getFlag();
+        } else {
+            end = mapPointEnd.getBuilding();
+        }
 
         courier = null;
         donkey  = null;
-
-        steps = new ArrayList<>();
-        steps.addAll(wayPoints);
 
         needsCourier = true;
 
         usage = 0;
 
         isMainRoad = false;
-    }
-
-    protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) {
-        this(startFlag, wayPoints, endFlag);
-
-        this.player = player;
     }
 
     @Override
