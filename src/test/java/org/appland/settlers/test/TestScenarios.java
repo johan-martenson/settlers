@@ -133,9 +133,7 @@ public class TestScenarios {
         assertNull(courierWcToHq.getCargo());
         assertTrue(courierWcToHq.isArrived());
         assertFalse(courierWcToHq.isTraveling());
-
         assertEquals(woodcutter0.getFlag().getStackedCargo().size(), 1);
-        assertTrue(woodcutter0.getFlag().hasCargoWaitingForRoad(wcToHqRoad));
 
         /* Transport cargo one hop */
         map.stepTime();

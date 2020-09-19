@@ -1245,6 +1245,9 @@ public class TestCatapult {
         /* Connect the first flag with the second flag */
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
+        /* Wait for the catapult to get constructed */
+        Utils.waitForBuildingToBeConstructed(catapult0);
+
         /* Wait for the catapult worker to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 

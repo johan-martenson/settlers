@@ -249,9 +249,6 @@ public class TestCourier {
             assertTrue(courier.isIdle());
 
             assertEquals(courier.getPosition(), point3);
-
-            assertFalse(flag1.hasCargoWaitingForRoad(road0));
-            assertFalse(flag2.hasCargoWaitingForRoad(road0));
             assertFalse(courier.isWalkingToIdlePoint());
 
             map.stepTime();
@@ -300,12 +297,12 @@ public class TestCourier {
 
         /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
+
         map.placeWorker(courier, flag0);
 
         courier.assignToRoad(road0);
 
         /* Verify that the courier first walks to the middle of the road even if there is a cargo to pick up */
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
         assertEquals(courier.getTarget(), middle);
@@ -315,7 +312,6 @@ public class TestCourier {
         assertEquals(courier.getPosition(), middle);
         assertTrue(courier.isArrived());
         assertTrue(courier.isIdle());
-
         assertFalse(courier.isWalkingToIdlePoint());
     }
 
@@ -371,11 +367,8 @@ public class TestCourier {
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         assertEquals(courier.getPosition(), middle);
-
         assertFalse(flag0.getStackedCargo().isEmpty());
-
         assertTrue(courier.isArrived());
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isIdle());
 
         /* Courier detects the cargo */
@@ -447,11 +440,8 @@ public class TestCourier {
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         assertEquals(courier.getPosition(), middle);
-
         assertFalse(flag0.getStackedCargo().isEmpty());
-
         assertTrue(courier.isArrived());
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isIdle());
 
         /* Courier detects the cargo */

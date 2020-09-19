@@ -123,10 +123,8 @@ public class TestGameLogic {
         /* Verify that the worker is idle */
         assertTrue(courier.isIdle());
         assertNull(courier.getCargo());
-
         assertTrue(courier.isArrived());
         assertFalse(courier.isTraveling());
-        assertTrue(flag0.hasCargoWaitingForRoad(courier.getAssignedRoad()));
 
         /* Verify that the worker picks up the cargo and has the sawmill as target */
         map.stepTime();

@@ -307,13 +307,10 @@ public class TestDonkey {
 
         /* Verify that the donkey stays idle when there is nothing to do */
         for (int i = 0; i < 200; i++) {
+
             assertTrue(donkey.isArrived());
             assertTrue(donkey.isIdle());
-
             assertEquals(donkey.getPosition(), point3);
-
-            assertFalse(flag1.hasCargoWaitingForRoad(road0));
-            assertFalse(flag2.hasCargoWaitingForRoad(road0));
             assertFalse(donkey.isWalkingToIdlePoint());
 
             map.stepTime();
@@ -366,9 +363,7 @@ public class TestDonkey {
         donkey.assignToRoad(road0);
 
         /* Verify that the donkey walks to the middle of the road even when there are cargo available for pickup */
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isWalkingToRoad());
-
         assertFalse(donkey.isIdle());
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
@@ -431,11 +426,8 @@ public class TestDonkey {
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
 
         assertEquals(donkey.getPosition(), middle);
-
         assertFalse(flag0.getStackedCargo().isEmpty());
-
         assertTrue(donkey.isArrived());
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isIdle());
 
         /* Donkey detects the cargo */
@@ -506,11 +498,8 @@ public class TestDonkey {
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
 
         assertEquals(donkey.getPosition(), middle);
-
         assertFalse(flag0.getStackedCargo().isEmpty());
-
         assertTrue(donkey.isArrived());
-        assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isIdle());
 
         /* Donkey detects the cargo */

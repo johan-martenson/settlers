@@ -36,7 +36,7 @@ public abstract class Worker {
 
     private static final int SPEED_ADJUST = 1;
 
-    private final Player player;
+    protected final Player player;
     private final Countdown walkCountdown;
 
     private boolean     dead;

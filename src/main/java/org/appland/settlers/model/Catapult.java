@@ -6,7 +6,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.MEDIUM;
 
 @Production(output = {}, requiredGoods = {STONE, STONE, STONE, STONE})
-@HouseSize(size = MEDIUM, material = {PLANK, PLANK,PLANK, PLANK, STONE, STONE})
+@HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE})
 @RequiresWorker(workerType = CATAPULT_WORKER)
 public class Catapult extends Building {
 

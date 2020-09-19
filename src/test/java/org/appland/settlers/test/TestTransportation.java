@@ -483,7 +483,8 @@ public class TestTransportation {
 
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Cargo cargo = quarry0.getFlag().getCargoWaitingForRoad(map.getRoad(storehouse.getFlag().getPosition(), quarry0.getFlag().getPosition()));
+        Cargo cargo = quarry0.getFlag().getStackedCargo().get(0);
+
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
         assertEquals(cargo.getTarget(), storehouse);
         assertEquals(cargo.getMaterial(), STONE);
@@ -565,7 +566,6 @@ public class TestTransportation {
         assertEquals(middleFlag.getStackedCargo().size(), 1);
         assertEquals(middleFlag.getStackedCargo().get(0), cargo);
         assertNull(hqToMdlCr.getCargo());
-        assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
 
         /* Next courier detects the cargo and walks there */
         map.stepTime();
@@ -1113,8 +1113,9 @@ public class TestTransportation {
 
         /* Place flags */
         Point point2 = new Point(19, 15);
-        Flag flag0 = map.placeFlag(player0, point2);
         Point point3 = new Point(10, 10);
+
+        Flag flag0 = map.placeFlag(player0, point2);
         Flag flag1 = map.placeFlag(player0, point3);
 
         /* Place roads */
@@ -1123,23 +1124,8 @@ public class TestTransportation {
         Road road2 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
         Road road3 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
-        /* Populate the roads */
-        Courier courier = new Courier(player0, map);
-        Courier courier2 = new Courier(player0, map);
-        Courier courier3 = new Courier(player0, map);
-        Courier courier4 = new Courier(player0, map);
-
-        map.placeWorker(courier, headquarter0.getFlag());
-        courier.assignToRoad(road0);
-
-        map.placeWorker(courier2, flag0);
-        courier2.assignToRoad(road1);
-
-        map.placeWorker(courier3, headquarter0.getFlag());
-        courier3.assignToRoad(road2);
-
-        map.placeWorker(courier4, flag1);
-        courier4.assignToRoad(road3);
+        /* Wait for the roads to get populated */
+        Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2, road3);
 
         /* Remove all planks, wood and stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, PLANK, 0);
@@ -1147,15 +1133,14 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Give the couriers time to get to the middle of their roads */
-        Utils.fastForward(100, map);
+        Courier courier = road0.getCourier();
+        Courier courier3 = road2.getCourier();
+        Courier courier4 = road3.getCourier();
 
-        /* Place a cargo on the headquarter's flag */
-        Cargo cargo = new Cargo(PLANK, map);
-        headquarter0.getFlag().putCargo(cargo);
+        Utils.waitForCouriersToBeIdle(map, courier, courier3, courier4);
 
-        /* Target the cargo to the sawmill */
-        cargo.setTarget(sawmill);
-        sawmill.promiseDelivery(PLANK);
+        /* Place a cargo on the headquarter's flag for the sawmill */
+        Cargo cargo = Utils.placeCargo(map, WOOD, headquarter0.getFlag(), sawmill);
 
         /* Verify that the cargo is planned to go via first flag */
         assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());

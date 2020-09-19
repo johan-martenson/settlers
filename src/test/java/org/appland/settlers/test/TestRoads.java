@@ -1437,8 +1437,8 @@ public class TestRoads {
         Storehouse headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
+        Point point1 = new Point(14, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         /* Place road */
         Point middlePoint1 = new Point(8, 4);
@@ -1448,31 +1448,29 @@ public class TestRoads {
                 middlePoint1,
                 middlePoint2,
                 middlePoint3,
-                endPoint);
+                point1);
 
-        /* Place original courier */
-        Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, endFlag);
-        courier.assignToRoad(road);
-
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        /* Wait for a courier to occupy the road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
 
         assertEquals(courier.getAssignedRoad(), road);
         assertEquals(road.getCourier(), courier);
+
+        /* Wait for the courier to be idle at the middle the road */
+        Utils.waitForCouriersToBeIdle(map, courier);
+
         assertTrue(courier.isIdle());
         assertTrue(courier.isAt(middlePoint2));
 
         /* Make the courier pick up a cargo and start walking to deliver it */
-        Cargo cargo = new Cargo(BEER, map);
-        endFlag.putCargo(cargo);
-        cargo.setTarget(headquarter);
+        Cargo cargo = Utils.placeCargo(map, BEER, flag0, headquarter);
 
         map.stepTime();
 
-        assertEquals(courier.getTarget(), endPoint);
+        assertEquals(courier.getTarget(), point1);
 
         /* Fast forward until the courier picks up the cargo */
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
 
         map.stepTime();
 

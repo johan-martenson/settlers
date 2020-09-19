@@ -138,16 +138,18 @@ public class TestCourierWalksOnItsOwnRoad {
         /* Remove all planks from the headquarter */
         Utils.adjustInventoryTo(headquarter, PLANK, 0);
 
-        /* Wait for the second road to get occupied */
+        /* Wait for the roads to get occupied */
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road2);
+        Courier courier3 = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
-        /* Place a cargo for the courier to pick up */
+        Utils.waitForCouriersToBeIdle(map, courier, courier3);
+
+        /* Place cargo for the couriers to pick up */
         Utils.placeCargo(map, PLANK, woodcutter.getFlag(), headquarter);
+        Utils.placeCargo(map, STONE, flag0, woodcutter);
 
-        /* Wait for the courier to carry cargo */
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
-
-        assertEquals(courier.getCargo().getTarget(), headquarter);
+        /* Wait for the couriers to carry cargo */
+        Utils.fastForwardUntilWorkersCarryCargo(map, courier, courier3);
 
         /* Fill up the first flag to make it impossible to deliver cargo the fast way */
         Utils.placeCargos(map, STONE, 8, flag1, woodcutter);

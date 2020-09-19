@@ -422,7 +422,7 @@ public class Utils {
         return worker.getCargo();
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws Exception {
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws InvalidRouteException, InvalidUserActionException {
         for (int j = 0; j < 2000; j++) {
             if (cargo.equals(worker.getCargo())) {
                 break;
@@ -1159,7 +1159,7 @@ public class Utils {
         return cargo;
     }
 
-    public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws Exception {
+    public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws InvalidRouteException, InvalidUserActionException {
         Set<Courier> couriers = new HashSet<>();
 
         for (int i = 0; i < 1000; i++) {
@@ -1204,7 +1204,7 @@ public class Utils {
     public static void waitForBuildingToBeConstructed(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
-        for (int i = 0; i < 3000; i++) {
+        for (int i = 0; i < 4000; i++) {
 
             if (building.isReady()) {
                 break;
@@ -1576,12 +1576,15 @@ public class Utils {
 
         System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
     }
+    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws InvalidRouteException, InvalidUserActionException {
+        List<Courier> listOfCouriers = new ArrayList<>();
 
-    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws Exception {
-        waitForCouriersToBeIdle(map, Arrays.asList(couriers));
+        listOfCouriers.addAll(Arrays.asList(couriers));
+
+        waitForCouriersToBeIdle(map, listOfCouriers);
     }
 
-    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws Exception {
+    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws InvalidRouteException, InvalidUserActionException {
 
         for (int i = 0; i < 5000; i++) {
             boolean allIdle = true;
@@ -2082,6 +2085,33 @@ public class Utils {
         flag.retrieveCargo(cargo);
 
         return cargo;
+    }
+
+    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 5000; i++) {
+
+            boolean allWorkersCarryCargo = true;
+
+            for (Worker worker : workers) {
+                if (worker.getCargo() != null) {
+                    continue;
+                }
+
+                allWorkersCarryCargo = false;
+
+                break;
+            }
+
+            if (allWorkersCarryCargo) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Worker worker : workers) {
+            assertNotNull(worker.getCargo());
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
