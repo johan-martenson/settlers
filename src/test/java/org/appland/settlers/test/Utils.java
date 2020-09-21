@@ -447,7 +447,7 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws Exception {
+    public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
         boolean populated = false;
@@ -1627,7 +1627,7 @@ public class Utils {
         }
     }
 
-    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws Exception {
+    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -2112,6 +2112,30 @@ public class Utils {
         for (Worker worker : workers) {
             assertNotNull(worker.getCargo());
         }
+    }
+
+    public static void waitForMilitaryToStopFighting(GameMap map, Military military) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            if (!military.isFighting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(military.isFighting());
+    }
+
+    public static void waitForMilitaryToStartFighting(GameMap map, Military military) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            if (military.isFighting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(military.isFighting());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

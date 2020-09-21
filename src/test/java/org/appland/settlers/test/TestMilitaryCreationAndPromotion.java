@@ -1,27 +1,37 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -35,11 +45,12 @@ public class TestMilitaryCreationAndPromotion {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
         Point point1 = new Point(10, 10);
@@ -137,7 +148,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing fortress */
         Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0);
@@ -166,7 +177,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing fortress */
         Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0);
@@ -200,7 +211,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing fortress */
         Point point1 = new Point(6, 12);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0);
@@ -230,7 +241,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing barracks */
         Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -260,7 +271,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -295,7 +306,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -330,7 +341,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -365,7 +376,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -400,7 +411,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -418,5 +429,265 @@ public class TestMilitaryCreationAndPromotion {
 
         assertEquals(barracks0.getHostedMilitary().size(), 1);
         assertEquals(barracks0.getHostedMilitary().get(0).getRank(), GENERAL_RANK);
+    }
+
+    @Test
+    public void testUpgradeOfAllRanksAtSameTime() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 12);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Connect the headquarter with the fortress */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Make sure the headquarter has only privates */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 1);
+
+        /* Wait for the fortress to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that adding a coin will promote one of each type of soldier */
+        Utils.deliverCargo(fortress0, COIN);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
+
+        Map<Military.Rank, Integer> rankCount = new HashMap<>();
+
+        for (Military military : fortress0.getHostedMilitary()) {
+            int amount = rankCount.getOrDefault(military.getRank(), 0);
+
+            rankCount.put(military.getRank(), amount + 1);
+        }
+
+        assertEquals(rankCount.get(PRIVATE_RANK).intValue(), 4);
+        assertEquals(rankCount.get(PRIVATE_FIRST_CLASS_RANK).intValue(), 1);
+        assertEquals(rankCount.get(SERGEANT_RANK).intValue(), 1);
+        assertEquals(rankCount.get(OFFICER_RANK).intValue(), 1);
+        assertEquals(rankCount.get(GENERAL_RANK).intValue(), 2);
+    }
+
+    @Test
+    public void testUpgradeOfOnlyPrivates() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 12);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Connect the headquarter with the fortress */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Make sure the headquarter has only privates */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 9);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Wait for the fortress to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that adding a coin will promote one of each type of soldier */
+        Utils.deliverCargo(fortress0, COIN);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
+
+        Map<Military.Rank, Integer> rankCount = new HashMap<>();
+
+        for (Military military : fortress0.getHostedMilitary()) {
+            int amount = rankCount.getOrDefault(military.getRank(), 0);
+
+            rankCount.put(military.getRank(), amount + 1);
+        }
+
+        assertEquals(rankCount.get(PRIVATE_RANK).intValue(), 8);
+        assertEquals(rankCount.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(SERGEANT_RANK, 0).intValue(), 0);
+        assertEquals(rankCount.getOrDefault(OFFICER_RANK, 0).intValue(), 0);
+        assertEquals(rankCount.getOrDefault(GENERAL_RANK, 0).intValue(), 0);
+    }
+
+    @Test
+    public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 12);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Connect the headquarter with the fortress */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Make sure the headquarter has only privates */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 8);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Wait for the fortress to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that adding a coin will promote one of each type of soldier */
+        Utils.deliverCargo(fortress0, COIN);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
+
+        Map<Military.Rank, Integer> rankCount = new HashMap<>();
+
+        for (Military military : fortress0.getHostedMilitary()) {
+            int amount = rankCount.getOrDefault(military.getRank(), 0);
+
+            rankCount.put(military.getRank(), amount + 1);
+        }
+
+        assertEquals(rankCount.get(PRIVATE_RANK).intValue(), 7);
+        assertEquals(rankCount.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(SERGEANT_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(OFFICER_RANK, 0).intValue(), 0);
+        assertEquals(rankCount.getOrDefault(GENERAL_RANK, 0).intValue(), 0);
+    }
+
+    @Test
+    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 12);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Connect the headquarter with the fortress */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Make sure the headquarter has only privates */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 7);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Wait for the fortress to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that adding a coin will promote one of each type of soldier */
+        Utils.deliverCargo(fortress0, COIN);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
+
+        Map<Military.Rank, Integer> rankCount = new HashMap<>();
+
+        for (Military military : fortress0.getHostedMilitary()) {
+            int amount = rankCount.getOrDefault(military.getRank(), 0);
+
+            rankCount.put(military.getRank(), amount + 1);
+        }
+
+        assertEquals(rankCount.get(PRIVATE_RANK).intValue(), 6);
+        assertEquals(rankCount.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(SERGEANT_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(OFFICER_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(GENERAL_RANK, 0).intValue(), 0);
+    }
+
+    @Test
+    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 12);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Connect the headquarter with the fortress */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Make sure the headquarter has only privates */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 6);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Wait for the fortress to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that adding a coin will promote one of each type of soldier */
+        Utils.deliverCargo(fortress0, COIN);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(fortress0, COIN, 0);
+
+        Map<Military.Rank, Integer> rankCount = new HashMap<>();
+
+        for (Military military : fortress0.getHostedMilitary()) {
+            int amount = rankCount.getOrDefault(military.getRank(), 0);
+
+            rankCount.put(military.getRank(), amount + 1);
+        }
+
+        assertEquals(rankCount.get(PRIVATE_RANK).intValue(), 5);
+        assertEquals(rankCount.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(SERGEANT_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(OFFICER_RANK, 0).intValue(), 1);
+        assertEquals(rankCount.getOrDefault(GENERAL_RANK, 0).intValue(), 1);
     }
 }

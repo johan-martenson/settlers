@@ -1,3 +1,5 @@
+package org.appland.settlers.test;
+
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -10,7 +12,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 
 public class TestRobustTransportation {
 
