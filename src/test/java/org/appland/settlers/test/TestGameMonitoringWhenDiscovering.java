@@ -714,20 +714,23 @@ public class TestGameMonitoringWhenDiscovering {
 
         assertEquals(gameChangesList.getChangedBorders().size(), 1);
 
-        boolean otherBorderFound = false;
+        BorderChange borderChange = gameChangesList.getChangedBorders().get(0);
 
-        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
-            if (borderChange.getPlayer().equals(player1)) {
-                otherBorderFound = true;
+        assertTrue(borderChange.getNewBorder().size() > 0);
+        assertEquals(borderChange.getRemovedBorder().size(), 0);
+        assertEquals(borderChange.getPlayer(), player1);
 
-                assertTrue(borderChange.getNewBorder().contains(point2));
-                assertEquals(borderChange.getRemovedBorder().size(), 0);
-
-                break;
+        for (Point point : player1.getBorderPoints()) {
+            if (player0.getDiscoveredLand().contains(point)) {
+                assertTrue(borderChange.getNewBorder().contains(point));
+            } else {
+                assertFalse(borderChange.getNewBorder().contains(point));
             }
         }
 
-        assertTrue(otherBorderFound);
+        for (Point point : borderChange.getNewBorder()) {
+            assertTrue(player1.getBorderPoints().contains(point));
+        }
     }
 
     @Test

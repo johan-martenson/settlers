@@ -466,7 +466,7 @@ public class Utils {
         assertEquals(building.getNumberOfHostedMilitary(), nr);
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(Building building) throws Exception {
+    public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
         assertFalse(building.isOccupied());

@@ -37,7 +37,8 @@ public class TestMonitoringOfAvailableConstruction {
      TODO:
       - test removing things - anything missing?
       - test not sent to wrong player
-       - remove stone one by one gives a field of flags which is wrong
+      - remove stone one by one gives a field of flags which is wrong
+      - test upgrade of barracks to guardhouse
      */
 
     @Test

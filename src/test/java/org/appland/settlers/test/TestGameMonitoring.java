@@ -11,10 +11,14 @@ import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -30,6 +34,7 @@ import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -54,6 +59,8 @@ public class TestGameMonitoring {
 
     /*
     TODO:
+        - enemy border changes
+        - workers and soldiers that die
         - catapulted stone,
         - available road connections (?),
         - road that becomes main road,
@@ -3198,8 +3205,8 @@ public class TestGameMonitoring {
 
         assertEquals(gameChanges.getNewCrops().size(), 1);
         assertEquals(gameChanges.getNewCrops().get(0), map.getCropAtPoint(point));
-        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), farmer);
+        assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
+        assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
 
         assertEquals(gameChanges.getNewBuildings().size(), 0);
         assertEquals(gameChanges.getNewRoads().size(), 0);
@@ -5159,5 +5166,103 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.getTime() > 0);
         assertTrue(gameChanges.getWorkersWithNewTargets().size() > 0);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(road0.getCourier()));
+    }
+
+    @Test
+    public void testMonitoringEnemyBorderChanges() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", Color.BLUE);
+        Player player1 = new Player("Player 1", Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter for the second player */
+        Point point1 = new Point(25, 25);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place fortress for the second player */
+        Point point2 = new Point(18, 18);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
+
+        /* Connect the fortress to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), fortress0.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that a monitoring event is sent when the second player's border changes */
+        List<Point> visibleBorderBeforeChange = new ArrayList<>();
+
+        for (Point point : player1.getBorderPoints()) {
+            if (!player0.getDiscoveredLand().contains(point)) {
+                continue;
+            }
+
+            visibleBorderBeforeChange.add(point);
+        }
+
+        Utils.waitForBuildingToBeConstructed(fortress0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getChangedBorders().size() > 0);
+
+        List<Point> visibleBorderAfterChange = new ArrayList<>();
+
+        for (Point point : player1.getBorderPoints()) {
+            if (!player0.getDiscoveredLand().contains(point)) {
+                continue;
+            }
+
+            visibleBorderAfterChange.add(point);
+        }
+
+        List<BorderChange> borderChanges = gameChanges.getChangedBorders();
+
+        BorderChange borderChangePlayer1 = null;
+
+        for (BorderChange borderChange : borderChanges) {
+            if (borderChange.getPlayer().equals(player1)) {
+                borderChangePlayer1 = borderChange;
+
+                break;
+            }
+        }
+
+        assertNotNull(borderChangePlayer1);
+        assertEquals(borderChangePlayer1.getPlayer(), player1);
+        assertTrue(borderChangePlayer1.getNewBorder().size() > 0);
+        assertTrue(borderChangePlayer1.getRemovedBorder().size() > 0);
+
+        for (Point point : visibleBorderBeforeChange) {
+
+            if (player1.getBorderPoints().contains(point)) {
+                assertFalse(borderChangePlayer1.getNewBorder().contains(point));
+                assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
+            } else {
+                assertTrue(borderChangePlayer1.getRemovedBorder().contains(point));
+            }
+        }
+
+        for (Point point : visibleBorderAfterChange) {
+            if (visibleBorderBeforeChange.contains(point)) {
+                assertFalse(borderChangePlayer1.getNewBorder().contains(point));
+                assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
+            } else {
+                assertTrue(borderChangePlayer1.getNewBorder().contains(point));
+            }
+        }
     }
 }

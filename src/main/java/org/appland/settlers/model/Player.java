@@ -835,7 +835,7 @@ public class Player {
                     continue;
                 }
 
-                changedBorders.add(new BorderChange(player, newDiscoveredLand, new ArrayList<>()));
+                changedBorders.add(new BorderChange(player, discoveredBorder, new ArrayList<>()));
             }
 
             /* Find any discovered workers */
