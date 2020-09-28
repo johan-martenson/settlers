@@ -1,6 +1,8 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
@@ -9,6 +11,7 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.LookoutTower;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -20,12 +23,18 @@ import org.junit.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestGameMonitoringWhenDiscovering {
@@ -1312,5 +1321,106 @@ public class TestGameMonitoringWhenDiscovering {
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.getChangedBorders().size(), 0);
         }
+    }
+
+    @Test
+    public void testMonitoringWhenSoldierDies() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+        assertFalse(barracks1.isUnderAttack());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Get the defender */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+
+        /* Wait for the defender to go to the attacker */
+        assertEquals(defender.getTarget(), attacker.getPosition());
+        assertTrue(barracks1.isUnderAttack());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Verify that the soldiers are fighting */
+        assertTrue(barracks1.isUnderAttack());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that the general beats the private */
+        Utils.waitForWorkerToDisappear(defender, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+        assertTrue(map.getWorkers().contains(attacker));
+        assertFalse(attacker.isFighting());
+        assertNotNull(monitor.getLastEvent());
+
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertTrue(gameChangesList.getRemovedWorkers().size() > 0);
+        assertTrue(gameChangesList.getRemovedWorkers().contains(defender));
     }
 }

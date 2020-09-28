@@ -59,12 +59,10 @@ public class TestGameMonitoring {
 
     /*
     TODO:
-        - enemy border changes
         - workers and soldiers that die
         - catapulted stone,
         - available road connections (?),
         - road that becomes main road,
-        - game events
         - monitoring of couriers when road is split
     *  */
 
