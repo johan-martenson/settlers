@@ -530,7 +530,7 @@ public class Player {
         /* Throw an exception if the priority is negative or too large */
         if (priority < 0) {
             throw new InvalidUserActionException("Cannot set a negative transport priority (" + priority + ") for " + category);
-        } else if (priority >= Material.getTransportableItems().size()) {
+        } else if (priority >= TransportCategory.values().length) {
             throw new InvalidUserActionException("Cannot set a higher transport priority (" + priority + ") than the amount of transportable items");
         }
 

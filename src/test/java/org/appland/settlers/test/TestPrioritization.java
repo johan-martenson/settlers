@@ -2344,13 +2344,30 @@ public class TestPrioritization {
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* There are 18 materials that the transport priority can be set for. Verify that it's not possible to set for an index higher than this */
+        /* Verify that it's not possible to set for an index higher than the number of items - 1 */
         try {
-            player0.setTransportPriority(18, TransportCategory.WOOD); // Priority starts on 0
+            player0.setTransportPriority(16, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
 
             fail();
         } catch (InvalidUserActionException e) {
 
         }
+    }
+
+    @Test
+    public void testCanSetTransportPriorityToLargeNumber() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's possible to set the largest number allowed (number of items - 1) */
+        player0.setTransportPriority(15, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
     }
 }
