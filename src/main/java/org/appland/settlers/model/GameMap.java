@@ -2376,6 +2376,11 @@ public class GameMap {
      * @throws Exception Throws exception if there is a fault when removing connected roads
      */
     public void removeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+
+        if (flag == null) {
+            throw new InvalidUserActionException("Cannot remove flag that is null");
+        }
+
         MapPoint mapPointUpLeft = getMapPoint(flag.getPosition().upLeft());
         MapPoint mapPoint = getMapPoint(flag.getPosition());
 

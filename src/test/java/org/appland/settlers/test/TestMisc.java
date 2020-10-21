@@ -1196,4 +1196,23 @@ public class TestMisc {
 
         assertEquals(map.getBuildings().size(), 0);
     }
+
+    @Test
+    public void testCannotRemoveFlagThatIsNull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Verify that it's not possible to remove a flag that is null */
+        try {
+            map.removeFlag(null);
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+
+        assertEquals(map.getBuildings().size(), 0);
+    }
 }
