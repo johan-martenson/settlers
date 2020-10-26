@@ -313,8 +313,17 @@ public class GameMap {
      * @param road The road to remove
      * @throws InvalidRouteException If there is a failure in making the courier return to storage or removing the road
      */
-    public void removeRoad(Road road) throws InvalidRouteException {
+    public void removeRoad(Road road) throws InvalidRouteException, InvalidUserActionException {
 
+        /* Don't allow removing the driveway for an existing building */
+        if (isBuildingAtPoint(road.getStart()) || isBuildingAtPoint(road.getEnd())) {
+            throw new InvalidUserActionException("Cannot remove a driveway");
+        }
+
+        doRemoveRoad(road);
+    }
+
+    void doRemoveRoad(Road road) throws InvalidRouteException {
         if (road.getCourier() != null) {
             road.getCourier().returnToStorage();
         }
@@ -1129,7 +1138,7 @@ public class GameMap {
 
         /* Remove the roads */
         for (Road road : roadsToRemove) {
-            removeRoad(road);
+            doRemoveRoad(road);
         }
 
         /* Update statistics collection of land per player */

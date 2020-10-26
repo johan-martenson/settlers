@@ -1191,6 +1191,7 @@ public class TestMisc {
         Point point0 = new Point(7, 3);
         try {
             map.placeBuilding(new Headquarter(player0), point0);
+
             fail();
         } catch (InvalidUserActionException e) {}
 
@@ -1214,5 +1215,40 @@ public class TestMisc {
         } catch (InvalidUserActionException e) {}
 
         assertEquals(map.getBuildings().size(), 0);
+    }
+
+    @Test
+    public void testCannotRemoveRoadFromDriveway() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(13, 9);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+        /* Wait for the woodcutter to get constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        /* Verify that it's not possible to remove a driveway from a house */
+        Road road1 = map.getRoad(woodcutter.getPosition(), woodcutter.getFlag().getPosition());
+
+        try {
+            map.removeRoad(road1);
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+
+        assertTrue(map.getRoads().contains(road1));
     }
 }

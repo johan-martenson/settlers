@@ -565,7 +565,7 @@ public class Building implements EndPoint {
         /* Remove driveway */
         Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
 
-        map.removeRoad(driveway);
+        map.doRemoveRoad(driveway);
 
         /* Report that the building has been torn down */
         map.reportTornDownBuilding(this);
