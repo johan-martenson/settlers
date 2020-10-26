@@ -8,6 +8,9 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -290,11 +293,6 @@ public class TestScout {
         }
 
         assertTrue(scout.getPosition().y > flag.getPosition().y + 4);
-    }
-
-    @Test
-    public void testScoutCanUseEnemiesRoads() {
-        // TODO: Implement test
     }
 
     @Test
@@ -1212,5 +1210,64 @@ public class TestScout {
         assertEquals(scout.getPosition(), headquarter0.getPosition());
     }
 
+    @Test
+    public void testScoutReturnsOffroadIfRoadIsMissingWhScoutReachesFlag() throws InvalidRouteException, InvalidUserActionException, InvalidEndPointException {
 
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point0 = new Point(9, 23);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(17, 23);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to come out */
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
+
+        /* Wait for the scout to reach the flag */
+        assertEquals(scout.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+
+        /* Wait for the scout to leave the flag */
+        assertEquals(scout.getPosition(), flag.getPosition());
+        assertTrue(scout.isExactlyAtPoint());
+
+        map.stepTime();
+
+        assertFalse(scout.isExactlyAtPoint());
+
+        /* Wait for the scout to be on the way back to the flag */
+        Utils.waitForWorkerToSetTarget(map, scout, flag.getPosition());
+
+        /* Wait for the scout to be almost at the flag */
+        for (int i = 0; i < 2000; i++) {
+            if (!scout.isExactlyAtPoint() && scout.getNextPoint().equals(flag.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(scout.isExactlyAtPoint());
+        assertEquals(scout.getNextPoint(), flag.getPosition());
+
+        /* Remove the road between the flag and the headquarter */
+        map.removeRoad(road0);
+
+        /* Verify that the scout walks offroad back to the headquarter */
+        Utils.verifyWorkerWalksToTarget(map, scout, headquarter0.getPosition());
+    }
 }

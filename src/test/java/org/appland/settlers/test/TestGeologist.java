@@ -11,6 +11,9 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1834,5 +1837,66 @@ public class TestGeologist {
         map.stepTime();
 
         assertNotEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testGeologistReturnsOffroadIfRoadIsMissingWhScoutReachesFlag() throws InvalidRouteException, InvalidUserActionException, InvalidEndPointException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point0 = new Point(9, 23);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(17, 23);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to come out */
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
+
+        /* Wait for the geologist to reach the flag */
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        /* Wait for the geologist to leave the flag */
+        assertEquals(geologist.getPosition(), flag.getPosition());
+        assertTrue(geologist.isExactlyAtPoint());
+
+        map.stepTime();
+
+        assertFalse(geologist.isExactlyAtPoint());
+
+        /* Wait for the geologist to be on the way back to the flag */
+        Utils.waitForWorkerToSetTarget(map, geologist, flag.getPosition());
+
+        /* Wait for the geologist to be almost at the flag */
+        for (int i = 0; i < 2000; i++) {
+            if (!geologist.isExactlyAtPoint() && geologist.getNextPoint().equals(flag.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(geologist.isExactlyAtPoint());
+        assertEquals(geologist.getNextPoint(), flag.getPosition());
+
+        /* Remove the road between the flag and the headquarter */
+        map.removeRoad(road0);
+
+        /* Verify that the geologist walks offroad back to the headquarter */
+        Utils.verifyWorkerWalksToTarget(map, geologist, headquarter0.getPosition());
     }
 }

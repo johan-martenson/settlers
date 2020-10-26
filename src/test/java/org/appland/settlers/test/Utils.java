@@ -22,6 +22,7 @@ import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
@@ -612,7 +613,7 @@ public class Utils {
         return workersFound;
     }
 
-    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws Exception {
+    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = player.getMap();
         List<T> workers = new LinkedList<>();
 
@@ -1287,7 +1288,7 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
-    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws Exception {
+    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
             if (point.equals(worker.getTarget())) {
                 break;
@@ -2136,6 +2137,20 @@ public class Utils {
         }
 
         assertTrue(military.isFighting());
+    }
+
+    public static void verifyWorkerWalksToTarget(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+
+            if (worker.isExactlyAtPoint() && worker.getPosition().equals(point)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isExactlyAtPoint());
+        assertEquals(worker.getPosition(), point);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
