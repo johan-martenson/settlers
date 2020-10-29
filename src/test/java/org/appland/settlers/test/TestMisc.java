@@ -5,6 +5,7 @@ import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Donkey;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
@@ -30,6 +31,7 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -1250,5 +1252,25 @@ public class TestMisc {
         } catch (InvalidUserActionException e) {}
 
         assertTrue(map.getRoads().contains(road1));
+    }
+
+    @Test
+    public void testPushOutDonkey() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Push out donkeys */
+        headquarter.pushOutAll(DONKEY);
+
+        /* Verify that donkeys can be pushed out */
+        Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
     }
 }
