@@ -41,7 +41,10 @@ import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -1288,10 +1291,132 @@ public class TestMisc {
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
-        /* Push out donkeys */
+        /* Push out courier */
         headquarter.pushOutAll(COURIER);
 
         /* Verify that couriers can be pushed out */
         Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+    }
+
+    @Test
+    public void testPushOutPrivate() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Push out private */
+        headquarter.pushOutAll(PRIVATE);
+
+        /* Verify that couriers can be pushed out */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(military.getRank(), PRIVATE_RANK);
+    }
+
+    @Test
+    public void testPushOutPrivateFirstClass() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Put a private first class into the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 1);
+
+        /* Push out private first class */
+        headquarter.pushOutAll(PRIVATE_FIRST_CLASS);
+
+        /* Verify that private first class can be pushed out */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(military.getRank(), PRIVATE_FIRST_CLASS_RANK);
+    }
+
+    @Test
+    public void testPushOutSergeant() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Put a sergeant into the headquarter */
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 1);
+
+        /* Push out sergeant */
+        headquarter.pushOutAll(SERGEANT);
+
+        /* Verify that sergeant can be pushed out */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(military.getRank(), SERGEANT_RANK);
+    }
+
+    @Test
+    public void testPushOutOfficer() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Put a officer into the headquarter */
+        Utils.adjustInventoryTo(headquarter, OFFICER, 1);
+
+        /* Push out officer */
+        headquarter.pushOutAll(OFFICER);
+
+        /* Verify that officer can be pushed out */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(military.getRank(), OFFICER_RANK);
+    }
+
+    @Test
+    public void testPushOutGeneral() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Put a general into the headquarter */
+        Utils.adjustInventoryTo(headquarter, GENERAL, 1);
+
+        /* Push out general */
+        headquarter.pushOutAll(GENERAL);
+
+        /* Verify that general can be pushed out */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(military.getRank(), GENERAL_RANK);
     }
 }

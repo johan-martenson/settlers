@@ -576,6 +576,21 @@ public class Storehouse extends Building {
         case COURIER:
             worker = new Courier(getPlayer(), getMap());
             break;
+        case PRIVATE:
+            worker = new Military(getPlayer(), PRIVATE_RANK, getMap());
+            break;
+        case PRIVATE_FIRST_CLASS:
+            worker = new Military(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
+            break;
+        case SERGEANT:
+            worker = new Military(getPlayer(), SERGEANT_RANK, getMap());
+            break;
+        case OFFICER:
+            worker = new Military(getPlayer(), OFFICER_RANK, getMap());
+            break;
+        case GENERAL:
+            worker = new Military(getPlayer(), GENERAL_RANK, getMap());
+            break;
         default:
             throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
         }
@@ -793,8 +808,8 @@ public class Storehouse extends Building {
         getPlayer().reportStorageReady(this);
     }
 
-    public void pushOutAll(Material fish) {
-        materialToPushOut.add(fish);
+    public void pushOutAll(Material material) {
+        materialToPushOut.add(material);
     }
 
     public boolean isPushedOut(Material material) {

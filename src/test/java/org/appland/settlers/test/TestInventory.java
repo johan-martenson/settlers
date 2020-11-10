@@ -292,17 +292,6 @@ public class TestInventory {
         assertEquals(storehouse.getAmount(GENERAL), 0);
     }
 
-    @Test
-    public void testRetrieveMilitaryAsWorker() {
-        storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
-
-        try {
-            storehouse.retrieveWorker(PRIVATE);
-
-            fail();
-        } catch (Exception e) {}
-    }
-
     private void assertNoMilitaryInInventory(Storehouse storehouse) {
         assertEquals(storehouse.getAmount(PRIVATE), 0);
         assertEquals(storehouse.getAmount(SERGEANT), 0);

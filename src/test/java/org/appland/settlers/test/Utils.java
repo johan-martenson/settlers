@@ -22,7 +22,6 @@ import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
@@ -581,7 +580,7 @@ public class Utils {
         assertFalse(map.getWorkers().contains(worker));
     }
 
-    public static Military waitForMilitaryOutsideBuilding(Player player) throws Exception {
+    public static Military waitForMilitaryOutsideBuilding(Player player) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = player.getMap();
         for (int i = 0; i < 1000; i++) {
             Military military = findMilitaryOutsideBuilding(player);
