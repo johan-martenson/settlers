@@ -31,6 +31,7 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.OFFICER;
@@ -1272,5 +1273,25 @@ public class TestMisc {
 
         /* Verify that donkeys can be pushed out */
         Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
+    }
+
+    @Test
+    public void testPushOutCourier() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        /* Push out donkeys */
+        headquarter.pushOutAll(COURIER);
+
+        /* Verify that couriers can be pushed out */
+        Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
     }
 }

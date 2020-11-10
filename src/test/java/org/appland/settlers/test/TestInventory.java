@@ -6,7 +6,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
@@ -271,17 +269,6 @@ public class TestInventory {
 
         try {
             storehouse.retrieveMilitary(GENERAL);
-
-            fail();
-        } catch (Exception e) {}
-    }
-
-    @Test
-    public void testRetrieveCourierLikeWorker() {
-        storehouse.depositWorker(new Courier(null, null));
-
-        try {
-            storehouse.retrieveWorker(COURIER);
 
             fail();
         } catch (Exception e) {}

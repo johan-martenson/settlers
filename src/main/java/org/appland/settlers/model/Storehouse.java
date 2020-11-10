@@ -573,6 +573,9 @@ public class Storehouse extends Building {
         case DONKEY:
             worker = new Donkey(getPlayer(), getMap());
             break;
+        case COURIER:
+            worker = new Courier(getPlayer(), getMap());
+            break;
         default:
             throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
         }
