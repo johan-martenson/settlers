@@ -60,12 +60,12 @@ public class TestWell {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
-        Point point22 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point22);
+        Point point1 = new Point(6, 12);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Deliver three plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -93,12 +93,12 @@ public class TestWell {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing well */
-        Point point22 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point22);
+        Point point1 = new Point(6, 12);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Deliver one plank */
         Cargo plankCargo = new Cargo(PLANK, map);
