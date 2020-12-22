@@ -113,6 +113,7 @@ public class GameMap {
     private final Stats     stats;
     private final Group     collectEachStepTimeGroup;
     private final Set<Flag> changedFlags;
+    private final List<Point> deadTrees;
 
     private Player winner;
     private long time;
@@ -230,6 +231,7 @@ public class GameMap {
         stats = new Stats();
 
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
+        deadTrees = new ArrayList<>();
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -1416,6 +1418,13 @@ public class GameMap {
         /* Handle the case where the flag is placed on a sign */
         if (mapPoint.isSign()) {
             removeSign(getSignAtPoint(flagPoint));
+        }
+
+        /* Handle the case where the flag is placed on a dead tree */
+        if (mapPoint.isDeadTree()) {
+            mapPoint.removeDeadTree();
+
+            deadTrees.remove(flagPoint);
         }
 
         /* Handle the case where the flag is on an existing road that will be split */
@@ -2739,6 +2748,10 @@ public class GameMap {
             return null;
         }
 
+        if (houseMapPoint.isDeadTree()) {
+            return null;
+        }
+
         if (houseMapPoint.isBuilding()) {
             return null;
         }
@@ -3687,5 +3700,43 @@ public class GameMap {
 
     public List<Point> findDetailedWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, Building end, Point... avoid) {
         return GameUtils.findShortestDetailedPathViaRoads(start, end, pointToGameObject, avoid);
+    }
+
+    public List<Point> getDeadTrees() {
+        return deadTrees;
+    }
+
+    public void placeDeadTree(Point point) throws InvalidUserActionException {
+        MapPoint mapPoint = getMapPoint(point);
+
+        if (mapPoint.isBuilding()) {
+            throw new InvalidUserActionException("Can't place dead tree on building");
+        }
+
+        if (mapPoint.isFlag()) {
+            throw new InvalidUserActionException("Can't place dead tree on a flag");
+        }
+
+        if (mapPoint.isRoad()) {
+            throw new InvalidUserActionException("Can't place dead tree on road");
+        }
+
+        if (mapPoint.isTree()) {
+            throw new InvalidUserActionException("Can't place dead tree on tree");
+        }
+
+        if (mapPoint.isStone()) {
+            throw new InvalidUserActionException("Can't place dead tree on stone");
+        }
+
+        mapPoint.setDeadTree();
+
+        deadTrees.add(point);
+    }
+
+    public boolean isDeadTree(Point point) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        return mapPoint.isDeadTree();
     }
 }

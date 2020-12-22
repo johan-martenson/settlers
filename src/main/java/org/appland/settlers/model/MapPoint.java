@@ -37,6 +37,7 @@ public class MapPoint {
     private int      mineralAmount;
     private Material mineral;
     private int      fishAmount;
+    private boolean  isDeadTree;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -46,6 +47,7 @@ public class MapPoint {
         stone                      = null;
         crop                       = null;
         sign                       = null;
+        isDeadTree                 = false;
         connectedNeighbors         = new HashSet<>();
         connectedRoads             = new HashSet<>();
         connectedFlagsAndBuildings = new HashSet<>();
@@ -291,5 +293,17 @@ public class MapPoint {
 
     public void removeStone() {
         stone = null;
+    }
+
+    public boolean isDeadTree() {
+        return isDeadTree;
+    }
+
+    public void setDeadTree() {
+        isDeadTree = true;
+    }
+
+    public void removeDeadTree() {
+        isDeadTree = false;
     }
 }
