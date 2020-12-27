@@ -197,6 +197,114 @@ public class GameUtils {
         return foundMatch && foundNotMatch;
     }
 
+    public static Vegetation detailedVegetationToSimpleVegetation(DetailedVegetation detailedVegetation) {
+        switch (detailedVegetation) {
+            case SAVANNAH:
+                return Vegetation.SAVANNAH;
+
+            case MOUNTAIN_1:
+            case MOUNTAIN_2:
+            case MOUNTAIN_3:
+            case MOUNTAIN_4:
+                return Vegetation.MOUNTAIN;
+
+            case SNOW:
+                return Vegetation.SNOW;
+
+            case SWAMP:
+                return Vegetation.SWAMP;
+
+            case DESERT_1:
+            case DESERT_2:
+                return Vegetation.DESERT;
+
+            case WATER:
+                return Vegetation.WATER;
+
+            case BUILDABLE_WATER:
+                return Vegetation.SHALLOW_WATER;
+
+            case MEADOW_1:
+            case MEADOW_2:
+            case MEADOW_3:
+            case FLOWER_MEADOW:
+                return Vegetation.GRASS;
+
+            case STEPPE:
+                return Vegetation.STEPPE;
+
+            case MOUNTAIN_MEADOW:
+                return Vegetation.MOUNTAIN_MEADOW;
+
+            case LAVA:
+            case LAVA_2:
+            case LAVA_3:
+            case LAVA_4:
+                return Vegetation.LAVA;
+
+            case MAGENTA:
+                return Vegetation.MAGENTA;
+
+            case WATER_2:
+                return Vegetation.DEEP_WATER;
+
+            case BUILDABLE_MOUNTAIN:
+                return Vegetation.BUILDABLE_MOUNTAIN;
+
+            default:
+                throw new RuntimeException("Can't translate to simple vegetation " + detailedVegetation);
+        }
+    }
+
+    public static DetailedVegetation simpleVegetationToDetailedVegetation(Vegetation simpleVegetation) {
+        switch (simpleVegetation) {
+            case SAVANNAH:
+                return DetailedVegetation.SAVANNAH;
+
+            case WATER:
+                return DetailedVegetation.WATER;
+
+            case GRASS:
+                return DetailedVegetation.MEADOW_1;
+
+            case SWAMP:
+                return DetailedVegetation.SWAMP;
+
+            case MOUNTAIN:
+                return DetailedVegetation.MOUNTAIN_1;
+
+            case SNOW:
+                return DetailedVegetation.SNOW;
+
+            case DESERT:
+                return DetailedVegetation.DESERT_1;
+
+            case DEEP_WATER:
+                return DetailedVegetation.WATER_2;
+
+            case SHALLOW_WATER:
+                return DetailedVegetation.BUILDABLE_WATER;
+
+            case STEPPE:
+                return DetailedVegetation.STEPPE;
+
+            case LAVA:
+                return DetailedVegetation.LAVA;
+
+            case MAGENTA:
+                return DetailedVegetation.MAGENTA;
+
+            case MOUNTAIN_MEADOW:
+                return DetailedVegetation.MOUNTAIN_MEADOW;
+
+            case BUILDABLE_MOUNTAIN:
+                return DetailedVegetation.BUILDABLE_MOUNTAIN;
+
+            default:
+                throw new RuntimeException("Can't translate to detailed vegetation: " + simpleVegetation);
+        }
+    }
+
     static class Line {
         final double k;
         final double m;

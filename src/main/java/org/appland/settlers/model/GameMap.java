@@ -20,10 +20,12 @@ import java.util.Random;
 import java.util.Set;
 
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
+import static org.appland.settlers.model.GameUtils.detailedVegetationToSimpleVegetation;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.GameUtils.isAny;
 import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
+import static org.appland.settlers.model.GameUtils.simpleVegetationToDetailedVegetation;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -50,6 +52,7 @@ public class GameMap {
     private static final double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
     private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
     private static final Set DEAD_TREE_NOT_ALLOWED = EnumSet.of(SNOW, WATER, SHALLOW_WATER, DEEP_WATER, MAGENTA);
+    private static final DetailedVegetation DEFAULT_VEGETATION = DetailedVegetation.MEADOW_1;
 
     private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = new ConnectionsProvider() {
 
@@ -91,8 +94,8 @@ public class GameMap {
     private final List<Point>          startingPoints;
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
     private final int                  statisticsCollectionPeriod;
-    private final Map<Integer, Vegetation> tileBelowMap;
-    private final Map<Integer, Vegetation> tileDownRightMap;
+    private final Map<Integer, DetailedVegetation> tileBelowMap;
+    private final Map<Integer, DetailedVegetation> tileDownRightMap;
 
     private final StatisticsManager statisticsManager;
     private final Set<Worker> workersWithNewTargets;
@@ -251,8 +254,8 @@ public class GameMap {
             }
 
             for (x = xStart; x <= xEnd + 1; x++) {
-                tileBelowMap.put(y * width + x, GRASS);
-                tileDownRightMap.put(y * width + x, GRASS);
+                tileBelowMap.put(y * width + x, DEFAULT_VEGETATION);
+                tileDownRightMap.put(y * width + x, DEFAULT_VEGETATION);
             }
         }
     }
@@ -3496,11 +3499,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileAbove(Point point) {
-        return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+        DetailedVegetation detailedVegetation = tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+
+        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileAbove(Point point, Vegetation vegetation) {
-        tileDownRightMap.put((point.y + 1) * width + point.x - 1, vegetation);
+        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
+
+        tileDownRightMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
     }
 
     /**
@@ -3510,11 +3517,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileBelow(Point point) {
-        return tileBelowMap.get(point.y * width + point.x);
+        DetailedVegetation detailedVegetation = tileBelowMap.get(point.y * width + point.x);
+
+        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileBelow(Point point, Vegetation vegetation) {
-        tileBelowMap.put(point.y * width + point.x, vegetation);
+        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
+
+        tileBelowMap.put(point.y * width + point.x, detailedVegetation);
     }
 
     /**
@@ -3524,11 +3535,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileDownRight(Point point) {
-        return tileDownRightMap.get(point.y * width + point.x);
+        DetailedVegetation detailedVegetation = tileDownRightMap.get(point.y * width + point.x);
+
+        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileDownRight(Point point, Vegetation vegetation) {
-        tileDownRightMap.put(point.y * width + point.x, vegetation);
+        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
+
+        tileDownRightMap.put(point.y * width + point.x, detailedVegetation);
     }
 
     /**
@@ -3538,11 +3553,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileDownLeft(Point point) {
-        return tileDownRightMap.get(point.y * width + point.x - 2);
+        DetailedVegetation detailedVegetation = tileDownRightMap.get(point.y * width + point.x - 2);
+
+        return detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileDownLeft(Point point, Vegetation vegetation) {
-        tileDownRightMap.put(point.y * width + point.x - 2, vegetation);
+        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
+
+        tileDownRightMap.put(point.y * width + point.x - 2, detailedVegetation);
     }
 
     /**
@@ -3552,11 +3571,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileUpRight(Point point) {
-        return tileBelowMap.get((point.y + 1) * width + point.x + 1);
+        DetailedVegetation detailedVegetation = tileBelowMap.get((point.y + 1) * width + point.x + 1);
+
+        return detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileUpRight(Point point, Vegetation vegetation) {
-        tileBelowMap.put((point.y + 1) * width + point.x + 1, vegetation);
+        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
+
+        tileBelowMap.put((point.y + 1) * width + point.x + 1, detailedVegetation);
     }
 
     /**
@@ -3566,11 +3589,15 @@ public class GameMap {
      * @return
      */
     public Vegetation getTileUpLeft(Point point) {
-        return tileBelowMap.get((point.y + 1) * width + point.x - 1);
+        DetailedVegetation detailedVegetation = tileBelowMap.get((point.y + 1) * width + point.x - 1);
+
+        return detailedVegetationToSimpleVegetation(detailedVegetation);
     }
 
     public void setTileUpLeft(Point point, Vegetation vegetation) {
-        tileBelowMap.put((point.y + 1) * width + point.x - 1, vegetation);
+        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
+
+        tileBelowMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
     }
 
     /**
@@ -3687,9 +3714,11 @@ public class GameMap {
     }
 
     public void fillMapWithVegetation(Vegetation vegetation) {
-        tileBelowMap.replaceAll((k, v) -> vegetation);
+        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
 
-        tileDownRightMap.replaceAll((k, v) -> vegetation);
+        tileBelowMap.replaceAll((k, v) -> detailedVegetation);
+
+        tileDownRightMap.replaceAll((k, v) -> detailedVegetation);
     }
 
     public Stats getStats() {
@@ -3746,5 +3775,53 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.isDeadTree();
+    }
+
+    public DetailedVegetation getDetailedVegetationDownLeft(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x - 2);
+    }
+
+    public void setDetailedVegetationDownLeft(Point point, DetailedVegetation detailedVegetation) {
+        tileDownRightMap.put(point.y * width + point.x - 2, detailedVegetation);
+    }
+
+    public void setDetailedVegetationUpLeft(Point point, DetailedVegetation detailedVegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
+    }
+
+    public void setDetailedVegetationAbove(Point point, DetailedVegetation detailedVegetation) {
+        tileDownRightMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
+    }
+
+    public void setDetailedVegetationUpRight(Point point, DetailedVegetation detailedVegetation) {
+        tileBelowMap.put((point.y + 1) * width + point.x + 1, detailedVegetation);
+    }
+
+    public void setDetailedVegetationDownRight(Point point, DetailedVegetation detailedVegetation) {
+        tileDownRightMap.put(point.y * width + point.x, detailedVegetation);
+    }
+
+    public void setDetailedVegetationBelow(Point point, DetailedVegetation detailedVegetation) {
+        tileBelowMap.put(point.y * width + point.x, detailedVegetation);
+    }
+
+    public DetailedVegetation getDetailedVegetationUpLeft(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public DetailedVegetation getDetailedVegetationAbove(Point point) {
+        return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+    }
+
+    public DetailedVegetation getDetailedVegetationUpRight(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x + 1);
+    }
+
+    public DetailedVegetation getDetailedVegetationDownRight(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x);
+    }
+
+    public DetailedVegetation getDetailedVegetationBelow(Point point) {
+        return tileBelowMap.get(point.y * width + point.x);
     }
 }
