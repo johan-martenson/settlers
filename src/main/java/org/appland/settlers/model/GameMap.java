@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -48,6 +49,7 @@ public class GameMap {
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
     private static final double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
     private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
+    private static final Set DEAD_TREE_NOT_ALLOWED = EnumSet.of(SNOW, WATER, SHALLOW_WATER, DEEP_WATER, MAGENTA);
 
     private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = new ConnectionsProvider() {
 
@@ -3727,6 +3729,12 @@ public class GameMap {
 
         if (mapPoint.isStone()) {
             throw new InvalidUserActionException("Can't place dead tree on stone");
+        }
+
+        for (Vegetation vegetation : getSurroundingTiles(point)) {
+            if (DEAD_TREE_NOT_ALLOWED.contains(vegetation)) {
+                throw new InvalidUserActionException("Can't place dead tree on " + vegetation);
+            }
         }
 
         mapPoint.setDeadTree();

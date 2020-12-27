@@ -13,6 +13,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Well;
 import org.junit.Test;
 
@@ -31,8 +32,30 @@ public class TestTree {
     /**
      * To test:
      *  - for dead tree:
-     *      - can vs can't place on each vegetation
-     *      - available construction on surrounding points
+     *      - can place on:
+     *          - MEADOW_3
+     *          - FLOWER_MEADOW
+     *          - STEPPE
+     *          - LAVA
+     *          - SAVANNAH
+     *          - MEADOW_1
+     *          - MEADOW_2
+     *          - DESERT_1
+     *          - DESERT_2
+     *          - MOUNTAIN_MEADOW
+     *          - MOUNTAIN_4
+     *          - SWAMP
+     *          - MOUNTAIN
+     *      - cannot place on all other vegetations
+     *          - SNOW
+     *          - WATER
+     *          - BUILDABLE_WATER
+     *          - MAGENTA
+     *          - WATER_2
+     *          - LAVA_2
+     *          - LAVA_3
+     *          - LAVA_4
+     *          - BUILDABLE_MOUNTAIN_2
      */
 
     @Test
@@ -112,10 +135,14 @@ public class TestTree {
         assertEquals(map.getDeadTrees().size(), 0);
 
         Point point0 = new Point(20, 20);
+
+        assertFalse(map.isDeadTree(point0));
+
         map.placeDeadTree(point0);
 
         assertEquals(map.getDeadTrees().size(), 1);
         assertTrue(map.getDeadTrees().contains(point0));
+        assertTrue(map.isDeadTree(point0));
     }
 
     @Test
@@ -345,5 +372,276 @@ public class TestTree {
 
         /* Verify that it's now possible to place a large building on the point where the dead tree was */
         assertEquals(map.isAvailableHousePoint(player0, point1), LARGE);
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnMountain() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN, map);
+
+        /* Verify that a dead tree can be placed on a mountain */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnSavannah() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place savannah */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SAVANNAH, map);
+
+        /* Verify that a dead tree can be placed on a savannah */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnLava() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place lava */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
+
+        /* Verify that a dead tree can be placed on lava */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnSteppe() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place steppe */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.STEPPE, map);
+
+        /* Verify that a dead tree can be placed on steppe */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnSwamp() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place swamp */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SWAMP, map);
+
+        /* Verify that a dead tree can be placed on swamp */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnDesert() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place desert */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT, map);
+
+        /* Verify that a dead tree can be placed on desert */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCanPlaceDeadTreeOnCombinedVegetation() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place savannah and mountain on the map */
+        Point point1 = new Point(12, 6);
+        map.setTileBelow(point1, Vegetation.SAVANNAH);
+        map.setTileDownRight(point1, Vegetation.MOUNTAIN);
+        map.setTileDownLeft(point1, Vegetation.DESERT);
+
+        /* Verify that a dead tree can be placed on a mountain */
+        map.placeDeadTree(point1);
+
+        assertTrue(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCannotPlaceDeadTreeOnSnow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place snow */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SNOW, map);
+
+        /* Verify that a dead tree can be placed on snow */
+        try {
+            map.placeDeadTree(point1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCannotPlaceDeadTreeOnShallowWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place shallow water */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SHALLOW_WATER, map);
+
+        /* Verify that a dead tree can be placed on shallow water */
+        try {
+            map.placeDeadTree(point1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCannotPlaceDeadTreeOnWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place water */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
+
+        /* Verify that a dead tree can be placed on water */
+        try {
+            map.placeDeadTree(point1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isDeadTree(point1));
+    }
+
+    @Test
+    public void testCannotPlaceDeadTreeOnDeepWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place deep water */
+        Point point1 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DEEP_WATER, map);
+
+        /* Verify that a dead tree can be placed on deep water */
+        try {
+            map.placeDeadTree(point1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isDeadTree(point1));
     }
 }
