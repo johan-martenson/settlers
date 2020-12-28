@@ -11,8 +11,6 @@ import org.appland.settlers.utils.Stats;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -37,7 +35,6 @@ import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIM
 public class Scout extends Worker {
 
     private static final int DISCOVERY_RADIUS = 4;
-    private static final int LENGTH_TO_PLAN_HEAD = 7;
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int MINIMUM_DISTANCE_TO_BORDER = 6;
@@ -321,23 +318,20 @@ public class Scout extends Worker {
             // FIXME: this doesn't correctly score angles that are close but on opposity side of the positive X axis
             double score = Math.abs(angleForExistingDirection - angleForCandidateDirection);
 
-            pointsAndScores.add(new EntityAndScore<Point>(point, score));
+            pointsAndScores.add(new EntityAndScore<>(point, score));
         }
 
         /* 3. Sort by how closely they match the existing direction */
-        Collections.sort(pointsAndScores, new Comparator<EntityAndScore<Point>>() {
-            @Override
-            public int compare(EntityAndScore<Point> pointEntityAndScore, EntityAndScore<Point> t1) {
-                if (pointEntityAndScore.score > t1.score) {
-                    return 1;
-                }
-
-                if (t1.score > pointEntityAndScore.score) {
-                    return -1;
-                }
-
-                return 0;
+        pointsAndScores.sort((pointEntityAndScore, t1) -> {
+            if (pointEntityAndScore.score > t1.score) {
+                return 1;
             }
+
+            if (t1.score > pointEntityAndScore.score) {
+                return -1;
+            }
+
+            return 0;
         });
 
         /* 4. Go through the points and select which one to pick */

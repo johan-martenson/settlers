@@ -10,12 +10,12 @@ public class Road {
     private final EndPoint    start;
     private final EndPoint    end;
     private final List<Point> steps;
+    private final Player      player;
 
     private int     usage;
     private Courier courier;
     private Donkey  donkey;
     private boolean needsCourier;
-    private Player  player;
     private boolean isMainRoad;
     private GameMap map;
 

@@ -62,15 +62,15 @@ public class TestTree {
     public void testTreeTypes() {
 
         assertEquals(TreeType.values().length, 9);
-        assertEquals(TreeType.TREE_TYPE_1.name(), "TREE_TYPE_1");
-        assertEquals(TreeType.TREE_TYPE_2.name(), "TREE_TYPE_2");
-        assertEquals(TreeType.TREE_TYPE_3.name(), "TREE_TYPE_3");
-        assertEquals(TreeType.TREE_TYPE_4.name(), "TREE_TYPE_4");
-        assertEquals(TreeType.TREE_TYPE_5.name(), "TREE_TYPE_5");
-        assertEquals(TreeType.TREE_TYPE_6.name(), "TREE_TYPE_6");
-        assertEquals(TreeType.TREE_TYPE_7.name(), "TREE_TYPE_7");
-        assertEquals(TreeType.TREE_TYPE_8.name(), "TREE_TYPE_8");
-        assertEquals(TreeType.TREE_TYPE_9.name(), "TREE_TYPE_9");
+        assertEquals(TreeType.PINE.name(), "PINE");
+        assertEquals(TreeType.BIRCH.name(), "BIRCH");
+        assertEquals(TreeType.OAK.name(), "OAK");
+        assertEquals(TreeType.PALM_1.name(), "PALM_1");
+        assertEquals(TreeType.PALM_2.name(), "PALM_2");
+        assertEquals(TreeType.PINE_APPLE.name(), "PINE_APPLE");
+        assertEquals(TreeType.CYPRESS.name(), "CYPRESS");
+        assertEquals(TreeType.CHERRY.name(), "CHERRY");
+        assertEquals(TreeType.FIR.name(), "FIR");
     }
 
     @Test
@@ -87,7 +87,7 @@ public class TestTree {
         Tree tree0 = map.placeTree(point0);
 
         /* Verify that the tree has the default tree type */
-        assertEquals(tree0.getTreeType(), TreeType.TREE_TYPE_1);
+        assertEquals(tree0.getTreeType(), TreeType.PINE);
     }
 
     @Test
@@ -104,9 +104,9 @@ public class TestTree {
         Tree tree0 = map.placeTree(point0);
 
         /* Verify that the tree type can be set */
-        tree0.setTreeType(TreeType.TREE_TYPE_2);
+        tree0.setTreeType(TreeType.BIRCH);
 
-        assertEquals(tree0.getTreeType(), TreeType.TREE_TYPE_2);
+        assertEquals(tree0.getTreeType(), TreeType.BIRCH);
     }
 
     @Test

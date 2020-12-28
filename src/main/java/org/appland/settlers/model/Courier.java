@@ -142,7 +142,7 @@ public class Courier extends Worker {
                 }
             }
 
-        /**
+        /*
          *  If the courier is on the road closest to the building, keep the state and target so that it goes to the building and delivers the cargo
          *
          * If the courier is going to pick up a new cargo, cancel and go to the new road

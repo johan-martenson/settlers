@@ -33,7 +33,7 @@ public class Tree {
         countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
 
         /* Make one of the tree types default */
-        type = TreeType.TREE_TYPE_1;
+        type = TreeType.PINE;
     }
 
     public void stepTime() {
@@ -77,14 +77,14 @@ public class Tree {
     }
 
     public enum TreeType {
-        TREE_TYPE_1,
-        TREE_TYPE_2,
-        TREE_TYPE_3,
-        TREE_TYPE_4,
-        TREE_TYPE_5,
-        TREE_TYPE_6,
-        TREE_TYPE_7,
-        TREE_TYPE_8,
-        TREE_TYPE_9;
+        PINE,
+        BIRCH,
+        OAK,
+        PALM_1,
+        PALM_2,
+        PINE_APPLE,
+        CYPRESS,
+        CHERRY,
+        FIR
     }
 }

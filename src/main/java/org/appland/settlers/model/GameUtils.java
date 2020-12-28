@@ -583,7 +583,7 @@ public class GameUtils {
      * @param start The point to start from
      * @param goal The point to reach
      * @param mapPoints The map with information about each point on the map
-     * @param avoid
+     * @param avoid List of points to avoid when finding the path
      * @return the list of flag points to pass (included the starting point) required to travel from start to goal
      */
     // FIXME: ALLOCATION HOTSPOT
@@ -598,9 +598,7 @@ public class GameUtils {
         Set<Point> avoidSet = null;
 
         if (avoid.length != 0) {
-            avoidSet = new HashSet<>();
-
-            avoidSet.addAll(Arrays.asList(avoid));
+            avoidSet = new HashSet<>(Arrays.asList(avoid));
         }
 
         /* Define starting parameters */
@@ -774,9 +772,7 @@ public class GameUtils {
         Set<Point> avoidSet = null;
 
         if (avoid.length != 0) {
-            avoidSet = new HashSet<>();
-
-            avoidSet.addAll(Arrays.asList(avoid));
+            avoidSet = new HashSet<>(Arrays.asList(avoid));
         }
 
         Point start = startEndPoint.getPosition();
@@ -1290,7 +1286,7 @@ public class GameUtils {
             }
 
             if (directionX > 0 && directionY < 0) {
-                angle = angle = 2*Math.PI;
+                angle = angle - 2 * Math.PI;
             }
         }
 

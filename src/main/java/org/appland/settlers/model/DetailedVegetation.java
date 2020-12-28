@@ -24,5 +24,5 @@ public enum DetailedVegetation {
     LAVA_2,
     LAVA_3,
     LAVA_4,
-    BUILDABLE_MOUNTAIN;
+    BUILDABLE_MOUNTAIN
 }

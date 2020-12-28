@@ -754,10 +754,6 @@ public class GameMap {
 
         /* Collect variables accumulated during stepTime and reset their collection */
 
-/*        for (String aggregatedVariable : stats.getVariablesInGroup(AGGREGATED_EACH_STEP_TIME_GROUP)) {
-            stats.resetCollectionPeriod(aggregatedVariable);
-        }*/
-
         collectEachStepTimeGroup.collectionPeriodDone();
     }
 
@@ -2863,10 +2859,16 @@ public class GameMap {
             return null;
         }
 
-        if (mapPointDownRight != null && mapPointDownRight.isBuilding()) {
+        /* Can't place a building with another building down-right.
+        * - No need to verify that mapPointDownRight exists. This is checked before.
+        */
+        if (mapPointDownRight.isBuilding()) {
             return null;
         }
 
+        /* Can't place a building with a stone down-right
+        * - No need to verify that MapPointDownRight exists. This is checked before.
+        *   */
         if (mapPointDownRight != null && mapPointDownRight.isStone()) {
             return null;
         }
@@ -2880,7 +2882,7 @@ public class GameMap {
         }
 
         /* Cannot place a house down-left of a flag */
-        if (player.isWithinBorder(pointUpRight) && mapPointUpRight.isFlag()) {
+        if (player.isWithinBorder(pointUpRight) && mapPointUpRight != null && mapPointUpRight.isFlag()) {
             return null;
         }
 
@@ -2940,7 +2942,10 @@ public class GameMap {
             return SMALL;
         }
 
-        if (mapPointDownRight != null && mapPointDownRight.isTree()) {
+        /* Can only place a small building if the point down-right is tree
+        *  - No need to check that mapPointDownRight exists. This is checked earlier.
+        *  */
+        if (mapPointDownRight.isTree()) {
             return SMALL;
         }
 
@@ -2951,7 +2956,7 @@ public class GameMap {
 
         /* ADDITIONAL CONDITIONS FOR LARGE */
 
-        if (player.isWithinBorder(pointUpLeft) && mapPointUpLeft.isFlag()) {
+        if (player.isWithinBorder(pointUpLeft) && mapPointUpLeft != null && mapPointUpLeft.isFlag()) {
             return MEDIUM;
         }
 
@@ -2959,7 +2964,7 @@ public class GameMap {
             return MEDIUM;
         }
 
-        if (player.isWithinBorder(pointLeft) && mapPointLeft.isFlag()) {
+        if (player.isWithinBorder(pointLeft) && mapPointLeft != null && mapPointLeft.isFlag()) {
             return MEDIUM;
         }
 
