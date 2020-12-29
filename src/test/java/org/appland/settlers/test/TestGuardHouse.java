@@ -6,16 +6,21 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -28,13 +33,15 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -57,13 +64,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Deliver three planks and two stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -96,13 +103,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Deliver one plank and three stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -134,13 +141,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Deliver one plank and three stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -172,13 +179,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Connect the guard house with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
@@ -219,25 +226,25 @@ public class TestGuardHouse {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 17);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(5, 23);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(5, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
-        Point point3 = new Point(6, 26);
+        Point point2 = new Point(6, 26);
 
-        assertTrue(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point2));
 
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
 
-        assertTrue(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point2));
     }
 
     @Test
@@ -251,15 +258,15 @@ public class TestGuardHouse {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(5, 23);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(5, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
@@ -282,16 +289,17 @@ public class TestGuardHouse {
         assertNotNull(military);
 
         /* Verify that the border is extended when the military reaches the guard house */
-        Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 32);
+        Point point2 = new Point(6, 24);
+        Point point3 = new Point(6, 32);
+
         assertEquals(military.getTarget(), guardHouse0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(point3));
-        assertFalse(player0.getBorderPoints().contains(point4));
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, guardHouse0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(point3));
-        assertTrue(player0.getBorderPoints().contains(point4));
+        assertFalse(player0.getBorderPoints().contains(point2));
+        assertTrue(player0.getBorderPoints().contains(point3));
     }
 
     @Test
@@ -303,13 +311,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -331,13 +339,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Verify that the guard house can't hold soldiers before it's finished */
         assertFalse(guardHouse0.needsMilitaryManning());
@@ -362,13 +370,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -398,13 +406,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -420,13 +428,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         assertFalse(guardHouse0.needsMaterial(COIN));
     }
@@ -440,13 +448,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -482,13 +490,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -518,13 +526,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -553,13 +561,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -593,13 +601,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -628,13 +636,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -665,13 +673,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -701,13 +709,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         Utils.constructHouse(guardHouse0);
 
@@ -729,13 +737,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Connect headquarter and guard house */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -766,13 +774,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Connect headquarter and guard house */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -811,13 +819,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0);
@@ -853,13 +861,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Connect headquarters and guard house */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -886,13 +894,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0);
@@ -935,13 +943,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point26 = new Point(8, 8);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point26);
+        /* Place guard house */
+        Point point1 = new Point(8, 8);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0);
@@ -977,13 +985,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point26 = new Point(8, 8);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point26);
+        /* Place guard house */
+        Point point1 = new Point(8, 8);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Connect the guard house with the headquarter */
         map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
@@ -1026,13 +1034,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point26 = new Point(8, 8);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point26);
+        /* Place guard house */
+        Point point1 = new Point(8, 8);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0);
@@ -1056,15 +1064,15 @@ public class TestGuardHouse {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 17);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(5, 23);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(5, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
@@ -1095,7 +1103,7 @@ public class TestGuardHouse {
 
         /* Place guard house mine */
         Point point1 = new Point(10, 10);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0);
@@ -1122,7 +1130,7 @@ public class TestGuardHouse {
 
         /* Place guard house */
         Point point1 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guard house */
         Utils.constructHouse(guardHouse0);
@@ -1146,7 +1154,7 @@ public class TestGuardHouse {
 
         /* Place guard house */
         Point point1 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(guardHouse0.getMaterialNeeded().size(), 2);
@@ -1179,7 +1187,7 @@ public class TestGuardHouse {
 
         /* Place guard house */
         Point point1 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guard house */
         Utils.constructHouse(guardHouse0);
@@ -1206,13 +1214,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, guardHouse0.getHostedMilitary().size());
@@ -1227,13 +1235,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct guard house */
         Utils.constructHouse(guardHouse0);
@@ -1251,13 +1259,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct guard house */
         Utils.constructHouse(guardHouse0);
@@ -1279,13 +1287,13 @@ public class TestGuardHouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct guard house */
         Utils.constructHouse(guardHouse0);
@@ -1522,5 +1530,1182 @@ public class TestGuardHouse {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
+    }
+
+    @Test
+    public void testGuardHouseCanBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        /* Upgrade the barracks */
+        assertFalse(guardHouse0.isUpgrading());
+
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify that the upgrade isn't too quick */
+        for (int i = 0; i < 100; i++) {
+
+            assertTrue(guardHouse0.isUpgrading());
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        Building upgradedBuilding = map.getBuildingAtPoint(guardHouse0.getPosition());
+
+        assertFalse(map.getBuildings().contains(guardHouse0));
+        assertTrue(map.getBuildings().contains(upgradedBuilding));
+        assertFalse(player0.getBuildings().contains(guardHouse0));
+        assertTrue(player0.getBuildings().contains(upgradedBuilding));
+        assertNotNull(upgradedBuilding);
+        assertFalse(upgradedBuilding.isUpgrading());
+        assertEquals(upgradedBuilding.getClass(), WatchTower.class);
+    }
+
+    @Test
+    public void testUnfinishedGuardHouseCannotBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(13, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the guard house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Upgrade the guard house */
+        try {
+            guardHouse0.upgrade();
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testBurningGuardHouseCannotBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(13, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the guard house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Tear down the guard house so it's on fire */
+        guardHouse0.tearDown();
+
+        /* Upgrade the guard house */
+        try {
+            guardHouse0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+    }
+
+    @Test
+    public void testCannotUpgradeGuardHouseWithoutMaterial() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials but not enough for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify that the upgrade cannot happen without the required material */
+        for (int i = 0; i < 1000; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Add the last required material for the upgrade */
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Step time once and verify that the guard house is upgraded */
+        map.stepTime();
+
+        assertNotEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+        assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()).getClass(), WatchTower.class);
+    }
+
+    @Test
+    public void testCannotUpgradeGuardHouseBeingUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(13, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the guard house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Verify that the guard house can't get upgraded again */
+        try {
+            guardHouse0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+    }
+
+    @Test
+    public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is material for upgrading */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
+        Utils.adjustInventoryTo(headquarter0, STONE, 10);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the guard house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 3, guardHouse0);
+
+        assertFalse(guardHouse0.needsMilitaryManning());
+        assertFalse(guardHouse0.needsMaterial(PRIVATE));
+
+        /* Place the courier on the road */
+        assertNotNull(road0.getCourier());
+
+        Courier courier0 = road0.getCourier();
+
+        /* Verify that the guard house doesn't need stone before the upgrade */
+        assertFalse(guardHouse0.needsMaterial(STONE));
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Verify that the guard house needs stone */
+        assertTrue(guardHouse0.needsMaterial(STONE));
+
+        /* Verify that the courier picks up a stone */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+
+        assertEquals(courier0.getCargo().getMaterial(), STONE);
+
+        /* Verify that the courier delivers the stone */
+        assertEquals(courier0.getCargo().getTarget(), guardHouse0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, guardHouse0.getPosition());
+
+        assertNull(courier0.getCargo());
+
+        /* Verify that the courier picks up the second stone */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+
+        assertEquals(courier0.getCargo().getMaterial(), STONE);
+
+        /* Verify that the courier delivers the stone */
+        assertEquals(courier0.getCargo().getTarget(), guardHouse0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, guardHouse0.getPosition());
+
+        assertNull(courier0.getCargo());
+
+        /* Verify that the courier picks up the third stone */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+
+        assertEquals(courier0.getCargo().getMaterial(), STONE);
+
+        /* Verify that the courier delivers the stone */
+        assertEquals(courier0.getCargo().getTarget(), guardHouse0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, guardHouse0.getPosition());
+
+        assertNull(courier0.getCargo());
+
+        /* Verify that the courier doesn't deliver anything else to the guard house */
+        for (int i = 0; i < 1000; i++) {
+
+            assertTrue(courier0.getCargo() == null || !courier0.getCargo().getTarget().equals(guardHouse0));
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testOccupiedGuardHouseIsOccupiedAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify that the upgrade isn't too quick */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the upgraded building is also occupied */
+        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+
+        assertTrue(watchTower0.isOccupied());
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
+    }
+
+    @Test
+    public void testCoinRemainsAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Put a coin in the building */
+        Cargo coinCargo = new Cargo(COIN, map);
+
+        guardHouse0.promiseDelivery(COIN);
+
+        guardHouse0.putCargo(coinCargo);
+
+        assertEquals(guardHouse0.getAmount(COIN), 1);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the coin is still in the building */
+        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+
+        assertEquals(watchTower0.getAmount(COIN), 1);
+    }
+
+    @Test
+    public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Upgrade for a while */
+        for (int i = 0; i < 10; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the building can be destroyed */
+        guardHouse0.tearDown();
+
+        assertTrue(guardHouse0.isBurningDown());
+    }
+
+    @Test
+    public void testPlayerIsCorrectAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player2 = new Player("Player 2", java.awt.Color.BLACK);
+        List<Player> players = new ArrayList<>();
+        players.add(player2);
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Put a coin in the building */
+        Cargo coinCargo = new Cargo(COIN, map);
+
+        guardHouse0.promiseDelivery(COIN);
+
+        guardHouse0.putCargo(coinCargo);
+
+        assertEquals(guardHouse0.getAmount(COIN), 1);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the player is set correctly in the upgraded building */
+        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+
+        assertEquals(watchTower0.getPlayer(), player0);
+    }
+
+    @Test
+    public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that two more soldiers can be hosted in the building */
+        Building watchTower0 = map.getBuildingAtPoint(guardHouse0.getPosition());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+    }
+
+    @Test
+    public void testBorderIsExpandedAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify the border before the upgrade */
+        Point point2 = new Point(37, 7);
+        Point point3 = new Point(39, 7);
+
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.isWithinBorder(point2));
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the border is expanded after the upgrade */
+        assertFalse(player0.getBorderPoints().contains(point2));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.isWithinBorder(point2));
+    }
+
+    @Test
+    public void testFlagIsCorrectAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the flag is correct after the upgrade */
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+
+        assertNotNull(buildingAfterUpgrade);
+        assertNotNull(buildingAfterUpgrade.getFlag());
+        assertEquals(buildingAfterUpgrade.getFlag().getPosition(), point1.downRight());
+    }
+
+    @Test
+    public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Verify that the guard house is still occupied */
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify that the guard house is occupied during the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the guard house is still occupied */
+            assertTrue(guardHouse0.isOccupied());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Evacuate the guard house */
+        guardHouse0.evacuate();
+
+        assertTrue(guardHouse0.isEvacuated());
+        assertFalse(guardHouse0.needsMilitaryManning());
+
+        /* Connect headquarter and guard house */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+
+        /* Occupy the guard house */
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+
+        /* Verify that the military comes out immediately */
+
+        map.stepTime();
+
+        assertFalse(military.isInsideBuilding());
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 0);
+    }
+
+    @Test
+    public void testCanUpgradeAfterDisablingPromotions() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        assertTrue(guardHouse0.isOccupied());
+
+        /* Disable promotions */
+        guardHouse0.disablePromotions();
+
+        assertFalse(guardHouse0.isPromotionEnabled());
+
+        /* Verify that the guard house can be upgraded */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the guard house is upgraded */
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+
+        assertNotNull(buildingAfterUpgrade);
+        assertEquals(buildingAfterUpgrade.getClass(), WatchTower.class);
+    }
+
+    @Test
+    public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
+
+        /* Place a guard house */
+        Point point2 = new Point(26, 6);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point2);
+
+        /* Construct the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Occupy the guard house */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
+
+        /* Place regular building */
+        Point point3 = new Point(30, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+
+        /* Connect the buildings with a road */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), foresterHut0.getFlag());
+
+        /* Evacuate the guard house and wait for the guard house to become empty */
+        guardHouse0.evacuate();
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (guardHouse0.getNumberOfHostedMilitary() == 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 0);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(guardHouse0, map.getBuildingAtPoint(guardHouse0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the forester hut and the road remains */
+        assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()).getClass(), WatchTower.class);
+        assertTrue(map.isBuildingAtPoint(foresterHut0.getPosition()));
+        assertEquals(map.getBuildingAtPoint(foresterHut0.getPosition()), foresterHut0);
+        assertTrue(map.getRoads().contains(road0));
+    }
+
+    @Test
+    public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Upgrade the guard house */
+        assertFalse(guardHouse0.isOccupied());
+
+        guardHouse0.upgrade();
+
+        /* Verify that the guard house is still unoccupied */
+        assertFalse(guardHouse0.isOccupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Verify that the guard house is unoccupied during and after the upgrade */
+        Point point2 = new Point(25, 5);
+        Point point3 = new Point(27, 5);
+
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the guard house is still occupied */
+            assertFalse(guardHouse0.isOccupied());
+            assertTrue(player0.getBorderPoints().contains(point2));
+            assertFalse(player0.isWithinBorder(point3));
+
+            map.stepTime();
+        }
+
+        assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()).getClass(), WatchTower.class);
+        assertFalse(map.getBuildingAtPoint(guardHouse0.getPosition()).isOccupied());
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.isWithinBorder(point3));
+    }
+
+    @Test
+    public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(21, 5);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Connect the guard house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+
+        /* Finish construction of the guard house */
+        Utils.constructHouse(guardHouse0);
+
+        /* Fill the guard house with soldiers */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse0);
+
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 3);
+
+        /* Make sure there are enough soldiers in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade to happen */
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 3);
+
+        Building watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
+
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 3);
+        assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()), watchTower0);
+        assertEquals(watchTower0.getMaxHostedMilitary(), 6);
+
+        /* Verify that only three soldiers are sent out to occupy the building */
+
+        /* Wait for three soldiers to occupy the building */
+        Utils.waitForMilitaryBuildingToGetPopulated(watchTower0, 6);
+
+        /* Verify that no more soldiers are sent out */
+        assertFalse(watchTower0.needsMilitaryManning());
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
+
+        for (int i = 0; i < 2000; i++) {
+
+            assertNull(Utils.findMilitaryOutsideBuilding(player0));
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testUpgradedGuardHouseGetsPopulatedFully() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Add privates to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
+
+        /* Place guard house */
+        Point point1 = new Point(6, 12);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        Utils.constructHouse(guardHouse0);
+
+        /* Connect the guard house to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the guard house to get occupied */
+        for (int i = 0; i < 1000; i++) {
+
+            if (guardHouse0.getNumberOfHostedMilitary() == 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 2);
+
+        /* Upgrade the guard house */
+        guardHouse0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+        guardHouse0.promiseDelivery(STONE);
+
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+        guardHouse0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade to happen */
+        Building watchTower0 = Utils.waitForBuildingToGetUpgraded(guardHouse0);
+
+        assertEquals(map.getBuildingAtPoint(guardHouse0.getPosition()), watchTower0);
+        assertEquals(watchTower0.getMaxHostedMilitary(), 6);
+
+        /* Verify that the building gets fully occupied */
+        for (int i = 0; i < 500; i++) {
+
+            if (watchTower0.getNumberOfHostedMilitary() == 6) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
     }
 }

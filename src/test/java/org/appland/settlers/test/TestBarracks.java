@@ -81,13 +81,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Deliver two planks */
         Cargo cargo = new Cargo(PLANK, map);
@@ -114,13 +114,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Deliver two planks */
         Cargo cargo = new Cargo(PLANK, map);
@@ -146,15 +146,15 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Placing road between (7, 21) and (6, 4) */
+        /* Place road between (7, 21) and (6, 4) */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -193,15 +193,15 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(6, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(6, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(5, 23);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(5, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -225,15 +225,15 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(6, 16);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(6, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(5, 23);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(5, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -256,17 +256,17 @@ public class TestBarracks {
         assertNotNull(military);
 
         /* Verify that the border is extended when the military reaches the barracks */
-        Point point3 = new Point(5, 25);
-        Point point4 = new Point(9, 31);
+        Point point2 = new Point(5, 25);
+        Point point3 = new Point(9, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(point3));
-        assertFalse(player0.getBorderPoints().contains(point4));
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertTrue(player0.getBorderPoints().contains(point4));
-        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point2));
     }
 
     @Test
@@ -278,13 +278,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -305,13 +305,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Verify that the barracks can't hold soldiers before it's finished */
         assertFalse(barracks0.needsMilitaryManning());
@@ -336,13 +336,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -371,13 +371,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -393,13 +393,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertFalse(barracks0.needsMaterial(COIN));
     }
@@ -413,13 +413,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -452,13 +452,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -502,13 +502,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -538,13 +538,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -573,13 +573,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -613,13 +613,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -648,13 +648,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -684,16 +684,16 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add coins to the headquarter */
         headquarter0.putCargo(new Cargo(COIN, map));
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -727,16 +727,16 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add coins to the headquarter */
         headquarter0.putCargo(new Cargo(COIN, map));
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -776,13 +776,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect headquarter and barracks */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -812,13 +812,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect headquarter and barracks */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -858,13 +858,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -900,13 +900,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect headquarters and barracks */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -939,13 +939,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -991,13 +991,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(8, 8);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1033,13 +1033,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(8, 8);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1082,13 +1082,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(8, 8);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1112,13 +1112,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Placing headquarter */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1158,13 +1158,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1222,13 +1222,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(13, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(13, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1252,13 +1252,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(13, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(13, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1288,13 +1288,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1345,13 +1345,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(13, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(13, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1384,17 +1384,17 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Make sure there is material for upgrading */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, STONE, 10);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
@@ -1478,13 +1478,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1534,13 +1534,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1593,13 +1593,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1652,13 +1652,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1715,13 +1715,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1771,13 +1771,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1802,12 +1802,12 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Verify the border before the upgrade */
-        Point point27 = new Point(37, 5);
-        Point point28 = new Point(39, 5);
+        Point point2 = new Point(37, 5);
+        Point point3 = new Point(39, 5);
 
-        assertTrue(player0.getBorderPoints().contains(point27));
-        assertFalse(player0.getBorderPoints().contains(point28));
-        assertFalse(player0.isWithinBorder(point27));
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.isWithinBorder(point2));
 
         /* Wait for the upgrade */
         for (int i = 0; i < 100; i++) {
@@ -1818,9 +1818,9 @@ public class TestBarracks {
         }
 
         /* Verify that the border is expanded after the upgrade */
-        assertFalse(player0.getBorderPoints().contains(point27));
-        assertTrue(player0.getBorderPoints().contains(point28));
-        assertTrue(player0.isWithinBorder(point27));
+        assertFalse(player0.getBorderPoints().contains(point2));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.isWithinBorder(point2));
     }
 
     @Test
@@ -1834,13 +1834,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1873,11 +1873,11 @@ public class TestBarracks {
         }
 
         /* Verify that the flag is correct after the upgrade */
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point26);
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertNotNull(buildingAfterUpgrade.getFlag());
-        assertEquals(buildingAfterUpgrade.getFlag().getPosition(), point26.downRight());
+        assertEquals(buildingAfterUpgrade.getFlag().getPosition(), point1.downRight());
     }
 
     @Test
@@ -1891,13 +1891,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1943,13 +1943,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -1985,13 +1985,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -2029,7 +2029,7 @@ public class TestBarracks {
         }
 
         /* Verify that the barracks is upgraded */
-        Building buildingAfterUpgrade = map.getBuildingAtPoint(point26);
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
 
         assertNotNull(buildingAfterUpgrade);
         assertEquals(buildingAfterUpgrade.getClass(), GuardHouse.class);
@@ -2046,13 +2046,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -2127,13 +2127,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -2216,13 +2216,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -2231,8 +2231,8 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
         /* Place a second barracks */
-        Point point1 = new Point(26, 6);
-        Building barracks1 = map.placeBuilding(new Barracks(player0), point1);
+        Point point2 = new Point(26, 6);
+        Barracks barracks1 = map.placeBuilding(new Barracks(player0), point2);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks1);
@@ -2241,8 +2241,8 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1);
 
         /* Place regular building */
-        Point point2 = new Point(30, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
+        Point point3 = new Point(30, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
 
         /* Connect the buildings with a road */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), foresterHut0.getFlag());
@@ -2301,13 +2301,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -2332,23 +2332,23 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Verify that the barracks is unoccupied during and after the upgrade */
-        Point point1 = new Point(25, 5);
-        Point point2 = new Point(27, 5);
+        Point point2 = new Point(25, 5);
+        Point point3 = new Point(27, 5);
 
         for (int i = 0; i < 100; i++) {
 
             /* Verify that the barracks is still occupied */
             assertFalse(barracks0.isOccupied());
-            assertTrue(player0.getBorderPoints().contains(point1));
-            assertFalse(player0.isWithinBorder(point2));
+            assertTrue(player0.getBorderPoints().contains(point2));
+            assertFalse(player0.isWithinBorder(point3));
 
             map.stepTime();
         }
 
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
         assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).isOccupied());
-        assertTrue(player0.getBorderPoints().contains(point1));
-        assertFalse(player0.isWithinBorder(point2));
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.isWithinBorder(point3));
     }
 
     @Test
@@ -2362,13 +2362,13 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
@@ -2401,16 +2401,16 @@ public class TestBarracks {
         /* Wait for the upgrade to happen */
         assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
 
-        barracks0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+        Building guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
 
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
-        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), barracks0);
-        assertEquals(barracks0.getMaxHostedMilitary(), 3);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 2);
+        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), guardHouse0);
+        assertEquals(guardHouse0.getMaxHostedMilitary(), 3);
         /* Verify that only one military is sent out to occupy the building */
 
         /* Wait for the military */
-        assertTrue(barracks0.needsMilitaryManning());
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
+        assertTrue(guardHouse0.needsMilitaryManning());
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 2);
 
         Military military0 = null;
         for (int i = 0; i < 2000; i++) {
@@ -2425,12 +2425,12 @@ public class TestBarracks {
         }
 
         assertNotNull(military0);
-        assertFalse(barracks0.needsMilitaryManning());
+        assertFalse(guardHouse0.needsMilitaryManning());
 
-        /* Wait for the military to get to the barracks and verify no other military is sent out */
+        /* Wait for the military to get to the guard house and verify no other military is sent out */
         for (int i = 0; i < 2000; i++) {
 
-            if (military0.getPosition().equals(barracks0.getPosition())) {
+            if (military0.getPosition().equals(guardHouse0.getPosition())) {
                 break;
             }
 
@@ -2439,7 +2439,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 3);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 3);
 
         /* Verify that no more soldiers are sent */
         for (int i = 0; i < 2000; i++) {
@@ -2459,13 +2459,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -2494,16 +2494,16 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add privates to the headquarter */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
 
@@ -2537,22 +2537,22 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Wait for the upgrade to happen */
-        barracks0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+        Building guardHouse0 = Utils.waitForBuildingToGetUpgraded(barracks0);
 
-        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), barracks0);
-        assertEquals(barracks0.getMaxHostedMilitary(), 3);
+        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), guardHouse0);
+        assertEquals(guardHouse0.getMaxHostedMilitary(), 3);
 
         /* Verify that the building gets fully occupied */
         for (int i = 0; i < 500; i++) {
 
-            if (barracks0.getNumberOfHostedMilitary() == 3) {
+            if (guardHouse0.getNumberOfHostedMilitary() == 3) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 3);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 3);
     }
 
     @Test
@@ -2566,15 +2566,15 @@ public class TestBarracks {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 17);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 17);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(5, 23);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(5, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -2605,7 +2605,7 @@ public class TestBarracks {
 
         /* Place barracks */
         Point point1 = new Point(7, 9);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
@@ -2633,7 +2633,7 @@ public class TestBarracks {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -2657,7 +2657,7 @@ public class TestBarracks {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(barracks0.getMaterialNeeded().size(), 1);
@@ -2688,7 +2688,7 @@ public class TestBarracks {
 
         /* Place barracks */
         Point point1 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
         Utils.constructHouse(barracks0);
@@ -2715,13 +2715,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, barracks0.getHostedMilitary().size());
@@ -2736,13 +2736,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct barracks */
         Utils.constructHouse(barracks0);
@@ -2760,13 +2760,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct barracks */
         Utils.constructHouse(barracks0);
@@ -2788,13 +2788,13 @@ public class TestBarracks {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing barracks */
-        Point point22 = new Point(6, 12);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        /* Place barracks */
+        Point point1 = new Point(6, 12);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct barracks */
         Utils.constructHouse(barracks0);

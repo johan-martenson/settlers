@@ -5,12 +5,14 @@
  */
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.SMALL;
 
 @HouseSize(size = SMALL, material = {PLANK, PLANK, PLANK, STONE, STONE})
 @MilitaryBuilding(maxHostedMilitary = 3, defenceRadius = 9, maxCoins = 2, attackRadius = 20, discoveryRadius = 13)
+@UpgradeCost(stones = 3)
 public class GuardHouse extends Building {
 
     public GuardHouse(Player player0) {
@@ -25,6 +27,57 @@ public class GuardHouse extends Building {
     @Override
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in barracks.");
+    }
+
+    @Override
+    protected void doUpgradeBuilding() throws InvalidRouteException {
+        Building upgraded = new WatchTower(getPlayer());
+
+        /* Set the map in the upgraded building */
+        upgraded.setMap(getMap());
+
+        /* Pre-construct the upgraded building */
+        upgraded.setConstructionReady();
+
+        /* Set the position of the upgraded building so the soldiers can enter */
+        upgraded.setPosition(getPosition());
+
+        /* Replace the buildings on the map */
+        getMap().replaceBuilding(upgraded, getPosition());
+
+        /* Ensure that the new building is occupied */
+        if (isOccupied()) {
+            upgraded.setOccupied();
+        }
+
+        /* Move the soldiers to the new building */
+        int currentMilitary = getNumberOfHostedMilitary();
+
+        for (int i = 0; i < currentMilitary; i++) {
+
+            /* Move one military from the old to the new building */
+            Military military = retrieveMilitary();
+
+            upgraded.promiseMilitary(military);
+            military.enterBuilding(upgraded);
+        }
+
+        /* Make sure the border is updated only once */
+        if (upgraded.getNumberOfHostedMilitary() == 0) {
+            getMap().updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
+        }
+
+        /* Move the coins to the new building */
+        int amountCoins = getAmount(COIN);
+        for (int i = 0; i < amountCoins; i++) {
+
+            /* Put one coin in the new building */
+            Cargo coinCargo = new Cargo(COIN, getMap());
+
+            upgraded.promiseDelivery(COIN);
+
+            upgraded.putCargo(coinCargo);
+        }
     }
 
     @Override
