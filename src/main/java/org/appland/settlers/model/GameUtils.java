@@ -20,6 +20,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
 import static java.lang.Math.round;
+import static org.appland.settlers.model.Material.COIN;
 
 /**
  *
@@ -302,6 +303,55 @@ public class GameUtils {
 
             default:
                 throw new RuntimeException("Can't translate to detailed vegetation: " + simpleVegetation);
+        }
+    }
+
+    public static void upgradeMilitaryBuilding(Building fromBuilding, Building upgraded) throws InvalidRouteException {
+
+        /* Set the map in the upgraded building */
+        upgraded.setMap(fromBuilding.getMap());
+
+        /* Pre-construct the upgraded building */
+        upgraded.setConstructionReady();
+
+        /* Set the position of the upgraded building so the soldiers can enter */
+        upgraded.setPosition(fromBuilding.getPosition());
+
+        /* Replace the buildings on the map */
+        fromBuilding.getMap().replaceBuilding(upgraded, fromBuilding.getPosition());
+
+        /* Ensure that the new building is occupied */
+        if (fromBuilding.isOccupied()) {
+            upgraded.setOccupied();
+        }
+
+        /* Move the soldiers to the new building */
+        int currentMilitary = fromBuilding.getNumberOfHostedMilitary();
+
+        for (int i = 0; i < currentMilitary; i++) {
+
+            /* Move one military from the old to the new building */
+            Military military = fromBuilding.retrieveMilitary();
+
+            upgraded.promiseMilitary(military);
+            military.enterBuilding(upgraded);
+        }
+
+        /* Make sure the border is updated only once */
+        if (upgraded.getNumberOfHostedMilitary() == 0) {
+            fromBuilding.getMap().updateBorder(fromBuilding, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
+        }
+
+        /* Move the coins to the new building */
+        int amountCoins = fromBuilding.getAmount(COIN);
+        for (int i = 0; i < amountCoins; i++) {
+
+            /* Put one coin in the new building */
+            Cargo coinCargo = new Cargo(COIN, fromBuilding.getMap());
+
+            upgraded.promiseDelivery(COIN);
+
+            upgraded.putCargo(coinCargo);
         }
     }
 

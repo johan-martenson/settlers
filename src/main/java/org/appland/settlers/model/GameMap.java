@@ -1685,6 +1685,30 @@ public class GameMap {
 
     private List<Point> buildFullGrid() {
         List<Point> result = new ArrayList<>();
+
+        /* Go row by row, starting from bottom-left corner */
+        for (int y = 0; y < height; y++) {
+
+            /* X start at 1 if y is odd, otherwise 0 */
+            int xOffset;
+
+            if (y % 2 == 0) {
+                xOffset = 0;
+            } else {
+                xOffset = 1;
+            }
+
+            /* Go one row, from left to right */
+            for (int x = 0; x * 2 + xOffset < width; x++) {
+                result.add(new Point(2 * x + xOffset, y));
+            }
+        }
+
+        return result;
+    }
+
+    private List<Point> buildFullGrid2() {
+        List<Point> result = new ArrayList<>();
         boolean rowFlip    = true;
         boolean columnFlip;
 

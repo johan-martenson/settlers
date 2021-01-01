@@ -1,7 +1,7 @@
 LARGER CHANGES
 ==============
 
-* Add missing upgrades for other military buildings that barracks
+* Fix upgrade cost for barracks, guard house, watch tower
 
 * Add the two missing states for house construction - digging planned, building planned
 

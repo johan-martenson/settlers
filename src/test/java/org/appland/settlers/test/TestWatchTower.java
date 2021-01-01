@@ -6,10 +6,15 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -22,19 +27,22 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -43,10 +51,6 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestWatchTower {
-
-    /*
-    TODO: test upgrade
-     */
 
     @Test
     public void testWatchTowerNeedsThreePlanksAndFiveStonesForConstruction() throws Exception {
@@ -63,7 +67,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver two planks and five stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -105,7 +109,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver one plank and three stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -149,7 +153,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver one plank and three stones */
         Cargo cargo = new Cargo(PLANK, map);
@@ -193,7 +197,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect the watch tower with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
@@ -240,7 +244,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(5, 13);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -269,7 +273,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(5, 13);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -321,7 +325,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -352,7 +356,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the watch tower can't hold soldiers before it's finished */
         assertFalse(watchTower0.needsMilitaryManning());
@@ -383,7 +387,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -422,7 +426,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -444,7 +448,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         assertFalse(watchTower0.needsMaterial(COIN));
     }
@@ -464,7 +468,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -508,7 +512,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -544,7 +548,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -579,7 +583,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -619,7 +623,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -654,7 +658,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -691,7 +695,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -727,7 +731,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
@@ -755,7 +759,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarter and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -792,7 +796,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarter and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -837,7 +841,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0);
@@ -879,7 +883,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarters and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -912,7 +916,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0);
@@ -961,7 +965,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0);
@@ -1003,7 +1007,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0);
@@ -1031,7 +1035,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Connect the watch tower with the headquarter */
         map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
@@ -1082,7 +1086,7 @@ public class TestWatchTower {
 
         /* Placing watch tower */
         Point point22 = new Point(5, 13);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
@@ -1115,7 +1119,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point1 = new Point(10, 10);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0);
@@ -1142,7 +1146,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point1 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Construct the watch tower */
         Utils.constructHouse(watchTower0);
@@ -1166,7 +1170,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point1 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(watchTower0.getMaterialNeeded().size(), 2);
@@ -1199,7 +1203,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point1 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Construct the watch tower */
         Utils.constructHouse(watchTower0);
@@ -1232,7 +1236,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, watchTower0.getHostedMilitary().size());
@@ -1253,7 +1257,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */
         Utils.constructHouse(watchTower0);
@@ -1277,7 +1281,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */
         Utils.constructHouse(watchTower0);
@@ -1305,7 +1309,7 @@ public class TestWatchTower {
 
         /* Place watch tower */
         Point point22 = new Point(6, 12);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */
         Utils.constructHouse(watchTower0);
@@ -1540,5 +1544,1121 @@ public class TestWatchTower {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
+    }
+
+    @Test
+    public void testWatchTowerCanBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        /* Upgrade the barracks */
+        assertFalse(watchTower0.isUpgrading());
+
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Utils.deliverCargos(watchTower0, PLANK, 1);
+        Utils.deliverCargos(watchTower0, STONE, 2);
+
+        /* Verify that the upgrade isn't too quick */
+        for (int i = 0; i < 100; i++) {
+
+            assertTrue(watchTower0.isUpgrading());
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        Building upgradedBuilding = map.getBuildingAtPoint(watchTower0.getPosition());
+
+        assertFalse(map.getBuildings().contains(watchTower0));
+        assertTrue(map.getBuildings().contains(upgradedBuilding));
+        assertFalse(player0.getBuildings().contains(watchTower0));
+        assertTrue(player0.getBuildings().contains(upgradedBuilding));
+        assertNotNull(upgradedBuilding);
+        assertFalse(upgradedBuilding.isUpgrading());
+        assertEquals(upgradedBuilding.getClass(), Fortress.class);
+    }
+
+    @Test
+    public void testUnfinishedWatchTowerCannotBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(13, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Upgrade the watch tower */
+        try {
+            watchTower0.upgrade();
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testBurningWatchTowerCannotBeUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(13, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Tear down the watch tower so it's on fire */
+        watchTower0.tearDown();
+
+        /* Upgrade the watch tower */
+        try {
+            watchTower0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+    }
+
+    @Test
+    public void testCannotUpgradeWatchTowerWithoutMaterial() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials but not enough for the upgrade */
+        Utils.deliverCargos(watchTower0, PLANK, 1);
+        Utils.deliverCargos(watchTower0, STONE, 1); // One less than needed
+
+        /* Verify that the upgrade cannot happen without the required material */
+        for (int i = 0; i < 1000; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Add the last required material for the upgrade */
+        Utils.deliverCargos(watchTower0, STONE, 1);
+
+        /* Step time once and verify that the watch tower is upgraded */
+        map.stepTime();
+
+        assertNotEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+        assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()).getClass(), Fortress.class);
+    }
+
+    @Test
+    public void testCannotUpgradeWatchTowerBeingUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(13, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Verify that the fortress can't get upgraded again */
+        try {
+            watchTower0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
+    }
+
+    @Test
+    public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is material for upgrading */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
+        Utils.adjustInventoryTo(headquarter0, STONE, 10);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 6, watchTower0);
+
+        assertFalse(watchTower0.needsMilitaryManning());
+        assertFalse(watchTower0.needsMaterial(PRIVATE));
+
+        /* Place the courier on the road */
+        assertNotNull(road0.getCourier());
+
+        Courier courier0 = road0.getCourier();
+
+        /* Verify that the watch tower doesn't need stone before the upgrade */
+        assertFalse(watchTower0.needsMaterial(STONE));
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Verify that the watch tower needs stone */
+        assertTrue(watchTower0.needsMaterial(STONE));
+
+        /* Verify that the courier picks up a stone or plank */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier0);
+
+        assertNotNull(courier0.getCargo());
+        assertTrue(Objects.equals(courier0.getCargo().getMaterial(), STONE) || Objects.equals(courier0.getCargo().getMaterial(), PLANK));
+
+        /* Verify that the courier delivers the cargo */
+        assertEquals(courier0.getCargo().getTarget(), watchTower0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier0, watchTower0.getPosition());
+
+        assertNull(courier0.getCargo());
+    }
+
+    @Test
+    public void testOccupiedWatchTowerIsOccupiedAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Verify that the upgrade isn't too quick */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the upgraded building is also occupied */
+        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+
+        assertTrue(fortress0.isOccupied());
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
+    }
+
+    @Test
+    public void testCoinRemainsAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Put a coin in the building */
+        Cargo coinCargo = new Cargo(COIN, map);
+
+        watchTower0.promiseDelivery(COIN);
+
+        watchTower0.putCargo(coinCargo);
+
+        assertEquals(watchTower0.getAmount(COIN), 1);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the coin is still in the building */
+        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+
+        assertEquals(fortress0.getAmount(COIN), 1);
+    }
+
+    @Test
+    public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Upgrade for a while */
+        for (int i = 0; i < 10; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the building can be destroyed */
+        watchTower0.tearDown();
+
+        assertTrue(watchTower0.isBurningDown());
+    }
+
+    @Test
+    public void testPlayerIsCorrectAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player2 = new Player("Player 2", java.awt.Color.BLACK);
+        List<Player> players = new ArrayList<>();
+        players.add(player2);
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Put a coin in the building */
+        Cargo coinCargo = new Cargo(COIN, map);
+
+        watchTower0.promiseDelivery(COIN);
+
+        watchTower0.putCargo(coinCargo);
+
+        assertEquals(watchTower0.getAmount(COIN), 1);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the player is set correctly in the upgraded building */
+        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+
+        assertEquals(fortress0.getPlayer(), player0);
+    }
+
+    @Test
+    public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that two more soldiers can be hosted in the building */
+        Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+    }
+
+    @Test
+    public void testBorderIsExpandedAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Utils.deliverCargos(watchTower0, PLANK, 1);
+        Utils.deliverCargos(watchTower0, STONE, 2);
+
+        /* Verify the border before the upgrade */
+        Point point2 = new Point(36, 10);
+        Point point3 = new Point(36, 12);
+
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.isWithinBorder(point2));
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the border is expanded after the upgrade */
+        assertFalse(player0.getBorderPoints().contains(point2));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.isWithinBorder(point2));
+    }
+
+    @Test
+    public void testFlagIsCorrectAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the flag is correct after the upgrade */
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+
+        assertNotNull(buildingAfterUpgrade);
+        assertNotNull(buildingAfterUpgrade.getFlag());
+        assertEquals(buildingAfterUpgrade.getFlag().getPosition(), point1.downRight());
+    }
+
+    @Test
+    public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Verify that the watch tower is still occupied */
+        assertTrue(watchTower0.isOccupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Verify that the watch tower is occupied during the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the watch tower is still occupied */
+            assertTrue(watchTower0.isOccupied());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(6, 12);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Evacuate the watch tower */
+        watchTower0.evacuate();
+
+        assertTrue(watchTower0.isEvacuated());
+        assertFalse(watchTower0.needsMilitaryManning());
+
+        /* Connect headquarter and watch tower */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+
+        /* Occupy the watch tower */
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+
+        /* Verify that the military comes out immediately */
+
+        map.stepTime();
+
+        assertFalse(military.isInsideBuilding());
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+    }
+
+    @Test
+    public void testCanUpgradeAfterDisablingPromotions() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        assertTrue(watchTower0.isOccupied());
+
+        /* Disable promotions */
+        watchTower0.disablePromotions();
+
+        assertFalse(watchTower0.isPromotionEnabled());
+
+        /* Verify that the watch tower can be upgraded */
+        watchTower0.upgrade();
+
+        assertTrue(watchTower0.isUpgrading());
+
+        /* Add materials for the upgrade */
+        Utils.deliverCargos(watchTower0, PLANK, 1);
+        Utils.deliverCargos(watchTower0, STONE, 2);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the watch tower is upgraded */
+        assertNotEquals(map.getBuildingAtPoint(watchTower0.getPosition()), watchTower0);
+
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point1);
+
+        assertFalse(buildingAfterUpgrade.isUpgrading());
+        assertNotNull(buildingAfterUpgrade);
+        assertEquals(buildingAfterUpgrade.getClass(), Fortress.class);
+    }
+
+    @Test
+    public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
+
+        /* Place a watch tower */
+        Point point2 = new Point(26, 6);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point2);
+
+        /* Construct the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
+
+        /* Place regular building */
+        Point point3 = new Point(30, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+
+        /* Connect the buildings with a road */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), foresterHut0.getFlag());
+
+        /* Evacuate the watch tower and wait for the watch tower to become empty */
+        watchTower0.evacuate();
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (watchTower0.getNumberOfHostedMilitary() == 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(watchTower0, map.getBuildingAtPoint(watchTower0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the forester hut and the road remains */
+        assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()).getClass(), WatchTower.class);
+        assertTrue(map.isBuildingAtPoint(foresterHut0.getPosition()));
+        assertEquals(map.getBuildingAtPoint(foresterHut0.getPosition()), foresterHut0);
+        assertTrue(map.getRoads().contains(road0));
+    }
+
+    @Test
+    public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(7, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Upgrade the watch tower */
+        assertFalse(watchTower0.isOccupied());
+
+        watchTower0.upgrade();
+
+        /* Verify that the watch tower is still unoccupied */
+        assertFalse(watchTower0.isOccupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Verify that the watch tower is unoccupied during and after the upgrade */
+        Point point2 = new Point(25, 5);
+        Point point3 = new Point(27, 5);
+
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the watch tower is still occupied */
+            assertFalse(watchTower0.isOccupied());
+            assertTrue(player0.getBorderPoints().contains(point2));
+            assertFalse(player0.isWithinBorder(point3));
+
+            map.stepTime();
+        }
+
+        assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()).getClass(), WatchTower.class);
+        assertFalse(map.getBuildingAtPoint(watchTower0.getPosition()).isOccupied());
+        assertTrue(player0.getBorderPoints().contains(point2));
+        assertFalse(player0.isWithinBorder(point3));
+    }
+
+    @Test
+    public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(21, 5);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Fill the watch tower with soldiers */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 6, watchTower0);
+
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
+
+        /* Make sure there are enough soldiers in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Utils.deliverCargos(watchTower0, PLANK, 1);
+        Utils.deliverCargos(watchTower0, STONE, 2);
+
+        /* Wait for the upgrade to happen */
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
+
+        Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
+
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 6);
+        assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
+        assertEquals(fortress0.getMaxHostedMilitary(), 9);
+
+        /* Verify that only three soldiers are sent out to occupy the building */
+
+        /* Wait for three soldiers to occupy the building */
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 9);
+
+        /* Verify that no more soldiers are sent out */
+        assertFalse(fortress0.needsMilitaryManning());
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 9);
+
+        for (int i = 0; i < 2000; i++) {
+
+            assertNull(Utils.findMilitaryOutsideBuilding(player0));
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testUpgradedWatchTowerGetsPopulatedFully() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Add privates to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
+
+        /* Place watch tower */
+        Point point1 = new Point(6, 12);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        Utils.constructHouse(watchTower0);
+
+        /* Connect the watch tower to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the watch tower to get occupied */
+        for (int i = 0; i < 1000; i++) {
+
+            if (watchTower0.getNumberOfHostedMilitary() == 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 2);
+
+        /* Upgrade the watch tower */
+        watchTower0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+        watchTower0.promiseDelivery(STONE);
+
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade to happen */
+        Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
+
+        assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
+        assertEquals(fortress0.getMaxHostedMilitary(), 9);
+
+        /* Verify that the building gets fully occupied */
+        for (int i = 0; i < 500; i++) {
+
+            if (fortress0.getNumberOfHostedMilitary() == 9) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 9);
     }
 }

@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, STONE, STONE, STONE, STONE, STONE})
 @MilitaryBuilding(maxHostedMilitary = 6, defenceRadius = 10, maxCoins = 3, attackRadius = 32, discoveryRadius = 14)
+@UpgradeCost(planks = 1, stones = 2)
 public class WatchTower extends Building {
 
     public WatchTower(Player player0) {
@@ -30,5 +31,12 @@ public class WatchTower extends Building {
     @Override
     public boolean isMilitaryBuilding() {
         return true;
+    }
+
+    @Override
+    protected void doUpgradeBuilding() throws InvalidRouteException {
+        Building upgraded = new Fortress(getPlayer());
+
+        GameUtils.upgradeMilitaryBuilding(this, upgraded);
     }
 }
