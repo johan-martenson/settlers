@@ -127,10 +127,6 @@ public class GameMap {
     private boolean winnerReported;
     private boolean isBorderUpdated;
 
-    enum PointInformation {
-        NONE, STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP
-    }
-
     /**
      * Creates a new game map
      *
@@ -3410,49 +3406,6 @@ public class GameMap {
 
     void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
-    }
-
-    PointInformation whatIsAtPoint(Point point) {
-        MapPoint mapPoint = getMapPoint(point);
-
-        if (mapPoint == null) {
-            return PointInformation.OUTSIDE_MAP;
-        }
-
-        if (mapPoint.isTree()) {
-            return PointInformation.TREE;
-        }
-
-        if (mapPoint.isStone()) {
-            return PointInformation.STONE;
-        }
-
-        if (mapPoint.isFlag()) {
-
-            if (mapPoint.isRoad()) {
-                return PointInformation.FLAG_AND_ROADS;
-            }
-
-            return PointInformation.FLAG;
-        }
-
-        if (mapPoint.isBuilding()) {
-            return PointInformation.BUILDING;
-        }
-
-        if (mapPoint.isRoad()) {
-            return PointInformation.ROAD;
-        }
-
-        if (mapPoint.isSign()) {
-            return PointInformation.SIGN;
-        }
-
-        if (mapPoint.isCrop()) {
-            return PointInformation.CROP;
-        }
-
-        return PointInformation.NONE;
     }
 
     public void reportPromotedRoad(Road road) {

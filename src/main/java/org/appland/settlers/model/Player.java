@@ -782,49 +782,38 @@ public class Player {
         /* If the player has discovered new land - find out what is on that land */
         if (!newDiscoveredLand.isEmpty()) {
             for (Point point : newDiscoveredLand) {
-
-                // TODO: change to only using MapPoint
-                GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
                 MapPoint mapPoint = map.getMapPoint(point);
 
                 if (mapPoint.isDeadTree()) {
                     discoveredDeadTrees.add(point);
                 }
 
-                if (pointInformation == GameMap.PointInformation.TREE) {
-                    newTrees.add(map.getTreeAtPoint(point));
+                if (mapPoint.isTree()) {
+                    newTrees.add(mapPoint.getTree());
                 }
 
-                if (pointInformation == GameMap.PointInformation.STONE) {
-                    newStones.add(map.getStoneAtPoint(point));
+                if (mapPoint.isStone()) {
+                    newStones.add(mapPoint.getStone());
                 }
 
-                if (pointInformation == GameMap.PointInformation.FLAG) {
-                    newFlags.add(map.getFlagAtPoint(point));
+                if (mapPoint.isFlag()) {
+                    newFlags.add(mapPoint.getFlag());
                 }
 
-                if (pointInformation == GameMap.PointInformation.BUILDING) {
-                    newBuildings.add(map.getBuildingAtPoint(point));
+                if (mapPoint.isBuilding()) {
+                    newBuildings.add(mapPoint.getBuilding());
                 }
 
-                if (pointInformation == GameMap.PointInformation.ROAD) {
-                    newRoads.add(map.getRoadAtPoint(point));
+                if (mapPoint.isRoad()) {
+                    newRoads.addAll(mapPoint.getConnectedRoads());
                 }
 
-                if (pointInformation == GameMap.PointInformation.FLAG_AND_ROADS) {
-                    Flag flag = map.getFlagAtPoint(point);
-                    newFlags.add(flag);
-                    newRoads.addAll(map.getRoadsFromFlag(flag));
+                if (mapPoint.isSign()) {
+                    newSigns.add(mapPoint.getSign());
                 }
 
-                if (pointInformation == GameMap.PointInformation.SIGN) {
-                    Sign sign = map.getSignAtPoint(point);
-                    newSigns.add(sign);
-                }
-
-                if (pointInformation == GameMap.PointInformation.CROP) {
-                    Crop crop = map.getCropAtPoint(point);
-                    newCrops.add(crop);
+                if (mapPoint.isCrop()) {
+                    newCrops.add(mapPoint.getCrop());
                 }
             }
 
