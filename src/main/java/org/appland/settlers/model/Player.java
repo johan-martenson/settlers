@@ -70,6 +70,8 @@ public class Player {
     private final Map<Material, Integer> toolProductionQuotas;
     private final List<TransportCategory> transportCategoryPriorities;
     private final Collection<Flag> changedFlags;
+    private final List<Point> removedDeadTrees;
+    private final List<Point> discoveredDeadTrees;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -160,6 +162,8 @@ public class Player {
         promotedRoads = new ArrayList<>();
         toolProductionQuotas = new EnumMap<>(Material.class);
         changedFlags = new HashSet<>();
+        removedDeadTrees = new ArrayList<>();
+        discoveredDeadTrees = new ArrayList<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -770,14 +774,22 @@ public class Player {
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
-            newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty()) {
+            newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
+            removedDeadTrees.isEmpty()) {
             return;
         }
 
         /* If the player has discovered new land - find out what is on that land */
         if (!newDiscoveredLand.isEmpty()) {
             for (Point point : newDiscoveredLand) {
+
+                // TODO: change to only using MapPoint
                 GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
+                MapPoint mapPoint = map.getMapPoint(point);
+
+                if (mapPoint.isDeadTree()) {
+                    discoveredDeadTrees.add(point);
+                }
 
                 if (pointInformation == GameMap.PointInformation.TREE) {
                     newTrees.add(map.getTreeAtPoint(point));
@@ -989,7 +1001,9 @@ public class Player {
                 new ArrayList<>(changedAvailableConstruction),
                 new ArrayList<>(newMessages),
                 new ArrayList<>(promotedRoads),
-                new ArrayList<>(changedFlags));
+                new ArrayList<>(changedFlags),
+                new ArrayList<>(removedDeadTrees),
+                new ArrayList<>(discoveredDeadTrees));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1024,6 +1038,8 @@ public class Player {
         promotedRoads.clear();
         changedBorders.clear();
         changedFlags.clear();
+        removedDeadTrees.clear();
+        discoveredDeadTrees.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1341,5 +1357,9 @@ public class Player {
 
     public void reportChangedFlag(Flag flag) {
         changedFlags.add(flag);
+    }
+
+    public void reportRemovedDeadTree(Point point) {
+        removedDeadTrees.add(point);
     }
 }

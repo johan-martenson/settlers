@@ -29,6 +29,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
@@ -44,6 +45,7 @@ public class TestGameMonitoringWhenDiscovering {
      - flag+road
      - wild animals
      - own border not being reported twice
+     - dead tree
      */
 
     @Test
@@ -1422,5 +1424,126 @@ public class TestGameMonitoringWhenDiscovering {
 
         assertTrue(gameChangesList.getRemovedWorkers().size() > 0);
         assertTrue(gameChangesList.getRemovedWorkers().contains(defender));
+    }
+
+    @Test
+    public void testMonitoringEventWhenDiscoveringDeadTree() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 80, 40);
+
+        /* Place headquarter for player 0 */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place dead tree to discover */
+        Point point1 = new Point(10, 20);
+        map.placeDeadTree(point1);
+
+        assertFalse(player0.getDiscoveredLand().contains(point1));
+
+        /* Place a lookout tower */
+        Point point2 = new Point(10, 12);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
+
+        /* Connect the lookout tower to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that a game monitoring message is sent when the dead tree is discovered */
+        assertFalse(player0.getDiscoveredLand().contains(point1));
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
+
+        assertTrue(player0.getDiscoveredLand().contains(point1));
+
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.getRemovedDeadTrees().size(), 0);
+        assertTrue(gameChangesList.getDiscoveredDeadTrees().size() > 0);
+        assertTrue(gameChangesList.getDiscoveredDeadTrees().contains(point1));
+    }
+
+    @Test
+    public void testMonitoringEventWhenDiscoveringDeadTreeIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 80, 40);
+
+        /* Place headquarter for player 0 */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place dead tree to discover */
+        Point point1 = new Point(4, 20);
+        map.placeDeadTree(point1);
+
+        assertFalse(player0.getDiscoveredLand().contains(point1));
+
+        /* Place a lookout tower */
+        Point point2 = new Point(4, 12);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
+
+        /* Connect the lookout tower to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that a game monitoring message is sent when the dead tree is discovered */
+        assertFalse(player0.getDiscoveredLand().contains(point1));
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
+
+        assertTrue(player0.getDiscoveredLand().contains(point1));
+
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.getRemovedDeadTrees().size(), 0);
+        assertTrue(gameChangesList.getDiscoveredDeadTrees().size() > 0);
+        assertTrue(gameChangesList.getDiscoveredDeadTrees().contains(point1));
+
+        /* Verify that the event is only sent once */
+
+        /* Place a second lookout tower to discover more land */
+        Point point3 = new Point(12, 12);
+        LookoutTower lookoutTower1 = map.placeBuilding(new LookoutTower(player0), point3);
+
+        /* Connect the new lookout tower to the headquarter and wait for it to get constructed and occupied */
+        Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower1.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(lookoutTower1);
+
+        Point point4 = new Point(16, 20);
+
+        assertFalse(player0.getDiscoveredLand().contains(point4));
+
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 5);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower1);
+
+        assertTrue(player0.getDiscoveredLand().contains(point4));
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        Utils.fastForward(100, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getDiscoveredDeadTrees().size(), 0);
+        }
     }
 }

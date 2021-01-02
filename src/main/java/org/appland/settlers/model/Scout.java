@@ -254,7 +254,7 @@ public class Scout extends Worker {
         for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
             getPlayer().discover(point);
         }
-        
+
         state = WORKING_IN_LOOKOUT_TOWER;
     }
 

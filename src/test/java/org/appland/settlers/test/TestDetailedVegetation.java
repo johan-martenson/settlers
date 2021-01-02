@@ -1,3 +1,5 @@
+package org.appland.settlers.test;
+
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -13,6 +15,18 @@ import static java.awt.Color.BLUE;
 import static org.junit.Assert.assertEquals;
 
 public class TestDetailedVegetation {
+
+    /*
+      TODO:
+         - Test can build house on:
+         - Test cannot build house on:
+         - Test can build mine on:
+         - Test cannot build mine on:
+         - Test can build flag on:
+         - Test cannot build flag on:
+         - Test can build road on:
+         - Test cannot build road on:
+     */
 
     @Test
     public void testSetAndGetDetailedVegetationAroundPoint() throws InvalidUserActionException {

@@ -116,6 +116,7 @@ public class GameMap {
     private final Set<Crop> newCrops;
     private final Set<Crop> removedCrops;
     private final Set<Road> promotedRoads;
+    private final List<Point> removedDeadTrees;
     private final Stats     stats;
     private final Group     collectEachStepTimeGroup;
     private final Set<Flag> changedFlags;
@@ -228,6 +229,7 @@ public class GameMap {
         removedCrops = new HashSet<>();
         promotedRoads = new HashSet<>();
         changedFlags = new HashSet<>();
+        removedDeadTrees = new ArrayList<>();
 
         winnerReported = false;
 
@@ -666,6 +668,14 @@ public class GameMap {
                 player.reportRemovedTree(tree);
             }
 
+            for (Point point : removedDeadTrees) {
+                if (!player.getDiscoveredLand().contains(point)) {
+                    continue;
+                }
+
+                player.reportRemovedDeadTree(point);
+            }
+
             for (Stone stone : removedStones) {
                 if (!player.getDiscoveredLand().contains(stone.getPosition())) {
                     continue;
@@ -737,6 +747,7 @@ public class GameMap {
         removedCrops.clear();
         promotedRoads.clear();
         changedFlags.clear();
+        removedDeadTrees.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -1427,6 +1438,9 @@ public class GameMap {
             mapPoint.removeDeadTree();
 
             deadTrees.remove(flagPoint);
+
+            /* Report that a dead tree was removed */
+            removedDeadTrees.add(flagPoint);
         }
 
         /* Handle the case where the flag is on an existing road that will be split */

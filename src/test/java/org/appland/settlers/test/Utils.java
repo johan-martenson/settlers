@@ -2152,6 +2152,44 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
+    public static void printMaxMinAdjacentToX(Set<Point> discoveredLand, int x) {
+        Point pointMin0 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointMin1 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointMin2 = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointMax0 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        Point pointMax1 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);;
+        Point pointMax2 = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);;
+
+        for (Point point : discoveredLand) {
+            if (pointMin0.y > point.y && point.x == x - 1) {
+                pointMin0 = point;
+            }
+
+            if (pointMin1.y > point.y && point.x == x) {
+                pointMin1 = point;
+            }
+
+            if (pointMin2.y > point.y && point.x == x + 1) {
+                pointMin2 = point;
+            }
+
+            if (pointMax0.y < point.y && point.x == x - 1) {
+                pointMax0 = point;
+            }
+
+            if (pointMax1.y < point.y && point.x == x) {
+                pointMax1 = point;
+            }
+
+            if (pointMax2.y < point.y && point.x == x + 1) {
+                pointMax2 = point;
+            }
+        }
+
+        System.out.println("Max: " + pointMax0 + ", " + pointMax1 + ", " + pointMax2);
+        System.out.println("Min: " + pointMin0 + ", " + pointMin1 + ", " + pointMin2);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

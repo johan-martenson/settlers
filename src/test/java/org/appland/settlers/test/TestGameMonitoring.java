@@ -64,6 +64,7 @@ public class TestGameMonitoring {
         - available road connections (?),
         - road that becomes main road,
         - monitoring of couriers when road is split
+        - dead tree that disappears (when a flag is placed)
     *  */
 
     @Test
@@ -5261,6 +5262,83 @@ public class TestGameMonitoring {
             } else {
                 assertTrue(borderChangePlayer1.getNewBorder().contains(point));
             }
+        }
+    }
+
+    @Test
+    public void testMonitoringWhenDeadTreeIsRemoved() throws Exception {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place dead tree */
+        Point point1 = new Point(21, 5);
+        map.placeDeadTree(point1);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when the dead tree is removed */
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        map.stepTime();
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getRemovedDeadTrees().size() > 0);
+        assertTrue(gameChanges.getRemovedDeadTrees().contains(point1));
+    }
+
+    @Test
+    public void testMonitoringWhenDeadTreeIsRemovedIsOnlySentOnce() throws Exception {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place dead tree */
+        Point point1 = new Point(21, 5);
+        map.placeDeadTree(point1);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when the dead tree is removed */
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        map.stepTime();
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertTrue(gameChanges.getRemovedDeadTrees().size() > 0);
+        assertTrue(gameChanges.getRemovedDeadTrees().contains(point1));
+
+        /* Verify that the message is only sent once */
+        Utils.fastForward(20, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getRemovedDeadTrees().size(), 0);
         }
     }
 }

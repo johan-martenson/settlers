@@ -31,6 +31,8 @@ public class GameChangesList {
     private final List<Message> newMessages;
     private final List<Road> promotedRoads;
     private final Collection<Flag> changedFlags;
+    private final Collection<Point> removedDeadTrees;
+    private final Collection<Point> discoveredDeadTrees;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -54,7 +56,11 @@ public class GameChangesList {
                            List<Stone> newStones,
                            List<Worker> newWorkers,
                            Collection<Point> changedAvailableConstruction,
-                           List<Message> newMessages, List<Road> promotedRoads, Collection<Flag> changedFlags) {
+                           List<Message> newMessages,
+                           List<Road> promotedRoads,
+                           Collection<Flag> changedFlags,
+                           Collection<Point> removedDeadTrees,
+                           Collection<Point> discoveredDeadTrees) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -80,6 +86,8 @@ public class GameChangesList {
         this.newMessages = newMessages;
         this.promotedRoads = promotedRoads;
         this.changedFlags = changedFlags;
+        this.removedDeadTrees = removedDeadTrees;
+        this.discoveredDeadTrees = discoveredDeadTrees;
     }
 
     public long getTime() {
@@ -210,5 +218,13 @@ public class GameChangesList {
 
     public Collection<Flag> getChangedFlags() {
         return changedFlags;
+    }
+
+    public Collection<Point> getRemovedDeadTrees() {
+        return removedDeadTrees;
+    }
+
+    public Collection<Point> getDiscoveredDeadTrees() {
+        return discoveredDeadTrees;
     }
 }
