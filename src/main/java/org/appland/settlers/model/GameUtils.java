@@ -355,6 +355,10 @@ public class GameUtils {
         }
     }
 
+    public static boolean isEven(int i) {
+        return i % 2 == 0;
+    }
+
     static class Line {
         final double k;
         final double m;

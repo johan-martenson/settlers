@@ -24,6 +24,7 @@ import static org.appland.settlers.model.GameUtils.detailedVegetationToSimpleVeg
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.GameUtils.isAny;
+import static org.appland.settlers.model.GameUtils.isEven;
 import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
 import static org.appland.settlers.model.GameUtils.simpleVegetationToDetailedVegetation;
 import static org.appland.settlers.model.Material.FISH;
@@ -85,7 +86,7 @@ public class GameMap {
     private final List<Sign>           signsToRemove;
     private final List<Worker>         workersToRemove;
     private final List<Crop>           cropsToRemove;
-    private final Map<Point, MapPoint> pointToGameObject;
+    private final MapPoint[]           pointToGameObject;
     private final List<Tree>           trees;
     private final List<Stone>          stones;
     private final List<Worker>         workersToAdd;
@@ -177,7 +178,7 @@ public class GameMap {
 
         statisticsManager   = new StatisticsManager();
 
-        pointToGameObject   = populateMapPoints(buildFullGrid());
+        pointToGameObject   = populateMapPoints();
 
         pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(this);
 
@@ -1683,53 +1684,6 @@ public class GameMap {
         return true;
     }
 
-    private List<Point> buildFullGrid() {
-        List<Point> result = new ArrayList<>();
-
-        /* Go row by row, starting from bottom-left corner */
-        for (int y = 0; y < height; y++) {
-
-            /* X start at 1 if y is odd, otherwise 0 */
-            int xOffset;
-
-            if (y % 2 == 0) {
-                xOffset = 0;
-            } else {
-                xOffset = 1;
-            }
-
-            /* Go one row, from left to right */
-            for (int x = 0; x * 2 + xOffset < width; x++) {
-                result.add(new Point(2 * x + xOffset, y));
-            }
-        }
-
-        return result;
-    }
-
-    private List<Point> buildFullGrid2() {
-        List<Point> result = new ArrayList<>();
-        boolean rowFlip    = true;
-        boolean columnFlip;
-
-        /* Place all possible flag points in the list */
-        for (int y = 1; y < height; y++) {
-            columnFlip = rowFlip;
-
-            for (int x = 1; x < width; x++) {
-                if (columnFlip) {
-                    result.add(new Point(x, y));
-                }
-
-                columnFlip = !columnFlip;
-            }
-
-            rowFlip = !rowFlip;
-        }
-
-        return result;
-    }
-
     /**
      * Returns a map of the points within the given player's border and the corresponding available construction. If
      * there is no possibility to build for a point its value will be null
@@ -1800,12 +1754,12 @@ public class GameMap {
 
         for (Point adjacentPoint : adjacentPoints) {
 
-            MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
-
             /* Filter points outside the map */
             if (!isWithinMap(adjacentPoint)) {
                 continue;
             }
+
+            MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
 
             /* Filter points with stones */
             if (mapPointAdjacent.isStone()) {
@@ -1905,14 +1859,44 @@ public class GameMap {
         }
     }
 
-    private Map<Point, MapPoint> populateMapPoints(List<Point> fullGrid) {
-        Map<Point, MapPoint> resultMap = new HashMap<>();
+    /**
+     * Creates an array with all Map Point instances. They are indexed like this:
+     *
+     * 4     5
+     *    2     3
+     * 0     1
+     *
+     * To address a Map Point:
+     *  - Data row length depends on the width of the game map
+     *     - For even width: dataRowLength = width / 2
+     *     - For odd width: dataRowLength = (width + 1) / 2
+     *  - For row where y is even: mapPoints[y * dataRowLength + (x / 2)]
+     *  - For row where y is odd: mapPoints[y * dataRowLength + ((x - 1) / 2)]
+     *
+     * @return Array of map points
+     */
+    private MapPoint[] populateMapPoints() {
+        int dataRowLength = isEven(width) ? width / 2 : (width + 1) / 2;
 
-        for (Point point : fullGrid) {
-            resultMap.put(point, new MapPoint(point));
+        MapPoint[] mapPoints = new MapPoint[dataRowLength * (height + 1)];
+
+        /* Walk row by row. Start at 0 and include the final row at #height */
+        for (int y = 0; y < height + 1; y++) {
+
+            int xOffset = isEven(y) ? 0 : 1;
+
+            for (int x = xOffset; x < width; x += 2) {
+                Point point = new Point(x, y);
+
+                if (GameUtils.isEven(point.y)) {
+                    mapPoints[point.y * dataRowLength + point.x / 2] = new MapPoint(point);
+                } else {
+                    mapPoints[point.y * dataRowLength + (point.x - 1) / 2] = new MapPoint(point);
+                }
+            }
         }
 
-        return resultMap;
+        return mapPoints;
     }
 
     /**
@@ -2577,7 +2561,21 @@ public class GameMap {
     }
 
     public MapPoint getMapPoint(Point point) {
-        return pointToGameObject.get(point);
+        int dataRowLength = isEven(width) ? width / 2 : (width + 1) / 2;
+
+        int index;
+
+        if (isEven(point.y)) {
+            index = point.y * dataRowLength + point.x / 2;
+        } else {
+            index = point.y * dataRowLength + (point.x - 1) / 2;
+        }
+
+        if (index < 0 || index >= this.pointToGameObject.length) {
+            return null;
+        }
+
+        return pointToGameObject[index];
     }
 
     /**
