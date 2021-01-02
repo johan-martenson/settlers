@@ -179,7 +179,7 @@ public class GameMap {
 
         pointToGameObject   = populateMapPoints(buildFullGrid());
 
-        pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
+        pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(this);
 
         /* Set grass as vegetation on all tiles */
         constructDefaultTiles();
@@ -3290,7 +3290,7 @@ public class GameMap {
      * @return true if the two points are connected by roads.
      */
     public boolean arePointsConnectedByRoads(Point start, Point end) {
-        return GameUtils.arePointsConnectedByRoads(start, end, pointToGameObject);
+        return GameUtils.arePointsConnectedByRoads(start, end, this);
     }
 
     /**
@@ -3302,7 +3302,7 @@ public class GameMap {
      */
     //FIXME: ALLOCATION HOTSPOT
     public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, EndPoint end, Point... avoid) {
-        return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject, avoid);
+        return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), this, avoid);
     }
 
     public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(Point... points) {
@@ -3337,7 +3337,7 @@ public class GameMap {
      * @return true if the given endpoints are connected
      */
     public boolean areFlagsOrBuildingsConnectedViaRoads(EndPoint from, EndPoint to) {
-        return GameUtils.areBuildingsOrFlagsConnected(from, to, pointToGameObject);
+        return GameUtils.areBuildingsOrFlagsConnected(from, to, this);
     }
 
     /**
@@ -3759,7 +3759,7 @@ public class GameMap {
     }
 
     public List<Point> findDetailedWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, Building end, Point... avoid) {
-        return GameUtils.findShortestDetailedPathViaRoads(start, end, pointToGameObject, avoid);
+        return GameUtils.findShortestDetailedPathViaRoads(start, end, this, avoid);
     }
 
     public List<Point> getDeadTrees() {

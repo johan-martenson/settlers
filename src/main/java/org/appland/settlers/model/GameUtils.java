@@ -557,15 +557,15 @@ public class GameUtils {
 
     public static class PathOnExistingRoadsProvider implements ConnectionsProvider {
 
-        private final Map<Point, MapPoint> pointToGameObject;
+        private final GameMap map;
 
-        public PathOnExistingRoadsProvider(Map<Point, MapPoint> pointToGameObject) {
-            this.pointToGameObject = pointToGameObject;
+        public PathOnExistingRoadsProvider(GameMap map) {
+            this.map = map;
         }
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            MapPoint mapPoint = pointToGameObject.get(start);
+            MapPoint mapPoint = map.getMapPoint(start);
 
             return mapPoint.getConnectedNeighbors();
         }
@@ -632,12 +632,12 @@ public class GameUtils {
      *
      * @param start The point to start from
      * @param goal The point to reach
-     * @param mapPoints The map with information about each point on the map
+     * @param map The instance of the map
      * @param avoid List of points to avoid when finding the path
      * @return the list of flag points to pass (included the starting point) required to travel from start to goal
      */
     // FIXME: ALLOCATION HOTSPOT
-    static List<Point> findShortestPathViaRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints, Point... avoid) {
+    static List<Point> findShortestPathViaRoads(Point start, Point goal, GameMap map, Point... avoid) {
         Set<Point>          evaluated        = new HashSet<>();
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         Map<Point, Point>   cameFrom         = new HashMap<>();
@@ -689,7 +689,7 @@ public class GameUtils {
             evaluated.add(currentPoint.point);
 
             /* Evaluate each neighbor directly connected by a road */
-            MapPoint mapPoint = mapPoints.get(currentPoint.point);
+            MapPoint mapPoint = map.getMapPoint(currentPoint.point);
             for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint.point);
@@ -738,10 +738,10 @@ public class GameUtils {
      *
      * @param start The point to start from
      * @param goal The point to reach
-     * @param mapPoints The map with information about each point on the map
+     * @param map The game map instance
      * @return true if the start and end are connected
      */
-    static boolean arePointsConnectedByRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints) {
+    static boolean arePointsConnectedByRoads(Point start, Point goal, GameMap map) {
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         int                 bestCaseCost;
 
@@ -770,7 +770,7 @@ public class GameUtils {
             }
 
             /* Evaluate each direct neighbor */
-            MapPoint mapPoint = mapPoints.get(currentPoint.point);
+            MapPoint mapPoint = map.getMapPoint(currentPoint.point);
 
             for (Road road : mapPoint.getConnectedRoads()) {
 
@@ -808,10 +808,10 @@ public class GameUtils {
      *
      * @param startEndPoint Flag or building to start from
      * @param goalEndPoint Flag or building to reach
-     * @param mapPoints The map with information about each point on the game map
+     * @param map The instance of the map
      * @return a detailed list with the steps required to travel from the start to the goal.
      */
-    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, Map<Point, MapPoint> mapPoints, Point[] avoid) {
+    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map, Point[] avoid) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();
@@ -900,7 +900,7 @@ public class GameUtils {
             evaluated.add(currentPoint);
 
             /* Evaluate each direct neighbor */
-            MapPoint mapPoint = mapPoints.get(currentPoint);
+            MapPoint mapPoint = map.getMapPoint(currentPoint);
             for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint);
@@ -947,10 +947,10 @@ public class GameUtils {
      *
      * @param startEndPoint Flag or building to start from
      * @param goalEndPoint Flag or building to reach
-     * @param mapPoints The map with information about each point on the game map
+     * @param map The instance of the map
      * @return true if the start and end are connected
      */
-    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint, Map<Point, MapPoint> mapPoints) {
+    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map) {
         Set<Point>          evaluated        = new HashSet<>();
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         int                 bestCaseCost;
@@ -986,7 +986,7 @@ public class GameUtils {
             evaluated.add(currentPoint.point);
 
             /* Evaluate each direct neighbor */
-            MapPoint mapPoint = mapPoints.get(currentPoint.point);
+            MapPoint mapPoint = map.getMapPoint(currentPoint.point);
             for (Road road : mapPoint.getConnectedRoads()) {
 
                 Point neighbor = road.getOtherPoint(currentPoint.point);
