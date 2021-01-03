@@ -6,6 +6,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Flag;
@@ -1120,7 +1121,7 @@ public class Utils {
         return courier;
     }
 
-    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws Exception {
+    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidRouteException, InvalidUserActionException {
 
         GameMap map = building.getMap();
         Worker worker = null;
@@ -2188,6 +2189,15 @@ public class Utils {
 
         System.out.println("Max: " + pointMax0 + ", " + pointMax1 + ", " + pointMax2);
         System.out.println("Min: " + pointMin0 + ", " + pointMin1 + ", " + pointMin2);
+    }
+
+    public static void surroundPointWithDetailedVegetation(Point point, DetailedVegetation detailedVegetation, GameMap map) {
+        map.setDetailedVegetationUpLeft(point, detailedVegetation);
+        map.setDetailedVegetationAbove(point, detailedVegetation);
+        map.setDetailedVegetationUpRight(point, detailedVegetation);
+        map.setDetailedVegetationDownRight(point, detailedVegetation);
+        map.setDetailedVegetationBelow(point, detailedVegetation);
+        map.setDetailedVegetationDownLeft(point, detailedVegetation);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
