@@ -4452,7 +4452,6 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point2, SWAMP, map);
 
         /* Place tree */
-        //Tree tree = map.placeTree(point2);
         WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Place woodcutter */

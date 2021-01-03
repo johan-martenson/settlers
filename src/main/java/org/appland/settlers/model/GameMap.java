@@ -1627,13 +1627,19 @@ public class GameMap {
             return false;
         }
 
-        /* Cannot build flag if construction is not possible on all adjacent tiles */
-        if (!canBuildFlagOn(getTileAbove(point))     &&
-            !canBuildFlagOn(getTileUpRight(point))   &&
-            !canBuildFlagOn(getTileDownRight(point)) &&
-            !canBuildFlagOn(getTileBelow(point))     &&
-            !canBuildFlagOn(getTileDownLeft(point))  &&
-            !canBuildFlagOn(getTileUpLeft(point))) {
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        if (!DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeft)    &&
+            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationAbove)     &&
+            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRight)   &&
+            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationDownRight) &&
+            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationBelow)     &&
+            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationDownLeft)) {
             return false;
         }
 
@@ -1755,12 +1761,19 @@ public class GameMap {
         /* Find out which adjacent points are possible off-road connections */
         Point[] adjacentPoints  = from.getAdjacentPointsExceptAboveAndBelow();
 
-        boolean cannotWalkOnTileUpLeft    = !canWalkOn(getTileUpLeft(from));
-        boolean cannotWalkOnTileDownLeft  = !canWalkOn(getTileDownLeft(from));
-        boolean cannotWalkOnTileUpRight   = !canWalkOn(getTileUpRight(from));
-        boolean cannotWalkOnTileDownRight = !canWalkOn(getTileDownRight(from));
-        boolean cannotWalkOnTileAbove     = !canWalkOn(getTileAbove(from));
-        boolean cannotWalkOnTileBelow     = !canWalkOn(getTileBelow(from));
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(from);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(from);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(from);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(from);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(from);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(from);
+
+        boolean cannotWalkOnTileUpLeft    = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationUpLeft);
+        boolean cannotWalkOnTileDownLeft  = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationDownLeft);
+        boolean cannotWalkOnTileUpRight   = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationUpRight);
+        boolean cannotWalkOnTileDownRight = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationDownRight);
+        boolean cannotWalkOnTileAbove     = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationAbove);
+        boolean cannotWalkOnTileBelow     = !DetailedVegetation.CAN_WALK_ON.contains(detailedVegetationBelow);
 
         for (Point adjacentPoint : adjacentPoints) {
 
@@ -2493,34 +2506,35 @@ public class GameMap {
     }
 
     private boolean isConnectedToWater(Point point) {
-        Vegetation vegetationAbove = getTileAbove(point);
-        Vegetation vegetationUpRight = getTileUpRight(point);
-        Vegetation vegetationDownRight = getTileDownRight(point);
-        Vegetation vegetationBelow = getTileBelow(point);
-        Vegetation vegetationDownLeft = getTileDownLeft(point);
-        Vegetation vegetationUpLeft = getTileUpLeft(point);
 
-        if (vegetationAbove == WATER || vegetationAbove == DEEP_WATER || vegetationAbove == SHALLOW_WATER) {
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpLeft)) {
             return true;
         }
 
-        if (vegetationUpRight == WATER || vegetationUpRight == DEEP_WATER || vegetationUpRight == SHALLOW_WATER) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationAbove)) {
             return true;
         }
 
-        if (vegetationDownRight == WATER || vegetationDownRight == DEEP_WATER || vegetationDownRight == SHALLOW_WATER) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpRight)) {
             return true;
         }
 
-        if (vegetationBelow == WATER || vegetationBelow == DEEP_WATER || vegetationBelow == SHALLOW_WATER) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownRight)) {
             return true;
         }
 
-        if (vegetationDownLeft == WATER || vegetationDownLeft == DEEP_WATER || vegetationDownLeft == SHALLOW_WATER) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationBelow)) {
             return true;
         }
 
-        if (vegetationUpLeft == WATER || vegetationUpLeft == DEEP_WATER || vegetationUpLeft == SHALLOW_WATER) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownLeft)) {
             return true;
         }
 
@@ -3452,34 +3466,35 @@ public class GameMap {
     }
 
     boolean isNextToAnyWater(Point point) {
-        Vegetation vegetationUpLeft    = getTileUpLeft(point);
-        Vegetation vegetationAbove     = getTileAbove(point);
-        Vegetation vegetationUpRight   = getTileUpRight(point);
-        Vegetation vegetationDownRight = getTileDownRight(point);
-        Vegetation vegetationBelow     = getTileBelow(point);
-        Vegetation vegetationDownLeft  = getTileDownLeft(point);
 
-        if (vegetationUpLeft.isAnyWater()) {
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpLeft)) {
             return true;
         }
 
-        if (vegetationAbove.isAnyWater()) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationAbove)) {
             return true;
         }
 
-        if (vegetationUpRight.isAnyWater()) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpRight)) {
             return true;
         }
 
-        if (vegetationDownRight.isAnyWater()) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownRight)) {
             return true;
         }
 
-        if (vegetationBelow.isAnyWater()) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationBelow)) {
             return true;
         }
 
-        if (vegetationDownLeft.isAnyWater()) {
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownLeft)) {
             return true;
         }
 
