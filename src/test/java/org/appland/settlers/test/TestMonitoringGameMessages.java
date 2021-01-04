@@ -1006,7 +1006,7 @@ public class TestMonitoringGameMessages {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -1084,7 +1084,7 @@ public class TestMonitoringGameMessages {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -1169,7 +1169,7 @@ public class TestMonitoringGameMessages {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -1812,7 +1812,7 @@ public class TestMonitoringGameMessages {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
@@ -1900,7 +1900,7 @@ public class TestMonitoringGameMessages {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
@@ -1995,7 +1995,7 @@ public class TestMonitoringGameMessages {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */

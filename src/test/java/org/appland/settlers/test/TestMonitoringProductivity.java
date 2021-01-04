@@ -10,6 +10,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Butcher;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.CoalMine;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.DonkeyBreeder;
 import org.appland.settlers.model.DonkeyFarm;
 import org.appland.settlers.model.Farm;
@@ -45,7 +46,6 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Woodcutter;
@@ -497,7 +497,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -557,7 +557,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -886,7 +886,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);
@@ -942,7 +942,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);
@@ -1013,7 +1013,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1073,7 +1073,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1148,7 +1148,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         /* Place granite mine */
@@ -1208,7 +1208,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
         /* Place granite mine */
@@ -1427,7 +1427,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1487,7 +1487,7 @@ public class TestMonitoringProductivity {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */

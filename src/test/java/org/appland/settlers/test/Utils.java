@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.Material.AXE;
 import static org.appland.settlers.model.Material.BOW;
 import static org.appland.settlers.model.Material.CLEAVER;
@@ -75,9 +76,6 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.SWAMP;
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
@@ -239,15 +237,15 @@ public class Utils {
     }
 
     public static void surroundPointWithWater(Point point, GameMap map) {
-        surroundPointWithSimplisticVegetation(point, WATER, map);
+        surroundPointWithVegetation(point, DetailedVegetation.WATER, map);
     }
 
-    public static void surroundPointWithMountain(Point point, GameMap map) {
-        surroundPointWithSimplisticVegetation(point, MOUNTAIN, map);
+    public static void surroundPointWithMinableMountain(Point point, GameMap map) {
+        surroundPointWithVegetation(point, MOUNTAIN_1, map);
     }
 
     public static void surroundPointWithSwamp(Point point, GameMap map) {
-        surroundPointWithSimplisticVegetation(point, SWAMP, map);
+        surroundPointWithVegetation(point, DetailedVegetation.SWAMP, map);
     }
 
     public static void fastForwardUntilBuildingIsConstructed(Building building) throws Exception {
@@ -294,9 +292,9 @@ public class Utils {
         map.surroundPointWithMineral(point, STONE, size);
     }
 
-    public static void createMountainWithinRadius(Point point, int radius, GameMap map) {
+    public static void createMinableMountainWithinRadius(Point point, int radius, GameMap map) {
         for (Point p : map.getPointsWithinRadius(point, radius - 1)) {
-            surroundPointWithSimplisticVegetation(p, MOUNTAIN, map);
+            surroundPointWithVegetation(p, MOUNTAIN_1, map);
         }
     }
 
@@ -1032,17 +1030,6 @@ public class Utils {
         assertEquals(map.getDetailedVegetationDownRight(point), vegetation);
         assertEquals(map.getDetailedVegetationBelow(point), vegetation);
         assertEquals(map.getDetailedVegetationDownLeft(point), vegetation);
-    }
-
-    static void surroundPointWithSimplisticVegetation(Point point, Vegetation vegetation, GameMap map) {
-        map.surroundWithSimplisticVegetation(point, vegetation);
-
-        assertEquals(map.getTileUpLeft(point), vegetation);
-        assertEquals(map.getTileAbove(point), vegetation);
-        assertEquals(map.getTileUpRight(point), vegetation);
-        assertEquals(map.getTileDownRight(point), vegetation);
-        assertEquals(map.getTileBelow(point), vegetation);
-        assertEquals(map.getTileDownLeft(point), vegetation);
     }
 
     public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {

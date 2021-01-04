@@ -32,6 +32,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -1991,12 +1992,12 @@ public class TestQuarry {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point3, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point4, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point5, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point6, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point7, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithVegetation(point3, WATER, map);
+        Utils.surroundPointWithVegetation(point4, WATER, map);
+        Utils.surroundPointWithVegetation(point5, WATER, map);
+        Utils.surroundPointWithVegetation(point6, WATER, map);
+        Utils.surroundPointWithVegetation(point7, WATER, map);
 
         /* Construct the quarry */
         constructHouse(quarry0);

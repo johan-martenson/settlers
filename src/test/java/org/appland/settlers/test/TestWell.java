@@ -31,6 +31,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -1412,7 +1413,7 @@ public class TestWell {
 
         /* Place a buildable mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Place well */
         Building well = map.placeBuilding(new Well(player0), point1);

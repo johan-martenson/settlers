@@ -67,7 +67,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
@@ -105,7 +105,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Utils.surroundPointWithMinableMountain(point22, map);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
@@ -142,7 +142,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -169,7 +169,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -197,7 +197,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -221,7 +221,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -251,7 +251,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point1);
@@ -292,7 +292,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point1);
@@ -311,7 +311,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -354,7 +354,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -408,7 +408,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -493,7 +493,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all iron but one */
@@ -572,7 +572,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -623,7 +623,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -667,7 +667,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -714,7 +714,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -772,7 +772,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -843,7 +843,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -949,7 +949,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing iron mine */
@@ -996,7 +996,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing iron mine */
@@ -1046,7 +1046,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1115,7 +1115,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1193,7 +1193,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
@@ -1240,7 +1240,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point4 = new Point(28, 12);
-        Utils.surroundPointWithMountain(point4, map);
+        Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putIronAtSurroundingTiles(point4, LARGE, map);
 
         /* Place player 2's headquarter */
@@ -1299,7 +1299,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putIronAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing iron mine */
@@ -1365,7 +1365,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putIronAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing iron mine */
@@ -1434,7 +1434,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putIronAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing iron mine */
@@ -1495,7 +1495,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing iron Mine */
@@ -1549,7 +1549,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing iron mine */
@@ -1606,7 +1606,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing iron mine */
@@ -1666,7 +1666,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing iron mine */
@@ -1717,7 +1717,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1763,7 +1763,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1803,7 +1803,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1862,7 +1862,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1916,7 +1916,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -1948,7 +1948,7 @@ public class TestIronMine {
 
         /* Place a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
@@ -1978,7 +1978,7 @@ public class TestIronMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
@@ -2006,7 +2006,7 @@ public class TestIronMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
@@ -2040,7 +2040,7 @@ public class TestIronMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
@@ -2082,7 +2082,7 @@ public class TestIronMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -2155,7 +2155,7 @@ public class TestIronMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -2245,7 +2245,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place Iron mine */
@@ -2309,7 +2309,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putIronAtSurroundingTiles(point2, LARGE, map);
 
         /* Place iron mine */
@@ -2378,7 +2378,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putIronAtSurroundingTiles(point2, LARGE, map);
 
         /* Place iron mine */
@@ -2528,7 +2528,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */
@@ -2592,7 +2592,7 @@ public class TestIronMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Place iron mine */

@@ -3,6 +3,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -14,7 +15,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -1737,12 +1737,12 @@ public class TestHunterHut {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point3, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point4, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point5, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point6, Vegetation.WATER, map);
-        Utils.surroundPointWithSimplisticVegetation(point7, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point3, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point4, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point5, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point6, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point7, DetailedVegetation.WATER, map);
 
         /* Construct the hunter hut */
         constructHouse(hunterHut0);

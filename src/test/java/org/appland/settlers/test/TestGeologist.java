@@ -545,7 +545,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -608,7 +608,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 7, map);
+        Utils.createMinableMountainWithinRadius(point1, 7, map);
         Utils.putMineralWithinRadius(COAL, point1, 7, map);
 
         /* Connect headquarter and flag */
@@ -671,7 +671,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a large mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(IRON, point1, 7, map);
 
         /* Connect headquarter and flag */
@@ -734,7 +734,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(STONE, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -1129,7 +1129,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Place mountain without ore */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);

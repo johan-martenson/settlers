@@ -35,15 +35,15 @@ import java.util.Set;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.DetailedVegetation.DESERT_1;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Vegetation.DESERT;
-import static org.appland.settlers.model.Vegetation.GRASS;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -950,9 +950,9 @@ public class TestPlacement {
         Point point0 = new Point(13, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Create water and grass tiles */
-        map.setTileDownRight(waterPoint, WATER);
-        map.setTileBelow(grassPoint, GRASS);
+        /* Create water and meadow 1 tiles */
+        map.setDetailedVegetationDownRight(waterPoint, WATER);
+        map.setDetailedVegetationBelow(grassPoint, MEADOW_1);
 
         /* Verify that it's possible to place flags next to the water */
         Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
@@ -974,15 +974,15 @@ public class TestPlacement {
 
         /* Place a lake */
         Point centerPoint = new Point(3, 1);
-        Utils.surroundPointWithSimplisticVegetation(centerPoint, WATER, map);
+        Utils.surroundPointWithVegetation(centerPoint, WATER, map);
 
         /* Verify that the center point is in the middle of the lake */
-        assertEquals(map.getTileUpLeft(centerPoint), WATER);
-        assertEquals(map.getTileAbove(centerPoint), WATER);
-        assertEquals(map.getTileUpRight(centerPoint), WATER);
-        assertEquals(map.getTileDownRight(centerPoint), WATER);
-        assertEquals(map.getTileBelow(centerPoint), WATER);
-        assertEquals(map.getTileDownLeft(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationUpLeft(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationAbove(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationUpRight(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationDownRight(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationBelow(centerPoint), WATER);
+        assertEquals(map.getDetailedVegetationDownLeft(centerPoint), WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 9);
@@ -996,7 +996,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testSetTileToMountainTerrain() throws Exception {
+    public void testSetDetailedVegetationToMountainTerrain() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1008,10 +1008,10 @@ public class TestPlacement {
         /* Set a tile's vegetation to mountain */
         Point top = new Point(2, 2);
 
-        map.setTileBelow(top, MOUNTAIN);
+        map.setDetailedVegetationBelow(top, MOUNTAIN_1);
 
         /* Verify that the tile's vegetation is set to mountain */
-        assertEquals(map.getTileBelow(top), MOUNTAIN);
+        assertEquals(map.getDetailedVegetationBelow(top), MOUNTAIN_1);
     }
 
     @Test
@@ -1050,7 +1050,7 @@ public class TestPlacement {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(5, 5);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Verify that it's possible to place a tree on the mountain */
@@ -1076,7 +1076,7 @@ public class TestPlacement {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(9, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Verify that it's not possible to place a woodcutter on the mountain */
@@ -1105,12 +1105,13 @@ public class TestPlacement {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(9, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
         /* Verify that it's not possible to place a woodcutter on the mountain */
         try {
             map.placeBuilding(new Woodcutter(player0), point1.downRight());
+
             fail();
         } catch (Exception e) {}
 
@@ -1238,15 +1239,15 @@ public class TestPlacement {
 
         /* Place a lake */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTileUpLeft(point0), WATER);
-        assertEquals(map.getTileAbove(point0), WATER);
-        assertEquals(map.getTileUpRight(point0), WATER);
-        assertEquals(map.getTileDownRight(point0), WATER);
-        assertEquals(map.getTileBelow(point0), WATER);
-        assertEquals(map.getTileDownLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationAbove(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationBelow(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(4, 4);
@@ -1279,15 +1280,15 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTileUpLeft(point0), WATER);
-        assertEquals(map.getTileAbove(point0), WATER);
-        assertEquals(map.getTileUpRight(point0), WATER);
-        assertEquals(map.getTileDownRight(point0), WATER);
-        assertEquals(map.getTileBelow(point0), WATER);
-        assertEquals(map.getTileDownLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationAbove(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationBelow(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(10, 10);
@@ -1352,7 +1353,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place sign */
         map.placeEmptySign(point1);
@@ -1947,15 +1948,15 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTileUpLeft(point0), WATER);
-        assertEquals(map.getTileAbove(point0), WATER);
-        assertEquals(map.getTileUpRight(point0), WATER);
-        assertEquals(map.getTileDownRight(point0), WATER);
-        assertEquals(map.getTileBelow(point0), WATER);
-        assertEquals(map.getTileDownLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationAbove(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationBelow(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
         /* Placing headquarter for player0 */
         Point point46 = new Point(5, 5);
@@ -2082,7 +2083,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Verify that there is an available point for a mine on the mountain */
         assertTrue(map.isAvailableMinePoint(player0, point1));
@@ -2106,7 +2107,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Verify that there is no available point for a house on the mountain */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -2151,7 +2152,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(47, 47);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Verify that there is no available mine on the grass */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -2175,7 +2176,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a mine on the mountain */
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2202,7 +2203,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a flag on the mountain */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -2229,7 +2230,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place flags */
         Point point2 = new Point(6, 8);
@@ -2286,7 +2287,7 @@ public class TestPlacement {
 
         /* Put a small mountain on point0 */
         Point point1 = new Point(8, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Verify that there are available flag points next to the mountain */
         List<Point> edgePoints = new LinkedList<>();
@@ -2378,9 +2379,9 @@ public class TestPlacement {
         Point point0 = new Point(5, 13);
         Point point1 = new Point(8, 14);
         Point point2 = new Point(5, 15);
-        Utils.surroundPointWithSimplisticVegetation(point0, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point0, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point2, MOUNTAIN_1, map);
 
         /* Put gold at mountain */
         map.surroundPointWithMineral(point0, GOLD);
@@ -2391,9 +2392,9 @@ public class TestPlacement {
         Point point3 = new Point(8, 16);
         Point point4 = new Point(11, 17);
         Point point5 = new Point(8, 18);
-        Utils.surroundPointWithSimplisticVegetation(point3, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point3, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point4, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point5, MOUNTAIN_1, map);
 
         /* Put coal at mountain */
         map.surroundPointWithMineral(point3, COAL);
@@ -2568,9 +2569,9 @@ public class TestPlacement {
 
         /* Place terrain that can only handle roads and flags - no buildings */
         Point point1 = new Point(15, 15);
-        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
-        Utils.surroundPointWithSimplisticVegetation(point1.right(), DESERT, map);
-        Utils.surroundPointWithSimplisticVegetation(point1.right().right(), DESERT, map);
+        Utils.surroundPointWithVegetation(point1, DESERT_1, map);
+        Utils.surroundPointWithVegetation(point1.right(), DESERT_1, map);
+        Utils.surroundPointWithVegetation(point1.right().right(), DESERT_1, map);
 
         /* Verify that it's possible to build a large house close to the vegetation */
         assertEquals(map.isAvailableHousePoint(player0, point1.right().down()), LARGE);

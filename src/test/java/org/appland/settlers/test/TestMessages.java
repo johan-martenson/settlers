@@ -447,7 +447,7 @@ public class TestMessages {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
@@ -519,7 +519,7 @@ public class TestMessages {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.createMinableMountainWithinRadius(point1, 9, map);
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -749,7 +749,7 @@ public class TestMessages {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
@@ -834,7 +834,7 @@ public class TestMessages {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */

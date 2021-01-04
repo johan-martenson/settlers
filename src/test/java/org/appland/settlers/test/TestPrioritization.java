@@ -83,22 +83,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(20, 10);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -208,22 +208,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.LARGE, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(20, 10);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -336,22 +336,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.LARGE, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(20, 10);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -464,22 +464,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.LARGE, map);
 
         Point point3 = new Point(20, 10);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -592,22 +592,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(5, 9);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(9, 15);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(9, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(25, 11);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.LARGE, map);
 
@@ -720,17 +720,17 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point3 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -833,22 +833,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(20, 10);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -964,22 +964,22 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
         Point point1 = new Point(10, 14);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
         Point point2 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
         Point point3 = new Point(16, 14);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
@@ -1110,7 +1110,7 @@ public class TestPrioritization {
 
         /* Put small mountains with ore on the map */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 

@@ -68,7 +68,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Utils.surroundPointWithMinableMountain(point22, map);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
@@ -106,7 +106,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Utils.surroundPointWithMinableMountain(point22, map);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
@@ -143,7 +143,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -170,7 +170,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -198,7 +198,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -222,7 +222,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -252,7 +252,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point1);
@@ -297,7 +297,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point1);
@@ -338,7 +338,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point1);
@@ -357,7 +357,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -400,7 +400,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -454,7 +454,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -539,7 +539,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
@@ -618,7 +618,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -669,7 +669,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -713,7 +713,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -760,7 +760,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -819,7 +819,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -890,7 +890,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -996,7 +996,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing coal mine */
@@ -1043,7 +1043,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing coal mine */
@@ -1093,7 +1093,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1158,7 +1158,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1232,7 +1232,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 10);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
@@ -1279,7 +1279,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point4 = new Point(28, 18);
-        Utils.surroundPointWithMountain(point4, map);
+        Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putCoalAtSurroundingTiles(point4, LARGE, map);
 
         /* Place player 2's headquarter */
@@ -1338,7 +1338,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(14, 4);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing coal mine */
@@ -1404,7 +1404,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(14, 4);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing coal mine */
@@ -1473,7 +1473,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(14, 4);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing coal mine */
@@ -1534,7 +1534,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point3 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
         /* Placing coal mine */
@@ -1588,7 +1588,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point3 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point3, map);
+        Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
         /* Placing coal mine */
@@ -1645,7 +1645,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing coal mine */
@@ -1705,7 +1705,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing coal mine */
@@ -1756,7 +1756,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -1802,7 +1802,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -1843,7 +1843,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -1902,7 +1902,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -1960,7 +1960,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -1992,7 +1992,7 @@ public class TestCoalMine {
 
         /* Place a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
         Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
@@ -2022,7 +2022,7 @@ public class TestCoalMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
@@ -2050,7 +2050,7 @@ public class TestCoalMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
@@ -2084,7 +2084,7 @@ public class TestCoalMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
@@ -2126,7 +2126,7 @@ public class TestCoalMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -2199,7 +2199,7 @@ public class TestCoalMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -2289,7 +2289,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place Coal mine */
@@ -2353,7 +2353,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         /* Place coal mine */
@@ -2422,7 +2422,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
         /* Place coal mine */
@@ -2572,7 +2572,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
@@ -2636,7 +2636,7 @@ public class TestCoalMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */

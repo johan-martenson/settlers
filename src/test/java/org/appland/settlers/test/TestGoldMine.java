@@ -67,7 +67,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Utils.surroundPointWithMinableMountain(point22, map);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
@@ -105,7 +105,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Utils.surroundPointWithMinableMountain(point22, map);
 
         /* Placing headquarter */
         Point point21 = new Point(9, 9);
@@ -142,7 +142,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -169,7 +169,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -197,7 +197,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -221,7 +221,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 14);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(7, 7);
@@ -251,7 +251,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point1);
@@ -292,7 +292,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point1);
@@ -311,7 +311,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -354,7 +354,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -408,7 +408,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -493,7 +493,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
@@ -572,7 +572,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
@@ -623,7 +623,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -667,7 +667,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -714,7 +714,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
@@ -773,7 +773,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -844,7 +844,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing headquarter */
@@ -950,7 +950,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing gold mine */
@@ -997,7 +997,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing gold mine */
@@ -1047,7 +1047,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1112,7 +1112,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place headquarter */
@@ -1186,7 +1186,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point0, map);
+        Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
@@ -1233,7 +1233,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point4 = new Point(28, 6);
-        Utils.surroundPointWithMountain(point4, map);
+        Utils.surroundPointWithMinableMountain(point4, map);
         Utils.putGoldAtSurroundingTiles(point4, LARGE, map);
 
         /* Place player 2's headquarter */
@@ -1292,7 +1292,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing gold mine */
@@ -1358,7 +1358,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing gold mine */
@@ -1427,7 +1427,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(13, 5);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
         /* Placing gold mine */
@@ -1488,7 +1488,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing gold mine */
@@ -1542,7 +1542,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing gold mine */
@@ -1599,7 +1599,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing gold mine */
@@ -1659,7 +1659,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Placing gold mine */
@@ -1710,7 +1710,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(17, 17);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1756,7 +1756,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1796,7 +1796,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1855,7 +1855,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1909,7 +1909,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -1941,7 +1941,7 @@ public class TestGoldMine {
 
         /* Place a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place gold mine */
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
@@ -1971,7 +1971,7 @@ public class TestGoldMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -1999,7 +1999,7 @@ public class TestGoldMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2033,7 +2033,7 @@ public class TestGoldMine {
 
         /* Place a small mountain */
         Point point1 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2075,7 +2075,7 @@ public class TestGoldMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -2148,7 +2148,7 @@ public class TestGoldMine {
 
         /* Place a small mountain */
         Point point1 = new Point(16, 6);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -2238,7 +2238,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place Gold mine */
@@ -2302,7 +2302,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
         /* Place gold mine */
@@ -2371,7 +2371,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point2 = new Point(18, 6);
-        Utils.surroundPointWithMountain(point2, map);
+        Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
         /* Place gold mine */
@@ -2521,7 +2521,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */
@@ -2585,7 +2585,7 @@ public class TestGoldMine {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithMountain(point1, map);
+        Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
         /* Place gold mine */

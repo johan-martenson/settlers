@@ -29,6 +29,9 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -734,10 +737,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 4)) {
-            Utils.surroundPointWithSimplisticVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithVegetation(point, WATER, map);
         }
 
-        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
+        Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut);
@@ -790,10 +793,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 10)) {
-            Utils.surroundPointWithSimplisticVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithVegetation(point, WATER, map);
         }
 
-        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point1, WATER, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut);
@@ -889,9 +892,9 @@ public class TestForesterHut {
         Point point4 = new Point(8, 16);
         Point point5 = new Point(11, 17);
         Point point6 = new Point(14, 16);
-        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN, map);
-        Utils.surroundPointWithSimplisticVegetation(point6, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point4, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point5, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point6, MOUNTAIN_1, map);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
