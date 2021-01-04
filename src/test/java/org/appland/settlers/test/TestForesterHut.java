@@ -18,7 +18,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -36,8 +35,6 @@ import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Vegetation.GRASS;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

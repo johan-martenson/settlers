@@ -76,7 +76,7 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -305,7 +305,7 @@ public class TestMessages {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Remove fishes until there is only one left */
         Utils.removeAllFish(map, point1);

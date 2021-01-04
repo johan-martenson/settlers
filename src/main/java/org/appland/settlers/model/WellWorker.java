@@ -8,7 +8,6 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WELL_WORKER;
-import static org.appland.settlers.model.Vegetation.BUILDABLE_MOUNTAIN;
 
 /**
  *

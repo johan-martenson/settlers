@@ -29,7 +29,6 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 
@@ -1096,7 +1095,7 @@ public class Utils {
         }
     }
 
-    public static void fillMapWithVegetation(GameMap map, Vegetation vegetation) {
+    public static void fillMapWithVegetation(GameMap map, DetailedVegetation vegetation) {
         map.fillMapWithVegetation(vegetation);
     }
 

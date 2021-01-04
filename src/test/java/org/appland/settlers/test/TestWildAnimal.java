@@ -16,18 +16,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.Vegetation.BUILDABLE_MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Vegetation.DESERT;
-import static org.appland.settlers.model.Vegetation.GRASS;
-import static org.appland.settlers.model.Vegetation.LAVA;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN_MEADOW;
-import static org.appland.settlers.model.Vegetation.SAVANNAH;
-import static org.appland.settlers.model.Vegetation.SNOW;
-import static org.appland.settlers.model.Vegetation.STEPPE;
-import static org.appland.settlers.model.Vegetation.SWAMP;
-import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
+import static org.appland.settlers.model.DetailedVegetation.WATER_2;
+import static org.appland.settlers.model.DetailedVegetation.DESERT_1;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
+import static org.appland.settlers.model.DetailedVegetation.LAVA;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_MEADOW;
+import static org.appland.settlers.model.DetailedVegetation.SAVANNAH;
+import static org.appland.settlers.model.DetailedVegetation.SNOW;
+import static org.appland.settlers.model.DetailedVegetation.STEPPE;
+import static org.appland.settlers.model.DetailedVegetation.SWAMP;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -294,7 +294,7 @@ public class TestWildAnimal {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Set the whole map to grass */
-        Utils.fillMapWithVegetation(map, GRASS);
+        Utils.fillMapWithVegetation(map, MEADOW_1);
 
         /* Verify that wild animals appear */
         boolean sawWildAnimal = false;
@@ -344,7 +344,7 @@ public class TestWildAnimal {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Set the whole map to mountain */
-        Utils.fillMapWithVegetation(map, MOUNTAIN);
+        Utils.fillMapWithVegetation(map, MOUNTAIN_1);
 
         /* Verify that wild animals appear */
         boolean sawWildAnimal = false;
@@ -419,7 +419,7 @@ public class TestWildAnimal {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Set the whole map to desert */
-        Utils.fillMapWithVegetation(map, DESERT);
+        Utils.fillMapWithVegetation(map, DESERT_1);
 
         /* Verify that wild animals appear */
         boolean sawWildAnimal = false;
@@ -519,7 +519,7 @@ public class TestWildAnimal {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Set the whole map to deep water */
-        Utils.fillMapWithVegetation(map, DEEP_WATER);
+        Utils.fillMapWithVegetation(map, WATER_2);
 
         /* Verify that no wild animals appear */
         for (int i = 0; i < 3000; i++) {

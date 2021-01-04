@@ -13,7 +13,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Well;
 import org.junit.Test;
 
@@ -537,9 +536,9 @@ public class TestTree {
 
         /* Place savannah and mountain on the map */
         Point point1 = new Point(12, 6);
-        map.setTileBelow(point1, Vegetation.SAVANNAH);
-        map.setTileDownRight(point1, Vegetation.MOUNTAIN);
-        map.setTileDownLeft(point1, Vegetation.DESERT);
+        map.setDetailedVegetationBelow(point1, SAVANNAH);
+        map.setDetailedVegetationDownRight(point1, MOUNTAIN_1);
+        map.setDetailedVegetationDownLeft(point1, DESERT_1);
 
         /* Verify that a dead tree can be placed on a mountain */
         map.placeDeadTree(point1);

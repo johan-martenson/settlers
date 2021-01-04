@@ -23,10 +23,8 @@ import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.areNonePartOf;
-import static org.appland.settlers.model.GameUtils.detailedVegetationToSimpleVegetation;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.GameUtils.isEven;
-import static org.appland.settlers.model.GameUtils.simpleVegetationToDetailedVegetation;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -1816,33 +1814,6 @@ public class GameMap {
         return possibleAdjacentOffRoadConnections;
     }
 
-    private boolean canBuildFlagOn(Vegetation vegetation) {
-        switch (vegetation) {
-            case SWAMP:
-            case SNOW:
-            case WATER:
-            case LAVA:
-            case DEEP_WATER:
-                return false;
-            default:
-                return true;
-        }
-    }
-
-    private boolean canWalkOn(Vegetation vegetation) {
-
-        switch (vegetation) {
-            case WATER:
-            case SWAMP:
-            case DEEP_WATER:
-            case LAVA:
-            case SNOW:
-                return false;
-            default:
-                return true;
-        }
-    }
-
     /**
      * Returns true if there is a flag at the given point
      *
@@ -3412,114 +3383,6 @@ public class GameMap {
     }
 
     /**
-     * Returns the tile above the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileAbove(Point point) {
-        DetailedVegetation detailedVegetation = tileDownRightMap.get((point.y + 1) * width + point.x - 1);
-
-        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileAbove(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
-
-        tileDownRightMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
-    }
-
-    /**
-     * Returns the tile below the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileBelow(Point point) {
-        DetailedVegetation detailedVegetation = tileBelowMap.get(point.y * width + point.x);
-
-        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileBelow(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
-
-        tileBelowMap.put(point.y * width + point.x, detailedVegetation);
-    }
-
-    /**
-     * Returns the tile down to the right of the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileDownRight(Point point) {
-        DetailedVegetation detailedVegetation = tileDownRightMap.get(point.y * width + point.x);
-
-        return GameUtils.detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileDownRight(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = GameUtils.simpleVegetationToDetailedVegetation(vegetation);
-
-        tileDownRightMap.put(point.y * width + point.x, detailedVegetation);
-    }
-
-    /**
-     * Returns the tile dow to the left of the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileDownLeft(Point point) {
-        DetailedVegetation detailedVegetation = tileDownRightMap.get(point.y * width + point.x - 2);
-
-        return detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileDownLeft(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
-
-        tileDownRightMap.put(point.y * width + point.x - 2, detailedVegetation);
-    }
-
-    /**
-     * Returns the tile up to the right of the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileUpRight(Point point) {
-        DetailedVegetation detailedVegetation = tileBelowMap.get((point.y + 1) * width + point.x + 1);
-
-        return detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileUpRight(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
-
-        tileBelowMap.put((point.y + 1) * width + point.x + 1, detailedVegetation);
-    }
-
-    /**
-     * Returns the tile up to the left of the given point
-     *
-     * @param point
-     * @return
-     */
-    public Vegetation getTileUpLeft(Point point) {
-        DetailedVegetation detailedVegetation = tileBelowMap.get((point.y + 1) * width + point.x - 1);
-
-        return detailedVegetationToSimpleVegetation(detailedVegetation);
-    }
-
-    public void setTileUpLeft(Point point, Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
-
-        tileBelowMap.put((point.y + 1) * width + point.x - 1, detailedVegetation);
-    }
-
-    /**
      * Returns true if the given point is surrounded by mountain tiles
      *
      * @param point
@@ -3586,21 +3449,6 @@ public class GameMap {
         setDetailedVegetationDownRight(point, vegetation);
         setDetailedVegetationBelow(point, vegetation);
         setDetailedVegetationDownLeft(point, vegetation);
-    }
-
-    /**
-     * Surrounds the given point with the chosen type of vegetation
-     *
-     * @param point
-     * @param vegetation
-     */
-    public void surroundWithSimplisticVegetation(Point point, Vegetation vegetation) {
-        setTileUpLeft(point, vegetation);
-        setTileAbove(point, vegetation);
-        setTileUpRight(point, vegetation);
-        setTileDownRight(point, vegetation);
-        setTileBelow(point, vegetation);
-        setTileDownLeft(point, vegetation);
     }
 
     boolean isSurroundedBy(Point point, DetailedVegetation vegetation) {
@@ -3680,9 +3528,7 @@ public class GameMap {
                DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationDownLeft);
     }
 
-    public void fillMapWithVegetation(Vegetation vegetation) {
-        DetailedVegetation detailedVegetation = simpleVegetationToDetailedVegetation(vegetation);
-
+    public void fillMapWithVegetation(DetailedVegetation detailedVegetation) {
         tileBelowMap.replaceAll((k, v) -> detailedVegetation);
 
         tileDownRightMap.replaceAll((k, v) -> detailedVegetation);

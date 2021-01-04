@@ -21,7 +21,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 

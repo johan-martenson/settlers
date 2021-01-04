@@ -18,7 +18,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Worker;

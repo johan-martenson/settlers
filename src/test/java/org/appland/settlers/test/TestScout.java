@@ -17,13 +17,13 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.SCOUT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1105,7 +1105,7 @@ public class TestScout {
 
         /* Place the sea that the scout should walk along side */
         for (int i = 0; i < 40; i += 2) {
-            map.surroundWithSimplisticVegetation(new Point(i, 24), Vegetation.WATER);
+            map.surroundWithVegetation(new Point(i, 24), WATER);
         }
 
         /* Call scout from the flag */
