@@ -33,16 +33,16 @@ import java.util.Set;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_WATER;
+import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.DetailedVegetation.WATER_2;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.appland.settlers.test.Utils.occupyBuilding;
 import static org.junit.Assert.assertEquals;
@@ -414,7 +414,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point0 = new Point(5, 5);
-        map.setTileBelow(point0, WATER);
+        map.setDetailedVegetationBelow(point0, WATER);
 
         /* Place headquarter */
         Point point1 = new Point(15, 9);
@@ -461,7 +461,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -512,7 +512,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -565,7 +565,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -635,7 +635,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -704,7 +704,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -844,34 +844,34 @@ public class TestFishery {
         Utils.surroundPointWithVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
-        assertEquals(map.getTileUpLeft(point0), WATER);
-        assertEquals(map.getTileAbove(point0), WATER);
-        assertEquals(map.getTileUpRight(point0), WATER);
-        assertEquals(map.getTileDownRight(point0), WATER);
-        assertEquals(map.getTileBelow(point0), WATER);
-        assertEquals(map.getTileDownLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpLeft(point0), WATER);
+        assertEquals(map.getDetailedVegetationAbove(point0), WATER);
+        assertEquals(map.getDetailedVegetationUpRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownRight(point0), WATER);
+        assertEquals(map.getDetailedVegetationBelow(point0), WATER);
+        assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
         /* Place a mountain */
         Point point7 = new Point(5, 13);
         Point point14 = new Point(8, 14);
 
-        Utils.surroundPointWithVegetation(point7, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point14, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point7, MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point14, MOUNTAIN_1, map);
 
         /* Verify that the points are surrounded by mountain */
-        assertEquals(map.getTileUpLeft(point7), MOUNTAIN);
-        assertEquals(map.getTileAbove(point7), MOUNTAIN);
-        assertEquals(map.getTileUpRight(point7), MOUNTAIN);
-        assertEquals(map.getTileDownRight(point7), MOUNTAIN);
-        assertEquals(map.getTileBelow(point7), MOUNTAIN);
-        assertEquals(map.getTileDownLeft(point7), MOUNTAIN);
+        assertEquals(map.getDetailedVegetationUpLeft(point7), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationAbove(point7), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationUpRight(point7), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationDownRight(point7), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationBelow(point7), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationDownLeft(point7), MOUNTAIN_1);
 
-        assertEquals(map.getTileUpLeft(point14), MOUNTAIN);
-        assertEquals(map.getTileAbove(point14), MOUNTAIN);
-        assertEquals(map.getTileUpRight(point14), MOUNTAIN);
-        assertEquals(map.getTileDownRight(point14), MOUNTAIN);
-        assertEquals(map.getTileBelow(point14), MOUNTAIN);
-        assertEquals(map.getTileDownLeft(point14), MOUNTAIN);
+        assertEquals(map.getDetailedVegetationUpLeft(point14), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationAbove(point14), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationUpRight(point14), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationDownRight(point14), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationBelow(point14), MOUNTAIN_1);
+        assertEquals(map.getDetailedVegetationDownLeft(point14), MOUNTAIN_1);
 
         /* Placing stone */
         Point point19 = new Point(12, 12);
@@ -926,7 +926,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Remove fishes until there is only one left */
         Utils.removeAllFish(map, point1);
@@ -1036,7 +1036,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point2 = new Point(9, 7);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
@@ -1120,7 +1120,7 @@ public class TestFishery {
         Point point1 = new Point(10, 6);
         Point point2 = new Point(9, 7);
 
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
@@ -1312,7 +1312,7 @@ public class TestFishery {
         Point point11 = new Point(12, 6);
         Point point12 = new Point(11, 7);
 
-        map.setTileBelow(point12, WATER);
+        map.setDetailedVegetationBelow(point12, WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
@@ -1382,7 +1382,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point12 = new Point(11, 7);
 
-        map.setTileBelow(point12, WATER);
+        map.setDetailedVegetationBelow(point12, WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
@@ -2265,7 +2265,7 @@ public class TestFishery {
         /* Place fish on one tile */
         Point point0 = new Point(5, 5);
 
-        map.setTileBelow(point0, WATER);
+        map.setDetailedVegetationBelow(point0, WATER);
 
         /* Place headquarter */
         Point point1 = new Point(15, 9);
@@ -2329,7 +2329,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point0 = new Point(5, 5);
-        map.setTileBelow(point0, WATER);
+        map.setDetailedVegetationBelow(point0, WATER);
 
         /* Place headquarter */
         Point point1 = new Point(15, 9);
@@ -2422,7 +2422,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point2 = new Point(11, 11);
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place road to connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
@@ -2481,7 +2481,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point3 = new Point(11, 11);
-        map.setTileBelow(point3, WATER);
+        map.setDetailedVegetationBelow(point3, WATER);
 
         /* Place road to connect the storehouse with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
@@ -2546,7 +2546,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point3 = new Point(11, 11);
-        map.setTileBelow(point3, WATER);
+        map.setDetailedVegetationBelow(point3, WATER);
 
         /* Place road to connect the storehouse with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
@@ -2605,7 +2605,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point1 = new Point(11, 11);
-        map.setTileBelow(point1, WATER);
+        map.setDetailedVegetationBelow(point1, WATER);
 
         /* Verify that worker goes out and in continuously when sent out without being blocked */
         Utils.adjustInventoryTo(headquarter0, FISHERMAN, 1);
@@ -2647,7 +2647,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point1 = new Point(11, 11);
-        map.setTileBelow(point1, WATER);
+        map.setDetailedVegetationBelow(point1, WATER);
 
         /* Verify that worker goes out and in continuously when sent out without being blocked */
         Utils.adjustInventoryTo(headquarter0, FISHERMAN, 1);
@@ -2700,7 +2700,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point2 = new Point(11, 11);
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place road to connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
@@ -2764,7 +2764,7 @@ public class TestFishery {
 
         /* Place fish on one tile */
         Point point2 = new Point(11, 11);
-        map.setTileBelow(point2, WATER);
+        map.setDetailedVegetationBelow(point2, WATER);
 
         /* Place road to connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
@@ -2813,7 +2813,7 @@ public class TestFishery {
     }
 
     @Test
-    public void testFishermanFishNextToShallowWaterOnTileBelow() throws Exception {
+    public void testFishermanFishNextToWater2OnTileBelow() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -2823,7 +2823,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(5, 5);
-        map.setTileBelow(point0, SHALLOW_WATER);
+        map.setDetailedVegetationBelow(point0, WATER_2);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -2898,7 +2898,7 @@ public class TestFishery {
     }
 
     @Test
-    public void testFishermanFishNextToShallowWaterOnTileAbove() throws Exception {
+    public void testFishermanFishNextToWater2OnTileAbove() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -2908,7 +2908,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(6, 4);
-        map.setTileAbove(point0, SHALLOW_WATER);
+        map.setDetailedVegetationAbove(point0, WATER_2);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -2993,7 +2993,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(5, 5);
-        map.setTileBelow(point0, WATER);
+        map.setDetailedVegetationBelow(point0, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -3078,7 +3078,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(6, 4);
-        map.setTileAbove(point0, WATER);
+        map.setDetailedVegetationAbove(point0, WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -3153,7 +3153,7 @@ public class TestFishery {
     }
 
     @Test
-    public void testFishermanFishNextToDeepWaterOnTileBelow() throws Exception {
+    public void testFishermanFishNextToBuildableWaterOnTileBelow() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -3163,7 +3163,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(5, 5);
-        map.setTileBelow(point0, DEEP_WATER);
+        map.setDetailedVegetationBelow(point0, BUILDABLE_WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
@@ -3238,7 +3238,7 @@ public class TestFishery {
     }
 
     @Test
-    public void testFishermanFishNextToDeepWaterOnTileAbove() throws Exception {
+    public void testFishermanFishNextToBuildableWaterOnTileAbove() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -3248,7 +3248,7 @@ public class TestFishery {
 
         /* Place a small lake on one tile */
         Point point0 = new Point(6, 4);
-        map.setTileAbove(point0, DEEP_WATER);
+        map.setDetailedVegetationAbove(point0, BUILDABLE_WATER);
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);

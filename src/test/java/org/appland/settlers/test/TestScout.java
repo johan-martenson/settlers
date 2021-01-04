@@ -1105,7 +1105,7 @@ public class TestScout {
 
         /* Place the sea that the scout should walk along side */
         for (int i = 0; i < 40; i += 2) {
-            map.surroundWithVegetation(new Point(i, 24), Vegetation.WATER);
+            map.surroundWithSimplisticVegetation(new Point(i, 24), Vegetation.WATER);
         }
 
         /* Call scout from the flag */

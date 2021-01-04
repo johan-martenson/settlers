@@ -3579,7 +3579,22 @@ public class GameMap {
      * @param point
      * @param vegetation
      */
-    public void surroundWithVegetation(Point point, Vegetation vegetation) {
+    public void surroundWithVegetation(Point point, DetailedVegetation vegetation) {
+        setDetailedVegetationUpLeft(point, vegetation);
+        setDetailedVegetationAbove(point, vegetation);
+        setDetailedVegetationUpRight(point, vegetation);
+        setDetailedVegetationDownRight(point, vegetation);
+        setDetailedVegetationBelow(point, vegetation);
+        setDetailedVegetationDownLeft(point, vegetation);
+    }
+
+    /**
+     * Surrounds the given point with the chosen type of vegetation
+     *
+     * @param point
+     * @param vegetation
+     */
+    public void surroundWithSimplisticVegetation(Point point, Vegetation vegetation) {
         setTileUpLeft(point, vegetation);
         setTileAbove(point, vegetation);
         setTileUpRight(point, vegetation);

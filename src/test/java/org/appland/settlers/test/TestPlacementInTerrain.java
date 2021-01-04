@@ -77,11 +77,11 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(9, 3);
         Point point4 = new Point(11, 3);
 
-        Utils.surroundPointWithVegetation(pointX, WATER, map);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
-        Utils.surroundPointWithVegetation(point3, WATER, map);
-        Utils.surroundPointWithVegetation(point4, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(pointX, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, WATER, map);
 
         /* Place headquarter */
         Point point0 = new Point(16, 6);
@@ -161,7 +161,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that there is an available flag point in the desert */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -183,7 +183,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that it is possible to place a flag in the desert */
         map.placeFlag(player0, point1);
@@ -205,7 +205,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that there is no available house point in the desert */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -227,7 +227,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that it's not possible to place a house in the desert */
         try {
@@ -252,7 +252,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that there is no available house point in the desert */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -274,7 +274,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Verify that it's not possible to place a house in the desert */
         try {
@@ -299,7 +299,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -328,8 +328,8 @@ public class TestPlacementInTerrain {
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         /* Verify that there is no available house point on the border of the desert */
         Point point3 = new Point(11, 11);
@@ -353,8 +353,8 @@ public class TestPlacementInTerrain {
         /* Put a small desert on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         /* Verify that it's not possible to place a house on the border of the desert */
         Point point3 = new Point(11, 11);
@@ -389,12 +389,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
-        Utils.surroundPointWithVegetation(point3, DESERT, map);
-        Utils.surroundPointWithVegetation(point4, DESERT, map);
-        Utils.surroundPointWithVegetation(point5, DESERT, map);
-        Utils.surroundPointWithVegetation(point6, DESERT, map);
-        Utils.surroundPointWithVegetation(point7, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, DESERT, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -426,7 +426,7 @@ public class TestPlacementInTerrain {
 
         /* Place a desert on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -473,13 +473,13 @@ public class TestPlacementInTerrain {
 
         /* Place a desert on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         /* Place snow next to the desert */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of desert and snow */
         Point point5 = new Point(5, 7);
@@ -501,13 +501,13 @@ public class TestPlacementInTerrain {
 
         /* Place a desert on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         /* Place snow next to the desert */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of desert and snow */
         Point point5 = new Point(5, 7);
@@ -525,10 +525,10 @@ public class TestPlacementInTerrain {
 
         /* Place a desert on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DESERT, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, DESERT, map);
+            Utils.surroundPointWithSimplisticVegetation(point, DESERT, map);
         }
 
         /* Verify that a headquarter cannot be placed in the desert */
@@ -559,7 +559,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that there is no available flag point in the snow */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -581,7 +581,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that it is not possible to place a flag on the snow */
         try {
@@ -606,7 +606,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that there is no available house point on the snow */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -628,7 +628,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that it's not possible to place a house on the snow */
         try {
@@ -653,7 +653,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that there is no available house point on the snow */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -675,7 +675,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Verify that it's not possible to place a house on the snow */
         try {
@@ -700,7 +700,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -732,8 +732,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
-        Utils.surroundPointWithVegetation(point2, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SNOW, map);
 
         /* Verify that there is no available house point on the border of the snow */
         Point point3 = new Point(11, 11);
@@ -757,8 +757,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of snow on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, SNOW, map);
-        Utils.surroundPointWithVegetation(point2, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SNOW, map);
 
         /* Verify that it's not possible to place a house on the border of the snow */
         Point point3 = new Point(11, 11);
@@ -793,12 +793,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, SNOW, map);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
-        Utils.surroundPointWithVegetation(point5, SNOW, map);
-        Utils.surroundPointWithVegetation(point6, SNOW, map);
-        Utils.surroundPointWithVegetation(point7, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, SNOW, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -837,7 +837,7 @@ public class TestPlacementInTerrain {
 
         /* Place a patch of snow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SNOW, map);
 
         /* Place a wild animal */
         WildAnimal animal0 = map.placeWildAnimal(point2);
@@ -875,13 +875,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of water and snow */
         Point point5 = new Point(5, 7);
@@ -907,13 +907,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of water and snow */
         Point point5 = new Point(5, 7);
@@ -931,10 +931,10 @@ public class TestPlacementInTerrain {
 
         /* Place snow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SNOW, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, SNOW, map);
+            Utils.surroundPointWithSimplisticVegetation(point, SNOW, map);
         }
 
         /* Verify that a headquarter cannot be placed on the snow */
@@ -964,7 +964,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that there is an available flag point on the grass */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -986,7 +986,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that it is  possible to place a flag on the grass */
         map.placeFlag(player0, point1);
@@ -1008,7 +1008,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that there is an available house point on the grass */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -1030,7 +1030,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that it's possible to place a house on the grass */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -1052,7 +1052,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that there is no available house point on the grass */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -1074,7 +1074,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Verify that it's not possible to place a house on the grass */
         try {
@@ -1099,7 +1099,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of grass on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -1136,12 +1136,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, GRASS, map);
-        Utils.surroundPointWithVegetation(point3, GRASS, map);
-        Utils.surroundPointWithVegetation(point4, GRASS, map);
-        Utils.surroundPointWithVegetation(point5, GRASS, map);
-        Utils.surroundPointWithVegetation(point6, GRASS, map);
-        Utils.surroundPointWithVegetation(point7, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, GRASS, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -1173,7 +1173,7 @@ public class TestPlacementInTerrain {
 
         /* Place a patch of grass on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, GRASS, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -1220,13 +1220,13 @@ public class TestPlacementInTerrain {
 
         /* Place a patch of grass on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, GRASS, map);
 
         /* Place snow next to the grass */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of grass and snow */
         Point point5 = new Point(5, 7);
@@ -1248,13 +1248,13 @@ public class TestPlacementInTerrain {
 
         /* Place a patch of grass on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, GRASS, map);
 
         /* Place snow next to the grass */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of grass and snow */
         Point point5 = new Point(5, 7);
@@ -1280,7 +1280,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that there is an available flag point on the savannah */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -1302,7 +1302,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that it is  possible to place a flag on the savannah */
         map.placeFlag(player0, point1);
@@ -1324,7 +1324,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that there is an available house point on the savannah */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -1346,7 +1346,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that it's possible to place a house on the savannah */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -1368,7 +1368,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that there is no available house point on the savannah */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -1390,7 +1390,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Verify that it's not possible to place a house on the savannah */
         try {
@@ -1415,7 +1415,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of savannah on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SAVANNAH, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -1452,12 +1452,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
-        Utils.surroundPointWithVegetation(point3, SAVANNAH, map);
-        Utils.surroundPointWithVegetation(point4, SAVANNAH, map);
-        Utils.surroundPointWithVegetation(point5, SAVANNAH, map);
-        Utils.surroundPointWithVegetation(point6, SAVANNAH, map);
-        Utils.surroundPointWithVegetation(point7, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, SAVANNAH, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -1489,7 +1489,7 @@ public class TestPlacementInTerrain {
 
         /* Place a savannah on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SAVANNAH, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -1534,13 +1534,13 @@ public class TestPlacementInTerrain {
 
         /* Place a savannah on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SAVANNAH, map);
 
         /* Place snow next to the savannah */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of savannah and snow */
         Point point5 = new Point(5, 7);
@@ -1562,13 +1562,13 @@ public class TestPlacementInTerrain {
 
         /* Place a savannah on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SAVANNAH, map);
 
         /* Place snow next to the savannah */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of savannah and snow */
         Point point5 = new Point(5, 7);
@@ -1586,10 +1586,10 @@ public class TestPlacementInTerrain {
 
         /* Place savannah on the map */
         Point point2 = new Point(8, 8);
-        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SAVANNAH, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, SAVANNAH, map);
+            Utils.surroundPointWithSimplisticVegetation(point, SAVANNAH, map);
         }
 
         /* Verify that a headquarter can be placed on the savannah */
@@ -1615,7 +1615,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that there is an available flag point on the buildable water */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -1637,7 +1637,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that it is  possible to place a flag on the buildable water */
         map.placeFlag(player0, point1);
@@ -1659,7 +1659,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that there is an available house point next to the buildable water */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -1681,7 +1681,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that it's possible to place a house on the buildable water */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -1703,7 +1703,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that there is no available house point on the buildable water */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -1725,7 +1725,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Verify that it's not possible to place a house on the buildable water */
         try {
@@ -1750,7 +1750,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SHALLOW_WATER, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -1787,12 +1787,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
-        Utils.surroundPointWithVegetation(point3, SHALLOW_WATER, map);
-        Utils.surroundPointWithVegetation(point4, SHALLOW_WATER, map);
-        Utils.surroundPointWithVegetation(point5, SHALLOW_WATER, map);
-        Utils.surroundPointWithVegetation(point6, SHALLOW_WATER, map);
-        Utils.surroundPointWithVegetation(point7, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, SHALLOW_WATER, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -1824,7 +1824,7 @@ public class TestPlacementInTerrain {
 
         /* Place a lake of buildable water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SHALLOW_WATER, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -1871,13 +1871,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake of buildable water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SHALLOW_WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of buildable water and snow */
         Point point5 = new Point(5, 7);
@@ -1899,13 +1899,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake of buildable water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SHALLOW_WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of buildable water and snow */
         Point point5 = new Point(5, 7);
@@ -1923,10 +1923,10 @@ public class TestPlacementInTerrain {
 
         /* Place buildable water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SHALLOW_WATER, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, SHALLOW_WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, SHALLOW_WATER, map);
         }
 
         /* Verify that a headquarter can be placed on the buildable water */
@@ -1952,7 +1952,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that there is an available flag point on the steppe */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -1974,7 +1974,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that it is  possible to place a flag on the steppe */
         map.placeFlag(player0, point1);
@@ -1996,7 +1996,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that there is an available house point on the steppe */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -2018,7 +2018,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that it's possible to place a house on the steppe */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -2040,7 +2040,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that there is no available house point on the steppe */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -2062,7 +2062,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Verify that it's not possible to place a house on the steppe */
         try {
@@ -2087,7 +2087,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of steppe on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, STEPPE, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -2124,12 +2124,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, STEPPE, map);
-        Utils.surroundPointWithVegetation(point3, STEPPE, map);
-        Utils.surroundPointWithVegetation(point4, STEPPE, map);
-        Utils.surroundPointWithVegetation(point5, STEPPE, map);
-        Utils.surroundPointWithVegetation(point6, STEPPE, map);
-        Utils.surroundPointWithVegetation(point7, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, STEPPE, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -2161,7 +2161,7 @@ public class TestPlacementInTerrain {
 
         /* Place a steppe on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, STEPPE, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -2206,13 +2206,13 @@ public class TestPlacementInTerrain {
 
         /* Place a steppe on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, STEPPE, map);
 
         /* Place snow next to the steppe */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of steppe and snow */
         Point point5 = new Point(5, 7);
@@ -2234,13 +2234,13 @@ public class TestPlacementInTerrain {
 
         /* Place a steppe on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, STEPPE, map);
 
         /* Place snow next to the steppe */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of steppe and snow */
         Point point5 = new Point(5, 7);
@@ -2258,10 +2258,10 @@ public class TestPlacementInTerrain {
 
         /* Place steppe on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, STEPPE, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, STEPPE, map);
+            Utils.surroundPointWithSimplisticVegetation(point, STEPPE, map);
         }
 
         /* Verify that a headquarter can be placed on the steppe */
@@ -2287,7 +2287,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that there is an available flag point on the mountain meadow */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -2309,7 +2309,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that it is  possible to place a flag on the mountain meadow */
         map.placeFlag(player0, point1);
@@ -2331,7 +2331,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that there is an available house point on the mountain meadow */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -2353,7 +2353,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that it's possible to place a house on the mountain meadow */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -2375,7 +2375,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that there is no available house point on the mountain meadow */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -2397,7 +2397,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that it's not possible to place a house on the mountain meadow */
         try {
@@ -2422,7 +2422,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of mountain meadow on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -2459,12 +2459,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithVegetation(point3, MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithVegetation(point4, MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithVegetation(point5, MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithVegetation(point6, MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithVegetation(point7, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, MOUNTAIN_MEADOW, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -2496,7 +2496,7 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain meadow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN_MEADOW, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -2543,13 +2543,13 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain meadow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN_MEADOW, map);
 
         /* Place snow next to the mountain meadow */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
         Point point5 = new Point(5, 7);
@@ -2571,13 +2571,13 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain meadow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN_MEADOW, map);
 
         /* Place snow next to the mountain meadow */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
         Point point5 = new Point(5, 7);
@@ -2595,10 +2595,10 @@ public class TestPlacementInTerrain {
 
         /* Place mountain meadow on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN_MEADOW, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, MOUNTAIN_MEADOW, map);
+            Utils.surroundPointWithSimplisticVegetation(point, MOUNTAIN_MEADOW, map);
         }
 
         /* Verify that a headquarter can be placed on the mountain meadow */
@@ -2623,7 +2623,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that there is an available flag point on the buildable mountain */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -2645,7 +2645,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it is  possible to place a flag on the buildable mountain */
         map.placeFlag(player0, point1);
@@ -2667,7 +2667,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that there is an available house point on the buildable mountain */
         assertNotNull(map.isAvailableHousePoint(player0, point1));
@@ -2689,7 +2689,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's possible to place a house on the buildable mountain */
         map.placeBuilding(new Woodcutter(player0), point1);
@@ -2711,7 +2711,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that there is no available house point on the buildable mountain */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -2733,7 +2733,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's not possible to place a house on the buildable mountain */
         try {
@@ -2758,7 +2758,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of buildable mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -2795,12 +2795,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point3, BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point4, BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point5, BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point6, BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point7, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, BUILDABLE_MOUNTAIN, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -2832,7 +2832,7 @@ public class TestPlacementInTerrain {
 
         /* Place a buildable mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -2877,13 +2877,13 @@ public class TestPlacementInTerrain {
 
         /* Place a buildable mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         /* Place snow next to the buildable mountain */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of buildable mountain and snow */
         Point point5 = new Point(5, 7);
@@ -2905,13 +2905,13 @@ public class TestPlacementInTerrain {
 
         /* Place a buildable mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         /* Place snow next to the buildable mountain */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of buildable mountain and snow */
         Point point5 = new Point(5, 7);
@@ -2929,10 +2929,10 @@ public class TestPlacementInTerrain {
 
         /* Place buildable mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
+            Utils.surroundPointWithSimplisticVegetation(point, BUILDABLE_MOUNTAIN, map);
         }
 
         /* Verify that a headquarter can be placed on the buildable mountain */
@@ -2954,10 +2954,10 @@ public class TestPlacementInTerrain {
 
         /* Place a buildable mountain on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, BUILDABLE_MOUNTAIN, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
+            Utils.surroundPointWithSimplisticVegetation(point, BUILDABLE_MOUNTAIN, map);
         }
 
         /* Verify that there is an available point for a large house on the buildable mountain */
@@ -2986,7 +2986,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that there is no available flag point in the lava */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -3008,7 +3008,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that it is not possible to place a flag on the lava */
         try {
@@ -3033,7 +3033,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that there is no available house point on the lava */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -3055,7 +3055,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that it's not possible to place a house on the lava */
         try {
@@ -3080,7 +3080,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that there is no available house point on the lava */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -3102,7 +3102,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Verify that it's not possible to place a house on the lava */
         try {
@@ -3127,7 +3127,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -3159,8 +3159,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         /* Verify that there is no available house point on the border of the lava */
         Point point3 = new Point(11, 11);
@@ -3184,8 +3184,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         /* Verify that it's not possible to place a house on the border of the lava */
         Point point3 = new Point(11, 11);
@@ -3220,12 +3220,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
-        Utils.surroundPointWithVegetation(point3, LAVA, map);
-        Utils.surroundPointWithVegetation(point4, LAVA, map);
-        Utils.surroundPointWithVegetation(point5, LAVA, map);
-        Utils.surroundPointWithVegetation(point6, LAVA, map);
-        Utils.surroundPointWithVegetation(point7, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, LAVA, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -3264,13 +3264,13 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of lava and snow */
         Point point5 = new Point(5, 7);
@@ -3296,13 +3296,13 @@ public class TestPlacementInTerrain {
 
         /* Place a swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of lava and snow */
         Point point5 = new Point(5, 7);
@@ -3320,10 +3320,10 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, LAVA, map);
+            Utils.surroundPointWithSimplisticVegetation(point, LAVA, map);
         }
 
         /* Verify that a headquarter can be placed on the lava */
@@ -3349,10 +3349,10 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, LAVA, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, LAVA, map);
+            Utils.surroundPointWithSimplisticVegetation(point, LAVA, map);
         }
 
         /* Verify that there is no available point for a large house on the lava */
@@ -3381,7 +3381,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that there is no available flag point in the deep water */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -3403,7 +3403,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that it is not possible to place a flag on the deep water */
         try {
@@ -3428,7 +3428,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that there is no available house point on the deep water */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -3450,7 +3450,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that it's not possible to place a house on the deep water */
         try {
@@ -3475,7 +3475,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that there is no available house point on the deep water */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -3497,7 +3497,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Verify that it's not possible to place a house on the deep water */
         try {
@@ -3522,7 +3522,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -3554,8 +3554,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         /* Verify that there is no available house point on the border of the deep water */
         Point point3 = new Point(11, 11);
@@ -3579,8 +3579,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of deep water on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         /* Verify that it's not possible to place a house on the border of the deep water */
         Point point3 = new Point(11, 11);
@@ -3615,12 +3615,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point3, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point4, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point5, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point6, DEEP_WATER, map);
-        Utils.surroundPointWithVegetation(point7, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, DEEP_WATER, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -3659,13 +3659,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake with deep water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of deep water and snow */
         Point point5 = new Point(5, 7);
@@ -3691,13 +3691,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake with deep water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of deep water and snow */
         Point point5 = new Point(5, 7);
@@ -3715,10 +3715,10 @@ public class TestPlacementInTerrain {
 
         /* Place deep water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
         }
 
         /* Verify that a headquarter cannot be placed on the deep water */
@@ -3744,10 +3744,10 @@ public class TestPlacementInTerrain {
 
         /* Place deep water on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, DEEP_WATER, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, DEEP_WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, DEEP_WATER, map);
         }
 
         /* Verify that there is no available point for a large house on the deep water */
@@ -3776,7 +3776,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of Water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that there is no available flag point in the water */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -3798,7 +3798,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that it is not possible to place a flag on the water */
         try {
@@ -3823,7 +3823,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that there is no available house point on the water */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -3845,7 +3845,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that it's not possible to place a house on the water */
         try {
@@ -3870,7 +3870,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that there is no available house point on the water */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -3892,7 +3892,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Verify that it's not possible to place a house on the water */
         try {
@@ -3917,7 +3917,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -3949,8 +3949,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Verify that there is no available house point on the border of the water */
         Point point3 = new Point(11, 11);
@@ -3974,8 +3974,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of water on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, WATER, map);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Verify that it's not possible to place a house on the border of the water */
         Point point3 = new Point(11, 11);
@@ -4010,12 +4010,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
-        Utils.surroundPointWithVegetation(point3, WATER, map);
-        Utils.surroundPointWithVegetation(point4, WATER, map);
-        Utils.surroundPointWithVegetation(point5, WATER, map);
-        Utils.surroundPointWithVegetation(point6, WATER, map);
-        Utils.surroundPointWithVegetation(point7, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, WATER, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -4054,13 +4054,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of water and snow */
         Point point5 = new Point(5, 7);
@@ -4086,13 +4086,13 @@ public class TestPlacementInTerrain {
 
         /* Place a lake on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         /* Place snow next to the lake */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of water and snow */
         Point point5 = new Point(5, 7);
@@ -4110,10 +4110,10 @@ public class TestPlacementInTerrain {
 
         /* Place water on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, WATER, map);
         }
 
         /* Verify that a headquarter cannot be placed on the water */
@@ -4139,10 +4139,10 @@ public class TestPlacementInTerrain {
 
         /* Place water on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, WATER, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, WATER, map);
         }
 
         /* Verify that there is no available point for a large house on the water */
@@ -4171,7 +4171,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that there is no available flag point in the swamp */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -4193,7 +4193,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that it is not possible to place a flag on the swamp */
         try {
@@ -4218,7 +4218,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that there is no available house point on the swamp */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -4240,7 +4240,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that it's not possible to place a house on the swamp */
         try {
@@ -4265,7 +4265,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that there is no available house point on the swamp */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -4287,7 +4287,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Verify that it's not possible to place a house on the swamp */
         try {
@@ -4312,7 +4312,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -4344,8 +4344,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         /* Verify that there is no available house point on the border of the swamp */
         Point point3 = new Point(11, 11);
@@ -4369,8 +4369,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of swamp on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, SWAMP, map);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         /* Verify that it's not possible to place a house on the border of the swamp */
         Point point3 = new Point(11, 11);
@@ -4405,12 +4405,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
-        Utils.surroundPointWithVegetation(point3, SWAMP, map);
-        Utils.surroundPointWithVegetation(point4, SWAMP, map);
-        Utils.surroundPointWithVegetation(point5, SWAMP, map);
-        Utils.surroundPointWithVegetation(point6, SWAMP, map);
-        Utils.surroundPointWithVegetation(point7, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, SWAMP, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -4449,7 +4449,7 @@ public class TestPlacementInTerrain {
 
         /* Place a swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         /* Place tree */
         WildAnimal animal0 = map.placeWildAnimal(point2);
@@ -4487,13 +4487,13 @@ public class TestPlacementInTerrain {
 
         /* Place a swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of swamp and snow */
         Point point5 = new Point(5, 7);
@@ -4519,13 +4519,13 @@ public class TestPlacementInTerrain {
 
         /* Place a swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's not possible to place a flag on the border of swamp and snow */
         Point point5 = new Point(5, 7);
@@ -4543,10 +4543,10 @@ public class TestPlacementInTerrain {
 
         /* Place swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, SWAMP, map);
+            Utils.surroundPointWithSimplisticVegetation(point, SWAMP, map);
         }
 
         /* Verify that a headquarter can be placed on the swamp */
@@ -4573,10 +4573,10 @@ public class TestPlacementInTerrain {
 
         /* Place swamp on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, SWAMP, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, SWAMP, map);
+            Utils.surroundPointWithSimplisticVegetation(point, SWAMP, map);
         }
 
         /* Verify that there is no available point for a large house on the swamp */
@@ -4604,7 +4604,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that there is an available flag point in the magenta */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -4626,7 +4626,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that it is possible to place a flag in the magenta */
         map.placeFlag(player0, point1);
@@ -4648,7 +4648,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that there is no available house point in the magenta */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -4670,7 +4670,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that it's not possible to place a house in the magenta */
         try {
@@ -4695,7 +4695,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that there is no available house point in the magenta */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -4717,7 +4717,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Verify that it's not possible to place a house in the magenta */
         try {
@@ -4742,7 +4742,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -4771,8 +4771,8 @@ public class TestPlacementInTerrain {
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         /* Verify that there is no available house point on the border of the magenta */
         Point point3 = new Point(11, 11);
@@ -4796,8 +4796,8 @@ public class TestPlacementInTerrain {
         /* Put a small magenta on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         /* Verify that it's not possible to place a house on the border of the magenta */
         Point point3 = new Point(11, 11);
@@ -4832,12 +4832,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point3, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point4, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point5, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point6, MAGENTA, map);
-        Utils.surroundPointWithVegetation(point7, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, MAGENTA, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -4869,7 +4869,7 @@ public class TestPlacementInTerrain {
 
         /* Place magenta on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -4916,13 +4916,13 @@ public class TestPlacementInTerrain {
 
         /* Place magenta on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         /* Place snow next to the magenta */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of magenta and snow */
         Point point5 = new Point(5, 7);
@@ -4944,13 +4944,13 @@ public class TestPlacementInTerrain {
 
         /* Place magenta on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         /* Place snow next to the magenta */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of magenta and snow */
         Point point5 = new Point(5, 7);
@@ -4968,10 +4968,10 @@ public class TestPlacementInTerrain {
 
         /* Place magenta on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, MAGENTA, map);
+            Utils.surroundPointWithSimplisticVegetation(point, MAGENTA, map);
         }
 
         /* Verify that a headquarter cannot be placed on the magenta */
@@ -4997,10 +4997,10 @@ public class TestPlacementInTerrain {
 
         /* Place magenta on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MAGENTA, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, MAGENTA, map);
+            Utils.surroundPointWithSimplisticVegetation(point, MAGENTA, map);
         }
 
         /* Verify that there is no available point for a large house on the magenta */
@@ -5028,7 +5028,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that there is an available flag point in the mountain */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
@@ -5051,7 +5051,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that it is possible to place a flag in the mountain */
         map.placeFlag(player0, point1);
@@ -5073,7 +5073,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that there is no available house point in the mountain */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -5095,7 +5095,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that it's not possible to place a house in the mountain */
         try {
@@ -5120,7 +5120,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that there is no available house point in the mountain */
         assertTrue(map.isAvailableMinePoint(player0, point1));
@@ -5142,7 +5142,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Verify that it's possible to place a house in the mountain */
         map.placeBuilding(new GoldMine(player0), point1);
@@ -5164,7 +5164,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -5193,8 +5193,8 @@ public class TestPlacementInTerrain {
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Verify that there is no available house point on the border of the mountain */
         Point point3 = new Point(11, 11);
@@ -5218,8 +5218,8 @@ public class TestPlacementInTerrain {
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Verify that it's not possible to place a house on the border of the mountain */
         Point point3 = new Point(11, 11);
@@ -5254,12 +5254,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point3, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point4, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point6, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point7, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point7, MOUNTAIN, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -5291,7 +5291,7 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -5338,13 +5338,13 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Place snow next to the mountain */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of mountain and snow */
         Point point5 = new Point(5, 7);
@@ -5366,13 +5366,13 @@ public class TestPlacementInTerrain {
 
         /* Place a mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Place snow next to the mountain */
         Point point3 = new Point(4, 8);
         Point point4 = new Point(7, 7);
-        Utils.surroundPointWithVegetation(point3, SNOW, map);
-        Utils.surroundPointWithVegetation(point4, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, SNOW, map);
 
         /* Verify that it's possible to place a flag on the border of mountain and snow */
         Point point5 = new Point(5, 7);
@@ -5390,10 +5390,10 @@ public class TestPlacementInTerrain {
 
         /* Place mountain on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, MOUNTAIN, map);
+            Utils.surroundPointWithSimplisticVegetation(point, MOUNTAIN, map);
         }
 
         /* Verify that a headquarter cannot be placed on the mountain */
@@ -5419,10 +5419,10 @@ public class TestPlacementInTerrain {
 
         /* Place mountain on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, MOUNTAIN, map);
+            Utils.surroundPointWithSimplisticVegetation(point, MOUNTAIN, map);
         }
 
         /* Verify that there is no available point for a large house on the mountain */

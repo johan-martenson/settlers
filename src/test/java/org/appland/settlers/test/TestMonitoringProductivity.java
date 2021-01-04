@@ -886,7 +886,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);
@@ -942,7 +942,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, Vegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);

@@ -1412,7 +1412,7 @@ public class TestWell {
 
         /* Place a buildable mountain on the map */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Place well */
         Building well = map.placeBuilding(new Well(player0), point1);

@@ -974,7 +974,7 @@ public class TestPlacement {
 
         /* Place a lake */
         Point centerPoint = new Point(3, 1);
-        Utils.surroundPointWithVegetation(centerPoint, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(centerPoint, WATER, map);
 
         /* Verify that the center point is in the middle of the lake */
         assertEquals(map.getTileUpLeft(centerPoint), WATER);
@@ -1238,7 +1238,7 @@ public class TestPlacement {
 
         /* Place a lake */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithVegetation(point0, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
         assertEquals(map.getTileUpLeft(point0), WATER);
@@ -1279,7 +1279,7 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithVegetation(point0, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
         assertEquals(map.getTileUpLeft(point0), WATER);
@@ -1947,7 +1947,7 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Utils.surroundPointWithVegetation(point0, WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point0, WATER, map);
 
         /* Verify that the point is surrounded by water */
         assertEquals(map.getTileUpLeft(point0), WATER);
@@ -2378,9 +2378,9 @@ public class TestPlacement {
         Point point0 = new Point(5, 13);
         Point point1 = new Point(8, 14);
         Point point2 = new Point(5, 15);
-        Utils.surroundPointWithVegetation(point0, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point0, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point2, MOUNTAIN, map);
 
         /* Put gold at mountain */
         map.surroundPointWithMineral(point0, GOLD);
@@ -2391,9 +2391,9 @@ public class TestPlacement {
         Point point3 = new Point(8, 16);
         Point point4 = new Point(11, 17);
         Point point5 = new Point(8, 18);
-        Utils.surroundPointWithVegetation(point3, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point4, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point3, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN, map);
 
         /* Put coal at mountain */
         map.surroundPointWithMineral(point3, COAL);
@@ -2568,9 +2568,9 @@ public class TestPlacement {
 
         /* Place terrain that can only handle roads and flags - no buildings */
         Point point1 = new Point(15, 15);
-        Utils.surroundPointWithVegetation(point1, DESERT, map);
-        Utils.surroundPointWithVegetation(point1.right(), DESERT, map);
-        Utils.surroundPointWithVegetation(point1.right().right(), DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1.right(), DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1.right().right(), DESERT, map);
 
         /* Verify that it's possible to build a large house close to the vegetation */
         assertEquals(map.isAvailableHousePoint(player0, point1.right().down()), LARGE);

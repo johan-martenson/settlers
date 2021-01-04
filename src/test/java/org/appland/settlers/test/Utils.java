@@ -239,15 +239,15 @@ public class Utils {
     }
 
     public static void surroundPointWithWater(Point point, GameMap map) {
-        surroundPointWithVegetation(point, WATER, map);
+        surroundPointWithSimplisticVegetation(point, WATER, map);
     }
 
     public static void surroundPointWithMountain(Point point, GameMap map) {
-        surroundPointWithVegetation(point, MOUNTAIN, map);
+        surroundPointWithSimplisticVegetation(point, MOUNTAIN, map);
     }
 
     public static void surroundPointWithSwamp(Point point, GameMap map) {
-        surroundPointWithVegetation(point, SWAMP, map);
+        surroundPointWithSimplisticVegetation(point, SWAMP, map);
     }
 
     public static void fastForwardUntilBuildingIsConstructed(Building building) throws Exception {
@@ -296,7 +296,7 @@ public class Utils {
 
     public static void createMountainWithinRadius(Point point, int radius, GameMap map) {
         for (Point p : map.getPointsWithinRadius(point, radius - 1)) {
-            surroundPointWithVegetation(p, MOUNTAIN, map);
+            surroundPointWithSimplisticVegetation(p, MOUNTAIN, map);
         }
     }
 
@@ -1023,8 +1023,19 @@ public class Utils {
 
     }
 
-    static void surroundPointWithVegetation(Point point, Vegetation vegetation, GameMap map) {
+    static void surroundPointWithVegetation(Point point, DetailedVegetation vegetation, GameMap map) {
         map.surroundWithVegetation(point, vegetation);
+
+        assertEquals(map.getDetailedVegetationUpLeft(point), vegetation);
+        assertEquals(map.getDetailedVegetationAbove(point), vegetation);
+        assertEquals(map.getDetailedVegetationUpRight(point), vegetation);
+        assertEquals(map.getDetailedVegetationDownRight(point), vegetation);
+        assertEquals(map.getDetailedVegetationBelow(point), vegetation);
+        assertEquals(map.getDetailedVegetationDownLeft(point), vegetation);
+    }
+
+    static void surroundPointWithSimplisticVegetation(Point point, Vegetation vegetation, GameMap map) {
+        map.surroundWithSimplisticVegetation(point, vegetation);
 
         assertEquals(map.getTileUpLeft(point), vegetation);
         assertEquals(map.getTileAbove(point), vegetation);

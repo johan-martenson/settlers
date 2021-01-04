@@ -389,7 +389,7 @@ public class TestTree {
 
         /* Place mountain */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.MOUNTAIN, map);
 
         /* Verify that a dead tree can be placed on a mountain */
         map.placeDeadTree(point1);
@@ -412,7 +412,7 @@ public class TestTree {
 
         /* Place savannah */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.SAVANNAH, map);
 
         /* Verify that a dead tree can be placed on a savannah */
         map.placeDeadTree(point1);
@@ -435,7 +435,7 @@ public class TestTree {
 
         /* Place lava */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.LAVA, map);
 
         /* Verify that a dead tree can be placed on lava */
         map.placeDeadTree(point1);
@@ -458,7 +458,7 @@ public class TestTree {
 
         /* Place steppe */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.STEPPE, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.STEPPE, map);
 
         /* Verify that a dead tree can be placed on steppe */
         map.placeDeadTree(point1);
@@ -481,7 +481,7 @@ public class TestTree {
 
         /* Place swamp */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.SWAMP, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.SWAMP, map);
 
         /* Verify that a dead tree can be placed on swamp */
         map.placeDeadTree(point1);
@@ -504,7 +504,7 @@ public class TestTree {
 
         /* Place desert */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.DESERT, map);
 
         /* Verify that a dead tree can be placed on desert */
         map.placeDeadTree(point1);
@@ -552,7 +552,7 @@ public class TestTree {
 
         /* Place snow */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.SNOW, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.SNOW, map);
 
         /* Verify that a dead tree can be placed on snow */
         try {
@@ -579,7 +579,7 @@ public class TestTree {
 
         /* Place shallow water */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.SHALLOW_WATER, map);
 
         /* Verify that a dead tree can be placed on shallow water */
         try {
@@ -606,7 +606,7 @@ public class TestTree {
 
         /* Place water */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.WATER, map);
 
         /* Verify that a dead tree can be placed on water */
         try {
@@ -633,7 +633,7 @@ public class TestTree {
 
         /* Place deep water */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, Vegetation.DEEP_WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.DEEP_WATER, map);
 
         /* Verify that a dead tree can be placed on deep water */
         try {

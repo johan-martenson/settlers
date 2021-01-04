@@ -734,10 +734,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 4)) {
-            Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, Vegetation.WATER, map);
         }
 
-        Utils.surroundPointWithVegetation(point1, GRASS, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, GRASS, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut);
@@ -790,10 +790,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 10)) {
-            Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithSimplisticVegetation(point, Vegetation.WATER, map);
         }
 
-        Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
+        Utils.surroundPointWithSimplisticVegetation(point1, Vegetation.WATER, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut);
@@ -889,9 +889,9 @@ public class TestForesterHut {
         Point point4 = new Point(8, 16);
         Point point5 = new Point(11, 17);
         Point point6 = new Point(14, 16);
-        Utils.surroundPointWithVegetation(point4, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
-        Utils.surroundPointWithVegetation(point6, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point4, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point5, MOUNTAIN, map);
+        Utils.surroundPointWithSimplisticVegetation(point6, MOUNTAIN, map);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
