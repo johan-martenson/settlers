@@ -119,8 +119,8 @@ public class TestPlacementInTerrain {
         assertEquals(map.getTileBelow(point7), WATER);
         assertEquals(map.getTileDownRight(point7), GRASS);
 
-        assertFalse(map.isOnGrass(fishery0.getFlag().getPosition()));
-        assertFalse(map.isOnGrass(fishery1.getFlag().getPosition()));
+        assertTrue(map.isNextToAnyWater(fishery0.getFlag().getPosition()));
+        assertTrue(map.isNextToAnyWater(fishery1.getFlag().getPosition()));
 
         /* First, define the road like a player would */
         assertTrue(

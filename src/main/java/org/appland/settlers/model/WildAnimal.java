@@ -45,9 +45,9 @@ public class WildAnimal extends Worker {
         }
     }
 
-    public static boolean cannotWalkOnAny(Collection<Vegetation> surroundingTiles) {
-        for (Vegetation vegetation : surroundingTiles) {
-            if (vegetation.canAnimalWalkOn()) {
+    public static boolean cannotWalkOnAny(Collection<DetailedVegetation> surroundingTiles) {
+        for (DetailedVegetation vegetation : surroundingTiles) {
+            if (!DetailedVegetation.WILD_ANIMAL_CAN_NOT_WALK_ON.contains(vegetation)) {
                 return false;
             }
         }
@@ -92,7 +92,7 @@ public class WildAnimal extends Worker {
             }
 
             /* Filter points surrounded by shallow water as animals can't walk on water */
-            Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+            Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
             if (cannotWalkOnAny(surroundingVegetation)) {
                 continue;

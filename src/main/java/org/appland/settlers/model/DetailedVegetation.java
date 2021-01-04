@@ -78,9 +78,25 @@ public enum DetailedVegetation {
             BUILDABLE_MOUNTAIN
     );
 
-    public static final Set<DetailedVegetation> WATER_VEGETATION = EnumSet.of(
+    public static final Set<DetailedVegetation> WATER_VEGETATION = EnumSet.of(WATER, WATER_2, BUILDABLE_WATER);
+
+    public static final Set<DetailedVegetation> MINABLE_MOUNTAIN = EnumSet.of(MOUNTAIN_1, MOUNTAIN_2, MOUNTAIN_3, MOUNTAIN_4);
+
+    public static final Set<DetailedVegetation> WILD_ANIMAL_CAN_NOT_WALK_ON = EnumSet.of(
             WATER,
             WATER_2,
-            BUILDABLE_WATER
+            BUILDABLE_WATER,
+            LAVA,
+            LAVA_2,
+            LAVA_3,
+            LAVA_4
     );
+
+    public static final Set<DetailedVegetation> CAN_USE_WELL = EnumSet.of(
+            MEADOW_1,
+            MEADOW_2,
+            MEADOW_3
+    );
+
+    static final Set<DetailedVegetation> DEAD_TREE_NOT_ALLOWED = EnumSet.of(SNOW, WATER, WATER_2, BUILDABLE_WATER, MAGENTA);
 }

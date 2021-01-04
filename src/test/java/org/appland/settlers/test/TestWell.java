@@ -50,6 +50,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestWell {
 
+    /*
+    * TODO: test what detailed vegetations the well can get water from
+    * */
+
     @Test
     public void testWellOnlyNeedsTwoPlanksForConstruction() throws Exception {
 

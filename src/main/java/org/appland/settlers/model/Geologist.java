@@ -9,7 +9,9 @@ package org.appland.settlers.model;
 import java.util.List;
 import java.util.Random;
 
-import static org.appland.settlers.model.GameUtils.isAll;
+import static org.appland.settlers.model.DetailedVegetation.CAN_USE_WELL;
+import static org.appland.settlers.model.DetailedVegetation.MINABLE_MOUNTAIN;
+import static org.appland.settlers.model.GameUtils.areAllOneOf;
 import static org.appland.settlers.model.Geologist.State.GOING_TO_NEXT_SITE;
 import static org.appland.settlers.model.Geologist.State.INVESTIGATING;
 import static org.appland.settlers.model.Geologist.State.RETURNING_TO_FLAG;
@@ -20,8 +22,6 @@ import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Vegetation.GRASS;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
 
 /**
  *
@@ -148,14 +148,14 @@ public class Geologist extends Worker {
         boolean placedSign = false;
         Material foundMaterial = null;
 
-        List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        List<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
-        if (isAll(surroundingVegetation, GRASS)) {
+        if (areAllOneOf(surroundingVegetation, CAN_USE_WELL)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
 
             foundMaterial = WATER;
-        } else if (isAll(surroundingVegetation, MOUNTAIN)) {
+        } else if (areAllOneOf(surroundingVegetation, MINABLE_MOUNTAIN)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 

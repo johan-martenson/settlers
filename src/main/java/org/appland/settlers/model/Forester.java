@@ -9,10 +9,7 @@ package org.appland.settlers.model;
 
 import java.util.Collection;
 
-import static org.appland.settlers.model.GameUtils.isAll;
 import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.WATER;
 
 @Walker(speed = 10)
 public class Forester extends Worker {
@@ -49,16 +46,25 @@ public class Forester extends Worker {
             return false;
         }
 
-        Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        /* Filter points where the surrounding terrain doesn't allow placing a tree */
+        Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
-        if (isAll(surroundingVegetation, MOUNTAIN)) {
+        boolean noVegetationAllowingTrees = true;
+
+        for (DetailedVegetation detailedVegetation : surroundingVegetation) {
+            if (!DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetation) &&
+                !DetailedVegetation.WATER_VEGETATION.contains(detailedVegetation)) {
+                noVegetationAllowingTrees = false;
+
+                break;
+            }
+        }
+
+        if (noVegetationAllowingTrees) {
             return false;
         }
 
-        if (isAll(surroundingVegetation, WATER)) {
-            return false;
-        }
-
+        /* Filter points that the forester cannot walk to */
         if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
             return false;
         }

@@ -161,9 +161,9 @@ public class GameUtils {
         return storehouse;
     }
 
-    public static boolean isAll(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
-        for (Vegetation vegetationInList : surroundingVegetation) {
-            if (vegetationInList != vegetation) {
+    public static <T> boolean isAll(Collection<T> collection, T item) {
+        for (T itemInList : collection) {
+            if (itemInList != item) {
                 return false;
             }
         }
@@ -171,9 +171,9 @@ public class GameUtils {
         return true;
     }
 
-    public static boolean isAny(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
-        for (Vegetation vegetationInList : surroundingVegetation) {
-            if (vegetationInList == vegetation) {
+    public static <T> boolean isAny(Collection<T> collection, T item) {
+        for (T itemInList : collection) {
+            if (itemInList == item) {
                 return true;
             }
         }
@@ -181,12 +181,12 @@ public class GameUtils {
         return false;
     }
 
-    public static boolean isSomeButNotAll(Collection<Vegetation> surroundingVegetation, Vegetation vegetation) {
+    public static <T> boolean isSomeButNotAll(Collection<T> collection, T item) {
         boolean foundMatch = false;
         boolean foundNotMatch = false;
 
-        for (Vegetation vegetationInList : surroundingVegetation) {
-            if (vegetationInList == vegetation) {
+        for (T itemInList : collection) {
+            if (itemInList == item) {
                 foundMatch = true;
 
                 continue;
@@ -357,6 +357,34 @@ public class GameUtils {
 
     public static boolean isEven(int i) {
         return i % 2 == 0;
+    }
+
+    /**
+     * Returns true if each item in the collection is part of the given set
+     *
+     * @param items
+     * @param collection
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean areAllOneOf(Collection<T> items, Set<T> collection) {
+        for (T itemInList : items) {
+            if (!collection.contains(itemInList)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static <T> boolean areNonePartOf(Collection<T> items, Set<T> collection) {
+        for (T item : items) {
+            if (collection.contains(item)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     static class Line {

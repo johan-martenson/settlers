@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -19,28 +18,19 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
+import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
+import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
+import static org.appland.settlers.model.GameUtils.areNonePartOf;
 import static org.appland.settlers.model.GameUtils.detailedVegetationToSimpleVegetation;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
-import static org.appland.settlers.model.GameUtils.isAll;
-import static org.appland.settlers.model.GameUtils.isAny;
 import static org.appland.settlers.model.GameUtils.isEven;
-import static org.appland.settlers.model.GameUtils.isSomeButNotAll;
 import static org.appland.settlers.model.GameUtils.simpleVegetationToDetailedVegetation;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.Vegetation.DEEP_WATER;
-import static org.appland.settlers.model.Vegetation.DESERT;
-import static org.appland.settlers.model.Vegetation.GRASS;
-import static org.appland.settlers.model.Vegetation.LAVA;
-import static org.appland.settlers.model.Vegetation.MAGENTA;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Vegetation.SHALLOW_WATER;
-import static org.appland.settlers.model.Vegetation.SNOW;
-import static org.appland.settlers.model.Vegetation.SWAMP;
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
 
 public class GameMap {
@@ -52,7 +42,6 @@ public class GameMap {
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
     private static final double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
     private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
-    private static final Set DEAD_TREE_NOT_ALLOWED = EnumSet.of(SNOW, WATER, SHALLOW_WATER, DEEP_WATER, MAGENTA);
     private static final DetailedVegetation DEFAULT_VEGETATION = DetailedVegetation.MEADOW_1;
 
     private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = new ConnectionsProvider() {
@@ -1634,12 +1623,12 @@ public class GameMap {
         DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
         DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
 
-        if (!DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeft)    &&
-            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationAbove)     &&
-            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRight)   &&
-            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationDownRight) &&
-            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationBelow)     &&
-            !DetailedVegetation.CAN_BUILD_ROAD_ON.contains(detailedVegetationDownLeft)) {
+        if (!CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeft)    &&
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationAbove)     &&
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRight)   &&
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationDownRight) &&
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationBelow)     &&
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationDownLeft)) {
             return false;
         }
 
@@ -1712,10 +1701,10 @@ public class GameMap {
 
         /* This iterates over a set and the order is non-deterministic */
         for (Point point : player.getLandInPoints()) {
-            Size result = isAvailableHousePoint(player, point);
+            Size availableHouse = isAvailableHousePoint(player, point);
 
-            if (result != null) {
-                housePoints.put(point, result);
+            if (availableHouse != null) {
+                housePoints.put(point, availableHouse);
             }
         }
 
@@ -1732,30 +1721,30 @@ public class GameMap {
             new Point(start.x + 1, start.y + 1),
         };
 
-        List<Point> resultList = new ArrayList<>();
+        List<Point> adjacentPossibleRoadConnections = new ArrayList<>();
 
         for (Point point : adjacentPoints) {
             if (point.equals(end) && isPossibleAsEndPointInRoad(player, point)) {
-                resultList.add(point);
+                adjacentPossibleRoadConnections.add(point);
             } else if (!point.equals(end) && isPossibleAsAnyPointInRoad(player, point)) {
-                resultList.add(point);
+                adjacentPossibleRoadConnections.add(point);
             }
         }
 
-        return resultList;
+        return adjacentPossibleRoadConnections;
     }
 
     // FIXME: HOTSPOT - allocations
     Collection<Point> getPossibleAdjacentOffRoadConnections(Point from) {
-        List<Point>  resultList = new ArrayList<>();
+        List<Point>  possibleAdjacentOffRoadConnections = new ArrayList<>();
 
         MapPoint mapPoint = getMapPoint(from);
 
         /* Houses can only be left via the driveway so handle this case separately */
         if (mapPoint.isBuilding()) {
-            resultList.add(from.downRight());
+            possibleAdjacentOffRoadConnections.add(from.downRight());
 
-            return resultList;
+            return possibleAdjacentOffRoadConnections;
         }
 
         /* Find out which adjacent points are possible off-road connections */
@@ -1821,10 +1810,10 @@ public class GameMap {
             }
 
             /* Add the point to the list if it passed the filters */
-            resultList.add(adjacentPoint);
+            possibleAdjacentOffRoadConnections.add(adjacentPoint);
         }
 
-        return resultList;
+        return possibleAdjacentOffRoadConnections;
     }
 
     private boolean canBuildFlagOn(Vegetation vegetation) {
@@ -1992,29 +1981,9 @@ public class GameMap {
             return false;
         }
 
-        Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
+        Collection<DetailedVegetation> surroundingVegetation = getSurroundingTiles(point);
 
-        if (isAll(surroundingVegetation, WATER)) {
-            return false;
-        }
-
-        /* Can't build road on snow */
-        if (isAll(surroundingVegetation, SNOW)) {
-            return false;
-        }
-
-        /* Can't build road on lava */
-        if (isAll(surroundingVegetation, LAVA)) {
-            return false;
-        }
-
-        /* Can't place road in deep water */
-        if (isAll(surroundingVegetation, DEEP_WATER)) {
-            return false;
-        }
-
-        /* Can't place road in swamp */
-        if (isAll(surroundingVegetation, SWAMP)) {
+        if (areNonePartOf(surroundingVegetation, CAN_BUILD_ROAD_ON)) {
             return false;
         }
 
@@ -2365,7 +2334,7 @@ public class GameMap {
      * @return The list of points within the radius
      */
     public List<Point> getPointsWithinRadius(Point point, int radius) {
-        List<Point> result = new ArrayList<>();
+        List<Point> pointsWithinRadius = new ArrayList<>();
 
         boolean rowFlip = false;
 
@@ -2381,14 +2350,14 @@ public class GameMap {
                 Point p = new Point(x, y);
 
                 if (isWithinMap(p) && point.distance(p) <= radius) {
-                    result.add(p);
+                    pointsWithinRadius.add(p);
                 }
             }
 
             rowFlip = !rowFlip;
         }
 
-        return result;
+        return pointsWithinRadius;
     }
 
     /**
@@ -2496,49 +2465,13 @@ public class GameMap {
     public int getAmountFishAtPoint(Point point) {
 
         /* Return zero if the point is not next to any water */
-        if (!isConnectedToWater(point)) {
+        if (!isNextToAnyWater(point)) {
             return 0;
         }
 
         MapPoint mapPoint = getMapPoint(point);
 
         return mapPoint.getAmountOfFish();
-    }
-
-    private boolean isConnectedToWater(Point point) {
-
-        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
-        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
-        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
-        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
-        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
-        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpLeft)) {
-            return true;
-        }
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationAbove)) {
-            return true;
-        }
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpRight)) {
-            return true;
-        }
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownRight)) {
-            return true;
-        }
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationBelow)) {
-            return true;
-        }
-
-        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownLeft)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -2824,42 +2757,12 @@ public class GameMap {
         }
 
         /* Check that the surrounding vegetation allows for placing a small house */
-        Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
+        Collection<DetailedVegetation> surroundingVegetation = getSurroundingTiles(point);
 
-        if (isAll(surroundingVegetation, MOUNTAIN)) {
-            return null;
-        }
-
-        if (isAll(surroundingVegetation, DEEP_WATER)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, MAGENTA)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, SWAMP)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, WATER)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, DESERT)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, SNOW)) {
-            return null;
-        }
-
-        if (isAny(surroundingVegetation, LAVA)) {
-            return null;
-        }
-
-        if (isSomeButNotAll(surroundingVegetation, MOUNTAIN)) {
-            return null;
+        for (DetailedVegetation vegetation : surroundingVegetation) {
+            if (!CAN_BUILD_ON.contains(vegetation)) {
+                return null;
+            }
         }
 
         /* It's not possible to build a house left/right or diagonally of a stone or building */
@@ -3038,11 +2941,18 @@ public class GameMap {
 
         /* A large building needs a larger free area on buildable vegetation */
         // TODO: check if it's possible to also build large house close to other sides where only flags&roads are possible
-        if (!getTileUpLeft(point.upLeft()).canBuildFlags()   ||
-            !getTileAbove(point.upLeft()).canBuildFlags()    ||
-            !getTileUpLeft(point.upRight()).canBuildFlags()  ||
-            !getTileAbove(point.upRight()).canBuildFlags()   ||
-            !getTileUpRight(point.upRight()).canBuildFlags() ||
+
+        DetailedVegetation detailedVegetationUpLeftUpLeft = getDetailedVegetationUpLeft(point.upLeft());
+        DetailedVegetation detailedVegetationUpLeftUp = getDetailedVegetationAbove(point.upLeft());
+        DetailedVegetation detailedVegetationUpUp = getDetailedVegetationUpLeft(point.upRight());
+        DetailedVegetation detailedVegetationUpRightUp = getDetailedVegetationAbove(point.upRight());
+        DetailedVegetation detailedVegetationUpRightUpRight = getDetailedVegetationUpRight(point.upRight());
+
+        if (!CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeftUpLeft)   ||
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeftUp)       ||
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpUp)           ||
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRightUp)      ||
+            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRightUpRight) ||
             !isOnBuildable(point.left())                     ||
             !isOnBuildable(point.right())                    ||
             !isOnBuildable(point.downRight())                ||
@@ -3103,7 +3013,7 @@ public class GameMap {
         }
 
         /* Return false if the point is not on a mountain */
-        if (!isOnMountain(point)) {
+        if (!isOnMinableMountain(point)) {
             return false;
         }
 
@@ -3465,7 +3375,7 @@ public class GameMap {
         mapPointBelow.setMineralAmount(mineral, amount);
     }
 
-    boolean isNextToAnyWater(Point point) {
+    public boolean isNextToAnyWater(Point point) {
 
         DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
         DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
@@ -3615,8 +3525,25 @@ public class GameMap {
      * @param point
      * @return
      */
-    public boolean isOnMountain(Point point) {
-        return isSurroundedBy(point, MOUNTAIN);
+    public boolean isOnMinableMountain(Point point) {
+
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        if (DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationUpLeft)    &&
+            DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationAbove)     &&
+            DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationUpRight)   &&
+            DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationDownRight) &&
+            DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationBelow)     &&
+            DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetationDownLeft)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -3626,17 +3553,24 @@ public class GameMap {
      * @return
      */
     public boolean isInWater(Point point) {
-        return isSurroundedBy(point, WATER);
-    }
 
-    /**
-     * Returns true if the given point is surrounded by grass tiles
-     *
-     * @param point
-     * @return
-     */
-    public boolean isOnGrass(Point point) {
-        return isSurroundedBy(point, GRASS);
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        if (DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpLeft)    &&
+            DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationAbove)     &&
+            DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationUpRight)   &&
+            DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownRight) &&
+            DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationBelow)     &&
+            DetailedVegetation.WATER_VEGETATION.contains(detailedVegetationDownLeft)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -3654,14 +3588,14 @@ public class GameMap {
         setTileDownLeft(point, vegetation);
     }
 
-    boolean isSurroundedBy(Point point, Vegetation vegetation) {
+    boolean isSurroundedBy(Point point, DetailedVegetation vegetation) {
 
-        return getTileUpLeft(point)    == vegetation &&
-               getTileAbove(point)     == vegetation &&
-               getTileUpRight(point)   == vegetation &&
-               getTileDownRight(point) == vegetation &&
-               getTileBelow(point)     == vegetation &&
-               getTileDownLeft(point)  == vegetation;
+        return getDetailedVegetationUpLeft(point)    == vegetation &&
+               getDetailedVegetationAbove(point)     == vegetation &&
+               getDetailedVegetationUpRight(point)   == vegetation &&
+               getDetailedVegetationDownRight(point) == vegetation &&
+               getDetailedVegetationBelow(point)     == vegetation &&
+               getDetailedVegetationDownLeft(point)  == vegetation;
     }
 
     /**
@@ -3670,38 +3604,39 @@ public class GameMap {
      * @param point
      * @return
      */
-    public List<Vegetation> getSurroundingTiles(Point point) {
-        List<Vegetation> result = new LinkedList<>();
+    public List<DetailedVegetation> getSurroundingTiles(Point point) {
+        List<DetailedVegetation> result = new LinkedList<>();
 
-        Vegetation vegetationUpLeft    = getTileUpLeft(point);
-        Vegetation vegetationAbove     = getTileAbove(point);
-        Vegetation vegetationUpRight   = getTileUpRight(point);
-        Vegetation vegetationDownRight = getTileDownRight(point);
-        Vegetation vegetationBelow     = getTileBelow(point);
-        Vegetation vegetationDownLeft  = getTileDownLeft(point);
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
 
-        if (vegetationUpLeft != null) {
-            result.add(vegetationUpLeft);
+
+        if (detailedVegetationUpLeft != null) {
+            result.add(detailedVegetationUpLeft);
         }
 
-        if (vegetationAbove != null) {
-            result.add(vegetationAbove);
+        if (detailedVegetationAbove != null) {
+            result.add(detailedVegetationAbove);
         }
 
-        if (vegetationUpRight != null) {
-            result.add(vegetationUpRight);
+        if (detailedVegetationUpRight != null) {
+            result.add(detailedVegetationUpRight);
         }
 
-        if (vegetationDownRight != null) {
-            result.add(vegetationDownRight);
+        if (detailedVegetationDownRight != null) {
+            result.add(detailedVegetationDownRight);
         }
 
-        if (vegetationBelow != null) {
-            result.add(vegetationBelow);
+        if (detailedVegetationBelow != null) {
+            result.add(detailedVegetationBelow);
         }
 
-        if (vegetationDownLeft != null) {
-            result.add(vegetationDownLeft);
+        if (detailedVegetationDownLeft != null) {
+            result.add(detailedVegetationDownLeft);
         }
 
         return result;
@@ -3714,12 +3649,20 @@ public class GameMap {
      * @return
      */
     public boolean isOnBuildable(Point point) {
-        return getTileUpLeft(point).isBuildable()     &&
-                getTileAbove(point).isBuildable()     &&
-                getTileUpRight(point).isBuildable()   &&
-                getTileDownRight(point).isBuildable() &&
-                getTileBelow(point).isBuildable()     &&
-                getTileDownLeft(point).isBuildable();
+
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+        return DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationUpLeft)    &&
+               DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationAbove)     &&
+               DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationUpRight)   &&
+               DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationDownRight) &&
+               DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationBelow)     &&
+               DetailedVegetation.CAN_BUILD_ON.contains(detailedVegetationDownLeft);
     }
 
     public void fillMapWithVegetation(Vegetation vegetation) {
@@ -3769,7 +3712,7 @@ public class GameMap {
             throw new InvalidUserActionException("Can't place dead tree on stone");
         }
 
-        for (Vegetation vegetation : getSurroundingTiles(point)) {
+        for (DetailedVegetation vegetation : getSurroundingTiles(point)) {
             if (DEAD_TREE_NOT_ALLOWED.contains(vegetation)) {
                 throw new InvalidUserActionException("Can't place dead tree on " + vegetation);
             }
