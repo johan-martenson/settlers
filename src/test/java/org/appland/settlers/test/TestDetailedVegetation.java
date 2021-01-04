@@ -36,6 +36,9 @@ public class TestDetailedVegetation {
          - Test can/cannot build mine on - done
          - Test can/cannot build flag and road at edge of
          - Test can/cannot place crop on
+         - Available house
+         - Available flag
+         - Available mine
      */
 
     @Test
