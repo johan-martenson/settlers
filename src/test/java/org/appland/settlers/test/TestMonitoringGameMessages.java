@@ -81,7 +81,6 @@ public class TestMonitoringGameMessages {
      *  - Test new message types:
      *    - Bombarded by catapult
      *    - Game ended
-     *    - no more resources for mine
      *    - This building has caused you to lose land
      */
 
@@ -1826,7 +1825,7 @@ public class TestMonitoringGameMessages {
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Place a road from headquarter to mine */

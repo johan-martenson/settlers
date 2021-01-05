@@ -40,8 +40,10 @@ public class TestTree {
 
     /**
      * To test:
-     *  - for dead tree: --- revise list based on DetailedVegetation!
+     *  - for dead tree: --- update tests below to cover all
      *      - can place on:
+     *          - MEADOW_1
+     *          - MEADOW_2
      *          - MEADOW_3
      *          - FLOWER_MEADOW
      *          - STEPPE
@@ -52,9 +54,9 @@ public class TestTree {
      *          - DESERT_1
      *          - DESERT_2
      *          - MOUNTAIN_MEADOW
+     *          - MOUNTAIN_1
      *          - MOUNTAIN_4
      *          - SWAMP
-     *          - MOUNTAIN
      *      - cannot place on all other vegetations
      *          - SNOW
      *          - WATER
@@ -64,6 +66,8 @@ public class TestTree {
      *          - LAVA_2
      *          - LAVA_3
      *          - LAVA_4
+     *          - MOUNTAIN_2
+     *          - MOUNTAIN_3
      *          - BUILDABLE_MOUNTAIN_2
      */
 
