@@ -175,6 +175,36 @@ public class TestWell {
     }
 
     @Test
+    public void testWellWorkerIsNotASoldier() throws Exception {
+
+        /* Create gamemap */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(8, 6);
+        Building well = map.placeBuilding(new Well(player0), point1);
+
+        /* Connect the well with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+
+        /* Finish the well */
+        Utils.constructHouse(well);
+
+        /* Wait for a well worker to walk out */
+        WellWorker wellWorker0 = Utils.waitForWorkerOutsideBuilding(WellWorker.class, player0);
+
+        /* Verify that the well worker is not a soldier */
+        assertFalse(wellWorker0.isSoldier());
+    }
+
+    @Test
     public void testUnoccupiedWellProducesNothing() throws Exception {
 
         /* Create gamemap */

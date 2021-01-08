@@ -240,6 +240,39 @@ public class TestPigFarm {
     }
 
     @Test
+    public void testPigBreederIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place pig farm */
+        Point point3 = new Point(10, 6);
+        Building farm = map.placeBuilding(new PigFarm(player0), point3);
+
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+
+        /* Finish the pig farm */
+        Utils.constructHouse(farm);
+
+        /* Run game logic twice, once to place courier and once to place pig breeder */
+        Utils.fastForward(2, map);
+
+        /* Wait for a pig breeder to walk out */
+        PigBreeder pigBreeder0 = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
+
+        /* Verify that the pig breeder is not a soldier */
+        assertFalse(pigBreeder0.isSoldier());
+    }
+
+    @Test
     public void testPigBreederRestsInPigFarmThenLeaves() throws Exception {
 
         /* Create single player game */

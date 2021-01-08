@@ -622,7 +622,7 @@ public class Military extends Worker {
     }
 
     @Override
-    boolean isMilitary() {
+    public boolean isSoldier() {
         return true;
     }
 }

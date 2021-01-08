@@ -246,6 +246,49 @@ public class TestArmory {
     }
 
     @Test
+    public void testArmorerIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Place road to connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory0);
+
+        assertTrue(armory0.needsWorker());
+
+        /* Verify that a armory worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Verify that the armorer is not a soldier */
+        Armorer armorer0 = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer)worker;
+            }
+        }
+
+        assertNotNull(armorer0);
+        assertFalse(armorer0.isSoldier());
+    }
+
+    @Test
     public void testArmorerGetsCreatedFromTongs() throws Exception {
 
         /* Create single player game */

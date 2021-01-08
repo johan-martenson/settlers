@@ -104,6 +104,41 @@ public class TestScout {
     }
 
     @Test
+    public void testScoutIsNotASoldier() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Call scout from the flag */
+        int amountWorkers = map.getWorkers().size();
+
+        flag.callScout();
+
+        /* Wait for a scout to walk out */
+        Scout scout0 = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
+
+        /* Verify that the scout is not a soldier */
+        assertFalse(scout0.isSoldier());
+    }
+
+    @Test
     public void testScoutGetsCreatedFromBow() throws Exception {
 
         /* Starting new game */

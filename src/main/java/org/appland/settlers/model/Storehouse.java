@@ -415,7 +415,7 @@ public class Storehouse extends Building {
     }
 
     public void depositWorker(Worker worker) {
-        if (worker.isMilitary()) { // FIXME: deposit for soldier does not seem to work for some ranks
+        if (worker.isSoldier()) { // FIXME: deposit for soldier does not seem to work for some ranks
             Military military = (Military) worker;
             Material material;
 

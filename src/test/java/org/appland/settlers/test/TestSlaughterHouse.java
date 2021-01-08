@@ -242,6 +242,38 @@ public class TestSlaughterHouse {
     }
 
     @Test
+    public void testButcherIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point3 = new Point(7, 9);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
+
+        /* Connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse);
+
+        assertTrue(slaughterHouse.needsWorker());
+
+        /* Wait for a butcher to walk out */
+        Butcher butcher0 = Utils.waitForWorkerOutsideBuilding(Butcher.class, player0);
+
+        /* Verify that the butcher is not a soldier */
+        assertFalse(butcher0.isSoldier());
+    }
+
+    @Test
     public void testButcherGetsCreatedFromCleaver() throws Exception {
 
         /* Create single player game */

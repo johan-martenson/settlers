@@ -309,6 +309,38 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterIsNotASoldier() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create single player game */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Finish the forester hut */
+        constructHouse(foresterHut);
+
+        /* Wait for a forester to walk out */
+        Forester forester0 = Utils.waitForWorkerOutsideBuilding(Forester.class, player0);
+
+        assertNotNull(forester0);
+        assertFalse(forester0.isSoldier());
+    }
+
+    @Test
     public void testForesterIsCreatedFromShovel() throws Exception {
 
         /* Create players */

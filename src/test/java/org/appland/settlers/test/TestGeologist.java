@@ -106,6 +106,41 @@ public class TestGeologist {
     }
 
     @Test
+    public void testStorageDispatchesGeologistIsNotASoldier() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Call geologist from the flag */
+        int amountWorkers = map.getWorkers().size();
+
+        flag.callGeologist();
+
+        /* Wait for a geologist to walk out */
+        Geologist geologist0 = Utils.waitForWorkerOutsideBuilding(Geologist.class, player0);
+
+        assertNotNull(geologist0);
+        assertFalse(geologist0.isSoldier());
+    }
+
+    @Test
     public void testGeologistGetsToFlagThenLeavesToNearbySpot() throws Exception {
 
         /* Starting new game */

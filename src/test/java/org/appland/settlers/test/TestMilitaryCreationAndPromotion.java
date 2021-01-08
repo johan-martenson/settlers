@@ -35,6 +35,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TestMilitaryCreationAndPromotion {
 
@@ -689,5 +690,194 @@ public class TestMilitaryCreationAndPromotion {
         assertEquals(rankCount.getOrDefault(SERGEANT_RANK, 0).intValue(), 1);
         assertEquals(rankCount.getOrDefault(OFFICER_RANK, 0).intValue(), 1);
         assertEquals(rankCount.getOrDefault(GENERAL_RANK, 0).intValue(), 1);
+    }
+
+    @Test
+    public void testPrivateIsSoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust the inventory of the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE, 1);
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter, GENERAL, 0);
+
+        /* Place storage */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        /* Verify that the private walking to the barracks is really a soldier */
+        Military soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertTrue(soldier.isSoldier());
+    }
+
+    @Test
+    public void testPrivateFirstRankIsSoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust the inventory of the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 1);
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter, GENERAL, 0);
+
+        /* Place storage */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        /* Verify that the private first class walking to the barracks is really a soldier */
+        Military soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(soldier.getRank(), PRIVATE_FIRST_CLASS_RANK);
+        assertTrue(soldier.isSoldier());
+    }
+
+    @Test
+    public void testSergeantIsSoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust the inventory of the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 1);
+        Utils.adjustInventoryTo(headquarter, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter, GENERAL, 0);
+
+        /* Place storage */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        /* Verify that the sergeant walking to the barracks is really a soldier */
+        Military soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(soldier.getRank(), SERGEANT_RANK);
+        assertTrue(soldier.isSoldier());
+    }
+
+    @Test
+    public void testOfficerIsSoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust the inventory of the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter, OFFICER, 1);
+        Utils.adjustInventoryTo(headquarter, GENERAL, 0);
+
+        /* Place storage */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        /* Verify that the officer walking to the barracks is really a soldier */
+        Military soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(soldier.getRank(), OFFICER_RANK);
+        assertTrue(soldier.isSoldier());
+    }
+
+    @Test
+    public void testGeneralIsSoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust the inventory of the headquarter */
+        Utils.adjustInventoryTo(headquarter, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter, GENERAL, 1);
+
+        /* Place storage */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        /* Verify that the general walking to the barracks is really a soldier */
+        Military soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+
+        assertEquals(soldier.getRank(), GENERAL_RANK);
+        assertTrue(soldier.isSoldier());
     }
 }

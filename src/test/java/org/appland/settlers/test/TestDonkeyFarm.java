@@ -236,6 +236,36 @@ public class TestDonkeyFarm {
     }
 
     @Test
+    public void testDonkeyBreederIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point3 = new Point(10, 6);
+        Building farm = map.placeBuilding(new DonkeyFarm(player0), point3);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+
+        /* Finish the donkey farm */
+        Utils.constructHouse(farm);
+
+        /* Wait for a donkey farmer to walk out */
+        DonkeyBreeder donkeyBreeder0 = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
+
+        assertNotNull(donkeyBreeder0);
+        assertFalse(donkeyBreeder0.isSoldier());
+    }
+
+    @Test
     public void testDonkeyBreederRestsInDonkeyFarmThenLeaves() throws Exception {
 
         /* Create single player game */

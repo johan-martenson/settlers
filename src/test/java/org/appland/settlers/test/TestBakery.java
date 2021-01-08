@@ -242,6 +242,49 @@ public class TestBakery {
     }
 
     @Test
+    public void testBakeryIsNotASoldier() throws Exception {
+
+        /* Create new single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point3 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
+
+        /* Connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery);
+
+        assertTrue(bakery.needsWorker());
+
+        /* Verify that a bakery worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Verify that the baker is not a soldier */
+        Baker baker = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker)worker;
+            }
+        }
+
+        assertNotNull(baker);
+        assertFalse(baker.isSoldier());
+    }
+
+    @Test
     public void testBakerIsCreatedFromRollingPing() throws Exception {
 
         /* Create new single player game */

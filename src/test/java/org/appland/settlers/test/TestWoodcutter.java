@@ -208,6 +208,37 @@ public class TestWoodcutter {
     }
 
     @Test
+    public void testWoodcutterIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(8, 6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Finish the woodcutter */
+        constructHouse(woodcutter);
+
+        /* Wait for a woodcutter to walk out */
+        WoodcutterWorker woodcutterWorker0 = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+
+        /* Verify that the woodcutter is not a soldier */
+        assertFalse(woodcutterWorker0.isSoldier());
+    }
+
+    @Test
     public void testWoodcutterIsCreatedFromTools() throws Exception {
 
         /* Create single player game */

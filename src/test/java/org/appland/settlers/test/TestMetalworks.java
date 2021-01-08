@@ -253,6 +253,42 @@ public class TestMetalworks {
     }
 
     @Test
+    public void testMetalworksIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point1 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point1);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        assertTrue(metalworks.needsWorker());
+
+        /* Verify that a metalworks worker leaves the headquarter */
+        Worker metalworker0 = Utils.waitForWorkerOutsideBuilding(Metalworker.class, player0);
+
+        assertTrue(map.getWorkers().contains(metalworker0));
+
+        /* Verify that the metalworks worker is not a soldier */
+        assertNotNull(metalworker0);
+        assertFalse(metalworker0.isSoldier());
+    }
+
+    @Test
     public void testOccupiedMetalworksWithoutPlankAndIronBarProducesNothing() throws Exception {
 
         /* Create single player game */

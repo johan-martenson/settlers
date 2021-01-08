@@ -174,6 +174,36 @@ public class TestQuarry {
     }
 
     @Test
+    public void testStonemasonIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(8, 6);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+
+        /* Finish the woodcutter */
+        constructHouse(quarry);
+
+        /* Wait for a stonemason to walk out */
+        Stonemason stonemason0 = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+
+        /* Verify that the stonemason is not a soldier */
+        assertFalse(stonemason0.isSoldier());
+    }
+
+    @Test
     public void testStonemasonIsCreatedFromPickAxe() throws Exception {
 
         /* Create single player game */

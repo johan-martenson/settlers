@@ -279,6 +279,41 @@ public class TestCoalMine {
     }
 
     @Test
+    public void testMinerIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Place a road between the headquarter and the goldmine */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
+
+        /* Construct the mine */
+        constructHouse(mine);
+
+        assertTrue(mine.isReady());
+
+        /* Wait for a miner to walk out */
+        Miner miner0 = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+
+        assertNotNull(miner0);
+        assertFalse(miner0.isSoldier());
+    }
+
+    @Test
     public void testMinerIsCreatedFromPickAxe() throws Exception {
 
         /* Create single player game */

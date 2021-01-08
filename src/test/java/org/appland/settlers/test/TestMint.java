@@ -255,6 +255,45 @@ public class TestMint {
     }
 
     @Test
+    public void testMinterIsNotASoldier() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point3 = new Point(7, 9);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
+
+        /* Connect the mint with the headquarter */
+        Point point4 = new Point(8, 8);
+        Point point5 = new Point(7, 7);
+        Point point6 = new Point(8, 6);
+        Point point7 = new Point(7, 5);
+        Point point8 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint);
+
+        assertTrue(mint.needsWorker());
+
+        /* Verify that a minter leaves the headquarter */
+        Minter minter0 = Utils.waitForWorkerOutsideBuilding(Minter.class, player0);
+
+        assertNotNull(minter0);
+
+        /* Verify that the minter is not a soldier */
+        assertFalse(minter0.isSoldier());
+    }
+
+    @Test
     public void testMinterGetsCreatedFromCrucible() throws Exception {
 
         /* Create a single player game */

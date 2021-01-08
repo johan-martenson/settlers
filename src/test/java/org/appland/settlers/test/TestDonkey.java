@@ -182,6 +182,48 @@ public class TestDonkey {
     }
 
     @Test
+    public void testDonkeyIsNotASoldier() throws Exception {
+
+        /* Create game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(8, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place flag */
+        Point point2 = new Point(11, 3);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place flag */
+        Point point3 = new Point(4, 4);
+        Flag flag2 = map.placeFlag(player0, point3);
+
+        /* Place roads */
+        Point point4 = new Point(6, 4);
+        Point point5 = new Point(9, 3);
+
+        Road road0 = map.placeRoad(player0, point3, point4, point1);
+        Road road1 = map.placeRoad(player0, point1, point5, point2);
+
+        /* Assign a donkey to road1 */
+        Donkey donkey = new Donkey(player0, map);
+        map.placeWorker(donkey, flag2);
+
+        donkey.assignToRoad(road1);
+
+        /* Verify that the donkey is not a soldier */
+        assertFalse(donkey.isSoldier());
+    }
+
+    @Test
     public void testDonkeyGoesToMiddlePointOfRoad() throws Exception {
 
         /* Create game map */

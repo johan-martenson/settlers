@@ -228,6 +228,39 @@ public class TestSawmill {
     }
 
     @Test
+    public void testSawmillIsNotASoldier() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point3 = new Point(7, 9);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        /* Place a road between the headquarter and the sawmill */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill);
+
+        assertTrue(sawmill.needsWorker());
+
+        /* Verify that a sawmill worker leaves the headquarter */
+        Worker sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(SawmillWorker.class, player0);
+
+        /* Verify that the sawmill worker is not a soldier */
+        assertNotNull(sawmillWorker0);
+        assertFalse(sawmillWorker0.isSoldier());
+    }
+
+    @Test
     public void testSawmillWorkerGetsCreatedFromSaw() throws Exception {
 
         /* Create a single player game */

@@ -233,6 +233,42 @@ public class TestBrewery {
     }
 
     @Test
+    public void testBrewerIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point3 = new Point(7, 9);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+
+        /* Place a road between the headquarter and the brewery */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the brewery */
+        Utils.constructHouse(brewery);
+
+        assertTrue(brewery.needsWorker());
+
+        /* Verify that a brewery worker leaves the headquarter */
+        Worker brewer0 = Utils.waitForWorkerOutsideBuilding(Brewer.class, player0);
+
+        assertTrue(map.getWorkers().contains(brewer0));
+
+        /* Verify that the brewer is not a soldier */
+        assertNotNull(brewer0);
+        assertFalse(brewer0.isSoldier());
+    }
+
+    @Test
     public void testOccupiedBreweryWithoutWheatAndWaterProducesNothing() throws Exception {
 
         /* Create single player game */

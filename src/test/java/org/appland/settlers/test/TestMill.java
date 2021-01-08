@@ -217,6 +217,39 @@ public class TestMill {
     }
 
     @Test
+    public void testMillerIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(12, 8);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Finish the mill */
+        Utils.constructHouse(mill);
+
+        /* Wait for a miller to walk out */
+        Miller miller0 = Utils.waitForWorkerOutsideBuilding(Miller.class, player0);
+
+        assertNotNull(miller0);
+
+        /* Verify that the miller is not a soldier */
+        assertFalse(miller0.isSoldier());
+    }
+
+    @Test
     public void testUnoccupiedMillProducesNothing() throws Exception {
 
         /* Create single player game */

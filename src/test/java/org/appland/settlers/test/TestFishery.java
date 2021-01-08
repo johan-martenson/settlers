@@ -404,6 +404,38 @@ public class TestFishery {
     }
 
     @Test
+    public void testOnlyOneFishermanIsNotASoldier() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Construct the fisherman hut */
+        constructHouse(fishery);
+
+        /* Wait for a fisherman to walk out */
+        Fisherman fisherman0 = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+
+        assertNotNull(fisherman0);
+        assertFalse(fisherman0.isSoldier());
+    }
+
+    @Test
     public void testArrivedFishermanRestsInFisheryAndThenLeaves() throws Exception {
 
         /* Create a single player game */

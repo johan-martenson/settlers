@@ -325,6 +325,50 @@ public class TestStorehouse {
     }
 
     @Test
+    public void testStorageWorkerIsNotASoldier() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage */
+        Point point3 = new Point(7, 9);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
+
+        /* Connect the storage with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storehouse);
+
+        /* Run game logic once to let the headquarter assign a storage worker to the storage */
+        map.stepTime();
+
+        Worker storageWorker = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof StorageWorker) {
+                storageWorker = worker;
+            }
+        }
+
+        assertNotNull(storageWorker);
+
+        assertEquals(storageWorker.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storehouse.getPosition());
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storehouse.getWorker(), storageWorker);
+    }
+
+    @Test
     public void testStorageWorkerRests() throws Exception {
 
         /* Create a single player game */

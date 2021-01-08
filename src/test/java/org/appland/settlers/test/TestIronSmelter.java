@@ -230,6 +230,39 @@ public class TestIronSmelter {
     }
 
     @Test
+    public void testIronSmelterIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point3 = new Point(7, 9);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
+
+        /* Place a road between the headquarter and the iron smelter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter);
+
+        assertTrue(ironSmelter.needsWorker());
+
+        /* Verify that a iron smelter worker leaves the headquarter */
+        IronFounder ironFounder0 = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
+
+        /* Verify that the iron founder is not a soldier */
+        assertNotNull(ironFounder0);
+        assertFalse(ironFounder0.isSoldier());
+    }
+
+    @Test
     public void testIronFounderGetsCreatedFromCrucible() throws Exception {
 
         /* Create single player game */

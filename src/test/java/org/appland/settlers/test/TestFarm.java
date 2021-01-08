@@ -296,6 +296,39 @@ public class TestFarm {
     }
 
     @Test
+    public void testFarmerIsNotASoldier() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place farm */
+        Point point3 = new Point(10, 6);
+        Building farm = map.placeBuilding(new Farm(player0), point3);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+
+        /* Finish the forester hut */
+        Utils.constructHouse(farm);
+
+        /* Run game logic twice, once to place courier and once to place forester */
+        Utils.fastForward(2, map);
+
+        /* Wait for a farm to walk out */
+        Farmer farmer0 = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+
+        assertNotNull(farmer0);
+        assertFalse(farmer0.isSoldier());
+    }
+
+    @Test
     public void testFarmerIsCreatedFromScythe() throws Exception {
 
         /* Create single player game */

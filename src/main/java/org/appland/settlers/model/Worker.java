@@ -258,7 +258,7 @@ public abstract class Worker {
             Building building = getTargetBuilding();
 
             /* Enter the building for non-military workers. soldiers enter on their own */
-            if ( !isMilitary()) {
+            if ( !isSoldier()) {
 
                 /* Go back to storage if the building is not ok to enter */
                 if (building.isBurningDown() || building.isDestroyed()) {
@@ -291,7 +291,7 @@ public abstract class Worker {
         }
     }
 
-    boolean isMilitary() {
+    public boolean isSoldier() {
         return false;
     }
 
