@@ -3077,6 +3077,23 @@ public class GameMap {
         return animal;
     }
 
+    /**
+     * Places a wild animal at the given point
+     *
+     * @param point The point to place the new wild animal at
+     * @return The placed wild animal
+     */
+    public WildAnimal placeWildAnimal(Point point, WildAnimal.Type type) {
+
+        /* Place the new wild animal */
+        WildAnimal animal = new WildAnimal(this, type);
+
+        animal.setPosition(point);
+        wildAnimals.add(animal);
+
+        return animal;
+    }
+
     private void handleWildAnimalPopulation() {
 
         double density = (double)wildAnimals.size() / (width * height);

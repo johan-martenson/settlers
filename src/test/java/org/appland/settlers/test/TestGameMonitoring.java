@@ -5341,4 +5341,95 @@ public class TestGameMonitoring {
             assertEquals(newChanges.getRemovedDeadTrees().size(), 0);
         }
     }
+
+    @Test
+    public void testMonitoringWhenWildAnimalMoves() throws Exception {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Place wild animal */
+        Point point1 = new Point(21, 5);
+        WildAnimal wildAnimal0 = map.placeWildAnimal(point1);
+
+        /* Verify that an event is sent when the wild animal moves */
+        Utils.waitForWorkerToHaveTargetSet(wildAnimal0, map);
+
+        map.stepTime();
+
+        assertNotNull(wildAnimal0.getTarget());
+        assertFalse(wildAnimal0.isExactlyAtPoint());
+
+        boolean foundEvent = false;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getWorkersWithNewTargets().contains(wildAnimal0)) {
+                foundEvent = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundEvent);
+    }
+
+    @Test
+    public void testMonitoringEventWhenWildAnimalMovesIsOnlySentOnce() throws Exception {
+
+        /* Start new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Place wild animal */
+        Point point1 = new Point(21, 5);
+        WildAnimal wildAnimal0 = map.placeWildAnimal(point1);
+
+        /* Verify that an event is sent when the wild animal moves */
+        Utils.waitForWorkerToHaveTargetSet(wildAnimal0, map);
+
+        map.stepTime();
+
+        assertNotNull(wildAnimal0.getTarget());
+        assertFalse(wildAnimal0.isExactlyAtPoint());
+
+        boolean foundEvent = false;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getWorkersWithNewTargets().contains(wildAnimal0)) {
+                foundEvent = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundEvent);
+
+        /* Verify that the event is only sent once */
+        GameChangesList lastEvent = monitor.getEvents().get(0);
+
+        Utils.fastForward(5, map);
+
+        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+            assertEquals(gameChangesList.getWorkersWithNewTargets().size(), 0);
+        }
+    }
 }

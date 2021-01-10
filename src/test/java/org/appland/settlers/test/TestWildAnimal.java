@@ -6,6 +6,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WildAnimal;
@@ -28,6 +29,14 @@ import static org.appland.settlers.model.DetailedVegetation.SNOW;
 import static org.appland.settlers.model.DetailedVegetation.STEPPE;
 import static org.appland.settlers.model.DetailedVegetation.SWAMP;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.WildAnimal.Type.DEER;
+import static org.appland.settlers.model.WildAnimal.Type.DEER_2;
+import static org.appland.settlers.model.WildAnimal.Type.DUCK;
+import static org.appland.settlers.model.WildAnimal.Type.DUCK_2;
+import static org.appland.settlers.model.WildAnimal.Type.FOX;
+import static org.appland.settlers.model.WildAnimal.Type.RABBIT;
+import static org.appland.settlers.model.WildAnimal.Type.SHEEP;
+import static org.appland.settlers.model.WildAnimal.Type.STAG;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -594,5 +603,182 @@ public class TestWildAnimal {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWildAnimalTypes() {
+        assertEquals(WildAnimal.Type.values().length, 8);
+
+        assertEquals(RABBIT.name(), "RABBIT");
+        assertEquals(WildAnimal.Type.FOX.name(), "FOX");
+        assertEquals(STAG.name(), "STAG");
+        assertEquals(DEER.name(), "DEER");
+        assertEquals(DUCK.name(), "DUCK");
+        assertEquals(SHEEP.name(), "SHEEP");
+        assertEquals(WildAnimal.Type.DEER_2.name(), "DEER_2");
+        assertEquals(WildAnimal.Type.DUCK_2.name(), "DUCK_2");
+    }
+
+    @Test
+    public void testGetTypeOfWildAnimal() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Wait for an animal to appear */
+        WildAnimal animal = Utils.waitForAnimalToAppear(map);
+
+        /* Verify that it's possible to get the type of the wild animal */
+        WildAnimal.Type type = animal.getType();
+
+        assertNotNull(type);
+    }
+
+    @Test
+    public void testPlaceRabbit() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a rabbit on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, RABBIT);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), RABBIT);
+    }
+
+    @Test
+    public void testPlaceFox() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a fox on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, FOX);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), FOX);
+    }
+
+    @Test
+    public void testPlaceStag() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a stag on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, STAG);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), STAG);
+    }
+
+    @Test
+    public void testPlaceDeer() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a deer on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, DEER);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), DEER);
+    }
+
+    @Test
+    public void testPlaceDuck() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a duck on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, DUCK);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), DUCK);
+    }
+
+    @Test
+    public void testPlaceSheep() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a sheep on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, SHEEP);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), SHEEP);
+    }
+
+    @Test
+    public void testPlaceDeer2() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a deer_2 on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, DEER_2);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), DEER_2);
+    }
+
+    @Test
+    public void testPlaceDuck2() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Verify that it's possible to place a duck_2 on the map */
+        Point point0 = new Point(20, 20);
+        WildAnimal animal = map.placeWildAnimal(point0, DUCK_2);
+
+        assertNotNull(animal);
+        assertEquals(animal.getType(), DUCK_2);
     }
 }

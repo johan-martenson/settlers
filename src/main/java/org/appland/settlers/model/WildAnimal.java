@@ -20,19 +20,17 @@ import static org.appland.settlers.model.Material.MEAT;
 public class WildAnimal extends Worker {
 
     private static final int TIME_TO_STAND = 39;
-    private final Countdown countdown;
-
     private static Random random;
+
+    private final Type type;
+    private final Countdown countdown;
 
     private State state;
 
-    private enum State {
-        ALIVE,
-        DEAD
-    }
-
-    public WildAnimal(GameMap map) {
+    public WildAnimal(GameMap map, Type type) {
         super(null, map);
+
+        this.type = type;
 
         state = State.ALIVE;
 
@@ -43,6 +41,19 @@ public class WildAnimal extends Worker {
             random = new Random();
             random.setSeed(1);
         }
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    private enum State {
+        ALIVE,
+        DEAD
+    }
+
+    public WildAnimal(GameMap map) {
+        this(map, WildAnimal.Type.FOX);
     }
 
     public static boolean cannotWalkOnAny(Collection<DetailedVegetation> surroundingTiles) {
@@ -123,5 +134,16 @@ public class WildAnimal extends Worker {
         state = State.DEAD;
 
         cancelWalkingToTarget();
+    }
+
+    public enum Type {
+        RABBIT,
+        FOX,
+        STAG,
+        DEER,
+        DUCK,
+        SHEEP,
+        DEER_2,
+        DUCK_2
     }
 }

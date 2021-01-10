@@ -2197,6 +2197,18 @@ public class Utils {
         map.setDetailedVegetationDownLeft(point, detailedVegetation);
     }
 
+    public static void waitForWorkerToHaveTargetSet(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 5000; i++) {
+            if (worker.getTarget() != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(worker.getTarget());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
