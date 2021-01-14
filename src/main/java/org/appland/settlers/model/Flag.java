@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.DONKEY;
+
 public class Flag implements EndPoint {
 
     private static final int MAX_NUMBER_OF_STACKED_CARGO = 8;
@@ -16,6 +19,7 @@ public class Flag implements EndPoint {
     private int    geologistsCalled;
     private int    scoutsCalled;
     private Player player;
+    private Type   type;
 
     public Flag(Point point) {
         position         = point;
@@ -23,6 +27,9 @@ public class Flag implements EndPoint {
         geologistsCalled = 0;
         scoutsCalled     = 0;
         promisedCargo    = new HashSet<>();
+
+        /* Default flag type is normal */
+        type = Type.NORMAL;
     }
 
     Flag(Player player, Point point) {
@@ -157,5 +164,17 @@ public class Flag implements EndPoint {
 
             building.cancelPromisedDelivery(cargo);
         }
+    }
+
+    public Flag.Type getType() {
+        return type;
+    }
+
+    public void setType(Type flagType) {
+        this.type = flagType;
+    }
+
+    public enum Type {
+        NORMAL, MAIN, MARINE
     }
 }

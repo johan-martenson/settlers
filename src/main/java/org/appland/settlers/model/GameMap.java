@@ -21,6 +21,7 @@ import java.util.Set;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
+import static org.appland.settlers.model.Flag.Type.MARINE;
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.areNonePartOf;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
@@ -1509,6 +1510,11 @@ public class GameMap {
         } else {
             mapPoint.setFlag(flag);
             flags.add(flag);
+        }
+
+        /* Make it a marine flag if it's next to water */
+        if (GameUtils.areAnyOneOf(getSurroundingTiles(flagPoint), DetailedVegetation.WATER_VEGETATION)) {
+            flag.setType(MARINE);
         }
 
         /* Report the placed flag */

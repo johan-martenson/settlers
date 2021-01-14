@@ -279,6 +279,16 @@ public class GameUtils {
         return true;
     }
 
+    public static <T> boolean areAnyOneOf(List<T> items, Set<T> collection) {
+        for (T item : items) {
+            if (collection.contains(item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     static class Line {
         final double k;
         final double m;

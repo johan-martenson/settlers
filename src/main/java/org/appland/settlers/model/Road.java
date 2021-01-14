@@ -3,6 +3,8 @@ package org.appland.settlers.model;
 import java.util.Collections;
 import java.util.List;
 
+import static org.appland.settlers.model.Flag.Type.MAIN;
+
 public class Road {
 
     private static final int MAIN_ROAD_THRESHOLD = 100;
@@ -164,6 +166,17 @@ public class Road {
             isMainRoad = true;
 
             map.reportPromotedRoad(this);
+
+            Flag startFlag = map.getFlagAtPoint(start.getPosition());
+            Flag endFlag = map.getFlagAtPoint(end.getPosition());
+
+            if (startFlag != null) {
+                startFlag.setType(MAIN);
+            }
+
+            if (endFlag != null) {
+                endFlag.setType(MAIN);
+            }
         }
     }
 
@@ -173,7 +186,6 @@ public class Road {
 
     public boolean needsDonkey() {
         return isMainRoad() && donkey == null && needsCourier;
-
     }
 
     Point getOtherPoint(Point position) {
