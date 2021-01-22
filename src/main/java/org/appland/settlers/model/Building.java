@@ -1270,6 +1270,8 @@ public class Building implements EndPoint {
         state = State.UNDER_CONSTRUCTION;
 
         countdown.countFrom(getConstructionCountdown());
+
+        map.reportBuildingUnderConstruction(this);
     }
 
     public Builder getBuilder() {

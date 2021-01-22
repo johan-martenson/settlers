@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
+import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -779,6 +780,115 @@ public class TestGameMonitoring {
     }
 
     @Test
+    public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a builder to start walking to the woodcutter */
+        Builder builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when a house changes from planned to under construction */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
+
+        map.stepTime();
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 1);
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+
+        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 0);
+    }
+
+    @Test
+    public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstructionIsSentOnlyOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a builder to start walking to the woodcutter */
+        Builder builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when a house changes from planned to under construction */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
+
+        map.stepTime();
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 1);
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+
+        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 0);
+
+        /* Verify that the events are only sent once */
+        Utils.fastForward(10, map);
+
+        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(gameChangesList.getChangedBuildings().size(), 0);
+            assertTrue(gameChangesList.getNewFlags().isEmpty());
+            assertTrue(gameChangesList.getNewRoads().isEmpty());
+        }
+    }
+
+    @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsAdded() throws Exception {
 
         /* Starting new game */
@@ -917,6 +1027,113 @@ public class TestGameMonitoring {
 
         for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newGameChanges.getChangedBuildings().size(), 0);
+        }
+    }
+
+    @Test
+    public void testMonitoringEventWhenPlannedHouseIsTornDown() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that the event is sent when the house is removed */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        map.stepTime();
+
+        assertEquals(monitor.getEvents().size(), 1);
+
+        GameChangesList gameChanges = monitor.getEvents().get(0);
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 1);
+        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 1);
+        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
+        assertEquals(gameChanges.getNewBuildings().size(), 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+    }
+
+    @Test
+    public void testMonitoringEventWhenPlannedHouseIsTornDownIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that the event is sent when the house is removed */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        map.stepTime();
+
+        assertEquals(monitor.getEvents().size(), 1);
+
+        GameChangesList gameChanges = monitor.getEvents().get(0);
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 1);
+        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 1);
+        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
+        assertEquals(gameChanges.getNewBuildings().size(), 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+
+        /* Verify that no more changed building messages are sent before the building burns down */
+        Utils.fastForward(30, map);
+
+        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newGameChanges.getRemovedBuildings().size(), 0);
+            assertEquals(newGameChanges.getChangedBuildings().size(), 0);
+
         }
     }
 

@@ -3665,4 +3665,8 @@ public class GameMap {
     public DetailedVegetation getDetailedVegetationBelow(Point point) {
         return tileBelowMap.get(point.y * width + point.x);
     }
+
+    void reportBuildingUnderConstruction(Building building) {
+        changedBuildings.add(building);
+    }
 }
