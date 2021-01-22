@@ -2596,7 +2596,12 @@ public class GameMap {
 
         mapPoint.removeBuilding();
 
-        buildingsToRemove.add(building);
+        /* Remove planned buildings directly, otherwise add to list and remove in next stepTime() */
+        if (building.isPlanned()) {
+            buildings.remove(building);
+        } else {
+            buildingsToRemove.add(building);
+        }
     }
 
     /**

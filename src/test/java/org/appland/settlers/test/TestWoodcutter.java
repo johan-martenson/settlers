@@ -78,6 +78,9 @@ public class TestWoodcutter {
         woodcutter0.putCargo(cargo);
         woodcutter0.putCargo(cargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(woodcutter0);
+
         /* Verify that this is enough to construct the woodcutter */
         for (int i = 0; i < 100; i++) {
             assertTrue(woodcutter0.isUnderConstruction());
@@ -110,6 +113,9 @@ public class TestWoodcutter {
 
         woodcutter0.putCargo(cargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(woodcutter0);
+
         /* Verify that this is enough to construct the woodcutter */
         for (int i = 0; i < 500; i++) {
             assertTrue(woodcutter0.isUnderConstruction());
@@ -139,7 +145,7 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify the the woodcutter doesn't need any worker when it's under construction */
-        assertTrue(woodcutter.isUnderConstruction());
+        assertTrue(woodcutter.isPlanned());
         assertFalse(woodcutter.needsWorker());
     }
 
@@ -279,42 +285,6 @@ public class TestWoodcutter {
         }
 
         assertTrue(foundWoodcutter);
-    }
-
-    @Test
-    public void testOnlyOneWoodcutterIsAssignedToHouse() throws Exception {
-
-        /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place woodcutter */
-        Point point1 = new Point(8, 6);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
-
-        /* Connect the woodcutter with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
-
-        /* Construct the forester hut */
-        constructHouse(woodcutter);
-
-        /* Run game logic twice, once to place courier and once to place forester */
-        Utils.fastForward(2, map);
-
-        int nrWorkers = map.getWorkers().size();
-
-        /* Keep running the game loop and make sure no more workers are allocated */
-        for (int i = 0; i < 20; i++) {
-            Utils.fastForward(10, map);
-        }
-
-        assertEquals(map.getWorkers().size(), nrWorkers);
     }
 
     @Test

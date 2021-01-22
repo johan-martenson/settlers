@@ -79,6 +79,9 @@ public class TestFortress {
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(fortress0);
+
         /* Verify that this is enough to construct the fortress */
         for (int i = 0; i < 200; i++) {
             assertTrue(fortress0.isUnderConstruction());
@@ -126,6 +129,9 @@ public class TestFortress {
         /* Verify that the fortress needs a plank */
         assertTrue(fortress0.needsMaterial(PLANK));
 
+        /* Assign builder */
+        Utils.assignBuilder(fortress0);
+
         /* Verify that this is not enough to construct the fortress */
         for (int i = 0; i < 500; i++) {
             assertTrue(fortress0.isUnderConstruction());
@@ -169,6 +175,9 @@ public class TestFortress {
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(fortress0);
 
         /* Verify that the fortress needs a stone */
         assertTrue(fortress0.needsMaterial(STONE));

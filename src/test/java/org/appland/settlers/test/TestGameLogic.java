@@ -270,7 +270,7 @@ public class TestGameLogic {
         /* Construct the barracks */
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        assertTrue(barracks0.isUnderConstruction());
+        assertTrue(barracks0.isPlanned());
         assertTrue(barracks0.isMilitaryBuilding());
         assertTrue(headquarter0.getAmount(PRIVATE) >= 10);
 
@@ -284,23 +284,35 @@ public class TestGameLogic {
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
 
-        assertEquals(map.getWorkers().size(), 4);
-        assertTrue(map.getWorkers().get(3) instanceof Military);
-        assertFalse(map.getWorkers().get(3).isArrived());
-        assertTrue(map.getWorkers().get(3).isTraveling());
+        Military military = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker.isSoldier()) {
+                military = (Military) worker;
+
+                break;
+            }
+        }
+
+        assertNotNull(military);
+        assertFalse(military.isArrived());
+        assertTrue(military.isTraveling());
 
         assertEquals(headquarter0.getAmount(PRIVATE), currentNumberOfMilitary - 1);
 
         /* Let the military reach the barracks */
-        Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(3));
+        Utils.fastForwardUntilWorkersReachTarget(map, military);
 
-        assertEquals(map.getWorkers().size(), 5);
-        assertTrue(map.getWorkers().get(3).isArrived());
-        assertFalse(map.getWorkers().get(3).isTraveling());
+        assertTrue(map.getWorkers().size() >= 5);
+        assertTrue(military.isArrived());
+        assertFalse(military.isTraveling());
 
         /* Make traveling workers that have arrived enter their building or road */
+        List<Military> soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(4));
+        assertEquals(soldiersOutside.size(), 1);
+
+        Utils.fastForwardUntilWorkersReachTarget(map, soldiersOutside.get(0));
 
         assertFalse(barracks0.needsMilitaryManning());
         assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
@@ -308,11 +320,11 @@ public class TestGameLogic {
         /* Assign new workers to unoccupied buildings again. There is building
          * or road that requires a worker so this should have no effect
          */
-        assertEquals(map.getWorkers().size(), 5);
+        assertEquals(map.getWorkers().size(), 6);
 
         map.stepTime();
 
-        assertEquals(map.getWorkers().size(), 5);
+        assertEquals(map.getWorkers().size(), 6);
 
         /* Finish construction of the forester hut which requires a forester worker to function */
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
@@ -329,7 +341,7 @@ public class TestGameLogic {
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
 
-        assertEquals(map.getWorkers().size(), 6);
+        assertEquals(map.getWorkers().size(), 7);
         assertFalse(foresterHut0.needsWorker());
 
         Forester forester = null;

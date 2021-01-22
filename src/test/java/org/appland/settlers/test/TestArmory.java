@@ -32,6 +32,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.ARMORER;
+import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.IRON_BAR;
@@ -80,6 +81,9 @@ public class TestArmory {
         armory0.putCargo(stoneCargo);
         armory0.putCargo(stoneCargo);
 
+        /* Assign a builder */
+        Utils.assignBuilder(armory0);
+
         /* Verify that this is enough to construct the armory */
         for (int i = 0; i < 150; i++) {
             assertTrue(armory0.isUnderConstruction());
@@ -106,6 +110,9 @@ public class TestArmory {
         /* Place armory */
         Point point1 = new Point(6, 12);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Assign a builder */
+        Utils.assignBuilder(armory0);
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -149,6 +156,9 @@ public class TestArmory {
         armory0.putCargo(plankCargo);
         armory0.putCargo(plankCargo);
         armory0.putCargo(stoneCargo);
+
+        /* Assign a builder */
+        Utils.assignBuilder(armory0);
 
         /* Verify that this is not enough to construct the armory */
         for (int i = 0; i < 500; i++) {
@@ -224,7 +234,7 @@ public class TestArmory {
         /* Verify that a armory worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the armory worker reach the armory */
         Armorer armorer0 = null;
@@ -273,7 +283,7 @@ public class TestArmory {
         /* Verify that a armory worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Verify that the armorer is not a soldier */
         Armorer armorer0 = null;
@@ -320,7 +330,7 @@ public class TestArmory {
         /* Verify that a armory worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the armory worker reach the armory */
         Armorer armorer0 = null;
@@ -1333,6 +1343,19 @@ public class TestArmory {
         /* Connect the first flag with the second flag */
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, armory0.getFlag());
 
+        /* Wait for the armory to get constructed */
+        assertTrue(headquarter0.getAmount(BUILDER) > 0);
+        assertTrue(headquarter0.getAmount(PLANK) > 20);
+        assertTrue(headquarter0.getAmount(STONE) > 20);
+        assertTrue(armory0.isPlanned());
+        assertTrue(armory0.needsMaterial(PLANK));
+        assertTrue(armory0.needsMaterial(STONE));
+        assertTrue(map.arePointsConnectedByRoads(armory0.getPosition(), headquarter0.getPosition()));
+
+        Utils.waitForBuildingToBeConstructed(armory0);
+
+        assertTrue(armory0.isReady());
+
         /* Wait for the armorer to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0);
 
@@ -1593,6 +1616,8 @@ public class TestArmory {
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getPosition(), armory0.getPosition());
+        assertTrue(armorer0 instanceof Armorer);
+        assertTrue(storehouse0.isPlanned());
 
         armory0.tearDown();
 

@@ -235,21 +235,27 @@ public class Courier extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+        Point position = getPosition();
+        MapPoint mapPoint = map.getMapPoint(position);
+        Cargo cargo = getCargo();
 
-        if (getCargo() == null) {
+        if (cargo == null) {
             return;
         }
 
         // TODO: verify that this call can be removed. There should be no need for cargos to know where they are when they are being carried
-        getCargo().setPosition(getPosition());
+        cargo.setPosition(getPosition());
 
         List<Point> plannedPath = getPlannedPath();
 
+        Building cargoTargetBuilding = getCargo().getTarget();
+
         /* If at the point before the flag */
         if (!plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.get(0))) {
-
             Point nextPoint = plannedPath.get(0);
-            Flag flag = map.getFlagAtPoint(nextPoint);
+            MapPoint mapPointNext = map.getMapPoint(nextPoint);
+
+            Flag flag = mapPointNext.getFlag();
 
             if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
 
@@ -266,20 +272,17 @@ public class Courier extends Worker {
 
         /* Return the cargo to storage if the building is torn down */
         // TODO: handle the case where the building has had time to get fully removed
-        else if (state != RETURNING_TO_STORAGE &&
-            map.isFlagAtPoint(getPosition()) &&
-            (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {
+        else if (state != RETURNING_TO_STORAGE && mapPoint.isFlag() &&
+                 (cargoTargetBuilding.isBurningDown() ||
+                  cargoTargetBuilding.isDestroyed()   ||
+                  !cargoTargetBuilding.equals(map.getBuildingAtPoint(cargoTargetBuilding.getPosition())))) {
 
-            Point position = getPosition();
             Material material = getCargo().getMaterial();
 
             Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
             /* Return the cargo to the storage if possible */
             if (storage != null) {
-
-                Cargo cargo = getCargo();
-
                 cargo.setTarget(storage);
 
                 /* Deliver the cargo either to the storage's flag or directly to the storage */

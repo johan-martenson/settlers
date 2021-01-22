@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
@@ -365,6 +366,17 @@ public class Utils {
     public static void constructHouse(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
+        /* Assign builder */
+        Builder builder = new Builder(building.getPlayer(), building.getMap());
+        map.placeWorker(builder, building.getFlag());
+
+        building.promiseBuilder(builder);
+        builder.setTargetBuilding(building);
+
+        assertEquals(builder.getTarget(), building.getPosition());
+
+        fastForwardUntilWorkerReachesPoint(map, builder, building.getPosition());
+
         assertTrue(building.isUnderConstruction());
 
         for (int i = 0; i < 20; i++) {
@@ -614,7 +626,7 @@ public class Utils {
         GameMap map = player.getMap();
         List<T> workers = new LinkedList<>();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5000; i++) {
 
             workers.clear();
 
@@ -1202,8 +1214,7 @@ public class Utils {
     public static void waitForBuildingToBeConstructed(Building building) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = building.getMap();
 
-        for (int i = 0; i < 4000; i++) {
-
+        for (int i = 0; i < 10000; i++) {
             if (building.isReady()) {
                 break;
             }
@@ -1891,6 +1902,23 @@ public class Utils {
     public static void constructHouses(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
+        /* Place builders */
+        Builder aBuilder = null;
+        for (Building building : buildings) {
+            Player player = building.getPlayer();
+
+            Builder builder = new Builder(player, map);
+            map.placeWorker(builder, building.getFlag());
+
+            building.promiseBuilder(builder);
+            builder.setTargetBuilding(building);
+
+            aBuilder = builder;
+        }
+
+        /* Make the builders reach the buildings */
+        fastForwardUntilWorkerReachesPoint(map, aBuilder, aBuilder.getTarget());
+
         for (Building building : buildings) {
             assertTrue(building.isUnderConstruction());
 
@@ -2207,6 +2235,62 @@ public class Utils {
         }
 
         assertNotNull(worker.getTarget());
+    }
+
+    public static void verifyBuilderHammersInPlaceForDuration(GameMap map, Builder builder0, int time) throws InvalidRouteException, InvalidUserActionException {
+        Point point = builder0.getPosition();
+
+        for (int i = 0; i < time; i++) {
+            assertEquals(point, builder0.getPosition());
+            assertTrue(builder0.isHammering());
+
+            map.stepTime();
+        }
+    }
+
+    public static void assignBuilder(Building building) throws InvalidRouteException, InvalidUserActionException {
+        GameMap map = building.getMap();
+        Builder builder = new Builder(building.getPlayer(), map);
+
+        map.placeWorker(builder, building.getFlag());
+        builder.setTargetBuilding(building);
+        building.promiseBuilder(builder);
+
+        assertEquals(builder.getTarget(), building.getPosition());
+
+        fastForwardUntilWorkerReachesPoint(map, builder, building.getPosition());
+    }
+
+    public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidRouteException, InvalidUserActionException {
+        GameMap map = building.getMap();
+        Builder builder = null;
+
+        for (int i = 0; i < 10000; i++) {
+            for (Worker worker : map.getWorkers()) {
+                if (! (worker instanceof Builder)) {
+                    continue;
+                }
+
+                if (!building.equals(worker.getTargetBuilding())) {
+                    continue;
+                }
+
+                builder = (Builder) worker;
+
+                break;
+            }
+
+            if (builder != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(builder);
+        assertEquals(builder.getTargetBuilding(), building);
+
+        return builder;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

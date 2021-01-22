@@ -24,9 +24,9 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 public class Building implements EndPoint {
 
     private static final int TIME_TO_PROMOTE_SOLDIER               = 100;
-    private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
-    private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 149;
-    private static final int TIME_TO_BUILD_LARGE_HOUSE             = 199;
+    private static final int TIME_TO_BUILD_SMALL_HOUSE             = 100;
+    private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 150;
+    private static final int TIME_TO_BUILD_LARGE_HOUSE             = 200;
     private static final int TIME_TO_BURN_DOWN                     = 49;
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
     private static final int TIME_TO_UPGRADE                       = 99;
@@ -49,7 +49,7 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> receivedMaterial;
 
     private enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
     }
 
     private Collection<Point> defendedLand;
@@ -68,6 +68,7 @@ public class Building implements EndPoint {
     private Military ownDefender;
     private Military primaryAttacker;
     private boolean  outOfResources;
+    private Builder  promisedBuilder;
 
     public Building(Player player) {
         receivedMaterial      = new EnumMap<>(Material.class);
@@ -89,10 +90,11 @@ public class Building implements EndPoint {
         productionEnabled     = true;
         outOfResources        = false;
         upgrading             = false;
+        promisedBuilder       = null;
 
         countdown.countFrom(getConstructionCountdown());
 
-        state = State.UNDER_CONSTRUCTION;
+        state = State.PLANNED;
         this.player = player;
 
         flag.setPlayer(player);
@@ -276,7 +278,7 @@ public class Building implements EndPoint {
     public void assignWorker(Worker worker) {
 
         /* A building can't get an assigned worker while it's still under construction */
-        if (isUnderConstruction()) {
+        if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
             throw new InvalidGameLogicException("Can't assign " + worker + " to unfinished " + this);
         }
 
@@ -339,7 +341,7 @@ public class Building implements EndPoint {
         Material material = cargo.getMaterial();
 
         /* Planks and stone can be delivered during construction */
-        if (isUnderConstruction()) {
+        if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
 
             Map<Material, Integer> materialsNeeded = getMaterialsToBuildHouse();
 
@@ -359,7 +361,7 @@ public class Building implements EndPoint {
             throw new InvalidStateForProduction(this);
         }
 
-        if (isReady()) {
+        if (state == State.UNOCCUPIED || state == State.OCCUPIED) {
 
             if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
                 throw new InvalidGameLogicException("This building doesn't need any more coins");
@@ -451,7 +453,7 @@ public class Building implements EndPoint {
             }
         }
 
-        if (isUnderConstruction()) {
+        if (state == State.UNDER_CONSTRUCTION) {
 
             if (countdown.hasReachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
@@ -541,8 +543,10 @@ public class Building implements EndPoint {
         defenders.clear();
         ownDefender = null;
 
-        /* Change building state to burning */
-        state = State.BURNING;
+        /* Change building state */
+        if (state != State.PLANNED) {
+            state = State.BURNING;
+        }
 
         /* Start countdown for burning */
         countdown.countFrom(TIME_TO_BURN_DOWN);
@@ -568,7 +572,13 @@ public class Building implements EndPoint {
         map.doRemoveRoad(driveway);
 
         /* Report that the building has been torn down */
-        map.reportTornDownBuilding(this);
+        if (state == State.PLANNED) {
+            map.removeBuilding(this);
+
+            map.reportBuildingRemoved(this);
+        } else {
+            map.reportTornDownBuilding(this);
+        }
     }
 
     public Size getSize() {
@@ -963,7 +973,7 @@ public class Building implements EndPoint {
 
     public int getTotalAmountNeeded(Material material) {
 
-        if (state == State.UNDER_CONSTRUCTION) {
+        if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
 
             return materialsToBuildHouse.getOrDefault(material, 0);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
@@ -976,7 +986,7 @@ public class Building implements EndPoint {
     private int getLackingAmountWithProjected(Material material) {
 
         /* Handle buildings that are under construction */
-        if (state == State.UNDER_CONSTRUCTION) {
+        if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
 
             if (!materialsToBuildHouse.containsKey(material)) {
                 return 0;
@@ -1056,7 +1066,7 @@ public class Building implements EndPoint {
         }
 
         /* Refuse to upgrade while under construction */
-        if (isUnderConstruction()) {
+        if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
             throw new InvalidUserActionException("Cannot upgrade while under construction.");
         }
 
@@ -1187,7 +1197,7 @@ public class Building implements EndPoint {
 
         Set<Material> result = EnumSet.noneOf(Material.class);
 
-        if (isUnderConstruction()) {
+        if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
             HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
 
             result.addAll(Arrays.asList(houseSize.material()));
@@ -1214,7 +1224,7 @@ public class Building implements EndPoint {
             return 0;
         }
 
-        return (fullConstructionTime - countdown.getCount()) / fullConstructionTime * 100;
+        return (int) ((double)((fullConstructionTime - countdown.getCount()) / fullConstructionTime) * 100);
     }
 
     /* Intended to be overridden by subclasses if needed */
@@ -1242,5 +1252,27 @@ public class Building implements EndPoint {
 
     public boolean isHeadquarter() {
         return false;
+    }
+
+    public boolean isPlanned() {
+        return state == State.PLANNED;
+    }
+
+    protected boolean needsBuilder() {
+        return this.state == State.PLANNED && promisedBuilder == null;
+    }
+
+    public void promiseBuilder(Builder builder) {
+        promisedBuilder = builder;
+    }
+
+    void startConstruction() {
+        state = State.UNDER_CONSTRUCTION;
+
+        countdown.countFrom(getConstructionCountdown());
+    }
+
+    public Builder getBuilder() {
+        return promisedBuilder;
     }
 }

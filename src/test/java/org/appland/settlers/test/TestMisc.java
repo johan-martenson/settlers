@@ -101,7 +101,7 @@ public class TestMisc {
             map.stepTime();
         }
 
-        assertEquals(map.getWorkers().size(), 2);
+        assertTrue(map.getWorkers().size() >= 2);
         assertNotNull(courier.getCargo());
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
         assertEquals(courier.getLastPoint(), headquarter0.getFlag().getPosition().right());
@@ -110,7 +110,7 @@ public class TestMisc {
         /* Remove the flag and cause the woodcutter to get torn down */
         map.removeFlag(map.getFlagAtPoint(point1));
 
-        assertEquals(map.getWorkers().size(), 2);
+        assertTrue(map.getWorkers().size() >= 2);
 
         /* Verify that the courier goes back to the headquarter */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
@@ -384,7 +384,7 @@ public class TestMisc {
         /* Construct the building */
         Utils.constructHouse(armory0);
 
-        /* Verify that the construction is at hundred  progress */
+        /* Verify that the construction is at hundred progress */
         assertEquals(armory0.getConstructionProgress(), 100);
     }
 
@@ -826,7 +826,63 @@ public class TestMisc {
     }
 
     @Test
-    public void testCourierDeliveringToBuildingMakesCargoDisappearIfTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierDeliveringToBuildingMakesCargoDisappearIfTargetUnderConstructionBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Assign builder */
+        Utils.assignBuilder(woodcutter);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a courier to come to the road */
+        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+
+        /* Wait for the courier to carry a cargo to the woodcutter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getTarget(), woodcutter);
+
+        /* Verify that the courier goes to the woodcutter and the cargo disappears if the woodcutter is torn down and it cannot be returned */
+        headquarter0.blockDeliveryOfMaterial(courier.getCargo().getMaterial());
+
+        assertTrue(woodcutter.isUnderConstruction());
+
+        woodcutter.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+
+        assertEquals(woodcutter.getAmount(PLANK), 0);
+        assertEquals(woodcutter.getAmount(STONE), 0);
+        assertEquals(courier.getPosition(), woodcutter.getFlag().getPosition());
+
+        assertNull(courier.getCargo());
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
+    }
+
+    @Test
+    public void testCourierDeliveringToBuildingMakesCargoDisappearIfPlannedTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -858,17 +914,25 @@ public class TestMisc {
         map.stepTime();
 
         assertFalse(courier.isExactlyAtPoint());
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo().getTarget(), woodcutter);
 
         /* Verify that the courier goes to the woodcutter and the cargo disappears if the woodcutter is torn down and it cannot be returned */
         headquarter0.blockDeliveryOfMaterial(courier.getCargo().getMaterial());
 
+        assertTrue(woodcutter.isPlanned());
+
         woodcutter.tearDown();
+
+        assertFalse(map.isBuildingAtPoint(point1));
+        assertNull(map.getBuildingAtPoint(point1));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
 
         assertEquals(woodcutter.getAmount(PLANK), 0);
         assertEquals(woodcutter.getAmount(STONE), 0);
         assertEquals(courier.getPosition(), woodcutter.getFlag().getPosition());
+
         assertNull(courier.getCargo());
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
     }

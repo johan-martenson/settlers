@@ -125,8 +125,8 @@ public class GameUtils {
                 continue;
             }
 
-            /* Filter buildings that are destroyed */
-            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
+            /* Filter buildings that are not operational */
+            if (!building.isReady()) {
                 continue;
             }
 
@@ -963,7 +963,7 @@ public class GameUtils {
         for (Building building : player.getBuildings()) {
 
             /* Filter buildings that are not ready */
-            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
+            if (!building.isReady()) {
                 continue;
             }
 
@@ -1007,8 +1007,8 @@ public class GameUtils {
                 continue;
             }
 
-            /* Filter buildings that are under construction or destroyed */
-            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
+            /* Filter buildings that are not ready */
+            if (!building.isReady()) {
                 continue;
             }
 
@@ -1058,7 +1058,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that are under construction or destroyed */
-            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
+            if (!building.isReady()) {
                 continue;
             }
 
@@ -1107,7 +1107,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that are destroyed */
-            if (building.isBurningDown() || building.isDestroyed() || building.isUnderConstruction()) {
+            if (!building.isReady()) {
                 continue;
             }
 

@@ -84,6 +84,9 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(guardHouse0);
+
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 100; i++) {
             assertTrue(guardHouse0.isUnderConstruction());
@@ -122,6 +125,9 @@ public class TestGuardHouse {
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(guardHouse0);
+
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 500; i++) {
             assertTrue(guardHouse0.isUnderConstruction());
@@ -159,6 +165,9 @@ public class TestGuardHouse {
         Cargo stoneCargo = new Cargo(STONE, map);
 
         guardHouse0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(guardHouse0);
 
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 500; i++) {

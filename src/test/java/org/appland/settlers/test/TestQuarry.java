@@ -74,6 +74,9 @@ public class TestQuarry {
         quarry0.putCargo(cargo);
         quarry0.putCargo(cargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(quarry0);
+
         /* Verify that this is enough to construct the quarry */
         for (int i = 0; i < 100; i++) {
             assertTrue(quarry0.isUnderConstruction());
@@ -105,6 +108,9 @@ public class TestQuarry {
         Cargo cargo = new Cargo(PLANK, map);
 
         quarry0.putCargo(cargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(quarry0);
 
         /* Verify that this is enough to construct the quarry */
         for (int i = 0; i < 500; i++) {
@@ -167,7 +173,7 @@ public class TestQuarry {
         Utils.fastForward(2, map);
 
         /* Verify that the right amount of workers are added to the map */
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Verify that the map contains a stonemason */
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);
@@ -234,7 +240,7 @@ public class TestQuarry {
         Utils.fastForward(2, map);
 
         /* Verify that the right amount of workers are added to the map */
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Verify that the map contains a stonemason */
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);

@@ -76,6 +76,9 @@ public class TestBakery {
         bakery0.putCargo(stoneCargo);
         bakery0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(bakery0);
+
         /* Verify that this is enough to construct the bakery */
         for (int i = 0; i < 150; i++) {
             assertTrue(bakery0.isUnderConstruction());
@@ -111,6 +114,9 @@ public class TestBakery {
         bakery0.putCargo(stoneCargo);
         bakery0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(bakery0);
+
         /* Verify that this is not enough to construct the bakery */
         for (int i = 0; i < 500; i++) {
             assertTrue(bakery0.isUnderConstruction());
@@ -145,6 +151,9 @@ public class TestBakery {
         bakery0.putCargo(plankCargo);
         bakery0.putCargo(plankCargo);
         bakery0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(bakery0);
 
         /* Verify that this is not enough to construct the bakery */
         for (int i = 0; i < 500; i++) {
@@ -220,7 +229,7 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the bakery worker reach the bakery */
         Baker baker = null;
@@ -269,7 +278,7 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Verify that the baker is not a soldier */
         Baker baker = null;
@@ -316,7 +325,7 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the bakery worker reach the bakery */
         Baker baker = null;

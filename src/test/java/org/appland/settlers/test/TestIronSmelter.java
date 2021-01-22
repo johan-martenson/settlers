@@ -77,6 +77,9 @@ public class TestIronSmelter {
         ironSmelter0.putCargo(stoneCargo);
         ironSmelter0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(ironSmelter0);
+
         /* Verify that this is enough to construct the iron smelter */
         for (int i = 0; i < 150; i++) {
             assertTrue(ironSmelter0.isUnderConstruction());
@@ -112,6 +115,9 @@ public class TestIronSmelter {
         ironSmelter0.putCargo(stoneCargo);
         ironSmelter0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(ironSmelter0);
+
         /* Verify that this is not enough to construct the iron smelter */
         for (int i = 0; i < 500; i++) {
             assertTrue(ironSmelter0.isUnderConstruction());
@@ -146,6 +152,9 @@ public class TestIronSmelter {
         ironSmelter0.putCargo(plankCargo);
         ironSmelter0.putCargo(plankCargo);
         ironSmelter0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(ironSmelter0);
 
         /* Verify that this is not enough to construct the iron smelter */
         for (int i = 0; i < 500; i++) {

@@ -76,6 +76,9 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(stoneCargo);
         slaughterHouse0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(slaughterHouse0);
+
         /* Verify that this is enough to construct the slaughter house */
         for (int i = 0; i < 150; i++) {
             assertTrue(slaughterHouse0.isUnderConstruction());
@@ -111,6 +114,9 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(stoneCargo);
         slaughterHouse0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(slaughterHouse0);
+
         /* Verify that this is not enough to construct the slaughter house */
         for (int i = 0; i < 500; i++) {
             assertTrue(slaughterHouse0.isUnderConstruction());
@@ -145,6 +151,9 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(plankCargo);
         slaughterHouse0.putCargo(plankCargo);
         slaughterHouse0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(slaughterHouse0);
 
         /* Verify that this is not enough to construct the slaughter house */
         for (int i = 0; i < 500; i++) {
@@ -220,7 +229,7 @@ public class TestSlaughterHouse {
         /* Verify that a slaughter house worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the slaughter house worker reach the slaughter house */
         Butcher butcher = null;
@@ -306,7 +315,7 @@ public class TestSlaughterHouse {
         /* Verify that a slaughter house worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the slaughter house worker reach the slaughter house */
         Butcher butcher = null;

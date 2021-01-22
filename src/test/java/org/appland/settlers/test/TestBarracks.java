@@ -95,6 +95,9 @@ public class TestBarracks {
         barracks0.putCargo(cargo);
         barracks0.putCargo(cargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(barracks0);
+
         /* Verify that this is enough to construct the barracks */
         for (int i = 0; i < 100; i++) {
             assertTrue(barracks0.isUnderConstruction());
@@ -126,6 +129,9 @@ public class TestBarracks {
         Cargo cargo = new Cargo(PLANK, map);
 
         barracks0.putCargo(cargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(barracks0);
 
         /* Verify that this is enough to construct the barracks */
         for (int i = 0; i < 500; i++) {

@@ -4157,6 +4157,13 @@ public class TestAttack {
         Point point3 = new Point(23, 15);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
+        /* Remove all soldiers from player 0's headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
         /* Finish construction */
         Utils.constructHouse(barracks0);
         Utils.constructHouse(barracks1);
@@ -4220,6 +4227,8 @@ public class TestAttack {
         assertEquals(barracks1.getPlayer(), player0);
 
         /* Verify that the barracks gets reinforced */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
+
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         for (int i = 0; i < 1000; i++) {
@@ -4258,8 +4267,15 @@ public class TestAttack {
         Point point1 = new Point(40, 12);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Fill up extra soldiers in player 0's headquarter */
+        /* Fill up extra stone in player 0's headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 10);
+
+        /* Remove all soldiers from player 0's headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
@@ -4279,8 +4295,12 @@ public class TestAttack {
         assertEquals(map.getFlagAtPoint(barracks1.getPosition().downRight()), barracks1.getFlag());
 
         /* Populate player 0's barracks */
+        assertEquals(barracks0.getHostedMilitary().size(), 0);
+
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
         assertEquals(map.getFlagAtPoint(barracks1.getPosition().downRight()), barracks1.getFlag());
+
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         assertTrue(barracks1.isReady());

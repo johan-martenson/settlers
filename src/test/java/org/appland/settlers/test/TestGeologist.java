@@ -45,6 +45,10 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestGeologist {
 
+    /*
+    * TODO: test geologist is created if there is a need and there is a hammer available
+    * */
+
     @Test
     public void testGeologistCanBeCalledFromAFlag() throws Exception {
 

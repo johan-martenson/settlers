@@ -79,6 +79,9 @@ public class TestPigFarm {
         pigFarm0.putCargo(stoneCargo);
         pigFarm0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(pigFarm0);
+
         /* Verify that this is enough to construct the pig farm */
         for (int i = 0; i < 200; i++) {
             assertTrue(pigFarm0.isUnderConstruction());
@@ -115,6 +118,9 @@ public class TestPigFarm {
         pigFarm0.putCargo(stoneCargo);
         pigFarm0.putCargo(stoneCargo);
         pigFarm0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(pigFarm0);
 
         /* Verify that this is not enough to construct the pig farm */
         for (int i = 0; i < 500; i++) {
@@ -153,6 +159,9 @@ public class TestPigFarm {
         pigFarm0.putCargo(stoneCargo);
         pigFarm0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(pigFarm0);
+
         /* Verify that this is not enough to construct the pig farm */
         for (int i = 0; i < 500; i++) {
             assertTrue(pigFarm0.isUnderConstruction());
@@ -180,7 +189,7 @@ public class TestPigFarm {
         Point point1 = new Point(10, 6);
         Building farm = map.placeBuilding(new PigFarm(player0), point1);
 
-        assertTrue(farm.isUnderConstruction());
+        assertTrue(farm.isPlanned());
         assertFalse(farm.needsWorker());
     }
 
@@ -234,7 +243,7 @@ public class TestPigFarm {
         Utils.fastForward(2, map);
 
         /* Verify that there was a pig breeder added */
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), PigBreeder.class);
     }

@@ -74,6 +74,10 @@ public class TestMultipleStorehouses {
         /* Connect the left-most well with the headquarter */
         Road road2 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter.getFlag());
 
+        /* Assign builders */
+        Utils.assignBuilder(well0);
+        Utils.assignBuilder(well1);
+
         /* Verify that both of the wells get deliveries and get constructed */
         assertTrue(well0.isUnderConstruction());
         assertTrue(well1.isUnderConstruction());

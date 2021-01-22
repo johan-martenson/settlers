@@ -35,6 +35,7 @@ public class TestMonitoringOfAvailableConstruction {
 
     /*
      TODO:
+      - houses that are planned instead of under construction/constructed -- ~10 new tests
       - test removing things - anything missing?
       - test not sent to wrong player
       - remove stone one by one gives a field of flags which is wrong
@@ -537,6 +538,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -580,6 +584,9 @@ public class TestMonitoringOfAvailableConstruction {
         /* Place woodcutter */
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
@@ -632,6 +639,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -677,6 +687,9 @@ public class TestMonitoringOfAvailableConstruction {
         /* Place woodcutter */
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
@@ -731,6 +744,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -774,6 +790,9 @@ public class TestMonitoringOfAvailableConstruction {
         /* Place woodcutter */
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
@@ -1014,6 +1033,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -1058,6 +1080,9 @@ public class TestMonitoringOfAvailableConstruction {
         /* Place sawmill */
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill0);
 
         map.stepTime();
 
@@ -1111,6 +1136,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -1155,6 +1183,9 @@ public class TestMonitoringOfAvailableConstruction {
         /* Place sawmill */
         Point point1 = new Point(10, 10);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill0);
 
         map.stepTime();
 

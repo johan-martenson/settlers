@@ -84,6 +84,9 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(watchTower0);
+
         /* Verify that this is enough to construct the watch tower */
         for (int i = 0; i < 150; i++) {
             assertTrue(watchTower0.isUnderConstruction());
@@ -128,6 +131,9 @@ public class TestWatchTower {
         /* Verify that the watch tower needs a plank */
         assertTrue(watchTower0.needsMaterial(PLANK));
 
+        /* Assign builder */
+        Utils.assignBuilder(watchTower0);
+
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {
             assertTrue(watchTower0.isUnderConstruction());
@@ -171,6 +177,9 @@ public class TestWatchTower {
 
         /* Verify that the watch tower needs a stone */
         assertTrue(watchTower0.needsMaterial(STONE));
+
+        /* Assign builder */
+        Utils.assignBuilder(watchTower0);
 
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {

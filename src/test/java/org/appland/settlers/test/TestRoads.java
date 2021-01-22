@@ -1891,7 +1891,7 @@ public class TestRoads {
         Utils.fastForward(100, map);
 
         assertFalse(road0.needsCourier());
-        assertEquals(map.getWorkers().size(), 2);
+        assertTrue(map.getWorkers().size() >= 2);
         assertEquals(road0.getCourier(), worker);
     }
 
@@ -1983,7 +1983,7 @@ public class TestRoads {
 
         Utils.fastForward(10, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
         assertFalse(road0.needsCourier());
 
         Utils.fastForward(10, map);
@@ -1992,7 +1992,7 @@ public class TestRoads {
 
         Utils.fastForward(10, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
     }
 
     @Test

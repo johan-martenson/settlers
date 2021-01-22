@@ -77,6 +77,9 @@ public class TestWell {
         well0.putCargo(plankCargo);
         well0.putCargo(plankCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(well0);
+
         /* Verify that this is enough to construct the well */
         for (int i = 0; i < 100; i++) {
             assertTrue(well0.isUnderConstruction());
@@ -108,6 +111,9 @@ public class TestWell {
         Cargo plankCargo = new Cargo(PLANK, map);
 
         well0.putCargo(plankCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(well0);
 
         /* Verify that this is not enough to construct the well */
         for (int i = 0; i < 500; i++) {
@@ -169,7 +175,7 @@ public class TestWell {
         /* Run game logic twice, once to place courier and once to place well worker */
         Utils.fastForward(2, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), WellWorker.class);
     }

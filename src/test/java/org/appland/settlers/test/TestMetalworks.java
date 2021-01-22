@@ -96,6 +96,9 @@ public class TestMetalworks {
         metalworks0.putCargo(stoneCargo);
         metalworks0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(metalworks0);
+
         /* Verify that this is enough to construct the metalworks */
         for (int i = 0; i < 150; i++) {
             assertTrue(metalworks0.isUnderConstruction());
@@ -131,6 +134,9 @@ public class TestMetalworks {
         metalworks0.putCargo(stoneCargo);
         metalworks0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(metalworks0);
+
         /* Verify that this is not enough to construct the metalworks */
         for (int i = 0; i < 500; i++) {
             assertTrue(metalworks0.isUnderConstruction());
@@ -165,6 +171,9 @@ public class TestMetalworks {
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(plankCargo);
         metalworks0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(metalworks0);
 
         /* Verify that this is not enough to construct the metalworks */
         for (int i = 0; i < 500; i++) {

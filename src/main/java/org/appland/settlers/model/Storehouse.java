@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BOW;
 import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.CLEAVER;
@@ -165,6 +166,10 @@ public class Storehouse extends Building {
             return true;
         }
 
+        if (assignBuildersToPlannedBuildings()) {
+            return true;
+        }
+
         if (assignWorkerToUnoccupiedBuildings()) {
             return true;
         }
@@ -174,6 +179,47 @@ public class Storehouse extends Building {
         }
 
         if (assignScouts()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean assignBuildersToPlannedBuildings() throws InvalidRouteException {
+
+        if (!hasAtLeastOne(BUILDER) && !hasAtLeastOne(Material.HAMMER)) {
+            return false;
+        }
+
+        for (Building building : getPlayer().getBuildings()) {
+
+            if (building.equals(this)) {
+                continue;
+            }
+
+            if (!building.needsBuilder()) {
+                continue;
+            }
+
+            /* Filter buildings that cannot be reached from this storehouse */
+            if (getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                continue;
+            }
+
+            /* Filter buildings that can get the worker assigned from a more local storehouse */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+
+            if (storehouse != null && !this.equals(storehouse) && storehouse.hasAtLeastOne(BUILDER)) {
+                continue;
+            }
+
+            /* Assign the builder */
+            Worker builder = retrieveWorker(BUILDER);
+
+            getMap().placeWorker(builder, this);
+            builder.setTargetBuilding(building);
+            building.promiseBuilder((Builder) builder);
+
             return true;
         }
 
@@ -384,7 +430,7 @@ public class Storehouse extends Building {
 
     @Override
     public void putCargo(Cargo cargo) {
-        if (!isWorking()) {
+        if (!isReady()) {
             super.putCargo(cargo);
         } else {
 
@@ -478,6 +524,8 @@ public class Storehouse extends Building {
             storeOneInInventory(HUNTER);
         } else if (worker instanceof Metalworker) {
             storeOneInInventory(METALWORKER);
+        } else if (worker instanceof Builder) {
+            storeOneInInventory(BUILDER);
         }
 
         getMap().removeWorker(worker);
@@ -590,6 +638,9 @@ public class Storehouse extends Building {
             break;
         case GENERAL:
             worker = new Military(getPlayer(), GENERAL_RANK, getMap());
+            break;
+        case BUILDER:
+            worker = new Builder(getPlayer(), getMap());
             break;
         default:
             throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
@@ -739,10 +790,6 @@ public class Storehouse extends Building {
         }
 
         return false;
-    }
-
-    private boolean isWorking() {
-        return isReady();
     }
 
     private boolean isClosestStorage(Building building) throws InvalidRouteException {

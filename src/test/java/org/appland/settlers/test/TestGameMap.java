@@ -682,6 +682,9 @@ public class TestGameMap {
         Point point1 = new Point(58, 50);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter);
+
         /* Verify that removing the flag tears down the woodcutter */
         map.removeFlag(woodcutter.getFlag());
 
@@ -689,6 +692,34 @@ public class TestGameMap {
         assertEquals(map.getRoads().size(), 1);
         assertEquals(map.getBuildings().size(), 2);
         assertTrue(woodcutter.isBurningDown());
+    }
+
+    @Test
+    public void testRemoveBuildingByRemovingFlag() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(58, 50);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Verify that removing the flag tears down the woodcutter */
+        map.removeFlag(woodcutter.getFlag());
+
+        assertEquals(map.getFlags().size(), 1);
+        assertEquals(map.getRoads().size(), 1);
+        assertFalse(map.isBuildingAtPoint(point1));
+        assertNull(map.getBuildingAtPoint(point1));
+        assertFalse(map.getBuildings().contains(woodcutter));
     }
 
     @Test

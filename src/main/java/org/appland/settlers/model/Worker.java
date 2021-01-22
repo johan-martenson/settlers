@@ -223,9 +223,9 @@ public abstract class Worker {
         if (isTraveling()) {
             String str;
             if (isExactlyAtPoint()) {
-                str = "Courier at " + getPosition() + " traveling to " + target;
+                str = "Worker at " + getPosition() + " traveling to " + target;
             } else {
-                str = "Courier latest at " + getLastPoint() + " traveling to " + target;
+                str = "Worker latest at " + getLastPoint() + " traveling to " + target;
             }
 
             if (buildingToEnter != null) {
@@ -239,7 +239,7 @@ public abstract class Worker {
             return str;
         }
 
-        return "Idle courier at " + getPosition();
+        return "Idle worker at " + getPosition();
     }
 
     void onArrival() throws InvalidRouteException, InvalidUserActionException {
@@ -257,8 +257,10 @@ public abstract class Worker {
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
-            /* Enter the building for non-military workers. soldiers enter on their own */
-            if ( !isSoldier()) {
+            /* Enter the building unless its a soldier or a builder.
+             * Soldiers enter on their own and builders should not enter.
+             * */
+            if (!isSoldier() && !(this instanceof Builder)) {
 
                 /* Go back to storage if the building is not ok to enter */
                 if (building.isBurningDown() || building.isDestroyed()) {

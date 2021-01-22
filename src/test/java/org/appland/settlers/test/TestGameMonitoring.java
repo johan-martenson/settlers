@@ -59,6 +59,7 @@ public class TestGameMonitoring {
 
     /*
     TODO:
+        - remove building that is planned
         - workers and soldiers that die
         - catapulted stone,
         - available road connections (?),
@@ -833,6 +834,9 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -882,6 +886,9 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
         map.stepTime();
 
         /* Set up monitoring subscription for the player */
@@ -905,11 +912,12 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
         assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
 
-        /* Verify that no more messages are sent before the building burns down */
+        /* Verify that no more changed building messages are sent before the building burns down */
         Utils.fastForward(30, map);
 
-        assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(woodcutter0.isBurningDown());
+        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newGameChanges.getChangedBuildings().size(), 0);
+        }
     }
 
     @Test
@@ -1110,11 +1118,12 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getEvents().get(1);
+        GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
+
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
         assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
 
@@ -1165,9 +1174,9 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getEvents().get(1);
+        GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
@@ -1176,7 +1185,7 @@ public class TestGameMonitoring {
         /* Verify that no more messages are sent before the house disappears */
         Utils.fastForward(10, map);
 
-        assertEquals(monitor.getEvents().size(), 2);
+        assertEquals(monitor.getEventsAfterEvent(gameChanges).size(), 0);
     }
 
     @Test
@@ -1265,9 +1274,9 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getEvents().get(1);
+        GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
@@ -1275,13 +1284,13 @@ public class TestGameMonitoring {
 
         /* Verify that an event is sent when the building disappears */
         assertTrue(woodcutter0.isDestroyed());
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
         Utils.waitForBuildingToDisappear(woodcutter0);
 
-        assertEquals(monitor.getEvents().size(), 3);
+        assertTrue(monitor.getEvents().size() >= 3);
 
-        gameChanges = monitor.getEvents().get(2);
+        gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
@@ -1334,9 +1343,9 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getEvents().get(1);
+        GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
@@ -1344,13 +1353,13 @@ public class TestGameMonitoring {
 
         /* Verify that an event is sent when the building disappears */
         assertTrue(woodcutter0.isDestroyed());
-        assertEquals(monitor.getEvents().size(), 2);
+        assertTrue(monitor.getEvents().size() >= 2);
 
         Utils.waitForBuildingToDisappear(woodcutter0);
 
-        assertEquals(monitor.getEvents().size(), 3);
+        assertTrue(monitor.getEvents().size() >= 3);
 
-        gameChanges = monitor.getEvents().get(2);
+        gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
@@ -1359,7 +1368,9 @@ public class TestGameMonitoring {
         /* Verify that no more message is sent */
         Utils.fastForward(100, map);
 
-        assertEquals(monitor.getEvents().size(), 3);
+        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newGameChanges.getRemovedBuildings().size(), 0);
+        }
     }
 
     @Test

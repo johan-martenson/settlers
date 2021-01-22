@@ -105,6 +105,9 @@ public class TestStorehouse {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
+
         /* Verify that this is enough to construct the storage */
         for (int i = 0; i < 150; i++) {
             assertTrue(storage0.isUnderConstruction());
@@ -142,6 +145,9 @@ public class TestStorehouse {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
 
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 500; i++) {
@@ -181,6 +187,9 @@ public class TestStorehouse {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
+
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 500; i++) {
             assertTrue(storage0.isUnderConstruction());
@@ -219,6 +228,9 @@ public class TestStorehouse {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
 
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 1000; i++) {

@@ -76,6 +76,9 @@ public class TestBrewery {
         brewery0.putCargo(stoneCargo);
         brewery0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(brewery0);
+
         /* Verify that this is enough to construct the brewery */
         for (int i = 0; i < 150; i++) {
             assertTrue(brewery0.isUnderConstruction());
@@ -111,6 +114,9 @@ public class TestBrewery {
         brewery0.putCargo(stoneCargo);
         brewery0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(brewery0);
+
         /* Verify that this is not enough to construct the brewery */
         for (int i = 0; i < 500; i++) {
             assertTrue(brewery0.isUnderConstruction());
@@ -145,6 +151,9 @@ public class TestBrewery {
         brewery0.putCargo(plankCargo);
         brewery0.putCargo(plankCargo);
         brewery0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(brewery0);
 
         /* Verify that this is not enough to construct the brewery */
         for (int i = 0; i < 500; i++) {

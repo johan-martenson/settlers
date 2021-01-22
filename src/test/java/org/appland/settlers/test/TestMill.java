@@ -78,6 +78,9 @@ public class TestMill {
         mill0.putCargo(stoneCargo);
         mill0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(mill0);
+
         /* Verify that this is enough to construct the mill */
         for (int i = 0; i < 150; i++) {
             assertTrue(mill0.isUnderConstruction());
@@ -113,6 +116,9 @@ public class TestMill {
         mill0.putCargo(stoneCargo);
         mill0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(mill0);
+
         /* Verify that this is not enough to construct the mill */
         for (int i = 0; i < 500; i++) {
             assertTrue(mill0.isUnderConstruction());
@@ -147,6 +153,9 @@ public class TestMill {
         mill0.putCargo(plankCargo);
         mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(mill0);
 
         /* Verify that this is not enough to construct the mill */
         for (int i = 0; i < 500; i++) {
@@ -211,7 +220,7 @@ public class TestMill {
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Miller.class);
     }

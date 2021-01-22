@@ -1773,9 +1773,6 @@ public class TestPlacement {
             /* Destroy the building */
             woodcutter0.tearDown();
 
-            /* Wait for the building to stop burning and disappear */
-            Utils.waitForBuildingToDisappear(woodcutter0);
-
             /* Remove the flag */
             map.removeFlag(flag0);
         }
@@ -1987,8 +1984,6 @@ public class TestPlacement {
             /* Tear down the house */
             map.removeFlag(building.getFlag());
 
-            Utils.waitForBuildingToDisappear(building);
-
             assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }
     }
@@ -2059,8 +2054,6 @@ public class TestPlacement {
 
             /* Tear down the house */
             map.removeFlag(building.getFlag());
-
-            Utils.waitForBuildingToDisappear(building);
 
             assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }

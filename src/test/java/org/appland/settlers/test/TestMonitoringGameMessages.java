@@ -1339,7 +1339,7 @@ public class TestMonitoringGameMessages {
 
         /* Populate player barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
 
         /* Verify that no soldiers leave the barracks before the attack is initiated */
         for (int i = 0; i < 100; i++) {
@@ -1687,7 +1687,7 @@ public class TestMonitoringGameMessages {
             assertEquals(newChanges.getNewGameMessages().size(), 0);
         }
 
-        for (GameChangesList newChanges : monitorForPlayer0.getEventsAfterEvent(gameChangesListForPlayer1)) {
+        for (GameChangesList newChanges : monitorForPlayer1.getEventsAfterEvent(gameChangesListForPlayer1)) {
             assertEquals(newChanges.getNewGameMessages().size(), 0);
         }
     }
@@ -2095,6 +2095,9 @@ public class TestMonitoringGameMessages {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
+
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
@@ -2150,6 +2153,9 @@ public class TestMonitoringGameMessages {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2213,6 +2219,9 @@ public class TestMonitoringGameMessages {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(storage0);
 
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 1000; i++) {

@@ -9,6 +9,7 @@ import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
@@ -118,6 +119,7 @@ public class Headquarter extends Storehouse {
         inventory.put(SCOUT, InitialState.STORAGE_INITIAL_SCOUT);
         inventory.put(HUNTER, InitialState.STORAGE_INITIAL_HUNTER);
         inventory.put(METALWORKER, InitialState.STORAGE_INITIAL_METALWORKER);
+        inventory.put(BUILDER, InitialState.STORAGE_INITIAL_BUILDER);
     }
 
     @Override

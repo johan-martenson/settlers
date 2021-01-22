@@ -75,6 +75,9 @@ public class TestSawmill {
         sawmill0.putCargo(stoneCargo);
         sawmill0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(sawmill0);
+
         /* Verify that this is enough to construct the sawmill */
         for (int i = 0; i < 150; i++) {
             assertTrue(sawmill0.isUnderConstruction());
@@ -110,6 +113,9 @@ public class TestSawmill {
         sawmill0.putCargo(stoneCargo);
         sawmill0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(sawmill0);
+
         /* Verify that this is not enough to construct the sawmill */
         for (int i = 0; i < 500; i++) {
             assertTrue(sawmill0.isUnderConstruction());
@@ -144,6 +150,9 @@ public class TestSawmill {
         sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(sawmill0);
 
         /* Verify that this is not enough to construct the sawmill */
         for (int i = 0; i < 500; i++) {

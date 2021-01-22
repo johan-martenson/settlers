@@ -1,3 +1,5 @@
+package org.appland.settlers.test;
+
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -9,7 +11,6 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -43,8 +43,7 @@ public class TestProduction {
         Point point1 = new Point(10, 10);
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        assertTrue(sawmill.isUnderConstruction());
-
+        assertTrue(sawmill.isPlanned());
         assertFalse(sawmill.needsWorker());
 
         /* Connect the forester with the headquarter */
@@ -79,8 +78,7 @@ public class TestProduction {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        assertTrue(woodcutter.isUnderConstruction());
-
+        assertTrue(woodcutter.isPlanned());
         assertFalse(woodcutter.needsWorker());
 
         /* Connect the forester with the headquarter */
@@ -113,8 +111,7 @@ public class TestProduction {
         Point point1 = new Point(10, 10);
         Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
-        assertTrue(quarry.isUnderConstruction());
-
+        assertTrue(quarry.isPlanned());
         assertFalse(quarry.needsWorker());
 
         /* Connect the forester with the headquarter */

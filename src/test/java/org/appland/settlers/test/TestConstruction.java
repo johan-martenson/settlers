@@ -47,6 +47,9 @@ public class TestConstruction {
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Assign builder */
+        Utils.assignBuilder(sawmill0);
+
         /* Verify that the sawmill is not a military building */
         assertFalse(sawmill0.isMilitaryBuilding());
 
@@ -131,7 +134,7 @@ public class TestConstruction {
         Point point1 = new Point(13, 13);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        assertTrue(barracks0.isUnderConstruction());
+        assertTrue(barracks0.isPlanned());
         assertTrue(barracks0.isMilitaryBuilding());
         assertEquals(barracks0.getMaxHostedMilitary(), 2);
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
@@ -165,6 +168,9 @@ public class TestConstruction {
         /* Place sawmill */
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Assign builder */
+        Utils.assignBuilder(sawmill0);
 
         assertTrue(sawmill0.isUnderConstruction());
 
@@ -237,6 +243,9 @@ public class TestConstruction {
         /* Place farm */
         Point point1 = new Point(9, 9);
         Building farm = map.placeBuilding(new Farm(player0), point1);
+
+        /* Assign builder */
+        Utils.assignBuilder(farm);
 
         assertTrue(farm.isUnderConstruction());
 

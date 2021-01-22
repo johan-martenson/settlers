@@ -79,6 +79,9 @@ public class TestMint {
         mint0.putCargo(stoneCargo);
         mint0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(mint0);
+
         /* Verify that this is enough to construct the mint */
         for (int i = 0; i < 150; i++) {
             assertTrue(mint0.isUnderConstruction());
@@ -114,6 +117,9 @@ public class TestMint {
         mint0.putCargo(stoneCargo);
         mint0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(mint0);
+
         /* Verify that this is not enough to construct the mint */
         for (int i = 0; i < 500; i++) {
             assertTrue(mint0.isUnderConstruction());
@@ -148,6 +154,9 @@ public class TestMint {
         mint0.putCargo(plankCargo);
         mint0.putCargo(plankCargo);
         mint0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(mint0);
 
         /* Verify that this is not enough to construct the mint */
         for (int i = 0; i < 500; i++) {
@@ -233,7 +242,7 @@ public class TestMint {
         /* Verify that a minter leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the mint worker reach the mint */
         Minter minter = null;
@@ -325,7 +334,7 @@ public class TestMint {
         /* Verify that a minter leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the mint worker reach the mint */
         Minter minter = null;

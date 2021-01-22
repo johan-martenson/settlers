@@ -84,6 +84,9 @@ public class TestCatapult {
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(catapult0);
+
         /* Verify that this is enough to construct the catapult */
         for (int i = 0; i < 150; i++) {
             assertTrue(catapult0.isUnderConstruction());
@@ -122,6 +125,9 @@ public class TestCatapult {
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(catapult0);
+
         /* Verify that this is not enough to construct the catapult */
         for (int i = 0; i < 500; i++) {
             assertTrue(catapult0.isUnderConstruction());
@@ -159,6 +165,9 @@ public class TestCatapult {
         catapult0.putCargo(plankCargo);
         catapult0.putCargo(plankCargo);
         catapult0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(catapult0);
 
         /* Verify that this is not enough to construct the catapult */
         for (int i = 0; i < 500; i++) {

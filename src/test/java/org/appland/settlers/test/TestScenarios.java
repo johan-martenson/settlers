@@ -87,9 +87,7 @@ public class TestScenarios {
         courier2.assignToRoad(qryToHqRoad);
 
         /* Move forward in time until the small buildings are done */
-        Utils.constructHouse(woodcutter0);
-        Utils.constructHouse(quarry0);
-        Utils.constructHouse(sawmill0);
+        Utils.constructHouses(woodcutter0, quarry0, sawmill0);
 
         assertTrue(woodcutter0.isReady());
         assertTrue(quarry0.isReady());
@@ -103,9 +101,6 @@ public class TestScenarios {
         assertEquals(headquarter0.getAmount(PLANK), 15);
         assertEquals(headquarter0.getAmount(STONE), 10);
 
-        /* Assign worker to the woodcutter */
-        assertNotNull(woodcutter0.getWorker());
-
         /* Assign worker to the sawmill */
         Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
 
@@ -114,8 +109,14 @@ public class TestScenarios {
 
         /*   --   START TEST   --   */
 
+        /* Wait for the woodcutter to get occupied */
+        Worker woodcutterWorker = Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
+
         /* Fast forward until the woodcutter has cut some wood */
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.isReady());
+        assertEquals(woodcutter0.getWorker(), woodcutterWorker);
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
 
         for (int i = 0; i < 700; i++) {
             if (!woodcutter0.getFlag().getStackedCargo().isEmpty()) {

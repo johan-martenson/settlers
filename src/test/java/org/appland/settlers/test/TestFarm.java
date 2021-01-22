@@ -85,6 +85,9 @@ public class TestFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(farm0);
+
         /* Verify that this is enough to construct the farm */
         for (int i = 0; i < 200; i++) {
             assertTrue(farm0.isUnderConstruction());
@@ -122,6 +125,9 @@ public class TestFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(farm0);
+
         /* Verify that this is not enough to construct the farm */
         for (int i = 0; i < 500; i++) {
             assertTrue(farm0.isUnderConstruction());
@@ -158,6 +164,9 @@ public class TestFarm {
         farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(farm0);
 
         /* Verify that this is not enough to construct the farm */
         for (int i = 0; i < 500; i++) {
@@ -235,7 +244,7 @@ public class TestFarm {
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        assertTrue(farm.isUnderConstruction());
+        assertTrue(farm.isPlanned());
         assertFalse(farm.needsWorker());
     }
 
@@ -283,14 +292,14 @@ public class TestFarm {
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish the forester hut */
+        /* Finish the farm */
         Utils.constructHouse(farm);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
 
         /* Verify that there was a farmer added */
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
     }
@@ -360,7 +369,7 @@ public class TestFarm {
         Utils.fastForward(2, map);
 
         /* Verify that there was a farmer added */
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
     }
@@ -2380,7 +2389,6 @@ public class TestFarm {
 
         /* Make the farm create some wheat with full space to plant on available */
         for (int i = 0; i < 3000; i++) {
-
             map.stepTime();
 
             if (farm.getProductivity() == 100) {

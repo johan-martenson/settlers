@@ -76,6 +76,9 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
 
+        /* Assign builder */
+        Utils.assignBuilder(lookoutTower0);
+
         /* Verify that this is enough to construct the lookout tower */
         for (int i = 0; i < 100; i++) {
             assertTrue(lookoutTower0.isUnderConstruction());
@@ -110,6 +113,9 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
+
+        /* Assign builder */
+        Utils.assignBuilder(lookoutTower0);
 
         /* Verify that this is not enough to construct the lookout tower */
         for (int i = 0; i < 500; i++) {
@@ -195,7 +201,7 @@ public class TestLookoutTower {
         /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the lookout tower worker reach the lookout tower */
         Scout Scout = null;
@@ -248,7 +254,7 @@ public class TestLookoutTower {
         /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Let the lookout tower worker reach the lookout tower */
         Scout Scout = null;
@@ -330,7 +336,7 @@ public class TestLookoutTower {
         /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
-        assertEquals(map.getWorkers().size(), 3);
+        assertTrue(map.getWorkers().size() >= 3);
 
         /* Verifies that the lookout tower discovers new land when it gets occupied */
         Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
