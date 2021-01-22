@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -287,60 +288,6 @@ public class GameUtils {
         }
 
         return false;
-    }
-
-    static class Line {
-        final double k;
-        final double m;
-
-        Line (java.awt.Point point1, java.awt.Point point2) {
-            double newK = (double)(point1.y - point2.y) / (point1.x - point2.x);
-
-            // y = kx + m, m = y - kx
-            double newM = point1.y - newK * point1.x;
-
-            k = newK;
-            m = newM;
-        }
-
-        Line(double k, double m) {
-            this.k = k;
-            this.m = m;
-        }
-
-        public Line(java.awt.Point point, int directionX, int directionY) {
-            k = (double)directionY / directionX;
-            m = point.y - point.x * k;
-        }
-
-        Line getOrthogonalLineThroughPoint(java.awt.Point point) {
-            double orthogonalK = 1/ k;
-
-            // y = kx + m, m = y - kx
-            return new Line(orthogonalK, point.y - orthogonalK * point.x);
-        }
-
-        java.awt.Point getPointOnLineAtX(int x) {
-            return new java.awt.Point(x, (int)(k * x + m));
-        }
-
-        public double getYForX(int x) {
-            return k * x + m;
-        }
-
-        public Point goFromPointWithPositiveXWithLength(Point position, int length) {
-            double x = Math.sqrt(length * length / (1 + k * k));
-            double y = k * x;
-
-            return Point.fitToGamePoint(position.x + x, position.y + y);
-        }
-
-        public Point goFromPointWithNegativeXWithLength(Point position, int length) {
-            double x = - Math.sqrt(length * length / (1 + k * k));
-            double y = k * x;
-
-            return Point.fitToGamePoint(position.x + x, position.y + y);
-        }
     }
 
     static boolean areAllUnique(Collection<Point> points) {
@@ -796,7 +743,7 @@ public class GameUtils {
             }
 
             /* Handle if the goal is reached */
-            if (currentPoint.equals(goal)) {
+            if (Objects.equals(currentPoint, goal)) {
                 List<Point> path = new ArrayList<>();
 
                 /* Re-construct the path taken, backwards from the goal */

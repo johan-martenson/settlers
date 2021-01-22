@@ -283,8 +283,8 @@ public class Scout extends Worker {
     }
 
     static class EntityAndScore<T> {
-        T entity;
-        double score;
+        final T entity;
+        final double score;
 
         EntityAndScore(T entity, double score) {
             this.entity = entity;

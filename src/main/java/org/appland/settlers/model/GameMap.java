@@ -2800,7 +2800,7 @@ public class GameMap {
         /* Can't place a building with a stone down-right
         * - No need to verify that MapPointDownRight exists. This is checked before.
         *   */
-        if (mapPointDownRight != null && mapPointDownRight.isStone()) {
+        if (mapPointDownRight.isStone()) {
             return null;
         }
 

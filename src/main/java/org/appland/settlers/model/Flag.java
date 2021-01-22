@@ -5,9 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.DONKEY;
-
 public class Flag implements EndPoint {
 
     private static final int MAX_NUMBER_OF_STACKED_CARGO = 8;

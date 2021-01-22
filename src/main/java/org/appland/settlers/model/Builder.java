@@ -72,7 +72,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    void onArrival() throws InvalidRouteException, InvalidUserActionException {
+    void onArrival() throws InvalidRouteException {
 
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT) {
             building = map.getBuildingAtPoint(getPosition());
