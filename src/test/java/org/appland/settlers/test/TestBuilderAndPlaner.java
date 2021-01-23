@@ -10,6 +10,8 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -18,9 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
+import static org.appland.settlers.model.Material.BUILDER;
+import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestBuilderAndPlaner {
@@ -29,16 +36,14 @@ public class TestBuilderAndPlaner {
     * TODO:
     *   - for builder, test all standard worker things
     *      - walking and road is removed
-    *      - building under construction is removed
-    *      - sent out
-    *      - storage blocked
-    *      - walks to die
+    *      - tear down building that builder is working on, while builder is walking from one point to the other to continue hammering
     *   - test broken promise
     *   - test builder is created with a hammer if needed
     *   - test cannot attack planned building
     *   - test soldiers are not assigned to planned building
     *   - test workers are not assigned to planned building
     *   - building construction time starts when builder reaches the building
+    *   - test builder that constructs house 1 and then house 2 does not cancel construction if house 1 is torn down
     * */
 
     @Test
@@ -484,6 +489,354 @@ public class TestBuilderAndPlaner {
         Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getPosition());
 
         assertEquals(headquarter0.getAmount(Material.BUILDER), amountBuilders + 1);
+        assertFalse(map.getWorkers().contains(builder0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndWellIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the builder of the storehouse */
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Wait for the storehouse to get constructed */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+
+        /* Wait for the builder of the storehouse to go back to the headquarter */
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(builder0));
+
+        /* Place well */
+        Point point2 = new Point(18, 6);
+        Well well0 = map.placeBuilding(new Well(player0), point2);
+
+        /* Place road to connect the headquarter with the well */
+        Road road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for a builder to reach the well */
+        Builder builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertNotNull(builder1);
+        assertEquals(builder1.getTargetBuilding(), well0);
+        assertEquals(builder1.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getPosition());
+
+        assertTrue(well0.isUnderConstruction());
+
+        /* Verify that the worker goes to the storage when the well is torn down */
+        headquarter0.blockDeliveryOfMaterial(BUILDER);
+
+        well0.tearDown();
+
+        map.stepTime();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getFlag().getPosition());
+
+        assertEquals(builder1.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, builder1, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(builder1));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndWellIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the builder of the storehouse */
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Wait for the storehouse to get constructed */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+
+        /* Wait for the builder of the storehouse to go back to the headquarter */
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(builder0));
+
+        /* Place well */
+        Point point2 = new Point(18, 6);
+        Well well0 = map.placeBuilding(new Well(player0), point2);
+
+        /* Place road to connect the headquarter with the well */
+        Road road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for a builder to reach the well */
+        Builder builder1 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertNotNull(builder1);
+        assertEquals(builder1.getTargetBuilding(), well0);
+        assertEquals(builder1.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getPosition());
+
+        assertTrue(well0.isUnderConstruction());
+
+        /* Verify that the worker goes to the storage when the well is torn down */
+        headquarter0.blockDeliveryOfMaterial(BUILDER);
+
+        well0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, well0.getFlag().getPosition());
+
+        assertEquals(builder1.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(builder1));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BUILDER, 1);
+
+        assertEquals(headquarter0.getAmount(BUILDER), 1);
+
+        headquarter0.pushOutAll(BUILDER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+            assertEquals(headquarter0.getAmount(BUILDER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BUILDER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(BUILDER);
+        headquarter0.pushOutAll(BUILDER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(7, 9);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Place road to connect the well with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the builder to reach the well and start construction */
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertFalse(well0.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, well0.getPosition());
+
+        assertTrue(well0.isUnderConstruction());
+
+        /* Verify that worker walks away and dies when the building is torn down because delivery is blocked in the headquarter */
+        headquarter0.blockDeliveryOfMaterial(BUILDER);
+
+        well0.tearDown();
+
+        assertNotNull(builder0.getTarget());
+        assertNotEquals(builder0.getTarget(), well0.getPosition());
+        assertNotEquals(builder0.getTarget(), headquarter0.getPosition());
+        assertFalse(builder0.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+
+        assertTrue(builder0.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(builder0.isDead());
+            assertTrue(map.getWorkers().contains(builder0));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(builder0));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(7, 9);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Place road to connect the well with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the builder to start walking towards the well */
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertTrue(well0.isPlanned());
+        assertFalse(well0.isUnderConstruction());
+
+        map.stepTime();
+
+        assertFalse(builder0.isExactlyAtPoint());
+        assertEquals(builder0.getTarget(), well0.getPosition());
+
+        /* Wait for the well worker to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the builder goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(builder0.getTarget(), well0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(BUILDER);
+
+        well0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, well0.getFlag().getPosition());
+
+        assertEquals(builder0.getPosition(), well0.getFlag().getPosition());
+        assertNotEquals(builder0.getTarget(), headquarter0.getPosition());
+        assertFalse(builder0.isInsideBuilding());
+        assertNull(well0.getWorker());
+        assertNotNull(builder0.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, builder0.getTarget());
+
+        Point point = builder0.getPosition();
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(builder0.isDead());
+            assertEquals(builder0.getPosition(), point);
+            assertTrue(map.getWorkers().contains(builder0));
+
+            map.stepTime();
+        }
+
         assertFalse(map.getWorkers().contains(builder0));
     }
 }

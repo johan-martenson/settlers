@@ -68,7 +68,7 @@ public class Building implements EndPoint {
     private Military ownDefender;
     private Military primaryAttacker;
     private boolean  outOfResources;
-    private Builder  promisedBuilder;
+    private Builder  builder;
 
     public Building(Player player) {
         receivedMaterial      = new EnumMap<>(Material.class);
@@ -90,7 +90,7 @@ public class Building implements EndPoint {
         productionEnabled     = true;
         outOfResources        = false;
         upgrading             = false;
-        promisedBuilder       = null;
+        builder               = null;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -556,9 +556,13 @@ public class Building implements EndPoint {
             map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_TORN_DOWN);
         }
 
-        /* Send home the worker */
+        /* Send home the worker and builder (if any) */
         if (worker != null) {
             worker.returnToStorage();
+        }
+
+        if (builder != null) {
+            builder.returnToStorage();
         }
 
         /* Send home deployed soldiers */
@@ -1259,11 +1263,11 @@ public class Building implements EndPoint {
     }
 
     protected boolean needsBuilder() {
-        return this.state == State.PLANNED && promisedBuilder == null;
+        return this.state == State.PLANNED && builder == null;
     }
 
     public void promiseBuilder(Builder builder) {
-        promisedBuilder = builder;
+        this.builder = builder;
     }
 
     void startConstruction() {
@@ -1275,6 +1279,6 @@ public class Building implements EndPoint {
     }
 
     public Builder getBuilder() {
-        return promisedBuilder;
+        return builder;
     }
 }

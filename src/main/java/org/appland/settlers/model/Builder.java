@@ -15,7 +15,7 @@ public class Builder extends Worker {
     private Building building;
 
     private enum State {
-        GOING_TO_HAMMER, HAMMERING, WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE, RETURNING_TO_STORAGE, GOING_TO_DIE, DEAD, WALKING_TO_BUILDING_TO_CONSTRUCT
+        GOING_TO_HAMMER, HAMMERING, WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE, RETURNING_TO_STORAGE, GOING_TO_DIE, DEAD, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, WALKING_TO_BUILDING_TO_CONSTRUCT
     }
 
     private State state;
@@ -30,7 +30,7 @@ public class Builder extends Worker {
     @Override
     void onIdle() throws InvalidRouteException {
 
-        if (building.isReady()) {
+        if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
                 setOffroadTarget(building.getFlag().getPosition());
 
@@ -65,6 +65,12 @@ public class Builder extends Worker {
                 } else {
                     countdown.countFrom(TIME_TO_HAMMER);
                 }
+            } else {
+                countdown.step();
+            }
+        } else if (state == State.DEAD) {
+            if (countdown.hasReachedZero()) {
+                map.removeWorker(this);
             } else {
                 countdown.step();
             }
@@ -120,11 +126,34 @@ public class Builder extends Worker {
             state = State.DEAD;
 
             countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
         }
     }
 
     @Override
     protected void onReturnToStorage() throws InvalidRouteException {
+
+        /* Wait until next flag to find out that the building is gone and then go back */
+        if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
+            (!isExactlyAtPoint() || !map.isFlagAtPoint(getPosition()))) {
+            return;
+        }
+
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
 
         if (storage != null) {
@@ -162,5 +191,29 @@ public class Builder extends Worker {
 
     public String toString() {
         return "Builder for " + building;
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+        Point position = getPosition();
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
+                map.isFlagAtPoint(position) &&
+                !map.arePointsConnectedByRoads(position, getTarget())) {
+
+            /* Don't try to start construction upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
+        }
     }
 }

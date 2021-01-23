@@ -172,6 +172,7 @@ public enum Material {
             case OFFICER:
             case PRIVATE_FIRST_CLASS:
             case METALWORKER:
+            case BUILDER:
                 return true;
         }
 
