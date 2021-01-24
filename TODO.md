@@ -3,9 +3,7 @@ LARGER CHANGES
 
 * Fix upgrade cost for barracks, guard house, watch tower
 
-* Add the two missing states for house construction - digging planned, building planned
-
-* Add builders and diggers
+* Add the missing "needs planing" state for house construction and add planer
 
 * Add ships, shipyard, harbour
 
