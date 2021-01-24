@@ -60,7 +60,6 @@ public class TestGameMonitoring {
 
     /*
     TODO:
-        - remove building that is planned
         - workers and soldiers that die
         - catapulted stone,
         - available road connections (?),

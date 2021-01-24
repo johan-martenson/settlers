@@ -25,6 +25,7 @@ import static org.appland.settlers.model.Material.FISHING_ROD;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
+import static org.appland.settlers.model.Material.HAMMER;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.METALWORKER;
@@ -94,6 +95,7 @@ public class Storehouse extends Building {
         workerToToolMap.put(MINTER, CRUCIBLE);
         workerToToolMap.put(MINER, PICK_AXE);
         workerToToolMap.put(FARMER, SCYTHE);
+        workerToToolMap.put(BUILDER, HAMMER);
 
         materialToPushOut = EnumSet.noneOf(Material.class);
         materialBlockedForDelivery = EnumSet.noneOf(Material.class);

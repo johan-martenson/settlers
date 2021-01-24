@@ -1281,4 +1281,8 @@ public class Building implements EndPoint {
     public Builder getBuilder() {
         return builder;
     }
+
+    void cancelPromisedBuilder(Builder builder) {
+        this.builder = null;
+    }
 }

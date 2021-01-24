@@ -21,6 +21,7 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Material.BUILDER;
+import static org.appland.settlers.model.Material.HAMMER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertEquals;
@@ -30,15 +31,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class TestBuilderAndPlaner {
+public class TestBuilder {
 
     /*
     * TODO:
     *   - for builder, test all standard worker things
     *      - walking and road is removed
     *      - tear down building that builder is working on, while builder is walking from one point to the other to continue hammering
-    *   - test broken promise
-    *   - test builder is created with a hammer if needed
     *   - test cannot attack planned building
     *   - test soldiers are not assigned to planned building
     *   - test workers are not assigned to planned building
@@ -101,6 +100,101 @@ public class TestBuilderAndPlaner {
 
         assertNotNull(builder0);
         assertEquals(builder0.getTarget(), woodcutter0.getPosition());
+    }
+
+    @Test
+    public void testBreakingPromisedBuilder() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 12);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a builder to be assigned to the planned building */
+        Utils.adjustInventoryTo(headquarter0, BUILDER, 2);
+
+        assertEquals(headquarter0.getAmount(Material.BUILDER), 2);
+
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertNotNull(builder0);
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition());
+
+        /* Remove the road so the builder can't go to the building, and gives up and goes back to the headquarter */
+        map.removeRoad(road0);
+
+        /* Wait for the builder to go the headquarter's flag and start going back again */
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, headquarter0.getFlag().getPosition());
+
+        assertEquals(builder0.getTarget(), headquarter0.getPosition());
+
+        /* Verify that the second build starts going out when the road is put back */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        List<Builder> builders = Utils.waitForWorkersOutsideBuilding(Builder.class, 2, player0);
+
+        assertEquals(builders.size(), 2);
+
+        builders.remove(builder0);
+
+        Builder builder1 = builders.get(0);
+
+        assertEquals(builder1.getTarget(), woodcutter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder1, woodcutter0.getPosition());
+
+        assertEquals(builder1, woodcutter0.getBuilder());
+    }
+
+    @Test
+    public void testBuilderIsCreated() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust contents of the headquarter */
+        Utils.adjustInventoryTo(headquarter0, BUILDER, 0);
+        Utils.adjustInventoryTo(headquarter0, HAMMER, 1);
+
+        assertEquals(headquarter0.getAmount(BUILDER), 0);
+        assertEquals(headquarter0.getAmount(HAMMER), 1);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 12);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that a builder is assigned to the planned building */
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertNotNull(builder0);
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition());
+        assertEquals(headquarter0.getAmount(HAMMER), 0);
     }
 
     @Test

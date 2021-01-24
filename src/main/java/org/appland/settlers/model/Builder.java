@@ -13,12 +13,11 @@ public class Builder extends Worker {
     private final Countdown countdown;
 
     private Building building;
+    private State state;
 
     private enum State {
         GOING_TO_HAMMER, HAMMERING, WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE, RETURNING_TO_STORAGE, GOING_TO_DIE, DEAD, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, WALKING_TO_BUILDING_TO_CONSTRUCT
     }
-
-    private State state;
 
     public Builder(Player player, GameMap map) {
         super(player, map);
@@ -208,6 +207,9 @@ public class Builder extends Worker {
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
                 map.isFlagAtPoint(position) &&
                 !map.arePointsConnectedByRoads(position, getTarget())) {
+
+            /* Cancel the promise to the building */
+            getTargetBuilding().cancelPromisedBuilder(this);
 
             /* Don't try to start construction upon arrival */
             clearTargetBuilding();
