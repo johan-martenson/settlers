@@ -45,6 +45,7 @@ import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Material.SCYTHE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.SHIPWRIGHT;
 import static org.appland.settlers.model.Material.SHOVEL;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
@@ -96,6 +97,7 @@ public class Storehouse extends Building {
         workerToToolMap.put(MINER, PICK_AXE);
         workerToToolMap.put(FARMER, SCYTHE);
         workerToToolMap.put(BUILDER, HAMMER);
+        workerToToolMap.put(SHIPWRIGHT, HAMMER);
 
         materialToPushOut = EnumSet.noneOf(Material.class);
         materialBlockedForDelivery = EnumSet.noneOf(Material.class);
@@ -528,6 +530,8 @@ public class Storehouse extends Building {
             storeOneInInventory(METALWORKER);
         } else if (worker instanceof Builder) {
             storeOneInInventory(BUILDER);
+        } else if (worker instanceof Shipwright) {
+            storeOneInInventory(SHIPWRIGHT);
         }
 
         getMap().removeWorker(worker);
@@ -643,6 +647,9 @@ public class Storehouse extends Building {
             break;
         case BUILDER:
             worker = new Builder(getPlayer(), getMap());
+            break;
+        case SHIPWRIGHT:
+            worker = new Shipwright(getPlayer(), getMap());
             break;
         default:
             throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);

@@ -24,6 +24,7 @@ import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Ship;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
@@ -2291,6 +2292,112 @@ public class Utils {
         assertEquals(builder.getTargetBuilding(), building);
 
         return builder;
+    }
+
+    public static void waitForShipToGetBuilt(GameMap map, Ship ship) throws InvalidRouteException, InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (ship.isReady()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(ship.isReady());
+    }
+
+    public static void waitForNewShipToBeBuilt(GameMap map) throws InvalidRouteException, InvalidUserActionException {
+        Set<Ship> shipsBefore = new HashSet<>(map.getShips());
+
+        for (int i = 0; i < 10000; i++) {
+            Set<Ship> currentShips = new HashSet<>(map.getShips());
+
+            currentShips.removeAll(shipsBefore);
+
+            boolean foundNewConstructedShip = false;
+
+            if (currentShips.size() > 0) {
+                for (Ship ship : currentShips) {
+                    if (ship.isReady()) {
+                        foundNewConstructedShip = true;
+
+                        break;
+                    }
+                }
+            }
+
+            if (foundNewConstructedShip) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        Set<Ship> currentShips = new HashSet<>(map.getShips());
+
+        currentShips.removeAll(shipsBefore);
+
+        assertNotEquals(currentShips.size(), 0);
+
+        boolean foundNewConstructedShip = false;
+
+        for (Ship ship : currentShips) {
+            if (ship.isReady()) {
+                foundNewConstructedShip = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundNewConstructedShip);
+    }
+
+    public static Set<Ship> waitForNewShipToStartConstruction(GameMap map) throws InvalidRouteException, InvalidUserActionException {
+        Set<Ship> shipsBefore = new HashSet<>(map.getShips());
+
+        for (int i = 0; i < 10000; i++) {
+            Set<Ship> currentShips = new HashSet<>(map.getShips());
+
+            currentShips.removeAll(shipsBefore);
+
+            boolean foundNewUnderConstructionShip = false;
+
+            if (currentShips.size() > 0) {
+                for (Ship ship : currentShips) {
+                    if (ship.isUnderConstruction()) {
+                        foundNewUnderConstructionShip = true;
+
+                        break;
+                    }
+                }
+            }
+
+            if (foundNewUnderConstructionShip) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        Set<Ship> currentShips = new HashSet<>(map.getShips());
+
+        currentShips.removeAll(shipsBefore);
+
+        assertNotEquals(currentShips.size(), 0);
+
+        boolean foundNewUnderConstructionShip = false;
+
+        for (Ship ship : currentShips) {
+            if (ship.isUnderConstruction()) {
+                foundNewUnderConstructionShip = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundNewUnderConstructionShip);
+
+        return currentShips;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

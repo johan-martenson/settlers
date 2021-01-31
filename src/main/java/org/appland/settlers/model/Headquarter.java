@@ -39,6 +39,7 @@ import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.SHIPWRIGHT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
@@ -120,6 +121,7 @@ public class Headquarter extends Storehouse {
         inventory.put(HUNTER, InitialState.STORAGE_INITIAL_HUNTER);
         inventory.put(METALWORKER, InitialState.STORAGE_INITIAL_METALWORKER);
         inventory.put(BUILDER, InitialState.STORAGE_INITIAL_BUILDER);
+        inventory.put(SHIPWRIGHT, InitialState.STORAGE_INITIAL_SHIPWRIGHT);
     }
 
     @Override

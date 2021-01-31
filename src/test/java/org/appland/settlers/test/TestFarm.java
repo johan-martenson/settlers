@@ -2977,53 +2977,53 @@ public class TestFarm {
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place donkey farm */
+        /* Place farm */
         Point point1 = new Point(7, 9);
-        Farm donkeyFarm0 = map.placeBuilding(new Farm(player0), point1);
+        Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Place road to connect the donkey farm with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+        /* Place road to connect the farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the donkey farm to get constructed */
-        Utils.waitForBuildingToBeConstructed(donkeyFarm0);
+        /* Wait for the farm to get constructed */
+        Utils.waitForBuildingToBeConstructed(farm0);
 
-        /* Wait for a farmer to start walking to the donkey farm */
-        Farmer donkeyBreeder = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+        /* Wait for a farmer to start walking to the farm */
+        Farmer farmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         /* Wait for the farmer to go past the headquarter's flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
         /* Verify that the farmer goes away and dies when the house has been torn down and storage is not possible */
-        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+        assertEquals(farmer.getTarget(), farm0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(FARMER);
 
-        donkeyFarm0.tearDown();
+        farm0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
 
-        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getFlag().getPosition());
-        assertNotEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
-        assertFalse(donkeyBreeder.isInsideBuilding());
-        assertNull(donkeyFarm0.getWorker());
-        assertNotNull(donkeyBreeder.getTarget());
+        assertEquals(farmer.getPosition(), farm0.getFlag().getPosition());
+        assertNotEquals(farmer.getTarget(), headquarter0.getPosition());
+        assertFalse(farmer.isInsideBuilding());
+        assertNull(farm0.getWorker());
+        assertNotNull(farmer.getTarget());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyBreeder.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
 
-        Point point = donkeyBreeder.getPosition();
+        Point point = farmer.getPosition();
         for (int i = 0; i < 100; i++) {
-            assertTrue(donkeyBreeder.isDead());
-            assertEquals(donkeyBreeder.getPosition(), point);
-            assertTrue(map.getWorkers().contains(donkeyBreeder));
+            assertTrue(farmer.isDead());
+            assertEquals(farmer.getPosition(), point);
+            assertTrue(map.getWorkers().contains(farmer));
 
             map.stepTime();
         }
 
-        assertFalse(map.getWorkers().contains(donkeyBreeder));
+        assertFalse(map.getWorkers().contains(farmer));
     }
 }

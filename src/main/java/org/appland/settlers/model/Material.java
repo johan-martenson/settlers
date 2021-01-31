@@ -55,7 +55,22 @@ public enum Material {
     SCOUT,
     HUNTER,
     OFFICER,
-    PRIVATE_FIRST_CLASS, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE, METALWORKER, BUILDER, HAMMER;
+    PRIVATE_FIRST_CLASS,
+    AXE,
+    SHOVEL,
+    PICK_AXE,
+    FISHING_ROD,
+    BOW,
+    SAW,
+    CLEAVER,
+    ROLLING_PIN,
+    CRUCIBLE,
+    TONGS,
+    SCYTHE,
+    METALWORKER,
+    BUILDER,
+    HAMMER,
+    SHIPWRIGHT, BOAT;
 
     public static final Set<? extends Material> TRANSPORTABLE_GOODS = EnumSet.copyOf(Arrays.asList(
             SWORD,
@@ -173,6 +188,7 @@ public enum Material {
             case PRIVATE_FIRST_CLASS:
             case METALWORKER:
             case BUILDER:
+            case SHIPWRIGHT:
                 return true;
         }
 

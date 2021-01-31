@@ -109,6 +109,7 @@ public class GameMap {
     private final Group     collectEachStepTimeGroup;
     private final Set<Flag> changedFlags;
     private final List<Point> deadTrees;
+    private final List<Ship> ships;
 
     private Player winner;
     private long time;
@@ -224,6 +225,7 @@ public class GameMap {
 
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
         deadTrees = new ArrayList<>();
+        ships = new ArrayList<>();
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -404,6 +406,12 @@ public class GameMap {
         }
 
         duration.after("Workers step time");
+
+        for (Ship ship : ships) {
+            ship.stepTime();
+        }
+
+        duration.after("Ships step time");
 
         for (Building building : buildings) {
             building.stepTime();
@@ -3668,5 +3676,19 @@ public class GameMap {
 
     void reportBuildingUnderConstruction(Building building) {
         changedBuildings.add(building);
+    }
+
+    public List<Ship> getShips() {
+        return ships;
+    }
+
+    public Ship placeShip(Player player, Point point) {
+        Ship ship = new Ship(player, this);
+
+        ship.setPosition(point);
+
+        ships.add(ship);
+
+        return ship;
     }
 }
