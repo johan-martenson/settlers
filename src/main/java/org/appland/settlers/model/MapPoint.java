@@ -38,6 +38,7 @@ public class MapPoint {
     private Material mineral;
     private int      fishAmount;
     private boolean  isDeadTree;
+    private boolean  isShipyardAvailable;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -48,6 +49,7 @@ public class MapPoint {
         crop                       = null;
         sign                       = null;
         isDeadTree                 = false;
+        isShipyardAvailable        = false;
         connectedNeighbors         = new HashSet<>();
         connectedRoads             = new HashSet<>();
         connectedFlagsAndBuildings = new HashSet<>();
@@ -305,5 +307,13 @@ public class MapPoint {
 
     public void removeDeadTree() {
         isDeadTree = false;
+    }
+
+    public boolean isAvailableShipyard() {
+        return isShipyardAvailable;
+    }
+
+    public void setShipyardIsAvailable() {
+        isShipyardAvailable = true;
     }
 }

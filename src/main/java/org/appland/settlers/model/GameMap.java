@@ -822,6 +822,7 @@ public class GameMap {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
             }
         } else {
+
             Size canBuild = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
 
             if (canBuild == null || !canBuild.contains(house.getSize())) {
@@ -829,6 +830,15 @@ public class GameMap {
                 Size size = house.getSize();
 
                 throw new InvalidUserActionException("Cannot place " + name + " of size " + size + " at " + point + ", only " + canBuild + ".");
+            }
+        }
+
+        /* Ensure shipyards can only be built on selected places */
+        MapPoint mapPoint = getMapPoint(point);
+
+        if (house instanceof Shipyard) {
+            if (!mapPoint.isAvailableShipyard()) {
+                throw new InvalidUserActionException("Cannot place shipyard on " + point);
             }
         }
 
@@ -843,7 +853,6 @@ public class GameMap {
             }
         }
 
-        MapPoint mapPoint = getMapPoint(point);
         MapPoint mapPointDownRight = getMapPoint(point.downRight());
 
         /* Handle the case where there is a sign at the site */
@@ -3690,5 +3699,17 @@ public class GameMap {
         ships.add(ship);
 
         return ship;
+    }
+
+    public boolean isAvailableShipyardPoint(Point point) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        return mapPoint.isAvailableShipyard();
+    }
+
+    public void setPossiblePlaceForShipyard(Point point) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        mapPoint.setShipyardIsAvailable();
     }
 }
