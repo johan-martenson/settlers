@@ -68,6 +68,7 @@ public class TestShipyard {
     *   - switch between boats and ships during production
     *   - how far away from water can a ship be built?
     *   - can only place shipyard close to water where ship can sail
+    *   - rule for where shipyards can be placed???
     *
     * */
 
