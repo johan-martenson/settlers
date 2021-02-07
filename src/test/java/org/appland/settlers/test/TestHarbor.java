@@ -10,17 +10,23 @@ import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
+import org.appland.settlers.model.Size;
 import org.appland.settlers.model.StorageWorker;
-import org.appland.settlers.model.Harbor;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Woodcutter;
@@ -66,7 +72,7 @@ public class TestHarbor {
      */
 
     @Test
-    public void testStorageOnlyNeedsFourPlanksAndSixStonesForConstruction() throws Exception {
+    public void testCanMarkAvailablePlaceForHarborOnMap() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -74,13 +80,69 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Verify that it's possible to mark that it's possible to place a harbor at a point on the map */
+        Point point0 = new Point(10, 10);
+
+        assertFalse(map.isAvailableHarborPoint(point0));
+
+        map.setPossiblePlaceForHarbor(point0);
+
+        assertTrue(map.isAvailableHarborPoint(point0));
+    }
+
+    @Test
+    public void testCannotPlaceHarborWithoutMarkingFirst() throws InvalidEndPointException, InvalidRouteException, InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to place a harbor on a point that hasn't been marked */
+        Point point1 = new Point(10, 8);
+
+        assertFalse(map.isAvailableHarborPoint(point1));
+
+        try {
+            Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isBuildingAtPoint(point1));
+        assertNull(map.getBuildingAtPoint(point1));
+        assertFalse(map.isAvailableHarborPoint(point1));
+    }
+
+    @Test
+    public void testHarborOnlyNeedsFourPlanksAndSixStonesForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place a lake */
+        Point point0 = new Point(12, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point22 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point22);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point22);
 
         /* Deliver four plank and three stone */
         Utils.deliverCargos(harbor0, PLANK, 4);
@@ -100,7 +162,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageCannotBeConstructedWithTooFewPlanks() throws Exception {
+    public void testHarborCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -108,13 +170,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point22 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point22);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point22);
 
         /* Deliver four plank and three stone */
         Utils.deliverCargos(harbor0, PLANK, 3);
@@ -134,7 +204,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageCannotBeConstructedWithTooFewStones() throws Exception {
+    public void testHarborCannotBeConstructedWithTooFewStones() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -142,13 +212,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point22 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point22);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point22);
 
         /* Deliver four plank and three stone */
         Utils.deliverCargos(harbor0, PLANK, 4);
@@ -168,7 +246,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageIsConstructedWithRequiredResources() throws Exception {
+    public void testHarborIsConstructedWithRequiredResources() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -176,13 +254,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point22 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point22);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point22);
 
         /* Deliver four plank and three stone */
         Utils.deliverCargos(harbor0, PLANK, 4);
@@ -205,7 +291,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testUnfinishedStorageNotNeedsWorker() throws Exception {
+    public void testUnfinishedHarborNotNeedsWorker() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -213,20 +299,28 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point3);
 
         /* Verify that an unfinished harbor doesn't need a worker */
         assertFalse(harbor.needsWorker());
     }
 
     @Test
-    public void testStorageNeedsWorker() throws Exception {
+    public void testHarborNeedsWorker() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -234,13 +328,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point3);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor);
@@ -252,7 +354,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGetsAssignedToFinishedStorage() throws Exception {
+    public void testStorageWorkerGetsAssignedToFinishedHarbor() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -260,9 +362,17 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Point point3 = new Point(7, 9);
@@ -304,9 +414,17 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Point point3 = new Point(7, 9);
@@ -348,13 +466,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point3);
 
         Utils.constructHouse(harbor);
 
@@ -378,21 +504,37 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point pointX = new Point(12, 12);
+        Utils.surroundPointWithDetailedVegetation(pointX, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point pointY = new Point(6, 10);
+        map.setPossiblePlaceForHarbor(pointY);
+
+        /* Place a lake */
+        Point point0 = new Point(13, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place woodcutter */
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Point point3 = new Point(11, 9);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3.upLeft());
 
         /* Place harbor */
-        Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3.upLeft());
+        Point point4 = new Point(7, 9);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Connect the harbor with the woodcutter */
-        Point point2 = new Point(9, 9);
-        map.placeRoad(player0, point1, point2, point3);
+        Point point5 = new Point(9, 9);
+        map.placeRoad(player0, point3, point5, point4);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor);
@@ -424,7 +566,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGoesBackToStorageAfterDelivery() throws Exception {
+    public void testStorageWorkerGoesBackToHarborAfterDelivery() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -432,21 +574,29 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(10, 14);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 10);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place woodcutter */
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Point point3 = new Point(11, 9);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3.upLeft());
 
         /* Place harbor */
-        Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3.upLeft());
+        Point point4 = new Point(7, 9);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Connect the harbor with woodcutter */
-        Point point2 = new Point(9, 9);
-        map.placeRoad(player0, point1, point2, point3);
+        Point point5 = new Point(9, 9);
+        map.placeRoad(player0, point3, point5, point4);
 
         Utils.constructHouse(harbor);
 
@@ -480,7 +630,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerRestsInStorageAfterDelivery() throws Exception {
+    public void testStorageWorkerRestsInHarborAfterDelivery() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -488,21 +638,29 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(10, 14);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 10);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place woodcutter */
-        Point point1 = new Point(11, 9);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Point point3 = new Point(11, 9);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point3.upLeft());
 
         /* Place harbor */
-        Point point3 = new Point(7, 9);
-        Building harbor = map.placeBuilding(new Harbor(player0), point3.upLeft());
+        Point point4 = new Point(7, 9);
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Connect the harbor with the woodcutter */
-        Point point2 = new Point(9, 9);
-        map.placeRoad(player0, point1, point2, point3);
+        Point point5 = new Point(9, 9);
+        map.placeRoad(player0, point3, point5, point4);
 
         Utils.constructHouse(harbor);
 
@@ -541,7 +699,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGoesBackToStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerGoesBackToHarborWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -549,13 +707,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 8);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(8, 8);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(8, 8);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -584,7 +750,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -592,13 +758,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -606,12 +780,12 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Connect the harbor buildings */
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), harbor1.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), storehouse0.getFlag());
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -623,11 +797,11 @@ public class TestHarbor {
 
         /* Verify that the harbor worker avoids the second harbor because it's burning, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse0.getPosition());
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToBurningStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -635,13 +809,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -649,18 +831,18 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Connect the harbor buildings */
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), harbor1.getFlag());
+        /* Connect the harbor with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), storehouse.getFlag());
 
-        /* Finish construction of the second harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
-        /* Destroy the second harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse.tearDown();
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -672,11 +854,11 @@ public class TestHarbor {
 
         /* Verify that the harbor worker avoids the second harbor because it's burning, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse.getPosition());
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -684,13 +866,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -698,21 +888,21 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Connect the harbor buildings */
-        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), harbor1.getFlag());
+        /* Connect the harbor and the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), storehouse.getFlag());
 
-        /* Finish construction of the second harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
-        /* Destroy the second harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse.tearDown();
 
         /* Wait for the second harbor to burn down */
-        Utils.waitForBuildingToBurnDown(harbor1);
+        Utils.waitForBuildingToBurnDown(storehouse);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -722,13 +912,13 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the harbor worker avoids the second harbor because it's destroyed, although it's close */
+        /* Verify that the harbor worker avoids the storehouse because it's destroyed, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse.getPosition());
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -736,13 +926,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -750,9 +948,9 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -762,13 +960,13 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the harbor worker avoids the second harbor because it's burning, although it's close */
+        /* Verify that the harbor worker avoids the storehouse because it's unfinished, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse.getPosition());
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToBurningStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackOffroadToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -776,13 +974,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        /* Place harbor */
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -790,15 +995,15 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the second harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse0);
 
-        /* Destroy the second harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse0.tearDown();
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -808,13 +1013,13 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the harbor worker avoids the second harbor because it's burning, although it's close */
+        /* Verify that the harbor worker avoids the burning storehouse because it's burning, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse0.getPosition());
     }
 
     @Test
-    public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -822,13 +1027,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -836,18 +1049,18 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place second harbor */
+        /* Place storehouse */
         Point point2 = new Point(15, 15);
-        Building harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the second harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
-        /* Destroy the second harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse.tearDown();
 
-        /* Wait for the second harbor to burn down */
-        Utils.waitForBuildingToBurnDown(harbor1);
+        /* Wait for the storehouse to burn down */
+        Utils.waitForBuildingToBurnDown(storehouse);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -857,13 +1070,13 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the harbor worker avoids the second harbor because it's destroyed, although it's close */
+        /* Verify that the harbor worker avoids the storehouse because it's destroyed, although it's close */
         assertFalse(harborWorker.isInsideBuilding());
-        assertNotEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertNotEquals(harborWorker.getTarget(), storehouse.getPosition());
     }
 
     @Test
-    public void testStorageWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerGoesBackOnToHarborOnRoadsIfPossibleWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -871,13 +1084,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 8);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(8, 8);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(8, 8);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Connect the harbor with the headquarter */
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
@@ -913,7 +1134,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testDestroyedStorageIsRemovedAfterSomeTime() throws Exception {
+    public void testDestroyedHarborIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -921,13 +1142,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 8);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(8, 8);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(8, 8);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Connect the harbor with the headquarter */
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
@@ -966,13 +1195,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 8);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(8, 8);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(8, 8);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -994,13 +1231,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(12, 8);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(8, 8);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
+        /* Place harbor */
         Point point26 = new Point(8, 8);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1014,7 +1259,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testProductionInStorageCannotBeStopped() throws Exception {
+    public void testProductionInHarborCannotBeStopped() throws Exception {
 
         /* Create game map */
         Player player0 = new Player("Player 0", BLUE);
@@ -1022,13 +1267,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(14, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(10, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(10, 6);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Point point3 = new Point(10, 6);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Connect the harbor and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter.getFlag());
@@ -1050,7 +1303,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testProductionInStorageCannotBeResumed() throws Exception {
+    public void testProductionInHarborCannotBeResumed() throws Exception {
 
         /* Create game map */
         Player player0 = new Player("Player 0", BLUE);
@@ -1058,13 +1311,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(14, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(10, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(10, 6);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter.getFlag());
@@ -1096,13 +1356,20 @@ public class TestHarbor {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
+        /* Place a lake */
+        Point point0 = new Point(14, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(20, 14);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(20, 14);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1123,7 +1390,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
+    public void testWorkerGoesBackToOwnHarborEvenWithoutRoadsAndEnemiesStorehouseIsCloser() throws Exception {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1138,6 +1405,14 @@ public class TestHarbor {
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place a lake */
+        Point pointX = new Point(32, 18);
+        Utils.surroundPointWithDetailedVegetation(pointX, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point pointY = new Point(28, 18);
+        map.setPossiblePlaceForHarbor(pointY);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(7, 9);
@@ -1302,17 +1577,25 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        /* Place a lake */
+        Point point0 = new Point(17, 5);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
-        /* Placing first flag */
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(13, 5);
+        map.setPossiblePlaceForHarbor(point1);
 
-        /* Placing harbor */
-        Point point2 = new Point(14, 4);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point2.upLeft());
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place first flag */
+        Point point3 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point3);
+
+        /* Place harbor */
+        Point point4 = new Point(14, 4);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1367,17 +1650,25 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        /* Place a lake */
+        Point point0 = new Point(17, 5);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
-        /* Placing first flag */
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(13, 5);
+        map.setPossiblePlaceForHarbor(point1);
 
-        /* Placing harbor */
-        Point point2 = new Point(14, 4);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point2.upLeft());
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place first flag */
+        Point point3 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point3);
+
+        /* Place harbor */
+        Point point4 = new Point(14, 4);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1427,7 +1718,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerReturnsToStorageIfStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerReturnsToHarborIfHarborIsDestroyed() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1435,17 +1726,25 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        /* Place a lake */
+        Point point0 = new Point(17, 5);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
-        /* Placing first flag */
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(13, 5);
+        map.setPossiblePlaceForHarbor(point1);
 
-        /* Placing harbor */
-        Point point2 = new Point(14, 4);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point2.upLeft());
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place first flag */
+        Point point3 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point3);
+
+        /* Place harbor */
+        Point point4 = new Point(14, 4);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point4.upLeft());
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1491,7 +1790,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerGoesOffroadBackToClosestStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerGoesOffroadBackToClosestStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -1499,13 +1798,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 13);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 13);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        /* Place harbor */
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1513,12 +1819,12 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place a second harbor closer to the harbor */
+        /* Place a storehouse closer to the harbor */
         Point point2 = new Point(13, 13);
-        Harbor harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -1530,18 +1836,18 @@ public class TestHarbor {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(harborWorker.isInsideBuilding());
-        assertEquals(harborWorker.getTarget(), harbor1.getPosition());
+        assertEquals(harborWorker.getTarget(), storehouse.getPosition());
 
-        int amount = harbor1.getAmount(STORAGE_WORKER);
+        int amount = storehouse.getAmount(STORAGE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, harbor1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, storehouse.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarter */
-        assertEquals(harbor1.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(storehouse.getAmount(STORAGE_WORKER), amount + 1);
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -1549,13 +1855,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        /* Place harbor */
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1563,15 +1876,15 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place a second harbor closer to the harbor */
+        /* Place a storehouse closer to the harbor */
         Point point2 = new Point(13, 13);
-        Harbor harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
-        /* Destroy the harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse.tearDown();
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -1594,7 +1907,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -1602,13 +1915,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        /* Place harbor */
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1616,18 +1936,18 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place a second harbor closer to the harbor */
+        /* Place a storehouse closer to the harbor */
         Point point2 = new Point(13, 13);
-        Harbor harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the harbor */
-        Utils.constructHouse(harbor1);
+        /* Finish construction of the storehouse */
+        Utils.constructHouse(storehouse);
 
-        /* Destroy the harbor */
-        harbor1.tearDown();
+        /* Destroy the storehouse */
+        storehouse.tearDown();
 
         /* Wait for the harbor to burn down */
-        Utils.waitForBuildingToBurnDown(harbor1);
+        Utils.waitForBuildingToBurnDown(storehouse);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -1650,7 +1970,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+    public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -1658,13 +1978,21 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place a lake */
+        Point point0 = new Point(29, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
-        /* Placing harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(23, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
+        Point point2 = new Point(15, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place harbor */
+        assertEquals(map.isAvailableHousePoint(player0, point1), Size.LARGE);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1672,9 +2000,9 @@ public class TestHarbor {
         /* Occupy the harbor */
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Place a second harbor closer to the harbor */
-        Point point2 = new Point(13, 13);
-        Harbor harbor1 = map.placeBuilding(new Harbor(player0), point2);
+        /* Place a storehouse closer to the harbor */
+        Point point3 = new Point(19, 9);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -1705,13 +2033,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(21, 17);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(17, 17);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place harbor */
-        Point point26 = new Point(17, 17);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Place road to connect the headquarter and the harbor */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
@@ -1741,7 +2076,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageCannotProduce() throws Exception {
+    public void testHarborCannotProduce() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1749,13 +2084,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(14, 10);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(10, 10);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(10, 10);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1768,7 +2110,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageReportsCorrectOutput() throws Exception {
+    public void testHarborReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1776,13 +2118,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(10, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Construct the harbor */
         Utils.constructHouse(harbor0);
@@ -1792,7 +2141,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageReportsCorrectMaterialsNeededForConstruction() throws Exception {
+    public void testHarborReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1800,13 +2149,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(10, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(harbor0.getMaterialNeeded().size(), 2);
@@ -1825,7 +2181,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testStorageReportsCorrectMaterialsNeededForProduction() throws Exception {
+    public void testHarborReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1833,13 +2189,20 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
+        /* Place a lake */
+        Point point0 = new Point(10, 12);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 12);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(6, 12);
-        Building harbor0 = map.placeBuilding(new Harbor(player0), point1);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Construct the harbor */
         Utils.constructHouse(harbor0);
@@ -1862,16 +2225,23 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Make sure there is enough construction material in the headquarter */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor with the headquarter */
@@ -1891,8 +2261,8 @@ public class TestHarbor {
         map.removeRoad(road0);
 
         /* Place fortress */
-        Point point2 = new Point(12, 10);
-        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+        Point point3 = new Point(12, 10);
+        Fortress fortress = map.placeBuilding(new Fortress(player0), point3);
 
         /* Connect the fortress with the harbor */
         Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), harbor.getFlag());
@@ -1925,16 +2295,23 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Make sure there is enough construction material in the headquarter */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor with the headquarter */
@@ -1959,8 +2336,8 @@ public class TestHarbor {
         map.removeRoad(road0);
 
         /* Place fortress */
-        Point point2 = new Point(12, 10);
-        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+        Point point3 = new Point(12, 10);
+        Fortress fortress = map.placeBuilding(new Fortress(player0), point3);
 
         /* Connect the fortress with the harbor */
         Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), harbor.getFlag());
@@ -2014,12 +2391,19 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor with the headquarter */
@@ -2064,12 +2448,19 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor with the headquarter */
@@ -2124,12 +2515,19 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Connect the harbor with the headquarter */
@@ -2177,17 +2575,24 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place a lake */
+        Point point0 = new Point(20, 6);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(16, 6);
+        map.setPossiblePlaceForHarbor(point1);
+
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point1 = new Point(16, 6);
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
         /* Place well */
-        Point point2 = new Point(9, 7);
-        Well well = map.placeBuilding(new Well(player0), point2);
+        Point point3 = new Point(9, 7);
+        Well well = map.placeBuilding(new Well(player0), point3);
 
         /* Make sure there is enough construction material in the headquarter */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);

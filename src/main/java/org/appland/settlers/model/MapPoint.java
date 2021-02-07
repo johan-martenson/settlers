@@ -309,11 +309,11 @@ public class MapPoint {
         isDeadTree = false;
     }
 
-    public boolean isAvailableShipyard() {
+    public boolean isHarborPossible() {
         return isShipyardAvailable;
     }
 
-    public void setShipyardIsAvailable() {
+    public void setHarborIsPossible() {
         isShipyardAvailable = true;
     }
 }

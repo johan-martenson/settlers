@@ -833,12 +833,12 @@ public class GameMap {
             }
         }
 
-        /* Ensure shipyards can only be built on selected places */
+        /* Ensure harbors can only be built on selected places */
         MapPoint mapPoint = getMapPoint(point);
 
-        if (house instanceof Shipyard) {
-            if (!mapPoint.isAvailableShipyard()) {
-                throw new InvalidUserActionException("Cannot place shipyard on " + point);
+        if (house instanceof Harbor) {
+            if (!mapPoint.isHarborPossible()) {
+                throw new InvalidUserActionException("Cannot place harbor on " + point);
             }
         }
 
@@ -3701,15 +3701,15 @@ public class GameMap {
         return ship;
     }
 
-    public boolean isAvailableShipyardPoint(Point point) {
+    public boolean isAvailableHarborPoint(Point point) {
         MapPoint mapPoint = getMapPoint(point);
 
-        return mapPoint.isAvailableShipyard();
+        return mapPoint.isHarborPossible();
     }
 
-    public void setPossiblePlaceForShipyard(Point point) {
+    public void setPossiblePlaceForHarbor(Point point) {
         MapPoint mapPoint = getMapPoint(point);
 
-        mapPoint.setShipyardIsAvailable();
+        mapPoint.setHarborIsPossible();
     }
 }

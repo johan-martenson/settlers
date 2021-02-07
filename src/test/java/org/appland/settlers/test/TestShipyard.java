@@ -14,9 +14,6 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -73,54 +70,6 @@ public class TestShipyard {
     * */
 
     @Test
-    public void testCanMarkAvailablePlaceForShipyardOnMap() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to mark that it's possible to place a shipyard at a point on the map */
-        Point point0 = new Point(10, 10);
-
-        assertFalse(map.isAvailableShipyardPoint(point0));
-
-        map.setPossiblePlaceForShipyard(point0);
-
-        assertTrue(map.isAvailableShipyardPoint(point0));
-    }
-
-    @Test
-    public void testCannotPlaceShipyardWithoutMarkingFirst() throws InvalidEndPointException, InvalidRouteException, InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Placing headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Verify that it's not possible to place a shipyard on a point that hasn't been marked */
-        Point point1 = new Point(10, 8);
-
-        assertFalse(map.isAvailableShipyardPoint(point1));
-
-        try {
-            Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point1);
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        assertFalse(map.isBuildingAtPoint(point1));
-        assertNull(map.getBuildingAtPoint(point1));
-        assertFalse(map.isAvailableShipyardPoint(point1));
-    }
-
-    @Test
     public void testShipyardOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
         /* Starting new game */
@@ -129,15 +78,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(6, 12);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Deliver two planks and three stones */
@@ -166,15 +112,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(6, 12);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Deliver one plank and three stone */
@@ -203,15 +146,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(6, 12);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Deliver three planks and two stones */
@@ -240,15 +180,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         assertTrue(shipyard.isPlanned());
@@ -265,15 +202,12 @@ public class TestShipyard {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Construct the shipyard */
@@ -293,15 +227,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -326,15 +257,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -360,10 +288,6 @@ public class TestShipyard {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -373,6 +297,7 @@ public class TestShipyard {
         Utils.adjustInventoryTo(headquarter, Material.HAMMER, 1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -398,15 +323,12 @@ public class TestShipyard {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -440,15 +362,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -493,15 +412,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -551,15 +467,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -630,15 +543,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -714,10 +624,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -727,6 +633,7 @@ public class TestShipyard {
         Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -794,15 +701,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Adjust resources to there is only resources for constructing the shipyard */
@@ -836,10 +740,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -849,6 +749,7 @@ public class TestShipyard {
         Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -920,15 +821,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(8, 8);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(8, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -968,15 +866,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(8, 8);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(8, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -1020,15 +915,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(12, 8);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(12, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard and the headquarter */
@@ -1087,15 +979,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(12, 8);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(12, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard and the headquarter */
@@ -1169,15 +1058,12 @@ public class TestShipyard {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(20, 14);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(20, 14);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -1215,10 +1101,6 @@ public class TestShipyard {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(28, 18);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place player 2's headquarter */
         Point point1 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point1);
@@ -1242,6 +1124,7 @@ public class TestShipyard {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place shipyard close to the new border */
+        Point point0 = new Point(28, 18);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -1269,15 +1152,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -1348,15 +1228,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -1420,15 +1297,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -1499,15 +1373,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -1571,10 +1442,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -1584,6 +1451,7 @@ public class TestShipyard {
         Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -1653,10 +1521,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(13, 5);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
@@ -1666,6 +1530,7 @@ public class TestShipyard {
         Flag flag0 = map.placeFlag(player0, point2);
 
         /* Placing shipyard */
+        Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect headquarter and first flag */
@@ -1712,10 +1577,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(13, 5);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
@@ -1725,6 +1586,7 @@ public class TestShipyard {
         Flag flag0 = map.placeFlag(player0, point2);
 
         /* Placing shipyard */
+        Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect headquarter and first flag */
@@ -1772,10 +1634,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(13, 5);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
@@ -1785,6 +1643,7 @@ public class TestShipyard {
         Flag flag0 = map.placeFlag(player0, point2);
 
         /* Placing shipyard */
+        Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect headquarter and first flag */
@@ -1831,15 +1690,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(17, 17);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -1893,15 +1749,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(17, 17);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -1958,15 +1811,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(17, 17);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -2027,15 +1877,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(17, 17);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Placing headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing shipyard */
+        Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road */
@@ -2084,15 +1931,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(17, 17);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road to connect the headquarter and the shipyard */
@@ -2131,15 +1975,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Construct and occupy the shipyard */
@@ -2167,15 +2008,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -2217,15 +2055,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -2282,15 +2117,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(10, 10);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(10, 10);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Finish construction of the shipyard */
@@ -2316,15 +2148,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(7, 9);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(7, 9);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -2355,15 +2184,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(6, 12);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Construct the shipyard */
@@ -2384,15 +2210,12 @@ public class TestShipyard {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(14, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(14, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -2455,15 +2278,12 @@ public class TestShipyard {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(14, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(14, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Connect the shipyard with the headquarter */
@@ -2547,15 +2367,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(7, 9);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place Shipyard */
+        Point point0 = new Point(7, 9);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road to connect the shipyard with the headquarter */
@@ -2601,10 +2418,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(18, 4);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
@@ -2614,6 +2427,7 @@ public class TestShipyard {
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Place shipyard */
+        Point point0 = new Point(18, 4);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road to connect the storehouse with the headquarter */
@@ -2665,10 +2479,6 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(18, 6);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
@@ -2678,6 +2488,7 @@ public class TestShipyard {
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Place shipyard */
+        Point point0 = new Point(18, 6);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road to connect the storehouse with the headquarter */
@@ -2819,15 +2630,12 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(7, 9);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
+        Point point0 = new Point(7, 9);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
         /* Place road to connect the shipyard with the headquarter */
@@ -2882,25 +2690,22 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Set that a shipyard can be placed */
-        Point point0 = new Point(7, 9);
-        map.setPossiblePlaceForShipyard(point0);
-
         /* Place headquarter */
         Point point1 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place donkey shipyard */
-        Shipyard donkeyShipyard0 = map.placeBuilding(new Shipyard(player0), point0);
+        /* Place shipyard */
+        Point point0 = new Point(7, 9);
+        Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
-        /* Place road to connect the donkey shipyard with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, donkeyShipyard0.getFlag(), headquarter0.getFlag());
+        /* Place road to connect the shipyard with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
         /* Wait for the shipyard to get constructed */
-        Utils.waitForBuildingToBeConstructed(donkeyShipyard0);
+        Utils.waitForBuildingToBeConstructed(shipyard0);
 
         /* Wait for a shipwright to start walking to the shipyard */
         Shipwright shipwright = Utils.waitForWorkerOutsideBuilding(Shipwright.class, player0);
@@ -2911,18 +2716,18 @@ public class TestShipyard {
         map.stepTime();
 
         /* Verify that the shipwright goes away and dies when the house has been torn down and storage is not possible */
-        assertEquals(shipwright.getTarget(), donkeyShipyard0.getPosition());
+        assertEquals(shipwright.getTarget(), shipyard0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(SHIPWRIGHT);
 
-        donkeyShipyard0.tearDown();
+        shipyard0.tearDown();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, donkeyShipyard0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipyard0.getFlag().getPosition());
 
-        assertEquals(shipwright.getPosition(), donkeyShipyard0.getFlag().getPosition());
+        assertEquals(shipwright.getPosition(), shipyard0.getFlag().getPosition());
         assertNotEquals(shipwright.getTarget(), headquarter0.getPosition());
         assertFalse(shipwright.isInsideBuilding());
-        assertNull(donkeyShipyard0.getWorker());
+        assertNull(shipyard0.getWorker());
         assertNotNull(shipwright.getTarget());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
