@@ -73,13 +73,8 @@ public class TestArmory {
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two plank and two stone */
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
-
-        armory0.putCargo(plankCargo);
-        armory0.putCargo(plankCargo);
-        armory0.putCargo(stoneCargo);
-        armory0.putCargo(stoneCargo);
+        Utils.deliverCargos(armory0, PLANK, 2);
+        Utils.deliverCargos(armory0, STONE, 2);
 
         /* Assign a builder */
         Utils.assignBuilder(armory0);
@@ -115,12 +110,8 @@ public class TestArmory {
         Utils.assignBuilder(armory0);
 
         /* Deliver one plank and two stone */
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
-
-        armory0.putCargo(plankCargo);
-        armory0.putCargo(stoneCargo);
-        armory0.putCargo(stoneCargo);
+        Utils.deliverCargos(armory0, PLANK, 1);
+        Utils.deliverCargos(armory0, STONE, 2);
 
         /* Verify that this is not enough to construct the armory */
         for (int i = 0; i < 500; i++) {
@@ -150,12 +141,8 @@ public class TestArmory {
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two planks and one stones */
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
-
-        armory0.putCargo(plankCargo);
-        armory0.putCargo(plankCargo);
-        armory0.putCargo(stoneCargo);
+        Utils.deliverCargos(armory0, PLANK, 2);
+        Utils.deliverCargos(armory0, STONE, 1);
 
         /* Assign a builder */
         Utils.assignBuilder(armory0);
@@ -226,8 +213,8 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
         assertTrue(armory0.needsWorker());
 
@@ -275,8 +262,8 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
         assertTrue(armory0.needsWorker());
 
@@ -322,8 +309,8 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
         assertTrue(armory0.needsWorker());
 
@@ -364,15 +351,21 @@ public class TestArmory {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Empty coal and iron bars from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
+
         /* Place armory */
         Point point1 = new Point(7, 9);
         Armory armory = map.placeBuilding(new Armory(player0), point1);
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory);
+        /* Connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter0.getFlag());
 
-        /* Populate the armory */
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory);
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory);
+
+        Worker armorer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
@@ -382,6 +375,7 @@ public class TestArmory {
         for (int i = 0; i < 500; i++) {
             assertTrue(armory.getFlag().getStackedCargo().isEmpty());
             assertNull(armorer0.getCargo());
+
             map.stepTime();
         }
     }
@@ -401,8 +395,8 @@ public class TestArmory {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point3 = new Point(7, 9);
-        Armory armory = map.placeBuilding(new Armory(player0), point3);
+        Point point1 = new Point(7, 9);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -435,19 +429,20 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
-        /* Populate the armory */
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
+
+        Worker armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver material to the armory */
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(COAL, map));
+        Utils.deliverCargo(armory0, IRON_BAR);
+        Utils.deliverCargo(armory0, COAL);
 
         /* Verify that the armory produces weapons */
         for (int i = 0; i < 149; i++) {
@@ -483,19 +478,20 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
-        /* Populate the armory */
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
+
+        Worker armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver ingredients to the armory */
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(COAL, map));
+        Utils.deliverCargo(armory0, IRON_BAR);
+        Utils.deliverCargo(armory0, COAL);
 
         /* Verify that the armory produces weapons */
         for (int i = 0; i < 149; i++) {
@@ -538,19 +534,25 @@ public class TestArmory {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Empty coal and iron bars from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0);
+
         /* Place armory */
         Point point1 = new Point(7, 9);
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Place road to connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Populate the armory */
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
 
         /* Deliver ingredients to the armory */
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(COAL, map));
+        Utils.deliverCargo(armory0, IRON_BAR);
+        Utils.deliverCargo(armory0, COAL);
 
         /* Wait until the armory worker produces a weapons */
         assertEquals(armory0.getAmount(IRON_BAR), 1);
@@ -591,8 +593,8 @@ public class TestArmory {
         assertNull(armorer0.getCargo());
 
         /* Deliver ingredients to the armory */
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(COAL, map));
+        Utils.deliverCargo(armory0, IRON_BAR);
+        Utils.deliverCargo(armory0, COAL);
 
         /* Verify that it takes 50 steps for the armory worker to produce the plank */
         for (int i = 0; i < 50; i++) {
@@ -623,21 +625,20 @@ public class TestArmory {
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the armory */
-        Utils.constructHouse(armory0);
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory0);
 
-        /* Populate the armory */
-        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory0);
+
+        Worker armorer0 = armory0.getWorker();
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory0);
         assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver material to the armory */
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(IRON_BAR, map));
-        armory0.putCargo(new Cargo(COAL, map));
-        armory0.putCargo(new Cargo(COAL, map));
+        Utils.deliverCargos(armory0, IRON_BAR, 2);
+        Utils.deliverCargos(armory0, COAL, 2);
 
         /* Verify that the armory produces a sword */
         Utils.fastForward(150, map);
@@ -685,14 +686,8 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON_BAR, map);
-        Cargo coalCargo = new Cargo(COAL, map);
-
-        armory0.putCargo(ironCargo);
-        armory0.putCargo(ironCargo);
-
-        armory0.putCargo(coalCargo);
-        armory0.putCargo(coalCargo);
+        Utils.deliverCargos(armory0, IRON_BAR, 2);
+        Utils.deliverCargos(armory0, COAL, 2);
 
         /* Let the armorer rest */
         Utils.fastForward(100, map);
@@ -753,14 +748,8 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON_BAR, map);
-        Cargo coalCargo = new Cargo(COAL, map);
-
-        armory0.putCargo(ironCargo);
-        armory0.putCargo(ironCargo);
-
-        armory0.putCargo(coalCargo);
-        armory0.putCargo(coalCargo);
+        Utils.deliverCargos(armory0, IRON_BAR, 2);
+        Utils.deliverCargos(armory0, COAL, 2);
 
         /* Occupy the armory */
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
@@ -952,14 +941,8 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON_BAR, map);
-        Cargo coalCargo = new Cargo(COAL, map);
-
-        armory0.putCargo(ironCargo);
-        armory0.putCargo(ironCargo);
-
-        armory0.putCargo(coalCargo);
-        armory0.putCargo(coalCargo);
+        Utils.deliverCargos(armory0, IRON_BAR, 2);
+        Utils.deliverCargos(armory0, COAL, 2);
 
         /* Assign a worker to the armory */
         Armorer armorer0 = new Armorer(player0, map);
@@ -1022,14 +1005,8 @@ public class TestArmory {
         assertTrue(armorer0.isInsideBuilding());
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON_BAR, map);
-        Cargo coalCargo = new Cargo(COAL, map);
-
-        armory0.putCargo(ironCargo);
-        armory0.putCargo(ironCargo);
-
-        armory0.putCargo(coalCargo);
-        armory0.putCargo(coalCargo);
+        Utils.deliverCargos(armory0, IRON_BAR, 2);
+        Utils.deliverCargos(armory0, COAL, 2);
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
@@ -1116,20 +1093,20 @@ public class TestArmory {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        Point point0 = new Point(70, 70);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point0);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point1 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place player 1's headquarter */
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        Point point2 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point2);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        Point point3 = new Point(21, 9);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point3);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1404,8 +1381,8 @@ public class TestArmory {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point2 = new Point(14, 4);
-        Armory armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+        Point point1 = new Point(14, 4);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1.upLeft());
 
         /* Connect armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
@@ -1643,12 +1620,12 @@ public class TestArmory {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point1 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        Point point0 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point2 = new Point(17, 17);
-        Armory armory0 = map.placeBuilding(new Armory(player0), point2);
+        Point point1 = new Point(17, 17);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the headquarter and the armory */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
@@ -1707,6 +1684,7 @@ public class TestArmory {
             assertTrue(armory.getFlag().getStackedCargo().isEmpty());
             assertNull(armorer0.getCargo());
             assertEquals(armory.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -1747,11 +1725,11 @@ public class TestArmory {
             map.stepTime();
 
             if (armory.needsMaterial(COAL)) {
-                armory.putCargo(new Cargo(COAL, map));
+                Utils.deliverCargo(armory, COAL);
             }
 
             if (armory.needsMaterial(IRON_BAR)) {
-                armory.putCargo(new Cargo(IRON_BAR, map));
+                Utils.deliverCargo(armory, IRON_BAR);
             }
         }
 
@@ -1763,11 +1741,11 @@ public class TestArmory {
             map.stepTime();
 
             if (armory.needsMaterial(COAL)) {
-                armory.putCargo(new Cargo(COAL, map));
+                Utils.deliverCargo(armory, COAL);
             }
 
             if (armory.needsMaterial(IRON_BAR)) {
-                armory.putCargo(new Cargo(IRON_BAR, map));
+                Utils.deliverCargo(armory, IRON_BAR);
             }
 
             assertEquals(armory.getProductivity(), 100);
@@ -1814,11 +1792,11 @@ public class TestArmory {
             map.stepTime();
 
             if (armory.needsMaterial(COAL) && armory.getAmount(COAL) < 2) {
-                armory.putCargo(new Cargo(COAL, map));
+                Utils.deliverCargo(armory, COAL);
             }
 
             if (armory.needsMaterial(IRON_BAR) && armory.getAmount(IRON_BAR) < 2) {
-                armory.putCargo(new Cargo(IRON_BAR, map));
+                Utils.deliverCargo(armory, IRON_BAR);
             }
         }
 
