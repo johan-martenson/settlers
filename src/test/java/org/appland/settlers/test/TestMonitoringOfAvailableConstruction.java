@@ -43,7 +43,7 @@ public class TestMonitoringOfAvailableConstruction {
      */
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingFlag() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceFlag() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -85,7 +85,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingFlagIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceFlagIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -231,7 +231,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingTree() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceTree() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -273,7 +273,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingTreeIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceTreeIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -431,7 +431,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingSmallBuilding() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceSmallBuilding() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -473,7 +473,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingSmallBuildingIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceSmallBuildingIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -829,7 +829,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingMediumBuilding() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceMediumBuilding() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -871,7 +871,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingMediumBuildingIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceMediumBuildingIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1223,7 +1223,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingLargeBuilding() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceLargeBuilding() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1265,7 +1265,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingLargeBuildingIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceLargeBuildingIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1532,7 +1532,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingHorizontalRoad() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoad() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1579,7 +1579,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingHorizontalRoadIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceHorizontalRoadIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1740,7 +1740,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingLeftToRightDiagonalRoad() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoad() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1787,7 +1787,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceLeftToRightDiagonalRoadIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2049,7 +2049,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingCrop() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceCrop() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2094,7 +2094,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenPlacingCropIsOnlySentOnce() throws Exception {
+    public void testMonitoringAvailableConstructionWhenPlaceCropIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2376,15 +2376,15 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -2439,15 +2439,15 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -2510,15 +2510,15 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
@@ -2582,15 +2582,15 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */

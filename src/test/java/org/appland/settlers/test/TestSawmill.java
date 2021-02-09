@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -58,13 +57,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point22 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -97,13 +96,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point22 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -135,13 +134,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point22 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
         /* Deliver two planks and one stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -179,7 +178,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Unfinished sawmill doesn't need worker */
         assertFalse(sawmill.needsWorker());
@@ -212,7 +211,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
@@ -251,7 +250,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
@@ -288,7 +287,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
@@ -327,7 +326,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -362,7 +361,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -389,7 +388,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -434,7 +433,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
@@ -495,7 +494,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -530,7 +529,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -564,13 +563,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -631,13 +630,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -734,13 +733,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -777,13 +776,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Connect the sawmill with the headquarter */
         map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
@@ -827,13 +826,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Connect the sawmill with the headquarter */
         map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
@@ -872,13 +871,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -900,13 +899,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -934,7 +933,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(10, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Connect the sawmill and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter.getFlag());
@@ -992,7 +991,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(10, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Connect the sawmill and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter.getFlag());
@@ -1059,7 +1058,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(20, 14);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1110,7 +1109,7 @@ public class TestSawmill {
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1143,17 +1142,17 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point2 = new Point(14, 4);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1205,17 +1204,17 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point2 = new Point(14, 4);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1270,17 +1269,17 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point2 = new Point(14, 4);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1331,13 +1330,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(17, 17);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1381,13 +1380,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 17);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(17, 17);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1434,13 +1433,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(17, 17);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1490,13 +1489,13 @@ public class TestSawmill {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point26 = new Point(17, 17);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1543,7 +1542,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point26 = new Point(17, 17);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Place road to connect the headquarter and the sawmill */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
@@ -1585,7 +1584,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -1621,7 +1620,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -1676,7 +1675,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -1726,7 +1725,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill);
@@ -1754,7 +1753,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(10, 10);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1781,7 +1780,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Construct the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1806,7 +1805,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(sawmill0.getMaterialNeeded().size(), 2);
@@ -1839,7 +1838,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(6, 12);
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Construct the sawmill */
         Utils.constructHouse(sawmill0);
@@ -1874,7 +1873,7 @@ public class TestSawmill {
 
         /* Place sawmill */
         Point point1 = new Point(16, 6);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Connect the sawmill with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());

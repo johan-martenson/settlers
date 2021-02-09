@@ -58,11 +58,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -82,11 +82,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -118,11 +118,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -153,11 +153,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -201,11 +201,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -259,11 +259,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -312,11 +312,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -365,11 +365,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -516,11 +516,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -575,11 +575,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -638,11 +638,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -701,11 +701,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(17, 17);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -764,11 +764,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -828,11 +828,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -908,11 +908,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -961,11 +961,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1025,11 +1025,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1092,11 +1092,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1159,11 +1159,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(17, 17);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1235,7 +1235,7 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1256,11 +1256,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1300,11 +1300,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(6, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(22, 8);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1389,11 +1389,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(10, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(22, 8);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1461,11 +1461,11 @@ public class TestGeologist {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(10, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(22, 8);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1502,11 +1502,11 @@ public class TestGeologist {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1531,11 +1531,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1608,11 +1608,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -1686,15 +1686,15 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing second flag */
+        /* Place second flag */
         Point point2 = new Point(14, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
@@ -1753,15 +1753,15 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing second flag */
+        /* Place second flag */
         Point point2 = new Point(14, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
@@ -1821,15 +1821,15 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing second flag */
+        /* Place second flag */
         Point point2 = new Point(14, 4);
         Flag flag1 = map.placeFlag(player0, point2);
 
@@ -1887,11 +1887,11 @@ public class TestGeologist {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(9, 23);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(17, 23);
         Flag flag = map.placeFlag(player0, point1);
 

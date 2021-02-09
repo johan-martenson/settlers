@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
@@ -65,11 +64,11 @@ public class TestCatapult {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point22 = new Point(6, 12);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
@@ -107,11 +106,11 @@ public class TestCatapult {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point22 = new Point(6, 12);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
@@ -148,11 +147,11 @@ public class TestCatapult {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point22 = new Point(6, 12);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
@@ -189,11 +188,11 @@ public class TestCatapult {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point22 = new Point(6, 12);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
@@ -820,11 +819,11 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
@@ -861,11 +860,11 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
@@ -911,11 +910,11 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
@@ -956,11 +955,11 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
@@ -984,11 +983,11 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
@@ -1076,7 +1075,7 @@ public class TestCatapult {
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1109,17 +1108,17 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point2 = new Point(14, 4);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1171,17 +1170,17 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point2 = new Point(14, 4);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1236,17 +1235,17 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point2 = new Point(14, 4);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1300,13 +1299,13 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(17, 17);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0);
@@ -1347,13 +1346,13 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(17, 17);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0);
@@ -1397,13 +1396,13 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(17, 17);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0);
@@ -1450,13 +1449,13 @@ public class TestCatapult {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing catapult */
+        /* Place catapult */
         Point point26 = new Point(17, 17);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0);
@@ -1500,7 +1499,7 @@ public class TestCatapult {
 
         /* Place catapult */
         Point point26 = new Point(17, 17);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Place road to connect the headquarter and the catapult */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
@@ -1542,7 +1541,7 @@ public class TestCatapult {
 
         /* Place catapult */
         Point point1 = new Point(6, 12);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Construct the catapult */
         Utils.constructHouse(catapult0);
@@ -1566,7 +1565,7 @@ public class TestCatapult {
 
         /* Place catapult */
         Point point1 = new Point(6, 12);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(catapult0.getMaterialNeeded().size(), 2);
@@ -1599,7 +1598,7 @@ public class TestCatapult {
 
         /* Place catapult */
         Point point1 = new Point(6, 12);
-        Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
+        Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Construct the catapult */
         Utils.constructHouse(catapult0);

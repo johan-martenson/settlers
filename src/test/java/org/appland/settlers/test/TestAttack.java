@@ -112,7 +112,7 @@ public class TestAttack {
 
         /* Place woodcutter */
         Point point2 = new Point(13, 5);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         /* Construct the woodcutter */
         Utils.constructHouse(woodcutter0);
@@ -150,7 +150,7 @@ public class TestAttack {
 
         /* Place woodcutter for player 1 */
         Point point2 = new Point(80, 90);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
         /* Verify that get available attackers can not be called for non-military building */
         assertFalse(player0.canAttack(woodcutter0));
@@ -463,7 +463,7 @@ public class TestAttack {
 
         /* Place woodcutter for player 1 */
         Point point3 = new Point(29, 5);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player1), point3);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point3);
 
         /* Finish construction of the woodcutter */
         Utils.constructHouse(woodcutter0);

@@ -78,11 +78,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -112,11 +112,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -146,11 +146,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(6, 12);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -821,11 +821,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(8, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -866,11 +866,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(8, 8);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1115,7 +1115,7 @@ public class TestShipyard {
 
         /* Place fortress for player 0 */
         Point point4 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point4);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point4);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1521,15 +1521,15 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point2 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1577,15 +1577,15 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point2 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1634,15 +1634,15 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point2 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(13, 5);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1690,11 +1690,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1749,11 +1749,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1811,11 +1811,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 
@@ -1877,11 +1877,11 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point1 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Placing shipyard */
+        /* Place shipyard */
         Point point0 = new Point(17, 17);
         Shipyard shipyard0 = map.placeBuilding(new Shipyard(player0), point0);
 

@@ -62,13 +62,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing mint */
+        /* Place mint */
         Point point22 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point22);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point22);
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -101,13 +101,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing mint */
+        /* Place mint */
         Point point22 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point22);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point22);
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -139,13 +139,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing mint */
+        /* Place mint */
         Point point22 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point22);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point22);
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -547,7 +547,7 @@ public class TestMint {
 
         /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -619,13 +619,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -690,13 +690,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -792,13 +792,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -835,13 +835,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Connect the mint with the headquarter */
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
@@ -885,13 +885,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Connect the mint with the headquarter */
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
@@ -930,13 +930,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -958,13 +958,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -992,7 +992,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(12, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Connect the mint and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter.getFlag());
@@ -1057,7 +1057,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(10, 8);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Connect the mint and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter.getFlag());
@@ -1131,7 +1131,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(20, 14);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1215,17 +1215,17 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing mint */
+        /* Place mint */
         Point point2 = new Point(14, 4);
-        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+        Mint mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1277,17 +1277,17 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing mint */
+        /* Place mint */
         Point point2 = new Point(14, 4);
-        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+        Mint mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1342,17 +1342,17 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing mint */
+        /* Place mint */
         Point point2 = new Point(14, 4);
-        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+        Mint mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1403,13 +1403,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(17, 17);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1453,13 +1453,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(17, 17);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1506,13 +1506,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(17, 17);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1562,13 +1562,13 @@ public class TestMint {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing mint */
+        /* Place mint */
         Point point26 = new Point(17, 17);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1615,7 +1615,7 @@ public class TestMint {
 
         /* Place mint */
         Point point26 = new Point(17, 17);
-        Building mint0 = map.placeBuilding(new Mint(player0), point26);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Place road to connect the headquarter and the mint */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
@@ -1657,7 +1657,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point1);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -1693,7 +1693,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point1);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -1756,7 +1756,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point1);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -1810,7 +1810,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point1);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -1846,7 +1846,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(10, 10);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0);
@@ -1873,7 +1873,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Construct the mint */
         Utils.constructHouse(mint0);
@@ -1898,7 +1898,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(mint0.getMaterialNeeded().size(), 2);
@@ -1931,7 +1931,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(6, 12);
-        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Construct the mint */
         Utils.constructHouse(mint0);
@@ -1968,7 +1968,7 @@ public class TestMint {
 
         /* Place mint */
         Point point1 = new Point(16, 6);
-        Building mint = map.placeBuilding(new Mint(player0), point1);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Connect the mint with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());

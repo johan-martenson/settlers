@@ -68,11 +68,11 @@ public class TestGraniteMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
         /* Deliver four planks */
@@ -109,11 +109,11 @@ public class TestGraniteMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
         /* Deliver three planks */
@@ -785,11 +785,11 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
@@ -856,11 +856,11 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
@@ -953,7 +953,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -962,7 +962,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
@@ -1000,7 +1000,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1009,7 +1009,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Connect the granite mine with the headquarter */
@@ -1289,11 +1289,11 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1302,7 +1302,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1355,11 +1355,11 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1368,7 +1368,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1424,11 +1424,11 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1437,7 +1437,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1489,7 +1489,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1498,7 +1498,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
@@ -1543,7 +1543,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1552,7 +1552,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
@@ -1600,7 +1600,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1609,7 +1609,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
@@ -1660,7 +1660,7 @@ public class TestGraniteMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1669,7 +1669,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing granite mine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */

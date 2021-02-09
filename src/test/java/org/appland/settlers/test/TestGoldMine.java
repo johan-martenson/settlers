@@ -69,11 +69,11 @@ public class TestGoldMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point22);
 
         /* Deliver four planks */
@@ -110,11 +110,11 @@ public class TestGoldMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point22);
 
         /* Deliver two plank and three stone */
@@ -782,11 +782,11 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Finish construction of the gold mine */
@@ -853,11 +853,11 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Finish construction of the gold mine */
@@ -950,7 +950,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -959,7 +959,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Finish construction of the gold mine */
@@ -997,7 +997,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1006,7 +1006,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Connect the gold mine with the headquarter */
@@ -1288,11 +1288,11 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1301,7 +1301,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1354,11 +1354,11 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1367,7 +1367,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1423,11 +1423,11 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1436,7 +1436,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putGoldAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point2);
 
         /* Connect headquarter and first flag */
@@ -1488,7 +1488,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1497,7 +1497,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Finish construction of the gold mine */
@@ -1542,7 +1542,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1551,7 +1551,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Finish construction of the gold mine */
@@ -1599,7 +1599,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1608,7 +1608,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Finish construction of the gold mine */
@@ -1659,7 +1659,7 @@ public class TestGoldMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1668,7 +1668,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing gold mine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Finish construction of the gold mine */

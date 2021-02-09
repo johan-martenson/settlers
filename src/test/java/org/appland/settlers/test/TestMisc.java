@@ -72,7 +72,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -130,7 +130,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -184,7 +184,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -247,7 +247,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -271,7 +271,7 @@ public class TestMisc {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point01 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point01);
 
@@ -646,7 +646,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 

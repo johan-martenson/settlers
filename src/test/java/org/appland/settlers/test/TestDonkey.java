@@ -60,7 +60,7 @@ public class TestDonkey {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1036,29 +1036,29 @@ public class TestDonkey {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing forester */
+        /* Place forester */
         Point point22 = new Point(22, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
-        /* Placing woodcutter */
+        /* Place woodcutter */
         Point point23 = new Point(19, 7);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point23);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point24 = new Point(10, 12);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point24);
 
-        /* Placing road between the forester and the woodcutter */
+        /* Place road between the forester and the woodcutter */
         Point point25 = new Point(23, 5);
         Point point26 = new Point(21, 5);
         Point point27 = new Point(20, 6);
         Road road0 = map.placeRoad(player0, point25, point26, point27);
 
-        /* Placing road between the woodcutter and the quarry */
+        /* Place road between the woodcutter and the quarry */
         Point point50 = new Point(19, 5);
         Point point28 = new Point(18, 4);
         Point point29 = new Point(17, 5);
@@ -1070,7 +1070,7 @@ public class TestDonkey {
         Point point35 = new Point(11, 11);
         Road road1 = map.placeRoad(player0, point27, point50, point28, point29, point30, point31, point32, point33, point34, point35);
 
-        /* Placing road between the headquarter and the quarry */
+        /* Place road between the headquarter and the quarry */
         Point point36 = new Point(10, 10);
         Point point37 = new Point(11, 9);
         Point point38 = new Point(10, 8);
@@ -1080,19 +1080,19 @@ public class TestDonkey {
         Point point42 = new Point(8, 4);
         Road road2 = map.placeRoad(player0, point35, point36, point37, point38, point39, point40, point41, point42);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag0 = map.placeFlag(player0, point40);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag1 = map.placeFlag(player0, point38);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag2 = map.placeFlag(player0, point33);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag3 = map.placeFlag(player0, point31);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag4 = map.placeFlag(player0, point29);
 
         /* Wait for all donkeys to become idle */
@@ -1200,7 +1200,7 @@ public class TestDonkey {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1268,7 +1268,7 @@ public class TestDonkey {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(21, 13);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 

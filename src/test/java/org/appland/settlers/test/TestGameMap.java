@@ -1129,75 +1129,75 @@ public class TestGameMap {
         /* Creating new game map with size 100x100 */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point39 = new Point(4, 22);
         Utils.placeAndOccupyBarracks(player0, point39);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point50 = new Point(5, 29);
         Utils.placeAndOccupyBarracks(player0, point50);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point58 = new Point(4, 36);
         Utils.placeAndOccupyBarracks(player0, point58);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point65 = new Point(14, 36);
         Utils.placeAndOccupyBarracks(player0, point65);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point70 = new Point(24, 36);
         Utils.placeAndOccupyBarracks(player0, point70);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point74 = new Point(34, 36);
         Utils.placeAndOccupyBarracks(player0, point74);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point78 = new Point(44, 36);
         Utils.placeAndOccupyBarracks(player0, point78);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point85 = new Point(42, 30);
         Utils.placeAndOccupyBarracks(player0, point85);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point87 = new Point(42, 24);
         Utils.placeAndOccupyBarracks(player0, point87);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point88 = new Point(44, 18);
         Utils.placeAndOccupyBarracks(player0, point88);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point89 = new Point(44, 12);
         Utils.placeAndOccupyBarracks(player0, point89);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point90 = new Point(44, 6);
         Utils.placeAndOccupyBarracks(player0, point90);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point91 = new Point(37, 3);
         Utils.placeAndOccupyBarracks(player0, point91);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point92 = new Point(29, 3);
         Utils.placeAndOccupyBarracks(player0, point92);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point93 = new Point(21, 3);
         Utils.placeAndOccupyBarracks(player0, point93);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point94 = new Point(13, 3);
         Utils.placeAndOccupyBarracks(player0, point94);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point95 = new Point(5, 3);
         Utils.placeAndOccupyBarracks(player0, point95);
 
@@ -1225,7 +1225,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1247,7 +1247,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1278,7 +1278,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1307,7 +1307,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1329,7 +1329,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1351,7 +1351,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1376,7 +1376,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1402,7 +1402,7 @@ public class TestGameMap {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 

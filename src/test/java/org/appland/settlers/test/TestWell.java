@@ -69,7 +69,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Deliver three plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -99,13 +99,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing well */
+        /* Place well */
         Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Deliver one plank */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -164,7 +164,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
@@ -195,7 +195,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
@@ -225,7 +225,7 @@ public class TestWell {
 
         /* Connect the well with the headquarter */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish the well */
         Utils.constructHouse(well);
@@ -252,7 +252,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect well with headquarter */
         Point point2 = new Point(6, 4);
@@ -302,7 +302,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
@@ -342,7 +342,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
@@ -388,7 +388,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
@@ -442,13 +442,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -503,13 +503,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -591,13 +591,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -634,13 +634,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Connect the well with the headquarter */
         map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
@@ -684,13 +684,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Connect the well with the headquarter */
         map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
@@ -729,13 +729,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -757,13 +757,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -791,7 +791,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
@@ -849,7 +849,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
@@ -916,7 +916,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(20, 14);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1000,17 +1000,17 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing well */
+        /* Place well */
         Point point2 = new Point(14, 4);
-        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+        Well well0 = map.placeBuilding(new Well(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1062,17 +1062,17 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing well */
+        /* Place well */
         Point point2 = new Point(14, 4);
-        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+        Well well0 = map.placeBuilding(new Well(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1127,17 +1127,17 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing well */
+        /* Place well */
         Point point2 = new Point(14, 4);
-        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+        Well well0 = map.placeBuilding(new Well(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1188,13 +1188,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(13, 13);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1241,13 +1241,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(13, 13);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1297,13 +1297,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(13, 13);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1353,13 +1353,13 @@ public class TestWell {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing well */
+        /* Place well */
         Point point26 = new Point(13, 13);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1406,7 +1406,7 @@ public class TestWell {
 
         /* Place well */
         Point point26 = new Point(13, 13);
-        Building well0 = map.placeBuilding(new Well(player0), point26);
+        Well well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Place road to connect the headquarter and the well */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
@@ -1451,7 +1451,7 @@ public class TestWell {
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Place well */
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well);
@@ -1487,7 +1487,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(7, 9);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well);
@@ -1533,7 +1533,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(7, 9);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well);
@@ -1561,7 +1561,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(10, 10);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0);
@@ -1588,7 +1588,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Construct the well */
         Utils.constructHouse(well0);
@@ -1613,7 +1613,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(well0.getMaterialNeeded().size(), 1);
@@ -1644,7 +1644,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(6, 12);
-        Building well0 = map.placeBuilding(new Well(player0), point1);
+        Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Construct the well */
         Utils.constructHouse(well0);
@@ -1673,7 +1673,7 @@ public class TestWell {
 
         /* Place well */
         Point point1 = new Point(16, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());

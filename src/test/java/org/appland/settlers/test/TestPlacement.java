@@ -1249,19 +1249,19 @@ public class TestPlacement {
         assertEquals(map.getDetailedVegetationBelow(point0), WATER);
         assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(4, 4);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(8, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing flag */
+        /* Place flag */
         Point point4 = new Point(12, 4);
         Flag flag1 = map.placeFlag(player0, point4);
 
-        /* Placing road between (8, 4) and (12, 4) */
+        /* Place road between (8, 4) and (12, 4) */
         try {
             Road road0 = map.placeRoad(player0, point1, point0, point4);
 
@@ -1290,15 +1290,15 @@ public class TestPlacement {
         assertEquals(map.getDetailedVegetationBelow(point0), WATER);
         assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(10, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(8, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing flag */
+        /* Place flag */
         Point point4 = new Point(12, 4);
         Flag flag1 = map.placeFlag(player0, point4);
 
@@ -1428,7 +1428,7 @@ public class TestPlacement {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1459,7 +1459,7 @@ public class TestPlacement {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
 
         /* Verify that it's not possible to place a house on the headquarter */
@@ -1955,7 +1955,7 @@ public class TestPlacement {
         assertEquals(map.getDetailedVegetationBelow(point0), WATER);
         assertEquals(map.getDetailedVegetationDownLeft(point0), WATER);
 
-        /* Placing headquarter for player0 */
+        /* Place headquarter for player0 */
         Point point46 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
 
@@ -2026,7 +2026,7 @@ public class TestPlacement {
         Point point29 = new Point(15, 9);
         Utils.surroundPointWithSwamp(point29, map);
 
-        /* Placing headquarter for player0 */
+        /* Place headquarter for player0 */
         Point point46 = new Point(26, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
 
@@ -2394,19 +2394,19 @@ public class TestPlacement {
         map.surroundPointWithMineral(point4, COAL);
         map.surroundPointWithMineral(point5, COAL);
 
-        /* Placing headquarter for player2 */
+        /* Place headquarter for player2 */
         Point point6 = new Point(8, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player2), point6);
 
-        /* Placing headquarter for player3 */
+        /* Place headquarter for player3 */
         Point point7 = new Point(45, 21);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player3), point7);
 
-        /* Placing barracks for player3 */
+        /* Place barracks for player3 */
         Point point8 = new Point(29, 21);
         Barracks barracks0 = map.placeBuilding(new Barracks(player3), point8);
 
-        /* Placing road between (30, 20) and (46, 20) */
+        /* Place road between (30, 20) and (46, 20) */
         Point point9 = new Point(30, 20);
         Point point10 = new Point(32, 20);
         Point point11 = new Point(34, 20);
@@ -2418,11 +2418,11 @@ public class TestPlacement {
         Point point17 = new Point(46, 20);
         Road road0 = map.placeRoad(player3, point9, point10, point11, point12, point13, point14, point15, point16, point17);
 
-        /* Placing flag */
+        /* Place flag */
         Point point18 = new Point(5, 11);
         Flag flag0 = map.placeFlag(player2, point18);
 
-        /* Placing road between (5, 11) and (9, 9) */
+        /* Place road between (5, 11) and (9, 9) */
         Point point19 = new Point(6, 10);
         Point point20 = new Point(7, 9);
         Point point21 = new Point(9, 9);

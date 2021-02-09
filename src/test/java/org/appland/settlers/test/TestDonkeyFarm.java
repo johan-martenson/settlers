@@ -58,11 +58,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
@@ -99,11 +99,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
@@ -139,11 +139,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
@@ -636,11 +636,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -694,11 +694,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -737,11 +737,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -932,11 +932,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -977,11 +977,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -1005,11 +1005,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -1516,15 +1516,15 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point2 = new Point(14, 4);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
 
@@ -1578,15 +1578,15 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point2 = new Point(14, 4);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
 
@@ -1643,15 +1643,15 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point2 = new Point(14, 4);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
 
@@ -1704,11 +1704,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(17, 17);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -1754,11 +1754,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(17, 17);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -1807,11 +1807,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(17, 17);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -1863,11 +1863,11 @@ public class TestDonkeyFarm {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing donkey farm */
+        /* Place donkey farm */
         Point point26 = new Point(17, 17);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 

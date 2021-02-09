@@ -2833,11 +2833,11 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -2917,11 +2917,11 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -3012,7 +3012,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Placing flag */
+        /* Place flag */
         Point point2 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point2);
 
@@ -3859,11 +3859,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -3938,7 +3938,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -3977,11 +3977,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -4064,11 +4064,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -4142,7 +4142,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(75, 75);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -4181,11 +4181,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
@@ -4243,11 +4243,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
@@ -4313,7 +4313,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
@@ -4357,11 +4357,11 @@ public class TestGameMonitoring {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
@@ -4407,11 +4407,11 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -4503,11 +4503,11 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -4615,11 +4615,11 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing flag */
+        /* Place flag */
         Point point1 = new Point(21, 5);
         Flag flag = map.placeFlag(player0, point1);
 
@@ -4716,7 +4716,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Placing flag */
+        /* Place flag */
         Point point2 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point2);
 
@@ -4937,7 +4937,7 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -5005,7 +5005,7 @@ public class TestGameMonitoring {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 

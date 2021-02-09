@@ -59,13 +59,13 @@ public class TestBrewery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point22 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point22);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point22);
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -98,13 +98,13 @@ public class TestBrewery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point22 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point22);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point22);
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -136,13 +136,13 @@ public class TestBrewery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point22 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point22);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point22);
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -181,7 +181,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Unfinished sawmill doesn't need worker */
         assertFalse(brewery.needsWorker());
@@ -215,7 +215,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
@@ -257,7 +257,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
@@ -293,7 +293,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -329,7 +329,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -357,7 +357,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -403,7 +403,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
@@ -465,7 +465,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -505,7 +505,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -546,7 +546,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -580,7 +580,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point3);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -608,13 +608,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -680,13 +680,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -779,13 +779,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -823,13 +823,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Connect the brewery with the headquarter */
         map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
@@ -880,7 +880,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(12, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Connect the brewery and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter.getFlag());
@@ -946,7 +946,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(12, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Connect the brewery and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter.getFlag());
@@ -1020,7 +1020,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(20, 14);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -1104,17 +1104,17 @@ public class TestBrewery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing brewer */
+        /* Place brewer */
         Point point2 = new Point(14, 4);
-        Building brewery = map.placeBuilding(new Brewery(player0), point2.upLeft());
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1166,17 +1166,17 @@ public class TestBrewery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing brewer */
+        /* Place brewer */
         Point point2 = new Point(14, 4);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1232,17 +1232,17 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point2 = new Point(14, 4);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1294,13 +1294,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(17, 17);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -1345,13 +1345,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(17, 17);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -1399,13 +1399,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(17, 17);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -1456,13 +1456,13 @@ public class TestBrewery {
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing brewery */
+        /* Place brewery */
         Point point26 = new Point(17, 17);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0);
@@ -1510,7 +1510,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point26 = new Point(17, 17);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Place road to connect the headquarter and the brewery */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery0.getFlag());
@@ -1552,7 +1552,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -1589,7 +1589,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -1653,7 +1653,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -1708,7 +1708,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -1737,7 +1737,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -1765,7 +1765,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Construct the brewery */
         Utils.constructHouse(brewery0);
@@ -1791,7 +1791,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(brewery0.getMaterialNeeded().size(), 2);
@@ -1825,7 +1825,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(6, 12);
-        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Construct the brewery */
         Utils.constructHouse(brewery0);
@@ -1862,7 +1862,7 @@ public class TestBrewery {
 
         /* Place brewery */
         Point point1 = new Point(16, 6);
-        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Connect the brewery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());

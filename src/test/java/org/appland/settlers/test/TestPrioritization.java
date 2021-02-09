@@ -102,7 +102,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -227,7 +227,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -355,7 +355,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -483,7 +483,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -611,7 +611,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(20, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -734,7 +734,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -852,7 +852,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -983,7 +983,7 @@ public class TestPrioritization {
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1114,7 +1114,7 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1194,7 +1194,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1305,7 +1305,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1424,7 +1424,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1543,7 +1543,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1662,7 +1662,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1766,7 +1766,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1882,7 +1882,7 @@ public class TestPrioritization {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 

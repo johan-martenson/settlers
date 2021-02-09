@@ -70,11 +70,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point22 = new Point(6, 12);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
@@ -106,11 +106,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point22 = new Point(6, 12);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
@@ -911,23 +911,23 @@ public class TestFishery {
         assertEquals(map.getDetailedVegetationBelow(point14), MOUNTAIN_1);
         assertEquals(map.getDetailedVegetationDownLeft(point14), MOUNTAIN_1);
 
-        /* Placing stone */
+        /* Place stone */
         Point point19 = new Point(12, 12);
         Stone stone0 = map.placeStone(point19);
 
-        /* Placing stone */
+        /* Place stone */
         Point point20 = new Point(13, 11);
         Stone stone1 = map.placeStone(point20);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point22 = new Point(10, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
-        /* Placing road between (11, 7) and (6, 4) */
+        /* Place road between (11, 7) and (6, 4) */
         Point point2 = new Point(9, 5);
         Point point23 = new Point(11, 7);
         Point point24 = new Point(10, 6);
@@ -1067,7 +1067,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1076,7 +1076,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(8, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1149,7 +1149,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1160,7 +1160,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(8, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1252,11 +1252,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(8, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1295,11 +1295,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(8, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1586,15 +1586,15 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point2 = new Point(14, 4);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
@@ -1648,15 +1648,15 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point2 = new Point(14, 4);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
@@ -1713,15 +1713,15 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point2 = new Point(14, 4);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
 
@@ -1774,11 +1774,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(17, 17);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1824,11 +1824,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(17, 17);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1877,11 +1877,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(17, 17);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
@@ -1933,11 +1933,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing fishery */
+        /* Place fishery */
         Point point26 = new Point(17, 17);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 

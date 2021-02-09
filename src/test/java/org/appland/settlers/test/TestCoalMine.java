@@ -70,12 +70,12 @@ public class TestCoalMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
         /* Deliver four planks */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -111,12 +111,12 @@ public class TestCoalMine {
         Point point22 = new Point(6, 12);
         Utils.surroundPointWithMinableMountain(point22, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
         /* Deliver two plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -865,12 +865,12 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -936,12 +936,12 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1033,7 +1033,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1042,8 +1042,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1080,7 +1080,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1089,8 +1089,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Connect the coal mine with the headquarter */
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
@@ -1144,7 +1144,7 @@ public class TestCoalMine {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Connect the coal mine and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
@@ -1209,7 +1209,7 @@ public class TestCoalMine {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Connect the coal mine and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
@@ -1283,7 +1283,7 @@ public class TestCoalMine {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1371,11 +1371,11 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1384,8 +1384,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1437,11 +1437,11 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1450,8 +1450,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1506,11 +1506,11 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
@@ -1519,8 +1519,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point2, map);
         Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1571,7 +1571,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1580,8 +1580,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1625,7 +1625,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1634,8 +1634,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point3, map);
         Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1682,7 +1682,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1691,8 +1691,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1742,7 +1742,7 @@ public class TestCoalMine {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1751,8 +1751,8 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
-        /* Placing coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        /* Place coal mine */
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine0);
@@ -1803,7 +1803,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Place road to connect the headquarter and the coal mine */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
@@ -1849,7 +1849,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine);
@@ -1890,7 +1890,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine);
@@ -1949,7 +1949,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine);
@@ -2007,7 +2007,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine);
@@ -2038,7 +2038,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Finish construction of the coal mine */
         constructHouse(coalMine);
@@ -2068,7 +2068,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Construct the coal mine */
         constructHouse(coalMine0);
@@ -2096,7 +2096,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(coalMine0.getMaterialNeeded().size(), 1);
@@ -2130,7 +2130,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place coal mine */
-        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Construct the coal mine */
         constructHouse(coalMine0);
@@ -2173,7 +2173,7 @@ public class TestCoalMine {
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
         /* Place coal mine */
-        Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Connect the coal mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());

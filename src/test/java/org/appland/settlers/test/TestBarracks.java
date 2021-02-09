@@ -2248,7 +2248,7 @@ public class TestBarracks {
 
         /* Place regular building */
         Point point3 = new Point(30, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
+        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
 
         /* Connect the buildings with a road */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), foresterHut0.getFlag());

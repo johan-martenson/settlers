@@ -70,7 +70,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -109,7 +109,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Assign a builder */
         Utils.assignBuilder(armory0);
@@ -147,7 +147,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -185,7 +185,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter0.getFlag());
@@ -221,7 +221,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -270,7 +270,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -317,7 +317,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -366,7 +366,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -402,7 +402,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        Armory armory = map.placeBuilding(new Armory(player0), point3);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -478,7 +478,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -540,7 +540,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -577,7 +577,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -618,7 +618,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -676,7 +676,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -747,7 +747,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -850,7 +850,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -893,7 +893,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Connect the armory with the headquarter */
         map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -943,7 +943,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(12, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Connect the armory and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -1006,7 +1006,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(12, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Connect the armory and the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -1078,7 +1078,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(20, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1176,7 +1176,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(20, 14);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1208,7 +1208,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point2 = new Point(14, 4);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1270,7 +1270,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point2 = new Point(14, 4);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1335,7 +1335,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point2 = new Point(14, 4);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1405,7 +1405,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point2 = new Point(14, 4);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
         /* Connect armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
@@ -1440,7 +1440,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1490,7 +1490,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1543,7 +1543,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1599,7 +1599,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1648,7 +1648,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point2 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Place road to connect the headquarter and the armory */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
@@ -1690,7 +1690,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -1726,7 +1726,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -1789,7 +1789,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -1847,7 +1847,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -1875,7 +1875,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory);
@@ -1902,7 +1902,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Construct the armory */
         Utils.constructHouse(armory0);
@@ -1928,7 +1928,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(armory0.getMaterialNeeded().size(), 2);
@@ -1961,7 +1961,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Construct the armory */
         Utils.constructHouse(armory0);
@@ -1997,7 +1997,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(6, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Remove all armorers from the headquarter */
         Utils.adjustInventoryTo(headquarter0, ARMORER, 0);
@@ -2049,7 +2049,7 @@ public class TestArmory {
 
         /* Place armory */
         Point point1 = new Point(16, 6);
-        Building armory = map.placeBuilding(new Armory(player0), point1);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());

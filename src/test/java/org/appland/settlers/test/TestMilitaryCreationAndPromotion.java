@@ -111,7 +111,7 @@ public class TestMilitaryCreationAndPromotion {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -143,11 +143,11 @@ public class TestMilitaryCreationAndPromotion {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing fortress */
+        /* Place fortress */
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
@@ -172,11 +172,11 @@ public class TestMilitaryCreationAndPromotion {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing fortress */
+        /* Place fortress */
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
@@ -206,11 +206,11 @@ public class TestMilitaryCreationAndPromotion {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing fortress */
+        /* Place fortress */
         Point point1 = new Point(6, 12);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
@@ -236,11 +236,11 @@ public class TestMilitaryCreationAndPromotion {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing barracks */
+        /* Place barracks */
         Point point22 = new Point(6, 12);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point22);
 

@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -57,7 +56,7 @@ public class TestCargo {
 
         /* Place a woodcutter */
         Point point1 = new Point(8, 6);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Place a flag */
         Point point2 = new Point(6, 4);
@@ -113,26 +112,26 @@ public class TestCargo {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing forester */
+        /* Place forester */
         Point point1 = new Point(10, 8);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Placing flag */
+        /* Place flag */
         Point point2 = new Point(9, 5);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Placing road between (11, 7) and (9, 5) */
+        /* Place road between (11, 7) and (9, 5) */
         Point point3 = new Point(11, 7);
         Point point4 = new Point(10, 6);
         Point point5 = new Point(7, 5);
         Point point6 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point3, point4, point2);
 
-        /* Placing road between (9, 5) and (6, 4) */
+        /* Place road between (9, 5) and (6, 4) */
         Road road1 = map.placeRoad(player0, point2, point5, point6);
 
         /* Place couriers on the roads */

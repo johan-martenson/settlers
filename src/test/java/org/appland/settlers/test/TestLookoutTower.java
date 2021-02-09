@@ -60,11 +60,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
@@ -98,11 +98,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
@@ -431,11 +431,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
@@ -474,11 +474,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
@@ -700,15 +700,15 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -762,15 +762,15 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -827,15 +827,15 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -888,11 +888,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
@@ -938,11 +938,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
@@ -991,11 +991,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
@@ -1047,11 +1047,11 @@ public class TestLookoutTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing lookout tower */
+        /* Place lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 

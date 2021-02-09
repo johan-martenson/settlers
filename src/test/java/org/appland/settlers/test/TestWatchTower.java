@@ -61,11 +61,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -106,11 +106,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -153,11 +153,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -200,11 +200,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -247,15 +247,15 @@ public class TestWatchTower {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(5, 13);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         /* Verify that the border doesn't change when the watch tower finishes construction */
@@ -276,15 +276,15 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(5, 13);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         /* Wait for the watch tower to finish construction */
@@ -328,11 +328,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -359,11 +359,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -390,11 +390,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -429,11 +429,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -451,11 +451,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -471,11 +471,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -515,11 +515,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -551,11 +551,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -586,11 +586,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -626,11 +626,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -661,11 +661,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -698,11 +698,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -734,11 +734,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -762,11 +762,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -799,11 +799,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -844,11 +844,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -886,11 +886,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -919,11 +919,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(6, 12);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
@@ -968,11 +968,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point26 = new Point(8, 8);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
@@ -1010,11 +1010,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point26 = new Point(8, 8);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
@@ -1038,11 +1038,11 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point26 = new Point(8, 8);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
@@ -1089,15 +1089,15 @@ public class TestWatchTower {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing watch tower */
+        /* Place watch tower */
         Point point22 = new Point(5, 13);
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Placing road */
+        /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         /* Wait for the watch tower to finish construction */
@@ -1239,7 +1239,7 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1260,7 +1260,7 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1284,7 +1284,7 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1312,7 +1312,7 @@ public class TestWatchTower {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 

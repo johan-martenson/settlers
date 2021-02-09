@@ -60,13 +60,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point22 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
         /* Deliver two planks */
         Cargo cargo = new Cargo(PLANK, map);
@@ -96,13 +96,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point22 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
         /* Deliver two planks */
         Cargo cargo = new Cargo(PLANK, map);
@@ -137,7 +137,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Verify that a finished quarry needs a worker */
         constructHouse(quarry);
@@ -161,7 +161,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
@@ -194,7 +194,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
@@ -228,7 +228,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
@@ -261,7 +261,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Place stone */
         Point point2 = new Point(12, 4);
@@ -306,7 +306,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Place stone */
         Point point2 = new Point(12, 4);
@@ -357,7 +357,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Place stone */
         Point point2 = new Point(11, 5);
@@ -416,7 +416,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Place stone */
         Point point2 = new Point(11, 5);
@@ -490,7 +490,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point2);
 
         /* Connect the quarry with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
@@ -587,7 +587,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -623,7 +623,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -701,7 +701,7 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -709,9 +709,9 @@ public class TestQuarry {
         Point point3 = new Point(12, 8);
         Stone stone = map.placeStone(point3);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -794,7 +794,7 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -802,9 +802,9 @@ public class TestQuarry {
         Point point3 = new Point(12, 8);
         Stone stone = map.placeStone(point3);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -897,13 +897,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -940,13 +940,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Connect the quarry with the headquarter */
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
@@ -990,13 +990,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Connect the quarry with the headquarter */
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
@@ -1035,13 +1035,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1063,13 +1063,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1101,7 +1101,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Connect the quarry and the headquarter */
         Point point2 = new Point(6, 4);
@@ -1170,7 +1170,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Connect the quarry and the headquarter */
         Point point2 = new Point(6, 4);
@@ -1244,7 +1244,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(20, 14);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1330,17 +1330,17 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point2 = new Point(14, 4);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1392,17 +1392,17 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point2 = new Point(14, 4);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1457,17 +1457,17 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point2 = new Point(14, 4);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
 
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -1518,13 +1518,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(17, 17);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1568,13 +1568,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(17, 17);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1621,13 +1621,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(17, 17);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1677,13 +1677,13 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing quarry */
+        /* Place quarry */
         Point point26 = new Point(17, 17);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1730,7 +1730,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point26 = new Point(17, 17);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Place road to connect the headquarter and the quarry */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
@@ -1766,7 +1766,7 @@ public class TestQuarry {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(10, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1840,7 +1840,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(7, 9);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1876,7 +1876,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(7, 9);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1935,7 +1935,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(7, 9);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -1990,7 +1990,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(7, 9);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -2018,7 +2018,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point26 = new Point(15, 5);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Surround the quarry with water the stonemason cannot cross */
         Point point2 = new Point(15, 7);
@@ -2069,7 +2069,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(10, 10);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
         constructHouse(quarry0);
@@ -2096,7 +2096,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry0);
@@ -2121,7 +2121,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(quarry0.getMaterialNeeded().size(), 1);
@@ -2152,7 +2152,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry0);
@@ -2180,7 +2180,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(6, 12);
-        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry0);
@@ -2208,7 +2208,7 @@ public class TestQuarry {
 
         /* Place quarry */
         Point point1 = new Point(16, 6);
-        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Place stone */
         Point point2 = new Point(18, 6);
