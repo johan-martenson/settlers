@@ -186,7 +186,7 @@ public class TestHarbor {
         Point point3 = new Point(6, 12);
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
-        /* Deliver four plank and three stone */
+        /* Deliver three planks and six stones */
         Utils.deliverCargos(harbor0, PLANK, 3);
         Utils.deliverCargos(harbor0, STONE, 6);
 
@@ -228,7 +228,7 @@ public class TestHarbor {
         Point point3 = new Point(6, 12);
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
-        /* Deliver four plank and three stone */
+        /* Deliver four planks and five stones */
         Utils.deliverCargos(harbor0, PLANK, 4);
         Utils.deliverCargos(harbor0, STONE, 5);
 
@@ -270,7 +270,7 @@ public class TestHarbor {
         Point point3 = new Point(6, 12);
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
-        /* Deliver four plank and three stone */
+        /* Deliver four planks and six stones */
         Utils.deliverCargos(harbor0, PLANK, 4);
         Utils.deliverCargos(harbor0, STONE, 6);
 
@@ -1047,12 +1047,12 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(15, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point26 = new Point(17, 17);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Point point3 = new Point(17, 17);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1061,8 +1061,8 @@ public class TestHarbor {
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
         /* Place storehouse */
-        Point point2 = new Point(15, 15);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        Point point4 = new Point(15, 15);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
         /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);
@@ -1104,12 +1104,12 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point26 = new Point(8, 8);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Point point3 = new Point(8, 8);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Connect the harbor with the headquarter */
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
@@ -1162,12 +1162,12 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point26 = new Point(8, 8);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Point point3 = new Point(8, 8);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Connect the harbor with the headquarter */
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
@@ -1187,14 +1187,14 @@ public class TestHarbor {
 
         /* Wait for the harbor to disappear */
         for (int i = 0; i < 100; i++) {
-            assertEquals(map.getBuildingAtPoint(point26), harbor0);
+            assertEquals(map.getBuildingAtPoint(point3), harbor0);
 
             map.stepTime();
         }
 
-        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.isBuildingAtPoint(point3));
         assertFalse(map.getBuildings().contains(harbor0));
-        assertNull(map.getBuildingAtPoint(point26));
+        assertNull(map.getBuildingAtPoint(point3));
     }
 
     @Test
@@ -1215,12 +1215,12 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point26 = new Point(8, 8);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Point point3 = new Point(8, 8);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1251,12 +1251,12 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
-        Point point26 = new Point(8, 8);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point26);
+        Point point3 = new Point(8, 8);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point3);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1418,28 +1418,28 @@ public class TestHarbor {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place a lake */
-        Point pointX = new Point(32, 18);
-        Utils.surroundPointWithDetailedVegetation(pointX, DetailedVegetation.WATER, map);
+        Point point0 = new Point(32, 18);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point pointY = new Point(28, 18);
-        map.setPossiblePlaceForHarbor(pointY);
+        Point point1 = new Point(28, 18);
+        map.setPossiblePlaceForHarbor(point1);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(7, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Point point2 = new Point(7, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place player 2's headquarter */
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        Point point3 = new Point(70, 70);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point3);
 
         /* Place player 1's headquarter */
-        Point point1 = new Point(37, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        Point point4 = new Point(37, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        Point point5 = new Point(21, 9);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point5);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1448,8 +1448,8 @@ public class TestHarbor {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place harbor close to the new border */
-        Point point4 = new Point(28, 18);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point4);
+        Point point6 = new Point(28, 18);
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point6);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1489,12 +1489,12 @@ public class TestHarbor {
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place player 2's headquarter */
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        Point point2 = new Point(70, 70);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 5);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        Point point3 = new Point(21, 5);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point3);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
@@ -1818,8 +1818,8 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
@@ -1831,8 +1831,8 @@ public class TestHarbor {
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        Point point3 = new Point(13, 13);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);
@@ -1875,8 +1875,8 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
@@ -1888,8 +1888,8 @@ public class TestHarbor {
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        Point point3 = new Point(13, 13);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);
@@ -1935,8 +1935,8 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
@@ -1948,8 +1948,8 @@ public class TestHarbor {
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point2);
+        Point point3 = new Point(13, 13);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);
@@ -2053,8 +2053,8 @@ public class TestHarbor {
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point2 = new Point(9, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
