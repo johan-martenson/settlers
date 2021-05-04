@@ -1,0 +1,46 @@
+
+
+Build ship next to water
+
+Select in Harbor between
+ - Expedition
+ - Exploration Expedition
+
+Harbor is a military building:
+ - Range: 
+
+Build one ship:
+
+Needed for expedition:
+
+
+
+Steps:
+ 0.  Build shipyard
+ 1.  Build ship
+       -- Next to water
+ 2.  Build harbor
+       -- Game message: New harbor building finished
+ 3.  Ship sails to harbor (?)
+ 4.  Prepare expedition
+       -- Material collects outside
+       -- Builder works on it
+       -- 4 planks & 6 stones & 1 builder
+ 5.  All material collected
+ 6.  Ship sails to harbor
+ 7.  Ready for expedition
+       -- Game message: A ship is ready for an expedition
+ 8.  Click ship and select direction
+       -- Lists all possible directions
+       -- Ships have names (e.g. Astrid)
+ 9.  Ship sails to harbor point
+       -- Game message: A ship has reached the destination of its expedition
+ 10. Select ship and click "anchor" to place a harbor
+       -- Also lists all possible directions
+       -- Can choose to instead go to another harbor
+ 11. Builders starts building harbor
+       -- Range: 8
+ 12. Harbor is done
+       -- Game message: New harbor building finished
+ 13. Build something and connect to the harbor
+ 14. Ships sails back to get material for construction
