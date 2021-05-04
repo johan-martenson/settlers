@@ -221,7 +221,7 @@ public class TestScout {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         /* Verify that the scout keeps going */
-        assertNotEquals(scout.getPosition().distance(scout.getTarget()), scout.getPosition());
+        assertNotEquals(scout.getTarget(), scout.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
     }

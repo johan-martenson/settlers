@@ -33,6 +33,7 @@ import static org.appland.settlers.model.DetailedVegetation.WATER_2;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -325,7 +326,7 @@ public class TestTree {
 
         /* Verify that it's only possible to place a flag on the dead tree */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
-        assertEquals(map.isAvailableHousePoint(player0, point1), null);
+        assertNull(map.isAvailableHousePoint(player0, point1));
     }
 
     @Test

@@ -653,11 +653,6 @@ public class TestQuarry {
     }
 
     @Test
-    public void testStonemasonIgnoresStoneTooFarAway() {
-        // TODO
-    }
-
-    @Test
     public void testStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
         /* Create single player game */

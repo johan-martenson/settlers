@@ -66,6 +66,7 @@ public class TestGameMonitoring {
         - road that becomes main road,
         - monitoring of couriers when road is split
         - dead tree that disappears (when a flag is placed)
+        - ship - ready and under construction
     *  */
 
     @Test
@@ -4451,9 +4452,7 @@ public class TestGameMonitoring {
 
         Point discoveredPoint = null;
 
-        Set<Point> discoveredLandBefore = new HashSet<>();
-
-        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
@@ -4548,9 +4547,7 @@ public class TestGameMonitoring {
         Point discoveredPoint = null;
 
 
-        Set<Point> discoveredLandBefore = new HashSet<>();
-
-        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
@@ -4651,9 +4648,7 @@ public class TestGameMonitoring {
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        Set<Point> discoveredLandBefore = new HashSet<>();
-
-        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
@@ -4752,9 +4747,7 @@ public class TestGameMonitoring {
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        Set<Point> discoveredLandBefore = new HashSet<>();
-
-        discoveredLandBefore.addAll(player0.getDiscoveredLand());
+        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
             Point target = scout.getTarget();
