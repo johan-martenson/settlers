@@ -46,6 +46,7 @@ public class TestGameMonitoringWhenDiscovering {
      - wild animals
      - own border not being reported twice
      - dead tree
+     - ship - ready and under construction
      */
 
     @Test
