@@ -85,9 +85,15 @@ public class Cargo {
 
     @Override
     public String toString() {
+
         String materialName = material.getSimpleName();
-        String houseName = target.getSimpleName();
+
+        if (target == null) {
+            return "Cargo of " + materialName + " to unknown, at " + position;
+        }
+
         Point housePosition = target.getPosition();
+        String houseName = target.getSimpleName();
 
         return "Cargo of " + materialName + " to " + houseName + " " + housePosition + ", at " + position;
     }

@@ -69,6 +69,10 @@ public class TestHarbor {
       - where harbor can be placed
       - start expedition (in separate file?)
       - harbor is large building
+      - cannot manually place harbor outside of own border
+      - harbor can be placed outside of own border by expedition
+      - harbor can't be placed in other player's border, either manually or by expedition
+      - harbor is military building like a headquarter
      */
 
     @Test
@@ -1401,7 +1405,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testWorkerGoesBackToOwnHarborEvenWithoutRoadsAndEnemiesStorehouseIsCloser() throws Exception {
+    public void testHarborRemainsWhenSupportingOtherMilitaryBuildingIsRemoved() throws Exception {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1455,12 +1459,21 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
+        Point point7 = new Point(29, 27);
+
+        assertFalse(player0.getBorderPoints().contains(point7));
+
         StorageWorker worker = Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
-        /* Verify that the worker goes back to its own harbor when the fortress is torn down */
+        /* Verify that the harbor remains when the fortress is torn down */
+        assertTrue(player0.getBorderPoints().contains(point7));
+
         fortress0.tearDown();
 
-        assertEquals(worker.getTarget(), headquarter0.getPosition());
+        assertTrue(map.isBuildingAtPoint(point6));
+        assertEquals(map.getBuildingAtPoint(point6), harbor0);
+        assertTrue(harbor0.isReady());
+        assertTrue(player0.getBorderPoints().contains(point7));
     }
 
     @Test

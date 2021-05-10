@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import java.util.List;
+import java.util.Set;
+
 import static org.appland.settlers.model.Material.BOAT;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SHIPWRIGHT;
@@ -12,6 +15,7 @@ public class Shipwright extends Worker {
     private static final int TIME_TO_BUILD_SHIP = 99;
     private static final int TIME_TO_MAKE_BOAT = 50;
     private static final int PLANKS_NEEDED_FOR_BOAT = 2;
+    private static final int PLANKS_NEEDED_FOR_SHIP = 4;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -57,24 +61,31 @@ public class Shipwright extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException, InvalidUserActionException {
+    protected void onIdle() throws InvalidRouteException {
 
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
-
                 if (shipyard.isProducingShips()) {
-                    Point pointToBuildShip = findPlaceToBuildShip();
+                    if  (getHome().getAmount(PLANK) >= PLANKS_NEEDED_FOR_SHIP) {
 
-                    if (pointToBuildShip != null) {
-                        state = State.GOING_OUT_TO_BUILD_SHIP;
+                        Point pointToBuildShip = findPlaceToBuildShip();
 
-                        setOffroadTarget(pointToBuildShip);
-                    } else {
+                        if (pointToBuildShip != null) {
+                            state = State.GOING_OUT_TO_BUILD_SHIP;
 
-                        /* Report that it's not possible to harvest or plant */
-                        productivityMeasurer.reportUnproductivity();
+                            setOffroadTarget(pointToBuildShip);
 
-                        return;
+                            getHome().consumeOne(PLANK);
+                            getHome().consumeOne(PLANK);
+                            getHome().consumeOne(PLANK);
+                            getHome().consumeOne(PLANK);
+                        } else {
+
+                            /* Report that it's not possible to harvest or plant */
+                            productivityMeasurer.reportUnproductivity();
+
+                            return;
+                        }
                     }
                 } else {
                     state = State.MAKING_BOAT;
@@ -167,7 +178,27 @@ public class Shipwright extends Worker {
     }
 
     private Point findPlaceToBuildShip() {
-        return getPosition().left().left(); // TODO: pick the spot more carefully
+        Set<Point> largeSurroundingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), 8, map);
+
+        /* Find points that are on the water's edge */
+        for (Point point : largeSurroundingArea) {
+            List<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
+
+            /* Filter points that are not on the water's edge */
+            if (!GameUtils.isSomeButNotAll(surroundingVegetation, DetailedVegetation.WATER)) {
+                continue;
+            }
+
+            /* Filter points that can't be reached */
+            // TODO: test that shipwright doesn't pick point it cannot go to
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+                continue;
+            }
+
+            return point;
+        }
+
+        return null;
     }
 
     @Override

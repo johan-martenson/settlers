@@ -39,6 +39,7 @@ public class MapPoint {
     private int      fishAmount;
     private boolean  isDeadTree;
     private boolean  isShipyardAvailable;
+    private boolean  isShip;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -50,6 +51,7 @@ public class MapPoint {
         sign                       = null;
         isDeadTree                 = false;
         isShipyardAvailable        = false;
+        isShip                     = false;
         connectedNeighbors         = new HashSet<>();
         connectedRoads             = new HashSet<>();
         connectedFlagsAndBuildings = new HashSet<>();
@@ -315,5 +317,17 @@ public class MapPoint {
 
     public void setHarborIsPossible() {
         isShipyardAvailable = true;
+    }
+
+    public boolean isShipUnderConstruction() {
+        return isShip;
+    }
+
+    public void setShipUnderConstruction() {
+        isShip = true;
+    }
+
+    public void setShipDone() {
+        isShip = false;
     }
 }

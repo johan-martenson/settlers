@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public enum Material {
@@ -105,6 +106,41 @@ public enum Material {
     )
     );
 
+    public static final Set<? extends Material> WORKERS = EnumSet.copyOf(Arrays.asList(
+            DONKEY,
+            PRIVATE,
+            SERGEANT,
+            GENERAL,
+            COURIER,
+            FORESTER,
+            WOODCUTTER_WORKER,
+            STONEMASON,
+            FARMER,
+            SAWMILL_WORKER,
+            WELL_WORKER,
+            MILLER,
+            BAKER,
+            STORAGE_WORKER,
+            FISHERMAN,
+            MINER,
+            IRON_FOUNDER,
+            BREWER,
+            MINTER,
+            ARMORER,
+            PIG_BREEDER,
+            BUTCHER,
+            GEOLOGIST,
+            DONKEY_BREEDER,
+            CATAPULT_WORKER,
+            SCOUT,
+            HUNTER,
+            OFFICER,
+            PRIVATE_FIRST_CLASS,
+            METALWORKER,
+            BUILDER,
+            SHIPWRIGHT
+    ));
+
     private static final List<Material> MINERALS = Arrays.asList(GOLD, IRON, COAL, STONE);
 
     static final List<Material> TOOLS = Arrays.asList(
@@ -155,44 +191,19 @@ public enum Material {
         return TOOLS_SET.contains(tool);
     }
 
-    public boolean isWorker() {
-        switch (this) {
-            case DONKEY:
-            case PRIVATE:
-            case SERGEANT:
-            case GENERAL:
-            case COURIER:
-            case FORESTER:
-            case WOODCUTTER_WORKER:
-            case STONEMASON:
-            case FARMER:
-            case SAWMILL_WORKER:
-            case WELL_WORKER:
-            case MILLER:
-            case BAKER:
-            case STORAGE_WORKER:
-            case FISHERMAN:
-            case MINER:
-            case IRON_FOUNDER:
-            case BREWER:
-            case MINTER:
-            case ARMORER:
-            case PIG_BREEDER:
-            case BUTCHER:
-            case GEOLOGIST:
-            case DONKEY_BREEDER:
-            case CATAPULT_WORKER:
-            case SCOUT:
-            case HUNTER:
-            case OFFICER:
-            case PRIVATE_FIRST_CLASS:
-            case METALWORKER:
-            case BUILDER:
-            case SHIPWRIGHT:
-                return true;
+    public static Material workerToMaterial(Worker worker) {
+
+        if (Objects.equals(worker.getClass(), Builder.class)) {
+            return BUILDER;
         }
 
-        return false;
+        // TODO: handle remaining types of workers
+
+        return null;
+    }
+
+    public boolean isWorker() {
+        return WORKERS.contains(this);
     }
 
     public String getSimpleName() {

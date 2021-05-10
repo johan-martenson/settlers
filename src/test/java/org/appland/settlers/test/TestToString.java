@@ -15,11 +15,13 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameEndedMessage;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GeologistFindMessage;
+import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
@@ -38,6 +40,9 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Ship;
+import org.appland.settlers.model.Shipwright;
+import org.appland.settlers.model.Shipyard;
 import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
@@ -48,7 +53,7 @@ import org.appland.settlers.model.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.UnderAttackMessage;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +63,7 @@ import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.OFFICER;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -814,5 +820,200 @@ public class TestToString {
 
         assertFalse(courier.isExactlyAtPoint());
         assertEquals(courier.toString(), "Courier (19, 5) - (20, 4)");
+    }
+
+    @Test
+    public void testShipUnderConstructionToString() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a lake */
+        for (int i = 13; i < 53; i += 2) {
+            Point point = new Point(i, 11);
+
+            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+        }
+
+        /* Mark a possible place for a harbor */
+        Point point0 = new Point(57, 11);
+        map.setPossiblePlaceForHarbor(point0);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place harbor */
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+
+        /* Connect the harbor to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+
+        /* Wait for the harbor to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(harbor);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
+
+        /* Place shipyard */
+        Point point3 = new Point(14, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+
+        /* Connect the shipyard to the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Set the shipyard to build ships */
+        shipyard.produceShips();
+
+        /* Wait for the shipyard to get occupied */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        Point point = shipwright.getTarget();
+
+        assertTrue(shipwright.isTraveling());
+
+        /* Let the shipwright reach the intended spot and start to build the ship */
+        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+
+        assertTrue(shipwright.isArrived());
+        assertTrue(shipwright.isAt(point));
+        assertTrue(shipwright.isHammering());
+
+        /* Wait for the shipwright to hammer */
+        Utils.fastForward(19, map);
+
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        assertEquals(ship.getPosition(), shipwright.getPosition());
+        assertTrue(ship.isUnderConstruction());
+
+        /* Verify toString for the ship when it's under construction */
+        assertEquals(ship.toString(), "Ship under construction (" + ship.getPosition().x + ", " + ship.getPosition().y + ")");
+    }
+
+    @Test
+    public void testShipReadyToString() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a lake */
+        for (int i = 13; i < 53; i += 2) {
+            Point point = new Point(i, 11);
+
+            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+        }
+
+        /* Mark a possible place for a harbor */
+        Point point0 = new Point(57, 11);
+        map.setPossiblePlaceForHarbor(point0);
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(7, 9);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place harbor */
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+
+        /* Connect the harbor to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+
+        /* Wait for the harbor to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(harbor);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
+
+        /* Place shipyard */
+        Point point3 = new Point(14, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+
+        /* Connect the shipyard to the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Set the shipyard to build ships */
+        shipyard.produceShips();
+
+        /* Wait for the shipyard to get occupied */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        Point point = shipwright.getTarget();
+
+        assertTrue(shipwright.isTraveling());
+
+        /* Let the shipwright reach the intended spot and start to build the ship */
+        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+
+        assertTrue(shipwright.isArrived());
+        assertTrue(shipwright.isAt(point));
+        assertTrue(shipwright.isHammering());
+
+        /* Wait for the shipwright to hammer */
+        Utils.fastForward(19, map);
+
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        assertEquals(ship.getPosition(), shipwright.getPosition());
+        assertTrue(ship.isUnderConstruction());
+
+        /* Wait for the ship to get finished */
+        Utils.waitForShipToGetBuilt(map, ship);
+
+        /* Verify toString for the ship when it's ready */
+        assertEquals(ship.toString(), "Ship (" + ship.getPosition().x + ", " + ship.getPosition().y + ")");
     }
 }

@@ -200,7 +200,7 @@ public class Player {
         return ownedLand.contains(point);
     }
 
-    public Collection<Point> getLandInPoints() {
+    public Set<Point> getLandInPoints() {
         return ownedLand;
     }
 
@@ -1350,5 +1350,24 @@ public class Player {
 
     public void reportRemovedDeadTree(Point point) {
         removedDeadTrees.add(point);
+    }
+
+
+    public void reportShipReadyForExpedition(Ship ship) {
+        ShipReadyForExpeditionMessage message = new ShipReadyForExpeditionMessage(ship);
+
+        messages.add(message);
+    }
+
+    public void reportShipReachedDestination(Ship ship) {
+        ShipHasReachedDestionationMessage message = new ShipHasReachedDestionationMessage(ship, ship.getPosition());
+
+        messages.add(message);
+    }
+
+    public void reportHarborReady(Harbor harbor) {
+        HarborIsFinishedMessage message = new HarborIsFinishedMessage(harbor);
+
+        messages.add(message);
     }
 }

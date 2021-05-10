@@ -3,6 +3,7 @@ package org.appland.settlers.model;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.ARMORER;
@@ -109,16 +110,13 @@ public class Storehouse extends Building {
         int shields = inventory.getOrDefault(SHIELD, 0);
         int beer    = inventory.getOrDefault(BEER, 0);
 
-        int privatesToAdd = Math.min(swords, shields);
+        int privatesToDraft = GameUtils.min(swords, shields, beer);
+        int existingPrivates = inventory.getOrDefault(PRIVATE, 0);
 
-        privatesToAdd = Math.min(privatesToAdd, beer);
-
-        int existingPirates = inventory.getOrDefault(PRIVATE, 0);
-
-        inventory.put(PRIVATE, existingPirates + privatesToAdd);
-        inventory.put(BEER, beer - privatesToAdd);
-        inventory.put(SHIELD, shields - privatesToAdd);
-        inventory.put(SWORD, swords - privatesToAdd);
+        inventory.put(PRIVATE, existingPrivates + privatesToDraft);
+        inventory.put(BEER, beer - privatesToDraft);
+        inventory.put(SHIELD, shields - privatesToDraft);
+        inventory.put(SWORD, swords - privatesToDraft);
     }
 
     @Override
@@ -138,10 +136,12 @@ public class Storehouse extends Building {
         }
 
         /* Send out new workers */
-        boolean assignedNewWorker = assignNewWorkerToUnoccupiedPlaces();
+        boolean sentOutWorker;
+
+        sentOutWorker = assignNewWorkerToUnoccupiedPlaces();
 
         /* Send pushed out workers */
-        if (!assignedNewWorker) {
+        if (!sentOutWorker) {
             for (Material material : materialToPushOut) {
 
                 if (getAmount(material) <= 0) {
@@ -157,6 +157,53 @@ public class Storehouse extends Building {
                 getMap().placeWorker(worker, this);
 
                 worker.goToOtherStorage(this);
+
+                // FIXME: fix so that only one worker is pushed out
+
+                sentOutWorker = true;
+            }
+        }
+
+        /* Send workers needed in other storehouses */
+        if (!sentOutWorker) {
+            for (Material workerType : Material.WORKERS) {
+
+                // FIXME: fix to filter workers that are not in store
+
+                /* Go through each storehouse */
+                for (Building building : getPlayer().getBuildings()) {
+
+                    /* Skip this storehouse so we don't try to deliver to ourselves */
+                    if (Objects.equals(building, this)) {
+                        continue;
+                    }
+
+                    /* Filter buildings that are not storehouses */
+                    if (! (building instanceof Storehouse)) {
+                        continue;
+                    }
+
+                    Storehouse storehouse = (Storehouse) building;
+
+                    /* Filter storehouses that are not ready */
+                    if (!storehouse.isReady()) {
+                        continue;
+                    }
+
+                    /* Filter storehouses that don't need the worker */
+                    if (!storehouse.needsMaterial(workerType)) {
+                        continue;
+                    }
+
+                    Worker worker = retrieveWorker(workerType);
+
+                    getMap().placeWorker(worker, this);
+
+                    worker.goToStorehouse(storehouse);
+                    storehouse.promiseDelivery(workerType);
+
+                    // FIXME: fix so that only one worker is pushed out
+                }
             }
         }
     }
@@ -324,7 +371,7 @@ public class Storehouse extends Building {
                 continue;
             }
 
-            if (building.isMilitaryBuilding()) {
+            if (building.isMilitaryBuilding() && !building.isHarbor()) {
                 if (!hasMilitary()) {
                     continue;
                 }
@@ -860,7 +907,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    void onConstructionFinished() {
+    void onConstructionFinished() throws InvalidRouteException {
         getPlayer().reportStorageReady(this);
     }
 

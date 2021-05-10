@@ -315,7 +315,7 @@ public class Scout extends Worker {
             double angleForCandidateDirection = calculateAngle(candidateDirectionX, candidateDirectionY);
 
             /* Calculate score - lower is better */
-            // FIXME: this doesn't correctly score angles that are close but on opposity side of the positive X axis
+            // FIXME: this doesn't correctly score angles that are close but on opposite side of the positive X axis
             double score = Math.abs(angleForExistingDirection - angleForCandidateDirection);
 
             pointsAndScores.add(new EntityAndScore<>(point, score));

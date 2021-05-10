@@ -21,6 +21,7 @@ import java.util.Set;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Flag.Type.MARINE;
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.areNonePartOf;
@@ -110,6 +111,7 @@ public class GameMap {
     private final Set<Flag> changedFlags;
     private final List<Point> deadTrees;
     private final List<Ship> ships;
+    private final Set<Point> possiblePlacesForHarbor;
 
     private Player winner;
     private long time;
@@ -215,6 +217,7 @@ public class GameMap {
         promotedRoads = new HashSet<>();
         changedFlags = new HashSet<>();
         removedDeadTrees = new ArrayList<>();
+        possiblePlacesForHarbor = new HashSet<>();
 
         winnerReported = false;
 
@@ -786,7 +789,7 @@ public class GameMap {
      * @throws InvalidEndPointException Any exceptions encountered while placing the building
      * @throws InvalidRouteException Any exceptions encountered while placing the building
      */
-    public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidRouteException {
 
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
@@ -821,6 +824,10 @@ public class GameMap {
             if (!isAvailableMinePoint(house.getPlayer(), point)) {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
             }
+        } else if (house.isHarbor()) {
+            if (!isAvailableHarborPoint(point)) {
+                throw new InvalidUserActionException("Cannot place harbor on non-harbor point");
+            }
         } else {
 
             Size canBuild = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
@@ -842,10 +849,10 @@ public class GameMap {
             }
         }
 
-        /* In case of headquarter, verify that the building is not placed within another player's border
-        *     -- normally this is done by isAvailableHousePoint
-        */
-        if (house.isHeadquarter()) {
+        /* In case of headquarter and harbors, verify that the building is not placed within another player's border
+         *     -- normally this is done by isAvailableHousePoint
+         */
+        if (house.isHeadquarter() || house.isHarbor()) {
             for (Player player : players) {
                 if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
                     throw new InvalidUserActionException("Can't place building on " + point + " within another player's border");
@@ -853,6 +860,14 @@ public class GameMap {
             }
         }
 
+        /* All checks have passed so place the building */
+        doPlaceBuilding(house, point, isFirstHouse);
+
+        return house;
+    }
+
+    private Building doPlaceBuilding(Building house, Point point, boolean isFirstHouse) throws InvalidUserActionException, InvalidRouteException {
+        MapPoint mapPoint = getMapPoint(point);
         MapPoint mapPointDownRight = getMapPoint(point.downRight());
 
         /* Handle the case where there is a sign at the site */
@@ -869,9 +884,9 @@ public class GameMap {
             flag.setPosition(point.downRight());
 
             if (isFirstHouse) {
-                placeFlagRegardlessOfBorder(flag);
+                doPlaceFlagRegardlessOfBorder(flag);
             } else {
-                placeFlag(flag);
+                doPlaceFlag(flag);
             }
         }
 
@@ -924,13 +939,18 @@ public class GameMap {
                 continue;
             }
 
+            /* Harbors behave differently when they are the start of a new settlement
+             *    -- like headquarters, but they start out as under construction and get their own border immediately
+             */
+            boolean harborWithOwnSettlement = building.isHarbor() && ((Harbor)building).isOwnSettlement();
+
             /* Filter buildings that are not yet fully built */
-            if (!building.isReady()) {
+            if (!building.isReady() && !harborWithOwnSettlement) {
                 continue;
             }
 
             /* Filter buildings that are not yet occupied */
-            if (!building.isOccupied()) {
+            if (!building.isOccupied() && !harborWithOwnSettlement) {
                 continue;
             }
 
@@ -1071,15 +1091,24 @@ public class GameMap {
         /* Destroy buildings now outside of their player's borders */
         for (Building building : buildings) {
 
+            /* Filter buildings that are already burning down */
             if (building.isBurningDown()) {
                 continue;
             }
 
+            /* Filter buildings that are already destroyed */
             if (building.isDestroyed()) {
                 continue;
             }
 
+            /* Filter military buildings that are occupied - they should remain */
             if (building.isMilitaryBuilding() && building.isOccupied()) {
+                continue;
+            }
+
+            /* Filter harbors that support their own settlement and are not destroyed */
+            if (building.isHarbor() && ((Harbor)building).isOwnSettlement() &&
+                !building.isBurningDown() && !building.isDestroyed()) {
                 continue;
             }
 
@@ -1207,10 +1236,9 @@ public class GameMap {
      * @throws Exception Any exceptions encountered while placing the new road
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException, InvalidEndPointException {
-
         /* Only allow roads that are at least three points long
-        *   -- Driveways are shorter but they are created with a separate method
-        */
+         *   -- Driveways are shorter but they are created with a separate method
+         */
         if (wayPoints.size() < 3) {
             throw new InvalidUserActionException("Cannot place road with less than three points.");
         }
@@ -1250,6 +1278,7 @@ public class GameMap {
             throw new InvalidUserActionException("Road " + wayPoints + " is too short.");
         }
 
+        /* Verify that all points are possible as road */
         for (Point point : wayPoints) {
             if (point.equals(start)) {
                 continue;
@@ -1265,6 +1294,11 @@ public class GameMap {
 
             throw new InvalidUserActionException(point + " in road is invalid");
         }
+
+        return doPlaceRoad(player, wayPoints);
+    }
+
+    private Road doPlaceRoad(Player player, List<Point> wayPoints) {
 
         Road road = new Road(player, wayPoints);
 
@@ -1412,22 +1446,28 @@ public class GameMap {
         return placeFlag(new Flag(player, point));
     }
 
-    private Flag placeFlag(Flag flag) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
-        return doPlaceFlag(flag, true);
+    private Flag placeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+
+        if (!isAvailableFlagPoint(flag.getPlayer(), flag.getPosition(), true)) {
+            throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
+        }
+
+        return doPlaceFlag(flag);
     }
 
-    private Flag placeFlagRegardlessOfBorder(Flag flag) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
-        return doPlaceFlag(flag, false);
+    private Flag doPlaceFlagRegardlessOfBorder(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+
+        if (!isAvailableFlagPoint(flag.getPlayer(), flag.getPosition(), false)) {
+            throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
+        }
+
+        return doPlaceFlag(flag);
     }
 
-    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    private Flag doPlaceFlag(Flag flag) throws InvalidRouteException {
 
         Point flagPoint = flag.getPosition();
         MapPoint mapPoint = getMapPoint(flagPoint);
-
-        if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint, checkBorder)) {
-            throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
-        }
 
         /* Handle the case where the flag is placed on a sign */
         if (mapPoint.isSign()) {
@@ -1459,8 +1499,8 @@ public class GameMap {
             mapPoint.setFlag(flag);
             flags.add(flag);
 
-            Road newRoad1 = placeRoad(flag.getPlayer(), points.subList(0, index + 1));
-            Road newRoad2 = placeRoad(flag.getPlayer(), points.subList(index, points.size()));
+            Road newRoad1 = doPlaceRoad(flag.getPlayer(), points.subList(0, index + 1));
+            Road newRoad2 = doPlaceRoad(flag.getPlayer(), points.subList(index, points.size()));
 
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
@@ -1634,6 +1674,10 @@ public class GameMap {
         }
 
         if (mapPoint.isBuilding()) {
+            return false;
+        }
+
+        if (mapPoint.isShipUnderConstruction()) {
             return false;
         }
 
@@ -3698,6 +3742,10 @@ public class GameMap {
 
         ships.add(ship);
 
+        MapPoint mapPoint = getMapPoint(point);
+
+        mapPoint.setShipUnderConstruction();
+
         return ship;
     }
 
@@ -3711,5 +3759,71 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(point);
 
         mapPoint.setHarborIsPossible();
+
+        possiblePlacesForHarbor.add(point);
+    }
+
+    void reportShipReady(Ship ship) {
+        MapPoint mapPoint = getMapPoint(ship.getPosition());
+
+        mapPoint.setShipDone();
+    }
+
+    public Set<Point> getPossiblePlacesForHarbor() {
+        return possiblePlacesForHarbor;
+    }
+
+    public List<Point> findWayForShip(Point from, Point to) {
+        return findShortestPath(from, to, null, new ConnectionsProvider() {
+
+            @Override
+            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
+                Set<Point> possibleConnections = new HashSet<>();
+
+                DetailedVegetation vegetationUpLeft = getDetailedVegetationUpLeft(point);
+                DetailedVegetation vegetationAbove = getDetailedVegetationAbove(point);
+                DetailedVegetation vegetationUpRight = getDetailedVegetationUpRight(point);
+                DetailedVegetation vegetationDownRight = getDetailedVegetationDownRight(point);
+                DetailedVegetation vegetationBelow = getDetailedVegetationBelow(point);
+                DetailedVegetation vegetationDownLeft = getDetailedVegetationDownLeft(point);
+
+                Point pointLeft = point.left();
+                if (isWithinMap(pointLeft) && (vegetationUpLeft == WATER || vegetationDownLeft == WATER)) {
+                    possibleConnections.add(pointLeft);
+                }
+
+                Point pointUpLeft = point.upLeft();
+                if (isWithinMap(pointUpLeft) && (vegetationUpLeft == WATER || vegetationAbove == WATER)) {
+                    possibleConnections.add(pointUpLeft);
+                }
+
+                Point pointUpRight = point.upRight();
+                if (isWithinMap(pointUpRight) && (vegetationAbove == WATER || vegetationUpRight == WATER)) {
+                    possibleConnections.add(pointUpRight);
+                }
+
+                Point pointRight = point.right();
+                if (isWithinMap(pointRight) && (vegetationUpRight == WATER || vegetationDownRight == WATER)) {
+                    possibleConnections.add(pointRight);
+                }
+
+                Point pointDownRight = point.downRight();
+                if (isWithinMap(pointDownRight) && (vegetationDownRight == WATER || vegetationBelow == WATER)) {
+                    possibleConnections.add(pointDownRight);
+                }
+
+                Point pointDownLeft = point.downLeft();
+                if (isWithinMap(pointDownLeft) && (vegetationBelow == WATER || vegetationDownLeft == WATER)) {
+                    possibleConnections.add(pointDownLeft);
+                }
+
+                return possibleConnections;
+            }
+
+            @Override
+            public int realDistance(Point currentPoint, Point neighbor) {
+                return 1;
+            }
+        });
     }
 }

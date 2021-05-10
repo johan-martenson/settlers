@@ -13,18 +13,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.appland.settlers.model.Worker.States.IDLE_INSIDE;
-import static org.appland.settlers.model.Worker.States.IDLE_OUTSIDE;
-import static org.appland.settlers.model.Worker.States.WALKING_AND_EXACTLY_AT_POINT;
-import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
-
 /**
  *
  * @author johan
  */
 public abstract class Worker {
 
-    enum States {
+    private enum State {
         WALKING_AND_EXACTLY_AT_POINT,
         WALKING_BETWEEN_POINTS,
         IDLE_OUTSIDE,
@@ -37,26 +32,28 @@ public abstract class Worker {
     private static final int SPEED_ADJUST = 1;
 
     protected final Player player;
+
     private final Countdown walkCountdown;
+
+    final GameMap map;
 
     private boolean     dead;
     private List<Point> path;
-    private States      state;
+    private State       state;
     private Cargo       carriedCargo;
-    private Building    buildingToEnter;
+    private Building    targetBuilding;
     private Point       position;
     private Point       target;
     private Building    home;
 
-    final GameMap map;
-
     static class ProductivityMeasurer {
         private final int   cycleLength;
-        private Building building;
-        private int   currentProductivityMeasurement;
-        private int   productionCycle;
         private final int[] productiveTime;
-        private int   currentUnproductivityMeasurement;
+
+        private Building building;
+        private int      currentProductivityMeasurement;
+        private int      productionCycle;
+        private int      currentUnproductivityMeasurement;
 
         ProductivityMeasurer(int cycleLength, Building building) {
             this.cycleLength = cycleLength;
@@ -127,17 +124,17 @@ public abstract class Worker {
     }
 
     Worker(Player player, GameMap map) {
-        this.player     = player;
-        target          = null;
-        position        = null;
-        path            = null;
-        buildingToEnter = null;
-        home            = null;
-        this.map        = map;
+        this.player    = player;
+        target         = null;
+        position       = null;
+        path           = null;
+        targetBuilding = null;
+        home           = null;
+        this.map       = map;
 
         walkCountdown  = new Countdown();
 
-        state = IDLE_OUTSIDE;
+        state = State.IDLE_OUTSIDE;
 
         dead = false;
     }
@@ -154,21 +151,21 @@ public abstract class Worker {
 
         Duration duration = new Duration(counterName);
 
-        if (state == WALKING_AND_EXACTLY_AT_POINT) {
+        if (state == State.WALKING_AND_EXACTLY_AT_POINT) {
 
             /* Arrival at target is already handled so in this branch the worker is at a fixed point but not the target point */
 
             /* Start the next part of the road */
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-            state = WALKING_BETWEEN_POINTS;
+            state = State.WALKING_BETWEEN_POINTS;
 
-        } else if (state == WALKING_BETWEEN_POINTS) {
+        } else if (state == State.WALKING_BETWEEN_POINTS) {
             walkCountdown.step();
 
             if (walkCountdown.hasReachedZero()) {
 
-                state = WALKING_AND_EXACTLY_AT_POINT;
+                state = State.WALKING_AND_EXACTLY_AT_POINT;
 
                 /* Update the worker's position */
                 position = path.get(0);
@@ -184,18 +181,18 @@ public abstract class Worker {
                 if (position.equals(target)) {
 
                     /* Set the state to idle and outside */
-                    state = IDLE_OUTSIDE;
+                    state = State.IDLE_OUTSIDE;
 
                     /* Enter buildings if required and give the sub classes a change to act */
                     handleArrival();
                 }
             }
-        } else if (state == States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT) {
+        } else if (state == State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT) {
 
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-            state = States.WALKING_HALF_WAY;
-        } else if (state == States.WALKING_HALF_WAY) {
+            state = State.WALKING_HALF_WAY;
+        } else if (state == State.WALKING_HALF_WAY) {
 
             walkCountdown.step();
 
@@ -203,13 +200,13 @@ public abstract class Worker {
             if (getPercentageOfDistanceTraveled() >= 50) {
                 onWalkedHalfWay();
 
-                state = States.IDLE_HALF_WAY;
+                state = State.IDLE_HALF_WAY;
             }
-        } else if (state == IDLE_OUTSIDE) {
+        } else if (state == State.IDLE_OUTSIDE) {
             onIdle();
-        } else if (state == IDLE_INSIDE) {
+        } else if (state == State.IDLE_INSIDE) {
             onIdle();
-        } else if (state == States.IDLE_HALF_WAY) {
+        } else if (state == State.IDLE_HALF_WAY) {
             onIdle();
         }
 
@@ -228,8 +225,8 @@ public abstract class Worker {
                 str = "Worker latest at " + getLastPoint() + " traveling to " + target;
             }
 
-            if (buildingToEnter != null) {
-                str += " for " + buildingToEnter;
+            if (targetBuilding != null) {
+                str += " for " + targetBuilding;
             }
 
             if (carriedCargo != null) {
@@ -253,6 +250,15 @@ public abstract class Worker {
 
     private void handleArrival() throws InvalidRouteException {
 
+        /* Just enter the storage and do nothing more */
+        if (targetBuilding != null && targetBuilding instanceof Storehouse && targetBuilding.isOccupied()) {
+            Storehouse storehouse = (Storehouse) targetBuilding;
+
+            storehouse.depositWorker(this);
+
+            return;
+        }
+
         /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
@@ -265,7 +271,7 @@ public abstract class Worker {
                 /* Go back to storage if the building is not ok to enter */
                 if (building.isBurningDown() || building.isDestroyed()) {
 
-                    buildingToEnter = null;
+                    targetBuilding = null;
 
                     returnToStorage();
 
@@ -278,7 +284,7 @@ public abstract class Worker {
                 }
             }
 
-            buildingToEnter = null;
+            targetBuilding = null;
         }
 
         /* This lets subclasses add their own logic */
@@ -307,7 +313,7 @@ public abstract class Worker {
 
     public boolean isArrived() {
 
-        if (state == IDLE_INSIDE || state == IDLE_OUTSIDE) {
+        if (state == State.IDLE_INSIDE || state == State.IDLE_OUTSIDE) {
             return true;
         }
 
@@ -315,7 +321,7 @@ public abstract class Worker {
     }
 
     public boolean isTraveling() {
-        return state == WALKING_AND_EXACTLY_AT_POINT || state == WALKING_BETWEEN_POINTS;
+        return state == State.WALKING_AND_EXACTLY_AT_POINT || state == State.WALKING_BETWEEN_POINTS;
     }
 
     private int getSpeed() {
@@ -325,7 +331,7 @@ public abstract class Worker {
     }
 
     public void setTargetBuilding(Building building) throws InvalidRouteException {
-        buildingToEnter = building;
+        targetBuilding = building;
         setTarget(building.getPosition());
 
         /* Let sub classes add logic */
@@ -336,11 +342,11 @@ public abstract class Worker {
     }
 
     public Building getTargetBuilding() {
-        return buildingToEnter;
+        return targetBuilding;
     }
 
     public boolean isExactlyAtPoint() {
-        return state != WALKING_BETWEEN_POINTS && state != States.WALKING_HALF_WAY && state != States.IDLE_HALF_WAY;
+        return state != State.WALKING_BETWEEN_POINTS && state != State.WALKING_HALF_WAY && state != State.IDLE_HALF_WAY;
     }
 
     public Point getLastPoint() {
@@ -356,10 +362,10 @@ public abstract class Worker {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (state != WALKING_BETWEEN_POINTS  &&
-            state != States.WALKING_HALF_WAY &&
-            state != States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
-            state != States.IDLE_HALF_WAY) {
+        if (state != State.WALKING_BETWEEN_POINTS  &&
+            state != State.WALKING_HALF_WAY &&
+            state != State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
+            state != State.IDLE_HALF_WAY) {
             return 100;
         }
 
@@ -371,7 +377,7 @@ public abstract class Worker {
             throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
         }
 
-        state = IDLE_INSIDE;
+        state = State.IDLE_INSIDE;
 
         home = building;
 
@@ -383,7 +389,7 @@ public abstract class Worker {
     }
 
     public boolean isInsideBuilding() {
-        return state == IDLE_INSIDE;
+        return state == State.IDLE_INSIDE;
     }
 
     public boolean isAt(Point point) {
@@ -404,12 +410,12 @@ public abstract class Worker {
 
         target = point;
 
-        if (state == IDLE_INSIDE) {
+        if (state == State.IDLE_INSIDE) {
             wasInside = true;
         }
 
         if (position.equals(point)) {
-            state = IDLE_OUTSIDE;
+            state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
@@ -431,7 +437,7 @@ public abstract class Worker {
 
             path.remove(0);
 
-            state = WALKING_AND_EXACTLY_AT_POINT;
+            state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -443,11 +449,11 @@ public abstract class Worker {
         path = pathToWalk;
 
         if (position.equals(target)) {
-            state = IDLE_OUTSIDE;
+            state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
-            state = WALKING_AND_EXACTLY_AT_POINT;
+            state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -461,11 +467,11 @@ public abstract class Worker {
         path.remove(0);
 
         if (position.equals(target)) {
-            state = IDLE_OUTSIDE;
+            state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
-            state = WALKING_AND_EXACTLY_AT_POINT;
+            state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -473,7 +479,7 @@ public abstract class Worker {
     }
 
     void setTarget(Point point) throws InvalidRouteException {
-        if (state == IDLE_INSIDE) {
+        if (state == State.IDLE_INSIDE) {
             if (!point.equals(home.getFlag().getPosition())) {
                 setTarget(point, home.getFlag().getPosition());
             } else {
@@ -489,7 +495,7 @@ public abstract class Worker {
         target = point;
 
         if (position.equals(point)) {
-            state = IDLE_OUTSIDE;
+            state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
@@ -508,7 +514,7 @@ public abstract class Worker {
             /* Remove the current point from the path */
             path.remove(0);
 
-            state = WALKING_AND_EXACTLY_AT_POINT;
+            state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -516,7 +522,7 @@ public abstract class Worker {
     }
 
     void stopWalkingToTarget() {
-        state = IDLE_OUTSIDE;
+        state = State.IDLE_OUTSIDE;
 
         path.clear();
         target = null;
@@ -586,7 +592,7 @@ public abstract class Worker {
         /* Walk half way to the given target */
         setOffroadTarget(point);
 
-        state = States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
+        state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }
 
     void onWalkedHalfWay() {}
@@ -607,7 +613,7 @@ public abstract class Worker {
         path.add(previousLastPoint);
 
         /* Set the state to be walking between two fixed points */
-        state = WALKING_BETWEEN_POINTS;
+        state = State.WALKING_BETWEEN_POINTS;
     }
 
     GameMap getMap() {
@@ -615,11 +621,11 @@ public abstract class Worker {
     }
 
     void cancelWalkingToTarget() {
-        state = IDLE_OUTSIDE;
+        state = State.IDLE_OUTSIDE;
     }
 
     void clearTargetBuilding() {
-        buildingToEnter = null;
+        targetBuilding = null;
     }
 
     int getProductivity() {
@@ -655,6 +661,12 @@ public abstract class Worker {
 
     protected void setDead() {
         dead = true;
+    }
+
+    void goToStorehouse(Storehouse storehouse) throws InvalidRouteException {
+        setTarget(storehouse.getPosition());
+
+        targetBuilding = storehouse;
     }
 }
 

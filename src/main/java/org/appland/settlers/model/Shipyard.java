@@ -16,7 +16,7 @@ import static org.appland.settlers.model.Size.LARGE;
  * @author johan
  */
 @HouseSize(size = LARGE, material = {PLANK, PLANK, PLANK, STONE, STONE, STONE})
-@Production(output = BOAT, requiredGoods = {PLANK, PLANK})
+@Production(output = BOAT, requiredGoods = {PLANK, PLANK, PLANK, PLANK})
 @RequiresWorker(workerType = SHIPWRIGHT)
 public class Shipyard extends Building {
 

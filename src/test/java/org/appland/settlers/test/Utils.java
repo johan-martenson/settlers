@@ -2400,6 +2400,61 @@ public class Utils {
         return currentShips;
     }
 
+    public static void waitForBuildingToGetBuilder(Building building) throws InvalidUserActionException, InvalidRouteException {
+        GameMap map = building.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (building.getBuilder() != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(building.getBuilder());
+    }
+
+    public static void waitForBuildingToBeUnderConstruction(Building building) throws InvalidUserActionException, InvalidRouteException {
+        GameMap map = building.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (building.isUnderConstruction()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(building.isUnderConstruction());
+    }
+
+    public static void waitForShipToBeReadyForExpedition(Ship ship, GameMap map) throws InvalidUserActionException, InvalidRouteException {
+        for (int i = 0; i < 5000; i++) {
+
+            if (ship.isReadyToStartExpedition()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(ship.isReadyToStartExpedition());
+    }
+
+    public static void waitForWorkerToHaveNoTargetSet(Ship ship, GameMap map) throws InvalidUserActionException, InvalidRouteException {
+        for (int i = 0; i < 10000; i++) {
+            if (ship.getTarget() == null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNull(ship.getTarget());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

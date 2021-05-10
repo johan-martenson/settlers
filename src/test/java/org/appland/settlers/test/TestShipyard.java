@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
@@ -56,16 +55,19 @@ public class TestShipyard {
 
     /*
     * TODO:
-    *   - shipyard can only be placed in some places (e.g. close to water)
     *   - available shipyard places
-    *   - does shipwright stay out and build, or does he go in when there is no material available?
+    *        - shipyard can only be placed in some places (e.g. close to water)
+    *        - can only place shipyard close to water where ship can sail
+    *        - test that shipwright doesn't pick point it cannot go to
+    *   - the way the shipwright builds is to 1) pick a plank, 2) go to the ship, 3) hammer, 4) go back -- and iterate
     *   - what does a ship cost?
     *   - production of small boats - pause and resume, produce without connection to storage, place on flag, etc.
     *   - available construction around ship being built
     *   - switch between boats and ships during production
     *   - how far away from water can a ship be built?
-    *   - can only place shipyard close to water where ship can sail
     *   - rule for where shipyards can be placed???
+    *   - test and handle case where there is no point to place the ship on (incl. wrong type of water)
+    *   - can't build ship on stones, trees, houses, roads, flags
     *
     * */
 
@@ -362,6 +364,10 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -387,7 +393,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Run the game logic 99 times and make sure the shipwright stays in the shipyard */
         for (int i = 0; i < 99; i++) {
@@ -411,6 +417,10 @@ public class TestShipyard {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -439,7 +449,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Run the game logic 99 times and make sure the shipwright stays in the shipyard */
         for (int i = 0; i < 99; i++) {
@@ -467,6 +477,10 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -492,7 +506,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Let the shipwright rest */
         Utils.fastForward(99, map);
@@ -535,6 +549,62 @@ public class TestShipyard {
     }
 
     @Test
+    public void testShipwrightBuildsAShipPointOnWaterEdge() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Connect the shipyard with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Let the shipwright rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once and make sure the shipwright goes out of the shipyard */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        Point point = shipwright.getTarget();
+
+        assertTrue(shipwright.isTraveling());
+        assertTrue(GameUtils.isSomeButNotAll(map.getSurroundingTiles(point), DetailedVegetation.WATER));
+    }
+
+    @Test
     public void testShipwrightReturnsViaFlagAfterStartingToBuildShip() throws Exception {
 
         /* Create single player game */
@@ -542,6 +612,10 @@ public class TestShipyard {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -568,7 +642,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -630,7 +704,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -653,7 +727,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -693,6 +767,542 @@ public class TestShipyard {
     }
 
     @Test
+    public void testShipwrightOnlyBuildsShipWhenThereAreEnoughResources() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Pause production in the shipyard to control the amount of planks when we start */
+        shipyard.stopProduction();
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Wait for the shipyard to have all required planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(shipyard, PLANK, 4);
+
+        assertFalse(shipyard.needsMaterial(PLANK));
+
+        /* Remove the road to make sure there are no more deliveries of planks */
+        map.removeRoad(road0);
+
+        /* Resume production */
+        shipyard.resumeProduction();
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to build a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        for (int i = 0; i < 100; i++) {
+            if (ship.isReady()) {
+                break;
+            }
+
+            assertTrue(ship.isUnderConstruction());
+
+            map.stepTime();
+        }
+
+        assertTrue(ship.isReady());
+        assertFalse(ship.isUnderConstruction());
+        assertEquals(shipyard.getAmount(PLANK), 0);
+
+        /* Verify that the shipyard doesn't build any more ships because it's out of resources */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(map.getShips().size(), 1);
+            assertEquals(shipyard.getAmount(PLANK), 0);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFinishedShipStaysInWaterCloseToShipyard() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to build a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        assertTrue(ship.isUnderConstruction());
+        assertFalse(ship.isReady());
+
+        Point point3 = shipwright.getPosition();
+
+        for (int i = 0; i < 100; i++) {
+            if (ship.isReady()) {
+                break;
+            }
+
+            if (shipyard.getAmount(PLANK) < 2) {
+                Utils.deliverCargo(shipyard, PLANK);
+            }
+
+            assertTrue(ship.isUnderConstruction());
+
+            map.stepTime();
+        }
+
+        assertTrue(ship.isReady());
+
+        /* Verify that the ship sails a short distance and then lies waiting */
+        Point point4 = ship.getTarget();
+
+        assertNotNull(point4);
+        assertNotEquals(point4, point3);
+        assertTrue(GameUtils.getDistanceInGameSteps(point4, shipyard.getPosition()) < 6);
+        assertTrue(GameUtils.isAll(map.getSurroundingTiles(point4), DetailedVegetation.WATER));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point4);
+
+        Utils.verifyWorkersDoNotMove(map, ship);
+    }
+
+    @Test
+    public void testShipIsBuiltCloseToWaterRightOfShipyard() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(17, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to start building a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        /* Verify that the ship is built close to the water */
+        assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
+        assertTrue(Math.abs(ship.getPosition().y - point2.y) < 5);
+    }
+
+    @Test
+    public void testCannotBuildShipCloseToWater2() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(17, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Verify that the shipwright stays in the building because there is no correct type of water close by */
+        for (int i = 0; i < 500; i++) {
+            System.out.println(shipwright.getTarget());
+
+            assertTrue(shipwright.isInsideBuilding());
+            assertEquals(map.getShips().size(), 0);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCannotBuildShipCloseToBuildableWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(17, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.BUILDABLE_WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Verify that the shipwright stays in the building because there is no correct type of water close by */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(shipwright.isInsideBuilding());
+            assertEquals(map.getShips().size(), 0);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testShipIsBuiltCloseToWaterLeftOfShipyard() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(4, 10);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to start building a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        /* Verify that the ship is built close to the water */
+        assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
+        assertTrue(Math.abs(ship.getPosition().y - point2.y) < 5);
+    }
+
+    @Test
+    public void testShipIsBuiltCloseToWaterAboveShipyard() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(10, 14);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to start building a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        /* Verify that the ship is built close to the water */
+        assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
+        assertTrue(Math.abs(ship.getPosition().y - point2.y) < 5);
+    }
+
+    @Test
+    public void testShipIsBuiltCloseToWaterBelowShipyard() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(5, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lake */
+        Point point2 = new Point(9, 3);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
+        /* Place shipyard */
+        Point point0 = new Point(9, 11);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Instruct the shipyard to construct ships */
+        shipyard.produceShips();
+
+        assertTrue(shipyard.isProducingShips());
+
+        /* Wait for a shipwright to occupy the shipyard */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        /* Wait for the shipwright to reach the position where the new ship will be built */
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
+
+        /* Wait for the shipwright to start building a ship */
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        /* Verify that the ship is built close to the water */
+        assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
+        assertTrue(Math.abs(ship.getPosition().y - point2.y) < 5);
+    }
+
+    @Test
     public void testShipyardWithoutPlanksProducesNothing() throws Exception {
 
         /* Create single player game */
@@ -729,87 +1339,6 @@ public class TestShipyard {
 
             map.stepTime();
         }
-    }
-
-    @Test
-    public void testShipMovesToWaterWhenItIsReady() throws Exception {
-
-        /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-
-        /* Place headquarter */
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
-
-        /* Place lake */
-        Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
-
-        /* Place shipyard */
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
-
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
-
-        /* Wait for the shipyard to get constructed */
-        Utils.waitForBuildingToBeConstructed(shipyard);
-
-        /* Instruct the shipyard to construct ships */
-        shipyard.produceShips();
-
-        assertTrue(shipyard.isProducingShips());
-
-        /* Wait for a shipwright to occupy the shipyard */
-        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
-
-        assertTrue(shipwright.isInsideBuilding());
-
-        /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
-
-        /* Wait for the shipwright to rest */
-        Utils.fastForward(99, map);
-
-        assertTrue(shipwright.isInsideBuilding());
-
-        /* Step once to let the shipwright go out to start building a ship */
-        map.stepTime();
-
-        /* Wait for the shipwright to reach the point where the ship will be built */
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipwright, shipwright.getTarget());
-
-        /* Wait for the shipwright to build a ship given enough resources */
-        assertEquals(map.getShips().size(), 1);
-
-        Ship ship = map.getShips().get(0);
-
-        Point pointDuringConstruction = ship.getPosition();
-
-        assertTrue(ship.isUnderConstruction());
-        assertFalse(ship.isReady());
-
-        for (int i = 0; i < 100; i++) {
-            if (ship.isReady()) {
-                break;
-            }
-
-            if (shipyard.getAmount(PLANK) < 2) {
-                Utils.deliverCargo(shipyard, PLANK);
-            }
-
-            assertTrue(ship.isUnderConstruction());
-
-            map.stepTime();
-        }
-
-        assertTrue(ship.isReady());
-        assertFalse(ship.isUnderConstruction());
-        assertTrue(GameUtils.areAnyOneOf(map.getSurroundingTiles(ship.getPosition()), DetailedVegetation.WATER_VEGETATION));
-        assertNotEquals(ship.getPosition(), pointDuringConstruction);
     }
 
     @Test
@@ -1152,6 +1681,10 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -1175,7 +1708,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -1228,6 +1761,10 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point2 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
@@ -1251,7 +1788,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -1297,13 +1834,17 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point0 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        Point point2 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
@@ -1320,7 +1861,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -1373,13 +1914,17 @@ public class TestShipyard {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place lake */
+        Point point0 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
         /* Place headquarter */
         Point point1 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place shipyard */
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        Point point2 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
@@ -1396,7 +1941,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -1430,6 +1975,7 @@ public class TestShipyard {
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
         /* Verify that it's not possible to place a flag on the ship being built */
+        assertTrue(ship.isUnderConstruction());
         assertFalse(map.isAvailableFlagPoint(player0, ship.getPosition()));
     }
 
@@ -1443,16 +1989,16 @@ public class TestShipyard {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point1 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place lake */
-        Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
+        Point point1 = new Point(15, 9);
+        Utils.surroundPointWithDetailedVegetation(point1, DetailedVegetation.WATER, map);
 
         /* Place shipyard */
-        Point point0 = new Point(10, 6);
-        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point0);
+        Point point2 = new Point(10, 6);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point2);
 
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
@@ -1469,7 +2015,7 @@ public class TestShipyard {
         assertTrue(shipwright.isInsideBuilding());
 
         /* Ensure the shipyard has plenty of materials */
-        Utils.deliverCargos(shipyard, PLANK, 2);
+        Utils.deliverCargos(shipyard, PLANK, 4);
 
         /* Wait for the shipwright to rest */
         Utils.fastForward(99, map);
@@ -1484,6 +2030,7 @@ public class TestShipyard {
         Point point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
+        assertTrue(map.isAvailableFlagPoint(player0, point));
 
         /* Let the shipwright reach the intended spot and start to build the ship */
         Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
@@ -1501,6 +2048,9 @@ public class TestShipyard {
         Ship ship = map.getShips().get(0);
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
+        assertEquals(ship.getPosition(), point);
+        assertTrue(ship.isUnderConstruction());
+        assertFalse(map.isAvailableFlagPoint(player0, point));
 
         /* Wait for the ship to get fully constructed */
         Utils.waitForShipToGetBuilt(map, ship);
@@ -1509,7 +2059,7 @@ public class TestShipyard {
         assertFalse(ship.isUnderConstruction());
 
         /* Verify that there is available building space where the ship was being built before */
-        assertTrue(map.isAvailableFlagPoint(player0, ship.getPosition()));
+        assertTrue(map.isAvailableFlagPoint(player0, point));
     }
 
     @Test

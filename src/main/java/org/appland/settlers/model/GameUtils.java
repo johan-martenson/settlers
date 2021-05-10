@@ -21,6 +21,14 @@ import static java.lang.Math.abs;
 import static java.lang.Math.ceil;
 import static java.lang.Math.floor;
 import static java.lang.Math.round;
+import static org.appland.settlers.model.Direction.DOWN;
+import static org.appland.settlers.model.Direction.DOWN_LEFT;
+import static org.appland.settlers.model.Direction.DOWN_RIGHT;
+import static org.appland.settlers.model.Direction.LEFT;
+import static org.appland.settlers.model.Direction.RIGHT;
+import static org.appland.settlers.model.Direction.UP;
+import static org.appland.settlers.model.Direction.UP_LEFT;
+import static org.appland.settlers.model.Direction.UP_RIGHT;
 import static org.appland.settlers.model.Material.COIN;
 
 /**
@@ -70,13 +78,13 @@ public class GameUtils {
         return hexagonBorder;
     }
 
-    public static Collection<Point> getHexagonAreaAroundPoint(Point position, int i, GameMap map) {
+    public static Set<Point> getHexagonAreaAroundPoint(Point position, int radius, GameMap map) {
         Set<Point> area = new HashSet<>();
 
-        int xStart = position.x - i;
-        int xEnd = position.x + i;
+        int xStart = position.x - radius;
+        int xEnd = position.x + radius;
 
-        for (int y = position.y - i; y < position.y; y++) {
+        for (int y = position.y - radius; y < position.y; y++) {
             for (int x = xStart; x <= xEnd; x += 2) {
                 if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
                     continue;
@@ -89,10 +97,10 @@ public class GameUtils {
             xEnd++;
         }
 
-        xStart = position.x - i;
-        xEnd = position.x + i;
+        xStart = position.x - radius;
+        xEnd = position.x + radius;
 
-        for (int y = position.y + i; y >= position.y; y--) {
+        for (int y = position.y + radius; y >= position.y; y--) {
             for (int x = xStart; x <= xEnd; x += 2) {
                 if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
                     continue;
@@ -297,6 +305,183 @@ public class GameUtils {
         return points.size() == pointsSet.size();
     }
 
+    public static Direction getDirection(Point from, Point to) {
+        int deltaX = to.x - from.x;
+        int deltaY = to.y - from.y;
+
+        /* To the right */
+        if (deltaX > 0) {
+
+            /* Above */
+            if (deltaY > 0) {
+
+                if (deltaY > deltaX * 2) {
+                    return UP;
+                }
+
+                if (deltaX > deltaY * 2) {
+                    return RIGHT;
+                }
+
+                return UP_RIGHT;
+
+            /* Below */
+            } else {
+
+                if (Math.abs(deltaY) > deltaX * 2) {
+                    return DOWN;
+                }
+
+                if (deltaX > Math.abs(deltaY) * 2) {
+                    return RIGHT;
+                }
+
+                return DOWN_RIGHT;
+
+            }
+
+        /* To the left */
+        } else {
+
+            /* Above */
+            if (deltaY > 0) {
+
+                if (deltaY > Math.abs(deltaX) * 2) {
+                    return UP;
+                }
+
+                if (Math.abs(deltaX) > deltaY * 2) {
+                    return LEFT;
+                }
+
+                return UP_LEFT;
+
+            /* Below */
+            } else {
+
+                if (deltaY < deltaX * 2) {
+                    return DOWN;
+                }
+
+                if (deltaX < deltaY * 2) {
+                    return LEFT;
+                }
+
+                return DOWN_LEFT;
+            }
+        }
+    }
+
+    public static Point getClosestWaterPoint(Point position, GameMap map) {
+        int distanceToClosestWater = Integer.MAX_VALUE;
+        Point pointClosestWater = null;
+
+        for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
+
+            /* Filter points that are not connected to water */
+            if (!isAny(map.getSurroundingTiles(point), DetailedVegetation.WATER)) {
+                continue;
+            }
+
+            int candidateDistance = getDistanceInGameSteps(position, point);
+
+            /* Filter points that are not closer than the current best pick */
+            if (candidateDistance >= distanceToClosestWater){
+                continue;
+            }
+
+            distanceToClosestWater = candidateDistance;
+            pointClosestWater = point;
+        }
+
+        return pointClosestWater;
+    }
+
+    public static Point getClosestWaterPointForBuilding(Building building) {
+        GameMap map = building.getMap();
+
+        Point position = building.getPosition();
+
+        return getClosestWaterPoint(position, map);
+    }
+
+    public static int min(int... numbers) {
+        int minimum = numbers[0];
+
+        for (int number : numbers) {
+            minimum = Math.min(minimum, number);
+        }
+
+        return minimum;
+    }
+
+    public static Harbor getClosestHarborOffroadForPlayer(Player player, Point position, int radius) {
+        GameMap map = player.getMap();
+
+        Harbor closestHarbor = null;
+        int distanceToClosestHarbor = Integer.MAX_VALUE;
+
+        for (Point point : GameUtils.getHexagonAreaAroundPoint(position, radius, map)) {
+
+            Building building = map.getBuildingAtPoint(point);
+
+            /* Filter points without a building */
+            if (building == null) {
+                continue;
+            }
+
+            /* Filter buildings that are not harbors */
+            if (!Objects.equals(building.getClass(), Harbor.class)) {
+                continue;
+            }
+
+            int candidateDistance = getDistanceInGameSteps(position, building.getPosition());
+
+            /* Filter buildings that are further away than the current candidate */
+            if (candidateDistance >= distanceToClosestHarbor) {
+                continue;
+            }
+
+            closestHarbor = (Harbor) building;
+            distanceToClosestHarbor = candidateDistance;
+        }
+
+        return closestHarbor;
+    }
+
+    public static void putCargos(Material material, int amount, Building building) {
+        GameMap map = building.getMap();
+
+        for (int i = 0; i < amount; i++) {
+            Cargo cargo = new Cargo(material, map);
+
+            building.promiseDelivery(material);
+
+            building.putCargo(cargo);
+        }
+    }
+
+    public static void putCargosOnFlag(Material material, int amount, Building building, Flag flag, GameMap map) throws InvalidRouteException {
+        for (int i = 0; i < amount; i++) {
+            Cargo cargo = new Cargo(material, map);
+
+            cargo.setPosition(flag.getPosition());
+            cargo.setTarget(building);
+
+            building.promiseDelivery(material);
+
+            flag.promiseCargo(cargo);
+
+            flag.putCargo(cargo);
+        }
+    }
+
+    public static void retrieveCargos(Storehouse storehouse, Material material, int amount) {
+        for (int i = 0; i < amount; i++) {
+            storehouse.retrieve(material);
+        }
+    }
+
     interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
 
@@ -322,6 +507,11 @@ public class GameUtils {
             }
 
             return 0;
+        }
+
+        @Override
+        public String toString() {
+            return " Point: " + point + ", cost: " + estimatedFullCostThroughPoint;
         }
     }
 
@@ -394,9 +584,9 @@ public class GameUtils {
                     int estimatedFullCostThroughPoint = newCostToGetToPoint + getDistanceInGameSteps(neighbor, goal);
 
                     /* Add the neighbor to the evaluation list */
-                    PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
+                    PointAndCost neighborPointAndEstimatedCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
 
-                    toEvaluatePriorityQueue.add(neighborPointAndCost);
+                    toEvaluatePriorityQueue.add(neighborPointAndEstimatedCost);
                 }
             }
         }

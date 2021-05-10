@@ -188,6 +188,7 @@ public class Builder extends Worker {
         return state == State.HAMMERING;
     }
 
+    @Override
     public String toString() {
         return "Builder for " + building;
     }

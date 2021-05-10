@@ -275,7 +275,7 @@ public class Building implements EndPoint {
         return promisedMilitary.size();
     }
 
-    public void assignWorker(Worker worker) {
+    public void assignWorker(Worker worker) throws InvalidRouteException {
 
         /* A building can't get an assigned worker while it's still under construction */
         if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
@@ -287,10 +287,14 @@ public class Building implements EndPoint {
             throw new InvalidGameLogicException("Building " + this + " is already occupied.");
         }
 
+        /* Change this building to be occupied by the worker */
         this.worker = worker;
         promisedWorker = null;
 
         state = State.OCCUPIED;
+
+        /* Give each type of building a chance to add extra logic when the building has become occupied */
+        onBuildingOccupied();
     }
 
     void deployMilitary(Military military) throws InvalidRouteException {
@@ -1232,7 +1236,7 @@ public class Building implements EndPoint {
     }
 
     /* Intended to be overridden by subclasses if needed */
-    void onConstructionFinished() { }
+    void onConstructionFinished() throws InvalidRouteException { }
 
     void setGeneration(long generation) {
         this.generation = generation;
@@ -1285,4 +1289,10 @@ public class Building implements EndPoint {
     void cancelPromisedBuilder(Builder builder) {
         this.builder = null;
     }
+
+    public boolean isHarbor() {
+        return false;
+    }
+
+    void onBuildingOccupied() throws InvalidRouteException { }
 }
