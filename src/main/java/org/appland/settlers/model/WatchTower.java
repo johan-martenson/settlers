@@ -34,7 +34,7 @@ public class WatchTower extends Building {
     }
 
     @Override
-    protected void doUpgradeBuilding() throws InvalidRouteException {
+    protected void doUpgradeBuilding() {
         Building upgraded = new Fortress(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);

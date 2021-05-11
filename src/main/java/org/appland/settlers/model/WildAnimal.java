@@ -67,7 +67,7 @@ public class WildAnimal extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
 
         if (state == State.ALIVE) {
             if (countdown.hasReachedZero()) {

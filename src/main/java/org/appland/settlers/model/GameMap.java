@@ -310,9 +310,8 @@ public class GameMap {
      * Removes the given road from the map
      *
      * @param road The road to remove
-     * @throws InvalidRouteException If there is a failure in making the courier return to storage or removing the road
      */
-    public void removeRoad(Road road) throws InvalidRouteException, InvalidUserActionException {
+    public void removeRoad(Road road) throws InvalidUserActionException {
 
         /* Don't allow removing the driveway for an existing building */
         if (isBuildingAtPoint(road.getStart()) || isBuildingAtPoint(road.getEnd())) {
@@ -322,7 +321,7 @@ public class GameMap {
         doRemoveRoad(road);
     }
 
-    void doRemoveRoad(Road road) throws InvalidRouteException {
+    void doRemoveRoad(Road road) {
         if (road.getCourier() != null) {
             road.getCourier().returnToStorage();
         }
@@ -382,7 +381,7 @@ public class GameMap {
      *
      * @throws Exception Any exception encountered while updating the game
      */
-    public void stepTime() throws InvalidRouteException, InvalidUserActionException {
+    public void stepTime() throws InvalidUserActionException {
 
         Duration duration = new Duration("GameMap.stepTime");
 
@@ -786,10 +785,8 @@ public class GameMap {
      * @param <T> The type of house
      * @return The house placed
      * @throws InvalidUserActionException Any exceptions encountered while placing the building
-     * @throws InvalidEndPointException Any exceptions encountered while placing the building
-     * @throws InvalidRouteException Any exceptions encountered while placing the building
      */
-    public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidRouteException {
+    public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException {
 
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
@@ -866,7 +863,7 @@ public class GameMap {
         return house;
     }
 
-    private Building doPlaceBuilding(Building house, Point point, boolean isFirstHouse) throws InvalidUserActionException, InvalidRouteException {
+    private Building doPlaceBuilding(Building house, Point point, boolean isFirstHouse) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
         MapPoint mapPointDownRight = getMapPoint(point.downRight());
 
@@ -920,7 +917,7 @@ public class GameMap {
         return house;
     }
 
-    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) throws InvalidRouteException {
+    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) {
 
         /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building>    claims       = new HashMap<>();
@@ -1120,7 +1117,7 @@ public class GameMap {
 
             try {
                 building.tearDown();
-            } catch (InvalidUserActionException | InvalidRouteException e) {
+            } catch (InvalidUserActionException e) {
                 InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
                 invalidGameLogicException.initCause(e);
 
@@ -1219,7 +1216,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exceptions encountered while placing the new road
      */
-    public Road placeRoad(Player player, Point... points) throws InvalidUserActionException, InvalidEndPointException {
+    public Road placeRoad(Player player, Point... points) throws InvalidUserActionException {
         if (!players.contains(player)) {
             throw new InvalidUserActionException("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
         }
@@ -1235,7 +1232,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exceptions encountered while placing the new road
      */
-    public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException, InvalidEndPointException {
+    public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException {
         /* Only allow roads that are at least three points long
          *   -- Driveways are shorter but they are created with a separate method
          */
@@ -1257,15 +1254,11 @@ public class GameMap {
         MapPoint mapPointEnd = getMapPoint(end);
 
         if (!mapPointStart.isFlag()) {
-            throw new InvalidEndPointException(start);
+            throw new InvalidUserActionException("There must be a flag at the endpoint: " + start);
         }
 
         if (!mapPointEnd.isFlag()) {
-            throw new InvalidEndPointException(end);
-        }
-
-        if (start.equals(end)) {
-            throw new InvalidEndPointException();
+            throw new InvalidUserActionException("There must be a flag at the endpoint: " + end);
         }
 
         /* Verify that the road does not overlap itself */
@@ -1322,10 +1315,9 @@ public class GameMap {
      * @param start The starting point of the road
      * @param end The end point of the road
      * @return The newly placed road
-     * @throws InvalidEndPointException Any exception encountered while placing the road
      * @throws InvalidUserActionException Any exception encountered while placing the road
      */
-    public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws InvalidEndPointException, InvalidUserActionException {
+    public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws InvalidUserActionException {
         return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
     }
 
@@ -1336,20 +1328,19 @@ public class GameMap {
      * @param start The start of the road
      * @param end The end of the road
      * @return The newly placed road
-     * @throws InvalidEndPointException Any exception encountered while placing the new road
      * @throws InvalidUserActionException Any exception encountered while placing the new road
      */
-    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws InvalidEndPointException, InvalidUserActionException {
+    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws InvalidUserActionException {
 
         /* Throw an exception if the start and end are the same */
         if (start.equals(end)) {
-            throw new InvalidEndPointException("An automatically placed road must have different start and end points.");
+            throw new InvalidUserActionException("An automatically placed road must have different start and end points.");
         }
 
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
 
     	if (wayPoints == null) {
-            throw new InvalidEndPointException(end);
+            throw new InvalidUserActionException("Can't place a road without points");
         }
 
         return placeRoad(player, wayPoints);
@@ -1372,9 +1363,8 @@ public class GameMap {
      * @param end The goal to reach
      * @param via Any points that need to be included in the path
      * @return The path if any is found, otherwise null
-     * @throws InvalidRouteException If the start and end points are the same
      */
-    public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
+    public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) {
         if (start.equals(via)) {
             return findWayWithExistingRoads(start, end);
         } else if (via.equals(end)) {
@@ -1397,11 +1387,10 @@ public class GameMap {
      * @param start The starting point
      * @param end The point to reach
      * @return The found path, or null if no path exists
-     * @throws InvalidRouteException If the start and end points are the same
      */
-    public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
+    public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidGameLogicException {
         if (start.equals(end)) {
-            throw new InvalidRouteException("Start and end are the same.");
+            throw new InvalidGameLogicException("Start and end are the same.");
         }
 
         // TODO: change to using GameUtils::findShortestDetailedPathViaRoads which only looks at start&end of roads
@@ -1436,7 +1425,7 @@ public class GameMap {
      * @return The placed flag
      * @throws Exception Any exception encountered while placing the flag
      */
-    public Flag placeFlag(Player player, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public Flag placeFlag(Player player, Point point) throws InvalidUserActionException {
 
         /* Verify that the player is valid */
         if (!players.contains(player)) {
@@ -1446,7 +1435,7 @@ public class GameMap {
         return placeFlag(new Flag(player, point));
     }
 
-    private Flag placeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+    private Flag placeFlag(Flag flag) throws InvalidUserActionException {
 
         if (!isAvailableFlagPoint(flag.getPlayer(), flag.getPosition(), true)) {
             throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
@@ -1455,7 +1444,7 @@ public class GameMap {
         return doPlaceFlag(flag);
     }
 
-    private Flag doPlaceFlagRegardlessOfBorder(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+    private Flag doPlaceFlagRegardlessOfBorder(Flag flag) throws InvalidUserActionException {
 
         if (!isAvailableFlagPoint(flag.getPlayer(), flag.getPosition(), false)) {
             throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
@@ -1464,7 +1453,7 @@ public class GameMap {
         return doPlaceFlag(flag);
     }
 
-    private Flag doPlaceFlag(Flag flag) throws InvalidRouteException {
+    private Flag doPlaceFlag(Flag flag) {
 
         Point flagPoint = flag.getPosition();
         MapPoint mapPoint = getMapPoint(flagPoint);
@@ -2432,7 +2421,7 @@ public class GameMap {
      * @param flag The flag to remove
      * @throws Exception Throws exception if there is a fault when removing connected roads
      */
-    public void removeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
+    public void removeFlag(Flag flag) throws InvalidUserActionException {
 
         if (flag == null) {
             throw new InvalidUserActionException("Cannot remove flag that is null");

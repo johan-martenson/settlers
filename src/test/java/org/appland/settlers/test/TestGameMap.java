@@ -12,7 +12,6 @@ import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -266,7 +265,7 @@ public class TestGameMap {
             map.findWayWithExistingRoads(point1, point1);
 
             fail();
-        } catch (InvalidRouteException e) {}
+        } catch (Throwable e) {}
     }
 
     @Test

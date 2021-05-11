@@ -67,7 +67,7 @@ public class StorageWorker extends Worker {
     }
 
     // FIXME: HOTSPOT
-    private Cargo tryToStartDelivery() throws InvalidRouteException {
+    private Cargo tryToStartDelivery() {
 
         for (Material material : getPlayer().getTransportPrioritiesForEachMaterial()) {
 
@@ -162,7 +162,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
 
@@ -186,7 +186,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
             Flag flag = getHome().getFlag();
 
@@ -211,7 +211,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
@@ -346,7 +346,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&

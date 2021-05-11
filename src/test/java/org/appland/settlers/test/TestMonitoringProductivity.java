@@ -24,8 +24,6 @@ import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.HunterHut;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronMine;
@@ -2728,7 +2726,7 @@ public class TestMonitoringProductivity {
     }
 
     @Test
-    public void testMonitoringWhenWoodcutterProductionPercentageChanges() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testMonitoringWhenWoodcutterProductionPercentageChanges() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -2787,7 +2785,7 @@ public class TestMonitoringProductivity {
     }
 
     @Test
-    public void testMonitoringWhenWoodcutterProductionPercentageChangesIsOnlySentOnce() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testMonitoringWhenWoodcutterProductionPercentageChangesIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

@@ -5,8 +5,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -28,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 public class TestRobustTransportation {
 
     @Test
-    public void testCourierDoesNotCarryItsCargoBackAndForth() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testCourierDoesNotCarryItsCargoBackAndForth() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

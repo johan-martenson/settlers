@@ -12,8 +12,8 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.InvalidGameLogicException;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -100,7 +100,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCreateRoadWithoutStartBuilding() throws Exception {
+    public void testCreateRoadToBuilding() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -116,14 +116,15 @@ public class TestTransportation {
         Point point1 = new Point(4, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place road */
-        Point point3 = new Point(5, 7);
+        /* Place flag */
+        Point point3 = new Point(8, 6);
 
+        /* Verify that it's not possible to place a road to a building */
         try {
             map.placeAutoSelectedRoad(player0, new Flag(point3), new Flag(storehouse.getPosition()));
 
             fail();
-        } catch (InvalidEndPointException e) {}
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test
@@ -152,11 +153,11 @@ public class TestTransportation {
             map.placeAutoSelectedRoad(player0, new Flag(point2), woodcutter.getFlag());
 
             fail();
-        } catch (InvalidEndPointException e) {}
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test
-    public void testCreateRoadWithoutAnyValidEndpoints() throws Exception {
+    public void testCreateRoadBetweenFlagsThatAreNotPlacedOnTheMap() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -176,7 +177,7 @@ public class TestTransportation {
             map.placeAutoSelectedRoad(player0, new Flag(point1), new Flag(point2));
 
             fail();
-        } catch (InvalidEndPointException e) {}
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test
@@ -233,7 +234,7 @@ public class TestTransportation {
         /* Place road */
         try {
             map.placeAutoSelectedRoad(player0, flag0, flag0);
-        } catch (InvalidEndPointException e) {
+        } catch (InvalidUserActionException e) {
         }
     }
 
@@ -249,7 +250,7 @@ public class TestTransportation {
         /* Verify that there is no road with the same start and end points */
         try {
             map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
-        } catch (InvalidRouteException e) {}
+        } catch (InvalidGameLogicException e) {}
     }
 
     @Test

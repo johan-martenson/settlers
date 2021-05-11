@@ -3,8 +3,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -46,7 +44,7 @@ public class TestBuilder {
     * */
 
     @Test
-    public void testJustPlacedWoodcutterIsPlanned() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testJustPlacedWoodcutterIsPlanned() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -72,7 +70,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderIsAssignedToPlannedBuilding() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBuilderIsAssignedToPlannedBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -103,7 +101,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBreakingPromisedBuilder() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBreakingPromisedBuilder() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -161,7 +159,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderIsCreated() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBuilderIsCreated() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -198,7 +196,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testPlannedBuildingGetsNeededMaterialDelivered() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPlannedBuildingGetsNeededMaterialDelivered() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -234,7 +232,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testPlannedBuildingIsNotConstructedWithoutBuilder() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPlannedBuildingIsNotConstructedWithoutBuilder() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -276,7 +274,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testPlannedBuildingIsConstructedByBuilder() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPlannedBuildingIsConstructedByBuilder() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -330,7 +328,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderWalksAroundDuringConstruction() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBuilderWalksAroundDuringConstruction() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -416,7 +414,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderWalksBackWhenConstructionIsDone() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBuilderWalksBackWhenConstructionIsDone() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -499,7 +497,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderIsDepositedInTheHeadquarterWhenHesBack() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testBuilderIsDepositedInTheHeadquarterWhenHesBack() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);

@@ -2,12 +2,10 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -78,7 +76,7 @@ public class Harbor extends Storehouse {
         return null;
     }
 
-    public void startExpedition(Direction direction) throws InvalidUserActionException, InvalidRouteException {
+    public void startExpedition(Direction direction) throws InvalidUserActionException {
 
         /* Get the ship */
         Ship ship = getAvailableShipForExpedition();
@@ -267,7 +265,7 @@ public class Harbor extends Storehouse {
     }
 
     @Override
-    void onConstructionFinished() throws InvalidRouteException {
+    void onConstructionFinished() {
 
         /* Report that the harbor is finished */
         getPlayer().reportHarborReady(this);
@@ -299,7 +297,7 @@ public class Harbor extends Storehouse {
     }
 
     @Override
-    void onBuildingOccupied() throws InvalidRouteException {
+    void onBuildingOccupied() {
         getMap().updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
     }
 }

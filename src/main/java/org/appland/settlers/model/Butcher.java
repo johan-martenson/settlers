@@ -59,7 +59,7 @@ public class Butcher extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 state = SLAUGHTERING_PIG;
@@ -124,7 +124,7 @@ public class Butcher extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -185,7 +185,7 @@ public class Butcher extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUTCHER);
 
         if (storage != null) {
@@ -211,7 +211,7 @@ public class Butcher extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -236,7 +236,7 @@ public class Butcher extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

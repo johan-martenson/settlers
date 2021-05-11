@@ -84,7 +84,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 if (hasFood()) {
@@ -162,7 +162,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
         if (state == GOING_OUT_TO_FLAG) {
             Cargo cargo = getCargo();
 
@@ -217,7 +217,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
         if (storage != null) {
@@ -243,7 +243,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -268,7 +268,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

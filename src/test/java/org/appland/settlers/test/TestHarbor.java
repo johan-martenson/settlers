@@ -16,8 +16,6 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -95,7 +93,7 @@ public class TestHarbor {
     }
 
     @Test
-    public void testCannotPlaceHarborWithoutMarkingFirst() throws InvalidEndPointException, InvalidRouteException, InvalidUserActionException {
+    public void testCannotPlaceHarborWithoutMarkingFirst() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);

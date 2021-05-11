@@ -4,8 +4,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -26,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 public class TestCourierWalksOnItsOwnRoad {
 
     @Test
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondFlag() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondFlag() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -102,7 +100,7 @@ public class TestCourierWalksOnItsOwnRoad {
     }
 
     @Test
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstFlag() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstFlag() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -188,7 +186,7 @@ public class TestCourierWalksOnItsOwnRoad {
     }
 
     @Test
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondBuilding() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierWalksOnOwnRoadWhenDeliveringFromFirstFlagToSecondBuilding() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -258,7 +256,7 @@ public class TestCourierWalksOnItsOwnRoad {
     }
 
     @Test
-    public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstBuilding() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierWalksOnOwnRoadWhenDeliveringFromSecondFlagToFirstBuilding() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

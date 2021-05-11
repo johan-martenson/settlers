@@ -8,8 +8,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -1246,7 +1244,7 @@ public class TestScout {
     }
 
     @Test
-    public void testScoutReturnsOffroadIfRoadIsMissingWhScoutReachesFlag() throws InvalidRouteException, InvalidUserActionException, InvalidEndPointException {
+    public void testScoutReturnsOffroadIfRoadIsMissingWhScoutReachesFlag() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

@@ -114,7 +114,7 @@ public class Cargo {
         pickupPromised = false;
     }
 
-    void transportToStorage() throws InvalidRouteException {
+    void transportToStorage() {
         Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, material);
 
         if (storehouse0 != null) {
@@ -124,7 +124,7 @@ public class Cargo {
         }
     }
 
-    private void returnToClosestStorage() throws InvalidRouteException {
+    private void returnToClosestStorage() {
         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
 
         if (storehouse != null) {
@@ -132,7 +132,7 @@ public class Cargo {
         }
     }
 
-    private void returnToStorage() throws InvalidRouteException {
+    private void returnToStorage() {
         Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storehouse0 != null) {
@@ -141,7 +141,7 @@ public class Cargo {
     }
 
     // FIXME: ALLOCATION HOTSPOT
-    void rerouteIfNeeded() throws InvalidRouteException {
+    void rerouteIfNeeded() {
 
         /* Handle the case where the targeted building cannot receive the cargo */
         if (target == null) {

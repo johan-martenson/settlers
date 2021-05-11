@@ -190,7 +190,7 @@ public class Building implements EndPoint {
         return 0;
     }
 
-    void setMap(GameMap map) throws InvalidRouteException {
+    void setMap(GameMap map) {
         this.map = map;
     }
 
@@ -275,7 +275,7 @@ public class Building implements EndPoint {
         return promisedMilitary.size();
     }
 
-    public void assignWorker(Worker worker) throws InvalidRouteException {
+    public void assignWorker(Worker worker) {
 
         /* A building can't get an assigned worker while it's still under construction */
         if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
@@ -297,7 +297,7 @@ public class Building implements EndPoint {
         onBuildingOccupied();
     }
 
-    void deployMilitary(Military military) throws InvalidRouteException {
+    void deployMilitary(Military military) {
 
         if (!isReady()) {
             throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
@@ -429,7 +429,7 @@ public class Building implements EndPoint {
         promisedDeliveries.put(material, amount + 1);
     }
 
-    void stepTime() throws InvalidRouteException {
+    void stepTime() {
 
         Stats stats = map.getStats();
 
@@ -535,7 +535,7 @@ public class Building implements EndPoint {
         return flag;
     }
 
-    public void tearDown() throws InvalidUserActionException, InvalidRouteException {
+    public void tearDown() throws InvalidUserActionException {
 
         /* A building cannot be torn down if it's already burning or destroyed */
         if (state == State.BURNING || state == State.DESTROYED) {
@@ -801,7 +801,7 @@ public class Building implements EndPoint {
         enablePromotions = true;
     }
 
-    public void evacuate() throws InvalidRouteException {
+    public void evacuate() {
         for (Military military : hostedMilitary) {
             military.returnToStorage();
         }
@@ -956,7 +956,7 @@ public class Building implements EndPoint {
         return false;
     }
 
-    void capture(Player player) throws InvalidRouteException, InvalidUserActionException {
+    void capture(Player player) throws InvalidUserActionException {
 
         /* Change the ownership of the building */
         setPlayer(player);
@@ -1047,7 +1047,7 @@ public class Building implements EndPoint {
         return 0;
     }
 
-    void hitByCatapult(Catapult catapult) throws InvalidUserActionException, InvalidRouteException {
+    void hitByCatapult(Catapult catapult) throws InvalidUserActionException {
 
         getPlayer().reportHitByCatapult(catapult, this);
 
@@ -1094,7 +1094,7 @@ public class Building implements EndPoint {
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
     }
 
-    void doUpgradeBuilding() throws InvalidRouteException {
+    void doUpgradeBuilding() {
     }
 
     private boolean isMaterialForUpgradeAvailable() {
@@ -1236,7 +1236,7 @@ public class Building implements EndPoint {
     }
 
     /* Intended to be overridden by subclasses if needed */
-    void onConstructionFinished() throws InvalidRouteException { }
+    void onConstructionFinished() { }
 
     void setGeneration(long generation) {
         this.generation = generation;
@@ -1294,5 +1294,5 @@ public class Building implements EndPoint {
         return false;
     }
 
-    void onBuildingOccupied() throws InvalidRouteException { }
+    void onBuildingOccupied() { }
 }

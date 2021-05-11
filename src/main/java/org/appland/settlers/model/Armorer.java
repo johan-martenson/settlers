@@ -73,7 +73,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
 
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
@@ -146,7 +146,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -199,7 +199,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
 
         if (storage != null) {
@@ -233,7 +233,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -257,7 +257,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

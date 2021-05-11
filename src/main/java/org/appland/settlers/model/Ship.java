@@ -37,7 +37,7 @@ public class Ship extends Worker {
     }
 
     @Override
-    void onIdle() throws InvalidRouteException {
+    void onIdle() {
 
         if (state == State.UNDER_CONSTRUCTION) {
             if (countdown.hasReachedZero()) {
@@ -162,7 +162,7 @@ public class Ship extends Worker {
     }
 
     @Override
-    void onArrival() throws InvalidRouteException, InvalidUserActionException {
+    void onArrival() {
 
         Player player = getPlayer();
         Point position = getPosition();
@@ -216,7 +216,7 @@ public class Ship extends Worker {
         return directions;
     }
 
-    public void startExpedition(Direction direction) throws InvalidUserActionException, InvalidRouteException {
+    public void startExpedition(Direction direction) throws InvalidUserActionException {
         GameMap map = getMap();
         Point position = getPosition();
 
@@ -267,7 +267,7 @@ public class Ship extends Worker {
         return "Ship " + getPosition();
     }
 
-    public void startSettlement() throws InvalidUserActionException, InvalidRouteException {
+    public void startSettlement() throws InvalidUserActionException {
 
         /* Place a harbor */
         Harbor newHarbor = map.placeBuilding(new Harbor(player), targetHarborPoint);

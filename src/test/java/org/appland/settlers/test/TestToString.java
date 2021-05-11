@@ -23,8 +23,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GeologistFindMessage;
 import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronSmelter;
@@ -493,7 +491,7 @@ public class TestToString {
     }
 
     @Test
-    public void testCargoToString() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCargoToString() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -823,7 +821,7 @@ public class TestToString {
     }
 
     @Test
-    public void testShipUnderConstructionToString() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testShipUnderConstructionToString() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -919,7 +917,7 @@ public class TestToString {
     }
 
     @Test
-    public void testShipReadyToString() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testShipReadyToString() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

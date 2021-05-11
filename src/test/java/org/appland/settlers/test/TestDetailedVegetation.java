@@ -5,8 +5,6 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -177,7 +175,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnSavannah() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -210,7 +208,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnMountain1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -237,7 +235,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnSnow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -264,7 +262,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnSwamp() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -291,7 +289,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnDesert1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -318,7 +316,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -345,7 +343,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnBuildableWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -378,7 +376,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnDesert2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -405,7 +403,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnMeadow1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -438,7 +436,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnMeadow2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -471,7 +469,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnMeadow3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -504,7 +502,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnMountain2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -531,7 +529,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnMountain3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -558,7 +556,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnMountain4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -585,7 +583,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnSteppe() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -618,7 +616,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnFlowerMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -651,7 +649,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnLava() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -678,7 +676,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnMagenta() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -705,7 +703,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnMountainMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -738,7 +736,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnWater2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -765,7 +763,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnLava2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -792,7 +790,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnLava3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -819,7 +817,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildHouseOnLava4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildHouseOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -846,7 +844,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildHouseOnBuildableMountain() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildHouseOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -879,7 +877,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnSavannah() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -912,7 +910,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMountain1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -945,7 +943,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnSnow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -991,7 +989,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnSwamp() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1037,7 +1035,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnDesert1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1070,7 +1068,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1116,7 +1114,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnBuildableWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1149,7 +1147,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnDesert2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1182,7 +1180,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMeadow1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1215,7 +1213,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMeadow2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1248,7 +1246,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMeadow3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1281,7 +1279,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMountain2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1314,7 +1312,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMountain3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1347,7 +1345,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMountain4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1380,7 +1378,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnSteppe() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1413,7 +1411,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnFlowerMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1446,7 +1444,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnLava() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1492,7 +1490,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMagenta() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1525,7 +1523,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnMountainMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1558,7 +1556,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnWater2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1604,7 +1602,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnLava2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1650,7 +1648,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnLava3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1696,7 +1694,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildRoadOnLava4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildRoadOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1742,7 +1740,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildRoadOnBuildableMountain() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildRoadOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1775,7 +1773,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnSavannah() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1802,7 +1800,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildMineOnMountain1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildMineOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1835,7 +1833,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnSnow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1862,7 +1860,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnSwamp() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1889,7 +1887,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnDesert1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1916,7 +1914,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1943,7 +1941,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnBuildableWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1970,7 +1968,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnDesert2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -1997,7 +1995,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnMeadow1() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2024,7 +2022,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnMeadow2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2051,7 +2049,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnMeadow3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2078,7 +2076,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildMineOnMountain2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildMineOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2111,7 +2109,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildMineOnMountain3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildMineOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2144,7 +2142,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCanBuildMineOnMountain4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanBuildMineOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2177,7 +2175,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnSteppe() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2204,7 +2202,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnFlowerMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2231,7 +2229,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnLava() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2258,7 +2256,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnMagenta() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2285,7 +2283,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnMountainMeadow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2312,7 +2310,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnWater2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2339,7 +2337,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnLava2() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2366,7 +2364,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnLava3() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2393,7 +2391,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnLava4() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
@@ -2420,7 +2418,7 @@ public class TestDetailedVegetation {
     }
 
     @Test
-    public void testCannotBuildMineOnBuildableMountain() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotBuildMineOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);

@@ -70,7 +70,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
@@ -137,7 +137,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    public void onArrival() throws InvalidRouteException {
+    public void onArrival() {
         if (state == GOING_BACK_TO_HOUSE_AFTER_FEEDING) {
             enterBuilding(getHome());
 
@@ -178,7 +178,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, DONKEY_BREEDER);
 
         if (storage != null) {
@@ -204,7 +204,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -229,7 +229,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

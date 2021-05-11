@@ -5,8 +5,6 @@ import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -64,7 +62,7 @@ public class TestExpedition {
     * */
 
     @Test
-    public void testAlreadyStoredMaterialIsUsedToPrepareExpeditionIfAvailable() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testAlreadyStoredMaterialIsUsedToPrepareExpeditionIfAvailable() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -130,7 +128,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testCannotStartExpeditionInWrongDirection() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotStartExpeditionInWrongDirection() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -259,7 +257,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testNoPossibleExpeditionsFromShipWithoutPreparingExpedition() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testNoPossibleExpeditionsFromShipWithoutPreparingExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -339,7 +337,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetNoPossibleExpeditionsFromShip() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetNoPossibleExpeditionsFromShip() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -441,7 +439,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionAboveFromHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionAboveFromHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -546,7 +544,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionBelowFromHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionBelowFromHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -651,7 +649,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionRightOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionRightOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -756,7 +754,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionLeftOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionLeftOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -861,7 +859,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionUpLeftOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionUpLeftOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -972,7 +970,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionDownLeftOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionDownLeftOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1083,7 +1081,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionUpRightOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionUpRightOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1217,7 +1215,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionDownRightOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionDownRightOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1328,7 +1326,7 @@ public class TestExpedition {
     }
 
     @Test
-    public void testGetPossibleExpeditionLeftAndDownLeftOfHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGetPossibleExpeditionLeftAndDownLeftOfHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

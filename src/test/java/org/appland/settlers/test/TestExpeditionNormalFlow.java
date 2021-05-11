@@ -8,8 +8,6 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.HarborIsFinishedMessage;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Message;
@@ -88,7 +86,7 @@ public class TestExpeditionNormalFlow {
     * */
 
     @Test
-    public void testReadyShipWaitsCloseToShipyard() throws InvalidRouteException, InvalidUserActionException, InvalidEndPointException {
+    public void testReadyShipWaitsCloseToShipyard() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -193,7 +191,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testPrepareExpedition() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPrepareExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -271,7 +269,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testShipReadyForExpeditionGameMessage() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testShipReadyForExpeditionGameMessage() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -430,7 +428,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testExpeditionMaterialIsTransferredToShip() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testExpeditionMaterialIsTransferredToShip() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -597,7 +595,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testExpeditionsAreAvailableInTheShipAfterMaterialIsTransferred() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testExpeditionsAreAvailableInTheShipAfterMaterialIsTransferred() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -769,7 +767,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testStartExpedition() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testStartExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -946,7 +944,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testShipSailsToExpeditionTargetAndDoesNotAutomaticallyBuildHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testShipSailsToExpeditionTargetAndDoesNotAutomaticallyBuildHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1135,7 +1133,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testGameMessageWhenShipReachesExpeditionTarget() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGameMessageWhenShipReachesExpeditionTarget() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1335,7 +1333,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testShipSailsToExpeditionTargetPlayerCanBuildHarbor() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testShipSailsToExpeditionTargetPlayerCanBuildHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1537,7 +1535,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testGameMessageWhenNewHarborInSettlementIsFinished() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testGameMessageWhenNewHarborInSettlementIsFinished() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1759,7 +1757,7 @@ public class TestExpeditionNormalFlow {
     }
 
     @Test
-    public void testNewHarborGetsOwnBorder() throws InvalidUserActionException, InvalidRouteException, InvalidEndPointException {
+    public void testNewHarborGetsOwnBorder() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

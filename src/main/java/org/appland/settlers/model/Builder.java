@@ -27,7 +27,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    void onIdle() throws InvalidRouteException {
+    void onIdle() {
 
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
@@ -77,7 +77,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    void onArrival() throws InvalidRouteException {
+    void onArrival() {
 
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT) {
             building = map.getBuildingAtPoint(getPosition());
@@ -145,7 +145,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
 
         /* Wait until next flag to find out that the building is gone and then go back */
         if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT &&
@@ -194,14 +194,14 @@ public class Builder extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
         Point position = getPosition();
 
         /* Return to storage if the planned path no longer exists */

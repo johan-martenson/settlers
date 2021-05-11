@@ -50,7 +50,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
 
         if (state == IDLE_AT_ROAD) {
             Flag start = map.getFlagAtPoint(assignedRoad.getStart());
@@ -99,7 +99,7 @@ public class Courier extends Worker {
         return assignedRoad;
     }
 
-    public void assignToRoad(Road newRoad) throws InvalidRouteException {
+    public void assignToRoad(Road newRoad) {
         if (getTargetBuilding() != null) {
             throw new InvalidGameLogicException("Can't set road as target while flag or building are already targeted");
         }
@@ -165,7 +165,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
 
         if (state == WALKING_TO_ROAD) {
             state = IDLE_AT_ROAD;
@@ -234,7 +234,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
         Point position = getPosition();
         MapPoint mapPoint = map.getMapPoint(position);
         Cargo cargo = getCargo();
@@ -300,7 +300,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
 
         /* Cancel any promised deliveries */
         Cargo cargo = getCargo();
@@ -341,7 +341,7 @@ public class Courier extends Worker {
         }
     }
 
-    private void deliverCargo() throws InvalidRouteException {
+    private void deliverCargo() {
 
         /* Deliver cargo */
         Cargo cargo = getCargo();
@@ -356,7 +356,7 @@ public class Courier extends Worker {
         setCargo(null);
     }
 
-    private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) throws InvalidRouteException {
+    private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
 
         Point point = getPosition();
         Flag endPoint = map.getFlagAtPoint(point);
@@ -383,7 +383,7 @@ public class Courier extends Worker {
         deliverToFlagOrBuilding(getCargo());
     }
 
-    private void deliverToFlagOrBuilding(Cargo cargo) throws InvalidRouteException {
+    private void deliverToFlagOrBuilding(Cargo cargo) {
 
         /* If the intended building is directly after the flag, deliver it all the way */
         Point cargoTarget = cargo.getTarget().getPosition();

@@ -17,8 +17,6 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -5389,7 +5387,7 @@ public class TestGameMonitoring {
     }
 
     @Test
-    public void testMonitoringEnemyBorderChanges() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testMonitoringEnemyBorderChanges() throws InvalidUserActionException {
 
         /* Start new game */
         Player player0 = new Player("Player 0", Color.BLUE);

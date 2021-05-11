@@ -5,8 +5,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -38,7 +36,7 @@ public class TestFlag {
     }
 
     @Test
-    public void testFlagOnLandAtStartIsNormal() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testFlagOnLandAtStartIsNormal() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -55,7 +53,7 @@ public class TestFlag {
     }
 
     @Test
-    public void testFlagNextToWaterIsMarine() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testFlagNextToWaterIsMarine() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);

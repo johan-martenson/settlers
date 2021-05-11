@@ -4,8 +4,6 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -160,7 +158,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnHouse() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnHouse() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -189,7 +187,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnStone() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnStone() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -218,7 +216,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnRoad() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnRoad() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -250,7 +248,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnTree() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnTree() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -279,7 +277,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnFlag() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnFlag() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -308,7 +306,7 @@ public class TestTree {
     }
 
     @Test
-    public void testOnlyFlagIsAvailableOnDeadTree() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testOnlyFlagIsAvailableOnDeadTree() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -330,7 +328,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceFlagOnDeadTree() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceFlagOnDeadTree() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -355,7 +353,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceLargeBuildingAfterPlacedAndRemovedFlagOnDeadTree() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceLargeBuildingAfterPlacedAndRemovedFlagOnDeadTree() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -389,7 +387,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnMountain() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnMountain() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -412,7 +410,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnSavannah() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnSavannah() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -435,7 +433,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnLava() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnLava() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -458,7 +456,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnSteppe() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnSteppe() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -481,7 +479,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnSwamp() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnSwamp() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -504,7 +502,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnDesert() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnDesert() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -527,7 +525,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCanPlaceDeadTreeOnCombinedVegetation() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCanPlaceDeadTreeOnCombinedVegetation() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -552,7 +550,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnSnow() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnSnow() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -579,7 +577,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnShallowWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnShallowWater() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -606,7 +604,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnWater() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -633,7 +631,7 @@ public class TestTree {
     }
 
     @Test
-    public void testCannotPlaceDeadTreeOnDeepWater() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCannotPlaceDeadTreeOnDeepWater() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);

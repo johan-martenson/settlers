@@ -15,8 +15,6 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
@@ -95,7 +93,7 @@ import static org.junit.Assert.fail;
 
 public class Utils {
 
-    public static void fastForward(int time, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForward(int time, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < time; i++) {
             map.stepTime();
@@ -138,11 +136,11 @@ public class Utils {
         }
     }
 
-    public static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) throws InvalidUserActionException {
         fastForwardUntilWorkersReachTarget(map, Arrays.asList(workers));
     }
 
-    public static void fastForwardUntilWorkersReachTarget(GameMap map, List<Worker> workers) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkersReachTarget(GameMap map, List<Worker> workers) throws InvalidUserActionException {
 
         assertNotNull(map);
         assertFalse(workers.isEmpty());
@@ -168,7 +166,7 @@ public class Utils {
         }
     }
 
-    public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws InvalidUserActionException {
         assertNotNull(target);
         assertNotNull(worker);
         assertNotNull(map);
@@ -186,7 +184,7 @@ public class Utils {
         assertTrue(worker.isAt(target));
     }
 
-    public static <T extends Worker> T occupyBuilding(T worker, Building building) throws InvalidRouteException {
+    public static <T extends Worker> T occupyBuilding(T worker, Building building) {
         GameMap map = building.getMap();
 
         map.placeWorker(worker, building);
@@ -198,7 +196,7 @@ public class Utils {
         return worker;
     }
 
-    public static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 500; i++) {
             map.stepTime();
@@ -211,7 +209,7 @@ public class Utils {
         assertEquals(tree.getSize(), LARGE);
     }
 
-    public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 500; i++) {
             if (crop.getGrowthState() == FULL_GROWN) {
@@ -250,7 +248,7 @@ public class Utils {
         surroundPointWithVegetation(point, DetailedVegetation.SWAMP, map);
     }
 
-    public static void fastForwardUntilBuildingIsConstructed(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilBuildingIsConstructed(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -264,7 +262,7 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static void fastForwardUntilBuildingIsOccupied(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilBuildingIsOccupied(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 1000; i++) {
@@ -306,7 +304,7 @@ public class Utils {
         }
     }
 
-    public static Courier occupyRoad(Road road, GameMap map) throws InvalidRouteException {
+    public static Courier occupyRoad(Road road, GameMap map) {
         Courier courier = new Courier(road.getPlayer(), map);
 
         map.placeWorker(courier, road.getFlags()[0]);
@@ -365,7 +363,7 @@ public class Utils {
         return false;
     }
 
-    public static void constructHouse(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void constructHouse(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         /* Assign builder */
@@ -416,7 +414,7 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidRouteException, InvalidUserActionException {
+    public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidUserActionException {
 
         Set<Material> setOfMaterials = new HashSet<>(Arrays.asList(materials));
 
@@ -434,7 +432,7 @@ public class Utils {
         return worker.getCargo();
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws InvalidUserActionException {
         for (int j = 0; j < 2000; j++) {
             if (cargo.equals(worker.getCargo())) {
                 break;
@@ -446,7 +444,7 @@ public class Utils {
         assertEquals(worker.getCargo(), cargo);
     }
 
-    public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
 
         for (int i = 0; i < 300; i++) {
             if (worker.getCargo() != null) {
@@ -459,7 +457,7 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         boolean populated = false;
@@ -478,7 +476,7 @@ public class Utils {
         assertEquals(building.getNumberOfHostedMilitary(), nr);
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         assertFalse(building.isOccupied());
@@ -502,7 +500,7 @@ public class Utils {
         assertFalse(player.getLandInPoints().contains(point));
     }
 
-    public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
         Courier courier = road.getCourier();
 
         boolean delivery = false;
@@ -520,7 +518,7 @@ public class Utils {
         assertTrue(delivery);
     }
 
-    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {
         Courier courier = road.getCourier();
 
         for (int i = 0; i < 500; i++) {
@@ -532,14 +530,14 @@ public class Utils {
         }
     }
 
-    public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building) throws InvalidRouteException {
+    public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building) {
         assertTrue(building.isReady());
         for (int i = 0; i < amount; i++) {
             occupyMilitaryBuilding(rank, building);
         }
     }
 
-    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) throws InvalidRouteException {
+    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) {
         GameMap map = building.getMap();
         Player player = building.getPlayer();
 
@@ -580,7 +578,7 @@ public class Utils {
         return result;
     }
 
-    public static void waitForWorkerToDisappear(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToDisappear(Worker worker, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
             if (!map.getWorkers().contains(worker)) {
                 break;
@@ -592,7 +590,7 @@ public class Utils {
         assertFalse(map.getWorkers().contains(worker));
     }
 
-    public static Military waitForMilitaryOutsideBuilding(Player player) throws InvalidRouteException, InvalidUserActionException {
+    public static Military waitForMilitaryOutsideBuilding(Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
         for (int i = 0; i < 1000; i++) {
             Military military = findMilitaryOutsideBuilding(player);
@@ -624,7 +622,7 @@ public class Utils {
         return workersFound;
     }
 
-    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidRouteException, InvalidUserActionException {
+    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
         List<T> workers = new LinkedList<>();
 
@@ -650,7 +648,7 @@ public class Utils {
         return workers;
     }
 
-    public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws InvalidRouteException, InvalidUserActionException {
+    public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
@@ -669,7 +667,7 @@ public class Utils {
         return null;
     }
 
-    public static <T extends Building> void waitForBuildingToDisappear(T building) throws InvalidRouteException, InvalidUserActionException {
+    public static <T extends Building> void waitForBuildingToDisappear(T building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         assertTrue(building.isBurningDown() || building.isDestroyed());
@@ -685,7 +683,7 @@ public class Utils {
         assertFalse(map.getBuildings().contains(building));
     }
 
-    static void waitForFightToStart(GameMap map, Military attacker, Military defender) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForFightToStart(GameMap map, Military attacker, Military defender) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
             if (attacker.isFighting() && defender.isFighting()) {
@@ -699,7 +697,7 @@ public class Utils {
         assertTrue(attacker.isFighting());
     }
 
-    static Military getMainAttacker(Building building, Collection<Military> attackers) throws InvalidRouteException, InvalidUserActionException {
+    static Military getMainAttacker(Building building, Collection<Military> attackers) throws InvalidUserActionException {
 
         GameMap map = building.getMap();
         Military firstAttacker = null;
@@ -719,7 +717,7 @@ public class Utils {
         return firstAttacker;
     }
 
-    static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidRouteException, InvalidUserActionException {
+    static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
         GameMap map = catapult.getMap();
 
         Projectile projectile = null;
@@ -743,7 +741,7 @@ public class Utils {
         return projectile;
     }
 
-    static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -757,7 +755,7 @@ public class Utils {
         assertTrue(projectile.isArrived());
     }
 
-    static WildAnimal waitForAnimalToAppear(GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    static WildAnimal waitForAnimalToAppear(GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 2000; i++) {
 
@@ -773,7 +771,7 @@ public class Utils {
         return map.getWildAnimals().get(0);
     }
 
-    static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidUserActionException {
         WildAnimal animal = null;
 
         for (int i = 0; i < 5000; i++) {
@@ -801,7 +799,7 @@ public class Utils {
         return animal;
     }
 
-    static void waitForActorsToGetClose(Hunter hunter, WildAnimal animal, int distance, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForActorsToGetClose(Hunter hunter, WildAnimal animal, int distance, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
             if (hunter.getPosition().distance(animal.getPosition()) <= distance) {
                 break;
@@ -813,7 +811,7 @@ public class Utils {
         assertTrue(hunter.getPosition().distance(animal.getPosition()) <= distance);
     }
 
-    static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws InvalidRouteException, InvalidUserActionException {
+    static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws InvalidUserActionException {
 
         for (int j = 0; j < 2000; j++) {
             if (worker.getCargo() == null) {
@@ -826,7 +824,7 @@ public class Utils {
         assertNull(worker.getCargo());
     }
 
-    static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws InvalidUserActionException {
 
         assertNotNull(cargo);
         assertNotNull(cargo.getPosition());
@@ -844,7 +842,7 @@ public class Utils {
         assertEquals(cargo.getPosition(), cargo.getTarget().getPosition());
     }
 
-    static void waitUntilAmountIs(Building building, Material material, int amount) throws InvalidRouteException, InvalidUserActionException {
+    static void waitUntilAmountIs(Building building, Material material, int amount) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
@@ -868,7 +866,7 @@ public class Utils {
         building.putCargo(cargo);
     }
 
-    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidRouteException, InvalidUserActionException {
+    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
 
         for (int i = 0; i < 2000; i++) {
 
@@ -884,7 +882,7 @@ public class Utils {
         return null;
     }
 
-    static void waitForCropToGetReady(GameMap map, Crop crop) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForCropToGetReady(GameMap map, Crop crop) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -898,7 +896,7 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidRouteException, InvalidUserActionException {
+    static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidUserActionException {
 
         waitForFarmerToStartPlanting(map, farmer0);
 
@@ -913,7 +911,7 @@ public class Utils {
         return map.getCropAtPoint(position);
     }
 
-    private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer) throws InvalidRouteException, InvalidUserActionException {
+    private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
 
         for (int i = 0; i < 10000; i++) {
 
@@ -927,7 +925,7 @@ public class Utils {
         assertFalse(farmer.isPlanting());
     }
 
-    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws InvalidRouteException, InvalidUserActionException {
+    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
 
         for (int i = 0; i < 10000; i++) {
 
@@ -941,7 +939,7 @@ public class Utils {
         assertTrue(farmer.isPlanting());
     }
 
-    static void waitForCropToGetHarvested(GameMap map, Crop crop) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForCropToGetHarvested(GameMap map, Crop crop) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -979,7 +977,7 @@ public class Utils {
         return sum;
     }
 
-    static Building waitForBuildingToGetUpgraded(Building building) throws InvalidRouteException, InvalidUserActionException {
+    static Building waitForBuildingToGetUpgraded(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -995,7 +993,7 @@ public class Utils {
         return map.getBuildingAtPoint(building.getPosition());
     }
 
-    static void waitForBuildingToBurnDown(Building building) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForBuildingToBurnDown(Building building) throws InvalidUserActionException {
 
         GameMap map = building.getMap();
 
@@ -1021,7 +1019,7 @@ public class Utils {
         assertEquals(stone.getAmount(), amountLeft);
     }
 
-    static void waitForTreeToGetPlanted(GameMap map, Point point) throws InvalidRouteException, InvalidUserActionException {
+    static void waitForTreeToGetPlanted(GameMap map, Point point) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (map.isTreeAtPoint(point)) {
                 break;
@@ -1045,7 +1043,7 @@ public class Utils {
         assertEquals(map.getDetailedVegetationDownLeft(point), vegetation);
     }
 
-    public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
             assertEquals(worker.getHome().getPosition(), worker.getPosition());
@@ -1113,7 +1111,7 @@ public class Utils {
         map.fillMapWithVegetation(vegetation);
     }
 
-    public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws InvalidRouteException, InvalidUserActionException {
+    public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws InvalidUserActionException {
         Courier courier = null;
 
         for (int i = 0; i < 10000; i++) {
@@ -1132,7 +1130,7 @@ public class Utils {
         return courier;
     }
 
-    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
 
         GameMap map = building.getMap();
         Worker worker = null;
@@ -1152,7 +1150,7 @@ public class Utils {
         return worker;
     }
 
-    public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag) throws InvalidRouteException, InvalidUserActionException {
+    public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag) throws InvalidUserActionException {
         Cargo cargo = null;
 
         for (int i = 0; i < 1000; i++) {
@@ -1171,7 +1169,7 @@ public class Utils {
         return cargo;
     }
 
-    public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws InvalidRouteException, InvalidUserActionException {
+    public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws InvalidUserActionException {
         Set<Courier> couriers = new HashSet<>();
 
         for (int i = 0; i < 1000; i++) {
@@ -1196,7 +1194,7 @@ public class Utils {
         return couriers;
     }
 
-    public static void waitForNewMessage(Player player0) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForNewMessage(Player player0) throws InvalidUserActionException {
         GameMap map = player0.getMap();
 
         int amountMessages = player0.getMessages().size();
@@ -1213,7 +1211,7 @@ public class Utils {
         assertTrue(amountMessages < player0.getMessages().size());
     }
 
-    public static void waitForBuildingToBeConstructed(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForBuildingToBeConstructed(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -1227,7 +1225,7 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static void waitForStonemasonToStartGettingStone(GameMap map, Stonemason stonemason) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForStonemasonToStartGettingStone(GameMap map, Stonemason stonemason) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (stonemason.isGettingStone()) {
                 break;
@@ -1239,7 +1237,7 @@ public class Utils {
         assertTrue(stonemason.isGettingStone());
     }
 
-    public static void waitForStonemasonToFinishGettingStone(GameMap map, Stonemason stonemason) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForStonemasonToFinishGettingStone(GameMap map, Stonemason stonemason) throws InvalidUserActionException {
         assertTrue(stonemason.isGettingStone());
 
         for (int i = 0; i < 1000; i++) {
@@ -1253,7 +1251,7 @@ public class Utils {
         assertFalse(stonemason.isGettingStone());
     }
 
-    public static void waitForSignToDisappear(GameMap map, Sign sign0) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForSignToDisappear(GameMap map, Sign sign0) throws InvalidUserActionException {
         assertTrue(map.isSignAtPoint(sign0.getPosition()));
 
         for (int i = 0; i < 5000; i++) {
@@ -1267,7 +1265,7 @@ public class Utils {
         assertFalse(map.isSignAtPoint(sign0.getPosition()));
     }
 
-    public static void waitForFarmerToHarvestCrop(GameMap map, Farmer farmer, Crop crop0) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForFarmerToHarvestCrop(GameMap map, Farmer farmer, Crop crop0) throws InvalidUserActionException {
         assertTrue(farmer.isHarvesting());
         assertEquals(farmer.getPosition(), crop0.getPosition());
         assertTrue(map.isCropAtPoint(crop0.getPosition()));
@@ -1285,7 +1283,7 @@ public class Utils {
         assertEquals(farmer.getCargo().getMaterial(), WHEAT);
     }
 
-    public static void waitForWorkerToGoToPoint(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToGoToPoint(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
             if (worker.isExactlyAtPoint() && worker.getPosition().equals(point)) {
                 break;
@@ -1298,7 +1296,7 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
-    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
             if (point.equals(worker.getTarget())) {
                 break;
@@ -1310,7 +1308,7 @@ public class Utils {
         assertEquals(worker.getTarget(), point);
     }
 
-    public static void waitForHarvestedCropToDisappear(GameMap map, Crop crop0) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForHarvestedCropToDisappear(GameMap map, Crop crop0) throws InvalidUserActionException {
         assertTrue(map.isCropAtPoint(crop0.getPosition()));
         assertEquals(crop0.getGrowthState(), HARVESTED);
 
@@ -1325,7 +1323,7 @@ public class Utils {
         assertFalse(map.isCropAtPoint(crop0.getPosition()));
     }
 
-    public static void waitForTreeToGetCutDown(Tree tree0, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForTreeToGetCutDown(Tree tree0, GameMap map) throws InvalidUserActionException {
         assertTrue(map.isTreeAtPoint(tree0.getPosition()));
         assertEquals(map.getTreeAtPoint(tree0.getPosition()), tree0);
 
@@ -1340,7 +1338,7 @@ public class Utils {
         assertFalse(map.isTreeAtPoint(tree0.getPosition()));
     }
 
-    public static void waitForWorkerToBeOutside(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToBeOutside(Worker worker, GameMap map) throws InvalidUserActionException {
         assertTrue(worker.isInsideBuilding());
 
         for (int i = 0; i < 1000; i++) {
@@ -1355,7 +1353,7 @@ public class Utils {
         assertFalse(worker.isInsideBuilding());
     }
 
-    public static void waitForUpgradeToFinish(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForUpgradeToFinish(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         assertTrue(building.isUpgrading());
@@ -1375,7 +1373,7 @@ public class Utils {
         assertFalse(map.getBuildingAtPoint(building.getPosition()).isUpgrading());
     }
 
-    public static void waitForTreeConservationProgramToActivate(Player player0) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForTreeConservationProgramToActivate(Player player0) throws InvalidUserActionException {
         GameMap map = player0.getMap();
 
         for (int i = 0; i < 1000; i++) {
@@ -1390,7 +1388,7 @@ public class Utils {
         assertTrue(player0.isTreeConservationProgramActive());
     }
 
-    public static void waitForStonesToDisappear(GameMap map, Stone... stones) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForStonesToDisappear(GameMap map, Stone... stones) throws InvalidUserActionException {
 
         for (int i = 0; i < 10000; i++) {
             boolean allStonesGone = true;
@@ -1555,7 +1553,7 @@ public class Utils {
         System.out.println();
     }
 
-    static void placeAndOccupyBarracks(Player player0, Point point88) throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    static void placeAndOccupyBarracks(Player player0, Point point88) throws InvalidUserActionException {
         GameMap map = player0.getMap();
         Building barracks9 = map.placeBuilding(new Barracks(player0), point88);
 
@@ -1587,14 +1585,14 @@ public class Utils {
 
         System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
     }
-    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws InvalidUserActionException {
 
         List<Courier> listOfCouriers = new ArrayList<>(Arrays.asList(couriers));
 
         waitForCouriersToBeIdle(map, listOfCouriers);
     }
 
-    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws InvalidUserActionException {
 
         for (int i = 0; i < 5000; i++) {
             boolean allIdle = true;
@@ -1619,7 +1617,7 @@ public class Utils {
         }
     }
 
-    public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) throws InvalidRouteException {
+    public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) {
         Cargo cargo = new Cargo(material, map);
 
         cargo.setPosition(flag.getPosition());
@@ -1631,13 +1629,13 @@ public class Utils {
         return cargo;
     }
 
-    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) throws InvalidRouteException {
+    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) {
         for (int i = 0; i < amount; i++) {
             placeCargo(map, material, flag, building);
         }
     }
 
-    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -1656,7 +1654,7 @@ public class Utils {
         mill.putCargo(new Cargo(material, mill.getMap()));
     }
 
-    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws InvalidUserActionException {
         for (int i = 0; i < 20000; i++) {
             if (flag.getStackedCargo().size() == amount) {
                 break;
@@ -1668,7 +1666,7 @@ public class Utils {
         assertEquals(flag.getStackedCargo().size(), amount);
     }
 
-    public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -1694,7 +1692,7 @@ public class Utils {
         }
     }
 
-    public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         for (int i = 0; i < 4000; i++) {
@@ -1721,7 +1719,7 @@ public class Utils {
         }
     }
 
-    public static void verifyWorkerWalksToTargetOnRoads(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkerWalksToTargetOnRoads(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
 
             if (worker.isExactlyAtPoint() && point.equals(worker.getPosition())) {
@@ -1739,7 +1737,7 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
-    public static void waitForWorkerToBeInside(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToBeInside(Worker worker, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
             if (worker.isInsideBuilding()) {
                 break;
@@ -1797,7 +1795,7 @@ public class Utils {
         }
     }
 
-    public static void waitForWorkersToDisappearFromMap(List<Worker> workers, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkersToDisappearFromMap(List<Worker> workers, GameMap map) throws InvalidUserActionException {
 
         boolean stillOnMap;
         for (int i = 0; i < 5000; i++) {
@@ -1848,7 +1846,7 @@ public class Utils {
         assertEquals(map.getAmountFishAtPoint(point0), 1);
     }
 
-    public static void waitForFishermanToStopFishing(Fisherman fisherman, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForFishermanToStopFishing(Fisherman fisherman, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (!fisherman.isFishing()) {
                 break;
@@ -1860,7 +1858,7 @@ public class Utils {
         assertFalse(fisherman.isFishing());
     }
 
-    public static void waitForPointToBeNext(GameMap map, Courier courier, Point position) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForPointToBeNext(GameMap map, Courier courier, Point position) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
 
             if (!courier.isExactlyAtPoint() && courier.getNextPoint().equals(position)) {
@@ -1874,7 +1872,7 @@ public class Utils {
         assertEquals(courier.getNextPoint(), position);
     }
 
-    public static void waitForMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -1900,7 +1898,7 @@ public class Utils {
         }
     }
 
-    public static void constructHouses(Building... buildings) throws InvalidRouteException, InvalidUserActionException {
+    public static void constructHouses(Building... buildings) throws InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
         /* Place builders */
@@ -1972,7 +1970,7 @@ public class Utils {
         }
     }
 
-    public static void waitForWorkerToBeExactlyOnPoint(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToBeExactlyOnPoint(Worker worker, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 500; i++) {
             if (worker.isExactlyAtPoint()) {
@@ -1985,7 +1983,7 @@ public class Utils {
         assertTrue(worker.isExactlyAtPoint());
     }
 
-    public static void verifyWorkerWalksOnPath(GameMap map, Worker worker, Point... points) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkerWalksOnPath(GameMap map, Worker worker, Point... points) throws InvalidUserActionException {
 
         System.out.println(Arrays.asList(points));
 
@@ -2015,7 +2013,7 @@ public class Utils {
         }
     }
 
-    public static void verifyWorkerDoesNotMove(GameMap map, Courier courier, int time) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkerDoesNotMove(GameMap map, Courier courier, int time) throws InvalidUserActionException {
         Point point = courier.getPosition();
 
         for (int i = 0; i < time; i++) {
@@ -2027,7 +2025,7 @@ public class Utils {
         assertEquals(point, courier.getPosition());
     }
 
-    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Material material, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Material material, Worker... workers) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
 
             boolean allWorkersCarryCargo = true;
@@ -2053,7 +2051,7 @@ public class Utils {
         }
     }
 
-    public static void verifyWorkersDoNotMove(GameMap map, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkersDoNotMove(GameMap map, Worker... workers) throws InvalidUserActionException {
         Map<Worker, Point> positions = new HashMap<>();
 
         for (Worker worker : workers) {
@@ -2070,7 +2068,7 @@ public class Utils {
         }
     }
 
-    public static void waitForCouriersToGetBlocked(GameMap map, Courier... couriers) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForCouriersToGetBlocked(GameMap map, Courier... couriers) throws InvalidUserActionException {
         for (int i = 0; i < 20000; i++) {
 
             boolean allCouriersBlocked = true;
@@ -2114,7 +2112,7 @@ public class Utils {
         return cargo;
     }
 
-    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Worker... workers) throws InvalidRouteException, InvalidUserActionException {
+    public static void fastForwardUntilWorkersCarryCargo(GameMap map, Worker... workers) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
 
             boolean allWorkersCarryCargo = true;
@@ -2141,7 +2139,7 @@ public class Utils {
         }
     }
 
-    public static void waitForMilitaryToStopFighting(GameMap map, Military military) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForMilitaryToStopFighting(GameMap map, Military military) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
             if (!military.isFighting()) {
                 break;
@@ -2153,7 +2151,7 @@ public class Utils {
         assertFalse(military.isFighting());
     }
 
-    public static void waitForMilitaryToStartFighting(GameMap map, Military military) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForMilitaryToStartFighting(GameMap map, Military military) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
             if (military.isFighting()) {
                 break;
@@ -2165,7 +2163,7 @@ public class Utils {
         assertTrue(military.isFighting());
     }
 
-    public static void verifyWorkerWalksToTarget(GameMap map, Worker worker, Point point) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyWorkerWalksToTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
 
             if (worker.isExactlyAtPoint() && worker.getPosition().equals(point)) {
@@ -2226,7 +2224,7 @@ public class Utils {
         map.setDetailedVegetationDownLeft(point, detailedVegetation);
     }
 
-    public static void waitForWorkerToHaveTargetSet(Worker worker, GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForWorkerToHaveTargetSet(Worker worker, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
             if (worker.getTarget() != null) {
                 break;
@@ -2238,7 +2236,7 @@ public class Utils {
         assertNotNull(worker.getTarget());
     }
 
-    public static void verifyBuilderHammersInPlaceForDuration(GameMap map, Builder builder0, int time) throws InvalidRouteException, InvalidUserActionException {
+    public static void verifyBuilderHammersInPlaceForDuration(GameMap map, Builder builder0, int time) throws InvalidUserActionException {
         Point point = builder0.getPosition();
 
         for (int i = 0; i < time; i++) {
@@ -2249,7 +2247,7 @@ public class Utils {
         }
     }
 
-    public static void assignBuilder(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static void assignBuilder(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
         Builder builder = new Builder(building.getPlayer(), map);
 
@@ -2262,7 +2260,7 @@ public class Utils {
         fastForwardUntilWorkerReachesPoint(map, builder, building.getPosition());
     }
 
-    public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidRouteException, InvalidUserActionException {
+    public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
         Builder builder = null;
 
@@ -2294,7 +2292,7 @@ public class Utils {
         return builder;
     }
 
-    public static void waitForShipToGetBuilt(GameMap map, Ship ship) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForShipToGetBuilt(GameMap map, Ship ship) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (ship.isReady()) {
                 break;
@@ -2306,7 +2304,7 @@ public class Utils {
         assertTrue(ship.isReady());
     }
 
-    public static void waitForNewShipToBeBuilt(GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static void waitForNewShipToBeBuilt(GameMap map) throws InvalidUserActionException {
         Set<Ship> shipsBefore = new HashSet<>(map.getShips());
 
         for (int i = 0; i < 10000; i++) {
@@ -2352,7 +2350,7 @@ public class Utils {
         assertTrue(foundNewConstructedShip);
     }
 
-    public static Set<Ship> waitForNewShipToStartConstruction(GameMap map) throws InvalidRouteException, InvalidUserActionException {
+    public static Set<Ship> waitForNewShipToStartConstruction(GameMap map) throws InvalidUserActionException {
         Set<Ship> shipsBefore = new HashSet<>(map.getShips());
 
         for (int i = 0; i < 10000; i++) {
@@ -2400,7 +2398,7 @@ public class Utils {
         return currentShips;
     }
 
-    public static void waitForBuildingToGetBuilder(Building building) throws InvalidUserActionException, InvalidRouteException {
+    public static void waitForBuildingToGetBuilder(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
@@ -2415,7 +2413,7 @@ public class Utils {
         assertNotNull(building.getBuilder());
     }
 
-    public static void waitForBuildingToBeUnderConstruction(Building building) throws InvalidUserActionException, InvalidRouteException {
+    public static void waitForBuildingToBeUnderConstruction(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
@@ -2430,7 +2428,7 @@ public class Utils {
         assertTrue(building.isUnderConstruction());
     }
 
-    public static void waitForShipToBeReadyForExpedition(Ship ship, GameMap map) throws InvalidUserActionException, InvalidRouteException {
+    public static void waitForShipToBeReadyForExpedition(Ship ship, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 5000; i++) {
 
             if (ship.isReadyToStartExpedition()) {
@@ -2443,7 +2441,7 @@ public class Utils {
         assertTrue(ship.isReadyToStartExpedition());
     }
 
-    public static void waitForWorkerToHaveNoTargetSet(Ship ship, GameMap map) throws InvalidUserActionException, InvalidRouteException {
+    public static void waitForWorkerToHaveNoTargetSet(Ship ship, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
             if (ship.getTarget() == null) {
                 break;

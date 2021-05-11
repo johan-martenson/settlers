@@ -28,7 +28,7 @@ public class Barracks extends Building {
     }
 
     @Override
-    protected void doUpgradeBuilding() throws InvalidRouteException {
+    protected void doUpgradeBuilding() {
         Building upgraded = new GuardHouse(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);

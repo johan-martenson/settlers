@@ -78,7 +78,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException {
+    protected void onArrival() {
         Stats stats = map.getStats();
 
         CumulativeDuration duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
@@ -259,7 +259,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Discover each point the scout walks on */
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
@@ -378,7 +378,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
         state = RETURNING_TO_STORAGE;
@@ -407,7 +407,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

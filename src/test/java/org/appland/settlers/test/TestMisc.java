@@ -12,8 +12,6 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -173,30 +171,6 @@ public class TestMisc {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
 
         assertEquals(scout.getPosition(), headquarter0.getPosition());
-    }
-
-    @Test
-    public void testPlaceRoadToSamePointOnEdgeOfScreen() throws Exception {
-
-        /* Starting new game */
-        Player player = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player);
-        GameMap map = new GameMap(players, 500, 250);
-
-        /* Place headquarter */
-        Point point0 = new Point(429, 201);
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
-
-        /* Verify that placing a road to the same point on the edge of the screen causes an invalid endpoint exception */
-        Point point1 = new Point(0, 0);
-        try {
-            Road road0 = map.placeAutoSelectedRoad(player, point1, point1);
-
-            fail();
-        } catch (InvalidEndPointException e) {
-
-        }
     }
 
     @Test
@@ -826,7 +800,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testCourierDeliveringToBuildingMakesCargoDisappearIfTargetUnderConstructionBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierDeliveringToBuildingMakesCargoDisappearIfTargetUnderConstructionBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -882,7 +856,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testCourierDeliveringToBuildingMakesCargoDisappearIfPlannedTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierDeliveringToBuildingMakesCargoDisappearIfPlannedTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -938,7 +912,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testCourierDeliveringToFlagMakesCargoDisappearIfTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testCourierDeliveringToFlagMakesCargoDisappearIfTargetBuildingIsTornDownAndReturnToStorageIsNotPossible() throws InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1111,7 +1085,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testRemovingFlagWithCargoOnItResetsPromisedDelivery() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testRemovingFlagWithCargoOnItResetsPromisedDelivery() throws InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1171,7 +1145,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testRemovingRoadWithCourierCarryingCargoResetsPromisedDelivery() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testRemovingRoadWithCourierCarryingCargoResetsPromisedDelivery() throws InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1323,7 +1297,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutDonkey() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutDonkey() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1343,7 +1317,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutCourier() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutCourier() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1363,7 +1337,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutPrivate() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutPrivate() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1385,7 +1359,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutPrivateFirstClass() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutPrivateFirstClass() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1410,7 +1384,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutSergeant() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutSergeant() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1435,7 +1409,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutOfficer() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutOfficer() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1460,7 +1434,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutGeneral() throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
+    public void testPushOutGeneral() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);

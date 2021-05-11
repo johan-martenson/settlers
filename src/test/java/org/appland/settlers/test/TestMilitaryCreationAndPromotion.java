@@ -5,8 +5,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
@@ -433,7 +431,7 @@ public class TestMilitaryCreationAndPromotion {
     }
 
     @Test
-    public void testUpgradeOfAllRanksAtSameTime() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testUpgradeOfAllRanksAtSameTime() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -485,7 +483,7 @@ public class TestMilitaryCreationAndPromotion {
     }
 
     @Test
-    public void testUpgradeOfOnlyPrivates() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testUpgradeOfOnlyPrivates() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -537,7 +535,7 @@ public class TestMilitaryCreationAndPromotion {
     }
 
     @Test
-    public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -589,7 +587,7 @@ public class TestMilitaryCreationAndPromotion {
     }
 
     @Test
-    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -641,7 +639,7 @@ public class TestMilitaryCreationAndPromotion {
     }
 
     @Test
-    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

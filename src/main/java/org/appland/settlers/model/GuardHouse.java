@@ -29,7 +29,7 @@ public class GuardHouse extends Building {
     }
 
     @Override
-    protected void doUpgradeBuilding() throws InvalidRouteException {
+    protected void doUpgradeBuilding() {
         Building upgraded = new WatchTower(getPlayer());
 
         GameUtils.upgradeMilitaryBuilding(this, upgraded);

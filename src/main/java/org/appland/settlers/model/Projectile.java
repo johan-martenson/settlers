@@ -45,7 +45,7 @@ public class Projectile {
         return (int) ((double) traveled / countdown.getStartedAt() * 100);
     }
 
-    public void stepTime() throws InvalidUserActionException, InvalidRouteException {
+    public void stepTime() throws InvalidUserActionException {
 
         if (!countdown.hasReachedZero()) {
             countdown.step();

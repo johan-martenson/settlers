@@ -120,7 +120,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    void stepTime() throws InvalidRouteException {
+    void stepTime() {
         super.stepTime();
 
         /* Handle draft with delay */
@@ -208,7 +208,7 @@ public class Storehouse extends Building {
         }
     }
 
-    private boolean assignNewWorkerToUnoccupiedPlaces() throws InvalidRouteException {
+    private boolean assignNewWorkerToUnoccupiedPlaces() {
         if (assignCouriers()) {
             return true;
         }
@@ -236,7 +236,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignBuildersToPlannedBuildings() throws InvalidRouteException {
+    private boolean assignBuildersToPlannedBuildings() {
 
         if (!hasAtLeastOne(BUILDER) && !hasAtLeastOne(Material.HAMMER)) {
             return false;
@@ -277,7 +277,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignGeologists() throws InvalidRouteException {
+    private boolean assignGeologists() {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(GEOLOGIST)) {
@@ -312,7 +312,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignScouts() throws InvalidRouteException {
+    private boolean assignScouts() {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(SCOUT)) {
@@ -356,7 +356,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignWorkerToUnoccupiedBuildings() throws InvalidRouteException {
+    private boolean assignWorkerToUnoccupiedBuildings() {
         for (Building building : getPlayer().getBuildings()) {
 
             if (building.equals(this)) {
@@ -444,7 +444,7 @@ public class Storehouse extends Building {
         return workerToToolMap.get(worker);
     }
 
-    private boolean assignCouriers() throws InvalidRouteException {
+    private boolean assignCouriers() {
 
         if (hasAtLeastOne(COURIER)) {
             for (Road road : getMap().getRoads()) {
@@ -848,13 +848,13 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean isClosestStorage(Building building) throws InvalidRouteException {
+    private boolean isClosestStorage(Building building) {
         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
 
         return equals(storehouse);
     }
 
-    private boolean assignDonkeys() throws InvalidRouteException {
+    private boolean assignDonkeys() {
         if (hasAtLeastOne(DONKEY)) {
             for (Road road : getMap().getRoads()) {
                 if (!road.getPlayer().equals(getPlayer())) {
@@ -907,7 +907,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    void onConstructionFinished() throws InvalidRouteException {
+    void onConstructionFinished() {
         getPlayer().reportStorageReady(this);
     }
 

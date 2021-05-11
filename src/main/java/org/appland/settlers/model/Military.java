@@ -128,7 +128,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
 
         if (state == DEFENDING || state == ATTACKING) {
 
@@ -224,7 +224,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onArrival() throws InvalidRouteException, InvalidUserActionException {
+    protected void onArrival() throws InvalidUserActionException {
 
         if (state == WALKING_TO_TARGET) {
 
@@ -382,7 +382,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building building) throws InvalidRouteException {
+    protected void onEnterBuilding(Building building) {
 
         if (state == WALKING_TO_TARGET             ||
             state == WALKING_TO_TAKE_OVER_BUILDING ||
@@ -393,7 +393,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;
@@ -425,7 +425,7 @@ public class Military extends Worker {
         }
     }
 
-    void attack(Building building, Point meetingPoint) throws InvalidRouteException {
+    void attack(Building building, Point meetingPoint) {
 
         /* Save the building to attack */
         buildingToAttack = building;
@@ -508,7 +508,7 @@ public class Military extends Worker {
         }
     }
 
-    void defendBuilding(Building building) throws InvalidRouteException {
+    void defendBuilding(Building building) {
 
         defendedBuilding = building;
 
@@ -548,7 +548,7 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         if (state == WALKING_TO_TARGET) {
 
@@ -582,7 +582,7 @@ public class Military extends Worker {
         }
     }
 
-    private void prepareForFight(Military military) throws InvalidRouteException {
+    private void prepareForFight(Military military) {
 
         /* Remember the opponent */
         opponent = military;
@@ -599,7 +599,7 @@ public class Military extends Worker {
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
     }
 
-    private void returnAfterAttackIsOver() throws InvalidRouteException {
+    private void returnAfterAttackIsOver() {
 
         /* Return home if there is a need for a military at home */
         if (getHome().needsMilitaryManning()  && getHome().getPlayer().equals(getPlayer())) {

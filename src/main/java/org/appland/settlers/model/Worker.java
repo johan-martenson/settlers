@@ -139,7 +139,7 @@ public abstract class Worker {
         dead = false;
     }
 
-    public void stepTime() throws InvalidRouteException, InvalidUserActionException {
+    public void stepTime() throws InvalidUserActionException {
 
         Stats stats = map.getStats();
 
@@ -239,16 +239,16 @@ public abstract class Worker {
         return "Idle worker at " + getPosition();
     }
 
-    void onArrival() throws InvalidRouteException, InvalidUserActionException {
+    void onArrival() throws InvalidUserActionException {
     }
 
-    void onIdle() throws InvalidRouteException, InvalidUserActionException {
+    void onIdle() throws InvalidUserActionException {
     }
 
-    void onEnterBuilding(Building building) throws InvalidRouteException {
+    void onEnterBuilding(Building building) {
     }
 
-    private void handleArrival() throws InvalidRouteException {
+    private void handleArrival() {
 
         /* Just enter the storage and do nothing more */
         if (targetBuilding != null && targetBuilding instanceof Storehouse && targetBuilding.isOccupied()) {
@@ -330,7 +330,7 @@ public abstract class Worker {
         return walker.speed();
     }
 
-    public void setTargetBuilding(Building building) throws InvalidRouteException {
+    public void setTargetBuilding(Building building) {
         targetBuilding = building;
         setTarget(building.getPosition());
 
@@ -372,7 +372,7 @@ public abstract class Worker {
         return (int)(((double)(getSpeed() - walkCountdown.getCount()) / getSpeed()) * 100);
     }
 
-    public void enterBuilding(Building building) throws InvalidRouteException {
+    public void enterBuilding(Building building) {
         if (!getPosition().equals(building.getPosition())) {
             throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
         }
@@ -400,12 +400,12 @@ public abstract class Worker {
         return carriedCargo;
     }
 
-    void setOffroadTarget(Point point) throws InvalidRouteException {
+    void setOffroadTarget(Point point) {
         setOffroadTarget(point, null);
     }
 
     // FIXME: HOTSPOT - allocations
-    void setOffroadTarget(Point point, Point via) throws InvalidRouteException {
+    void setOffroadTarget(Point point, Point via) {
         boolean wasInside = false;
 
         target = point;
@@ -444,7 +444,7 @@ public abstract class Worker {
         }
     }
 
-    protected void setOffroadTargetWithPath(List<Point> pathToWalk) throws InvalidRouteException {
+    protected void setOffroadTargetWithPath(List<Point> pathToWalk) {
         target = pathToWalk.get(pathToWalk.size() - 1);
         path = pathToWalk;
 
@@ -460,7 +460,7 @@ public abstract class Worker {
         }
     }
 
-    void setTargetWithPath(List<Point> pathToWalk) throws InvalidRouteException {
+    void setTargetWithPath(List<Point> pathToWalk) {
         target = pathToWalk.get(pathToWalk.size() - 1);
         path = new ArrayList<>(pathToWalk);
 
@@ -478,7 +478,7 @@ public abstract class Worker {
         }
     }
 
-    void setTarget(Point point) throws InvalidRouteException {
+    void setTarget(Point point) {
         if (state == State.IDLE_INSIDE) {
             if (!point.equals(home.getFlag().getPosition())) {
                 setTarget(point, home.getFlag().getPosition());
@@ -490,7 +490,7 @@ public abstract class Worker {
         }
     }
 
-    void setTarget(Point point, Point via) throws InvalidRouteException {
+    void setTarget(Point point, Point via) {
 
         target = point;
 
@@ -508,7 +508,7 @@ public abstract class Worker {
             }
 
             if (path == null) {
-                throw new InvalidRouteException("No way on existing roads from " + start + " to " + target);
+                throw new InvalidGameLogicException("No way on existing roads from " + start + " to " + target);
             }
 
             /* Remove the current point from the path */
@@ -557,11 +557,11 @@ public abstract class Worker {
         return path;
     }
 
-    void returnHomeOffroad() throws InvalidRouteException {
+    void returnHomeOffroad() {
         setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
     }
 
-    void returnHome() throws InvalidRouteException {
+    void returnHome() {
         if (getPosition().equals(home.getFlag().getPosition())) {
             setTarget(home.getPosition());
         } else {
@@ -573,11 +573,11 @@ public abstract class Worker {
         home = building;
     }
 
-    void returnToStorage() throws InvalidRouteException {
+    void returnToStorage() {
         onReturnToStorage();
     }
 
-    void onReturnToStorage() throws InvalidRouteException {
+    void onReturnToStorage() {
 
     }
 
@@ -585,9 +585,9 @@ public abstract class Worker {
         return player;
     }
 
-    void onWalkingAndAtFixedPoint() throws InvalidRouteException {}
+    void onWalkingAndAtFixedPoint() {}
 
-    void walkHalfWayOffroadTo(Point point) throws InvalidRouteException {
+    void walkHalfWayOffroadTo(Point point) {
 
         /* Walk half way to the given target */
         setOffroadTarget(point);
@@ -632,7 +632,7 @@ public abstract class Worker {
         return 0;
     }
 
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
     }
 
     public boolean isDead() {
@@ -663,7 +663,7 @@ public abstract class Worker {
         dead = true;
     }
 
-    void goToStorehouse(Storehouse storehouse) throws InvalidRouteException {
+    void goToStorehouse(Storehouse storehouse) {
         setTarget(storehouse.getPosition());
 
         targetBuilding = storehouse;

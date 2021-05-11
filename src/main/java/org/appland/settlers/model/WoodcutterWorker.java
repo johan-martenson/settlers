@@ -82,7 +82,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    protected void onIdle() throws InvalidRouteException {
+    protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.hasReachedZero()) {
                 Point point = getTreeToCutDown();
@@ -149,7 +149,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    public void onArrival() throws InvalidRouteException {
+    public void onArrival() {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
@@ -206,7 +206,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WOODCUTTER_WORKER);
 
         if (storage != null) {
@@ -232,7 +232,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
+    protected void onWalkingAndAtFixedPoint() {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&
@@ -256,7 +256,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws InvalidRouteException {
+    public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

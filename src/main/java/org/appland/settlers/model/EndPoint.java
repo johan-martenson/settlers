@@ -12,7 +12,7 @@ package org.appland.settlers.model;
  */
 public interface EndPoint {
 
-    void putCargo(Cargo cargo) throws InvalidRouteException;
+    void putCargo(Cargo cargo);
 
     Point getPosition();
 }

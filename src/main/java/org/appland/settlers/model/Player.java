@@ -264,7 +264,7 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building buildingToAttack, int nrAttackers) throws InvalidUserActionException, InvalidRouteException {
+    public void attack(Building buildingToAttack, int nrAttackers) throws InvalidUserActionException {
 
         /* Can only attack military buildings */
         if (!buildingToAttack.isMilitaryBuilding()) {
@@ -440,7 +440,7 @@ public class Player {
         return color;
     }
 
-    Storehouse getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
+    Storehouse getClosestStorage(Point position, Building avoid) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 

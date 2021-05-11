@@ -7,8 +7,6 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Mill;
@@ -736,7 +734,7 @@ public class TestLimitedSpaceOnFlag {
     }
 
     @Test
-    public void testFlagWithDirectBuildingAndBidirectionalTrafficCannotExceedLimit() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testFlagWithDirectBuildingAndBidirectionalTrafficCannotExceedLimit() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

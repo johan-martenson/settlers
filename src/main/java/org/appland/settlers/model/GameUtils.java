@@ -207,7 +207,7 @@ public class GameUtils {
         return foundMatch && foundNotMatch;
     }
 
-    public static void upgradeMilitaryBuilding(Building fromBuilding, Building upgraded) throws InvalidRouteException {
+    public static void upgradeMilitaryBuilding(Building fromBuilding, Building upgraded) {
 
         /* Set the map in the upgraded building */
         upgraded.setMap(fromBuilding.getMap());
@@ -461,7 +461,7 @@ public class GameUtils {
         }
     }
 
-    public static void putCargosOnFlag(Material material, int amount, Building building, Flag flag, GameMap map) throws InvalidRouteException {
+    public static void putCargosOnFlag(Material material, int amount, Building building, Flag flag, GameMap map) {
         for (int i = 0; i < amount; i++) {
             Cargo cargo = new Cargo(material, map);
 
@@ -1127,12 +1127,12 @@ public class GameUtils {
         return storehouse;
     }
 
-    public static Storehouse getClosestStorageConnectedByRoads(Point point, Player player) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Player player) {
         return getClosestStorageConnectedByRoads(point, null, player);
     }
 
     // FIXME: HOTSPOT
-    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
         GameMap map = player.getMap();
@@ -1179,11 +1179,11 @@ public class GameUtils {
         return storehouse;
     }
 
-    public static Storehouse getClosestStorageConnectedByRoads(Point point, GameMap map) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, GameMap map) {
         return getClosestStorageConnectedByRoads(point, null, map);
     }
 
-    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 
@@ -1232,7 +1232,7 @@ public class GameUtils {
         return storehouse;
     }
 
-    public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 

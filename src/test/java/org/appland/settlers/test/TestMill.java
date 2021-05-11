@@ -12,8 +12,6 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Mill;
@@ -2391,7 +2389,7 @@ public class TestMill {
     }
 
     @Test
-    public void testWorkerCanDeliverAfterHavingWaited() throws InvalidEndPointException, InvalidUserActionException, InvalidRouteException {
+    public void testWorkerCanDeliverAfterHavingWaited() throws InvalidUserActionException {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", BLUE);
