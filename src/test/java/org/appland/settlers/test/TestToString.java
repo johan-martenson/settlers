@@ -830,8 +830,8 @@ public class TestToString {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a lake */
-        for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+        for (int i = 7; i < 53; i += 2) {
+            Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
@@ -841,7 +841,7 @@ public class TestToString {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(7, 9);
+        Point point1 = new Point(8, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -926,8 +926,8 @@ public class TestToString {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a lake */
-        for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+        for (int i = 7; i < 53; i += 2) {
+            Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
@@ -937,7 +937,7 @@ public class TestToString {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(7, 9);
+        Point point1 = new Point(8, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */

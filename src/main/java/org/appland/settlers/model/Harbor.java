@@ -1,11 +1,8 @@
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -21,7 +18,6 @@ public class Harbor extends Storehouse {
     private final Map<Material, Integer> REQUIRED_FOR_EXPEDITION;
     private final Map<Material, Integer> promisedMaterialForNextExpedition;
     private final Map<Material, Integer> materialForNextExpedition;
-    private final List<Ship> shipsWaitingForExpedition;
 
     private State expeditionState;
     private boolean isOwnSettlement;
@@ -48,65 +44,10 @@ public class Harbor extends Storehouse {
         REQUIRED_FOR_EXPEDITION.put(PLANK, 4);
         REQUIRED_FOR_EXPEDITION.put(STONE, 6);
         REQUIRED_FOR_EXPEDITION.put(BUILDER, 1);
-        shipsWaitingForExpedition = new ArrayList<>();
     }
 
     public boolean isReadyForExpedition() {
         return expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION;
-    }
-
-    private Ship getAvailableShipForExpedition() {
-
-        /* Look for a ship that can go on the expedition */
-        for (Ship ship : getMap().getShips()) {
-
-            /* Filter ships that are not ready */
-            if (!ship.isReady()) {
-                continue;
-            }
-
-            /* Filter ships that belong to other players */
-            if (!Objects.equals(ship.getPlayer(), getPlayer())) {
-                continue;
-            }
-
-            return ship;
-        }
-
-        return null;
-    }
-
-    public void startExpedition(Direction direction) throws InvalidUserActionException {
-
-        /* Get the ship */
-        Ship ship = getAvailableShipForExpedition();
-
-        if (ship == null) {
-            throw new InvalidUserActionException("Cannot start expedition because there is no available ship");
-        }
-
-        /* Select target */
-        for (Point point : getMap().getPossiblePlacesForHarbor()) {
-
-            if (Objects.equals(getPosition(), point)) {
-                continue;
-            }
-
-            if (!Objects.equals(GameUtils.getDirection(getPosition(), point), direction)) {
-                continue;
-            }
-
-            /* Pick the point as target for the expedition */
-            List<Point> path = getMap().findWayForShip(ship.getPosition(), point.downRight());
-
-            ship.setOffroadTargetWithPath(path);
-
-            break;
-        }
-
-        if (ship.getTarget() == null) {
-            throw new InvalidUserActionException("No suitable target in this direction: " + direction);
-        }
     }
 
     public void prepareForExpedition() {
@@ -238,7 +179,7 @@ public class Harbor extends Storehouse {
         return materialForNextExpedition;
     }
 
-    public void addShipReadyForTask(Ship ship) {
+    void addShipReadyForTask(Ship ship) {
         for (Material material : materialForNextExpedition.keySet()) {
             int amount = materialForNextExpedition.get(material);
 
@@ -283,7 +224,7 @@ public class Harbor extends Storehouse {
         }
     }
 
-    public void setOwnSettlement() {
+    void setOwnSettlement() {
         isOwnSettlement = true;
     }
 

@@ -75,11 +75,7 @@ public class TestExpeditionNormalFlow {
     *
     * TODO: variations to test ...
     *     - find way to right point close to harbor (if harbor is next to different seas)
-    *     - not more than required material is delivered for the expedition buffer
-    *     - material already exists for expedition and does not require transport from hq
-    *     - prepare expedition when no free ship exists (but ships already prepared for expedition do) only collects material
-    *        -- in addition, when ship later appears an expedition can be started as normal
-    *     - cannot start expedition in invalid direction
+    *     - prepare for expedition when no free ship exists, when ship later appears an expedition can be started as normal
     *     - can't put possible harbor point too far from water
     *     - make sure material gets transported from flag to the new harbor
     *     - can continue to next possible harbor spot if the first one is not wanted
@@ -95,18 +91,18 @@ public class TestExpeditionNormalFlow {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place a lake */
-        for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+        for (int i = 5; i < 53; i += 2) {
+            Point point = new Point(i, 11);  // 5, 11  --  51, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(4, 10);
+        Point point1 = new Point(3, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point2 = new Point(5, 5);
+        Point point2 = new Point(9, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
@@ -121,7 +117,7 @@ public class TestExpeditionNormalFlow {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         /* Place shipyard */
-        Point point3 = new Point(18, 6);
+        Point point3 = new Point(18, 8);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
         /* Connect the shipyard to the headquarter */
@@ -179,6 +175,11 @@ public class TestExpeditionNormalFlow {
         assertTrue(ship.isReady());
         assertFalse(ship.isUnderConstruction());
 
+        /* Wait for the ship to sail to its waiting point */
+        assertNotNull(ship.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+
         /* Verify that the ship waits close to the shipyard */
         assertTrue(GameUtils.getDistanceInGameSteps(shipyard.getPosition(), harbor.getPosition()) > 8);
 
@@ -197,21 +198,21 @@ public class TestExpeditionNormalFlow {
         Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Place a lake */
-        for (int i = 13; i < 53; i += 2) {
-            Point point = new Point(i, 11);
+        for (int i = 7; i < 57; i += 2) {
+            Point point = new Point(i, 11);  // 13, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 11);
+        Point point0 = new Point(56, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(7, 9);
+        Point point1 = new Point(8, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -777,13 +778,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(54, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -954,13 +955,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(54, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -1119,7 +1120,7 @@ public class TestExpeditionNormalFlow {
         /* Start the expedition */
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(56, 10); // Closest water point for the potential harbor site
+        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertEquals(ship.getTarget(), point5);
         assertNotEquals(ship.getPosition(), point0.downRight());
@@ -1143,13 +1144,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(56, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -1343,13 +1344,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(54, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -1508,7 +1509,7 @@ public class TestExpeditionNormalFlow {
         /* Start the expedition */
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(56, 10); // Closest water point for the potential harbor site
+        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertEquals(ship.getTarget(), point5);
         assertNotEquals(ship.getPosition(), point0.downRight());
@@ -1545,13 +1546,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(54, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -1722,7 +1723,7 @@ public class TestExpeditionNormalFlow {
         /* Start the expedition */
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(56, 10); // Closest water point for the potential harbor site
+        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertEquals(ship.getTarget(), point5);
         assertNotEquals(ship.getPosition(), point0.downRight());
@@ -1767,13 +1768,13 @@ public class TestExpeditionNormalFlow {
 
         /* Place a lake */
         for (int i = 3; i < 57; i += 2) {
-            Point point = new Point(i, 11);
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
 
             Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(57, 9);
+        Point point0 = new Point(54, 10);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
@@ -1933,7 +1934,7 @@ public class TestExpeditionNormalFlow {
         /* Start the expedition */
         ship.startExpedition(RIGHT);
 
-        Point point5 = new Point(56, 10); // Closest water point for the potential harbor site
+        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
         assertEquals(ship.getTarget(), point5);
         assertNotEquals(ship.getPosition(), point0.downRight());

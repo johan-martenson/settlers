@@ -3744,7 +3744,21 @@ public class GameMap {
         return mapPoint.isHarborPossible();
     }
 
-    public void setPossiblePlaceForHarbor(Point point) {
+    public void setPossiblePlaceForHarbor(Point point) throws InvalidUserActionException {
+
+        /* Either building or flag needs to be connected to the right type of water */
+        if (!GameUtils.isAny(getSurroundingTiles(point), WATER) &&
+            !GameUtils.isAny(getSurroundingTiles(point.downRight()), WATER)) {
+            throw new InvalidUserActionException("Can't mark a possible point at " + point + " for harbor without access to water");
+        }
+
+        /* The building and the flag can't be completely surrounded by water */
+        // TODO: check for all types of non-buildable terrain as well
+        if (GameUtils.isAll(getSurroundingTiles(point), WATER) ||
+            GameUtils.isAll(getSurroundingTiles(point.downRight()), WATER)) {
+            throw new InvalidUserActionException("Can't mark a possible point at " + point + " for harbor without access to land");
+        }
+
         MapPoint mapPoint = getMapPoint(point);
 
         mapPoint.setHarborIsPossible();
