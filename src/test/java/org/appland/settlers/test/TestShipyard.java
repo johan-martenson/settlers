@@ -1055,7 +1055,6 @@ public class TestShipyard {
 
         /* Verify that the shipwright stays in the building because there is no correct type of water close by */
         for (int i = 0; i < 500; i++) {
-            System.out.println(shipwright.getTarget());
 
             assertTrue(shipwright.isInsideBuilding());
             assertEquals(map.getShips().size(), 0);

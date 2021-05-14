@@ -76,7 +76,6 @@ public class TestExpeditionNormalFlow {
     * TODO: variations to test ...
     *     - find way to right point close to harbor (if harbor is next to different seas)
     *     - prepare for expedition when no free ship exists, when ship later appears an expedition can be started as normal
-    *     - can't put possible harbor point too far from water
     *     - make sure material gets transported from flag to the new harbor
     *     - can continue to next possible harbor spot if the first one is not wanted
     * */
@@ -378,12 +377,8 @@ public class TestExpeditionNormalFlow {
 
         /* Wait for the ship to sail to a waiting point */
         assertNotNull(ship.getTarget());
-        System.out.println(ship.getTarget());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
-
-        System.out.println(ship.getPosition());
-        System.out.println(ship.getTarget());
 
         /* Prepare for the expedition */
         Utils.adjustInventoryTo(headquarter, PLANK, 20);
@@ -1945,7 +1940,6 @@ public class TestExpeditionNormalFlow {
 
         /* Verify that a harbor is built and that it gets its border when construction starts */
         Point point6 = new Point(point0.x + 9, point0.y + 9);
-        System.out.println(point6);
 
         assertFalse(player0.getBorderPoints().contains(point6));
         assertFalse(map.isBuildingAtPoint(point0));

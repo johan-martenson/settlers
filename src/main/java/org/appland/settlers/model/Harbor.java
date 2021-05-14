@@ -21,6 +21,7 @@ public class Harbor extends Storehouse {
 
     private State expeditionState;
     private boolean isOwnSettlement;
+    private Ship promisedShip;
 
     private enum State {
         NO_EXPEDITION_PLANNED,
@@ -44,10 +45,12 @@ public class Harbor extends Storehouse {
         REQUIRED_FOR_EXPEDITION.put(PLANK, 4);
         REQUIRED_FOR_EXPEDITION.put(STONE, 6);
         REQUIRED_FOR_EXPEDITION.put(BUILDER, 1);
+
+        promisedShip = null;
     }
 
     public boolean isReadyForExpedition() {
-        return expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION;
+        return expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION && promisedShip == null;
     }
 
     public void prepareForExpedition() {
@@ -194,6 +197,8 @@ public class Harbor extends Storehouse {
 
         /* Report that the ship is ready for an expedition */
         getPlayer().reportShipReadyForExpedition(ship);
+
+        promisedShip = null;
     }
 
     public boolean isCollectingMaterialForExpedition() {
@@ -240,5 +245,9 @@ public class Harbor extends Storehouse {
     @Override
     void onBuildingOccupied() {
         getMap().updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
+    }
+
+    public void promiseShip(Ship ship) {
+        promisedShip = ship;
     }
 }

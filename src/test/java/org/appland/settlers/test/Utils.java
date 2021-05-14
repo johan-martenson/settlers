@@ -2453,6 +2453,18 @@ public class Utils {
         assertNull(ship.getTarget());
     }
 
+    public static void waitForNumberItems(List<Ship> ships, int amount, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (ships.size() == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(ships.size(), amount);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

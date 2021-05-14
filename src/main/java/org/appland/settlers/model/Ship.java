@@ -17,6 +17,7 @@ public class Ship extends Worker {
 
     private State state;
     private Point targetHarborPoint;
+    private Harbor targetHarbor;
 
     private enum State {
         WAITING_FOR_TASK,
@@ -47,51 +48,38 @@ public class Ship extends Worker {
                 /* Tell the map that the ship is ready so it's possible to place construction on it again */
                 map.reportShipReady(this);
 
-                /* Find the closest harbor ready for an expedition */
-                List<Point> pathToClosestHarbor = getWayToClosestHarborWhereShipIsNeeded();
-
-                /* Sail to the harbor where there is an expedition ready to start */
-                if (pathToClosestHarbor != null) {
-
-                    state = State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK;
-
-                    setOffroadTargetWithPath(pathToClosestHarbor);
-
                 /* Sail out a small step into the water if there is no expedition to start */
+                Point surroundedByWaterPoint = null;
+                List<Point> pathToWaterPoint = null;
+
+                for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
+
+                    /* Filter points not surrounded by water */
+                    if (!GameUtils.isAll(map.getSurroundingTiles(point), DetailedVegetation.WATER)) {
+                        continue;
+                    }
+
+                    /* Filter points that can't be reached */
+                    pathToWaterPoint = map.findWayForShip(position, point);
+
+                    if (pathToWaterPoint == null) {
+                        continue;
+                    }
+
+                    surroundedByWaterPoint = point;
+
+                    break;
+                }
+
+                /* Sail to the point surrounded by water close to the shipyard and wait */
+                if (surroundedByWaterPoint != null) {
+                    state = State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS;
+
+                    setOffroadTargetWithPath(pathToWaterPoint);
+
+                /* Just stay in the current place if there is nowhere to go */
                 } else {
-
-                    Point surroundedByWaterPoint = null;
-                    List<Point> pathToWaterPoint = null;
-
-                    for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
-
-                        /* Filter points not surrounded by water */
-                        if (!GameUtils.isAll(map.getSurroundingTiles(point), DetailedVegetation.WATER)) {
-                            continue;
-                        }
-
-                        /* Filter points that can't be reached */
-                        pathToWaterPoint = map.findWayForShip(position, point);
-
-                        if (pathToWaterPoint == null) {
-                            continue;
-                        }
-
-                        surroundedByWaterPoint = point;
-
-                        break;
-                    }
-
-                    /* Sail to the point surrounded by water close to the shipyard and wait */
-                    if (surroundedByWaterPoint != null) {
-                        state = State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS;
-
-                        setOffroadTargetWithPath(pathToWaterPoint);
-
-                    /* Just stay in the current place if there is nowhere to go */
-                    } else {
-                        state = State.WAITING_FOR_TASK;
-                    }
+                    state = State.WAITING_FOR_TASK;
                 }
             } else {
                 countdown.step();
@@ -99,58 +87,56 @@ public class Ship extends Worker {
         } else if (state == State.WAITING_FOR_TASK) {
 
             /* Is there a harbor that has collected material for an expedition? */
-            List<Point> pathToHarborWhereShipIsNeeded = getWayToClosestHarborWhereShipIsNeeded();
+            List<Point> pathToClosestHarbor = null;
+            Harbor targetHarbor = null;
+            int distanceToClosestHarbor = Integer.MAX_VALUE;
 
-            if (pathToHarborWhereShipIsNeeded != null) {
+            for (Building building : player.getBuildings()) {
+
+                /* Filter all buildings that are not harbors */
+                if (!building.isHarbor()) {
+                    continue;
+                }
+
+                Harbor harbor = (Harbor) building;
+
+                /* Filter harbors that are not ready for an expedition */
+                if (!harbor.isReadyForExpedition()) {
+                    continue;
+                }
+
+                Point waterPoint = GameUtils.getClosestWaterPointForBuilding(harbor);
+
+                /* Filter harbors without any close points in water */
+                if (waterPoint == null) {
+                    continue;
+                }
+
+                /* Filter harbors that cannot be reached */
+                List<Point> path = map.findWayForShip(getPosition(), waterPoint);
+
+                if (path == null) {
+                    continue;
+                }
+
+                /* Look for the closest harbor */
+                if (path.size() >= distanceToClosestHarbor) {
+                    continue;
+                }
+
+                distanceToClosestHarbor = path.size();
+                pathToClosestHarbor = path;
+                targetHarbor = harbor;
+            }
+
+            if (pathToClosestHarbor != null) {
                 state = State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK;
 
-                setOffroadTargetWithPath(pathToHarborWhereShipIsNeeded);
+                targetHarbor.promiseShip(this);
+
+                setOffroadTargetWithPath(pathToClosestHarbor);
             }
         }
-    }
-
-    private List<Point> getWayToClosestHarborWhereShipIsNeeded() {
-        List<Point> pathToClosestHarbor = null;
-        int distanceToClosestHarbor = Integer.MAX_VALUE;
-
-        for (Building building : player.getBuildings()) {
-
-            /* Filter all buildings that are not harbors */
-            if (!building.isHarbor()) {
-                continue;
-            }
-
-            Harbor harbor = (Harbor) building;
-
-            /* Filter harbors that are not ready for an expedition */
-            if (!harbor.isReadyForExpedition()) {
-                continue;
-            }
-
-            Point waterPoint = GameUtils.getClosestWaterPointForBuilding(harbor);
-
-            /* Filter harbors without any close points in water */
-            if (waterPoint == null) {
-                continue;
-            }
-
-            /* Filter harbors that cannot be reached */
-            List<Point> path = map.findWayForShip(getPosition(), waterPoint);
-
-            if (path == null) {
-                continue;
-            }
-
-            /* Look for the closest harbor */
-            if (path.size() >= distanceToClosestHarbor) {
-                continue;
-            }
-
-            distanceToClosestHarbor = path.size();
-            pathToClosestHarbor = path;
-        }
-
-        return pathToClosestHarbor;
     }
 
     public boolean isUnderConstruction() {
