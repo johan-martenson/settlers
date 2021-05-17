@@ -271,10 +271,15 @@ public class Ship extends Worker {
         GameUtils.putCargos(PLANK, 4, newHarbor);
         GameUtils.putCargos(STONE, 6, newHarbor);
 
+        cargos.clear();
+
         /* Update the border */
         newHarbor.setOwnSettlement();
 
         map.updateBorder(newHarbor, BorderChangeCause.NEW_SETTLEMENT);
+
+        /* Get ready for next task */
+        state = State.WAITING_FOR_TASK;
     }
 
     public boolean isReadyToStartExpedition() {

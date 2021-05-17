@@ -1951,4 +1951,241 @@ public class TestExpeditionNormalFlow {
         assertTrue(map.isBuildingAtPoint(point0));
         assertTrue(player0.getBorderPoints().contains(point6));
     }
+
+    @Test
+    public void testShipCanStartNewExpeditionAfterFirstSettlementIsFinished() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place a lake */
+        for (int i = 3; i < 57; i += 2) {
+            Point point = new Point(i, 11);  // 3, 11  --  55, 11
+
+            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+        }
+
+        /* Mark a possible place for a harbor */
+        Point point0 = new Point(54, 10);
+        map.setPossiblePlaceForHarbor(point0);
+
+        assertTrue(map.isAvailableHarborPoint(point0));
+
+        /* Mark a possible place for a harbor */
+        Point point1 = new Point(6, 10);
+        map.setPossiblePlaceForHarbor(point1);
+
+        /* Place headquarter */
+        Point point2 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        /* Place harbor */
+        Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
+
+        /* Connect the harbor to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
+
+        /* Wait for the harbor to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(harbor);
+
+        Utils.fastForward(2000, map);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
+
+        assertTrue(harbor.isReady());
+
+        /* Place shipyard */
+        Point point3 = new Point(14, 8);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
+
+        /* Connect the shipyard to the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+
+        /* Wait for the shipyard to get constructed and occupied */
+        assertFalse(harbor.needsMaterial(BUILDER));
+
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        /* Set the shipyard to build ships */
+        shipyard.produceShips();
+
+        /* Wait for the shipyard to get occupied */
+        Shipwright shipwright = (Shipwright) Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Ensure the shipyard has plenty of materials */
+        Utils.deliverCargos(shipyard, PLANK, 4);
+
+        /* Wait for the shipwright to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(shipwright.isInsideBuilding());
+
+        /* Step once to let the shipwright go out to start building a ship */
+        map.stepTime();
+
+        assertFalse(shipwright.isInsideBuilding());
+
+        Point point = shipwright.getTarget();
+
+        assertTrue(shipwright.isTraveling());
+
+        /* Let the shipwright reach the intended spot and start to build the ship */
+        Utils.fastForwardUntilWorkersReachTarget(map, shipwright);
+
+        assertTrue(shipwright.isArrived());
+        assertTrue(shipwright.isAt(point));
+        assertTrue(shipwright.isHammering());
+
+        /* Wait for the shipwright to hammer */
+        Utils.fastForward(19, map);
+
+        assertTrue(shipwright.isHammering());
+        assertEquals(map.getShips().size(), 1);
+
+        Ship ship = map.getShips().get(0);
+
+        assertEquals(ship.getPosition(), shipwright.getPosition());
+        assertTrue(ship.isUnderConstruction());
+
+        /* Wait for the ship to get fully constructed */
+        Utils.waitForShipToGetBuilt(map, ship);
+
+        assertTrue(ship.isReady());
+        assertFalse(ship.isUnderConstruction());
+
+        /* Make sure there is only one ship */
+        shipyard.stopProduction();
+
+        /* The ship sails to a waiting point close to the shipyard */
+        assertNotNull(ship.getTarget());
+        assertNotEquals(ship.getPosition(), ship.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
+
+        /* Prepare for the expedition */
+        Utils.adjustInventoryTo(headquarter, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter, STONE, 30);
+        Utils.adjustInventoryTo(headquarter, BUILDER, 30);
+
+        assertEquals(headquarter.getAmount(PLANK), 30);
+        assertEquals(headquarter.getAmount(STONE), 30);
+        assertEquals(headquarter.getAmount(BUILDER), 30);
+        assertEquals(harbor.getMaterialForExpedition().size(), 0);
+
+        Utils.adjustInventoryTo(harbor, PLANK, 0);
+        Utils.adjustInventoryTo(harbor, STONE, 0);
+        Utils.adjustInventoryTo(harbor, BUILDER, 0);
+
+        harbor.prepareForExpedition();
+
+        assertTrue(harbor.isReady());
+        assertTrue(harbor.needsMaterial(PLANK));
+        assertTrue(harbor.needsMaterial(STONE));
+        assertTrue(harbor.needsMaterial(BUILDER));
+
+        /* Wait for the harbor to collect the required material for the expedition */
+        for (int i = 0; i < 10000; i++) {
+
+            Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
+
+            if (expeditionMaterial.getOrDefault(PLANK, 0) == 4 &&
+                    expeditionMaterial.getOrDefault(STONE, 0) == 6 &&
+                    expeditionMaterial.getOrDefault(BUILDER, 0) == 1) {
+                break;
+            }
+
+            assertTrue(harbor.isReady());
+
+            map.stepTime();
+        }
+
+        /* Wait for the ship to sail to the harbor */
+        assertEquals(ship.getTarget(), point1);
+        assertNotEquals(ship.getPosition(), point1);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+
+        assertEquals(ship.getPosition(), point1);
+
+        /* The collected material for the expedition is transferred to the ship */
+        assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
+        assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(STONE, 0), 0);
+        assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(BUILDER, 0), 0);
+
+        Set<Cargo> cargos = ship.getCargos();
+
+        Map<Material, Integer> materialInShip = new HashMap<>();
+
+        for (Cargo cargo : cargos) {
+            Material material = cargo.getMaterial();
+            int amount = materialInShip.getOrDefault(material, 0);
+
+            amount = amount + 1;
+
+            materialInShip.put(material, amount);
+        }
+
+        assertEquals((int)materialInShip.getOrDefault(PLANK, 0), 4);
+        assertEquals((int)materialInShip.getOrDefault(STONE, 0), 6);
+        assertEquals((int)materialInShip.getOrDefault(BUILDER, 0), 1);
+
+        /* Check that there is an expedition available to the possible harbor point */
+        Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
+
+        assertEquals(directions.size(), 1);
+        assertTrue(directions.contains(RIGHT));
+
+        /* Start the expedition */
+        ship.startExpedition(RIGHT);
+
+        Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
+
+        assertEquals(ship.getTarget(), point5);
+        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertFalse(map.isBuildingAtPoint(point0));
+
+        /* Wait for the ship to sail to the possible harbor point */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+
+        /* Verify that a harbor can be built */
+        assertFalse(map.isBuildingAtPoint(point0));
+
+        ship.startSettlement();
+
+        assertEquals(ship.getCargos().size(), 0);
+        assertTrue(map.isBuildingAtPoint(point0));
+
+        Harbor newHarbor = (Harbor) map.getBuildingAtPoint(point0);
+
+        assertNotNull(newHarbor.getBuilder());
+
+        Utils.waitForBuildingToBeUnderConstruction(newHarbor);
+
+        /* Wait for the harbor to finish construction */
+        Utils.waitForBuildingToBeConstructed(newHarbor);
+
+        /* Verify that the ship can start a new expedition when the first expedition is done */
+        Utils.adjustInventoryTo(harbor, PLANK, 40);
+        Utils.adjustInventoryTo(harbor, STONE, 40);
+        Utils.adjustInventoryTo(harbor, BUILDER, 40);
+
+        harbor.prepareForExpedition();
+
+        map.stepTime();
+
+        assertEquals(map.getShips().size(), 1);
+        assertEquals(ship.getCargos().size(), 0);
+        assertEquals(ship.getTarget(), harbor.getPosition());
+        assertFalse(ship.isReadyToStartExpedition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, harbor.getPosition());
+
+        assertEquals(ship.getCargos().size(), 11);
+        assertTrue(ship.isReadyToStartExpedition());
+    }
 }
