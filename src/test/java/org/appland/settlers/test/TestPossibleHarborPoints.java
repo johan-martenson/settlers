@@ -1,9 +1,10 @@
+package org.appland.settlers.test;
+
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
