@@ -54,6 +54,110 @@ public class TestPossibleHarborPoints {
     }
 
     @Test
+    public void testCannotMarkAvailablePlaceForHarborWithBuildableWaterNextToFlag() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place lake of buildable water */
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.BUILDABLE_WATER, map);
+
+        /* Verify that there is no possible point for harbor with water close to the flag */
+        try {
+            map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.downLeft().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.upRight().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.left().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.right().right().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isAvailableHarborPoint(point0.upLeft().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.downLeft().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.upRight().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.left().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.right().right().upLeft()));
+    }
+
+    @Test
+    public void testCannotMarkAvailablePlaceForHarborWithWater2NextToFlag() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place lake of water_2 */
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER_2, map);
+        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.WATER_2, map);
+
+        /* Verify that there is no a possible point for harbor with water close to the flag */
+        try {
+            map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.downLeft().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.upRight().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.left().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            map.setPossiblePlaceForHarbor(point0.right().right().upLeft());
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        assertFalse(map.isAvailableHarborPoint(point0.upLeft().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.downLeft().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.upRight().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.left().upLeft()));
+        assertFalse(map.isAvailableHarborPoint(point0.right().right().upLeft()));
+    }
+
+    @Test
     public void testCanMarkAvailablePlaceForHarborWithWaterNextToBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
