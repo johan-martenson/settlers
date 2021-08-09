@@ -265,7 +265,7 @@ public class TestGameMap {
             map.findWayWithExistingRoads(point1, point1);
 
             fail();
-        } catch (Throwable e) {}
+        } catch (Exception e) {}
     }
 
     @Test

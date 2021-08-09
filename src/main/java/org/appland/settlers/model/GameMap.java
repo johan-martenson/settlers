@@ -623,7 +623,7 @@ public class GameMap {
             }
 
             for (Road road : newRoads) {
-                if (!GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
                     continue;
                 }
 
@@ -631,7 +631,7 @@ public class GameMap {
             }
 
             for (Road road : removedRoads) {
-                if (!GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
                     continue;
                 }
 
@@ -711,7 +711,7 @@ public class GameMap {
             }
 
             for (Road road : promotedRoads) {
-                if (!GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
                     continue;
                 }
 
@@ -1214,7 +1214,7 @@ public class GameMap {
      * @param player The player that will own the new road
      * @param points The points of the new road
      * @return The newly placed road
-     * @throws Exception Any exceptions encountered while placing the new road
+     * @throws InvalidUserActionException Thrown if the given player is not part of the game
      */
     public Road placeRoad(Player player, Point... points) throws InvalidUserActionException {
         if (!players.contains(player)) {
@@ -1230,7 +1230,7 @@ public class GameMap {
      * @param player The player that will own the new road
      * @param wayPoints The points of the new road
      * @return The newly placed road
-     * @throws Exception Any exceptions encountered while placing the new road
+     * @throws InvalidUserActionException Thrown if the road is too short or outside the player's border
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException {
         /* Only allow roads that are at least three points long
@@ -1423,7 +1423,7 @@ public class GameMap {
      * @param player The player that wants to place the flag
      * @param point The position for the flag
      * @return The placed flag
-     * @throws Exception Any exception encountered while placing the flag
+     * @throws InvalidUserActionException Thrown if the given player is not part of the game
      */
     public Flag placeFlag(Player player, Point point) throws InvalidUserActionException {
 
@@ -2211,7 +2211,7 @@ public class GameMap {
      * Places a tree at the given point
      * @param point The point to place the tree at
      * @return The placed tree
-     * @throws Exception Throws exception if the tree cannot be placed
+     * @throws InvalidUserActionException Thrown if the tree would be placed on a flag, road, or stone
      */
     public Tree placeTree(Point point) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
@@ -2419,7 +2419,7 @@ public class GameMap {
      * Removes the given flag from the game
      *
      * @param flag The flag to remove
-     * @throws Exception Throws exception if there is a fault when removing connected roads
+     * @throws InvalidUserActionException Thrown if the flag to remove is null
      */
     public void removeFlag(Flag flag) throws InvalidUserActionException {
 
@@ -3463,8 +3463,8 @@ public class GameMap {
     /**
      * Returns true if the given point is surrounded by mountain tiles
      *
-     * @param point
-     * @return
+     * @param point Point that may be on a minable mountain
+     * @return True if the given point is on a minable mountain, otherwise false
      */
     public boolean isOnMinableMountain(Point point) {
 
@@ -3490,8 +3490,8 @@ public class GameMap {
     /**
      * Returns true if the given point is surrounded by water tiles
      *
-     * @param point
-     * @return
+     * @param point Point that may be surrounded by water
+     * @return True if the given point is surrounded by water, otherwise false
      */
     public boolean isInWater(Point point) {
 
@@ -3517,8 +3517,8 @@ public class GameMap {
     /**
      * Surrounds the given point with the chosen type of vegetation
      *
-     * @param point
-     * @param vegetation
+     * @param point Point to surround with vegetation
+     * @param vegetation Vegetation to surround the point with
      */
     public void surroundWithVegetation(Point point, DetailedVegetation vegetation) {
         setDetailedVegetationUpLeft(point, vegetation);
@@ -3542,8 +3542,8 @@ public class GameMap {
     /**
      * Returns a list of the tiles surrounding the given point
      *
-     * @param point
-     * @return
+     * @param point Point to get surrounding tiles for
+     * @return List of tiles surrounding the given point
      */
     public List<DetailedVegetation> getSurroundingTiles(Point point) {
         List<DetailedVegetation> result = new LinkedList<>();
@@ -3586,8 +3586,8 @@ public class GameMap {
     /**
      * Returns true if the given point is on vegetation where houses can be built
      *
-     * @param point
-     * @return
+     * @param point Point that may be on buildable land
+     * @return True if the given point is on buildable land, otherwise false
      */
     public boolean isOnBuildable(Point point) {
 
@@ -3747,8 +3747,8 @@ public class GameMap {
     public void setPossiblePlaceForHarbor(Point point) throws InvalidUserActionException {
 
         /* Either building or flag needs to be connected to the right type of water */
-        if (!GameUtils.isAny(getSurroundingTiles(point), WATER) &&
-            !GameUtils.isAny(getSurroundingTiles(point.downRight()), WATER)) {
+        if (!getSurroundingTiles(point).contains(WATER) &&
+            !getSurroundingTiles(point.downRight()).contains(WATER)) {
             throw new InvalidUserActionException("Can't mark a possible point at " + point + " for harbor without access to water");
         }
 
