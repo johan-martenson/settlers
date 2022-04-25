@@ -526,6 +526,9 @@ public class Building implements EndPoint {
             }
         }
 
+        /* Give buildings a chance to add additional logic on step time */
+        onStepTime();
+
         duration.after("stepTime");
 
         map.getStats().reportVariableValue(counterName, duration.getFullDuration());
@@ -1295,4 +1298,6 @@ public class Building implements EndPoint {
     }
 
     void onBuildingOccupied() { }
+
+    void onStepTime() { }
 }

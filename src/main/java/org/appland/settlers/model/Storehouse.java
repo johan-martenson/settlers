@@ -1,10 +1,6 @@
 package org.appland.settlers.model;
 
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.AXE;
@@ -930,5 +926,17 @@ public class Storehouse extends Building {
     @Override
     public boolean isStorehouse() {
         return true;
+    }
+
+    public Collection<? extends Cargo> retrieve(Material material, int amount) {
+        List<Cargo> cargos = new ArrayList<>();
+
+        int cargosToReturn = Math.min(amount, getAmount(material));
+
+        for (int i = 0; i < cargosToReturn; i++) {
+            cargos.add(retrieve(material));
+        }
+
+        return cargos;
     }
 }

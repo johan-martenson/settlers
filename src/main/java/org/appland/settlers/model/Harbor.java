@@ -1,8 +1,8 @@
 package org.appland.settlers.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -22,6 +22,7 @@ public class Harbor extends Storehouse {
     private State expeditionState;
     private boolean isOwnSettlement;
     private Ship promisedShip;
+    private boolean needToShipMaterialToOtherHarbor;
 
     private enum State {
         NO_EXPEDITION_PLANNED,
@@ -47,6 +48,11 @@ public class Harbor extends Storehouse {
         REQUIRED_FOR_EXPEDITION.put(BUILDER, 1);
 
         promisedShip = null;
+    }
+
+    boolean hasTaskForShip() {
+        return needToShipMaterialToOtherHarbor ||
+                (expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION && promisedShip == null);
     }
 
     public boolean isReadyForExpedition() {
@@ -183,20 +189,32 @@ public class Harbor extends Storehouse {
     }
 
     void addShipReadyForTask(Ship ship) {
-        for (Material material : materialForNextExpedition.keySet()) {
-            int amount = materialForNextExpedition.get(material);
 
-            ship.putCargos(material, amount, null);
+        /* Start an expedition if needed */
+        if (expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION) {
+            for (Material material : materialForNextExpedition.keySet()) {
+                int amount = materialForNextExpedition.get(material);
 
-            materialForNextExpedition.put(material, 0);
+                ship.putCargos(material, amount, null);
+
+                materialForNextExpedition.put(material, 0);
+            }
+
+            ship.setReadyForExpedition();
+
+            expeditionState = State.NO_EXPEDITION_PLANNED;
+
+            /* Report that the ship is ready for an expedition */
+            getPlayer().reportShipReadyForExpedition(ship);
+
+        /* Ship material to other harbors if needed */
+        } else if (needToShipMaterialToOtherHarbor) {
+
+            // What does each settlement need?
+            // Go through materials in priority order
+            // Create cargos
+            // Put on ship
         }
-
-        ship.setReadyForExpedition();
-
-        expeditionState = State.NO_EXPEDITION_PLANNED;
-
-        /* Report that the ship is ready for an expedition */
-        getPlayer().reportShipReadyForExpedition(ship);
 
         promisedShip = null;
     }
@@ -249,5 +267,115 @@ public class Harbor extends Storehouse {
 
     public void promiseShip(Ship ship) {
         promisedShip = ship;
+    }
+
+    @Override
+    void onStepTime() {
+
+        /* Find out if there is a need to ship something to another harbor */
+        if (isOccupied()) {
+
+            needToShipMaterialToOtherHarbor = getPlayer().getBuildings().stream()
+
+                    /* Find all harbors that are not this one */
+                    .filter(building -> !Objects.equals(building, this))
+                    .filter(Building::isHarbor)
+                    .filter(Building::isReady)
+                    .map(building -> (Harbor) building)
+
+                    /* Look for any material that needs shipping and that this harbor has in store */
+                    .anyMatch(harbor -> harbor.getMaterialNeedingShippingAsStream()
+                                .anyMatch(material -> getAmount(material) > 0)
+                    );
+        }
+    }
+
+    private Stream<Material> getMaterialNeedingShippingAsStream() {
+
+        List<Building> buildings = getPlayer().getBuildings();
+        GameMap map = getMap();
+
+        return Arrays.stream(Material.values())
+
+                /* Find materials needed */
+                .filter(material -> buildings.stream().anyMatch(building -> building.needsMaterial(material)))
+
+                /* Find materials that need shipping - i.e. that are not available locally */
+                .filter(material -> buildings.stream()
+                                .filter(building -> !Objects.equals(this, building))
+                                .filter(Building::isStorehouse)
+                                .filter(Building::isReady)
+                                .filter(storeHouse -> GameUtils.areBuildingsOrFlagsConnected(this, storeHouse, map))
+                                .noneMatch(localStoreHouse -> localStoreHouse.getAmount(material) > 0)
+                );
+    }
+
+    public boolean needsToShipToOtherHarbors() {
+        return needToShipMaterialToOtherHarbor;
+    }
+
+    /**
+     * Answers the question - what do other harbors need from this harbor?
+     *
+     * @return
+     */
+    public Map<Harbor, Map<Material, Integer>> getNeededShipmentsFromThisHarbor() {
+        Map<Harbor, Map<Material, Integer>> neededShipmentsFromThisHarbor = new HashMap<>();
+
+        for (Building building : getPlayer().getBuildings()) {
+
+            if (!building.isReady()) {
+                continue;
+            }
+
+            if (!(building instanceof Harbor )) {
+                continue;
+            }
+
+            Harbor otherHarbor = (Harbor) building;
+
+            if (this.equals(otherHarbor)) {
+                continue;
+            }
+
+            neededShipmentsFromThisHarbor.put(otherHarbor, new HashMap<>());
+
+            for (Entry<Material, Integer> entry : otherHarbor.getShipmentNeededForSettlement().entrySet()) {
+                Material material = entry.getKey();
+                int amount = entry.getValue();
+
+                int currentAmount = neededShipmentsFromThisHarbor.get(otherHarbor).getOrDefault(material, 0);
+
+                neededShipmentsFromThisHarbor.get(otherHarbor).put(material, currentAmount + amount);
+            }
+        }
+
+        return neededShipmentsFromThisHarbor;
+    }
+
+    Map<Material, Integer> getShipmentNeededForSettlement() {
+
+        Map<Material, Integer> shipmentsNeeded = new HashMap<>();
+
+        /* Get all buildings within reach */
+        Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getFlag());
+
+        /* Remove this harbor */
+        reachableBuildings.remove(this);
+
+        /* Collect needed material for each building */
+        for (Building building : reachableBuildings) {
+
+            for (Material material : building.getMaterialNeeded()) {
+                int amountNeededByHouse = building.getTotalAmountNeeded(material);
+                int amountInStorage = getAmount(material);
+
+                int currentAmountNeeded = shipmentsNeeded.getOrDefault(material, 0);
+
+                shipmentsNeeded.put(material, currentAmountNeeded + amountNeededByHouse - amountInStorage);
+            }
+        }
+
+        return shipmentsNeeded;
     }
 }

@@ -1,9 +1,7 @@
 package org.appland.settlers.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -11,6 +9,7 @@ import static org.appland.settlers.model.Material.STONE;
 @Walker(speed = 10)
 public class Ship extends Worker {
     private static final int TIME_TO_BUILD_SHIP = 100;
+    private static final int MAX_STORAGE = 33; // TODO: verify that this number is correct
 
     private final Countdown countdown;
     private final Set<Cargo> cargos;
@@ -23,7 +22,10 @@ public class Ship extends Worker {
         WAITING_FOR_TASK,
         SAILING_TO_HARBOR_TO_TAKE_ON_TASK,
         SAILING_TO_START_NEW_SETTLEMENT,
-        SAILING_TO_POINT_TO_WAIT_FOR_ORDERS, READY_TO_START_EXPEDITION, UNDER_CONSTRUCTION
+        SAILING_TO_POINT_TO_WAIT_FOR_ORDERS,
+        READY_TO_START_EXPEDITION,
+        SAILING_TO_HARBOR_WITH_CARGO,
+        UNDER_CONSTRUCTION
     }
 
     Ship(Player player, GameMap map) {
@@ -45,7 +47,7 @@ public class Ship extends Worker {
 
                 Point position = getPosition();
 
-                /* Tell the map that the ship is ready so it's possible to place construction on it again */
+                /* Tell the map that the ship is ready, so it's possible to place construction on it again */
                 map.reportShipReady(this);
 
                 /* Sail out a small step into the water if there is no expedition to start */
@@ -86,24 +88,24 @@ public class Ship extends Worker {
             }
         } else if (state == State.WAITING_FOR_TASK) {
 
-            /* Is there a harbor that has collected material for an expedition? */
-            List<Point> pathToClosestHarbor = null;
-            Harbor targetHarbor = null;
-            int distanceToClosestHarbor = Integer.MAX_VALUE;
+            Point position = getPosition();
 
-            for (Building building : player.getBuildings()) {
+            List<Harbor> harborsWithTasksForShipSortedByDistance = player.getBuildings().stream()
+                    .filter(Building::isHarbor)
+                    .filter(Building::isReady)
+                    .map(building -> (Harbor) building)
+                    .filter(Harbor::hasTaskForShip)
 
-                /* Filter all buildings that are not harbors */
-                if (!building.isHarbor()) {
-                    continue;
-                }
+                    /* Sort by distance to the ship - closest first */
+                    .map(harbor -> new GameUtils.BuildingAndData<>(
+                            harbor,
+                            GameUtils.getDistanceInGameSteps(position, harbor.getPosition())))
+                    .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::getData))
+                    .map(GameUtils.BuildingAndData::getBuilding)
+                    .collect(Collectors.toUnmodifiableList());
 
-                Harbor harbor = (Harbor) building;
-
-                /* Filter harbors that are not ready for an expedition */
-                if (!harbor.isReadyForExpedition()) {
-                    continue;
-                }
+            /* Start sailing to the nearest point that can be reached (if any) */
+            for (Harbor harbor : harborsWithTasksForShipSortedByDistance) {
 
                 Point waterPoint = GameUtils.getClosestWaterPointForBuilding(harbor);
 
@@ -119,22 +121,16 @@ public class Ship extends Worker {
                     continue;
                 }
 
-                /* Look for the closest harbor */
-                if (path.size() >= distanceToClosestHarbor) {
-                    continue;
-                }
-
-                distanceToClosestHarbor = path.size();
-                pathToClosestHarbor = path;
+                /* Sail to the harbor to pick up a new task */
                 targetHarbor = harbor;
-            }
 
-            if (pathToClosestHarbor != null) {
                 state = State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK;
 
                 targetHarbor.promiseShip(this);
 
-                setOffroadTargetWithPath(pathToClosestHarbor);
+                setOffroadTargetWithPath(path);
+
+                break;
             }
         }
     }
@@ -156,13 +152,54 @@ public class Ship extends Worker {
         if (state == State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK) {
             Harbor harbor = GameUtils.getClosestHarborOffroadForPlayer(player, position, 5);
 
-            state = State.WAITING_FOR_TASK;
+            if (harbor.needsToShipToOtherHarbors()) {
 
-            harbor.addShipReadyForTask(this);
+                // Get needed deliveries from this harbor to other harbors. Harbor-#material
+                // Pick one of the harbors
+                // FIXME: follow priority, pick up material for several harbors if there is capacity, limit pickup to ship's capacity
+                Map<Harbor, Map<Material, Integer>> neededShipments = harbor.getNeededShipmentsFromThisHarbor();
+
+                targetHarbor = neededShipments.keySet().iterator().next();
+                Map<Material, Integer> neededShipmentsForTargetHarbor = neededShipments.get(targetHarbor);
+
+                // Load up on cargo
+                for (Map.Entry<Material, Integer> entry : neededShipmentsForTargetHarbor.entrySet()) {
+                    Material material = entry.getKey();
+                    int amountNeeded = entry.getValue();
+                    int amountAvailable = harbor.getAmount(material);
+                    int spaceAvailable = MAX_STORAGE - cargos.size();
+
+                    int amountToLoadOfMaterial = Math.min(
+                            Math.min(amountNeeded, amountAvailable),
+                            spaceAvailable
+                    );
+
+                    cargos.addAll(harbor.retrieve(material, amountToLoadOfMaterial));
+                }
+
+                /* Find the way to the potential target */
+                Point closestWaterPoint = GameUtils.getClosestWaterPoint(targetHarbor.getPosition(), map);
+
+                List<Point> pathToTargetHarbor = map.findWayForShip(position, closestWaterPoint);
+
+                state = State.SAILING_TO_HARBOR_WITH_CARGO;
+
+                setOffroadTargetWithPath(pathToTargetHarbor);
+            } else {
+                state = State.WAITING_FOR_TASK;
+
+                harbor.addShipReadyForTask(this);
+            }
         } else if (state == State.SAILING_TO_START_NEW_SETTLEMENT) {
             player.reportShipReachedDestination(this);
         } else if (state == State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS) {
             state = State.WAITING_FOR_TASK;
+        } else if (state == State.SAILING_TO_HARBOR_WITH_CARGO) {
+            for (Cargo cargo : cargos) {
+                targetHarbor.putCargo(cargo);
+            }
+
+            cargos.clear();
         }
     }
 

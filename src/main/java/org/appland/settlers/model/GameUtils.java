@@ -47,6 +47,24 @@ public class GameUtils {
         return false;
     }
 
+    public static class BuildingAndData<B extends Building, D> {
+        private final D data;
+        private final B building;
+
+        public BuildingAndData(B building, D data) {
+            this.data = data;
+            this.building = building;
+        }
+
+        public D getData() {
+            return data;
+        }
+
+        public B getBuilding() {
+            return building;
+        }
+    }
+
     public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {
         Set<Point> hexagonBorder = new HashSet<>();
 
