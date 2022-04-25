@@ -15,15 +15,12 @@ public class Stats {
     }
 
     public Variable addVariable(String name) {
-        System.out.println("Adding variable: " + name);
-
         VariableImpl variable = new VariableImpl(name);
 
         variableMap.put(name, variable);
 
         if (upperThresholdsToBeSet.containsKey(name)) {
             System.out.println("Stored threshold exists: " + upperThresholdsToBeSet.get(name));
-
             variable.setUpperThreshold(upperThresholdsToBeSet.get(name));
             upperThresholdsToBeSet.remove(name);
         }
@@ -81,8 +78,6 @@ public class Stats {
         Variable periodicVariable = variableMap.get(name);
 
         if (periodicVariable == null) {
-            System.out.println("Adding periodic counter variable: " + name);
-
             periodicVariable = new PeriodicCounterVariableImpl(name);
 
             variableMap.put(name, periodicVariable);

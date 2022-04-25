@@ -1985,11 +1985,7 @@ public class Utils {
 
     public static void verifyWorkerWalksOnPath(GameMap map, Worker worker, Point... points) throws InvalidUserActionException {
 
-        System.out.println(Arrays.asList(points));
-
         for (Point point : points) {
-
-            System.out.println(point);
 
             assertTrue(worker.isExactlyAtPoint());
             assertEquals(point, worker.getPosition());

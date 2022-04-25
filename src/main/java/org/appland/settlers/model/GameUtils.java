@@ -37,6 +37,16 @@ import static org.appland.settlers.model.Material.COIN;
  */
 public class GameUtils {
 
+    public static boolean setContainsNone(Set<Point> set, List<Point> needles) {
+        for (Point point : needles) {
+            if (set.contains(point)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean setContainsAny(Set<Point> discoveredLand, List<Point> wayPoints) {
         for (Point point : wayPoints) {
             if (discoveredLand.contains(point)) {
