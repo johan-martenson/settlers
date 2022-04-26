@@ -323,15 +323,8 @@ public class Scout extends Worker {
 
         /* 3. Sort by how closely they match the existing direction */
         pointsAndScores.sort((pointEntityAndScore, t1) -> {
-            if (pointEntityAndScore.score > t1.score) {
-                return 1;
-            }
+            return Double.compare(pointEntityAndScore.score, t1.score);
 
-            if (t1.score > pointEntityAndScore.score) {
-                return -1;
-            }
-
-            return 0;
         });
 
         /* 4. Go through the points and select which one to pick */

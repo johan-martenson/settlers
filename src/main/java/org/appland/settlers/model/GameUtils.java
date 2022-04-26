@@ -291,10 +291,10 @@ public class GameUtils {
     /**
      * Returns true if each item in the collection is part of the given set
      *
-     * @param items
-     * @param collection
-     * @param <T>
-     * @return
+     * @param items The items to determine if the given collection contains
+     * @param collection The collection that may contain all of the given items
+     * @param <T> The type of item
+     * @return True if the set of items is a subset of the collection
      */
     public static <T> boolean areAllOneOf(Collection<T> items, Set<T> collection) {
         for (T itemInList : items) {

@@ -158,26 +158,7 @@ public enum Material {
 
     static final Set<Material> TOOLS_SET = EnumSet.copyOf(TOOLS);
 
-    private static final List<Material> transportableItems = Collections.unmodifiableList(Arrays.asList(
-        SWORD,
-        SHIELD,
-        BEER,
-        GOLD,
-        IRON,
-        COAL,
-        WOOD,
-        PLANK,
-        STONE,
-        WHEAT,
-        WATER,
-        FLOUR,
-        BREAD,
-        IRON_BAR,
-        FISH,
-        COIN,
-        PIG,
-        MEAT
-    ));
+    private static final List<Material> transportableItems = List.of(SWORD, SHIELD, BEER, GOLD, IRON, COAL, WOOD, PLANK, STONE, WHEAT, WATER, FLOUR, BREAD, IRON_BAR, FISH, COIN, PIG, MEAT);
 
     static List<Material> getTransportableItems() {
         return transportableItems;

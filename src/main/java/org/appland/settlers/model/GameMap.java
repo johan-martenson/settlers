@@ -379,7 +379,7 @@ public class GameMap {
     /**
      * Moves time one step ahead for all parts of the game
      *
-     * @throws Exception Any exception encountered while updating the game
+     * @throws InvalidUserActionException Reports any invalid user actions encountered while updating the game
      */
     public void stepTime() throws InvalidUserActionException {
 
@@ -926,7 +926,9 @@ public class GameMap {
 
         allBuildings.addAll(getBuildings());
         allBuildings.addAll(buildingsToAdd);
-        allBuildings.removeAll(buildingsToRemove);
+
+        // Written this way to improve performance
+        buildingsToRemove.forEach(allBuildings::remove);
 
         /* Calculate claims for all military buildings */
         for (Building building : allBuildings) {

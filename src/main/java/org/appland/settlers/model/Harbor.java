@@ -317,7 +317,7 @@ public class Harbor extends Storehouse {
     /**
      * Answers the question - what do other harbors need from this harbor?
      *
-     * @return
+     * @return Returns a nested map with information about how much resources each harbor needs
      */
     public Map<Harbor, Map<Material, Integer>> getNeededShipmentsFromThisHarbor() {
         Map<Harbor, Map<Material, Integer>> neededShipmentsFromThisHarbor = new HashMap<>();
