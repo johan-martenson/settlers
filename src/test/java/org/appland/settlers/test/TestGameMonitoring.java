@@ -3225,11 +3225,6 @@ public class TestGameMonitoring {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
-
         /* Place sign */
         Point point1 = new Point(10, 4);
         Sign sign0 = map.placeSign(IRON, SMALL, point1);
@@ -3277,11 +3272,6 @@ public class TestGameMonitoring {
 
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place sign */
         Point point1 = new Point(10, 4);
@@ -3331,11 +3321,6 @@ public class TestGameMonitoring {
         /* Place headquarter for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
-
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place sign */
         Point point3 = new Point(10, 4);

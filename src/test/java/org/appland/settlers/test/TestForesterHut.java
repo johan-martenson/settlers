@@ -18,6 +18,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -666,6 +668,104 @@ public class TestForesterHut {
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isInsideBuilding());
+    }
+
+    @Test
+    public void testGrowthStepsAndTimeForTree() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut);
+
+        /* Manually place forester */
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+
+        /* Let the forester rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Step once and make sure the forester goes out of the hut */
+        map.stepTime();
+
+        assertFalse(forester.isInsideBuilding());
+
+        Point point = forester.getTarget();
+
+        assertTrue(forester.isTraveling());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+
+        assertTrue(forester.isArrived());
+        assertTrue(forester.isAt(point));
+        assertTrue(forester.isPlanting());
+
+        /* Wait for the forester to plant the tree */
+        Utils.fastForward(19, map);
+
+        assertTrue(forester.isPlanting());
+        assertFalse(map.isTreeAtPoint(point));
+
+        map.stepTime();
+
+        /* Make sure there is only one tree */
+        foresterHut.stopProduction();
+
+        /* Verify the growth of the tree */
+        Tree tree = map.getTreeAtPoint(point);
+
+        assertFalse(forester.isPlanting());
+        assertTrue(map.isTreeAtPoint(point));
+        assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
+
+        for (int i = 0; i < 150; i++) {
+
+            /* Allow one steps difference because the tree may get to run stepTime() when it gets added by the forester */
+            if (i == 149 && tree.getSize() == TreeSize.SMALL) {
+                break;
+            }
+
+            assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
+
+            map.stepTime();
+        }
+
+        assertEquals(tree.getSize(), TreeSize.SMALL);
+
+        for (int i = 0; i < 150; i++) {
+            assertEquals(tree.getSize(), TreeSize.SMALL);
+            System.out.println(i);
+            map.stepTime();
+        }
+
+        assertEquals(tree.getSize(), TreeSize.MEDIUM);
+
+        for (int i = 0; i < 150; i++) {
+            assertEquals(tree.getSize(), TreeSize.MEDIUM);
+
+            map.stepTime();
+        }
+
+        assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+
+        for (int i = 0; i < 300; i++) {
+            assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+
+            map.stepTime();
+        }
     }
 
     @Test

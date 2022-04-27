@@ -30,6 +30,7 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 
@@ -198,15 +199,15 @@ public class Utils {
 
     public static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) throws InvalidUserActionException {
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             map.stepTime();
 
-            if (tree.getSize() == LARGE) {
+            if (tree.getSize() == TreeSize.FULL_GROWN) {
                 break;
             }
         }
 
-        assertEquals(tree.getSize(), LARGE);
+        assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
     }
 
     public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws InvalidUserActionException {

@@ -8,7 +8,6 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
-import static org.appland.settlers.model.Size.LARGE;
 
 /**
  *
@@ -35,7 +34,8 @@ public class WoodcutterWorker extends Worker {
             }
 
             Tree tree = map.getTreeAtPoint(point);
-            if (tree.getSize() != LARGE) {
+
+            if (tree.getSize() != TreeSize.FULL_GROWN) {
                 continue;
             }
 

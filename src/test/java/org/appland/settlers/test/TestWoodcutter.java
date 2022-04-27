@@ -18,10 +18,10 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
@@ -40,7 +40,6 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -766,7 +765,7 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testWoodcutterDoesNotCutSmallOrMediumTrees() throws Exception {
+    public void testWoodcutterOnlyCutsDownFullGrownTrees() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -786,9 +785,9 @@ public class TestWoodcutter {
         constructHouse(woodcutter);
 
         /* Place the woodcutter */
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        WoodcutterWorker woodcutterWorker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(wcWorker, woodcutter);
+        Utils.occupyBuilding(woodcutterWorker, woodcutter);
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
 
@@ -798,43 +797,50 @@ public class TestWoodcutter {
 
         Utils.fastForward(9, map);
 
-        assertTrue(wcWorker.isInsideBuilding());
+        assertTrue(woodcutterWorker.isInsideBuilding());
 
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
 
-        assertEquals(tree.getSize(), Size.SMALL);
+        assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
 
         /* Step once and make sure the forester stays in the hut */
         map.stepTime();
 
-        assertTrue(wcWorker.isInsideBuilding());
+        assertTrue(woodcutterWorker.isInsideBuilding());
+
+        /* Grow tree to small */
+        for (int i = 0; i < 500; i++) {
+            map.stepTime();
+
+            if (tree.getSize() == TreeSize.SMALL) {
+                break;
+            }
+        }
 
         /* Grow tree to medium */
         for (int i = 0; i < 500; i++) {
             map.stepTime();
 
-            if (tree.getSize() == MEDIUM) {
+            if (tree.getSize() == TreeSize.MEDIUM) {
                 break;
             }
         }
 
-        assertEquals(tree.getSize(), MEDIUM);
+        assertEquals(tree.getSize(), TreeSize.MEDIUM);
 
         /* Step once and make sure the forester stays in the hut */
-
         map.stepTime();
 
-        assertTrue(wcWorker.isInsideBuilding());
+        assertTrue(woodcutterWorker.isInsideBuilding());
 
         /* Grow the tree to large */
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Step time and make sure the forester leaves the hut */
-
         map.stepTime();
 
-        assertFalse(wcWorker.isInsideBuilding());
+        assertFalse(woodcutterWorker.isInsideBuilding());
     }
 
     @Test
@@ -2318,17 +2324,17 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Place a lot of trees on the map */
-        Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 4), map);
+        Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 6), map);
 
         /* Wait for the trees to grow up */
-        Utils.fastForward(300, map);
+        Utils.fastForward(700, map);
 
         /* Make the woodcutter take down some trees with plenty of trees available */
         for (int i = 0; i < 1000; i++) {
             map.stepTime();
 
             /* Fill up with more trees */
-            Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 4), map);
+            Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 6), map);
         }
 
         /* Verify that the productivity is 100% and stays there */

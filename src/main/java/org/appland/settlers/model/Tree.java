@@ -6,25 +6,23 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
-
 /**
  *
  * @author johan
  */
 public class Tree {
-    private static final int TIME_TO_GROW_TREE_ONE_STEP = 200;
+    private static final int TIME_TO_GROW_TREE_ONE_STEP = 149; // TODO: update based on measurements from the game
 
     private final Countdown countdown;
     private final Point position;
 
-    private Size size;
+    private TreeSize size;
     private TreeType type;
 
     Tree(Point point) {
-        size = SMALL;
+
+        /* Make trees start out as newly planted by default */
+        size = TreeSize.NEWLY_PLANTED;
 
         position = point;
 
@@ -37,17 +35,22 @@ public class Tree {
     }
 
     public void stepTime() {
-        if (size == LARGE) {
+
+        if (size == TreeSize.FULL_GROWN) {
             return;
         }
 
         if (countdown.hasReachedZero()) {
-            if (size == MEDIUM) {
-                size = LARGE;
+            if (size == TreeSize.MEDIUM) {
+                size = TreeSize.FULL_GROWN;
 
                 countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
-            } else if (size == SMALL) {
-                size = MEDIUM;
+            } else if (size == TreeSize.SMALL) {
+                size = TreeSize.MEDIUM;
+
+                countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
+            } else if (size == TreeSize.NEWLY_PLANTED) {
+                size = TreeSize.SMALL;
 
                 countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
             }
@@ -60,7 +63,7 @@ public class Tree {
         return position;
     }
 
-    public Size getSize() {
+    public TreeSize getSize() {
         return size;
     }
 
