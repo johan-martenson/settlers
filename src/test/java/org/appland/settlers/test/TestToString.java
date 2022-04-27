@@ -109,7 +109,7 @@ public class TestToString {
 
         /* Place stone */
         Point point0 = new Point(3, 5);
-        Tree tree0 = map.placeTree(point0);
+        Tree tree0 = map.placeTree(point0, Tree.TreeType.PINE);
 
         /* Verify that the toString() method is correct */
         assertEquals(tree0.toString(), "Tree (3, 5)");

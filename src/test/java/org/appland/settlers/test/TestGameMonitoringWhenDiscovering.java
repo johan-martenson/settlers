@@ -66,7 +66,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -114,7 +114,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);

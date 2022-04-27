@@ -2369,7 +2369,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2457,7 +2457,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2533,7 +2533,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */

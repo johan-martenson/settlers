@@ -21,6 +21,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -851,7 +852,7 @@ public class TestFishery {
                 continue;
             }
 
-            map.placeTree(point);
+            map.placeTree(point, Tree.TreeType.PINE);
         }
 
         /* Manually place fisherman */

@@ -302,7 +302,7 @@ public class TestWoodcutter {
 
         /* Place and grow tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -349,7 +349,7 @@ public class TestWoodcutter {
 
         /* Place and grow tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -401,7 +401,7 @@ public class TestWoodcutter {
 
         /* Place and grow tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -453,7 +453,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -524,7 +524,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Wait for the tree to grow */
         Utils.fastForwardUntilTreeIsGrown(tree, map);
@@ -635,7 +635,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place forester hut (is this needed for the test?) */
@@ -800,7 +800,7 @@ public class TestWoodcutter {
         assertTrue(woodcutterWorker.isInsideBuilding());
 
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
 
         assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
 
@@ -858,11 +858,11 @@ public class TestWoodcutter {
 
         /* Plant and grow trees */
         Point point2 = new Point(12, 4);
-        Tree tree0 = map.placeTree(point2);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Place tree */
         Point point5 = new Point(11, 5);
-        Tree tree1 = map.placeTree(point5);
+        Tree tree1 = map.placeTree(point5, Tree.TreeType.PINE);
 
         /* Wait for the tree to grow */
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
@@ -1007,10 +1007,10 @@ public class TestWoodcutter {
 
         /* Plant and grow trees */
         Point point2 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point2);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
 
         Point point3 = new Point(11, 7);
-        Tree tree1 = map.placeTree(point3);
+        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
@@ -1102,7 +1102,7 @@ public class TestWoodcutter {
 
         /* Plant and grow trees */
         Point point2 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point2);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
@@ -1402,7 +1402,7 @@ public class TestWoodcutter {
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point12);
+        Tree tree0 = map.placeTree(point12, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
@@ -1473,10 +1473,10 @@ public class TestWoodcutter {
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);
-        Tree tree0 = map.placeTree(point12);
+        Tree tree0 = map.placeTree(point12, Tree.TreeType.PINE);
 
         Point point13 = new Point(8, 8);
-        Tree tree1 = map.placeTree(point13);
+        Tree tree1 = map.placeTree(point13, Tree.TreeType.PINE);
 
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
@@ -1652,7 +1652,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree directly behind the woodcutter */
         Point point2 = new Point(9, 5);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Construct the woodcutter */
@@ -1713,7 +1713,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree directly behind the woodcutter */
         Point point2 = new Point(15, 3);
-        Tree tree = map.placeTree(point2);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place stone */
@@ -2188,7 +2188,7 @@ public class TestWoodcutter {
 
         /* Place and grow the tree */
         Point point1 = new Point(12, 6);
-        Tree tree = map.placeTree(point1);
+        Tree tree = map.placeTree(point1, Tree.TreeType.PINE);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutters */
@@ -2568,9 +2568,9 @@ public class TestWoodcutter {
         Point point2 = new Point(18, 6);
         Point point3 = new Point(19, 7);
         Point point4 = new Point(20, 6);
-        Tree tree0 = map.placeTree(point2);
-        Tree tree1 = map.placeTree(point3);
-        Tree tree2 = map.placeTree(point4);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE);
+        Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE);
 
         /* Connect the woodcutter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
@@ -2637,9 +2637,9 @@ public class TestWoodcutter {
         Point point2 = new Point(18, 6);
         Point point3 = new Point(19, 7);
         Point point4 = new Point(20, 6);
-        Tree tree0 = map.placeTree(point2);
-        Tree tree1 = map.placeTree(point3);
-        Tree tree2 = map.placeTree(point4);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE);
+        Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE);
 
         /* Connect the woodcutter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
@@ -2721,7 +2721,7 @@ public class TestWoodcutter {
         /* Place trees */
         for (Point point : Utils.getAreaInsideHexagon(6, woodcutter0.getPosition())) {
             try {
-                map.placeTree(point);
+                map.placeTree(point, Tree.TreeType.PINE);
             } catch (Exception e) {}
         }
 

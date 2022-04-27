@@ -19,7 +19,7 @@ public class Tree {
     private TreeSize size;
     private TreeType type;
 
-    Tree(Point point) {
+    Tree(Point point, TreeType treeType) {
 
         /* Make trees start out as newly planted by default */
         size = TreeSize.NEWLY_PLANTED;
@@ -31,7 +31,7 @@ public class Tree {
         countdown.countFrom(TIME_TO_GROW_TREE_ONE_STEP);
 
         /* Make one of the tree types default */
-        type = TreeType.PINE;
+        type = treeType;
     }
 
     public void stepTime() {

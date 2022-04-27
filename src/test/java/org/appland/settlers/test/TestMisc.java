@@ -452,7 +452,7 @@ public class TestMisc {
 
         /* Place a tree that the woodcutter can cut down */
         Point point2 = new Point(14, 12);
-        Tree tree0 = map.placeTree(point2);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();

@@ -24,8 +24,10 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
@@ -769,6 +771,57 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterPlantsDifferentTypesOfTree() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut);
+
+        /* Manually place forester */
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Verify that the forester plants different types of trees */
+        Map<Tree.TreeType, Integer> treeTypeCount = new HashMap<>();
+
+        for (int i = 0; i < 60; i++) {
+            Utils.waitForWorkerToBeOutside(forester, map);
+
+            Utils.waitForForesterToBePlantingTree(forester, map);
+
+            Point point2 = forester.getPosition();
+
+            Utils.waitForForesterToStopPlantingTree(forester, map);
+
+            Tree tree = map.getTreeAtPoint(point2);
+
+            int currentAmount = treeTypeCount.getOrDefault(tree.getTreeType(), 0);
+
+            treeTypeCount.put(tree.getTreeType(), currentAmount + 1);
+
+            Utils.waitForWorkerToBeInside(forester, map);
+        }
+
+        for (Tree.TreeType treeType : Tree.TreeType.values()) {
+            assertTrue(treeTypeCount.get(treeType) > 0);
+        }
+    }
+
+    @Test
     public void testForesterHutProducesNothing() throws Exception {
 
         /* Create single player game */
@@ -836,7 +889,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point);
+            map.placeTree(point, Tree.TreeType.PINE);
         }
 
         /* Manually place forester */
@@ -894,7 +947,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point);
+            map.placeTree(point, Tree.TreeType.PINE);
         }
 
         /* Manually place forester */
@@ -951,7 +1004,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point);
+            map.placeTree(point, Tree.TreeType.PINE);
         }
 
         /* Manually place forester */
@@ -1057,7 +1110,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point);
+            map.placeTree(point, Tree.TreeType.PINE);
         }
 
         /* Manually place forester */
@@ -1965,7 +2018,7 @@ public class TestForesterHut {
             }
 
             try {
-                map.placeTree(point4);
+                map.placeTree(point4, Tree.TreeType.PINE);
             } catch (Exception e) {}
         }
 

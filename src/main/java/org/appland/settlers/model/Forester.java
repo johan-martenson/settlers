@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
 import java.util.Collection;
+import java.util.Random;
 
 import static org.appland.settlers.model.Material.FORESTER;
 
@@ -17,6 +18,7 @@ public class Forester extends Worker {
     private static final int TIME_TO_REST = 99;
     private static final int RANGE = 8;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final Random random = new Random(1);
 
     private final Countdown countdown;
 
@@ -45,6 +47,8 @@ public class Forester extends Worker {
         if (mapPoint.isStone()) {
             return false;
         }
+
+        // TODO: foresters can't plant trees on crops!
 
         /* Filter points where the surrounding terrain doesn't allow placing a tree */
         Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
@@ -138,7 +142,9 @@ public class Forester extends Worker {
 
                 /* Place a tree if the point is still open */
                 if (spotIsClearForTree(getPosition())) {
-                    map.placeTree(getPosition());
+                    Tree.TreeType treeType = Tree.TreeType.values()[(int)(Math.floor(random.nextDouble() * Tree.TreeType.values().length))];
+
+                    map.placeTree(getPosition(), treeType);
                 }
 
                 state = State.GOING_BACK_TO_HOUSE;

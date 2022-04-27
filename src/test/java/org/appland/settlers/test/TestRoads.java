@@ -809,7 +809,7 @@ public class TestRoads {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(12, 8);
-        Tree tree0 = map.placeTree(point2);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Place flag */
         Point point3 = new Point(10, 8);

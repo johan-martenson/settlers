@@ -11,6 +11,7 @@ import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -1057,7 +1058,7 @@ public class Utils {
 
         for (Point point: player.getLandInPoints()) {
             try {
-                player.getMap().placeTree(point);
+                player.getMap().placeTree(point, Tree.TreeType.PINE);
             } catch (Exception e) {}
         }
     }
@@ -1069,7 +1070,7 @@ public class Utils {
             }
 
             try {
-                map.placeTree(point);
+                map.placeTree(point, Tree.TreeType.PINE);
             } catch (Exception e) {}
         }
     }
@@ -2460,6 +2461,31 @@ public class Utils {
         }
 
         assertEquals(ships.size(), amount);
+    }
+
+    public static void waitForForesterToBePlantingTree(Forester forester, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (forester.isPlanting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(forester.isPlanting());
+    }
+
+    public static void waitForForesterToStopPlantingTree(Forester forester, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (!forester.isPlanting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(forester.isPlanting());
+
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

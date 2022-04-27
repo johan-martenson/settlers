@@ -96,7 +96,7 @@ public class TestTree {
 
         /* Place tree */
         Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0);
+        Tree tree0 = map.placeTree(point0, TreeType.PINE);
 
         /* Verify that the tree has the default tree type */
         assertEquals(tree0.getTreeType(), TreeType.PINE);
@@ -113,7 +113,7 @@ public class TestTree {
 
         /* Place tree */
         Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0);
+        Tree tree0 = map.placeTree(point0, TreeType.PINE);
 
         /* Verify that the tree type can be set */
         tree0.setTreeType(TreeType.BIRCH);
@@ -262,7 +262,7 @@ public class TestTree {
 
         /* Place tree */
         Point point1 = new Point(6, 12);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, TreeType.PINE);
 
         /* Verify that it's not possible to place a dead tree on a tree */
         assertEquals(map.getDeadTrees().size(), 0);

@@ -317,7 +317,7 @@ public class TestPlacement {
 
         /* Plant a tree */
         Point point1 = new Point(2, 2);
-        map.placeTree(point1);
+        map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -340,7 +340,7 @@ public class TestPlacement {
 
         /* Plant a tree */
         Point point1 = new Point(2, 2);
-        map.placeTree(point1);
+        map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -1030,7 +1030,7 @@ public class TestPlacement {
 
         /* Verify that it's not possible to place a tree on the stone */
         try {
-            map.placeTree(point0);
+            map.placeTree(point0, Tree.TreeType.PINE);
             fail();
         } catch (Exception e) {}
 
@@ -1054,7 +1054,7 @@ public class TestPlacement {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Verify that it's possible to place a tree on the mountain */
-        map.placeTree(point0);
+        map.placeTree(point0, Tree.TreeType.PINE);
 
         assertTrue(map.isTreeAtPoint(point0));
     }
@@ -1189,7 +1189,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(3, 3);
-        map.placeTree(point1);
+        map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Verify that it's not possible to place a flag on the tree */
         try {
@@ -1215,7 +1215,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(3, 3);
-        map.placeTree(point1.downRight());
+        map.placeTree(point1.downRight(), Tree.TreeType.PINE);
 
         /* Verify that it's not possible to place a house on the tree */
         try {
@@ -1610,7 +1610,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(8, 8);
-        map.placeTree(point1);
+        map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Verify that there is no available space for a house on a tree */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -1662,7 +1662,7 @@ public class TestPlacement {
 
         /* Verify that it's not possible to place a tree on the woodcutter */
         try {
-            map.placeTree(point1);
+            map.placeTree(point1, Tree.TreeType.PINE);
             fail();
         } catch (Exception e) {}
     }
@@ -2502,11 +2502,11 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(5, 5);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Place tree */
         Point point2 = new Point(13, 5);
-        Tree tree1 = map.placeTree(point2);
+        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Verify that the available buildings between the trees are small house, castle, small house */
         assertEquals(map.isAvailableHousePoint(player0, point1.right()), SMALL);
@@ -2531,7 +2531,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(7, 15);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Verify that only small houses are up right, down right, down left from the tree */
         assertEquals(map.isAvailableHousePoint(player0, point1.downRight()), SMALL);

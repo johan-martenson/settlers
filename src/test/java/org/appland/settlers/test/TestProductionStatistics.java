@@ -237,7 +237,7 @@ public class TestProductionStatistics {
 
         /* Place a tree close to the woodcutter */
         Point point05 = new Point(12, 4);
-        Tree tree01 = map.placeTree(point05);
+        Tree tree01 = map.placeTree(point05, Tree.TreeType.PINE);
 
         /* Verify a collected tree is part of the collected production statistics */
         int nrDataPoints = statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().size();

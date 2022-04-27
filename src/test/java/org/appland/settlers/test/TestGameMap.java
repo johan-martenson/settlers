@@ -1334,7 +1334,7 @@ public class TestGameMap {
 
         /* Verify that it's possible to place a tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
     }
 
     @Test
@@ -1356,7 +1356,7 @@ public class TestGameMap {
 
         /* Place tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Verify that the tree is there */
         assertTrue(map.isTreeAtPoint(point1));
@@ -1381,7 +1381,7 @@ public class TestGameMap {
 
         /* Place tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         /* Verify that there is no tree on another spot */
         Point point2 = new Point(20, 16);
@@ -1407,10 +1407,10 @@ public class TestGameMap {
 
         /* Place trees */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         Point point2 = new Point(15, 17);
-        Tree tree1 = map.placeTree(point2);
+        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE);
 
         /* Verify that there are exactly these trees on the map */
         Collection<Tree> trees = map.getTrees();

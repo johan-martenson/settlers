@@ -262,7 +262,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         map.stepTime();
 
@@ -304,7 +304,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         map.stepTime();
 
@@ -337,7 +337,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         map.stepTime();
 
@@ -388,7 +388,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
 
         map.stepTime();
 
