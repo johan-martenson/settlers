@@ -213,7 +213,7 @@ public class Utils {
 
     public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws InvalidUserActionException {
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 1000; i++) {
             if (crop.getGrowthState() == FULL_GROWN) {
                 break;
             }

@@ -7,9 +7,10 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
-import static org.appland.settlers.model.Crop.GrowthState.HALFWAY;
+import static org.appland.settlers.model.Crop.GrowthState.ALMOST_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
+import static org.appland.settlers.model.Crop.GrowthState.SMALL;
 import static org.appland.settlers.model.Material.WHEAT;
 
 /**
@@ -19,9 +20,14 @@ import static org.appland.settlers.model.Material.WHEAT;
 public class Crop {
 
     public enum GrowthState {
-        JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
+        JUST_PLANTED,
+        SMALL,
+        ALMOST_GROWN,
+        FULL_GROWN,
+        HARVESTED
     }
 
+    // TODO: verify the time to grow and wither and modify if needed
     private static final int TIME_TO_GROW = 199;
     private static final int TIME_TO_WITHER = 199;
 
@@ -47,10 +53,14 @@ public class Crop {
 
         if (growthCountdown.hasReachedZero()) {
             if (state == JUST_PLANTED) {
-                state = HALFWAY;
+                state = SMALL;
 
                 growthCountdown.countFrom(TIME_TO_GROW);
-            } else if (state == HALFWAY) {
+            } else if (state == SMALL) {
+                state = ALMOST_GROWN;
+
+                growthCountdown.countFrom(TIME_TO_GROW);
+            } else if (state == ALMOST_GROWN) {
                 state = FULL_GROWN;
             } else if (state == HARVESTED) {
                 map.removeCropWithinStepTime(this);

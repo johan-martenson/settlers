@@ -216,11 +216,19 @@ public class TestFarm {
 
         map.stepTime();
 
-        assertEquals(crop.getGrowthState(), Crop.GrowthState.HALFWAY);
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.SMALL);
 
         Utils.fastForward(199, map);
 
-        assertEquals(crop.getGrowthState(), Crop.GrowthState.HALFWAY);
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.SMALL);
+
+        map.stepTime();
+
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.ALMOST_GROWN);
+
+        Utils.fastForward(199, map);
+
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.ALMOST_GROWN);
 
         map.stepTime();
 
