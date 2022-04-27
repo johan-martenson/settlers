@@ -112,6 +112,7 @@ public class GameMap {
     private final List<Point> deadTrees;
     private final List<Ship> ships;
     private final Set<Point> possiblePlacesForHarbor;
+    private final List<Crop> harvestedCrops;
 
     private Player winner;
     private long time;
@@ -218,6 +219,9 @@ public class GameMap {
         changedFlags = new HashSet<>();
         removedDeadTrees = new ArrayList<>();
         possiblePlacesForHarbor = new HashSet<>();
+        harvestedCrops = new ArrayList<>();
+        deadTrees = new ArrayList<>();
+        ships = new ArrayList<>();
 
         winnerReported = false;
 
@@ -227,8 +231,6 @@ public class GameMap {
         stats = new Stats();
 
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
-        deadTrees = new ArrayList<>();
-        ships = new ArrayList<>();
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -718,6 +720,13 @@ public class GameMap {
                 player.reportPromotedRoad(road);
             }
 
+            harvestedCrops.forEach(crop -> {
+                        if (player.getDiscoveredLand().contains(crop.getPosition())) {
+                            player.reportHarvestedCrop(crop);
+                        }
+                    }
+            );
+
             player.sendMonitoringEvents(time);
         }
 
@@ -742,6 +751,7 @@ public class GameMap {
         promotedRoads.clear();
         changedFlags.clear();
         removedDeadTrees.clear();
+        harvestedCrops.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3831,5 +3841,9 @@ public class GameMap {
                 return 1;
             }
         });
+    }
+
+    public void reportHarvestedCrop(Crop crop) {
+        harvestedCrops.add(crop);
     }
 }

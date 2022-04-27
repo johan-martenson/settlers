@@ -138,6 +138,9 @@ public class Farmer extends Worker {
                 Crop crop = map.getCropAtPoint(getPosition());
                 crop.harvest();
 
+                /* Report the harvested crop */
+                map.reportHarvestedCrop(crop);
+
                 /* Create a crop cargo to make sure the map is set correctly */
                 setCargo(new Cargo(WHEAT, map));
 

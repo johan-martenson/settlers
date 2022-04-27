@@ -33,6 +33,7 @@ public class GameChangesList {
     private final Collection<Flag> changedFlags;
     private final Collection<Point> removedDeadTrees;
     private final Collection<Point> discoveredDeadTrees;
+    private final List<Crop> harvestedCrops;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -60,7 +61,8 @@ public class GameChangesList {
                            List<Road> promotedRoads,
                            Collection<Flag> changedFlags,
                            Collection<Point> removedDeadTrees,
-                           Collection<Point> discoveredDeadTrees) {
+                           Collection<Point> discoveredDeadTrees,
+                           List<Crop> harvestedCrops) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -88,6 +90,7 @@ public class GameChangesList {
         this.changedFlags = changedFlags;
         this.removedDeadTrees = removedDeadTrees;
         this.discoveredDeadTrees = discoveredDeadTrees;
+        this.harvestedCrops = harvestedCrops;
     }
 
     public long getTime() {
@@ -226,5 +229,9 @@ public class GameChangesList {
 
     public Collection<Point> getDiscoveredDeadTrees() {
         return discoveredDeadTrees;
+    }
+
+    public List<Crop> getHarvestedCrops() {
+        return harvestedCrops;
     }
 }

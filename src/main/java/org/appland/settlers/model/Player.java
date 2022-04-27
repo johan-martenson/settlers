@@ -72,6 +72,7 @@ public class Player {
     private final Collection<Flag> changedFlags;
     private final List<Point> removedDeadTrees;
     private final List<Point> discoveredDeadTrees;
+    private final List<Crop> harvestedCrops;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -164,6 +165,7 @@ public class Player {
         changedFlags = new HashSet<>();
         removedDeadTrees = new ArrayList<>();
         discoveredDeadTrees = new ArrayList<>();
+        harvestedCrops = new ArrayList<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -775,7 +777,7 @@ public class Player {
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
-            removedDeadTrees.isEmpty()) {
+            removedDeadTrees.isEmpty() && harvestedCrops.isEmpty()) {
             return;
         }
 
@@ -992,7 +994,8 @@ public class Player {
                 new ArrayList<>(promotedRoads),
                 new ArrayList<>(changedFlags),
                 new ArrayList<>(removedDeadTrees),
-                new ArrayList<>(discoveredDeadTrees));
+                new ArrayList<>(discoveredDeadTrees),
+                new ArrayList<>(harvestedCrops));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1029,6 +1032,7 @@ public class Player {
         changedFlags.clear();
         removedDeadTrees.clear();
         discoveredDeadTrees.clear();
+        harvestedCrops.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1369,5 +1373,9 @@ public class Player {
         HarborIsFinishedMessage message = new HarborIsFinishedMessage(harbor);
 
         messages.add(message);
+    }
+
+    public void reportHarvestedCrop(Crop crop) {
+        harvestedCrops.add(crop);
     }
 }

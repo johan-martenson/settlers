@@ -40,6 +40,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.IRON;
@@ -3432,6 +3433,216 @@ public class TestGameMonitoring {
     }
 
     @Test
+    public void testMonitoringEventWhenFarmerHarvestsCrop() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place farm */
+        Point point3 = new Point(10, 6);
+        Farm farm = map.placeBuilding(new Farm(player0), point3);
+
+        /* Connect the farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+
+        /* Wait for the farm to get constructed */
+        Utils.waitForBuildingToBeConstructed(farm);
+
+        /* Wait for the farm to get occupied */
+        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Let the farmer rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Step once and make sure the farmer goes out of the farm */
+        map.stepTime();
+
+        assertFalse(farmer.isInsideBuilding());
+
+        Point point = farmer.getTarget();
+
+        assertTrue(farmer.isTraveling());
+
+        /* Let the farmer reach the spot and start to plant */
+        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+
+        assertTrue(farmer.isArrived());
+        assertTrue(farmer.isAt(point));
+        assertTrue(farmer.isPlanting());
+
+        /* Wait for the farmer to plant a crop */
+        Utils.waitForFarmerToPlantCrop(map, farmer);
+
+        assertTrue(map.isCropAtPoint(farmer.getPosition()));
+
+        Crop crop = map.getCropAtPoint(farmer.getPosition());
+
+        /* Wait for the crop to get fully grown */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the farmer to walk to the crop */
+        Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+        assertTrue(farmer.isHarvesting());
+
+        /* Verify that an event is sent when the farmer harvests the crop */
+        Utils.waitForFarmerToHarvestCrop(map, farmer, crop);
+
+        assertFalse(farmer.isHarvesting());
+        assertNotNull(farmer.getCargo());
+        assertEquals(map.getCropAtPoint(point).getGrowthState(), HARVESTED);
+
+        assertTrue(monitor.getEvents().size() >= 1);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertEquals(gameChanges.getHarvestedCrops().size(), 1);
+        assertEquals(gameChanges.getHarvestedCrops().get(0), crop);
+        assertEquals(gameChanges.getNewCrops().size(), 0);
+        assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
+        assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
+
+        assertEquals(gameChanges.getNewBuildings().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedSigns().size(), 0);
+        assertEquals(gameChanges.getRemovedTrees().size(), 0);
+        assertEquals(gameChanges.getNewTrees().size(), 0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
+    }
+
+    @Test
+    public void testMonitoringEventWhenFarmerHarvestsCropIsOnlySentOnce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place farm */
+        Point point3 = new Point(10, 6);
+        Farm farm = map.placeBuilding(new Farm(player0), point3);
+
+        /* Connect the farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+
+        /* Wait for the farm to get constructed */
+        Utils.waitForBuildingToBeConstructed(farm);
+
+        /* Wait for the farm to get occupied */
+        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Let the farmer rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Step once and make sure the farmer goes out of the farm */
+        map.stepTime();
+
+        assertFalse(farmer.isInsideBuilding());
+
+        Point point = farmer.getTarget();
+
+        assertTrue(farmer.isTraveling());
+
+        /* Let the farmer reach the spot and start to plant */
+        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+
+        assertTrue(farmer.isArrived());
+        assertTrue(farmer.isAt(point));
+        assertTrue(farmer.isPlanting());
+
+        /* Wait for the farmer to plant a crop */
+        Utils.waitForFarmerToPlantCrop(map, farmer);
+
+        assertTrue(map.isCropAtPoint(farmer.getPosition()));
+
+        Crop crop = map.getCropAtPoint(farmer.getPosition());
+
+        /* Wait for the crop to get fully grown */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the farmer to walk to the crop */
+        Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+        assertTrue(farmer.isHarvesting());
+
+        /* An event is sent when the farmer harvests the crop */
+        Utils.waitForFarmerToHarvestCrop(map, farmer, crop);
+
+        assertFalse(farmer.isHarvesting());
+        assertNotNull(farmer.getCargo());
+        assertEquals(map.getCropAtPoint(point).getGrowthState(), HARVESTED);
+
+        /* Tell the farmer to stop working */
+        farm.stopProduction();
+
+        assertTrue(monitor.getEvents().size() >= 1);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertEquals(gameChanges.getHarvestedCrops().size(), 1);
+        assertEquals(gameChanges.getHarvestedCrops().get(0), crop);
+        assertEquals(gameChanges.getNewCrops().size(), 0);
+        assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
+        assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
+
+        assertEquals(gameChanges.getNewBuildings().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedSigns().size(), 0);
+        assertEquals(gameChanges.getRemovedTrees().size(), 0);
+        assertEquals(gameChanges.getNewTrees().size(), 0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
+
+        /* Verify that the event is only sent once */
+        int amountEvents = monitor.getEvents().size();
+
+        for (int i = 0; i < 10; i++) {
+            map.stepTime();
+
+            if (monitor.getEvents().size() > amountEvents) {
+                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                    assertEquals(changes.getHarvestedCrops().size(), 0);
+                }
+            }
+        }
+    }
+
+    @Test
     public void testMonitoringEventFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvestIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
@@ -3753,7 +3964,7 @@ public class TestGameMonitoring {
 
         if (monitor.getEvents().size() > amountEvents) {
             for (GameChangesList changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
-                assertTrue(gameChanges.getRemovedCrops().isEmpty());
+                assertTrue(changes.getRemovedCrops().isEmpty());
             }
         }
     }
