@@ -160,14 +160,17 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
-        constructHouse(woodcutter);
+        /* Connect the woodcutter hut to the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the woodcutter to get constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
 
         /* Verify that it needs a worker */
         assertTrue(woodcutter.needsWorker());
@@ -790,7 +793,6 @@ public class TestWoodcutter {
         Utils.occupyBuilding(woodcutterWorker, woodcutter);
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
-
         for (int i = 0; i < 9; i++) {
             Utils.fastForward(10, map);
         }
@@ -841,6 +843,69 @@ public class TestWoodcutter {
         map.stepTime();
 
         assertFalse(woodcutterWorker.isInsideBuilding());
+    }
+
+    @Test
+    public void testWoodcutterDoesNotCutDownPineappleTrees() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter hut to the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the woodcutter to get constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        /* Wait for the woodcutter to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(woodcutter);
+
+        WoodcutterWorker woodcutterWorker = (WoodcutterWorker) woodcutter.getWorker();
+
+        assertNotNull(woodcutterWorker);
+
+        /* Surround the woodcutter completely with pineapple trees that can't be cut down */
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+
+                if ((x + y) % 2 != 0) {
+                    continue;
+                }
+
+                Point point = new Point(x, y);
+
+                if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                    continue;
+                }
+
+                Tree tree = map.placeTree(point, Tree.TreeType.PINE_APPLE);
+
+                tree.setSize(TreeSize.FULL_GROWN);
+            }
+        }
+
+        /* All pine apple trees should be fully grown */
+        for (Tree tree : map.getTrees()) {
+            assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+        }
+
+        /* Verify that the woodcutter doesn't go out to cut down any pine apple tree */
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(woodcutterWorker.isInsideBuilding());
+
+            map.stepTime();
+        }
     }
 
     @Test

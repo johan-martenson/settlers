@@ -97,6 +97,10 @@ public class Tree {
         this.type = type;
     }
 
+    public void setSize(TreeSize treeSize) {
+        this.size = treeSize;
+    }
+
     public enum TreeType {
         PINE,
         BIRCH,

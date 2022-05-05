@@ -6,6 +6,10 @@
 
 package org.appland.settlers.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 
@@ -22,6 +26,7 @@ public class WoodcutterWorker extends Worker {
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+    private final Set TREE_TYPES_THAT_CAN_BE_CUT_DOWN = new HashSet(Arrays.asList(Tree.PLANTABLE_TREES));
 
     private State state;
 
@@ -34,6 +39,10 @@ public class WoodcutterWorker extends Worker {
             }
 
             Tree tree = map.getTreeAtPoint(point);
+
+            if (!TREE_TYPES_THAT_CAN_BE_CUT_DOWN.contains(tree.getTreeType())) {
+                continue;
+            }
 
             if (tree.getSize() != TreeSize.FULL_GROWN) {
                 continue;
