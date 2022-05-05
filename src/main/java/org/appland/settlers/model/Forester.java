@@ -48,7 +48,9 @@ public class Forester extends Worker {
             return false;
         }
 
-        // TODO: foresters can't plant trees on crops!
+        if (mapPoint.isCrop()) {
+            return false;
+        }
 
         /* Filter points where the surrounding terrain doesn't allow placing a tree */
         Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);

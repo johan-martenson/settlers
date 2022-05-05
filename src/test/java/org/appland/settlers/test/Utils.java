@@ -2701,4 +2701,22 @@ public class Utils {
         }
         return area;
     }
-}
+
+    static void fillMapWithCrops(GameMap map) throws InvalidUserActionException {
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+
+                if ((x + y) % 2 != 0) {
+                    continue;
+                }
+
+                Point point = new Point(x, y);
+
+                if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                    continue;
+                }
+
+                Crop crop = map.placeCrop(point);
+            }
+        }
+    }}

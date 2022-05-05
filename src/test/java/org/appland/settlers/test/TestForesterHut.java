@@ -609,6 +609,47 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterDoesNotPlantTreeOnCrop() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Connect the forester hut with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Fill the map with crops */
+        Utils.fillMapWithCrops(map);
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
+
+        Forester forester = (Forester) foresterHut.getWorker();
+
+        assertNotNull(forester);
+
+        /* Verify that the forester stays in the hut because there is nowhere to plant a tree */
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(forester.isInsideBuilding());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testForesterReturnsHomeAfterPlantingTree() throws Exception {
 
         /* Create single player game */
