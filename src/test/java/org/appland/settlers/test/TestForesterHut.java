@@ -771,7 +771,7 @@ public class TestForesterHut {
     }
 
     @Test
-    public void testForesterPlantsDifferentTypesOfTree() throws Exception {
+    public void testForesterPlantsDifferentTypesOfTreeButNotPineapples() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -817,6 +817,13 @@ public class TestForesterHut {
         }
 
         for (Tree.TreeType treeType : Tree.TreeType.values()) {
+
+            if (treeType == Tree.TreeType.PINE_APPLE) {
+                assertEquals((int)treeTypeCount.getOrDefault(Tree.TreeType.PINE_APPLE, 0), 0);
+
+                continue;
+            }
+
             assertTrue(treeTypeCount.get(treeType) > 0);
         }
     }

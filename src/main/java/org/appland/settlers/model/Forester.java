@@ -99,7 +99,10 @@ public class Forester extends Worker {
         GOING_OUT_TO_PLANT,
         PLANTING,
         GOING_BACK_TO_HOUSE,
-        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public Forester(Player player, GameMap map) {
@@ -142,7 +145,7 @@ public class Forester extends Worker {
 
                 /* Place a tree if the point is still open */
                 if (spotIsClearForTree(getPosition())) {
-                    Tree.TreeType treeType = Tree.TreeType.values()[(int)(Math.floor(random.nextDouble() * Tree.TreeType.values().length))];
+                    Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(random.nextDouble() * Tree.PLANTABLE_TREES.length))];
 
                     map.placeTree(getPosition(), treeType);
                 }

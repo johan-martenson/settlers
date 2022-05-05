@@ -6,11 +6,29 @@
 
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Tree.TreeType.BIRCH;
+import static org.appland.settlers.model.Tree.TreeType.CHERRY;
+import static org.appland.settlers.model.Tree.TreeType.CYPRESS;
+import static org.appland.settlers.model.Tree.TreeType.FIR;
+import static org.appland.settlers.model.Tree.TreeType.OAK;
+import static org.appland.settlers.model.Tree.TreeType.PALM_1;
+import static org.appland.settlers.model.Tree.TreeType.PALM_2;
+import static org.appland.settlers.model.Tree.TreeType.PINE;
+
 /**
  *
  * @author johan
  */
 public class Tree {
+    public static final TreeType[] PLANTABLE_TREES = new TreeType[]{
+            PINE,
+            BIRCH,
+            OAK,
+            PALM_1,
+            PALM_2,
+            CYPRESS,
+            CHERRY,
+            FIR};
     private static final int TIME_TO_GROW_TREE_ONE_STEP = 149; // TODO: update based on measurements from the game
 
     private final Countdown countdown;
