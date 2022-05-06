@@ -27,6 +27,7 @@ import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
@@ -2370,7 +2371,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2458,7 +2459,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2534,7 +2535,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */

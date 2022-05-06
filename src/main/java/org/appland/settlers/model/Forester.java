@@ -149,7 +149,7 @@ public class Forester extends Worker {
                 if (spotIsClearForTree(getPosition())) {
                     Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(random.nextDouble() * Tree.PLANTABLE_TREES.length))];
 
-                    map.placeTree(getPosition(), treeType);
+                    map.placeTree(getPosition(), treeType, TreeSize.NEWLY_PLANTED);
                 }
 
                 state = State.GOING_BACK_TO_HOUSE;

@@ -18,6 +18,7 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -67,7 +68,7 @@ public class TestScenarios {
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
         /* Place tree */
-        map.placeTree(point1.downRight().right(), Tree.TreeType.PINE);
+        map.placeTree(point1.downRight().right(), Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Create roads */
         Road wcToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());

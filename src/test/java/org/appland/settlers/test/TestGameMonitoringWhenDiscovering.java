@@ -18,6 +18,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -66,7 +67,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -114,7 +115,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);

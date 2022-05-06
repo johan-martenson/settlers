@@ -21,6 +21,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Woodcutter;
@@ -809,7 +810,7 @@ public class TestRoads {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(12, 8);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Place flag */
         Point point3 = new Point(10, 8);

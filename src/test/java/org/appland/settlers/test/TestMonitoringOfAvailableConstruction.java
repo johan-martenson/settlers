@@ -17,6 +17,7 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -262,7 +263,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -304,7 +305,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -337,7 +338,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -388,7 +389,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         map.stepTime();
 

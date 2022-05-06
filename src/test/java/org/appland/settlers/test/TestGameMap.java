@@ -17,6 +17,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -1334,7 +1335,7 @@ public class TestGameMap {
 
         /* Verify that it's possible to place a tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
     }
 
     @Test
@@ -1356,7 +1357,7 @@ public class TestGameMap {
 
         /* Place tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Verify that the tree is there */
         assertTrue(map.isTreeAtPoint(point1));
@@ -1381,7 +1382,7 @@ public class TestGameMap {
 
         /* Place tree */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Verify that there is no tree on another spot */
         Point point2 = new Point(20, 16);
@@ -1407,10 +1408,10 @@ public class TestGameMap {
 
         /* Place trees */
         Point point1 = new Point(15, 15);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         Point point2 = new Point(15, 17);
-        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE);
+        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Verify that there are exactly these trees on the map */
         Collection<Tree> trees = map.getTrees();

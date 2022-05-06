@@ -42,10 +42,10 @@ public class Tree {
     private TreeSize size;
     private TreeType type;
 
-    Tree(Point point, TreeType treeType) {
+    Tree(Point point, TreeType treeType, TreeSize treeSize) {
 
         /* Make trees start out as newly planted by default */
-        size = TreeSize.NEWLY_PLANTED;
+        size = treeSize;
 
         position = point;
 

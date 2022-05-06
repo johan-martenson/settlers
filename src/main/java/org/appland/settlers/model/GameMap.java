@@ -2223,10 +2223,11 @@ public class GameMap {
      * Places a tree at the given point
      * @param point The point to place the tree at
      * @param treeType
+     * @param treeSize
      * @return The placed tree
      * @throws InvalidUserActionException Thrown if the tree would be placed on a flag, road, or stone
      */
-    public Tree placeTree(Point point, Tree.TreeType treeType) throws InvalidUserActionException {
+    public Tree placeTree(Point point, Tree.TreeType treeType, TreeSize treeSize) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag()) {
@@ -2237,7 +2238,7 @@ public class GameMap {
             throw new InvalidUserActionException("Can't place tree on " + point + " on existing stone");
         }
 
-        Tree tree = new Tree(point, treeType);
+        Tree tree = new Tree(point, treeType, treeSize);
 
         mapPoint.setTree(tree);
 

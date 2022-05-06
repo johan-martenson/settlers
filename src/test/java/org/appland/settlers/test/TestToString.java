@@ -48,6 +48,7 @@ import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.TreeConservationProgramDeactivatedMessage;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.UnderAttackMessage;
 import org.junit.Test;
 
@@ -109,7 +110,7 @@ public class TestToString {
 
         /* Place stone */
         Point point0 = new Point(3, 5);
-        Tree tree0 = map.placeTree(point0, Tree.TreeType.PINE);
+        Tree tree0 = map.placeTree(point0, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
 
         /* Verify that the toString() method is correct */
         assertEquals(tree0.toString(), "Tree (3, 5)");

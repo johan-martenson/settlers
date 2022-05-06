@@ -18,6 +18,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -278,7 +279,7 @@ public class TestGeologist {
         /* Fill surrounding area with trees */
         for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeTree(point, Tree.TreeType.PINE);
+                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -982,7 +983,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE);
+                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -1048,7 +1049,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE);
+                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -1115,7 +1116,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE);
+                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 

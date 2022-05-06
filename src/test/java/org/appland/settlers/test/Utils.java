@@ -1058,7 +1058,7 @@ public class Utils {
 
         for (Point point: player.getLandInPoints()) {
             try {
-                player.getMap().placeTree(point, Tree.TreeType.PINE);
+                player.getMap().placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
     }
@@ -1070,7 +1070,7 @@ public class Utils {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE);
+                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
     }

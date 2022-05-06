@@ -937,7 +937,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE);
+            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
 
         /* Manually place forester */
@@ -995,7 +995,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE);
+            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
 
         /* Manually place forester */
@@ -1052,7 +1052,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE);
+            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
 
         /* Manually place forester */
@@ -1158,7 +1158,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE);
+            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
 
         /* Manually place forester */
@@ -2066,7 +2066,7 @@ public class TestForesterHut {
             }
 
             try {
-                map.placeTree(point4, Tree.TreeType.PINE);
+                map.placeTree(point4, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
