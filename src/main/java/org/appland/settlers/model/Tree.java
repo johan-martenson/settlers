@@ -6,6 +6,10 @@
 
 package org.appland.settlers.model;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.appland.settlers.model.Tree.TreeType.BIRCH;
 import static org.appland.settlers.model.Tree.TreeType.CHERRY;
 import static org.appland.settlers.model.Tree.TreeType.CYPRESS;
@@ -29,6 +33,7 @@ public class Tree {
             CYPRESS,
             CHERRY,
             FIR};
+    public static final Set TREE_TYPES_THAT_CAN_BE_CUT_DOWN = new HashSet(Arrays.asList(Tree.PLANTABLE_TREES));
     private static final int TIME_TO_GROW_TREE_ONE_STEP = 149; // TODO: update based on measurements from the game
 
     private final Countdown countdown;
