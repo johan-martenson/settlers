@@ -16,7 +16,7 @@ public class Flag implements EndPoint {
     private int    geologistsCalled;
     private int    scoutsCalled;
     private Player player;
-    private Type   type;
+    private FlagType flagType;
 
     public Flag(Point point) {
         position         = point;
@@ -26,7 +26,7 @@ public class Flag implements EndPoint {
         promisedCargo    = new HashSet<>();
 
         /* Default flag type is normal */
-        type = Type.NORMAL;
+        flagType = FlagType.NORMAL;
     }
 
     Flag(Player player, Point point) {
@@ -163,15 +163,12 @@ public class Flag implements EndPoint {
         }
     }
 
-    public Flag.Type getType() {
-        return type;
+    public FlagType getType() {
+        return flagType;
     }
 
-    public void setType(Type flagType) {
-        this.type = flagType;
+    public void setType(FlagType flagType) {
+        this.flagType = flagType;
     }
 
-    public enum Type {
-        NORMAL, MAIN, MARINE
-    }
 }

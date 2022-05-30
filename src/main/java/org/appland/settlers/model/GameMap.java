@@ -22,7 +22,7 @@ import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.Flag.Type.MARINE;
+import static org.appland.settlers.model.FlagType.MARINE;
 import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.areNonePartOf;
 import static org.appland.settlers.model.GameUtils.findShortestPath;

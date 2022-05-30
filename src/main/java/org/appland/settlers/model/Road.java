@@ -3,7 +3,7 @@ package org.appland.settlers.model;
 import java.util.Collections;
 import java.util.List;
 
-import static org.appland.settlers.model.Flag.Type.MAIN;
+import static org.appland.settlers.model.FlagType.MAIN;
 
 public class Road {
 
