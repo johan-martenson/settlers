@@ -292,7 +292,7 @@ public class GameUtils {
      * Returns true if each item in the collection is part of the given set
      *
      * @param items The items to determine if the given collection contains
-     * @param collection The collection that may contain all of the given items
+     * @param collection The collection that may contain all the given items
      * @param <T> The type of item
      * @return True if the set of items is a subset of the collection
      */
@@ -559,7 +559,7 @@ public class GameUtils {
 
         toEvaluatePriorityQueue.add(startingPointAndCost);
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         PointAndCost currentPoint;
         int newCostToGetToPoint;
 
@@ -758,7 +758,7 @@ public class GameUtils {
 
         toEvaluatePriorityQueue.add(startingPointAndCost);
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         PointAndCost currentPoint;
         int newCostToGetToPoint;
 
@@ -854,7 +854,7 @@ public class GameUtils {
 
         toEvaluatePriorityQueue.add(startingPointAndCost);
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         PointAndCost currentPoint;
         int newCostToGetToPoint;
 
@@ -933,7 +933,7 @@ public class GameUtils {
         realCostToPoint.put(start, (double)0);
         estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         Point currentPoint;
         double currentEstimatedCost;
 
@@ -1067,7 +1067,7 @@ public class GameUtils {
 
         toEvaluatePriorityQueue.add(startingPointAndCost);
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         PointAndCost currentPoint;
         int newCostToGetToPoint;
 
@@ -1315,7 +1315,7 @@ public class GameUtils {
 
         toEvaluate.add(start);
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         Point point;
         Point oppositePoint;
 
@@ -1361,7 +1361,7 @@ public class GameUtils {
 
         toEvaluate.add(startFlag.getPosition());
 
-        /* Declare variables outside of the loop to keep memory churn down */
+        /* Declare variables outside the loop to keep memory churn down */
         Point point;
         Point oppositePoint;
 
@@ -1421,8 +1421,6 @@ public class GameUtils {
         } else if (directionY == 0 && directionX < 0) {
             angle = Math.PI;
         } else {
-
-            double length = Math.sqrt(directionX*directionX + directionY*directionY);
 
             angle = Math.atan((double)directionY / (double)directionX);
 

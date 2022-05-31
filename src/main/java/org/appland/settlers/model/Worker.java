@@ -174,7 +174,7 @@ public abstract class Worker {
                 /* Update the cargo's position */
                 updateCargoPosition();
 
-                /* Call the sub class to let it react */
+                /* Call the subclass to let it react */
                 onWalkingAndAtFixedPoint();
 
                 /* Handle the arrival if the worker is at the target */
@@ -183,7 +183,7 @@ public abstract class Worker {
                     /* Set the state to idle and outside */
                     state = State.IDLE_OUTSIDE;
 
-                    /* Enter buildings if required and give the sub classes a change to act */
+                    /* Enter buildings if required and give the subclasses a change to act */
                     handleArrival();
                 }
             }
@@ -263,7 +263,7 @@ public abstract class Worker {
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
-            /* Enter the building unless its a soldier or a builder.
+            /* Enter the building unless it's a soldier or a builder.
              * Soldiers enter on their own and builders should not enter.
              * */
             if (!isSoldier() && !(this instanceof Builder)) {
@@ -589,7 +589,7 @@ public abstract class Worker {
 
     void walkHalfWayOffroadTo(Point point) {
 
-        /* Walk half way to the given target */
+        /* Walk halfway to the given target */
         setOffroadTarget(point);
 
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;

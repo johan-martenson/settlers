@@ -99,7 +99,7 @@ public class Building implements EndPoint {
 
         flag.setPlayer(player);
 
-        /* Initialize goods required for production if the building does any any production */
+        /* Initialize goods required for production if the building does any production */
         requiredGoodsForProduction = new EnumMap<>(Material.class);
         Production production = getClass().getAnnotation(Production.class);
 
@@ -1187,7 +1187,7 @@ public class Building implements EndPoint {
     }
 
     private Map<Material, Integer> getMaterialNeededForProduction() {
-        Map<Material, Integer> materialNeeded = new EnumMap(Material.class);
+        Map<Material, Integer> materialNeeded = new EnumMap<>(Material.class);
 
         Production production = getClass().getAnnotation(Production.class);
 

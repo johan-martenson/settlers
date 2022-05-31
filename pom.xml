@@ -66,6 +66,26 @@
                     </targetTests>
                 </configuration>
             </plugin> -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.0.0</version>
+                <dependencies>
+                    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>4.7.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- Part of Maven - specified version explicitly for compatibility
+     with the maven-project-info-reports-plugin 3.0.0-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -90,6 +110,11 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.2.0</version>
             </plugin>
+            <!-- <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.0.0</version>
+            </plugin> -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>

@@ -1107,8 +1107,8 @@ public class Player {
         changedAvailableConstruction.add(point.upRight()); // Small building or flag
 
         // Unaffected:
-        // Left left: large building and flag ok
-        // Right right: large building and flag ok
+        // Left-left: large building and flag ok
+        // Right-right: large building and flag ok
         // Down: large building and flag ok
         // Up: large building and flag (?) still ok
         // Up right, up right: large building and flag ok
