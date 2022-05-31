@@ -177,7 +177,7 @@ public class GameMap {
         /* Add initial measurement */
         statisticsManager.addZeroInitialMeasurementForPlayers(players);
 
-        /* Set the time keeper to 1 */
+        /* Set the timekeeper to 1 */
         time = 1;
 
         /* Set the initial production statistics collection period */
@@ -1097,7 +1097,7 @@ public class GameMap {
             player.setLands(new ArrayList<>(), buildingCausedUpdate, cause);
         }
 
-        /* Destroy buildings now outside of their player's borders */
+        /* Destroy buildings now outside their player's borders */
         for (Building building : buildings) {
 
             /* Filter buildings that are already burning down */
@@ -1137,7 +1137,7 @@ public class GameMap {
             }
         }
 
-        /* Remove flags now outside of the borders */
+        /* Remove flags now outside the borders */
         List<Flag> flagsToRemove = new LinkedList<>();
 
         for (Flag flag : flags) {
@@ -1148,12 +1148,12 @@ public class GameMap {
             }
         }
 
-        /* Remove the flags now outside of any border */
+        /* Remove the flags now outside any border */
         for (Flag flag : flagsToRemove) {
             removeFlagWithoutSideEffects(flag);
         }
 
-        /* Remove any roads now outside of the borders */
+        /* Remove any roads now outside the borders */
         Set<Road> roadsToRemove = new HashSet<>();
 
         for (Road road : roads) {
@@ -1237,7 +1237,7 @@ public class GameMap {
     }
 
     /**
-     * Places a road according to  he given points
+     * Places a road according to the given points
      *
      * @param player The player that will own the new road
      * @param wayPoints The points of the new road
@@ -1620,7 +1620,7 @@ public class GameMap {
     }
 
     /**
-     * Returns the a list of the points where the given player can place a flag
+     * Returns a list of the points where the given player can place a flag
      *
      * @param player The player that wants to place a flag
      * @return A list of all the places on the map where the player can place a flag
@@ -2222,8 +2222,8 @@ public class GameMap {
     /**
      * Places a tree at the given point
      * @param point The point to place the tree at
-     * @param treeType
-     * @param treeSize
+     * @param treeType The type of the tree
+     * @param treeSize The size of the tree
      * @return The placed tree
      * @throws InvalidUserActionException Thrown if the tree would be placed on a flag, road, or stone
      */
@@ -3037,7 +3037,7 @@ public class GameMap {
     /**
      * Returns a list of roads that connect to the given flag
      *
-     * @param flag that the connect to
+     * @param flag to connect to
      * @return List of roads that connect to the flag
      */
     public List<Road> getRoadsFromFlag(Flag flag) {
