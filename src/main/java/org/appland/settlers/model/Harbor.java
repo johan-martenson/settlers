@@ -192,8 +192,9 @@ public class Harbor extends Storehouse {
 
         /* Start an expedition if needed */
         if (expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION) {
-            for (Material material : materialForNextExpedition.keySet()) {
-                int amount = materialForNextExpedition.get(material);
+            for (Entry<Material, Integer> entry : materialForNextExpedition.entrySet()) {
+                Material material = entry.getKey();
+                int amount = entry.getValue();
 
                 ship.putCargos(material, amount, null);
 

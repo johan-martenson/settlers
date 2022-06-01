@@ -242,7 +242,7 @@ public class GameMap {
             int xStart = 0;
             int xEnd   = width;
 
-            if (y % 2 == 1) {
+            if (y % 2 != 0) {
                 xStart = -1;
                 xEnd   = width + 1;
             }

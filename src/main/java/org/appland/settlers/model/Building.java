@@ -1235,7 +1235,7 @@ public class Building implements EndPoint {
             return 0;
         }
 
-        return (int) ((double)((fullConstructionTime - countdown.getCount()) / fullConstructionTime) * 100);
+        return (int) (((fullConstructionTime - countdown.getCount()) / (double) fullConstructionTime) * 100);
     }
 
     /* Intended to be overridden by subclasses if needed */
