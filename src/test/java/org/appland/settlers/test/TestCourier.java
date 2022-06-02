@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.BodyType;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -15,6 +16,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -26,11 +28,15 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANK;
@@ -1371,5 +1377,47 @@ public class TestCourier {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
 
         assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testCourierCanBeFatOrThin() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that couriers can be both fat and thin */
+        Map<BodyType, Integer> courierBodyTypes = new EnumMap<>(BodyType.class);
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for the road to get assigned a courier */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+            int amount = courierBodyTypes.getOrDefault(courier.getBodyType(), 0);
+
+            courierBodyTypes.put(courier.getBodyType(), amount + 1);
+
+            map.stepTime();
+
+            map.removeRoad(road0);
+        }
+
+        assertNotEquals((int)courierBodyTypes.getOrDefault(THIN, 0), 0);
+        assertNotEquals((int)courierBodyTypes.getOrDefault(FAT, 0), 0);
     }
 }

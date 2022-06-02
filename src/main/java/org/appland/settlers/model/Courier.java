@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
+import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
 import static org.appland.settlers.model.Courier.States.GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
@@ -18,6 +21,10 @@ import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
+
+    private static final Random random = new Random(1);
+
+    private final BodyType bodyType;
 
     private Cargo  intendedCargo;
     private Road   assignedRoad;
@@ -47,6 +54,12 @@ public class Courier extends Worker {
         lastCargo = null;
 
         state = WALKING_TO_ROAD;
+
+        if (random.nextBoolean()) {
+            bodyType = THIN;
+        } else {
+            bodyType = FAT;
+        }
     }
 
     @Override
@@ -537,5 +550,9 @@ public class Courier extends Worker {
         }
 
         return waitingCargo;
+    }
+
+    public BodyType getBodyType() {
+        return bodyType;
     }
 }
