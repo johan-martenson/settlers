@@ -76,6 +76,7 @@ public class Player {
     private final List<Ship> newShips;
     private final List<Ship> finishedShips;
     private final List<Ship> shipsWithNewTargets;
+    private final Map<Worker, WorkerAction> workersWithStartedActions;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -172,6 +173,7 @@ public class Player {
         newShips = new ArrayList<>();
         finishedShips = new ArrayList<>();
         shipsWithNewTargets = new ArrayList<>();
+        workersWithStartedActions = new HashMap<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -784,7 +786,7 @@ public class Player {
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
-            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty()) {
+            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty()) {
             return;
         }
 
@@ -1005,7 +1007,8 @@ public class Player {
                 new ArrayList<>(harvestedCrops),
                 new ArrayList<>(newShips),
                 new ArrayList<>(finishedShips),
-                new ArrayList<>(shipsWithNewTargets));
+                new ArrayList<>(shipsWithNewTargets),
+                new HashMap<>(workersWithStartedActions));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1046,6 +1049,7 @@ public class Player {
         newShips.clear();
         finishedShips.clear();
         shipsWithNewTargets.clear();
+        workersWithStartedActions.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1402,5 +1406,9 @@ public class Player {
 
     public void reportShipWithNewTarget(Ship ship) {
         shipsWithNewTargets.add(ship);
+    }
+
+    public void reportWorkerStartedAction(Worker worker, WorkerAction action) {
+        workersWithStartedActions.put(worker, action);
     }
 }

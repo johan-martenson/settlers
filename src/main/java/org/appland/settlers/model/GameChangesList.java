@@ -2,6 +2,7 @@ package org.appland.settlers.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class GameChangesList {
 
@@ -37,6 +38,7 @@ public class GameChangesList {
     private final List<Ship> newShips;
     private final List<Ship> finishedShips;
     private final List<Ship> shipsWithNewTargets;
+    private final Map<Worker, WorkerAction> getWorkersWithStartedActions;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -68,7 +70,8 @@ public class GameChangesList {
                            List<Crop> harvestedCrops,
                            List<Ship> newShips,
                            List<Ship> finishedShips,
-                           List<Ship> shipsWithNewTargets) {
+                           List<Ship> shipsWithNewTargets,
+                           Map<Worker, WorkerAction> getWorkersWithStartedActions) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -100,6 +103,7 @@ public class GameChangesList {
         this.newShips = newShips;
         this.finishedShips = finishedShips;
         this.shipsWithNewTargets = shipsWithNewTargets;
+        this.getWorkersWithStartedActions = getWorkersWithStartedActions;
     }
 
     public long getTime() {
@@ -261,5 +265,9 @@ public class GameChangesList {
 
     public List<Ship> getShipsWithNewTargets() {
         return shipsWithNewTargets;
+    }
+
+    public Map<Worker, WorkerAction> getWorkersWithStartedActions() {
+        return getWorkersWithStartedActions;
     }
 }

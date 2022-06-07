@@ -116,6 +116,7 @@ public class GameMap {
     private final List<Ship> newShips;
     private final List<Ship> finishedShips;
     private final List<Ship> shipsWithNewTargets;
+    private final Map<Worker, WorkerAction> workersWithStartedActions;
 
     private Player winner;
     private long time;
@@ -228,6 +229,7 @@ public class GameMap {
         newShips = new ArrayList<>();
         finishedShips = new ArrayList<>();
         shipsWithNewTargets = new ArrayList<>();
+        workersWithStartedActions = new HashMap<>();
 
         winnerReported = false;
 
@@ -574,173 +576,131 @@ public class GameMap {
                 player.reportChangedBorders(borderChanges);
             }
 
-            for (Flag flag : changedFlags) {
-                if (!player.getDiscoveredLand().contains(flag.getPosition())) {
-                    continue;
+            changedFlags.forEach(flag -> {
+                if (player.getDiscoveredLand().contains(flag.getPosition())) {
+                    player.reportChangedFlag(flag);
                 }
+            });
 
-                player.reportChangedFlag(flag);
-            }
-
-            for (Worker worker : workersWithNewTargets) {
-                if (!player.getDiscoveredLand().contains(worker.getPosition())) {
-                    continue;
+            workersWithNewTargets.forEach(worker -> {
+                if (player.getDiscoveredLand().contains(worker.getPosition())) {
+                    player.reportWorkerWithNewTarget(worker);
                 }
+            });
 
-                player.reportWorkerWithNewTarget(worker);
-            }
-
-            for (Worker worker : removedWorkers) {
-                if (!player.getDiscoveredLand().contains(worker.getPosition())) {
-                    continue;
+            removedWorkers.forEach(worker -> {
+                if (player.getDiscoveredLand().contains(worker.getPosition())) {
+                    player.reportRemovedWorker(worker);
                 }
+            });
 
-                player.reportRemovedWorker(worker);
-            }
-
-            for (Building building : changedBuildings) {
-                if (!player.getDiscoveredLand().contains(building.getPosition())) {
-                    continue;
+            changedBuildings.forEach(building -> {
+                if (player.getDiscoveredLand().contains(building.getPosition())) {
+                    player.reportChangedBuilding(building);
                 }
+            });
 
-                player.reportChangedBuilding(building);
-            }
-
-            for (Building building : removedBuildings) {
-                if (!player.getDiscoveredLand().contains(building.getPosition())) {
-                    continue;
+            removedBuildings.forEach(building -> {
+                if (player.getDiscoveredLand().contains(building.getPosition())) {
+                    player.reportRemovedBuilding(building);
                 }
+            });
 
-                player.reportRemovedBuilding(building);
-            }
-
-            for (Flag flag : newFlags) {
-                if (!player.getDiscoveredLand().contains(flag.getPosition())) {
-                    continue;
+            newFlags.forEach(flag -> {
+                if (player.getDiscoveredLand().contains(flag.getPosition())) {
+                    player.reportNewFlag(flag);
                 }
+            });
 
-                player.reportNewFlag(flag);
-            }
-
-            for (Flag flag : removedFlags) {
-                if (!player.getDiscoveredLand().contains(flag.getPosition())) {
-                    continue;
+            removedFlags.forEach(flag -> {
+                if (player.getDiscoveredLand().contains(flag.getPosition())) {
+                    player.reportRemovedFlag(flag);
                 }
+            });
 
-                player.reportRemovedFlag(flag);
-            }
-
-            for (Road road : newRoads) {
-                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
-                    continue;
+            newRoads.forEach(road -> {
+                if (GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                    player.reportNewRoad(road);
                 }
+            });
 
-                player.reportNewRoad(road);
-            }
-
-            for (Road road : removedRoads) {
-                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
-                    continue;
+            removedRoads.forEach(road -> {
+                if (GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                    player.reportRemovedRoad(road);
                 }
+            });
 
-                player.reportRemovedRoad(road);
-            }
-
-            for (Building building : newBuildings) {
-                if (!player.getDiscoveredLand().contains(building.getPosition())) {
-                    continue;
+            newBuildings.forEach(building -> {
+                if (player.getDiscoveredLand().contains(building.getPosition())) {
+                    player.reportNewBuilding(building);
                 }
+            });
 
-                player.reportNewBuilding(building);
-            }
-
-            for (Tree tree : newTrees) {
-                if (!player.getDiscoveredLand().contains(tree.getPosition())) {
-                    continue;
+            newTrees.forEach(tree -> {
+                if (player.getDiscoveredLand().contains(tree.getPosition())) {
+                    player.reportNewTree(tree);
                 }
+            });
 
-                player.reportNewTree(tree);
-            }
-
-            for (Tree tree : removedTrees) {
-                if (!player.getDiscoveredLand().contains(tree.getPosition())) {
-                    continue;
+            removedTrees.forEach(tree -> {
+                if (player.getDiscoveredLand().contains(tree.getPosition())) {
+                    player.reportRemovedTree(tree);
                 }
+            });
 
-                player.reportRemovedTree(tree);
-            }
-
-            for (Point point : removedDeadTrees) {
-                if (!player.getDiscoveredLand().contains(point)) {
-                    continue;
+            removedDeadTrees.forEach(point -> {
+                if (player.getDiscoveredLand().contains(point)) {
+                    player.reportRemovedDeadTree(point);
                 }
+            });
 
-                player.reportRemovedDeadTree(point);
-            }
-
-            for (Stone stone : removedStones) {
-                if (!player.getDiscoveredLand().contains(stone.getPosition())) {
-                    continue;
+            removedStones.forEach(stone -> {
+                if (player.getDiscoveredLand().contains(stone.getPosition())) {
+                    player.reportRemovedStone(stone);
                 }
+            });
 
-                player.reportRemovedStone(stone);
-            }
-
-            for (Sign sign : newSigns) {
-                if (!player.getDiscoveredLand().contains(sign.getPosition())) {
-                    continue;
+            newSigns.forEach(sign -> {
+                if (player.getDiscoveredLand().contains(sign.getPosition())) {
+                    player.reportNewSign(sign);
                 }
+            });
 
-                player.reportNewSign(sign);
-            }
-
-            for (Sign sign : removedSigns) {
-                if (!player.getDiscoveredLand().contains(sign.getPosition())) {
-                    continue;
+            removedSigns.forEach(sign -> {
+                if (player.getDiscoveredLand().contains(sign.getPosition())) {
+                    player.reportRemovedSign(sign);
                 }
+            });
 
-                player.reportRemovedSign(sign);
-            }
-
-            for (Crop crop : newCrops) {
-                if (!player.getDiscoveredLand().contains(crop.getPosition())) {
-                    continue;
+            newCrops.forEach(crop -> {
+                if (player.getDiscoveredLand().contains(crop.getPosition())) {
+                    player.reportNewCrop(crop);
                 }
+            });
 
-                player.reportNewCrop(crop);
-            }
-
-            for (Crop crop : removedCrops) {
-                if (!player.getDiscoveredLand().contains(crop.getPosition())) {
-                    continue;
+            removedCrops.forEach(crop -> {
+                if (player.getDiscoveredLand().contains(crop.getPosition())) {
+                    player.reportRemovedCrop(crop);
                 }
+            });
 
-                player.reportRemovedCrop(crop);
-            }
-
-            for (Road road : promotedRoads) {
-                if (GameUtils.setContainsNone(player.getDiscoveredLand(), road.getWayPoints())) {
-                    continue;
+            promotedRoads.forEach(promotedRoad -> {
+                if (GameUtils.setContainsAny(player.getDiscoveredLand(), promotedRoad.getWayPoints())) {
+                    player.reportPromotedRoad(promotedRoad);
                 }
+            });
 
-                player.reportPromotedRoad(road);
-            }
-
-            for (Ship ship : newShips) {
-                if (!player.getDiscoveredLand().contains(ship.getPosition())) {
-                    continue;
+            newShips.forEach(ship -> {
+                if (player.getDiscoveredLand().contains(ship.getPosition())) {
+                    player.reportNewShip(ship);
                 }
+            });
 
-                player.reportNewShip(ship);
-            }
-
-            for (Ship ship : finishedShips) {
-                if (!player.getDiscoveredLand().contains(ship.getPosition())) {
-                    continue;
+            finishedShips.forEach(ship -> {
+                if (player.getDiscoveredLand().contains(ship.getPosition())) {
+                    player.reportFinishedShip(ship);
                 }
-
-                player.reportFinishedShip(ship);
-            }
+            });
 
             shipsWithNewTargets.forEach(ship -> {
                 if (player.getDiscoveredLand().contains(ship.getPosition())) {
@@ -748,12 +708,17 @@ public class GameMap {
                 }
             });
 
+            workersWithStartedActions.forEach((worker, action) -> {
+                if (player.getDiscoveredLand().contains(worker.getPosition())) {
+                    player.reportWorkerStartedAction(worker, action);
+                }
+            });
+
             harvestedCrops.forEach(crop -> {
-                        if (player.getDiscoveredLand().contains(crop.getPosition())) {
-                            player.reportHarvestedCrop(crop);
-                        }
-                    }
-            );
+                if (player.getDiscoveredLand().contains(crop.getPosition())) {
+                    player.reportHarvestedCrop(crop);
+                }
+            });
 
             player.sendMonitoringEvents(time);
         }
@@ -783,6 +748,7 @@ public class GameMap {
         newShips.clear();
         finishedShips.clear();
         shipsWithNewTargets.clear();
+        workersWithStartedActions.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3885,5 +3851,9 @@ public class GameMap {
 
     void reportShipWithNewTarget(Ship ship) {
         shipsWithNewTargets.add(ship);
+    }
+
+    public void reportWorkerStartedAction(Worker worker, WorkerAction action) {
+        workersWithStartedActions.put(worker, action);
     }
 }
