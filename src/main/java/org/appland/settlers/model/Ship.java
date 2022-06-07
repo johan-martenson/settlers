@@ -326,4 +326,11 @@ public class Ship extends Worker {
     public void setReadyForExpedition() {
         state = State.READY_TO_START_EXPEDITION;
     }
+
+    @Override
+    protected void setOffroadTargetWithPath(List<Point> path) {
+        super.setOffroadTargetWithPath(path);
+
+        map.reportShipWithNewTarget(this);
+    }
 }

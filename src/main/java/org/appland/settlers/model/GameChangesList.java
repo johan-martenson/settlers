@@ -34,6 +34,9 @@ public class GameChangesList {
     private final Collection<Point> removedDeadTrees;
     private final Collection<Point> discoveredDeadTrees;
     private final List<Crop> harvestedCrops;
+    private final List<Ship> newShips;
+    private final List<Ship> finishedShips;
+    private final List<Ship> shipsWithNewTargets;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -62,7 +65,10 @@ public class GameChangesList {
                            Collection<Flag> changedFlags,
                            Collection<Point> removedDeadTrees,
                            Collection<Point> discoveredDeadTrees,
-                           List<Crop> harvestedCrops) {
+                           List<Crop> harvestedCrops,
+                           List<Ship> newShips,
+                           List<Ship> finishedShips,
+                           List<Ship> shipsWithNewTargets) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -91,6 +97,9 @@ public class GameChangesList {
         this.removedDeadTrees = removedDeadTrees;
         this.discoveredDeadTrees = discoveredDeadTrees;
         this.harvestedCrops = harvestedCrops;
+        this.newShips = newShips;
+        this.finishedShips = finishedShips;
+        this.shipsWithNewTargets = shipsWithNewTargets;
     }
 
     public long getTime() {
@@ -168,7 +177,7 @@ public class GameChangesList {
     @Override
     public String toString() {
         return "GameChangesList{" +
-                "time=" + time +
+                "\ntime=" + time +
                 ", \nworkersWithNewTargets=" + workersWithNewTargets +
                 ", \nnewFlags=" + newFlags +
                 ", \nremovedFlags=" + removedFlags +
@@ -192,6 +201,13 @@ public class GameChangesList {
                 ", \nchangedAvailableConstruction=" + changedAvailableConstruction +
                 ", \nnewMessages=" + newMessages +
                 ", \npromotedRoads=" + promotedRoads +
+                ", \nchangedFlags=" + changedFlags +
+                ", \nremovedDeadTrees=" + removedDeadTrees +
+                ", \ndiscoveredDeadTrees=" + discoveredDeadTrees +
+                ", \nharvestedCrops=" + harvestedCrops +
+                ", \nnewShips=" + newShips +
+                ", \nfinishedShips=" + finishedShips +
+                ", \nshipsWithNewTargets=" + shipsWithNewTargets +
                 '}';
     }
 
@@ -233,5 +249,17 @@ public class GameChangesList {
 
     public List<Crop> getHarvestedCrops() {
         return harvestedCrops;
+    }
+
+    public List<Ship> getNewShips() {
+        return newShips;
+    }
+
+    public List<Ship> getFinishedShips() {
+        return finishedShips;
+    }
+
+    public List<Ship> getShipsWithNewTargets() {
+        return shipsWithNewTargets;
     }
 }

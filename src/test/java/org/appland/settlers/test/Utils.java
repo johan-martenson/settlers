@@ -2568,7 +2568,6 @@ public class Utils {
             int index = gameChanges.indexOf(gameChangesEvent);
 
             return gameChanges.subList(index + 1, gameChanges.size() - 1);
-
         }
 
         public void setAvailableConstruction(Map<Point, Size> availableHousePoints, Collection<Point> availableFlagPoints, List<Point> availableMinePoints) {

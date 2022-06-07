@@ -73,6 +73,9 @@ public class Player {
     private final List<Point> removedDeadTrees;
     private final List<Point> discoveredDeadTrees;
     private final List<Crop> harvestedCrops;
+    private final List<Ship> newShips;
+    private final List<Ship> finishedShips;
+    private final List<Ship> shipsWithNewTargets;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -166,6 +169,9 @@ public class Player {
         removedDeadTrees = new ArrayList<>();
         discoveredDeadTrees = new ArrayList<>();
         harvestedCrops = new ArrayList<>();
+        newShips = new ArrayList<>();
+        finishedShips = new ArrayList<>();
+        shipsWithNewTargets = new ArrayList<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -777,7 +783,8 @@ public class Player {
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
-            removedDeadTrees.isEmpty() && harvestedCrops.isEmpty()) {
+            removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
+            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty()) {
             return;
         }
 
@@ -995,7 +1002,10 @@ public class Player {
                 new ArrayList<>(changedFlags),
                 new ArrayList<>(removedDeadTrees),
                 new ArrayList<>(discoveredDeadTrees),
-                new ArrayList<>(harvestedCrops));
+                new ArrayList<>(harvestedCrops),
+                new ArrayList<>(newShips),
+                new ArrayList<>(finishedShips),
+                new ArrayList<>(shipsWithNewTargets));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1033,6 +1043,9 @@ public class Player {
         removedDeadTrees.clear();
         discoveredDeadTrees.clear();
         harvestedCrops.clear();
+        newShips.clear();
+        finishedShips.clear();
+        shipsWithNewTargets.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1377,5 +1390,17 @@ public class Player {
 
     public void reportHarvestedCrop(Crop crop) {
         harvestedCrops.add(crop);
+    }
+
+    public void reportNewShip(Ship ship) {
+        newShips.add(ship);
+    }
+
+    public void reportFinishedShip(Ship ship) {
+        finishedShips.add(ship);
+    }
+
+    public void reportShipWithNewTarget(Ship ship) {
+        shipsWithNewTargets.add(ship);
     }
 }

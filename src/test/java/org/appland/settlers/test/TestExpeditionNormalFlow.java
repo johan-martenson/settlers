@@ -536,7 +536,6 @@ public class TestExpeditionNormalFlow {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
-
         /* Prepare for the expedition */
         Utils.adjustInventoryTo(headquarter, PLANK, 30);
         Utils.adjustInventoryTo(headquarter, STONE, 30);

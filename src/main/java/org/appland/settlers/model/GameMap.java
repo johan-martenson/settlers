@@ -113,6 +113,9 @@ public class GameMap {
     private final List<Ship> ships;
     private final Set<Point> possiblePlacesForHarbor;
     private final List<Crop> harvestedCrops;
+    private final List<Ship> newShips;
+    private final List<Ship> finishedShips;
+    private final List<Ship> shipsWithNewTargets;
 
     private Player winner;
     private long time;
@@ -222,6 +225,9 @@ public class GameMap {
         harvestedCrops = new ArrayList<>();
         deadTrees = new ArrayList<>();
         ships = new ArrayList<>();
+        newShips = new ArrayList<>();
+        finishedShips = new ArrayList<>();
+        shipsWithNewTargets = new ArrayList<>();
 
         winnerReported = false;
 
@@ -720,6 +726,28 @@ public class GameMap {
                 player.reportPromotedRoad(road);
             }
 
+            for (Ship ship : newShips) {
+                if (!player.getDiscoveredLand().contains(ship.getPosition())) {
+                    continue;
+                }
+
+                player.reportNewShip(ship);
+            }
+
+            for (Ship ship : finishedShips) {
+                if (!player.getDiscoveredLand().contains(ship.getPosition())) {
+                    continue;
+                }
+
+                player.reportFinishedShip(ship);
+            }
+
+            shipsWithNewTargets.forEach(ship -> {
+                if (player.getDiscoveredLand().contains(ship.getPosition())) {
+                    player.reportShipWithNewTarget(ship);
+                }
+            });
+
             harvestedCrops.forEach(crop -> {
                         if (player.getDiscoveredLand().contains(crop.getPosition())) {
                             player.reportHarvestedCrop(crop);
@@ -752,6 +780,9 @@ public class GameMap {
         changedFlags.clear();
         removedDeadTrees.clear();
         harvestedCrops.clear();
+        newShips.clear();
+        finishedShips.clear();
+        shipsWithNewTargets.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3749,6 +3780,8 @@ public class GameMap {
 
         mapPoint.setShipUnderConstruction();
 
+        newShips.add(ship);
+
         return ship;
     }
 
@@ -3784,6 +3817,8 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(ship.getPosition());
 
         mapPoint.setShipDone();
+
+        finishedShips.add(ship);
     }
 
     public Set<Point> getPossiblePlacesForHarbor() {
@@ -3844,7 +3879,11 @@ public class GameMap {
         });
     }
 
-    public void reportHarvestedCrop(Crop crop) {
+    void reportHarvestedCrop(Crop crop) {
         harvestedCrops.add(crop);
+    }
+
+    void reportShipWithNewTarget(Ship ship) {
+        shipsWithNewTargets.add(ship);
     }
 }

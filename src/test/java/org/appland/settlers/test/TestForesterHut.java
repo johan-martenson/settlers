@@ -790,7 +790,7 @@ public class TestForesterHut {
 
         for (int i = 0; i < 150; i++) {
             assertEquals(tree.getSize(), TreeSize.SMALL);
-            System.out.println(i);
+
             map.stepTime();
         }
 
