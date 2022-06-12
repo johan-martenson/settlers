@@ -271,24 +271,24 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
         for (int i = 0; i < 99; i++) {
-            assertTrue(mason.isInsideBuilding());
+            assertTrue(stonemason.isInsideBuilding());
             map.stepTime();
         }
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
+        assertFalse(stonemason.isInsideBuilding());
     }
 
     @Test
@@ -316,29 +316,29 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
         /* Step once and make sure the stone mason goes out of the hut */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
+        assertFalse(stonemason.isInsideBuilding());
 
-        Point point = mason.getTarget();
+        Point point = stonemason.getTarget();
         assertNotNull(point);
 
         /* Verify that the stonemason has chosen a correct spot */
         assertTrue(point.isAdjacent(point2));
-        assertTrue(mason.isTraveling() || point.equals(mason.getPosition()));
+        assertTrue(stonemason.isTraveling() || point.equals(stonemason.getPosition()));
         assertFalse(map.isBuildingAtPoint(point));
     }
 
@@ -367,38 +367,38 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
         /* Step once to let the stonemason go out to get stone */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
+        assertFalse(stonemason.isInsideBuilding());
 
-        Point point = mason.getTarget();
+        Point point = stonemason.getTarget();
 
-        assertNotEquals(mason.getTarget(), point2);
-        assertTrue(mason.getTarget().isAdjacent(point2));
-        assertTrue(mason.isTraveling());
+        assertNotEquals(stonemason.getTarget(), point2);
+        assertTrue(stonemason.getTarget().isAdjacent(point2));
+        assertTrue(stonemason.isTraveling());
 
         map.stepTime();
 
         /* Wait for the stonemason to arrive if it isn't already at the right spot */
-        if (!mason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, mason);
+        if (!stonemason.isArrived()) {
+            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
 
-        assertTrue(mason.getPosition().isAdjacent(point2));
-        assertTrue(mason.isArrived());
-        assertTrue(mason.isAt(point));
-        assertFalse(mason.isTraveling());
+        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertTrue(stonemason.isArrived());
+        assertTrue(stonemason.isAt(point));
+        assertFalse(stonemason.isTraveling());
     }
 
     @Test
@@ -426,53 +426,53 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
 
         /* Step once to let the stonemason go out to get stone */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
+        assertFalse(stonemason.isInsideBuilding());
 
-        Point point = mason.getTarget();
+        Point point = stonemason.getTarget();
 
         assertTrue(point.isAdjacent(point2));
-        assertTrue(mason.isTraveling());
+        assertTrue(stonemason.isTraveling());
 
         map.stepTime();
 
         /* Let the stonemason reach the chosen spot if it isn't already there */
-        if (!mason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, mason);
+        if (!stonemason.isArrived()) {
+            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
 
-        assertTrue(mason.isArrived());
-        assertTrue(mason.getPosition().isAdjacent(point2));
-        assertTrue(mason.isGettingStone());
+        assertTrue(stonemason.isArrived());
+        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertTrue(stonemason.isGettingStone());
 
         /* Verify that the stonemason gets stone */
         for (int i = 0; i < 49; i++) {
-            assertTrue(mason.isGettingStone());
+            assertTrue(stonemason.isGettingStone());
             map.stepTime();
         }
 
-        assertTrue(mason.isGettingStone());
+        assertTrue(stonemason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
 
         /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();
 
-        assertFalse(mason.isGettingStone());
+        assertFalse(stonemason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
-        assertNotNull(mason.getCargo());
-        assertEquals(mason.getCargo().getMaterial(), STONE);
+        assertNotNull(stonemason.getCargo());
+        assertEquals(stonemason.getCargo().getMaterial(), STONE);
     }
 
     @Test
@@ -503,73 +503,73 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Step once to let the stonemason go out to get stone */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
+        assertFalse(stonemason.isInsideBuilding());
 
-        Point point = mason.getTarget();
+        Point point = stonemason.getTarget();
 
         assertTrue(point.isAdjacent(point3));
-        assertTrue(mason.isTraveling());
+        assertTrue(stonemason.isTraveling());
 
         /* Let the stonemason reach the chosen spot if it isn't already there */
-        if (!mason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, mason);
+        if (!stonemason.isArrived()) {
+            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
 
-        assertTrue(mason.isArrived());
-        assertTrue(mason.getPosition().isAdjacent(point3));
-        assertTrue(mason.isGettingStone());
-        assertNull(mason.getCargo());
+        assertTrue(stonemason.isArrived());
+        assertTrue(stonemason.getPosition().isAdjacent(point3));
+        assertTrue(stonemason.isGettingStone());
+        assertNull(stonemason.getCargo());
 
         /* Wait for the stonemason to get some stone */
         Utils.fastForward(49, map);
 
-        assertTrue(mason.isGettingStone());
+        assertTrue(stonemason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
-        assertNull(mason.getCargo());
+        assertNull(stonemason.getCargo());
 
         map.stepTime();
 
         /* Stonemason has the stone and goes back to the quarry */
-        assertFalse(mason.isGettingStone());
+        assertFalse(stonemason.isGettingStone());
 
-        assertEquals(mason.getTarget(), quarry.getPosition());
-        assertNotNull(mason.getCargo());
+        assertEquals(stonemason.getTarget(), quarry.getPosition());
+        assertNotNull(stonemason.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getPosition());
 
-        assertTrue(mason.isInsideBuilding());
-        assertNotNull(mason.getCargo());
+        assertTrue(stonemason.isInsideBuilding());
+        assertNotNull(stonemason.getCargo());
 
         /* Stonemason leaves the hut and goes to the flag to drop the cargo */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());
-        assertEquals(mason.getTarget(), quarry.getFlag().getPosition());
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), quarry.getFlag().getPosition());
         assertTrue(quarry.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry.getFlag().getPosition());
 
         assertFalse(quarry.getFlag().getStackedCargo().isEmpty());
-        assertNull(mason.getCargo());
+        assertNull(stonemason.getCargo());
 
         /* The stonemason goes back to the quarry */
-        assertEquals(mason.getTarget(), quarry.getPosition());
+        assertEquals(stonemason.getTarget(), quarry.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, mason);
+        Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
     }
 
     @Test
@@ -593,18 +593,18 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
-        assertTrue(mason.isInsideBuilding());
-        assertNull(mason.getCargo());
+        assertTrue(stonemason.isInsideBuilding());
+        assertNull(stonemason.getCargo());
 
         /* Verify that no stone is available from the quarry's flag */
         for (int i = 0; i < 100; i++) {
             map.stepTime();
             assertTrue(quarry.getFlag().getStackedCargo().isEmpty());
-            assertNull(mason.getCargo());
+            assertNull(stonemason.getCargo());
         }
     }
 
@@ -629,16 +629,16 @@ public class TestQuarry {
         constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(player0, map);
+        Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry);
+        Utils.occupyBuilding(stonemason, quarry);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Verify that the stone mason hasn't understood that there are no resources available */
         assertFalse(quarry.isOutOfNaturalResources());
@@ -646,7 +646,7 @@ public class TestQuarry {
         /* Step once to verify that the stonemason stays inside */
         map.stepTime();
 
-        assertTrue(mason.isInsideBuilding());
+        assertTrue(stonemason.isInsideBuilding());
 
         /* Verify that the quarry is out of natural resources */
         assertTrue(quarry.isOutOfNaturalResources());
