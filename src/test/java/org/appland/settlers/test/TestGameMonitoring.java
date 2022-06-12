@@ -7,7 +7,6 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Flag;
@@ -17,7 +16,6 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
-import org.appland.settlers.model.Harbor;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
@@ -25,9 +23,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
-import org.appland.settlers.model.Ship;
-import org.appland.settlers.model.Shipwright;
-import org.appland.settlers.model.Shipyard;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
@@ -46,10 +41,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
-import static org.appland.settlers.model.Material.BUILDER;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.PLANK;
@@ -2163,25 +2156,19 @@ public class TestGameMonitoring {
 
         Point point = forester.getTarget();
 
+        /* Wait for the forester to reach the spot for the tree */
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        for (int i = 0; i < 19; i++) {
-            assertTrue(forester.isPlanting());
-            map.stepTime();
-        }
-
-        assertTrue(forester.isPlanting());
-        assertFalse(map.isTreeAtPoint(point));
-
         if (!monitor.getEvents().isEmpty()) {
             assertTrue(monitor.getLastEvent().getNewTrees().isEmpty());
         }
 
-        map.stepTime();
+        /* Wait for the forester to plant a tree */
+        Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
@@ -2250,6 +2237,7 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(forester.isTraveling());
 
+        /* Wait for the forester to reach the spot for the tree */
         Point point = forester.getTarget();
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
@@ -2258,19 +2246,12 @@ public class TestGameMonitoring {
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        for (int i = 0; i < 19; i++) {
-            assertTrue(forester.isPlanting());
-            map.stepTime();
-        }
-
-        assertTrue(forester.isPlanting());
-        assertFalse(map.isTreeAtPoint(point));
-
         if (!monitor.getEvents().isEmpty()) {
             assertTrue(monitor.getLastEvent().getNewTrees().isEmpty());
         }
 
-        map.stepTime();
+        /* Wait for the forester to plant the tree */
+        Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
@@ -2321,6 +2302,7 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(forester.isTraveling());
 
+        /* Wait for the forester to reach the spot for the tree */
         Point point = forester.getTarget();
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
@@ -2329,15 +2311,8 @@ public class TestGameMonitoring {
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        for (int i = 0; i < 19; i++) {
-            assertTrue(forester.isPlanting());
-            map.stepTime();
-        }
-
-        assertTrue(forester.isPlanting());
-        assertFalse(map.isTreeAtPoint(point));
-
-        map.stepTime();
+        /* Wait for the forester to finish planting the tree */
+        Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));

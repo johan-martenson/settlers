@@ -1,5 +1,5 @@
 package org.appland.settlers.model;
 
 public enum WorkerAction {
-    PLANTING
+    CUTTING, HACKING_STONE, PLANTING
 }

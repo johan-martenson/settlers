@@ -175,6 +175,8 @@ public class WoodcutterWorker extends Worker {
         } else if (state == State.GOING_OUT_TO_CUT_TREE) {
             state = State.CUTTING_TREE;
 
+            map.reportWorkerStartedAction(this, WorkerAction.CUTTING);
+
             countdown.countFrom(TIME_TO_CUT_TREE);
         } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());

@@ -587,21 +587,15 @@ public class TestForesterHut {
 
         assertTrue(forester.isTraveling());
 
+        /* Wait for the forester to reach the spot */
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        for (int i = 0; i < 19; i++) {
-            assertTrue(forester.isPlanting());
-            map.stepTime();
-        }
-
-        assertTrue(forester.isPlanting());
-        assertFalse(map.isTreeAtPoint(point));
-
-        map.stepTime();
+        /* Verify that the forester plants a tree */
+        Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
@@ -693,12 +687,7 @@ public class TestForesterHut {
         assertTrue(forester.isPlanting());
 
         /* Wait for the forester to plant the tree */
-        Utils.fastForward(19, map);
-
-        assertTrue(forester.isPlanting());
-        assertFalse(map.isTreeAtPoint(point));
-
-        map.stepTime();
+        Utils.waitForForesterToStopPlantingTree(forester, map);
 
         /* Verify that the forester goes back home */
         assertFalse(forester.isPlanting());
@@ -757,7 +746,7 @@ public class TestForesterHut {
         assertTrue(forester.isPlanting());
 
         /* Wait for the forester to plant the tree */
-        Utils.fastForward(19, map);
+        Utils.fastForward(50, map);
 
         assertTrue(forester.isPlanting());
         assertFalse(map.isTreeAtPoint(point));

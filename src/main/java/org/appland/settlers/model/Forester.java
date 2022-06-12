@@ -14,7 +14,7 @@ import static org.appland.settlers.model.Material.FORESTER;
 
 @Walker(speed = 10)
 public class Forester extends Worker {
-    private static final int TIME_TO_PLANT = 19;
+    private static final int TIME_TO_PLANT = 50;
     private static final int TIME_TO_REST = 99;
     private static final int RANGE = 8;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;

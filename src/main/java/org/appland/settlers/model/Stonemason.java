@@ -220,6 +220,8 @@ public class Stonemason extends Worker {
         } else if (state == State.GOING_OUT_TO_GET_STONE) {
             state = State.GETTING_STONE;
 
+            map.reportWorkerStartedAction(this, WorkerAction.HACKING_STONE);
+
             countdown.countFrom(TIME_TO_GET_STONE);
         } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
