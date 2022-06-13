@@ -1076,8 +1076,8 @@ public class TestForesterHut {
         /* Construct the forester hut */
         constructHouse(foresterHut);
 
-        /* Put stones around the forester hut */
-        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+        /* Put stones all over the map so there is nowhere to plant trees */
+        for (Point point : Utils.getAllPointsOnMap(map)) {
             if (point.equals(point1)) {
                 continue;
             }

@@ -1837,9 +1837,9 @@ public class GameMap {
             MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
 
             /* Filter points with stones */
-            if (mapPointAdjacent.isStone()) {
+            /*if (mapPointAdjacent.isStone()) {
                 continue;
-            }
+            }*/
 
             /* Buildings can only be reached from their flags */
             if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(from)) {

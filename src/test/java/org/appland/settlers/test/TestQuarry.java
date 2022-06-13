@@ -337,7 +337,7 @@ public class TestQuarry {
         assertNotNull(point);
 
         /* Verify that the stonemason has chosen a correct spot */
-        assertTrue(point.isAdjacent(point2));
+        assertEquals(point, point2);
         assertTrue(stonemason.isTraveling() || point.equals(stonemason.getPosition()));
         assertFalse(map.isBuildingAtPoint(point));
     }
@@ -384,8 +384,8 @@ public class TestQuarry {
 
         Point point = stonemason.getTarget();
 
-        assertNotEquals(stonemason.getTarget(), point2);
-        assertTrue(stonemason.getTarget().isAdjacent(point2));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
+        assertEquals(stonemason.getTarget(), point2);
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
@@ -395,7 +395,7 @@ public class TestQuarry {
             Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
         }
 
-        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertEquals(stonemason.getPosition(), point2);
         assertTrue(stonemason.isArrived());
         assertTrue(stonemason.isAt(point));
         assertFalse(stonemason.isTraveling());
@@ -443,7 +443,7 @@ public class TestQuarry {
 
         Point point = stonemason.getTarget();
 
-        assertTrue(point.isAdjacent(point2));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
@@ -454,7 +454,7 @@ public class TestQuarry {
         }
 
         assertTrue(stonemason.isArrived());
-        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
 
         /* Verify that the stonemason gets stone */
@@ -464,13 +464,12 @@ public class TestQuarry {
         }
 
         assertTrue(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
+        System.out.println(map.getStoneAtPoint(stone.getPosition()).getAmount());
 
         /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();
 
         assertFalse(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
         assertNotNull(stonemason.getCargo());
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
     }
@@ -519,7 +518,7 @@ public class TestQuarry {
 
         Point point = stonemason.getTarget();
 
-        assertTrue(point.isAdjacent(point3));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         /* Let the stonemason reach the chosen spot if it isn't already there */
@@ -528,7 +527,7 @@ public class TestQuarry {
         }
 
         assertTrue(stonemason.isArrived());
-        assertTrue(stonemason.getPosition().isAdjacent(point3));
+        assertEquals(stonemason.getPosition(), point3);
         assertTrue(stonemason.isGettingStone());
         assertNull(stonemason.getCargo());
 
@@ -536,7 +535,6 @@ public class TestQuarry {
         Utils.fastForward(49, map);
 
         assertTrue(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
         assertNull(stonemason.getCargo());
 
         map.stepTime();
@@ -720,7 +718,7 @@ public class TestQuarry {
         /* Wait for the stone mason to produce a new stone cargo */
         Worker stonemason = quarry0.getWorker();
 
-        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
@@ -753,7 +751,7 @@ public class TestQuarry {
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(100, map);
 
-        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
@@ -813,7 +811,7 @@ public class TestQuarry {
         /* Wait for the stone mason to go to the stone */
         Worker stonemason = quarry0.getWorker();
 
-        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
 
@@ -1792,8 +1790,8 @@ public class TestQuarry {
         Worker stonemason0 = quarry0.getWorker();
         Worker stonemason1 = quarry1.getWorker();
 
-        assertTrue(stonemason0.getTarget().isAdjacent(stone.getPosition()));
-        assertTrue(stonemason0.getTarget().isAdjacent(stone.getPosition()));
+        assertEquals(stonemason0.getTarget(), stone.getPosition());
+        assertEquals(stonemason0.getTarget(), stone.getPosition());
 
         /* Wait for the stonemasons to try to get the same stone */
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, stonemason0.getTarget());

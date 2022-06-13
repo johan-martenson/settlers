@@ -69,7 +69,6 @@ public class Stonemason extends Worker {
     protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.hasReachedZero()) {
-                Point accessPoint = null;
                 double distance = Integer.MAX_VALUE;
                 Point homePoint = getHome().getPosition();
 
@@ -82,47 +81,23 @@ public class Stonemason extends Worker {
                     }
 
                     /* Is the stone reachable? */
-                    int distanceToAccessPoint = Integer.MAX_VALUE;
-                    Point potentialAccessPoint = null;
-                    for (Point p2 : point.getAdjacentPoints()) {
-
-                        /* Filter the quarry since the stone mason needs to go outside  */
-                        if (p2.equals(getHome().getPosition())) {
-                            continue;
-                        }
-
-                        /* Filter points that can't be reached */
-                        List<Point> path = map.findWayOffroad(getHome().getPosition(), p2, null);
-                        if (path == null) {
-                            continue;
-                        }
-
-                        /* Look for the closest access point */
-                        if (path.size() < distanceToAccessPoint) {
-                            distanceToAccessPoint = path.size();
-
-                            potentialAccessPoint = p2;
-
-                        }
-                    }
-
-                    /* Skip the stone if there is no way to reach it */
-                    if (potentialAccessPoint == null) {
+                    List<Point> path = map.findWayOffroad(getHome().getPosition(), point, null);
+                    if (path == null) {
                         continue;
                     }
 
-                    /* Check if this is the closest access point this far */
-                    if (distanceToAccessPoint < distance) {
-                        distance = distanceToAccessPoint;
+                    int distanceToStone = path.size();
 
-                        accessPoint = potentialAccessPoint;
+                    /* Check if this is the closest access point this far */
+                    if (distanceToStone < distance) {
+                        distance = distanceToStone;
 
                         stoneTarget = point;
                     }
                 }
 
                 /* Report that there are no resources if no point is found */
-                if (accessPoint == null) {
+                if (stoneTarget == null) {
 
                     productivityMeasurer.reportUnproductivity();
 
@@ -135,7 +110,7 @@ public class Stonemason extends Worker {
                     return;
                 }
 
-                setOffroadTarget(accessPoint);
+                setOffroadTarget(stoneTarget);
 
                 state = State.GOING_OUT_TO_GET_STONE;
             } else {

@@ -2488,6 +2488,22 @@ public class Utils {
 
     }
 
+    public static Iterable<? extends Point> getAllPointsOnMap(GameMap map) {
+        List<Point> pointsOnMap = new ArrayList<>();
+
+        for (int x = 0; x < map.getWidth(); x++) {
+            for (int y = 0; y < map.getHeight(); y++) {
+                if ((x + y) % 2 != 0) {
+                    continue;
+                }
+
+                pointsOnMap.add(new Point(x, y));
+            }
+        }
+
+        return pointsOnMap;
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

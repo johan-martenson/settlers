@@ -2407,11 +2407,24 @@ public class TestFarm {
         /* Verify that the productivity goes down when there is no space to plant on */
         assertEquals(farm.getProductivity(), 100);
 
+        map.stepTime();
+
+        /* Put stones all over the map so there is nowhere to plant crops */
+        for (Point point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point1)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point) || map.isStoneAtPoint(point)) {
+                continue;
+            }
+
+            map.placeStone(point);
+        }
+
         for (int i = 0; i < 5000; i++) {
 
             map.stepTime();
-
-            Utils.putStonesOnPoints(map.getPointsWithinRadius(farm.getPosition(), 5), map);
 
             if (farm.getProductivity() == 0) {
                 break;

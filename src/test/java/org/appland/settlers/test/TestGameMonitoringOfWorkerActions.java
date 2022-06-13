@@ -417,7 +417,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         Point point = stonemason.getTarget();
 
-        assertTrue(point.isAdjacent(point2));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
@@ -432,7 +432,7 @@ public class TestGameMonitoringOfWorkerActions {
         }
 
         assertTrue(stonemason.isArrived());
-        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
 
         /* Verify that the stonemason gets stone */
@@ -442,13 +442,11 @@ public class TestGameMonitoringOfWorkerActions {
         }
 
         assertTrue(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
 
         /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();
 
         assertFalse(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
         assertNotNull(stonemason.getCargo());
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
@@ -511,7 +509,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         Point point = stonemason.getTarget();
 
-        assertTrue(point.isAdjacent(point2));
+        assertEquals(stonemason.getTarget(), stone.getPosition());
         assertTrue(stonemason.isTraveling());
 
         map.stepTime();
@@ -526,7 +524,7 @@ public class TestGameMonitoringOfWorkerActions {
         }
 
         assertTrue(stonemason.isArrived());
-        assertTrue(stonemason.getPosition().isAdjacent(point2));
+        assertEquals(stonemason.getPosition(), stone.getPosition());
         assertTrue(stonemason.isGettingStone());
 
         /* Verify that the stonemason gets stone */
@@ -536,13 +534,11 @@ public class TestGameMonitoringOfWorkerActions {
         }
 
         assertTrue(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
 
         /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();
 
         assertFalse(stonemason.isGettingStone());
-        assertFalse(map.isStoneAtPoint(point));
         assertNotNull(stonemason.getCargo());
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 

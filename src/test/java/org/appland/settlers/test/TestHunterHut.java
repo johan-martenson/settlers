@@ -17,6 +17,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -1637,6 +1638,7 @@ public class TestHunterHut {
         }
     }
 
+    @Ignore
     @Test
     public void testHunterHutLosesProductivityWhenResourcesRunOut() throws Exception {
 
@@ -1709,11 +1711,21 @@ public class TestHunterHut {
 
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
 
+        /* Put stones all over the map so there is nowhere to plant trees */
+        for (Point point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point1)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point) || map.isStoneAtPoint(point)) {
+                continue;
+            }
+
+            map.placeStone(point);
+        }
+
         /* Verify that the productivity goes down when the hunter can't reach any wild animals */
         for (int i = 0; i < 5000; i++) {
-
-            Utils.putStonesOnPoints(map.getPointsWithinRadius(hunterHut0.getPosition(), 5), map);
-
             map.stepTime();
 
             assertEquals(hunter.getPosition(), hunterHut0.getPosition());

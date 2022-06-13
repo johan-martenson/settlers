@@ -347,7 +347,7 @@ public class Farmer extends Worker {
             MapPoint mapPoint = map.getMapPoint(point);
 
             /* Filter points that's not possible to plant on */
-            if (mapPoint.isBuilding() || mapPoint.isFlag() || mapPoint.isRoad() ||  mapPoint.isTree()) {
+            if (mapPoint.isBuilding() || mapPoint.isFlag() || mapPoint.isRoad() ||  mapPoint.isTree() || mapPoint.isStone()) {
                 continue;
             }
 
