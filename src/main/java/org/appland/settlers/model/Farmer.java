@@ -60,7 +60,11 @@ public class Farmer extends Worker {
         GOING_BACK_TO_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         IN_HOUSE_WITH_CARGO,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public Farmer(Player player, GameMap map) {
@@ -228,9 +232,13 @@ public class Farmer extends Worker {
         } else if (state == GOING_OUT_TO_PLANT) {
             state = PLANTING;
 
+            map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
+
             countdown.countFrom(TIME_TO_PLANT);
         } else if (state == GOING_OUT_TO_HARVEST) {
             state = HARVESTING;
+
+            map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
 
             countdown.countFrom(TIME_TO_HARVEST);
         } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {

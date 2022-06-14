@@ -172,7 +172,7 @@ public class Forester extends Worker {
         if (state == State.GOING_OUT_TO_PLANT) {
             state = State.PLANTING;
 
-            map.reportWorkerStartedAction(this, WorkerAction.PLANTING);
+            map.reportWorkerStartedAction(this, WorkerAction.PLANTING_TREE);
 
             countdown.countFrom(TIME_TO_PLANT);
         } else if (state == State.GOING_BACK_TO_HOUSE) {

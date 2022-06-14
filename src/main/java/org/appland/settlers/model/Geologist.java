@@ -119,6 +119,8 @@ public class Geologist extends Worker {
         } else if (state == GOING_TO_NEXT_SITE) {
             state = INVESTIGATING;
 
+            map.reportWorkerStartedAction(this, WorkerAction.INVESTIGATING);
+
             countdown.countFrom(TIME_TO_INVESTIGATE);
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;

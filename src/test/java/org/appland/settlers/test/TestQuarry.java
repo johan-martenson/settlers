@@ -464,7 +464,6 @@ public class TestQuarry {
         }
 
         assertTrue(stonemason.isGettingStone());
-        System.out.println(map.getStoneAtPoint(stone.getPosition()).getAmount());
 
         /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();

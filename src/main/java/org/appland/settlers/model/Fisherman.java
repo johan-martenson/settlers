@@ -151,6 +151,8 @@ public class Fisherman extends Worker {
         if (state == GOING_OUT_TO_FISH) {
             state = FISHING;
 
+            map.reportWorkerStartedAction(this, WorkerAction.FISHING);
+
             countdown.countFrom(TIME_TO_FISH);
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
