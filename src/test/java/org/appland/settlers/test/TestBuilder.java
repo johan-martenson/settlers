@@ -41,6 +41,7 @@ public class TestBuilder {
     *   - test workers are not assigned to planned building
     *   - building construction time starts when builder reaches the building
     *   - test builder that constructs house 1 and then house 2 does not cancel construction if house 1 is torn down
+    *   - HAMMERING_HOUSE_HIGH_AND_LOW, INSPECTING_HOUSE_CONSTRUCTION
     * */
 
     @Test

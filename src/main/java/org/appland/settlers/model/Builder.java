@@ -16,7 +16,14 @@ public class Builder extends Worker {
     private State state;
 
     private enum State {
-        GOING_TO_HAMMER, HAMMERING, WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE, RETURNING_TO_STORAGE, GOING_TO_DIE, DEAD, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, WALKING_TO_BUILDING_TO_CONSTRUCT
+        GOING_TO_HAMMER,
+        HAMMERING,
+        WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE,
+        RETURNING_TO_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        WALKING_TO_BUILDING_TO_CONSTRUCT
     }
 
     public Builder(Player player, GameMap map) {
@@ -91,6 +98,8 @@ public class Builder extends Worker {
                 } else {
                     countdown.countFrom(TIME_TO_HAMMER);
 
+                    map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+
                     state = State.HAMMERING;
                 }
             } else {
@@ -100,6 +109,8 @@ public class Builder extends Worker {
 
             if (!building.isReady()) {
                 state = State.HAMMERING;
+
+                map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
 
                 countdown.countFrom(TIME_TO_HAMMER);
             } else {

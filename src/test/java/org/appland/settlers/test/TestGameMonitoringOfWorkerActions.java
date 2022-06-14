@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farm;
@@ -13,6 +14,8 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -1201,6 +1204,191 @@ public class TestGameMonitoringOfWorkerActions {
                 WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(farmer);
 
                 assertEquals(workerAction, WorkerAction.HARVESTING);
+
+                foundEvent = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundEvent);
+
+        /* Verify that the event is only sent once */
+        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+
+        Utils.fastForward(5, map);
+
+        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+        }
+    }
+
+    @Test
+    public void testBuilderWalksAroundDuringConstruction() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 12);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Adjust inventory so there is material but no builder */
+        Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 0);
+        Utils.adjustInventoryTo(headquarter0, Material.PLANK, 10);
+        Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the planned building to get resources delivered */
+        assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
+        assertTrue(woodcutter0.isPlanned());
+        assertFalse(woodcutter0.isReady());
+
+        Utils.waitForBuildingToGetAmountOfMaterial(woodcutter0, Material.PLANK, 2);
+
+        assertEquals(woodcutter0.getAmount(Material.PLANK), 2);
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Wait for a builder to leave the headquarters */
+        Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
+
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Verify that the builder is not building while walking to the woodcutter */
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition());
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (builder0.isExactlyAtPoint() && builder0.getPosition().equals(woodcutter0.getPosition())) {
+                break;
+            }
+
+            assertFalse(builder0.isHammering());
+
+            map.stepTime();
+        }
+
+        assertEquals(builder0.getPosition(), woodcutter0.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the builder to go out to a chosen location and build the house */
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition().downLeft());
+        assertEquals(builder0.getPosition(), woodcutter0.getPosition());
+        assertFalse(builder0.isHammering());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition().downLeft()); // 20 (not taking direct path)
+
+        assertTrue(builder0.isHammering());
+
+        /* Verify that an event was sent when the builder hammered */
+        boolean foundEvent = false;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getWorkersWithStartedActions().containsKey(builder0)) {
+                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(builder0);
+
+                assertEquals(workerAction, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+
+                foundEvent = true;
+
+                break;
+            }
+        }
+
+        assertTrue(foundEvent);
+    }
+
+    @Test
+    public void testBuilderWalksAroundDuringConstructionIsOnlySentOnce() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 12);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Adjust inventory so there is material but no builder */
+        Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 0);
+        Utils.adjustInventoryTo(headquarter0, Material.PLANK, 10);
+        Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the planned building to get resources delivered */
+        assertEquals(woodcutter0.getAmount(Material.PLANK), 0);
+        assertTrue(woodcutter0.isPlanned());
+        assertFalse(woodcutter0.isReady());
+
+        Utils.waitForBuildingToGetAmountOfMaterial(woodcutter0, Material.PLANK, 2);
+
+        assertEquals(woodcutter0.getAmount(Material.PLANK), 2);
+        assertTrue(woodcutter0.isPlanned());
+
+        /* Wait for a builder to leave the headquarters */
+        Utils.adjustInventoryTo(headquarter0, Material.BUILDER, 1);
+
+        Builder builder0 = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        /* Verify that the builder is not building while walking to the woodcutter */
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition());
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (builder0.isExactlyAtPoint() && builder0.getPosition().equals(woodcutter0.getPosition())) {
+                break;
+            }
+
+            assertFalse(builder0.isHammering());
+
+            map.stepTime();
+        }
+
+        assertEquals(builder0.getPosition(), woodcutter0.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the builder to go out to a chosen location and build the house */
+        assertEquals(builder0.getTarget(), woodcutter0.getPosition().downLeft());
+        assertEquals(builder0.getPosition(), woodcutter0.getPosition());
+        assertFalse(builder0.isHammering());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, builder0, woodcutter0.getPosition().downLeft()); // 20 (not taking direct path)
+
+        assertTrue(builder0.isHammering());
+
+        /* Verify that an event was sent when the builder hammered */
+        boolean foundEvent = false;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getWorkersWithStartedActions().containsKey(builder0)) {
+                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(builder0);
+
+                assertEquals(workerAction, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
 
                 foundEvent = true;
 
