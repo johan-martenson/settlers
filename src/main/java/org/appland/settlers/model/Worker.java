@@ -45,6 +45,7 @@ public abstract class Worker {
     private Point       position;
     private Point       target;
     private Building    home;
+    private Direction   direction;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;
@@ -137,6 +138,8 @@ public abstract class Worker {
         state = State.IDLE_OUTSIDE;
 
         dead = false;
+
+        direction = Direction.DOWN_RIGHT;
     }
 
     public void stepTime() throws InvalidUserActionException {
@@ -157,6 +160,23 @@ public abstract class Worker {
 
             /* Start the next part of the road */
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+
+            /* Keep track of what direction the worker is walking in */
+            Point next = path.get(0);
+
+            if (next.x == position.x + 2 && next.y == position.y) {
+                direction = Direction.RIGHT;
+            } else if (next.x == position.x + 1 && next.y == position.y + 1) {
+                direction = Direction.UP_RIGHT;
+            } else if (next.x == position.x + 1 && next.y == position.y - 1) {
+                direction = Direction.DOWN_RIGHT;
+            } else if (next.x == position.x - 2 && next.y == position.y) {
+                direction = Direction.LEFT;
+            } else if (next.x == position.x - 1 && next.y == position.y + 1) {
+                direction = Direction.UP_LEFT;
+            } else if (next.x == position.x - 1 && next.y == position.y - 1) {
+                direction = Direction.DOWN_LEFT;
+            }
 
             state = State.WALKING_BETWEEN_POINTS;
 
@@ -362,7 +382,7 @@ public abstract class Worker {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (state != State.WALKING_BETWEEN_POINTS  &&
+        if (state != State.WALKING_BETWEEN_POINTS &&
             state != State.WALKING_HALF_WAY &&
             state != State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
             state != State.IDLE_HALF_WAY) {
@@ -632,8 +652,7 @@ public abstract class Worker {
         return 0;
     }
 
-    public void goToOtherStorage(Building building) {
-    }
+    public void goToOtherStorage(Building building) { }
 
     public boolean isDead() {
         return dead;
@@ -667,6 +686,10 @@ public abstract class Worker {
         setTarget(storehouse.getPosition());
 
         targetBuilding = storehouse;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }
 
