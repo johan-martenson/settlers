@@ -57,6 +57,26 @@ public class GameUtils {
         return false;
     }
 
+    static Direction getDirectionBetweenPoints(Point from, Point to) {
+        Direction direction = null;
+
+        if (to.x == from.x + 2 && to.y == from.y) {
+            direction = RIGHT;
+        } else if (to.x == from.x + 1 && to.y == from.y + 1) {
+            direction = UP_RIGHT;
+        } else if (to.x == from.x + 1 && to.y == from.y - 1) {
+            direction = DOWN_RIGHT;
+        } else if (to.x == from.x - 2 && to.y == from.y) {
+            direction = LEFT;
+        } else if (to.x == from.x - 1 && to.y == from.y + 1) {
+            direction = UP_LEFT;
+        } else if (to.x == from.x - 1 && to.y == from.y - 1) {
+            direction = DOWN_LEFT;
+        }
+
+        return direction;
+    }
+
     public static class BuildingAndData<B extends Building, D> {
         private final D data;
         private final B building;

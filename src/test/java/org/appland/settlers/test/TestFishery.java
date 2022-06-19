@@ -2122,18 +2122,18 @@ public class TestFishery {
         Point point1 = new Point(7, 9);
         Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Finish construction of the fishery */
-        constructHouse(fishery);
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter0.getFlag());
 
-        /* Populate the fishery */
-        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman0 = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman0.isInsideBuilding());
         assertEquals(fisherman0.getHome(), fishery);
         assertEquals(fishery.getWorker(), fisherman0);
-
-        /* Connect the fishery with the headquarter */
-        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
 
         /* Make the fishery catch some fish with full resources available */
         for (int i = 0; i < 1000; i++) {
@@ -2143,7 +2143,11 @@ public class TestFishery {
         /* Verify that the productivity goes down when resources run out */
         assertEquals(fishery.getProductivity(), 100);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 20000; i++) {
+            if (fishery.getProductivity() == 0) {
+                break;
+            }
+
             map.stepTime();
         }
 
@@ -2520,7 +2524,7 @@ public class TestFishery {
         Fishery fishery0 = map.placeBuilding(new Fishery(player0), point2);
 
         /* Place fish on one tile */
-        Point point3 = new Point(11, 11);
+        Point point3 = new Point(7, 11);
         map.setDetailedVegetationBelow(point3, WATER);
 
         /* Place road to connect the storehouse with the headquarter */
@@ -2585,7 +2589,7 @@ public class TestFishery {
         Fishery fishery0 = map.placeBuilding(new Fishery(player0), point2);
 
         /* Place fish on one tile */
-        Point point3 = new Point(11, 11);
+        Point point3 = new Point(7, 11);
         map.setDetailedVegetationBelow(point3, WATER);
 
         /* Place road to connect the storehouse with the headquarter */

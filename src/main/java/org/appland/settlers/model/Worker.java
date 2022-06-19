@@ -164,19 +164,7 @@ public abstract class Worker {
             /* Keep track of what direction the worker is walking in */
             Point next = path.get(0);
 
-            if (next.x == position.x + 2 && next.y == position.y) {
-                direction = Direction.RIGHT;
-            } else if (next.x == position.x + 1 && next.y == position.y + 1) {
-                direction = Direction.UP_RIGHT;
-            } else if (next.x == position.x + 1 && next.y == position.y - 1) {
-                direction = Direction.DOWN_RIGHT;
-            } else if (next.x == position.x - 2 && next.y == position.y) {
-                direction = Direction.LEFT;
-            } else if (next.x == position.x - 1 && next.y == position.y + 1) {
-                direction = Direction.UP_LEFT;
-            } else if (next.x == position.x - 1 && next.y == position.y - 1) {
-                direction = Direction.DOWN_LEFT;
-            }
+            direction = GameUtils.getDirectionBetweenPoints(position, next);
 
             state = State.WALKING_BETWEEN_POINTS;
 
@@ -459,6 +447,8 @@ public abstract class Worker {
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
+            direction = GameUtils.getDirection(position, path.get(0));
+
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
         }
@@ -492,6 +482,8 @@ public abstract class Worker {
             handleArrival();
         } else {
             state = State.WALKING_AND_EXACTLY_AT_POINT;
+
+            direction = GameUtils.getDirectionBetweenPoints(position, path.get(0));
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -535,6 +527,8 @@ public abstract class Worker {
             path.remove(0);
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
+
+            direction = GameUtils.getDirectionBetweenPoints(position, path.get(0));
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);

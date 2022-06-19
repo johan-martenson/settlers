@@ -29,6 +29,7 @@ public class Fisherman extends Worker {
     private static final int TIME_TO_FISH = 19;
     private static final int TIME_TO_REST = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final int FISHING_RADIUS = 8;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -264,9 +265,9 @@ public class Fisherman extends Worker {
     }
 
     private Point getFishingSpot() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
+        Iterable<Point> fishingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), FISHING_RADIUS, map);
 
-        for (Point point : adjacentPoints) {
+        for (Point point : fishingArea) {
 
             MapPoint mapPoint = map.getMapPoint(point);
 
