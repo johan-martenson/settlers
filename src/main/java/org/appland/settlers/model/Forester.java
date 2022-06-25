@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import static org.appland.settlers.model.Material.FORESTER;
@@ -79,9 +80,14 @@ public class Forester extends Worker {
     }
 
     private Point getTreeSpot() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
+        List<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 
-        for (Point point : adjacentPoints) {
+        int offset = random.nextInt(adjacentPoints.size());
+
+        for (int i = 0; i < adjacentPoints.size(); i++) {
+            int indexWithOffset = (i + offset) % adjacentPoints.size();
+
+            Point point = adjacentPoints.get(indexWithOffset);
 
             /* Filter points where trees cannot be placed */
             if (!spotIsClearForTree(point)) {

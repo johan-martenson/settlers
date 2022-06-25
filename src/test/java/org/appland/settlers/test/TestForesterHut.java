@@ -603,6 +603,72 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterPlantsTreesEvenly() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 19);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(20, 20);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
+
+        /* Let the forester plant six trees and keep track of where they are planted */
+        List<Point> treeLocations = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+
+            /* Wait for the forester to leave the house */
+            Utils.waitForWorkerToBeOutside(forester, map);
+
+            /* Wait for the forester to start planting a tree */
+            Utils.waitForForesterToBePlantingTree(forester, map);
+
+            treeLocations.add(forester.getPosition());
+
+            /* Verify that the forester plants a tree */
+            Utils.waitForForesterToStopPlantingTree(forester, map);
+
+            /* Wait for the forester to go back home */
+            assertEquals(forester.getTarget(), foresterHut.getPosition());
+
+            Utils.waitForWorkerToGoToPoint(map, forester, foresterHut.getPosition());
+
+            assertTrue(forester.isInsideBuilding());
+        }
+
+        /* Verify that the planted trees are spread evenly enough */
+        int totalX = 0;
+        int totalY = 0;
+
+        for (Point point : treeLocations) {
+            totalX = totalX + point.x;
+            totalY = totalY + point.y;
+        }
+
+        double averageX = totalX / (double) 6;
+        double averageY = totalY / (double) 6;
+
+        assertTrue(Math.abs(foresterHut.getPosition().x - averageX) < 4);
+        assertTrue(Math.abs(foresterHut.getPosition().y - averageY) < 4);
+    }
+
+    @Test
     public void testForesterDoesNotPlantTreeOnCrop() throws Exception {
 
         /* Create single player game */
