@@ -432,17 +432,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -471,17 +474,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -516,17 +522,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -561,17 +570,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -720,17 +732,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -779,17 +794,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -877,17 +895,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -935,17 +956,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         assertTrue(forester.isInsideBuilding());
         assertNull(forester.getCargo());
@@ -969,14 +993,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 20)) {
@@ -994,11 +1024,6 @@ public class TestForesterHut {
 
             map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
-
-        /* Manually place forester */
-        Forester forester = new Forester(player0, map);
-
-        Utils.occupyBuilding(forester, foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1020,7 +1045,7 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
@@ -1034,7 +1059,13 @@ public class TestForesterHut {
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut);
+        Utils.constructHouse(foresterHut);
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Occupy the forester hut */
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -1052,9 +1083,6 @@ public class TestForesterHut {
 
             map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
-
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1077,7 +1105,7 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
@@ -1091,7 +1119,10 @@ public class TestForesterHut {
         Utils.surroundPointWithVegetation(point1, WATER, map);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut);
+        Utils.constructHouse(foresterHut);
+
+        /* Occupy the forester hut */
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -1109,9 +1140,6 @@ public class TestForesterHut {
 
             map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
-
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1133,14 +1161,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Put stones all over the map so there is nowhere to plant trees */
         for (Point point : Utils.getAllPointsOnMap(map)) {
@@ -1154,9 +1188,6 @@ public class TestForesterHut {
 
             map.placeStone(point);
         }
-
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1190,14 +1221,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter =  map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 14);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Put stones around the forester hut but not on the mountain */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 10)) {
@@ -1215,9 +1252,6 @@ public class TestForesterHut {
 
             map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
         }
-
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1249,15 +1283,16 @@ public class TestForesterHut {
         Point point26 = new Point(8, 8);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Destroy the forester hut */
-        Worker forester = foresterHut0.getWorker();
-
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -1295,11 +1330,14 @@ public class TestForesterHut {
         /* Connect the forester hut with the headquarter */
         map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Worker forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Destroy the forester hut */
         assertTrue(forester.isInsideBuilding());
@@ -1346,11 +1384,11 @@ public class TestForesterHut {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the forester hut */
-        constructHouse(foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
 
-        /* Assign a worker to the forester hut */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1414,11 +1452,11 @@ public class TestForesterHut {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the forester hut */
-        constructHouse(foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
 
-        /* Assign a worker to the forester hut */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1552,16 +1590,19 @@ public class TestForesterHut {
         Point point4 = new Point(28, 18);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Forester worker = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
-        assertEquals(worker.getTarget(), headquarter0.getPosition());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
     }
 
     @Test
@@ -1575,17 +1616,20 @@ public class TestForesterHut {
 
         /* Place headquarter */
         Point point0 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place the forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
-        constructHouse(foresterHut);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut);
 
         /* Wait for the forester to pick a spot to plant a tree where a flag can be placed */
         for (int i = 0; i < 10000; i++) {
@@ -1843,11 +1887,14 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
@@ -1860,8 +1907,6 @@ public class TestForesterHut {
         Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
 
         /* Destroy the forester hut */
-        Worker forester = foresterHut0.getWorker();
-
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -1896,11 +1941,14 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
@@ -1916,8 +1964,6 @@ public class TestForesterHut {
         storehouse0.tearDown();
 
         /* Destroy the forester hut */
-        Worker forester = foresterHut0.getWorker();
-
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -1952,11 +1998,14 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
@@ -1975,8 +2024,6 @@ public class TestForesterHut {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the forester hut */
-        Worker forester = foresterHut0.getWorker();
-
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -2011,19 +2058,20 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the forester hut */
-        Worker forester = foresterHut0.getWorker();
-
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -2163,11 +2211,14 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Finish construction of the forester hut */
-        constructHouse(foresterHut0);
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Populate the forester hut */
-        Worker forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        /* Wait for the forester hut to get occupied */
+        Forester forester = (Forester) Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
         /* Verify that the forester hut can produce */
         assertFalse(foresterHut0.canProduce());
