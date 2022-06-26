@@ -45,7 +45,7 @@ public abstract class Worker {
     private Point       position;
     private Point       target;
     private Building    home;
-    private Direction   direction;
+    protected Direction   direction;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;

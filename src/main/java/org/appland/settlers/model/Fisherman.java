@@ -152,6 +152,36 @@ public class Fisherman extends Worker {
         if (state == GOING_OUT_TO_FISH) {
             state = FISHING;
 
+            Point position = getPosition();
+
+            DetailedVegetation vegetationUpLeft = map.getDetailedVegetationUpLeft(position);
+            DetailedVegetation vegetationAbove = map.getDetailedVegetationAbove(position);
+            DetailedVegetation vegetationUpRight = map.getDetailedVegetationUpRight(position);
+            DetailedVegetation vegetationDownRight = map.getDetailedVegetationDownRight(position);
+            DetailedVegetation vegetationBelow = map.getDetailedVegetationBelow(position);
+            DetailedVegetation vegetationDownLeft = map.getDetailedVegetationDownLeft(position);
+
+            boolean isWaterUpLeft = DetailedVegetation.WATER_VEGETATION.contains(vegetationUpLeft);
+            boolean isWaterAbove = DetailedVegetation.WATER_VEGETATION.contains(vegetationAbove);
+            boolean isWaterUpRight = DetailedVegetation.WATER_VEGETATION.contains(vegetationUpRight);
+            boolean isWaterDownRight = DetailedVegetation.WATER_VEGETATION.contains(vegetationDownRight);
+            boolean isWaterBelow = DetailedVegetation.WATER_VEGETATION.contains(vegetationBelow);
+            boolean isWaterDownLeft = DetailedVegetation.WATER_VEGETATION.contains(vegetationDownLeft);
+
+            if (isWaterUpLeft && isWaterDownLeft) {
+                direction = Direction.LEFT;
+            } else if (isWaterUpLeft) {
+                direction = Direction.UP_LEFT;
+            } else if (isWaterAbove) {
+                direction = Direction.UP_RIGHT;
+            } else if (isWaterUpRight) {
+                direction = Direction.RIGHT;
+            } else if (isWaterDownRight) {
+                direction = Direction.DOWN_RIGHT;
+            } else if (isWaterDownLeft) {
+                direction = Direction.DOWN_LEFT;
+            }
+
             map.reportWorkerStartedAction(this, WorkerAction.FISHING);
 
             countdown.countFrom(TIME_TO_FISH);

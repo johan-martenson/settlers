@@ -3,6 +3,8 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Direction;
+import org.appland.settlers.model.Fisherman;
+import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
@@ -16,9 +18,12 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.awt.Color.BLUE;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +31,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestWorkerHasDirections {
+
+    /**
+     * TODO:
+     *    - test fisherman around single triangles, upwards- and downwards-facing
+     */
 
     @Test
     public void testCourierLeavingHeadquartersHasDirectionDownRight() throws Exception {
@@ -436,4 +446,93 @@ public class TestWorkerHasDirections {
         assertEquals(courier.getDirection(), Direction.RIGHT);
     }
 
+    @Test
+    public void testFishermanFishingHasCorrectDirection() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place a lake */
+        Point point0 = new Point(4, 4);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
+
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Let the fisherman rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Wait for the fisherman to fish at all points around the lake */
+        Map<Point, Direction> fishingDirection = new HashMap<>();
+
+        for (int i = 0; i < 20000; i++) {
+
+            if (fishingDirection.size() == 6) {
+                break;
+            }
+
+            /* Wait for the fisherman to leave the house */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            /* Wait for the fisherman to get to the fishing spot */
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+
+            /* Store the direction the fisherman has while he's fishing */
+            map.stepTime();
+
+            assertTrue(fisherman.isFishing());
+
+            if (!fishingDirection.containsKey(fisherman.getPosition())) {
+                fishingDirection.put(fisherman.getPosition(), fisherman.getDirection());
+            } else {
+                assertEquals(fisherman.getDirection(), fishingDirection.get(fisherman.getPosition()));
+            }
+
+            /* Wait for the fisherman to finish fishing */
+            Utils.waitForFishermanToStopFishing(fisherman, map);
+
+            /* Wait for the fisherman to go back to the fishery */
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+
+            /* Wait for the fisherman to leave the fish by the flag and go back to the house */
+            Utils.waitForWorkerToBeOutside(fisherman, map);
+
+            assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+
+            assertEquals(fisherman.getTarget(), fishery.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getPosition());
+        }
+
+        assertEquals(fishingDirection.size(), 6);
+        assertEquals(fishingDirection.get(point0.right()), Direction.LEFT);
+        assertEquals(fishingDirection.get(point0.downRight()), Direction.UP_LEFT);
+        assertEquals(fishingDirection.get(point0.downLeft()), Direction.UP_RIGHT);
+        assertEquals(fishingDirection.get(point0.left()), Direction.RIGHT);
+        assertEquals(fishingDirection.get(point0.upLeft()), Direction.DOWN_RIGHT);
+        assertEquals(fishingDirection.get(point0.upRight()), Direction.DOWN_LEFT);
+    }
 }
