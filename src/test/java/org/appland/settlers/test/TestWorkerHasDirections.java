@@ -535,4 +535,63 @@ public class TestWorkerHasDirections {
         assertEquals(fishingDirection.get(point0.upLeft()), Direction.DOWN_RIGHT);
         assertEquals(fishingDirection.get(point0.upRight()), Direction.DOWN_LEFT);
     }
+
+    @Test
+    public void testFishermanFishingOnHorizontalShoreWithWaterDownHasCorrectDirection() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place a long horizontal shore */
+        for (int i = 0; i < 40; i++) {
+
+            if ((i + 3) % 2 != 0) {
+                continue;
+            }
+
+            try {
+                Point point0 = new Point(i, 3);
+                Utils.surroundPointWithVegetation(point0, WATER, map);
+            } catch (Exception e) { }
+        }
+
+        /* Place headquarter */
+        Point point3 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place fishery */
+        Point point4 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
+
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
+
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Let the fisherman rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Wait for the fisherman to fish by the lake */
+
+        /* Wait for the fisherman to leave the house */
+        Utils.waitForWorkerToBeOutside(fisherman, map);
+
+        /* Wait for the fisherman to get to the fishing spot */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+
+        /* Verify the direction the fisherman has while he's fishing */
+        map.stepTime();
+
+        assertTrue(fisherman.isFishing());
+        assertEquals(fisherman.getDirection(), Direction.DOWN_RIGHT);
+    }
 }
