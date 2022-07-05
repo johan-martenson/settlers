@@ -1137,14 +1137,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
-        /* Connect the road with the headquarter */
+        /* Connect the road with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, headquarter1.getFlag());
 
         /* Place lookout tower */
         Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Connect the lookout tower with the headquarter */
+        /* Connect the lookout tower with the headquarters */
         Road road2 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the road to get a courier standing at the middle */
@@ -1165,7 +1165,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
-        /* Verify that an event was sent for the newly worker */
+        /* Verify that an event was sent for the new worker */
         assertTrue(player0.getDiscoveredLand().contains(point5));
         assertTrue(monitor.getEvents().size() >= 1);
 
@@ -1179,8 +1179,8 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getNewWorkers().size(), 0);
-            assertEquals(newChanges.getWorkersWithNewTargets().size(), 0);
+            assertFalse(newChanges.getNewWorkers().contains(courier0));
+            assertFalse(newChanges.getWorkersWithNewTargets().contains(courier0));
         }
     }
 

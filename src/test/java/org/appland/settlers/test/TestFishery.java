@@ -72,7 +72,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -108,7 +108,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -143,7 +143,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -151,7 +151,7 @@ public class TestFishery {
         Point point1 = new Point(10, 10);
         Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         assertTrue(fishery.isPlanned());
@@ -224,7 +224,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -232,10 +232,18 @@ public class TestFishery {
         Point point1 = new Point(10, 10);
         Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        constructHouse(fishery);
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        fishery.assignWorker(new Fisherman(player0, map));
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
+
+        /* Verify that it's not possible to assign a worker again */
         try {
             fishery.assignWorker(new Fisherman(player0, map));
 
@@ -252,7 +260,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -280,7 +288,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -288,7 +296,7 @@ public class TestFishery {
         Point point1 = new Point(10, 10);
         Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         assertTrue(fishery.isPlanned());
@@ -320,7 +328,7 @@ public class TestFishery {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -351,11 +359,11 @@ public class TestFishery {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Remove all fishermen from the headquarter and add a fishing rod */
+        /* Remove all fishermen from the headquarters and add a fishing rod */
         Utils.adjustInventoryTo(headquarter, FISHERMAN, 0);
         Utils.adjustInventoryTo(headquarter, Material.FISHING_ROD, 1);
 
@@ -386,7 +394,7 @@ public class TestFishery {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -394,7 +402,7 @@ public class TestFishery {
         Point point1 = new Point(10, 4);
         Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Construct the fisherman hut */
@@ -422,7 +430,7 @@ public class TestFishery {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -430,11 +438,11 @@ public class TestFishery {
         Point point1 = new Point(10, 4);
         Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Construct the fisherman hut */
-        constructHouse(fishery);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
         /* Wait for a fisherman to walk out */
         Fisherman fisherman0 = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
@@ -456,20 +464,22 @@ public class TestFishery {
         Point point0 = new Point(5, 5);
         map.setDetailedVegetationBelow(point0, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
+        /* Place fishery */
         Point point2 = new Point(10, 4);
         Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
-        /* Construct the fisherman hut */
-        constructHouse(fishery);
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(player0, map);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
-        Utils.occupyBuilding(fisherman, fishery);
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
 
         assertTrue(fisherman.isInsideBuilding());
 
@@ -503,7 +513,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -554,20 +564,20 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
         Point point4 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman hut */
-        constructHouse(fishermanHut);
+        constructHouse(fishery);
 
         /* Manually place fisherman */
         Fisherman fisherman = new Fisherman(player0, map);
 
-        Utils.occupyBuilding(fisherman, fishermanHut);
+        Utils.occupyBuilding(fisherman, fishery);
 
         /* Let the fisherman rest */
         Utils.fastForward(99, map);
@@ -607,20 +617,24 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
+        /* Place fishery */
         Point point4 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Construct the fisherman hut */
-        constructHouse(fishermanHut);
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(player0, map);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
-        Utils.occupyBuilding(fisherman, fishermanHut);
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
 
         /* Let the fisherman rest */
         Utils.fastForward(99, map);
@@ -646,8 +660,9 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
 
         /* Verify that the fisherman fishes the right time */
-        for (int i = 0; i < 19; i++) {
+        for (int i = 0; i < 136; i++) {
             assertTrue(fisherman.isFishing());
+
             map.stepTime();
         }
 
@@ -677,20 +692,20 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
         Point point4 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman hut */
-        constructHouse(fishermanHut);
+        constructHouse(fishery);
 
         /* Manually place fisherman */
         Fisherman fisherman = new Fisherman(player0, map);
 
-        Utils.occupyBuilding(fisherman, fishermanHut);
+        Utils.occupyBuilding(fisherman, fishery);
 
         /* Let the fisherman rest */
         Utils.fastForward(99, map);
@@ -714,7 +729,7 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
 
         /* Wait for the fisherman to get a fish */
-        Utils.fastForward(19, map);
+        Utils.fastForward(136, map);
 
         assertTrue(fisherman.isFishing());
 
@@ -723,7 +738,7 @@ public class TestFishery {
         /* Verify that the fisherman goes back home */
         assertFalse(fisherman.isFishing());
 
-        assertEquals(fisherman.getTarget(), fishermanHut.getPosition());
+        assertEquals(fisherman.getTarget(), fishery.getPosition());
         assertTrue(fisherman.isTraveling());
 
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
@@ -746,14 +761,14 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Connect the headquarter with the fishery */
+        /* Connect the headquarters with the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         /* Construct the fisherman hut */
@@ -786,11 +801,7 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
 
         /* Wait for the fisherman to get a fish */
-        Utils.fastForward(19, map);
-
-        assertTrue(fisherman.isFishing());
-
-        map.stepTime();
+        Utils.waitForFishermanToStopFishing(fisherman, map);
 
         /* Verify that the fisherman goes back home */
         assertFalse(fisherman.isFishing());
@@ -832,7 +843,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -921,7 +932,7 @@ public class TestFishery {
         Point point20 = new Point(13, 11);
         Stone stone1 = map.placeStone(point20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -980,7 +991,7 @@ public class TestFishery {
             map.catchFishAtPoint(point0);
         }
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -988,7 +999,7 @@ public class TestFishery {
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Place a road from the headquarter to the fishery */
+        /* Place a road from the headquarters to the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         /* Construct the fisherman hut */
@@ -1025,7 +1036,7 @@ public class TestFishery {
         /* Wait for the fisherman to finish fishing */
         assertFalse(fishery.isOutOfNaturalResources());
 
-        Utils.fastForward(20, map);
+        Utils.waitForFishermanToStopFishing(fisherman, map);
 
         /* Let the fisherman go back to the fishery */
         assertEquals(fisherman.getTarget(), fishery.getPosition());
@@ -1069,7 +1080,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1151,7 +1162,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1206,7 +1217,7 @@ public class TestFishery {
 
         assertEquals(cargo.getPosition(), fishery0.getFlag().getPosition());
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
 
         /* Assign a courier to the road */
@@ -1233,14 +1244,14 @@ public class TestFishery {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier delivers the cargo to the headquarter */
+        /* Verify that the courier delivers the cargo to the headquarters */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(FISH);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier has delivered the cargo to the headquarter */
+        /* Verify that the courier has delivered the cargo to the headquarters */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(FISH), amount + 1);
     }
@@ -1254,7 +1265,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1276,7 +1287,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
@@ -1284,7 +1295,7 @@ public class TestFishery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
-        /* Verify that the fisherman is stored correctly in the headquarter */
+        /* Verify that the fisherman is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
     }
 
@@ -1297,7 +1308,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1305,7 +1316,7 @@ public class TestFishery {
         Point point26 = new Point(8, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the fishery */
@@ -1322,7 +1333,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
@@ -1354,7 +1365,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point12, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1362,7 +1373,7 @@ public class TestFishery {
         Point point1 = new Point(8, 6);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery and the headquarter */
+        /* Connect the fishery and the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1424,7 +1435,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point12, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1432,7 +1443,7 @@ public class TestFishery {
         Point point1 = new Point(8, 6);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
 
-        /* Connect the fishery and the headquarter */
+        /* Connect the fishery and the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1498,7 +1509,7 @@ public class TestFishery {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1509,10 +1520,10 @@ public class TestFishery {
         /* Finish construction of the fishery */
         constructHouse(fishery0);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
 
-        /* Wait for fisherman to get assigned and leave the headquarter */
+        /* Wait for fisherman to get assigned and leave the headquarters */
         List<Fisherman> workers = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0);
 
         assertNotNull(workers);
@@ -1541,15 +1552,15 @@ public class TestFishery {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters */
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1588,7 +1599,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1635,7 +1646,7 @@ public class TestFishery {
 
         assertEquals(fisherman.getPosition(), flag0.getPosition());
 
-        /* Verify that the fisherman returns to the headquarter when it reaches the flag */
+        /* Verify that the fisherman returns to the headquarters when it reaches the flag */
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
@@ -1650,7 +1661,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1715,7 +1726,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1776,7 +1787,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1805,7 +1816,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), storehouse0.getPosition());
 
@@ -1813,7 +1824,7 @@ public class TestFishery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, storehouse0.getPosition());
 
-        /* Verify that the fisherman is stored correctly in the headquarter */
+        /* Verify that the fisherman is stored correctly in the headquarters */
         assertEquals(storehouse0.getAmount(FISHERMAN), amount + 1);
     }
 
@@ -1826,7 +1837,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1858,7 +1869,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
@@ -1866,7 +1877,7 @@ public class TestFishery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
-        /* Verify that the fisherman is stored correctly in the headquarter */
+        /* Verify that the fisherman is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
     }
 
@@ -1879,7 +1890,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1914,7 +1925,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
@@ -1922,7 +1933,7 @@ public class TestFishery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
-        /* Verify that the fisherman is stored correctly in the headquarter */
+        /* Verify that the fisherman is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
     }
 
@@ -1935,7 +1946,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1961,7 +1972,7 @@ public class TestFishery {
 
         fishery0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(fisherman.isInsideBuilding());
         assertEquals(fisherman.getTarget(), headquarter0.getPosition());
 
@@ -1969,7 +1980,7 @@ public class TestFishery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
 
-        /* Verify that the fisherman is stored correctly in the headquarter */
+        /* Verify that the fisherman is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
     }
 
@@ -1982,7 +1993,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2024,7 +2035,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2060,7 +2071,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2082,11 +2093,16 @@ public class TestFishery {
         assertEquals(fisherman0.getHome(), fishery);
         assertEquals(fishery.getWorker(), fisherman0);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
 
         /* Make the fishery catch some fish with full resources available */
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
+
+            if (fishery.getProductivity() == 100) {
+                break;
+            }
+
             map.stepTime();
         }
 
@@ -2110,7 +2126,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2136,7 +2152,12 @@ public class TestFishery {
         assertEquals(fishery.getWorker(), fisherman0);
 
         /* Make the fishery catch some fish with full resources available */
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10000; i++) {
+
+            if (fishery.getProductivity() == 100) {
+                break;
+            }
+
             map.stepTime();
         }
 
@@ -2163,7 +2184,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2195,7 +2216,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2222,7 +2243,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2247,7 +2268,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2278,7 +2299,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2311,7 +2332,7 @@ public class TestFishery {
 
         map.setDetailedVegetationBelow(point0, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -2319,7 +2340,7 @@ public class TestFishery {
         Point point2 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Wait for the fishery to get constructed and assigned a worker */
@@ -2339,7 +2360,7 @@ public class TestFishery {
             map.stepTime();
         }
 
-        /* Reconnect the fishery with the headquarter */
+        /* Reconnect the fishery with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2375,7 +2396,7 @@ public class TestFishery {
         Point point0 = new Point(5, 5);
         map.setDetailedVegetationBelow(point0, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
@@ -2383,7 +2404,7 @@ public class TestFishery {
         Point point2 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
-        /* Connect the fishery with the headquarter */
+        /* Connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Wait for the fishery to get constructed and assigned a worker */
@@ -2403,7 +2424,7 @@ public class TestFishery {
             map.stepTime();
         }
 
-        /* Reconnect the fishery with the headquarter */
+        /* Reconnect the fishery with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2456,7 +2477,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2468,7 +2489,7 @@ public class TestFishery {
         Point point2 = new Point(11, 11);
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place road to connect the fishery with the headquarter */
+        /* Place road to connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the fishery to get constructed and occupied */
@@ -2511,7 +2532,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2527,21 +2548,27 @@ public class TestFishery {
         Point point3 = new Point(7, 11);
         map.setDetailedVegetationBelow(point3, WATER);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the fishery */
-        Road road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
-
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the fishery and the storehouse to get constructed */
-        Utils.waitForBuildingsToBeConstructed(storehouse, fishery0);
+        /* Wait for the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse);
 
-        /* Wait for the fishery and the storage to get occupied */
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, fishery0);
+        /* Wait for the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse);
+
+        /* Place road to connect the headquarters with the fishery */
+        Road road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingsToBeConstructed(fishery0);
+
+        /* Wait for the fishery to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(fishery0);
 
         Worker fisherman0 = fishery0.getWorker();
 
@@ -2576,7 +2603,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2592,21 +2619,27 @@ public class TestFishery {
         Point point3 = new Point(7, 11);
         map.setDetailedVegetationBelow(point3, WATER);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarters */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse);
+
+        /* Wait for the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse);
 
         /* Place road to connect the headquarter with the fishery */
         Road road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
-        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingsToBeConstructed(fishery0);
 
-        /* Wait for the fishery and the storehouse to get constructed */
-        Utils.waitForBuildingsToBeConstructed(storehouse, fishery0);
-
-        /* Wait for the fishery and the storage to get occupied */
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, fishery0);
+        /* Wait for the fishery to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(fishery0);
 
         Worker fisherman0 = fishery0.getWorker();
 
@@ -2643,7 +2676,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2685,7 +2718,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2734,7 +2767,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2746,7 +2779,7 @@ public class TestFishery {
         Point point2 = new Point(11, 11);
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place road to connect the fishery with the headquarter */
+        /* Place road to connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2798,7 +2831,7 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2810,7 +2843,7 @@ public class TestFishery {
         Point point2 = new Point(11, 11);
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place road to connect the fishery with the headquarter */
+        /* Place road to connect the fishery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2869,7 +2902,7 @@ public class TestFishery {
         Point point0 = new Point(5, 5);
         map.setDetailedVegetationBelow(point0, WATER_2);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -2954,7 +2987,7 @@ public class TestFishery {
         Point point0 = new Point(6, 4);
         map.setDetailedVegetationAbove(point0, WATER_2);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -3039,7 +3072,7 @@ public class TestFishery {
         Point point0 = new Point(5, 5);
         map.setDetailedVegetationBelow(point0, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -3124,7 +3157,7 @@ public class TestFishery {
         Point point0 = new Point(6, 4);
         map.setDetailedVegetationAbove(point0, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -3209,7 +3242,7 @@ public class TestFishery {
         Point point0 = new Point(5, 5);
         map.setDetailedVegetationBelow(point0, BUILDABLE_WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -3294,7 +3327,7 @@ public class TestFishery {
         Point point0 = new Point(6, 4);
         map.setDetailedVegetationAbove(point0, BUILDABLE_WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 

@@ -71,7 +71,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -94,7 +94,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -140,7 +140,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -183,7 +183,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -225,7 +225,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -270,7 +270,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -330,7 +330,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -403,7 +403,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -493,7 +493,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -586,7 +586,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -675,7 +675,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -760,7 +760,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -853,7 +853,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -939,7 +939,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1036,7 +1036,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1132,7 +1132,7 @@ public class TestCourier {
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1175,11 +1175,11 @@ public class TestCourier {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1229,7 +1229,7 @@ public class TestCourier {
 
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1240,7 +1240,7 @@ public class TestCourier {
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
 
-        /* Wait for courier to get assigned and leave the headquarter */
+        /* Wait for courier to get assigned and leave the headquarters */
         List<Courier> couriers = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0);
 
         assertNotNull(couriers);
@@ -1264,7 +1264,7 @@ public class TestCourier {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point38 = new Point(5, 27);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -1302,7 +1302,7 @@ public class TestCourier {
         /* Place road between the flags */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
-        /* Destroy the fortress so the  road is not connected to the headquarter */
+        /* Destroy the fortress so the  road is not connected to the headquarters */
         fortress0.tearDown();
 
         assertFalse(map.arePointsConnectedByRoads(road0.getStart(), headquarter0.getPosition()));
@@ -1331,7 +1331,7 @@ public class TestCourier {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 27);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1339,7 +1339,7 @@ public class TestCourier {
         Point point1 = new Point(5, 31);
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
 
-        /* Connect the sawmill with the headquarter */
+        /* Connect the sawmill with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
 
         /* Fill up the headquarter with material */
@@ -1389,7 +1389,7 @@ public class TestCourier {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 27);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1420,4 +1420,297 @@ public class TestCourier {
         assertNotEquals((int)courierBodyTypes.getOrDefault(THIN, 0), 0);
         assertNotEquals((int)courierBodyTypes.getOrDefault(FAT, 0), 0);
     }
+
+    @Test
+    public void testCourierCanChewGumWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Verify that the courier sometimes chews gum while being bored */
+        boolean didChewGum = false;
+
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isChewingGum()) {
+                didChewGum = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(didChewGum);
+    }
+
+    @Test
+    public void testCourierDoesNotChewGumWhileCarryingCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter hut */
+        Point point1 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place road */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+        /* Wait for a courier to get assigned to the road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+        /* Wait for the courier to carry a cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Verify that the courier doesn't chew gum while carrying the cargo */
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getCargo() == null) {
+                break;
+            }
+
+            assertNotNull(courier.getCargo());
+            assertFalse(courier.isChewingGum());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCourierChewsGumForTheRightAmountOfTime() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToChewGum(courier, map);
+
+        /* Verify that the courier chews gum for the right amount of time */
+        for (int i = 0; i < 30; i++) {
+            assertTrue(courier.isChewingGum());
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isChewingGum());
+    }
+
+    @Test
+    public void testCourierStopsChewingGumWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Wait for a courier to get assigned to the road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToChewGum(courier, map);
+
+        /* Place woodcutter hut by the flag */
+        Point point2 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place plank cargo for the woodcutter by the headquarters' flag */
+        Utils.placeCargo(map, PLANK, headquarter0.getFlag(), woodcutter);
+
+        /* Verify that the courier stops chewing gum when it starts walking to pick up the plank cargo */
+        assertTrue(courier.isChewingGum());
+
+        map.stepTime();
+
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(courier.isChewingGum());
+    }
+
+    @Test
+    public void testOnlyFatCourierChewsGum() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that only the fat couriers chew gum */
+        for (int i = 0; i < 50; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            /* For thin couriers, verify that they don't start chewing gum */
+            if (courier.getBodyType() == THIN) {
+                for (int j = 0; j < 200; j++) {
+                    assertFalse(courier.isChewingGum());
+
+                    map.stepTime();
+                }
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+    }
+
+    @Test
+    public void testCourierChewsGumAtRightFrequency() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Verify that the courier chew gum the right number of times */
+        int timeSpentChewingGum = 0;
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.isChewingGum()) {
+                timeSpentChewingGum = timeSpentChewingGum + 1;
+            }
+
+            map.stepTime();
+        }
+    }
+
+    /**
+     * TODO:
+     *  X 1. not chewing gum while carrying,
+     *  X 2. each time chewing gum only lasts X time,
+     *  X 3. stops chewing gum when work appears
+     *    4. only fat courier can chew gum
+     *    4. does not read the paper at the same time
+     *    5. frequency of chewing gum
+     *    6. all the same tests for other activities: reading paper, etc.
+     */
 }

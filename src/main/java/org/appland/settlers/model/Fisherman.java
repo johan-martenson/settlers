@@ -14,6 +14,8 @@ import static org.appland.settlers.model.Fisherman.State.GOING_TO_DIE;
 import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG;
 import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Fisherman.State.IN_HOUSE_WITH_FISH;
+import static org.appland.settlers.model.Fisherman.State.LOWERING_FISHING_ROD;
+import static org.appland.settlers.model.Fisherman.State.PULLING_UP_FISH;
 import static org.appland.settlers.model.Fisherman.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Fisherman.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Fisherman.State.WAITING_FOR_SPACE_ON_FLAG;
@@ -26,10 +28,12 @@ import static org.appland.settlers.model.Material.FISHERMAN;
  */
 @Walker(speed = 10)
 public class Fisherman extends Worker {
-    private static final int TIME_TO_FISH = 19;
+    private static final int TIME_TO_FISH = 89;
     private static final int TIME_TO_REST = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int FISHING_RADIUS = 8;
+    private static final int TIME_TO_PULL_UP_FISH = 30;
+    private static final int TIME_TO_LOWER_FISHING_ROD = 15;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -45,7 +49,13 @@ public class Fisherman extends Worker {
         IN_HOUSE_WITH_FISH,
         GOING_TO_FLAG,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        LOWERING_FISHING_ROD,
+        PULLING_UP_FISH,
+        RETURNING_TO_STORAGE
     }
 
     public Fisherman(Player player, GameMap map) {
@@ -59,7 +69,7 @@ public class Fisherman extends Worker {
     }
 
     public boolean isFishing() {
-        return state == FISHING;
+        return state == FISHING || state == LOWERING_FISHING_ROD || state == PULLING_UP_FISH;
     }
 
     @Override
@@ -102,7 +112,7 @@ public class Fisherman extends Worker {
                 /* Report that there was no fish available so the fisherman couldn't fish */
                 productivityMeasurer.reportUnproductivity();
             }
-        } else if (state == FISHING) {
+        } else if (state == PULLING_UP_FISH) {
             if (countdown.hasReachedZero()) {
 
                 Cargo cargo = map.catchFishAtPoint(getPosition());
@@ -144,13 +154,33 @@ public class Fisherman extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == LOWERING_FISHING_ROD) {
+            if (countdown.hasReachedZero()) {
+                state = FISHING;
+
+                map.reportWorkerStartedAction(this, WorkerAction.FISHING);
+
+                countdown.countFrom(TIME_TO_FISH);
+            } else {
+                countdown.step();
+            }
+        } else if (state == FISHING) {
+            if (countdown.hasReachedZero()) {
+                state = PULLING_UP_FISH;
+
+                map.reportWorkerStartedAction(this, WorkerAction.PULL_UP_FISHING_ROD);
+
+                countdown.countFrom(TIME_TO_PULL_UP_FISH);
+            } else {
+                countdown.step();
+            }
         }
     }
 
     @Override
     protected void onArrival() {
         if (state == GOING_OUT_TO_FISH) {
-            state = FISHING;
+            state = LOWERING_FISHING_ROD;
 
             Point position = getPosition();
 
@@ -182,9 +212,9 @@ public class Fisherman extends Worker {
                 direction = Direction.DOWN_LEFT;
             }
 
-            map.reportWorkerStartedAction(this, WorkerAction.FISHING);
+            map.reportWorkerStartedAction(this, WorkerAction.LOWER_FISHING_ROD);
 
-            countdown.countFrom(TIME_TO_FISH);
+            countdown.countFrom(TIME_TO_LOWER_FISHING_ROD);
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
 

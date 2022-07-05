@@ -997,7 +997,8 @@ public class Player {
                 new ArrayList<>(removedCrops),
                 new ArrayList<>(newDiscoveredLand),
                 new ArrayList<>(changedBorders),
-                new ArrayList<>(newStones), newWorkers,
+                new ArrayList<>(newStones),
+                new ArrayList<>(newWorkers),
                 new ArrayList<>(changedAvailableConstruction),
                 new ArrayList<>(newMessages),
                 new ArrayList<>(promotedRoads),
@@ -1050,6 +1051,7 @@ public class Player {
         finishedShips.clear();
         shipsWithNewTargets.clear();
         workersWithStartedActions.clear();
+        newWorkers.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {

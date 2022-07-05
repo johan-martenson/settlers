@@ -1729,12 +1729,17 @@ public class TestGameMonitoring {
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
+        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), road0.getCourier());
         assertEquals(gameChanges.getNewRoads().size(), 1);
+
+        GameChangesList lastEvent = monitor.getLastEvent();
 
         /* Verify that no more events are sent when nothing happens */
         Utils.fastForward(100, map);
 
-        assertEquals(monitor.getEvents().size(), 1);
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(lastEvent)) {
+            assertFalse(newChanges.getWorkersWithNewTargets().contains(road0.getCourier()));
+        }
     }
 
     @Test

@@ -714,7 +714,7 @@ public class TestMonitoringGameMessages {
         /* Wait for the fisherman to finish fishing */
         assertFalse(fishery.isOutOfNaturalResources());
 
-        Utils.fastForward(20, map);
+        Utils.waitForFishermanToStopFishing(fisherman, map);
 
         /* Let the fisherman go back to the fishery */
         assertEquals(fisherman.getTarget(), fishery.getPosition());
@@ -828,7 +828,7 @@ public class TestMonitoringGameMessages {
         /* Wait for the fisherman to finish fishing */
         assertFalse(fishery.isOutOfNaturalResources());
 
-        Utils.fastForward(20, map);
+        Utils.waitForFishermanToStopFishing(fisherman, map);
 
         /* Let the fisherman go back to the fishery */
         assertEquals(fisherman.getTarget(), fishery.getPosition());
@@ -949,7 +949,7 @@ public class TestMonitoringGameMessages {
         /* Wait for the fisherman to finish fishing */
         assertFalse(fishery.isOutOfNaturalResources());
 
-        Utils.fastForward(20, map);
+        Utils.waitForFishermanToStopFishing(fisherman, map);
 
         /* Let the fisherman go back to the fishery */
         assertEquals(fisherman.getTarget(), fishery.getPosition());

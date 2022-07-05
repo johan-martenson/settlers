@@ -14,6 +14,7 @@ import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DEL
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
+import static org.appland.settlers.model.Courier.States.IDLE_CHEWING_GUM;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Courier.States.WAITING_FOR_SPACE_ON_FLAG;
@@ -23,8 +24,10 @@ import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 public class Courier extends Worker {
 
     private static final Random random = new Random(1);
+    private static final int TIME_TO_CHEW_GUM = 29;
 
     private final BodyType bodyType;
+    private final Countdown countdown;
 
     private Cargo  intendedCargo;
     private Road   assignedRoad;
@@ -36,6 +39,7 @@ public class Courier extends Worker {
 
         WALKING_TO_ROAD,
         IDLE_AT_ROAD,
+        IDLE_CHEWING_GUM,
         GOING_TO_FLAG_TO_PICK_UP_CARGO,
         GOING_TO_FLAG_TO_DELIVER_CARGO,
         RETURNING_TO_IDLE_SPOT,
@@ -60,16 +64,19 @@ public class Courier extends Worker {
         } else {
             bodyType = FAT;
         }
+
+        countdown = new Countdown();
     }
 
     @Override
     protected void onIdle() {
 
-        if (state == IDLE_AT_ROAD) {
+        if (state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM) {
             Flag start = map.getFlagAtPoint(assignedRoad.getStart());
             Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
 
             Cargo cargoAtStart = findCargoToCarry(start);
+            Cargo cargoAtEnd = findCargoToCarry(end);
 
             if (cargoAtStart != null) {
 
@@ -78,19 +85,29 @@ public class Courier extends Worker {
                 setTarget(start.getPosition());
 
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-            } else {
+            } else if (cargoAtEnd != null) {
 
-                Cargo cargoAtEnd = findCargoToCarry(end);
+                cargoAtEnd.promisePickUp();
+                intendedCargo = cargoAtEnd;
+                setTarget(end.getPosition());
 
-                if (cargoAtEnd != null) {
+                state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+            }
 
-                    cargoAtEnd.promisePickUp();
-                    intendedCargo = cargoAtEnd;
-                    setTarget(end.getPosition());
+            if (state == IDLE_AT_ROAD && random.nextInt(10) == 5 && bodyType == FAT) {
+                state = IDLE_CHEWING_GUM;
 
-                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
+
+                countdown.countFrom(TIME_TO_CHEW_GUM);
+            } else if (state == IDLE_CHEWING_GUM) {
+                if (countdown.hasReachedZero()) {
+                    state = IDLE_AT_ROAD;
+                } else {
+                    countdown.step();
                 }
             }
+
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             Flag flag = map.getFlagAtPoint(getCargo().getNextFlagOrBuilding());
 
@@ -445,7 +462,7 @@ public class Courier extends Worker {
     }
 
     public boolean isIdle() {
-        return state == IDLE_AT_ROAD;
+        return state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM;
     }
 
     private EndPoint getEndPointAtPoint(Point point) {
@@ -554,5 +571,9 @@ public class Courier extends Worker {
 
     public BodyType getBodyType() {
         return bodyType;
+    }
+
+    public boolean isChewingGum() {
+        return state == IDLE_CHEWING_GUM;
     }
 }

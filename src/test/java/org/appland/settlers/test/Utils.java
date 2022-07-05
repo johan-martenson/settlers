@@ -34,6 +34,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.WorkerAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
@@ -2504,6 +2506,18 @@ public class Utils {
         return pointsOnMap;
     }
 
+    public static void waitForCourierToChewGum(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isChewingGum()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isChewingGum());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -2734,4 +2748,12 @@ public class Utils {
                 Crop crop = map.placeCrop(point);
             }
         }
-    }}
+    }
+
+    static List<WorkerAction> getMonitoredWorkerActionsForWorker(Worker worker, GameViewMonitor monitor) {
+        return monitor.getEvents().stream()
+                .filter(gameChangesList -> gameChangesList.getWorkersWithStartedActions().containsKey(worker))
+                .map(gameChangesList -> gameChangesList.getWorkersWithStartedActions().get(worker))
+                .collect(Collectors.toList());
+    }
+}

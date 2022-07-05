@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
+import static org.appland.settlers.model.BodyType.FAT;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.STONE;
@@ -599,7 +601,7 @@ public class TestGameMonitoringOfWorkerActions {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the farm */
@@ -677,7 +679,7 @@ public class TestGameMonitoringOfWorkerActions {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the farm */
@@ -748,7 +750,7 @@ public class TestGameMonitoringOfWorkerActions {
     }
 
     @Test
-    public void testMonitoringEventWhenFishermanFishes() throws Exception {
+    public void testMonitoringEventsWhenFishermanFishes() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -763,18 +765,22 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place headquarter */
         Point point3 = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point4 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
+        /* Place fishery */
+        Point point4 = new Point(10, 4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Construct the fisherman hut */
-        constructHouse(fishermanHut);
+        /* Connect the fishery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(player0, map);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
-        Utils.occupyBuilding(fisherman, fishermanHut);
+        /* Wait for the fishery to get occupied */
+        Fisherman fisherman = (Fisherman) Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        assertTrue(fisherman.isInsideBuilding());
 
         /* Let the fisherman rest */
         Utils.fastForward(99, map);
@@ -801,22 +807,46 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(fisherman.isAt(point));
         assertTrue(fisherman.isFishing());
 
+        /* Verify that (only) an event was sent when the fisherman lowered the rod */
+        List<WorkerAction> fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
 
-        /* Verify that an event was sent when the stonemason started picking the stone */
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(fisherman)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(fisherman);
+        assertEquals(fishermanActions.size(), 1);
+        assertEquals(fishermanActions.get(0), WorkerAction.LOWER_FISHING_ROD);
 
-                assertEquals(workerAction, WorkerAction.FISHING);
+        /* Let the fisherman lower the rod and verify no other event is sent */
+        Utils.fastForward(15, map);
 
-                foundEvent = true;
+        fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
 
-                break;
-            }
-        }
+        assertEquals(fishermanActions.size(), 1);
 
-        assertTrue(foundEvent);
+        /* Verify that the next event is that the fisherman is fishing */
+        map.stepTime();
+
+        fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
+
+        assertEquals(fishermanActions.size(), 2);
+        assertEquals(fishermanActions.get(0), WorkerAction.LOWER_FISHING_ROD);
+        assertEquals(fishermanActions.get(1), WorkerAction.FISHING);
+
+        /* Let the fisherman fish for a while and verify that no other event is sent */
+        Utils.fastForward(89, map);
+
+        fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
+
+        assertEquals(fishermanActions.size(), 2);
+        assertEquals(fishermanActions.get(0), WorkerAction.LOWER_FISHING_ROD);
+        assertEquals(fishermanActions.get(1), WorkerAction.FISHING);
+
+        /* Verify that an event is sent when the fisherman pulls up the fish */
+        map.stepTime();
+
+        fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
+
+        assertEquals(fishermanActions.size(), 3);
+        assertEquals(fishermanActions.get(0), WorkerAction.LOWER_FISHING_ROD);
+        assertEquals(fishermanActions.get(1), WorkerAction.FISHING);
+        assertEquals(fishermanActions.get(2), WorkerAction.PULL_UP_FISHING_ROD);
     }
 
     @Test
@@ -879,7 +909,7 @@ public class TestGameMonitoringOfWorkerActions {
             if (gameChangesList.getWorkersWithStartedActions().containsKey(fisherman)) {
                 WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(fisherman);
 
-                assertEquals(workerAction, WorkerAction.FISHING);
+                assertEquals(workerAction, WorkerAction.LOWER_FISHING_ROD);
 
                 foundEvent = true;
 
@@ -1224,7 +1254,7 @@ public class TestGameMonitoringOfWorkerActions {
     }
 
     @Test
-    public void testBuilderWalksAroundDuringConstruction() throws InvalidUserActionException {
+    public void testMonitoringEventWhenBuilderHammers() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1247,7 +1277,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.adjustInventoryTo(headquarter0, Material.PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the planned building to get resources delivered */
@@ -1312,7 +1342,7 @@ public class TestGameMonitoringOfWorkerActions {
     }
 
     @Test
-    public void testBuilderWalksAroundDuringConstructionIsOnlySentOnce() throws InvalidUserActionException {
+    public void testMonitoringEventWhenBuilderHammersIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1335,7 +1365,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.adjustInventoryTo(headquarter0, Material.PLANK, 10);
         Utils.adjustInventoryTo(headquarter0, Material.STONE, 10);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the planned building to get resources delivered */
@@ -1406,5 +1436,102 @@ public class TestGameMonitoringOfWorkerActions {
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
             assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
         }
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierChewsGum() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToChewGum(courier, map);
+
+        /* Verify that an event was sent when the builder hammered */
+        List<WorkerAction> actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+
+        assertEquals(actions.size(), 1);
+        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierChewsGumIsOnlySentOnce() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Wait for a courier to get assigned to the road */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToChewGum(courier, map);
+
+        /* Verify that an event was sent when the builder hammered */
+        List<WorkerAction> actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+
+        assertEquals(actions.size(), 1);
+        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(5, map);
+
+        actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+
+        assertEquals(actions.size(), 1);
+        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
     }
 }
