@@ -15,16 +15,28 @@ import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
 import static org.appland.settlers.model.Courier.States.IDLE_CHEWING_GUM;
+import static org.appland.settlers.model.Courier.States.IDLE_JUMPING_SKIP_ROPE;
+import static org.appland.settlers.model.Courier.States.IDLE_READING_PAPER;
+import static org.appland.settlers.model.Courier.States.IDLE_SITTING_DOWN;
+import static org.appland.settlers.model.Courier.States.IDLE_TOUCHING_NOSE;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Courier.States.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
+import static org.appland.settlers.model.WorkerAction.JUMP_SKIP_ROPE;
+import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
+import static org.appland.settlers.model.WorkerAction.SIT_DOWN;
+import static org.appland.settlers.model.WorkerAction.TOUCH_NOSE;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
 
     private static final Random random = new Random(1);
     private static final int TIME_TO_CHEW_GUM = 29;
+    private static final int TIME_TO_READ_PAPER = 29;
+    private static final int TIME_TO_TOUCH_NOSE = 29;
+    private static final int TIME_TO_JUMP_SKIP_ROPE = 29;
+    private static final int TIME_TO_SIT_DOWN = 29;
 
     private final BodyType bodyType;
     private final Countdown countdown;
@@ -47,6 +59,10 @@ public class Courier extends Worker {
         GOING_BACK_TO_ROAD,
         WAITING_FOR_SPACE_ON_FLAG,
         GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO,
+        IDLE_READING_PAPER,
+        IDLE_TOUCHING_NOSE,
+        IDLE_JUMPING_SKIP_ROPE,
+        IDLE_SITTING_DOWN,
         RETURNING_TO_STORAGE
     }
 
@@ -71,7 +87,12 @@ public class Courier extends Worker {
     @Override
     protected void onIdle() {
 
-        if (state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM) {
+        if (state == IDLE_AT_ROAD ||
+            state == IDLE_CHEWING_GUM ||
+            state == IDLE_READING_PAPER ||
+            state == IDLE_TOUCHING_NOSE ||
+            state == IDLE_JUMPING_SKIP_ROPE ||
+            state == IDLE_SITTING_DOWN) {
             Flag start = map.getFlagAtPoint(assignedRoad.getStart());
             Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
 
@@ -94,13 +115,61 @@ public class Courier extends Worker {
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
             }
 
-            if (state == IDLE_AT_ROAD && random.nextInt(10) == 5 && bodyType == FAT) {
+            if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == FAT) {
                 state = IDLE_CHEWING_GUM;
 
                 map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
 
                 countdown.countFrom(TIME_TO_CHEW_GUM);
+            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
+                state = IDLE_READING_PAPER;
+
+                map.reportWorkerStartedAction(this, READ_NEWSPAPER);
+
+                countdown.countFrom(TIME_TO_READ_PAPER);
+            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
+                state = IDLE_TOUCHING_NOSE;
+
+                map.reportWorkerStartedAction(this, TOUCH_NOSE);
+
+                countdown.countFrom(TIME_TO_TOUCH_NOSE);
+            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
+                state = IDLE_JUMPING_SKIP_ROPE;
+
+                map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
+
+                countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
+            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == FAT) {
+                state = IDLE_SITTING_DOWN;
+
+                map.reportWorkerStartedAction(this, SIT_DOWN);
+
+                countdown.countFrom(TIME_TO_SIT_DOWN);
             } else if (state == IDLE_CHEWING_GUM) {
+                if (countdown.hasReachedZero()) {
+                    state = IDLE_AT_ROAD;
+                } else {
+                    countdown.step();
+                }
+            } else if (state == IDLE_READING_PAPER) {
+                if (countdown.hasReachedZero()) {
+                    state = IDLE_AT_ROAD;
+                } else {
+                    countdown.step();
+                }
+            } else if (state == IDLE_TOUCHING_NOSE) {
+                if (countdown.hasReachedZero()) {
+                    state = IDLE_AT_ROAD;
+                } else {
+                    countdown.step();
+                }
+            } else if (state == IDLE_JUMPING_SKIP_ROPE) {
+                if (countdown.hasReachedZero()) {
+                    state = IDLE_AT_ROAD;
+                } else {
+                    countdown.step();
+                }
+            } else if (state == IDLE_SITTING_DOWN) {
                 if (countdown.hasReachedZero()) {
                     state = IDLE_AT_ROAD;
                 } else {
@@ -462,7 +531,7 @@ public class Courier extends Worker {
     }
 
     public boolean isIdle() {
-        return state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM;
+        return state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM || state == IDLE_READING_PAPER || state == IDLE_TOUCHING_NOSE;
     }
 
     private EndPoint getEndPointAtPoint(Point point) {
@@ -575,5 +644,21 @@ public class Courier extends Worker {
 
     public boolean isChewingGum() {
         return state == IDLE_CHEWING_GUM;
+    }
+
+    public boolean isReadingPaper() {
+        return state == IDLE_READING_PAPER;
+    }
+
+    public boolean isTouchingNose() {
+        return state == IDLE_TOUCHING_NOSE;
+    }
+
+    public boolean isJumpingSkipRope() {
+        return state == IDLE_JUMPING_SKIP_ROPE;
+    }
+
+    public boolean isSittingDown() {
+        return state == IDLE_SITTING_DOWN;
     }
 }

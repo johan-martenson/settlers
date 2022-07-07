@@ -2518,6 +2518,54 @@ public class Utils {
         assertTrue(courier.isChewingGum());
     }
 
+    public static void waitForCourierToReadPaper(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 20000; i++) {
+            if (courier.isReadingPaper()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isReadingPaper());
+    }
+
+    public static void waitForCourierToTouchNose(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isTouchingNose()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isTouchingNose());
+    }
+
+    public static void waitForCourierToJumpSkipRope(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isJumpingSkipRope()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isJumpingSkipRope());
+    }
+
+    public static void waitForCourierToSitDown(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isSittingDown()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isSittingDown());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -2755,5 +2803,22 @@ public class Utils {
                 .filter(gameChangesList -> gameChangesList.getWorkersWithStartedActions().containsKey(worker))
                 .map(gameChangesList -> gameChangesList.getWorkersWithStartedActions().get(worker))
                 .collect(Collectors.toList());
+    }
+
+    static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
+        int count = 0;
+
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            for (Map.Entry<Worker, WorkerAction> entry : gameChangesList.getWorkersWithStartedActions().entrySet()) {
+                Worker worker1 = entry.getKey();
+                WorkerAction workerAction1 = entry.getValue();
+
+                if (worker.equals(worker1) && workerAction.equals(workerAction1)) {
+                    count = count + 1;
+                }
+            }
+        }
+
+        return count;
     }
 }

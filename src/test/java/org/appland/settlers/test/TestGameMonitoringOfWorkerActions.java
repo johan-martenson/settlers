@@ -36,10 +36,12 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1507,11 +1509,26 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(10, 26);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        /* Make sure to get a fat courier */
+        Courier courier = null;
 
-        /* Wait for a courier to get assigned to the road */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -1533,5 +1550,338 @@ public class TestGameMonitoringOfWorkerActions {
 
         assertEquals(actions.size(), 1);
         assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierCanReadThePaperWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to read the paper */
+        Utils.waitForCourierToReadPaper(courier, map);
+
+        /* Verify that an event was sent when the builder hammered */
+        int countReadNewspaper = Utils.countMonitoredWorkerActionForWorker(courier, READ_NEWSPAPER, monitor);
+
+        assertEquals(countReadNewspaper, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierReadsThePaperWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to read the paper */
+        Utils.waitForCourierToReadPaper(courier, map);
+
+        /* Verify that an event was sent when the builder hammered */
+        int actionCount = Utils.countMonitoredWorkerActionForWorker(courier, READ_NEWSPAPER, monitor);
+
+        assertEquals(actionCount, 1);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(5, map);
+
+        actionCount = Utils.countMonitoredWorkerActionForWorker(courier, READ_NEWSPAPER, monitor);
+
+        assertEquals(actionCount, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierTouchesNoseWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to touch the nose while being bored */
+        Utils.waitForCourierToTouchNose(courier, map);
+
+        /* Verify that an event was sent when the courier touched the nose */
+        int touchNoseCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.TOUCH_NOSE, monitor);
+
+        assertEquals(touchNoseCount, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenCourierTouchesNoseWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to touch the nose while being bored */
+        Utils.waitForCourierToTouchNose(courier, map);
+
+        /* Verify that an event was sent when the courier touched the nose */
+        int touchNoseCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.TOUCH_NOSE, monitor);
+
+        assertEquals(touchNoseCount, 1);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(5, map);
+
+        touchNoseCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.TOUCH_NOSE, monitor);
+
+        assertEquals(touchNoseCount, 1);
+    }
+
+    @Test
+    public void testCourierJumpSkipRopeWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to jump skip rope */
+        Utils.waitForCourierToJumpSkipRope(courier, map);
+
+        /* Verify that an event was sent when the courier touched the nose */
+        int jumpSkipRopeCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.JUMP_SKIP_ROPE, monitor);
+
+        assertEquals(jumpSkipRopeCount, 1);
+    }
+
+    @Test
+    public void testCourierJumpSkipRopeWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to jump skip rope */
+        Utils.waitForCourierToJumpSkipRope(courier, map);
+
+        /* Verify that an event was sent when the courier touched the nose */
+        int jumpSkipRopeCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.JUMP_SKIP_ROPE, monitor);
+
+        assertEquals(jumpSkipRopeCount, 1);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(5, map);
+
+        jumpSkipRopeCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.JUMP_SKIP_ROPE, monitor);
+
+        assertEquals(jumpSkipRopeCount, 1);
     }
 }

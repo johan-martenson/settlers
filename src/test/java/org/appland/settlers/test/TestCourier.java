@@ -1554,6 +1554,8 @@ public class TestCourier {
             map.removeRoad(road);
         }
 
+        assertEquals(courier.getBodyType(), FAT);
+
         /* Wait for the courier to start chewing gum */
         Utils.waitForCourierToChewGum(courier, map);
 
@@ -1585,11 +1587,26 @@ public class TestCourier {
         Point point1 = new Point(10, 26);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place road */
-        Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        /* Make sure to get a fat courier */
+        Courier courier = null;
 
-        /* Wait for a courier to get assigned to the road */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
 
         /* Wait for the courier to start chewing gum */
         Utils.waitForCourierToChewGum(courier, map);
@@ -1693,7 +1710,7 @@ public class TestCourier {
         /* Verify that the courier chew gum the right number of times */
         int timeSpentChewingGum = 0;
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5000; i++) {
 
             if (courier.isChewingGum()) {
                 timeSpentChewingGum = timeSpentChewingGum + 1;
@@ -1701,6 +1718,1287 @@ public class TestCourier {
 
             map.stepTime();
         }
+
+        System.out.println(timeSpentChewingGum);
+        System.out.println(timeSpentChewingGum / 5000.0);
+
+        assertTrue(Math.abs(0.13 - (timeSpentChewingGum / 5000.0) ) < 0.05);
+    }
+
+    @Test
+    public void testCourierCanReadThePaperWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier sometimes chews gum while being bored */
+        boolean didReadPaper = false;
+
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isReadingPaper()) {
+                didReadPaper = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(didReadPaper);
+    }
+
+    @Test
+    public void testCourierDoesNotReadThePaperWhileCarryingCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter hut */
+        Point point1 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to carry a cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Verify that the courier doesn't read the paper while carrying the cargo */
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getCargo() == null) {
+                break;
+            }
+
+            assertNotNull(courier.getCargo());
+            assertFalse(courier.isReadingPaper());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCourierReadThePaperForTheRightAmountOfTime() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToReadPaper(courier, map);
+
+        /* Verify that the courier chews gum for the right amount of time */
+        for (int i = 0; i < 30; i++) {
+            assertTrue(courier.isReadingPaper());
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isReadingPaper());
+    }
+
+    @Test
+    public void testCourierStopsReadingThePaperWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start reading the paper */
+        Utils.waitForCourierToReadPaper(courier, map);
+
+        /* Place woodcutter hut by the flag */
+        Point point2 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place plank cargo for the woodcutter by the headquarters' flag */
+        Utils.placeCargo(map, PLANK, headquarter0.getFlag(), woodcutter);
+
+        /* Verify that the courier stops chewing gum when it starts walking to pick up the plank cargo */
+        assertTrue(courier.isReadingPaper());
+
+        map.stepTime();
+
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(courier.isReadingPaper());
+    }
+
+    @Test
+    public void testOnlyThinCourierReadsThePaper() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that only the fat couriers chew gum */
+        for (int i = 0; i < 50; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            /* For thin couriers, verify that they don't start chewing gum */
+            if (courier.getBodyType() == FAT) {
+                for (int j = 0; j < 200; j++) {
+                    assertFalse(courier.isReadingPaper());
+
+                    map.stepTime();
+                }
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+    }
+
+    @Test
+    public void testCourierReadsThePaperAtRightFrequency() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier chew gum the right number of times */
+        int timeReadingPaper = 0;
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (courier.isReadingPaper()) {
+                timeReadingPaper = timeReadingPaper + 1;
+            }
+
+            map.stepTime();
+        }
+
+        System.out.println(timeReadingPaper);
+        System.out.println(timeReadingPaper / 5000.0);
+
+        assertTrue(Math.abs(0.13 - (timeReadingPaper / 5000.0) ) < 0.05);
+    }
+
+    @Test
+    public void testCourierCanTouchNoseWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier sometimes chews gum while being bored */
+        boolean didTouchNose = false;
+
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isTouchingNose()) {
+                didTouchNose = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(didTouchNose);
+    }
+
+    @Test
+    public void testCourierDoesNotTouchNoseWhileCarryingCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter hut */
+        Point point1 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to carry a cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Verify that the courier doesn't touch the nose while carrying the cargo */
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getCargo() == null) {
+                break;
+            }
+
+            assertNotNull(courier.getCargo());
+            assertFalse(courier.isTouchingNose());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCourierTouchNoseForTheRightAmountOfTime() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToTouchNose(courier, map);
+
+        /* Verify that the courier touches the nose for the right amount of time */
+        for (int i = 0; i < 30; i++) {
+            assertTrue(courier.isTouchingNose());
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isTouchingNose());
+    }
+
+    @Test
+    public void testCourierStopsTouchingNoseWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToTouchNose(courier, map);
+
+        /* Place woodcutter hut by the flag */
+        Point point2 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place plank cargo for the woodcutter by the headquarters' flag */
+        Utils.placeCargo(map, PLANK, headquarter0.getFlag(), woodcutter);
+
+        /* Verify that the courier stops chewing gum when it starts walking to pick up the plank cargo */
+        assertTrue(courier.isTouchingNose());
+
+        map.stepTime();
+
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(courier.isTouchingNose());
+    }
+
+    @Test
+    public void testOnlyThinCourierTouchesNose() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that only the fat couriers chew gum */
+        for (int i = 0; i < 50; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            /* For thin couriers, verify that they don't start chewing gum */
+            if (courier.getBodyType() == FAT) {
+                for (int j = 0; j < 200; j++) {
+                    assertFalse(courier.isTouchingNose());
+
+                    map.stepTime();
+                }
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+    }
+
+    @Test
+    public void testCourierTouchesNoseAtRightFrequency() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier chew gum the right number of times */
+        int timeTouchingNose = 0;
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (courier.isTouchingNose()) {
+                timeTouchingNose = timeTouchingNose + 1;
+            }
+
+            map.stepTime();
+        }
+
+        System.out.println(timeTouchingNose);
+        System.out.println(timeTouchingNose / 5000.0);
+
+        assertTrue(Math.abs(0.13 - (timeTouchingNose / 5000.0) ) < 0.05);
+    }
+
+    @Test
+    public void testCourierJumpSkipRopeWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier sometimes jumps skip rope while being bored */
+        boolean didJumpSkipRope = false;
+
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isJumpingSkipRope()) {
+                didJumpSkipRope = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(didJumpSkipRope);
+    }
+
+    @Test
+    public void testCourierDoesNotJumpSkipRopeWhileCarryingCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter hut */
+        Point point1 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to carry a cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Verify that the courier doesn't jump skip rope while carrying the cargo */
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getCargo() == null) {
+                break;
+            }
+
+            assertNotNull(courier.getCargo());
+            assertFalse(courier.isJumpingSkipRope());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCourierJumpsSkipRopeForTheRightAmountOfTime() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start jumping skip rope */
+        Utils.waitForCourierToJumpSkipRope(courier, map);
+
+        /* Verify that the courier jumps skip rope for the right amount of time */
+        for (int i = 0; i < 30; i++) {
+            assertTrue(courier.isJumpingSkipRope());
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isJumpingSkipRope());
+    }
+
+    @Test
+    public void testCourierStopsJumpingSkipRopeWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Wait for the courier to start chewing gum */
+        Utils.waitForCourierToJumpSkipRope(courier, map);
+
+        /* Place woodcutter hut by the flag */
+        Point point2 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place plank cargo for the woodcutter by the headquarters' flag */
+        Utils.placeCargo(map, PLANK, headquarter0.getFlag(), woodcutter);
+
+        /* Verify that the courier stops jumping skip rope when it starts walking to pick up the plank cargo */
+        assertTrue(courier.isJumpingSkipRope());
+
+        map.stepTime();
+
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(courier.isJumpingSkipRope());
+    }
+
+    @Test
+    public void testOnlyThinCourierJumpsSkipRope() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that only the thin couriers jump skip rope */
+        for (int i = 0; i < 50; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            /* For thin couriers, verify that they don't start chewing gum */
+            if (courier.getBodyType() == FAT) {
+                for (int j = 0; j < 200; j++) {
+                    assertFalse(courier.isJumpingSkipRope());
+
+                    map.stepTime();
+                }
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+    }
+
+    @Test
+    public void testCourierJumpsSkipRopeAtRightFrequency() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier chew gum the right number of times */
+        int timeJumpingSkipRope = 0;
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (courier.isJumpingSkipRope()) {
+                timeJumpingSkipRope = timeJumpingSkipRope + 1;
+            }
+
+            map.stepTime();
+        }
+
+        System.out.println(timeJumpingSkipRope);
+        System.out.println(timeJumpingSkipRope / 5000.0);
+
+        assertTrue(Math.abs(0.13 - (timeJumpingSkipRope / 5000.0) ) < 0.05);
+    }
+
+    @Test
+    public void testCourierSitsDownWhileBored() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Verify that the courier sometimes sits down while being bored */
+        boolean didSitDown = false;
+
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isSittingDown()) {
+                didSitDown = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(didSitDown);
+    }
+
+    @Test
+    public void testCourierDoesNotSitDownWhileCarryingCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter hut */
+        Point point1 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Wait for the courier to carry a cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier);
+
+        /* Verify that the courier doesn't sit down while carrying the cargo */
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getCargo() == null) {
+                break;
+            }
+
+            assertNotNull(courier.getCargo());
+            assertFalse(courier.isJumpingSkipRope());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCourierSitsDownForTheRightAmountOfTime() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Wait for the courier to start sitting down */
+        Utils.waitForCourierToSitDown(courier, map);
+
+        /* Verify that the courier sits down for the right amount of time */
+        for (int i = 0; i < 30; i++) {
+            assertTrue(courier.isSittingDown());
+
+            map.stepTime();
+        }
+
+        assertFalse(courier.isSittingDown());
+    }
+
+    @Test
+    public void testCourierStopsSittingDownWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Wait for the courier to start sitting down */
+        Utils.waitForCourierToSitDown(courier, map);
+
+        /* Place woodcutter hut by the flag */
+        Point point2 = new Point(9, 27);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place plank cargo for the woodcutter by the headquarters' flag */
+        Utils.placeCargo(map, PLANK, headquarter0.getFlag(), woodcutter);
+
+        /* Verify that the courier stops sitting down when it starts walking to pick up the plank cargo */
+        assertTrue(courier.isSittingDown());
+
+        map.stepTime();
+
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(courier.isSittingDown());
+    }
+
+    @Test
+    public void testOnlyThinCourierSitsDown() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that only the fat couriers sit down */
+        for (int i = 0; i < 50; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            /* For thin couriers, verify that they don't start sitting down */
+            if (courier.getBodyType() == THIN) {
+                for (int j = 0; j < 200; j++) {
+                    assertFalse(courier.isSittingDown());
+
+                    map.stepTime();
+                }
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+    }
+
+    @Test
+    public void testCourierSitsDownAtRightFrequency() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Verify that the courier sits down the right number of times */
+        int timeSittingDown = 0;
+
+        for (int i = 0; i < 5000; i++) {
+
+            if (courier.isSittingDown()) {
+                timeSittingDown = timeSittingDown + 1;
+            }
+
+            map.stepTime();
+        }
+
+        System.out.println(timeSittingDown);
+        System.out.println(timeSittingDown / 5000.0);
+
+        assertTrue(Math.abs(0.13 - (timeSittingDown / 5000.0) ) < 0.05);
     }
 
     /**
