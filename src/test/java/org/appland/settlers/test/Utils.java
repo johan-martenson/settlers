@@ -2566,6 +2566,18 @@ public class Utils {
         assertTrue(courier.isSittingDown());
     }
 
+    public static void waitForCourierToBeIdle(Courier courier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (courier.isIdle()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(courier.isIdle());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

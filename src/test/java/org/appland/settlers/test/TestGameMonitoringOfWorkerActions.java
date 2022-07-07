@@ -41,6 +41,7 @@ import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
 import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -1485,10 +1486,9 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.waitForCourierToChewGum(courier, map);
 
         /* Verify that an event was sent when the builder hammered */
-        List<WorkerAction> actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+        int chewGumCount = Utils.countMonitoredWorkerActionForWorker(courier, CHEW_GUM, monitor);
 
-        assertEquals(actions.size(), 1);
-        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+        assertEquals(chewGumCount, 1);
     }
 
     @Test
@@ -1538,18 +1538,16 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.waitForCourierToChewGum(courier, map);
 
         /* Verify that an event was sent when the builder hammered */
-        List<WorkerAction> actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+        int chewGumCount = Utils.countMonitoredWorkerActionForWorker(courier, CHEW_GUM, monitor);
 
-        assertEquals(actions.size(), 1);
-        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+        assertEquals(chewGumCount, 1);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(5, map);
 
-        actions = Utils.getMonitoredWorkerActionsForWorker(courier, monitor);
+        chewGumCount = Utils.countMonitoredWorkerActionForWorker(courier, CHEW_GUM, monitor);
 
-        assertEquals(actions.size(), 1);
-        assertEquals(actions.get(0), WorkerAction.CHEW_GUM);
+        assertEquals(chewGumCount, 1);
     }
 
     @Test

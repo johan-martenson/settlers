@@ -47,6 +47,8 @@ public class Courier extends Worker {
     private Point  idlePoint;
     private Cargo  lastCargo;
 
+    protected boolean shouldDoSpecialActions = true;
+
     protected enum States {
 
         WALKING_TO_ROAD,
@@ -115,65 +117,71 @@ public class Courier extends Worker {
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
             }
 
-            if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == FAT) {
-                state = IDLE_CHEWING_GUM;
+            if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
 
-                map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
+                if (random.nextInt(135) == 5 && bodyType == FAT) {
+                    state = IDLE_CHEWING_GUM;
 
-                countdown.countFrom(TIME_TO_CHEW_GUM);
-            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
-                state = IDLE_READING_PAPER;
+                    map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
 
-                map.reportWorkerStartedAction(this, READ_NEWSPAPER);
+                    countdown.countFrom(TIME_TO_CHEW_GUM);
+                } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                    state = IDLE_READING_PAPER;
 
-                countdown.countFrom(TIME_TO_READ_PAPER);
-            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
-                state = IDLE_TOUCHING_NOSE;
+                    map.reportWorkerStartedAction(this, READ_NEWSPAPER);
 
-                map.reportWorkerStartedAction(this, TOUCH_NOSE);
+                    countdown.countFrom(TIME_TO_READ_PAPER);
+                } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                    state = IDLE_TOUCHING_NOSE;
 
-                countdown.countFrom(TIME_TO_TOUCH_NOSE);
-            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == THIN) {
-                state = IDLE_JUMPING_SKIP_ROPE;
+                    map.reportWorkerStartedAction(this, TOUCH_NOSE);
 
-                map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
+                    countdown.countFrom(TIME_TO_TOUCH_NOSE);
+                } else if (random.nextInt(115) == 5 && bodyType == THIN) {
+                    state = IDLE_JUMPING_SKIP_ROPE;
 
-                countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
-            } else if (state == IDLE_AT_ROAD && random.nextInt(135) == 5 && bodyType == FAT) {
-                state = IDLE_SITTING_DOWN;
+                    map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
 
-                map.reportWorkerStartedAction(this, SIT_DOWN);
+                    countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
+                } else if (random.nextInt(115) == 5 && bodyType == FAT) {
+                    state = IDLE_SITTING_DOWN;
 
-                countdown.countFrom(TIME_TO_SIT_DOWN);
-            } else if (state == IDLE_CHEWING_GUM) {
-                if (countdown.hasReachedZero()) {
-                    state = IDLE_AT_ROAD;
-                } else {
-                    countdown.step();
+                    map.reportWorkerStartedAction(this, SIT_DOWN);
+
+                    countdown.countFrom(TIME_TO_SIT_DOWN);
                 }
-            } else if (state == IDLE_READING_PAPER) {
-                if (countdown.hasReachedZero()) {
-                    state = IDLE_AT_ROAD;
-                } else {
-                    countdown.step();
-                }
-            } else if (state == IDLE_TOUCHING_NOSE) {
-                if (countdown.hasReachedZero()) {
-                    state = IDLE_AT_ROAD;
-                } else {
-                    countdown.step();
-                }
-            } else if (state == IDLE_JUMPING_SKIP_ROPE) {
-                if (countdown.hasReachedZero()) {
-                    state = IDLE_AT_ROAD;
-                } else {
-                    countdown.step();
-                }
-            } else if (state == IDLE_SITTING_DOWN) {
-                if (countdown.hasReachedZero()) {
-                    state = IDLE_AT_ROAD;
-                } else {
-                    countdown.step();
+            } else {
+
+                if (state == IDLE_CHEWING_GUM) {
+                    if (countdown.hasReachedZero()) {
+                        state = IDLE_AT_ROAD;
+                    } else {
+                        countdown.step();
+                    }
+                } else if (state == IDLE_READING_PAPER) {
+                    if (countdown.hasReachedZero()) {
+                        state = IDLE_AT_ROAD;
+                    } else {
+                        countdown.step();
+                    }
+                } else if (state == IDLE_TOUCHING_NOSE) {
+                    if (countdown.hasReachedZero()) {
+                        state = IDLE_AT_ROAD;
+                    } else {
+                        countdown.step();
+                    }
+                } else if (state == IDLE_JUMPING_SKIP_ROPE) {
+                    if (countdown.hasReachedZero()) {
+                        state = IDLE_AT_ROAD;
+                    } else {
+                        countdown.step();
+                    }
+                } else if (state == IDLE_SITTING_DOWN) {
+                    if (countdown.hasReachedZero()) {
+                        state = IDLE_AT_ROAD;
+                    } else {
+                        countdown.step();
+                    }
                 }
             }
 
@@ -531,7 +539,12 @@ public class Courier extends Worker {
     }
 
     public boolean isIdle() {
-        return state == IDLE_AT_ROAD || state == IDLE_CHEWING_GUM || state == IDLE_READING_PAPER || state == IDLE_TOUCHING_NOSE;
+        return state == IDLE_AT_ROAD ||
+                state == IDLE_CHEWING_GUM ||
+                state == IDLE_READING_PAPER ||
+                state == IDLE_TOUCHING_NOSE ||
+                state == IDLE_SITTING_DOWN ||
+                state == IDLE_JUMPING_SKIP_ROPE;
     }
 
     private EndPoint getEndPointAtPoint(Point point) {

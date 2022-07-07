@@ -14,5 +14,7 @@ public class Donkey extends Courier {
 
     public Donkey(Player player, GameMap map) {
         super(player, map);
+
+        shouldDoSpecialActions = false;
     }
 }

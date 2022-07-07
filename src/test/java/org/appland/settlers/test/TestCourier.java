@@ -3001,6 +3001,108 @@ public class TestCourier {
         assertTrue(Math.abs(0.13 - (timeSittingDown / 5000.0) ) < 0.05);
     }
 
+    @Test
+    public void testIdleFatCourierIsIdle() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a fat courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == FAT) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), FAT);
+
+        /* Verify that the courier is idle */
+        Utils.waitForCourierToBeIdle(courier, map);
+
+        for (int i = 0; i < 10000; i++) {
+
+            assertTrue(courier.isIdle());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testIdleThinCourierIsIdle() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 26);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Make sure to get a thin courier */
+        Courier courier = null;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Place road */
+            Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+            /* Wait for a courier to get assigned to the road */
+            courier = Utils.waitForRoadToGetAssignedCourier(map, road);
+
+            if (courier.getBodyType() == THIN) {
+                break;
+            }
+
+            /* Remove the road */
+            map.removeRoad(road);
+        }
+
+        assertEquals(courier.getBodyType(), THIN);
+
+        /* Verify that the courier is idle */
+        Utils.waitForCourierToBeIdle(courier, map);
+
+        for (int i = 0; i < 10000; i++) {
+
+            assertTrue(courier.isIdle());
+
+            map.stepTime();
+        }
+    }
+
+
+
     /**
      * TODO:
      *  X 1. not chewing gum while carrying,

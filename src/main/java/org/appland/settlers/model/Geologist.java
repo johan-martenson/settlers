@@ -194,9 +194,13 @@ public class Geologist extends Worker {
         /* Add the list to itself to create a list of twice the length that repeats itself */
         points.addAll(points);
 
-        int startIndex = RANDOM.nextInt(points.size() / 2);
+        int offset = RANDOM.nextInt(points.size());
 
-        for (Point point : points.subList(startIndex, points.size() - 1)) {
+        for (int i = 0; i < points.size(); i++) {
+            int indexWithOffset = (i + offset) % points.size();
+
+            Point point = points.get(indexWithOffset);
+
             if (point.equals(getPosition())) {
                 continue;
             }
