@@ -191,9 +191,6 @@ public class Geologist extends Worker {
     private Point findSiteToExamine() {
         List<Point> points = map.getPointsWithinRadius(flagPoint, RADIUS_TO_INVESTIGATE);
 
-        /* Add the list to itself to create a list of twice the length that repeats itself */
-        points.addAll(points);
-
         int offset = RANDOM.nextInt(points.size());
 
         for (int i = 0; i < points.size(); i++) {

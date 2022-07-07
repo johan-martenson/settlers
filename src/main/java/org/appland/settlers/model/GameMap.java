@@ -243,9 +243,8 @@ public class GameMap {
 
     // FIXME: HOTSPOT FOR ALLOCATION
     private void constructDefaultTiles() {
-        int x, y;
 
-        for (y = 0; y <= height; y++) {
+        for (int y = 0; y <= height; y++) {
 
             int xStart = 0;
             int xEnd   = width;
@@ -255,7 +254,7 @@ public class GameMap {
                 xEnd   = width + 1;
             }
 
-            for (x = xStart; x <= xEnd + 1; x++) {
+            for (int x = xStart; x <= xEnd + 1; x++) {
                 tileBelowMap.put(y * width + x, DEFAULT_VEGETATION);
                 tileDownRightMap.put(y * width + x, DEFAULT_VEGETATION);
             }
