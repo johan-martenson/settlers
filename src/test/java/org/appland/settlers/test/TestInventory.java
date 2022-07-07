@@ -6,6 +6,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -204,7 +205,9 @@ public class TestInventory {
     public void testRetrieveCourierFromEmptyInventory() {
         /* This should always work */
 
-        storehouse.retrieveCourier();
+        Courier courier = storehouse.retrieveCourier();
+
+        assertNotNull(courier);
     }
 
     @Test

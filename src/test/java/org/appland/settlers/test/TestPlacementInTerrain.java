@@ -186,7 +186,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, DESERT_1, map);
 
         /* Verify that it is possible to place a flag in the desert */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(flag, map.getFlagAtPoint(point1));
     }
 
     @Test
@@ -483,7 +486,10 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of desert and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(flag, map.getFlagAtPoint(point5));
     }
 
     @Test
@@ -989,7 +995,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         /* Verify that it is  possible to place a flag on the grass */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(flag, map.getFlagAtPoint(point1));
     }
 
     @Test
@@ -1033,7 +1042,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MEADOW_1, map);
 
         /* Verify that it's possible to place a house on the grass */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertNotNull(woodcutter);
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(woodcutter, map.getBuildingAtPoint(point1));
     }
 
     @Test
@@ -1230,7 +1243,10 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of grass and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(flag, map.getFlagAtPoint(point5));
     }
 
     @Test

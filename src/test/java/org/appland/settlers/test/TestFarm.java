@@ -929,7 +929,10 @@ public class TestFarm {
         crop.harvest();
 
         /* Verify that it's possible to place a new crop on the harvested crop */
-        map.placeCrop(point0);
+        Crop crop1 = map.placeCrop(point0);
+
+        assertTrue(map.isCropAtPoint(point0));
+        assertEquals(map.getCropAtPoint(point0), crop1);
     }
 
     @Test

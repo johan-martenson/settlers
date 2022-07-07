@@ -1152,6 +1152,9 @@ public class TestDonkey {
 
         courier0.assignToRoad(road0);
         donkey0.assignToRoad(road0);
+
+        assertEquals(road0.getCourier(), courier0);
+        assertEquals(road0.getDonkey(), donkey0);
     }
 
     @Test

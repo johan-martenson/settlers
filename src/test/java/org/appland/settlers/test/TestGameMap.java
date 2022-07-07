@@ -277,7 +277,11 @@ public class TestGameMap {
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        new GameMap(players, 5, 5);
+        GameMap gameMap = new GameMap(players, 5, 5);
+
+        assertNotNull(gameMap);
+        assertEquals(gameMap.getWidth(), 5);
+        assertEquals(gameMap.getHeight(), 5);
     }
 
     @Test
@@ -1336,6 +1340,9 @@ public class TestGameMap {
         /* Verify that it's possible to place a tree */
         Point point1 = new Point(15, 15);
         Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        assertTrue(map.isTreeAtPoint(point1));
+        assertEquals(tree0, map.getTreeAtPoint(point1));
     }
 
     @Test

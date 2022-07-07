@@ -1314,7 +1314,9 @@ public class TestMisc {
         headquarter.pushOutAll(DONKEY);
 
         /* Verify that donkeys can be pushed out */
-        Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
+        Donkey donkey = Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
+
+        assertNotNull(donkey);
     }
 
     @Test
@@ -1334,7 +1336,9 @@ public class TestMisc {
         headquarter.pushOutAll(COURIER);
 
         /* Verify that couriers can be pushed out */
-        Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+        Courier courier = Utils.waitForWorkerOutsideBuilding(Courier.class, player0);
+
+        assertNotNull(courier);
     }
 
     @Test
