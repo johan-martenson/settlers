@@ -312,6 +312,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to Build a road across the desert */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -1092,6 +1094,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the grass */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -1321,7 +1324,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         /* Verify that it is  possible to place a flag on the savannah */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -1365,7 +1372,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, SAVANNAH, map);
 
         /* Verify that it's possible to place a house on the savannah */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), woodcutter);
     }
 
     @Test
@@ -1441,6 +1452,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the savannah */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -1560,7 +1573,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of savannah and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -1609,7 +1626,11 @@ public class TestPlacementInTerrain {
         }
 
         /* Verify that a headquarter can be placed on the savannah */
-        map.placeBuilding(new Headquarter(player0), point2);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        assertTrue(map.getBuildings().contains(headquarter));
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), headquarter);
     }
 
 
@@ -1656,7 +1677,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         /* Verify that it is  possible to place a flag on the buildable water */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -1700,7 +1725,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, BUILDABLE_WATER, map);
 
         /* Verify that it's possible to place a house on the buildable water */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), woodcutter);
     }
 
     @Test
@@ -1746,6 +1775,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the buildable water */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -1776,6 +1806,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the buildable water */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -1897,7 +1929,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of buildable water and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -1946,7 +1982,11 @@ public class TestPlacementInTerrain {
         }
 
         /* Verify that a headquarter can be placed on the buildable water */
-        map.placeBuilding(new Headquarter(player0), point2);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        assertTrue(map.getBuildings().contains(headquarter));
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), headquarter);
     }
 
 
