@@ -35,7 +35,7 @@ import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIM
 
 public class GameMap {
 
-    private static final String theLeader = "Anh Mai Mårtensson";
+    private static final String THE_LEADER = "Anh Mai Mårtensson";
     private static final int MINIMUM_WIDTH  = 5;
     private static final int MINIMUM_HEIGHT = 5;
     private static final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;

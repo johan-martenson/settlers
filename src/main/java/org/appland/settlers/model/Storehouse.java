@@ -928,7 +928,7 @@ public class Storehouse extends Building {
         return true;
     }
 
-    public Collection<? extends Cargo> retrieve(Material material, int amount) {
+    public Collection<Cargo> retrieve(Material material, int amount) {
         List<Cargo> cargos = new ArrayList<>();
 
         int cargosToReturn = Math.min(amount, getAmount(material));

@@ -1098,6 +1098,7 @@ public class Building implements EndPoint {
     }
 
     void doUpgradeBuilding() {
+        // Empty - available for subclasses to implement
     }
 
     private boolean isMaterialForUpgradeAvailable() {
@@ -1239,7 +1240,9 @@ public class Building implements EndPoint {
     }
 
     /* Intended to be overridden by subclasses if needed */
-    void onConstructionFinished() { }
+    void onConstructionFinished() {
+        // Empty - available for subclasses to implement
+    }
 
     void setGeneration(long generation) {
         this.generation = generation;
@@ -1297,7 +1300,11 @@ public class Building implements EndPoint {
         return false;
     }
 
-    void onBuildingOccupied() { }
+    void onBuildingOccupied() {
+        // Empty - available for subclasses to implement
+    }
 
-    void onStepTime() { }
+    void onStepTime() {
+        // Empty - available for subclasses to implement
+    }
 }
