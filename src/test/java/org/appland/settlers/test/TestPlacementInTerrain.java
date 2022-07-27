@@ -1125,6 +1125,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the grass */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -2033,7 +2035,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         /* Verify that it is  possible to place a flag on the steppe */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -2077,7 +2083,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, STEPPE, map);
 
         /* Verify that it's possible to place a house on the steppe */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), woodcutter);
     }
 
     @Test
@@ -2123,6 +2133,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the steppe */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -2153,6 +2164,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the steppe */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -2272,7 +2285,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of steppe and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -2320,8 +2337,12 @@ public class TestPlacementInTerrain {
             Utils.surroundPointWithVegetation(point, STEPPE, map);
         }
 
-        /* Verify that a headquarter can be placed on the steppe */
-        map.placeBuilding(new Headquarter(player0), point2);
+        /* Verify that a headquarters can be placed on the steppe */
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        assertTrue(map.getBuildings().contains(headquarter));
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), headquarter);
     }
 
 
@@ -2368,7 +2389,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that it is  possible to place a flag on the mountain meadow */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -2412,7 +2437,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_MEADOW, map);
 
         /* Verify that it's possible to place a house on the mountain meadow */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), woodcutter);
     }
 
     @Test
@@ -2458,6 +2487,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the mountain meadow */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -2488,6 +2518,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the mountain meadow */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -2609,7 +2641,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -2658,7 +2694,11 @@ public class TestPlacementInTerrain {
         }
 
         /* Verify that a headquarter can be placed on the mountain meadow */
-        map.placeBuilding(new Headquarter(player0), point2);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        assertTrue(map.getBuildings().contains(headquarter));
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), headquarter);
     }
 
     // Buildable mountain
@@ -2704,7 +2744,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it is  possible to place a flag on the buildable mountain */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -2748,7 +2792,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's possible to place a house on the buildable mountain */
-        map.placeBuilding(new Woodcutter(player0), point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), woodcutter);
     }
 
     @Test
@@ -2794,6 +2842,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the buildable mountain */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -2824,6 +2873,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the buildable mountain */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -2943,7 +2994,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of buildable mountain and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -2992,7 +3047,11 @@ public class TestPlacementInTerrain {
         }
 
         /* Verify that a headquarter can be placed on the buildable mountain */
-        map.placeBuilding(new Headquarter(player0), point2);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
+
+        assertTrue(map.getBuildings().contains(headquarter));
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), headquarter);
     }
 
     @Test
@@ -3069,6 +3128,7 @@ public class TestPlacementInTerrain {
         /* Verify that it is not possible to place a flag on the lava */
         try {
             map.placeFlag(player0, point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3116,6 +3176,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the lava */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3163,6 +3224,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the lava */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3194,6 +3256,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to Build a road across the lava */
         try {
             Road road0 = map.placeRoad(player0, point2, point1, point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3247,6 +3310,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3298,7 +3362,6 @@ public class TestPlacementInTerrain {
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
-
             assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
 
             map.stepTime();
@@ -3333,6 +3396,7 @@ public class TestPlacementInTerrain {
 
         try {
             map.placeFlag(player0, point5);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3385,6 +3449,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter can be placed on the lava */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -3512,6 +3577,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the deep water */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3559,6 +3625,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the deep water */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3784,6 +3851,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed on the deep water */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -3863,6 +3931,7 @@ public class TestPlacementInTerrain {
         /* Verify that it is not possible to place a flag on the water */
         try {
             map.placeFlag(player0, point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3910,6 +3979,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the water */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3957,6 +4027,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the water */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -3988,6 +4059,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to Build a road across the water */
         try {
             Road road0 = map.placeRoad(player0, point2, point1, point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4041,6 +4113,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4127,6 +4200,7 @@ public class TestPlacementInTerrain {
 
         try {
             map.placeFlag(player0, point5);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4179,6 +4253,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed on the water */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -4258,6 +4333,7 @@ public class TestPlacementInTerrain {
         /* Verify that it is not possible to place a flag on the swamp */
         try {
             map.placeFlag(player0, point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4305,6 +4381,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the swamp */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4352,6 +4429,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the swamp */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4383,6 +4461,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to Build a road across the swamp */
         try {
             Road road0 = map.placeRoad(player0, point2, point1, point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4436,6 +4515,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4487,7 +4567,6 @@ public class TestPlacementInTerrain {
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
-
             assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
 
             map.stepTime();
@@ -4560,6 +4639,7 @@ public class TestPlacementInTerrain {
 
         try {
             map.placeFlag(player0, point5);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4612,6 +4692,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter can be placed on the swamp */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
 
@@ -4689,7 +4770,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MAGENTA, map);
 
         /* Verify that it is possible to place a flag in the magenta */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -4735,6 +4820,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house in the magenta */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4782,6 +4868,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house in the magenta */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4812,6 +4899,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to Build a road across the magenta */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -4863,6 +4952,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -4986,7 +5076,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of magenta and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -5037,6 +5131,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed on the magenta */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -5092,7 +5187,6 @@ public class TestPlacementInTerrain {
 
         /* Verify that there is an available flag point in the mountain */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
-
     }
 
     @Test
@@ -5114,7 +5208,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         /* Verify that it is possible to place a flag in the mountain */
-        map.placeFlag(player0, point1);
+        Flag flag = map.placeFlag(player0, point1);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point1));
+        assertEquals(map.getFlagAtPoint(point1), flag);
     }
 
     @Test
@@ -5160,6 +5258,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house in the mountain */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -5205,7 +5304,11 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point1, MOUNTAIN_1, map);
 
         /* Verify that it's possible to place a house in the mountain */
-        map.placeBuilding(new GoldMine(player0), point1);
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        assertTrue(map.getBuildings().contains(goldMine));
+        assertTrue(map.isBuildingAtPoint(point1));
+        assertEquals(map.getBuildingAtPoint(point1), goldMine);
     }
 
     @Test
@@ -5234,6 +5337,8 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to Build a road across the mountain */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+
+        assertTrue(map.getRoads().contains(road0));
     }
 
     @Test
@@ -5285,6 +5390,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -5408,7 +5514,11 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to place a flag on the border of mountain and snow */
         Point point5 = new Point(5, 7);
-        map.placeFlag(player0, point5);
+        Flag flag = map.placeFlag(player0, point5);
+
+        assertTrue(map.getFlags().contains(flag));
+        assertTrue(map.isFlagAtPoint(point5));
+        assertEquals(map.getFlagAtPoint(point5), flag);
     }
 
     @Test
@@ -5459,6 +5569,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed on the mountain */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
