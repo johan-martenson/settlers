@@ -235,6 +235,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house in the desert */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -282,6 +283,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house in the desert */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -365,6 +367,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -542,6 +545,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed in the desert */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -594,6 +598,7 @@ public class TestPlacementInTerrain {
         /* Verify that it is not possible to place a flag on the snow */
         try {
             map.placeFlag(player0, point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -641,6 +646,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the snow */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -688,6 +694,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the snow */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }
@@ -719,6 +726,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to Build a road across the snow */
         try {
             Road road0 = map.placeRoad(player0, point2, point1, point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -772,6 +780,7 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(11, 11);
         try {
             map.placeBuilding(new Woodcutter(player0), point3);
+
             fail();
         } catch (Exception e) {}
     }
@@ -823,7 +832,6 @@ public class TestPlacementInTerrain {
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
-
             assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
 
             map.stepTime();
@@ -896,6 +904,7 @@ public class TestPlacementInTerrain {
 
         try {
             map.placeFlag(player0, point5);
+
             fail();
         } catch (Exception e) {}
     }
@@ -948,6 +957,7 @@ public class TestPlacementInTerrain {
         /* Verify that a headquarter cannot be placed on the snow */
         try {
             map.placeBuilding(new Headquarter(player0), point2);
+
             fail();
         } catch (Exception e) {
         }
@@ -1424,6 +1434,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's not possible to place a house on the savannah */
         try {
             map.placeBuilding(new GoldMine(player0), point1);
+
             fail();
         } catch (Exception e) {}
     }

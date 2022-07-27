@@ -2369,5 +2369,7 @@ public class TestPrioritization {
 
         /* Verify that it's possible to set the largest number allowed (number of items - 1) */
         player0.setTransportPriority(15, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
+
+        assertEquals(player0.getTransportPriorities().get(15), TransportCategory.WOOD);
     }
 }

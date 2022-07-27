@@ -204,14 +204,17 @@ public class TestTransportation {
         map.placeFlag(player0, middleFlag);
 
         /* Place road from woodcutter to the middle flag */
-        map.placeAutoSelectedRoad(player0, woodcutter.getFlag().getPosition(), middleFlag);
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag().getPosition(), middleFlag);
 
         /* Place end flag */
         Point endFlag = new Point(10, 10);
         map.placeFlag(player0, endFlag);
 
         /* Place road from middle flag to end flag */
-        map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
+        Road road1 = map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
+
+        assertTrue(map.getRoads().contains(road0));
+        assertTrue(map.getRoads().contains(road1));
     }
 
     @Test

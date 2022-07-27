@@ -59,6 +59,9 @@ public class TestPlayer {
 
         /* Create player 'player one' */
         Player player = new Player("Player one", BLUE);
+
+        assertEquals(player.getName(), "Player one");
+        assertEquals(player.getColor(), BLUE);
     }
 
     @Test
@@ -69,6 +72,8 @@ public class TestPlayer {
 
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(player);
+
+        assertEquals(woodcutter0.getPlayer(), player);
     }
 
     @Test

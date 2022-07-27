@@ -976,7 +976,9 @@ public class TestRoads {
         map.placeFlag(player0, point4);
 
         /* Place road */
-        map.placeRoad(player0, point4, point4.upLeft(), point2);
+        Road road = map.placeRoad(player0, point4, point4.upLeft(), point2);
+
+        assertTrue(map.getRoads().contains(road));
     }
 
     @Test

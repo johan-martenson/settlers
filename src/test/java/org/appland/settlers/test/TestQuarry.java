@@ -2182,6 +2182,9 @@ public class TestQuarry {
 
         /* Verify that tearing down the flag doesn't cause any problem */
         map.removeFlag(quarry0.getFlag());
+
+        assertFalse(map.getFlags().contains(quarry0.getFlag()));
+        assertFalse(map.isFlagAtPoint(quarry0.getFlag().getPosition()));
     }
 
     @Test
