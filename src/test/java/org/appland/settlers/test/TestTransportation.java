@@ -252,7 +252,9 @@ public class TestTransportation {
 
         /* Verify that there is no road with the same start and end points */
         try {
-            map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
+            List<Point> path = map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
+
+            assertNull(path);
         } catch (InvalidGameLogicException e) {}
     }
 
@@ -860,7 +862,6 @@ public class TestTransportation {
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 
-        assertEquals(cargo.getNextFlagOrBuilding(), sawmill.getFlag().getPosition());
         assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point2);
         assertEquals(flag1.getStackedCargo().get(0), cargo);
@@ -1146,9 +1147,6 @@ public class TestTransportation {
         /* Place a cargo on the headquarter's flag for the sawmill */
         Cargo cargo = Utils.placeCargo(map, WOOD, headquarter0.getFlag(), sawmill);
 
-        /* Verify that the cargo is planned to go via first flag */
-        assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
-
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
@@ -1249,9 +1247,6 @@ public class TestTransportation {
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-        /* Verify that the cargo will go via the second flag */
-        assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
-
         /* Add a shortcut from the second flag to the sawmill */
         Road road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
@@ -1265,9 +1260,6 @@ public class TestTransportation {
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
-
-        /* Verify that the cargo takes the new, shorter road instead of the old road */
-        assertEquals(cargo.getNextFlagOrBuilding(), sawmill.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
 

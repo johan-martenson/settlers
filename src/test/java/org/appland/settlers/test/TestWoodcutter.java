@@ -729,7 +729,6 @@ public class TestWoodcutter {
         Cargo cargo = woodcutter.getFlag().getStackedCargo().get(0);
 
         assertEquals(cargo.getTarget(), headquarter);
-        assertEquals(cargo.getNextFlagOrBuilding(), headquarter.getFlag().getPosition());
     }
 
     @Test

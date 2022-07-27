@@ -4,23 +4,16 @@ import java.util.List;
 
 public class Cargo {
 
-    /*
-    * TODO: simplify re-routing to only look at if the existing target is reachable, otherwise return to storage
-    *
-    * */
-
     private final Material material;
     private final GameMap  map;
 
-    private Building    target;
-    private Point       position;
-    private List<Point> path;
-    private boolean     pickupPromised;
+    private Building target;
+    private Point    position;
+    private boolean  pickupPromised;
 
     public Cargo(Material material, GameMap map) {
-
         this.material = material;
-        pickupPromised = false;
+        this.pickupPromised = false;
         this.map = map;
     }
 
@@ -30,23 +23,10 @@ public class Cargo {
 
     public void setTarget(Building target) {
         this.target = target;
-
-        Flag flag = map.getFlagAtPoint(getPosition());
-        path = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, target);
-
-        path.remove(0);
     }
 
     public Building getTarget() {
         return target;
-    }
-
-    public Point getNextFlagOrBuilding() {
-        if (path == null || path.isEmpty()) {
-            return null;
-        }
-
-        return path.get(0);
     }
 
     // FIXME: HOTSPOT
@@ -77,10 +57,6 @@ public class Cargo {
         }
 
         position = point;
-
-        if (path != null && !path.isEmpty() && path.get(0).equals(point)) {
-            path.remove(0);
-        }
     }
 
     @Override
@@ -158,9 +134,7 @@ public class Cargo {
              *
              * Note: the path only contains flags and buildings. It does not contain each individual step
             */
-            if (!looksLikeOptimalRoute(getPosition(), path)                                   ||  // Is there theoretically a better way?
-                !map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), path.get(0)) ||  // Is it still possible to go the next step?
-                !map.isValidRouteThroughFlagsAndBuildingsViaRoads(path)) {                        // Is the planned path still possible?
+            if (!map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), target.getPosition())) {
 
                 /* Find the best way from this flag */
                 Flag flag = map.getFlagAtPoint(getPosition());
@@ -174,47 +148,9 @@ public class Cargo {
 
                     /* Return the cargo to the storage */
                     returnToStorage();
-                } else {
-
-                    /* Update the planned route to use the closest way */
-                    closestPath.remove(0);
-
-                    path = closestPath;
                 }
             }
         }
-    }
-
-    /**
-     * Note: this is only definitely optimal if all points are included. If the path only consists of flags the result
-     * might not be too optimistic
-     * @param start Start of the route
-     * @param path Path to take from the starting point
-     * @return Returns true if the route looks optimal
-     */
-    private boolean looksLikeOptimalRoute(Point start, List<Point> path) {
-
-        Point target = path.get(path.size() - 1); //FIXME: this hides a field
-
-        Point previousPoint = start; // TODO: this variable is never used so this method shouldn't work
-
-        for (Point point : path) {
-
-            if (previousPoint != null) {
-                int currentDistanceX = Math.abs(target.x - point.x);
-                int currentDistanceY = Math.abs(target.y - point.y);
-
-                int previousDistanceX = Math.abs(target.x - previousPoint.x);
-                int previousDistanceY = Math.abs(target.y - previousPoint.y);
-
-                if (currentDistanceX > previousDistanceX || currentDistanceY > previousDistanceY) {
-                    return false;
-                }
-            }
-
-        }
-
-        return true;
     }
 
     GameMap getMap() {

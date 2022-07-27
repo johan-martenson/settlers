@@ -15,14 +15,12 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -32,51 +30,6 @@ import static org.junit.Assert.assertTrue;
  * @author johan
  */
 public class TestCargo {
-
-    @Test
-    public void testNextStepIsNullForCargoWithoutTarget() {
-        Cargo cargo = new Cargo(WOOD, null);
-        assertNull(cargo.getNextFlagOrBuilding());
-    }
-
-    @Test
-    public void testGetNextIsValidDirectlyAfterSetTarget() throws Exception {
-
-        /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        /* Create the game map */
-        GameMap map = new GameMap(players, 20, 20);
-
-        /* Place the headquarter */
-        Point point0 = new Point(12, 12);
-        map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place a woodcutter */
-        Point point1 = new Point(8, 6);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
-
-        /* Place a flag */
-        Point point2 = new Point(6, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
-
-        /* Place a road from the flag to the woodcutter's flag */
-        Point point3 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, woodcutter.getFlag().getPosition());
-
-        /* Create a cargo and put on the flag */
-        Cargo cargo = new Cargo(PLANK, map);
-
-        flag0.putCargo(cargo);
-
-        /* Set the woodcutter as target */
-        cargo.setTarget(woodcutter);
-
-        /* Verify that the cargo will go via the woodcutter's flag */
-        assertEquals(cargo.getNextFlagOrBuilding(), woodcutter.getFlag().getPosition());
-    }
 
     @Test
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {

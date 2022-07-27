@@ -46,6 +46,7 @@ public class Courier extends Worker {
     private States state;
     private Point  idlePoint;
     private Cargo  lastCargo;
+    private Flag   waitToGoToFlag;
 
     protected boolean shouldDoSpecialActions = true;
 
@@ -186,14 +187,12 @@ public class Courier extends Worker {
             }
 
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            Flag flag = map.getFlagAtPoint(getCargo().getNextFlagOrBuilding());
-
-            if (flag.hasPlaceForMoreCargo()) {
+            if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                 state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-                setTarget(flag.getPosition());
+                setTarget(waitToGoToFlag.getPosition());
 
-                flag.promiseCargo(getCargo());
+                waitToGoToFlag.promiseCargo(getCargo());
             }
         }
     }
@@ -369,6 +368,8 @@ public class Courier extends Worker {
                 /* Wait if there is no space at the flag to put down the cargo */
                 if (!flag.hasPlaceForMoreCargo()) {
                     state = WAITING_FOR_SPACE_ON_FLAG;
+
+                    waitToGoToFlag = flag;
 
                     stopWalkingToTarget();
                 } else {
