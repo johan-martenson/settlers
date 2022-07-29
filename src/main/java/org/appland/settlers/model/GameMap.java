@@ -164,7 +164,7 @@ public class GameMap {
         crops               = new ArrayList<>();
         workersToAdd        = new LinkedList<>();
         animalCountdown     = new Countdown();
-        random              = new Random();
+        random              = new Random(1);
         startingPoints      = new ArrayList<>();
         tileBelowMap        = new HashMap<>();
         tileDownRightMap    = new HashMap<>();
@@ -196,9 +196,6 @@ public class GameMap {
         if (!allPlayersHaveUniqueColor()) {
             throw new InvalidUserActionException("Each player must have a unique color");
         }
-
-        /* Set a constant initial seed for the random generator to get a deterministic behavior */
-        random.setSeed(1);
 
         /* There is no winner when the game starts */
         winner = null;

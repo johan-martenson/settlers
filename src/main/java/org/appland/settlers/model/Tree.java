@@ -32,8 +32,10 @@ public class Tree {
             PALM_2,
             CYPRESS,
             CHERRY,
-            FIR};
-    public static final Set TREE_TYPES_THAT_CAN_BE_CUT_DOWN = new HashSet(Arrays.asList(Tree.PLANTABLE_TREES));
+            FIR
+    };
+    public static final Set<TreeType> TREE_TYPES_THAT_CAN_BE_CUT_DOWN = new HashSet<>(Arrays.asList(Tree.PLANTABLE_TREES));
+
     private static final int TIME_TO_GROW_TREE_ONE_STEP = 149; // TODO: update based on measurements from the game
 
     private final Countdown countdown;

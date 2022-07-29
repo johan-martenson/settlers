@@ -78,16 +78,16 @@ public class MapPoint {
         Point previous = null;
 
         /* Find connected neighbors */
-        for (Point point : road.getWayPoints()) { // FIXME: this hides a field
-            if (point.equals(this.point) && previous != null) {
+        for (Point roadPoint : road.getWayPoints()) {
+            if (roadPoint.equals(this.point) && previous != null) {
                 connectedNeighbors.add(previous);
             }
 
             if (previous != null && previous.equals(this.point)) {
-                connectedNeighbors.add(point);
+                connectedNeighbors.add(roadPoint);
             }
 
-            previous = point;
+            previous = roadPoint;
         }
 
         connectedRoads.add(road);
