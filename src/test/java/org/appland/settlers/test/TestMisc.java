@@ -140,7 +140,7 @@ public class TestMisc {
         /* Call scout */
         flag0.callScout();
 
-        /* Create a road that connects the flag with the headquarter's flag */
+        /* Create a road that connects the flag with the headquarters' flag */
         Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag(), flag0);
 
         /* Wait for a scout to appear */
