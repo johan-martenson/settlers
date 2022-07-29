@@ -2995,8 +2995,8 @@ public class TestCourier {
             map.stepTime();
         }
 
-        System.out.println(timeSittingDown);
-        System.out.println(timeSittingDown / 5000.0);
+        System.out.println("Total time sitting down: " + timeSittingDown);
+        System.out.println("Time sitting down divided by total: " + (timeSittingDown / 5000.0));
 
         assertTrue(Math.abs(0.13 - (timeSittingDown / 5000.0) ) < 0.05);
     }
