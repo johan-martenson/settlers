@@ -79,6 +79,8 @@ public class Scout extends Worker {
 
     @Override
     protected void onArrival() {
+        State stateBefore = this.state;
+
         Stats stats = map.getStats();
 
         CumulativeDuration duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
@@ -160,6 +162,7 @@ public class Scout extends Worker {
 
             duration.after("Set offroad target 1");
         } else if (state == RETURNING_TO_FLAG) {
+
             state = RETURNING_TO_STORAGE;
 
             // FIXME: add test and fix so returning scout can't go to storage where storage is not allowed
@@ -264,21 +267,27 @@ public class Scout extends Worker {
         /* Discover each point the scout walks on */
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
-        /* Return to storage if the planned path no longer exists */
-        if (map.isFlagAtPoint(getPosition()) && !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
-            returnToStorage();
-        }
+        if (state == RETURNING_TO_STORAGE ||
+            state == WALKING_TO_TARGET ||
+            state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER ||
+            state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-        /* Return to storage if the planned path no longer exists */
-        if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER &&
-                map.isFlagAtPoint(getPosition()) &&
-                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            /* Return to storage if the planned path no longer exists */
+            if (map.isFlagAtPoint(getPosition()) && !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                returnToStorage();
+            }
 
-            /* Don't try to enter upon arrival */
-            clearTargetBuilding();
+            /* Return to storage if the planned path no longer exists */
+            if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER &&
+                    map.isFlagAtPoint(getPosition()) &&
+                    !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Go back to the storage */
-            returnToStorage();
+                /* Don't try to enter upon arrival */
+                clearTargetBuilding();
+
+                /* Go back to the storage */
+                returnToStorage();
+            }
         }
     }
 
@@ -372,6 +381,8 @@ public class Scout extends Worker {
 
     @Override
     protected void onReturnToStorage() {
+        State stateBefore = this.state;
+
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
         state = RETURNING_TO_STORAGE;

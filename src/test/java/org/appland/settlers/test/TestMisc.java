@@ -123,55 +123,58 @@ public class TestMisc {
     @Test
     public void testScoutReturnsWhenFlagRemainsButRoadHasBeenRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player);
-        GameMap map = new GameMap(players, 500, 250);
+        for (int i = 0; i < 40; i++) {
 
-        /* Place headquarter */
-        Point point0 = new Point(429, 201);
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+            /* Starting new game */
+            Player player = new Player("Player 0", BLUE);
+            List<Player> players = new ArrayList<>();
+            players.add(player);
+            GameMap map = new GameMap(players, 500, 250);
 
-        /* Place flag */
-        Point point1 = new Point(434, 200);
-        Flag flag0 = map.placeFlag(player, point1);
+            /* Place headquarter */
+            Point point0 = new Point(429, 201);
+            Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
-        /* Call scout */
-        flag0.callScout();
+            /* Place flag */
+            Point point1 = new Point(434, 200);
+            Flag flag0 = map.placeFlag(player, point1);
 
-        /* Create a road that connects the flag with the headquarters' flag */
-        Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag(), flag0);
+            /* Call scout */
+            flag0.callScout();
 
-        /* Wait for a scout to appear */
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).get(0);
+            /* Create a road that connects the flag with the headquarters' flag */
+            Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag(), flag0);
 
-        /* Wait the scout to get to the flag */
-        assertEquals(scout.getTarget(), flag0.getPosition());
+            /* Wait for a scout to appear */
+            Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).get(0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+            /* Wait the scout to get to the flag */
+            assertEquals(scout.getTarget(), flag0.getPosition());
 
-        assertEquals(scout.getPosition(), flag0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
 
-        /* Wait for the scout to continue away from the flag */
-        Utils.fastForward(10, map);
+            assertEquals(scout.getPosition(), flag0.getPosition());
 
-        assertNotEquals(scout.getPosition(), flag0.getPosition());
+            /* Wait for the scout to continue away from the flag */
+            Utils.fastForward(10, map);
 
-        /* Remove the road so the scout has no way back using roads */
-        map.removeRoad(road0);
+            assertNotEquals(scout.getPosition(), flag0.getPosition());
 
-        /* Wait for the scout to get back to the flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+            /* Remove the road so the scout has no way back using roads */
+            map.removeRoad(road0);
 
-        assertEquals(scout.getPosition(), flag0.getPosition());
+            /* Wait for the scout to get back to the flag */
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
 
-        /* Verify that the scout goes back to the headquarter */
-        assertEquals(scout.getTarget(), headquarter0.getPosition());
+            assertEquals(scout.getPosition(), flag0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+            /* Verify that the scout goes back to the headquarters */
+            assertEquals(scout.getTarget(), headquarter0.getPosition());
 
-        assertEquals(scout.getPosition(), headquarter0.getPosition());
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+
+            assertEquals(scout.getPosition(), headquarter0.getPosition());
+        }
     }
 
     @Test

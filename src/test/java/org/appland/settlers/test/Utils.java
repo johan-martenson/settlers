@@ -7,7 +7,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fisherman;
@@ -179,7 +178,7 @@ public class Utils {
 
         for (int i = 0; i < 100000; i++) {
 
-            if (worker.isAt(target)) {
+            if (Objects.equals(worker.getPosition(), target)) {
                 break;
             }
 
@@ -187,7 +186,6 @@ public class Utils {
         }
 
         assertEquals(worker.getPosition(), target);
-        assertTrue(worker.isAt(target));
     }
 
     public static <T extends Worker> T occupyBuilding(T worker, Building building) {
