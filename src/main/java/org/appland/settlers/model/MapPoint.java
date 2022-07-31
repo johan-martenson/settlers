@@ -27,19 +27,20 @@ public class MapPoint {
     private final Set<Road>  connectedRoads;
     private final Set<Point> connectedFlagsAndBuildings;
 
-    private Building building;
-    private Flag     flag;
-    private Tree     tree;
-    private Stone    stone;
-    private Crop     crop;
-    private Sign     sign;
-    private int      height;
-    private int      mineralAmount;
-    private Material mineral;
-    private int      fishAmount;
-    private boolean  isDeadTree;
-    private boolean  isShipyardAvailable;
-    private boolean  isShip;
+    private Building       building;
+    private Flag           flag;
+    private Tree           tree;
+    private Stone          stone;
+    private Crop           crop;
+    private Sign           sign;
+    private int            height;
+    private int            mineralAmount;
+    private Material       mineral;
+    private int            fishAmount;
+    private boolean        isDeadTree;
+    private boolean        isShipyardAvailable;
+    private boolean        isShip;
+    private DecorationType decoration;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -329,5 +330,17 @@ public class MapPoint {
 
     public void setShipDone() {
         isShip = false;
+    }
+
+    public boolean isDecoration() {
+        return decoration != null;
+    }
+
+    public void removeDecoration() {
+        decoration = null;
+    }
+
+    public void setDecoration(DecorationType decoration) {
+        this.decoration = decoration;
     }
 }

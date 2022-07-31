@@ -7,6 +7,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fisherman;
@@ -44,6 +45,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -2576,6 +2578,20 @@ public class Utils {
         }
 
         assertTrue(courier.isIdle());
+    }
+
+    public static int countMonitoredEventsForDecoration(Point point, GameViewMonitor monitor) {
+        int count = 0;
+
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            for (Point decoratedPoint : gameChangesList.getRemovedDecorations()) {
+                if (Objects.equals(point, decoratedPoint)) {
+                    count = count + 1;
+                }
+            }
+        }
+
+        return count;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

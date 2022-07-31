@@ -117,6 +117,8 @@ public class GameMap {
     private final List<Ship> finishedShips;
     private final List<Ship> shipsWithNewTargets;
     private final Map<Worker, WorkerAction> workersWithStartedActions;
+    private final Map<Point, DecorationType> decorations;
+    private final List<Point> removedDecorations;
 
     private Player winner;
     private long time;
@@ -168,6 +170,7 @@ public class GameMap {
         startingPoints      = new ArrayList<>();
         tileBelowMap        = new HashMap<>();
         tileDownRightMap    = new HashMap<>();
+        removedDecorations  = new ArrayList<>();
 
         statisticsManager   = new StatisticsManager();
 
@@ -236,6 +239,7 @@ public class GameMap {
         stats = new Stats();
 
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
+        decorations = new HashMap<>();
     }
 
     // FIXME: HOTSPOT FOR ALLOCATION
@@ -716,6 +720,12 @@ public class GameMap {
                 }
             });
 
+            removedDecorations.forEach(point -> {
+                if (player.getDiscoveredLand().contains(point)) {
+                    player.reportRemovedDecoration(point);
+                }
+            });
+
             player.sendMonitoringEvents(time);
         }
 
@@ -745,6 +755,7 @@ public class GameMap {
         finishedShips.clear();
         shipsWithNewTargets.clear();
         workersWithStartedActions.clear();
+        removedDecorations.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -873,6 +884,11 @@ public class GameMap {
         /* Handle the case where there is a sign at the site */
         if (mapPoint.isSign()) {
             removeSign(getSignAtPoint(point));
+        }
+
+        /* Handle the case where there is a decoration at the site */
+        if (mapPoint.isDecoration()) {
+            removeDecorationAtPoint(point);
         }
 
         /* Use the existing flag if it exists, otherwise place a new flag */
@@ -1198,17 +1214,9 @@ public class GameMap {
         wayPoints.add(building.getPosition());
         wayPoints.add(building.getFlag().getPosition());
 
-        Road road = new Road(building.getPlayer(), wayPoints);
+        Road road = doPlaceRoad(building.getPlayer(), wayPoints);
 
-        road.setMap(this);
         road.setDriveway();
-
-        roads.add(road);
-
-        addRoadToMapPoints(road);
-
-        /* Report that the driveway has been added */
-        newRoads.add(road);
 
         return road;
     }
@@ -1305,7 +1313,15 @@ public class GameMap {
 
         roads.add(road);
 
-        addRoadToMapPoints(road);
+        for (Point point : road.getWayPoints()) {
+            MapPoint mapPoint = getMapPoint(point);
+
+            mapPoint.addConnectingRoad(road);
+
+            if (mapPoint.isDecoration()) {
+                removeDecorationAtPoint(point);
+            }
+        }
 
         /* Report that the road is created */
         newRoads.add(road);
@@ -1476,6 +1492,11 @@ public class GameMap {
 
             /* Report that a dead tree was removed */
             removedDeadTrees.add(flagPoint);
+        }
+
+        /* Handle the case whe the flag is placed on a decoration */
+        if (mapPoint.isDecoration()) {
+            removeDecorationAtPoint(flagPoint);
         }
 
         /* Handle the case where the flag is on an existing road that will be split */
@@ -1895,14 +1916,6 @@ public class GameMap {
         return point.x > 0 && point.x < width && point.y > 0 && point.y < height;
     }
 
-    private void addRoadToMapPoints(Road road) {
-        for (Point point : road.getWayPoints()) {
-            MapPoint mapPoint = getMapPoint(point);
-
-            mapPoint.addConnectingRoad(road);
-        }
-    }
-
     /**
      * Creates an array with all Map Point instances. They are indexed like this:
      *
@@ -2236,6 +2249,10 @@ public class GameMap {
         mapPoint.setTree(tree);
 
         trees.add(tree);
+
+        if (mapPoint.isDecoration()) {
+            this.removeDecorationAtPoint(point);
+        }
 
         /* Report that a new tree is planted */
         newTrees.add(tree);
@@ -3851,5 +3868,35 @@ public class GameMap {
 
     public void reportWorkerStartedAction(Worker worker, WorkerAction action) {
         workersWithStartedActions.put(worker, action);
+    }
+
+    public void placeDecoration(Point point, DecorationType decoration) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        mapPoint.setDecoration(decoration);
+
+        decorations.put(point, decoration);
+    }
+
+    public boolean isDecoratedAtPoint(Point point) {
+        return decorations.containsKey(point);
+    }
+
+    public DecorationType getDecorationAtPoint(Point point) {
+        return decorations.get(point);
+    }
+
+    public Map<Point, DecorationType> getDecorations() {
+        return decorations;
+    }
+
+    private void removeDecorationAtPoint(Point point) {
+        MapPoint mapPoint = getMapPoint(point);
+
+        mapPoint.removeDecoration();
+
+        decorations.remove(point);
+
+        removedDecorations.add(point);
     }
 }

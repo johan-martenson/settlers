@@ -77,6 +77,7 @@ public class Player {
     private final List<Ship> finishedShips;
     private final List<Ship> shipsWithNewTargets;
     private final Map<Worker, WorkerAction> workersWithStartedActions;
+    private final List<Point> removedDecorations;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -174,6 +175,7 @@ public class Player {
         finishedShips = new ArrayList<>();
         shipsWithNewTargets = new ArrayList<>();
         workersWithStartedActions = new HashMap<>();
+        removedDecorations = new ArrayList<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -786,7 +788,8 @@ public class Player {
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
-            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty()) {
+            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
+            removedDecorations.isEmpty()) {
             return;
         }
 
@@ -1009,7 +1012,8 @@ public class Player {
                 new ArrayList<>(newShips),
                 new ArrayList<>(finishedShips),
                 new ArrayList<>(shipsWithNewTargets),
-                new HashMap<>(workersWithStartedActions));
+                new HashMap<>(workersWithStartedActions),
+                new ArrayList<>(removedDecorations));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1052,6 +1056,7 @@ public class Player {
         shipsWithNewTargets.clear();
         workersWithStartedActions.clear();
         newWorkers.clear();
+        removedDecorations.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1412,5 +1417,9 @@ public class Player {
 
     public void reportWorkerStartedAction(Worker worker, WorkerAction action) {
         workersWithStartedActions.put(worker, action);
+    }
+
+    public void reportRemovedDecoration(Point point) {
+        removedDecorations.add(point);
     }
 }
