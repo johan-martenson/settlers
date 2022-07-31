@@ -2038,8 +2038,8 @@ public class TestCourier {
             map.stepTime();
         }
 
-        System.out.println(timeReadingPaper);
-        System.out.println(timeReadingPaper / 5000.0);
+        System.out.println("Total time reading paper: " + timeReadingPaper);
+        System.out.println("Time reading paper divided by total" + timeReadingPaper / 5000.0);
 
         assertTrue(Math.abs(0.13 - (timeReadingPaper / 5000.0) ) < 0.05);
     }
@@ -2679,7 +2679,7 @@ public class TestCourier {
         System.out.println("Time jumping skip rope: " + timeJumpingSkipRope);
         System.out.println("Skip rope time divided by total: " + timeJumpingSkipRope / 5000.0);
 
-        assertTrue(Math.abs(0.13 - (timeJumpingSkipRope / 5000.0) ) < 0.05);
+        assertTrue(Math.abs(0.15 - (timeJumpingSkipRope / 5000.0) ) < 0.08);
     }
 
     @Test
