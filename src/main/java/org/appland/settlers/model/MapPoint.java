@@ -343,4 +343,8 @@ public class MapPoint {
     public void setDecoration(DecorationType decoration) {
         this.decoration = decoration;
     }
+
+    public DecorationType getDecoration() {
+        return decoration;
+    }
 }

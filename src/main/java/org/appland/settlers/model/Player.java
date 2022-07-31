@@ -78,6 +78,7 @@ public class Player {
     private final List<Ship> shipsWithNewTargets;
     private final Map<Worker, WorkerAction> workersWithStartedActions;
     private final List<Point> removedDecorations;
+    private final Map<Point, DecorationType> newDecorations;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -176,6 +177,7 @@ public class Player {
         shipsWithNewTargets = new ArrayList<>();
         workersWithStartedActions = new HashMap<>();
         removedDecorations = new ArrayList<>();
+        newDecorations = new HashMap<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -789,7 +791,7 @@ public class Player {
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
             finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
-            removedDecorations.isEmpty()) {
+            removedDecorations.isEmpty() && newDecorations.isEmpty()) {
             return;
         }
 
@@ -828,6 +830,10 @@ public class Player {
 
                 if (mapPoint.isCrop()) {
                     newCrops.add(mapPoint.getCrop());
+                }
+
+                if (mapPoint.isDecoration()) {
+                    newDecorations.put(point, mapPoint.getDecoration());
                 }
             }
 
@@ -1013,7 +1019,8 @@ public class Player {
                 new ArrayList<>(finishedShips),
                 new ArrayList<>(shipsWithNewTargets),
                 new HashMap<>(workersWithStartedActions),
-                new ArrayList<>(removedDecorations));
+                new ArrayList<>(removedDecorations),
+                newDecorations);
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1057,6 +1064,7 @@ public class Player {
         workersWithStartedActions.clear();
         newWorkers.clear();
         removedDecorations.clear();
+        newDecorations.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {

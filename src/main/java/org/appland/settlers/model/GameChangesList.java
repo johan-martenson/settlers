@@ -40,6 +40,7 @@ public class GameChangesList {
     private final List<Ship> shipsWithNewTargets;
     private final Map<Worker, WorkerAction> workersWithStartedActions;
     private final List<Point> removedDecorations;
+    private final Map<Point, DecorationType> newDecorations;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -73,7 +74,8 @@ public class GameChangesList {
                            List<Ship> finishedShips,
                            List<Ship> shipsWithNewTargets,
                            Map<Worker, WorkerAction> workersWithStartedActions,
-                           List<Point> removedDecorations) {
+                           List<Point> removedDecorations,
+                           Map<Point, DecorationType> newDecorations) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -107,6 +109,7 @@ public class GameChangesList {
         this.shipsWithNewTargets = shipsWithNewTargets;
         this.workersWithStartedActions = workersWithStartedActions;
         this.removedDecorations = removedDecorations;
+        this.newDecorations = newDecorations;
     }
 
     public long getTime() {
@@ -277,5 +280,9 @@ public class GameChangesList {
 
     public List<Point> getRemovedDecorations() {
         return removedDecorations;
+    }
+
+    public Map<Point, DecorationType> getNewDecorations() {
+        return newDecorations;
     }
 }

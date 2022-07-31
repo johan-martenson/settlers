@@ -7,6 +7,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fisherman;
@@ -2592,6 +2593,24 @@ public class Utils {
         return count;
     }
 
+    public static int countMonitoredEventsForNewDecoration(Point point, GameViewMonitor monitor) {
+        int count = 0;
+
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            for (Map.Entry<Point, DecorationType> entry : gameChangesList.getNewDecorations().entrySet()) {
+                Point decoratedPoint = entry.getKey();
+                DecorationType decorationType = entry.getValue();
+
+                if (Objects.equals(point, decoratedPoint)) {
+                    count = count + 1;
+                }
+            }
+        }
+
+        return count;
+
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -2605,7 +2624,10 @@ public class Utils {
         // FIXME: HOTSPOT
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
-            gameChanges.add(gameChangesList);
+
+            GameChangesList copiedGameChangesList = Utils.copyGameChangesList(gameChangesList);
+
+            gameChanges.add(copiedGameChangesList);
 
             /* Update the monitoring of available construction */
             GameMap map = player.getMap();
@@ -2774,6 +2796,45 @@ public class Utils {
                 assertEquals(availableConstruction.get(minePoint).getAvailableBuilding(), MINE_POSSIBLE);
             }
         }
+    }
+
+    private static GameChangesList copyGameChangesList(GameChangesList gameChangesList) {
+        GameChangesList copy = new GameChangesList(gameChangesList.getTime(),
+                new ArrayList<>(gameChangesList.getWorkersWithNewTargets()),
+                new ArrayList<>(gameChangesList.getNewFlags()),
+                new ArrayList<>(gameChangesList.getRemovedFlags()),
+                new ArrayList<>(gameChangesList.getNewBuildings()),
+                new ArrayList<>(gameChangesList.getChangedBuildings()),
+                new ArrayList<>(gameChangesList.getRemovedBuildings()),
+                new ArrayList<>(gameChangesList.getNewRoads()),
+                new ArrayList<>(gameChangesList.getRemovedRoads()),
+                new ArrayList<>(gameChangesList.getRemovedWorkers()),
+                new ArrayList<>(gameChangesList.getNewTrees()),
+                new ArrayList<>(gameChangesList.getRemovedTrees()),
+                new ArrayList<>(gameChangesList.getRemovedStones()),
+                new ArrayList<>(gameChangesList.getNewSigns()),
+                new ArrayList<>(gameChangesList.getRemovedSigns()),
+                new ArrayList<>(gameChangesList.getNewCrops()),
+                new ArrayList<>(gameChangesList.getRemovedCrops()),
+                new ArrayList<>(gameChangesList.getNewDiscoveredLand()),
+                new ArrayList<>(gameChangesList.getChangedBorders()),
+                new ArrayList<>(gameChangesList.getNewStones()),
+                new ArrayList<>(gameChangesList.getNewWorkers()),
+                new ArrayList<>(gameChangesList.getChangedAvailableConstruction()),
+                new ArrayList<>(gameChangesList.getNewGameMessages()),
+                new ArrayList<>(gameChangesList.getPromotedRoads()),
+                new ArrayList<>(gameChangesList.getChangedFlags()),
+                new ArrayList<>(gameChangesList.getRemovedDeadTrees()),
+                new ArrayList<>(gameChangesList.getDiscoveredDeadTrees()),
+                new ArrayList<>(gameChangesList.getHarvestedCrops()),
+                new ArrayList<>(gameChangesList.getNewShips()),
+                new ArrayList<>(gameChangesList.getFinishedShips()),
+                new ArrayList<>(gameChangesList.getShipsWithNewTargets()),
+                new HashMap<>(gameChangesList.getWorkersWithStartedActions()),
+                new ArrayList<>(gameChangesList.getRemovedDecorations()),
+                new HashMap<>(gameChangesList.getNewDecorations()));
+
+        return copy;
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {
