@@ -25,6 +25,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -2636,14 +2637,16 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
             assertTrue(map.isStoneAtPoint(point1));
         }
+
+        assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
@@ -2705,14 +2708,16 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
             assertTrue(map.isStoneAtPoint(point1));
         }
+
+        assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
@@ -2782,7 +2787,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point3 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point3);
+        Stone stone0 = map.placeStone(point3, StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 9; i++) {

@@ -2292,12 +2292,14 @@ public class GameMap {
      * Places a stone at the given point
      *
      * @param point The point to place the stone on
+     * @param stoneType
+     * @param amount
      * @return The placed stone
      */
-    public Stone placeStone(Point point) {
+    public Stone placeStone(Point point, StoneType stoneType, int amount) {
         MapPoint mapPoint = getMapPoint(point);
 
-        Stone stone = new Stone(point);
+        Stone stone = new Stone(point, stoneType, amount);
 
         mapPoint.setStone(stone);
 

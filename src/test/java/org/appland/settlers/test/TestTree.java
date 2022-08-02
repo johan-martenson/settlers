@@ -9,6 +9,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
 import org.appland.settlers.model.TreeSize;
@@ -202,7 +203,7 @@ public class TestTree {
 
         /* Place stone */
         Point point1 = new Point(6, 12);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a dead tree on a stone */
         assertEquals(map.getDeadTrees().size(), 0);

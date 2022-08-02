@@ -13,12 +13,14 @@ package org.appland.settlers.model;
 public class Stone {
 
     private final Point position;
+    private final StoneType stoneType;
 
     private int amount;
 
-    public Stone(Point point) {
-        amount = 10;
-        position = point;
+    public Stone(Point point, StoneType stoneType, int amount) {
+        this.amount = amount;
+        this.position = point;
+        this.stoneType = stoneType;
     }
 
     public void removeOnePart() {
@@ -39,5 +41,9 @@ public class Stone {
 
     public String toString() {
         return "Stone (" + position.x + ", " + position.y + ")";
+    }
+
+    public StoneType getStoneType() {
+        return stoneType;
     }
 }

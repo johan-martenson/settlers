@@ -37,6 +37,8 @@ import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.StoneType.STONE_1;
+import static org.appland.settlers.model.StoneType.STONE_2;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -265,7 +267,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(12, 4);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -310,7 +312,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(12, 4);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -361,7 +363,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Construct the forester hut */
         constructHouse(quarry);
@@ -420,7 +422,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -495,7 +497,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point3 = new Point(13, 5);
-        Stone stone = map.placeStone(point3);
+        Stone stone = map.placeStone(point3, STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -665,12 +667,14 @@ public class TestQuarry {
 
         /* Place stone */
         Point point1 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, STONE_1, 7);
 
         /* Remove all but one pats of the stone */
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
+
             map.stepTime();
+
             assertTrue(map.isStoneAtPoint(point1));
         }
 
@@ -699,7 +703,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point3 = new Point(12, 8);
-        Stone stone = map.placeStone(point3);
+        Stone stone = map.placeStone(point3, STONE_1, 7);
 
         /* Place quarry */
         Point point26 = new Point(8, 8);
@@ -792,7 +796,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point3 = new Point(12, 8);
-        Stone stone = map.placeStone(point3);
+        Stone stone = map.placeStone(point3, STONE_1, 7);
 
         /* Place quarry */
         Point point26 = new Point(8, 8);
@@ -1089,7 +1093,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point5 = new Point(10, 8);
-        Stone stone = map.placeStone(point5);
+        Stone stone = map.placeStone(point5, STONE_1, 7);
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
@@ -1158,7 +1162,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point5 = new Point(10, 8);
-        Stone stone = map.placeStone(point5);
+        Stone stone = map.placeStone(point5, STONE_1, 7);
 
         /* Place quarry */
         Point point1 = new Point(8, 6);
@@ -1764,7 +1768,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point1 = new Point(8, 6);
-        Stone stone = map.placeStone(point1);
+        Stone stone = map.placeStone(point1, STONE_1, 7);
 
         /* Place two quarries with the same distance to the stone */
         Point point2 = new Point(5, 9);
@@ -2031,7 +2035,7 @@ public class TestQuarry {
 
         /* Put a stone on the other side of the water */
         Point point8 = new Point(15, 9);
-        map.placeStone(point8);
+        map.placeStone(point8, STONE_1, 7);
 
         /* Occupy the quarry */
         Stonemason stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
@@ -2207,7 +2211,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(18, 6);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
@@ -2272,7 +2276,7 @@ public class TestQuarry {
 
         /* Place stone */
         Point point2 = new Point(18, 6);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, STONE_1, 7);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
@@ -2354,8 +2358,8 @@ public class TestQuarry {
         /* Place stones */
         Point point2 = new Point(9, 9);
         Point point3 = new Point(10, 8);
-        Stone stone0 = map.placeStone(point2);
-        Stone stone1 = map.placeStone(point3);
+        Stone stone0 = map.placeStone(point2, STONE_1, 7);
+        Stone stone1 = map.placeStone(point3, STONE_1, 7);
 
         /* Place road to connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
@@ -2719,5 +2723,32 @@ public class TestQuarry {
         }
 
         assertFalse(map.getWorkers().contains(stonemason));
+    }
+
+    @Test
+    public void testThereAreTwoTypesOfStone() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(10, 4);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Verify that stones can be place with both types */
+        Point point2 = new Point(11, 5);
+        Point point3 = new Point(13, 5);
+        Stone stone0 = map.placeStone(point2, STONE_1, 7);
+        Stone stone1 = map.placeStone(point3, STONE_2, 3);
+
+        assertEquals(stone0.getStoneType(), STONE_1);
+        assertEquals(stone1.getStoneType(), STONE_2);
     }
 }

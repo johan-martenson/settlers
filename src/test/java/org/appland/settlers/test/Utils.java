@@ -29,6 +29,7 @@ import org.appland.settlers.model.Ship;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
@@ -1085,7 +1086,7 @@ public class Utils {
             }
 
             try {
-                map.placeStone(point);
+                map.placeStone(point, StoneType.STONE_1, 7);
             } catch (Exception e) {}
         }
     }
@@ -1097,7 +1098,7 @@ public class Utils {
             }
 
             try {
-                map.placeStone(point);
+                map.placeStone(point, StoneType.STONE_1, 7);
                 break;
             } catch (Exception e) {}
         }

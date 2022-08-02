@@ -20,6 +20,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -2422,7 +2423,7 @@ public class TestFarm {
                 continue;
             }
 
-            map.placeStone(point);
+            map.placeStone(point, StoneType.STONE_1, 7);
         }
 
         for (int i = 0; i < 5000; i++) {

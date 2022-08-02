@@ -18,6 +18,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
@@ -169,7 +170,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a stone to discover */
         Point point1 = new Point(33, 5);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -217,7 +218,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a stone to discover */
         Point point1 = new Point(33, 5);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);

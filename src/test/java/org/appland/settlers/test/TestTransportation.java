@@ -21,6 +21,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
@@ -451,7 +452,7 @@ public class TestTransportation {
         Stonemason mason = new Stonemason(player0, map);
 
         /* Place a stone */
-        map.placeStone(quarry0.getFlag().getPosition().up().up());
+        map.placeStone(quarry0.getFlag().getPosition().up().up(), StoneType.STONE_1, 7);
 
         worker.setPosition(start.getPosition());
 

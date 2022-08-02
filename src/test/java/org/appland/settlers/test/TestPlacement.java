@@ -20,6 +20,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
@@ -272,7 +273,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(2, 2);
-        map.placeStone(point1);
+        map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -295,7 +296,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(2, 2);
-        map.placeStone(point1);
+        map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -1027,7 +1028,7 @@ public class TestPlacement {
 
         /* Place stone */
         Point point0 = new Point(3, 3);
-        map.placeStone(point0);
+        map.placeStone(point0, StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a tree on the stone */
         try {
@@ -1163,7 +1164,7 @@ public class TestPlacement {
 
         /* Place stone */
         Point point1 = new Point(3, 3);
-        map.placeStone(point1);
+        map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a flag on the stone */
         try {
@@ -2327,7 +2328,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(8, 8);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Verify that there are available flag points next to the mountain */
         List<Point> edgePoints = new LinkedList<>();
@@ -2468,7 +2469,7 @@ public class TestPlacement {
 
         /* Place stone */
         Point point1 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point1);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
 
         /* Verify that there are only available flags around the stone */
         assertTrue(map.isAvailableFlagPoint(player0, point1.left()));

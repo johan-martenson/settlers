@@ -43,6 +43,7 @@ import org.appland.settlers.model.Shipwright;
 import org.appland.settlers.model.Shipyard;
 import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
@@ -91,7 +92,7 @@ public class TestToString {
 
         /* Place stone */
         Point point0 = new Point(3, 3);
-        Stone stone0 = map.placeStone(point0);
+        Stone stone0 = map.placeStone(point0, StoneType.STONE_1, 7);
 
         /* Verify that the toString() method is correct */
         assertEquals(stone0.toString(), "Stone (3, 3)");

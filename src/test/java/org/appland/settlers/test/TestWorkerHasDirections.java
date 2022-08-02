@@ -13,6 +13,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -373,7 +374,7 @@ public class TestWorkerHasDirections {
                 continue;
             }
 
-            map.placeStone(point);
+            map.placeStone(point, StoneType.STONE_1, 7);
         }
 
         /* Let the forester rest */

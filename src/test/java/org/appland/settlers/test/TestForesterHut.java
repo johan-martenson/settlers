@@ -17,6 +17,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -1186,7 +1187,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeStone(point);
+            map.placeStone(point, StoneType.STONE_1, 7);
         }
 
         assertTrue(forester.isInsideBuilding());

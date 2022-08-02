@@ -9,6 +9,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.WildAnimal;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -242,7 +243,7 @@ public class TestWildAnimal {
                     continue;
                 }
 
-                map.placeStone(pointCurrent);
+                map.placeStone(pointCurrent, StoneType.STONE_1, 7);
             }
         }
 
@@ -592,7 +593,7 @@ public class TestWildAnimal {
                 }
 
                 /* Place stone because this is a regular point */
-                map.placeStone(point);
+                map.placeStone(point, StoneType.STONE_1, 7);
             }
         }
 

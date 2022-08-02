@@ -22,6 +22,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -413,7 +414,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, StoneType.STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -505,7 +506,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2);
+        Stone stone = map.placeStone(point2, StoneType.STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);

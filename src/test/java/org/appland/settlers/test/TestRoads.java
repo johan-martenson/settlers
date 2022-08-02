@@ -19,6 +19,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -785,7 +786,7 @@ public class TestRoads {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(12, 8);
-        Stone stone0 = map.placeStone(point2);
+        Stone stone0 = map.placeStone(point2, StoneType.STONE_1, 7);
 
         /* Place flag */
         Point point3 = new Point(10, 8);

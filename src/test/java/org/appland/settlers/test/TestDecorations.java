@@ -22,6 +22,8 @@ import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.DecorationType.BROWN_MUSHROOM;
 import static org.appland.settlers.model.DecorationType.BUSH;
 import static org.appland.settlers.model.DecorationType.CATTAIL;
+import static org.appland.settlers.model.DecorationType.DEAD_TREE;
+import static org.appland.settlers.model.DecorationType.DEAD_TREE_LYING_DOWN;
 import static org.appland.settlers.model.DecorationType.FEW_SMALL_STONES;
 import static org.appland.settlers.model.DecorationType.FLOWERS;
 import static org.appland.settlers.model.DecorationType.GRASS_1;
@@ -73,7 +75,9 @@ public class TestDecorations {
             FEW_SMALL_STONES,
             SPARSE_BUSH,
             SOME_WATER,
-            LITTLE_GRASS
+            LITTLE_GRASS,
+            DEAD_TREE,
+            DEAD_TREE_LYING_DOWN
     );
 
     /**

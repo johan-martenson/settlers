@@ -16,6 +16,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -332,7 +333,7 @@ public class TestGeologist {
         /* Fill surrounding area with stones */
         for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeStone(point);
+                map.placeStone(point, StoneType.STONE_1, 7);
             } catch (Exception e) {}
         }
 
