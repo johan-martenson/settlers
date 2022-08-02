@@ -74,7 +74,10 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <parallel>classes</parallel>
                     <useUnlimitedThreads>true</useUnlimitedThreads>
-                </configuration>
+                    <excludes>
+                        <exclude>**/assets/test/*</exclude>
+                    </excludes>
+                    </configuration>
             </plugin>
 <!--            <plugin>
                 <groupId>org.pitest</groupId>
