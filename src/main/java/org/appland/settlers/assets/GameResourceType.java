@@ -1,0 +1,17 @@
+package org.appland.settlers.assets;
+
+public enum GameResourceType {
+    PLAYER_BITMAP_RESOURCE,
+    MIDI_SOUND,
+    WAVE_SOUND,
+    XMIDI_SOUND,
+    BITMAP_RLE,
+    BITMAP_RAW,
+    BITMAP_RESOURCE,
+    BOB_RESOURCE,
+    PALETTE_ANIM_RESOURCE,
+    LBM_RESOURCE,
+    FONT_RESOURCE,
+    TEXT_RESOURCE,
+    PALETTE_RESOURCE
+}
