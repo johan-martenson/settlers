@@ -773,15 +773,9 @@ public class Extractor {
         );
 
         // Write each worker image collection to file
-        workerImageCollectors.values().forEach(
-                (WorkerImageCollection workerImageCollection) -> {
-                    try {
-                        workerImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-        );
+        for (WorkerImageCollection workerImageCollection : workerImageCollectors.values()) {
+            workerImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
+        }
 
         // Extract couriers
         Bob jobsBob = jobsBobGameResource.getBob();
