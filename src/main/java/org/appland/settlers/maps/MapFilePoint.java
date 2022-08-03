@@ -263,4 +263,8 @@ class MapFilePoint {
     public void setPossibleHarbor() {
         isPossibleHarbor = true;
     }
+
+    public TreeSize getTreeSize() {
+        return treeSize;
+    }
 }

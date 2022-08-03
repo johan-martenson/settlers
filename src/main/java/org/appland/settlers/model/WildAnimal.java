@@ -20,7 +20,7 @@ import static org.appland.settlers.model.Material.MEAT;
 public class WildAnimal extends Worker {
 
     private static final int TIME_TO_STAND = 39;
-    private static Random random = new Random(1);
+    private static final Random random = new Random(1);
 
     private final Type type;
     private final Countdown countdown;

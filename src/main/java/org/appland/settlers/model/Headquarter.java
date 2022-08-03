@@ -137,7 +137,7 @@ public class Headquarter extends Storehouse {
     @Override
     void capture(Player player) throws InvalidUserActionException {
 
-        /* Destroy the headquarter if it's captured */
+        /* Destroy the headquarters if it's captured */
         super.tearDown();
     }
 

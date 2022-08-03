@@ -260,7 +260,7 @@ public class BuildingsImageCollection {
         this.specialImagesMap.get(nation).addConstructionJustStartedShadowImage(image);
     }
 
-    private class BuildingImages {
+    private static class BuildingImages {
         private Bitmap buildingReadyImage;
         private Bitmap buildingUnderConstruction;
         private Bitmap buildingReadyShadowImage;
@@ -288,7 +288,7 @@ public class BuildingsImageCollection {
         }
     }
 
-    private class SpecialImages {
+    private static class SpecialImages {
         private Bitmap constructionPlannedImage;
         private Bitmap constructionJustStartedImage;
         private Bitmap constructionPlannedShadowImage;

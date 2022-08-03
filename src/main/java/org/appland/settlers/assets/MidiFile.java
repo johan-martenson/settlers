@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MidiFile implements Sound {
-    long headerSize; // uint 32
-    int format; // uint 16
-    int numberTracks; // uint 16
-    short ppqs; // int 16
+    private final long headerSize; // uint 32
+    private final int format; // uint 16
+    private final int numberTracks; // uint 16
+    private final short ppqs; // int 16
     private final List<MidiTrack> tracks;
 
     public MidiFile(long headerSize, int format, int numTracks, short ppqs) {

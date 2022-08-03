@@ -218,7 +218,7 @@ public class Butcher extends Worker {
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the slaughter house upon arrival */
+            /* Don't try to enter the slaughterhouse upon arrival */
             clearTargetBuilding();
 
             /* Go back to the storage */

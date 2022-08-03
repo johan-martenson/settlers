@@ -76,7 +76,7 @@ public class BorderImageCollector {
         Files.writeString(Paths.get(toDir, "image-atlas-border.json"), jsonImageAtlas.toJSONString());
     }
 
-    private class BorderForNation {
+    private static class BorderForNation {
         private Bitmap landBorder;
         private Bitmap coastBorder;
 

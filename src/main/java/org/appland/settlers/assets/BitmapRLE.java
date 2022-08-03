@@ -5,8 +5,6 @@ import java.nio.ByteOrder;
 
 public class BitmapRLE extends Bitmap {
 
-    private final int height;
-    private final int width;
     private final Palette palette;
 
     private boolean debug = false;
@@ -14,8 +12,6 @@ public class BitmapRLE extends Bitmap {
     public BitmapRLE(int width, int height, byte[] data, Palette palette, long length, TextureFormat format) throws InvalidFormatException {
         super(width, height, palette, format);
 
-        this.width = width;
-        this.height = height;
         this.palette = palette;
 
         ByteBuffer byteBufferData = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);

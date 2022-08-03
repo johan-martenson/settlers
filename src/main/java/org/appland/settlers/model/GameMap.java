@@ -363,7 +363,7 @@ public class GameMap {
     }
 
     /**
-     * Returns the possible starting points of the map. A starting point is where a headquarter can be placed
+     * Returns the possible starting points of the map. A starting point is where a headquarters can be placed
      *
      * @return The points where player's headquarters should be placed
      */
@@ -765,7 +765,7 @@ public class GameMap {
 
         isBorderUpdated = false;
 
-        /* Step the time keeper */
+        /* Step the timekeeper */
         time = time + 1;
 
         duration.after("Final updates");
@@ -815,17 +815,17 @@ public class GameMap {
         /* Handle the first building separately */
         boolean isFirstHouse = house.getPlayer().getBuildings().isEmpty();
 
-        /* The first building place by each player must be a headquarter */
+        /* The first building place by each player must be a headquarters */
         if (isFirstHouse && !house.isHeadquarter()) {
             throw new InvalidUserActionException("Can not place " + house + " as initial building");
         }
 
-        /* Only one headquarter can be placed per player */
+        /* Only one headquarters can be placed per player */
         if (house.isHeadquarter() && !isFirstHouse) {
             throw new InvalidUserActionException("Can only have one headquarter placed per player");
         }
 
-        /* Don't allow placing a headquarter so that it's flag ends up too close to the border */
+        /* Don't allow placing a headquarters so that it's flag ends up too close to the border */
         if (isFirstHouse && (width - point.x < 4 || point.y < 4)) {
             throw new InvalidUserActionException("Cannot place headquarter too close to the border so there is no space for its flag.");
         }
@@ -927,7 +927,7 @@ public class GameMap {
         /* Create a road between the flag and the building */
         placeDriveWay(house);
 
-        /* Note when the building was placed so we can compare the age of buildings */
+        /* Note when the building was placed, so we can compare the age of buildings */
         house.setGeneration(time);
 
         /* Report the placed building */
@@ -1087,7 +1087,7 @@ public class GameMap {
 
             updatedLands.get(player).add(new Land(pointsInLand, borders));
 
-            /* Remember that the border was updated so we can notify monitored players */
+            /* Remember that the border was updated, so we can notify monitored players */
             isBorderUpdated = true;
         }
 
@@ -1247,7 +1247,7 @@ public class GameMap {
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException {
         /* Only allow roads that are at least three points long
-         *   -- Driveways are shorter but they are created with a separate method
+         *   -- Driveways are shorter, but they are created with a separate method
          */
         if (wayPoints.size() < 3) {
             throw new InvalidUserActionException("Cannot place road with less than three points.");
@@ -2781,7 +2781,7 @@ public class GameMap {
             return null;
         }
 
-        /* Make sure all houses except for the headquarter are placed within the player's border */
+        /* Make sure all houses except for the headquarters are placed within the player's border */
         if (!isFirstHouse && !player.isWithinBorder(point)) {
             return null;
         }

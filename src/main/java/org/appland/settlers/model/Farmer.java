@@ -384,7 +384,7 @@ public class Farmer extends Worker {
             if (map.isCropAtPoint(point)) {
                 Crop crop = map.getCropAtPoint(point);
 
-                /* Filter crops that aren't full grown */
+                /* Filter crops that aren't full-grown */
                 if (crop.getGrowthState() != FULL_GROWN) {
                     continue;
                 }

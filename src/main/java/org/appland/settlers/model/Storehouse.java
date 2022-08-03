@@ -169,7 +169,7 @@ public class Storehouse extends Building {
                 /* Go through each storehouse */
                 for (Building building : getPlayer().getBuildings()) {
 
-                    /* Skip this storehouse so we don't try to deliver to ourselves */
+                    /* Skip this storehouse, so we don't try to deliver to ourselves */
                     if (Objects.equals(building, this)) {
                         continue;
                     }

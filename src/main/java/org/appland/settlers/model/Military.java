@@ -293,7 +293,7 @@ public class Military extends Worker {
                 previousOwner.reportBuildingLost(buildingToAttack);
                 getPlayer().reportBuildingCaptured(buildingToAttack);
 
-                /* Return home if it's a headquarter */
+                /* Return home if it's a headquarters */
                 if (buildingToAttack.isHeadquarter()) {
 
                     /* Can't occupy headquarter so return home or to storage */
@@ -587,7 +587,7 @@ public class Military extends Worker {
         /* Remember the opponent */
         opponent = military;
 
-        /* Walk half way to the next point to not stand on top of the defender */
+        /* Walk halfway to the next point to not stand on top of the defender */
         walkHalfWayOffroadTo(getPosition().left());
 
         state = WALKING_APART_TO_ATTACK;

@@ -284,10 +284,10 @@ public class Courier extends Worker {
 
             Building building = map.getBuildingAtPoint(getPosition());
 
-            /* Cannot delivery if the building has just been torn down */
+            /* Cannot deliver if the building has just been torn down */
             if (building.isBurningDown()) {
 
-                /* Return to the headquarter off-road because the driveway is gone */
+                /* Return to the headquarters off-road because the driveway is gone */
                 state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
                 setOffroadTarget(getPosition().downRight());
@@ -332,7 +332,7 @@ public class Courier extends Worker {
         } else if (state == GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO) {
             state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
-            /* Return the cargo to the headquarter */
+            /* Return the cargo to the headquarters */
             getCargo().transportToStorage();
 
             setTarget(getAssignedRoad().getOtherPoint(getPosition()));

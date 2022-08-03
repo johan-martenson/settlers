@@ -40,7 +40,6 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -363,7 +362,6 @@ public class Extractor {
 
                         /* Calculate the dimension */
                         Point maxOrigin = new Point(0, 0);
-                        Dimension size = new Dimension(0, 0);
 
                         if (!frame.getBitmaps().isEmpty()) {
 

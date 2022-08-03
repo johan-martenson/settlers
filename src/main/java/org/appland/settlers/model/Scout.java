@@ -79,8 +79,6 @@ public class Scout extends Worker {
 
     @Override
     protected void onArrival() {
-        State stateBefore = this.state;
-
         Stats stats = map.getStats();
 
         CumulativeDuration duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
@@ -331,10 +329,7 @@ public class Scout extends Worker {
         }
 
         /* 3. Sort by how closely they match the existing direction */
-        pointsAndScores.sort((pointEntityAndScore, t1) -> {
-            return Double.compare(pointEntityAndScore.score, t1.score);
-
-        });
+        pointsAndScores.sort((pointEntityAndScore, t1) -> Double.compare(pointEntityAndScore.score, t1.score));
 
         /* 4. Go through the points and select which one to pick */
         for (int i = 0; i < pointsAndScores.size(); i++) {
@@ -381,8 +376,6 @@ public class Scout extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        State stateBefore = this.state;
-
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
         state = RETURNING_TO_STORAGE;

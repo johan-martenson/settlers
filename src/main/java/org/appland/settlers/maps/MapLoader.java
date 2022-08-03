@@ -643,8 +643,9 @@ public class MapLoader {
             /* Place trees */
             if (mapFilePoint.hasTree()) {
                 Tree.TreeType treeType = mapFilePoint.getTreeType();
+                TreeSize treeSize = mapFilePoint.getTreeSize();
 
-                gameMap.placeTree(point, treeType, TreeSize.FULL_GROWN);
+                gameMap.placeTree(point, treeType, treeSize);
             }
 
             /* Place dead trees */

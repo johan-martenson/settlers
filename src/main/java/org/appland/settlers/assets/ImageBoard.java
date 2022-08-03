@@ -128,7 +128,7 @@ public class ImageBoard {
         return jsonImages;
     }
 
-    private class ImageOnBoard {
+    private static class ImageOnBoard {
         private final int x;
         private final int y;
         private final Bitmap image;
@@ -141,7 +141,7 @@ public class ImageBoard {
         }
     }
 
-    private class ImageSeries {
+    private static class ImageSeries {
 
         private final List<Bitmap> images;
         private final int x;

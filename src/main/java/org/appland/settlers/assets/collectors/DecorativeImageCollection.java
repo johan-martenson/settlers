@@ -75,7 +75,7 @@ public class DecorativeImageCollection {
         Files.writeString(Paths.get(dir, "image-atlas-decorations.json"), jsonImageAtlas.toJSONString());
     }
 
-    private class DecorationTypeImage {
+    private static class DecorationTypeImage {
 
         private final Bitmap image;
         private final Bitmap shadowImage;

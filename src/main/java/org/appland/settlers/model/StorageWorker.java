@@ -95,7 +95,7 @@ public class StorageWorker extends Worker {
                 return cargo;
             }
 
-            /* Iterate over all buildings, instead of just the ones that can be reached from the headquarter
+            /* Iterate over all buildings, instead of just the ones that can be reached from the headquarters
 
                This will perform the fast tests first and only perform the expensive test if the quick ones pass
             */

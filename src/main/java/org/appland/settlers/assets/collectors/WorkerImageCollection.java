@@ -68,7 +68,7 @@ public class WorkerImageCollection {
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
 
-        /**
+        /*
          * Write the image atlas, one row per direction, and collect metadata to write as json
          *
          * JSON format:

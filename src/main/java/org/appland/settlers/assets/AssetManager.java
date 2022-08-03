@@ -1979,9 +1979,7 @@ public class AssetManager {
 
             ResourceType resourceType = ResourceType.fromInt(datBobtype);
 
-            AssetManager assetManager = new AssetManager();
-
-            GameResource gameResource = assetManager.loadType(resourceType, datReader, defaultPalette);
+            GameResource gameResource = loadType(resourceType, datReader, defaultPalette);
 
             gameResourceList.add(gameResource);
         }
@@ -2068,67 +2066,67 @@ public class AssetManager {
      * JOBS.BOB
      * SLIM GUY (no head)
      * 0-7   - Walk east
-     * 8-15  - Walk north east
-     * 16-23 - Walk south west
+     * 8-15  - Walk north-east
+     * 16-23 - Walk south-west
      * 24-31 - Walk west
-     * 32-39 - Walk north west
-     * 40-47 - Walk east (south east?)
+     * 32-39 - Walk north-west
+     * 40-47 - Walk east (south-east?)
      *
      * FAT GUY (no head)
      * 48-55 - Walk east
-     * 56-63 - Walk north east (?)
-     * 64-71 - Walk south west
+     * 56-63 - Walk north-east (?)
+     * 64-71 - Walk south-west
      * 72-79 - Walk west
-     * 80-87 - Walk north west
+     * 80-87 - Walk north-west
      * 88-95 - Walk south east
      *
      * HEAD 1
      * 96 - East
-     * 97 - South east (?)
-     * 98 - South west
+     * 97 - South-east (?)
+     * 98 - South-west
      * 99 - West
-     * 100 - North west
-     * 101 - North east
+     * 100 - North-west
+     * 101 - North-east
      *
      * HEAD 2
      * 102 - East
-     * 103 - South east
-     * 104 - South west
+     * 103 - South-east
+     * 104 - South-west
      * 105 - West
-     * 106 - North west
-     * 107 - North east
+     * 106 - North-west
+     * 107 - North-east
      *
      * HEAD 3
      * 108 - East
-     * 109 - South east
-     * 110 - South west
+     * 109 - South-east
+     * 110 - South-west
      * 111 - West
-     * 112 - North west
-     * 113 - North east
+     * 112 - North-west
+     * 113 - North-east
      *
      * HEAD 4
      * 114 - East
-     * 115 - South east
-     * 116 - South west
+     * 115 - South-east
+     * 116 - South-west
      * 117 - West
-     * 118 - North west
-     * 119 - North east
+     * 118 - North-west
+     * 119 - North-east
      *
      * HEAD 5
      * 120 - East
-     * 121 - South east
-     * 122 - South west
+     * 121 - South-east
+     * 122 - South-west
      * 123 - West
-     * 124 - North west
-     * 125 - North east
+     * 124 - North-west
+     * 125 - North-east
      *
      * HEAD 6
      * 126 - East
-     * 127 - South east
-     * 128 - South west
+     * 127 - South-east
+     * 128 - South-west
      * 129 - West
-     * 130 - North west
-     * 131 - North east
+     * 130 - North-west
+     * 131 - North-east
      *
      * HEAD 7
      * 132-137 - E, SE, SW, W, NW, NE
@@ -2189,7 +2187,7 @@ public class AssetManager {
      * 310-315 - E, SE, SW, W, NW, NE
      * 316-17 - W - animation(?)
      *
-     * ... more heads and sometimes bit of body ...
+     * ... more heads and sometimes a bit of body ...
      *
      * MILITARY
      * 859-906 - Roman private (?)
@@ -2204,7 +2202,7 @@ public class AssetManager {
      * @return
      */
     public Map<JobType, RenderedWorker> renderWorkerImages(Bob jobsBob, Map<JobType, WorkerDetails> workerDetailsMap) {
-        Map<JobType, RenderedWorker> workerImages = new EnumMap(JobType.class);
+        Map<JobType, RenderedWorker> workerImages = new EnumMap<>(JobType.class);
 
         /* Go through each job type */
         for (JobType job : JobType.values()) {

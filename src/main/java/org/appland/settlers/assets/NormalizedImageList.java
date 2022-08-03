@@ -8,10 +8,10 @@ import java.util.List;
 public class NormalizedImageList {
     private final List<Bitmap> originalImages;
     private final List<Bitmap> normalizedImages;
-    public int width;
-    public int height;
-    public int nx;
-    public int ny;
+    public final int width;
+    public final int height;
+    public final int nx;
+    public final int ny;
 
     public NormalizedImageList(List<Bitmap> images) {
 
