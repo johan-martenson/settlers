@@ -8,6 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -428,8 +429,8 @@ public class AssetManager {
         long length = streamReader.getUint32();
 
         if (debug) {
-            System.out.println(" - nx_: " + nx);
-            System.out.println(" - ny_: " + ny);
+            System.out.println(" - nx: " + nx);
+            System.out.println(" - ny: " + ny);
             System.out.println(" - Unknown 1: " + unknown1);
             System.out.println(" - Width: " + width);
             System.out.println(" - Height: " + height);
@@ -461,8 +462,8 @@ public class AssetManager {
 
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
 
-        short nx_ = streamReader.getInt16();
-        short ny_ = streamReader.getInt16();
+        short nx = streamReader.getInt16();
+        short ny = streamReader.getInt16();
 
         int width = streamReader.getUint16();
         int height = streamReader.getUint16();
@@ -528,8 +529,8 @@ public class AssetManager {
 
         BitmapRaw bitmapRaw = new BitmapRaw(width, height, length, palette, wantedFormat);
 
-        bitmapRaw.setNx(nx_);
-        bitmapRaw.setNy(ny_);
+        bitmapRaw.setNx(nx);
+        bitmapRaw.setNy(ny);
 
         /* Return the file directly if no conversion is required */
         if (wantedFormat == TextureFormat.PALETTED) {
@@ -588,8 +589,8 @@ public class AssetManager {
         StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
 
         /* Read header */
-        short nx_ = streamReader.getInt16();
-        short ny_ = streamReader.getInt16();
+        short nx = streamReader.getInt16();
+        short ny = streamReader.getInt16();
         long unknown1 = streamReader.getUint32();
         int width = streamReader.getUint16();
         int height = streamReader.getUint16();
@@ -617,8 +618,8 @@ public class AssetManager {
         long position = height * 2L;
         Bitmap bitmap = new Bitmap(width, height, palette, TextureFormat.BGRA);
 
-        bitmap.setNx(nx_);
-        bitmap.setNy(ny_);
+        bitmap.setNx(nx);
+        bitmap.setNy(ny);
 
         for (int y = 0; y < height; y++) {
             int x = 0;
@@ -1425,8 +1426,6 @@ public class AssetManager {
 
         byte[] colors = streamReader.getUint8ArrayAsBytes(256 * 3); // uint 8 x 3, rgb
 
-        int transparentIndex = Palette.DEFAULT_TRANSPARENT_INDEX;
-
         Palette palette =  new Palette(colors);
 
         palette.setDefaultTransparentIdx();
@@ -1568,7 +1567,7 @@ public class AssetManager {
             byte[] myPaletteColors = new byte[256 * 3];
 
             /* Read color by color in BGRA mode */
-            for (int i = 0; i < numberColorsUsedAdjusted; i++) { // FIXME: make the colors used variable correct and replace 256.
+            for (int i = 0; i < numberColorsUsedAdjusted; i++) {
                 byte blue = streamReader.getInt8();
                 byte green = streamReader.getInt8();
                 byte red = streamReader.getInt8();
@@ -1586,7 +1585,7 @@ public class AssetManager {
 
         int sourceBytesPerPixel = bitsPerPixel / 8;
 
-        long rowSize = (int)Math.ceil((bitsPerPixel * width) / 32) * 4L;
+        long rowSize = (int)Math.ceil((bitsPerPixel * width) / 32.0) * 4L;
 
         if (debug) {
             System.out.println(" ---- Calculated row size: " + rowSize);
@@ -2205,7 +2204,7 @@ public class AssetManager {
      * @return
      */
     public Map<JobType, RenderedWorker> renderWorkerImages(Bob jobsBob, Map<JobType, WorkerDetails> workerDetailsMap) {
-        Map<JobType, RenderedWorker> workerImages = new HashMap<>();
+        Map<JobType, RenderedWorker> workerImages = new EnumMap(JobType.class);
 
         /* Go through each job type */
         for (JobType job : JobType.values()) {

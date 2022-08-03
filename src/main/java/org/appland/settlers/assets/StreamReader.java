@@ -167,9 +167,9 @@ public class StreamReader {
     }
 
     public void skip(int i) throws IOException {
-        inputStream.skip(i);
+        long readBytes = inputStream.skip(i);
 
-        offset = offset + i;
+        offset = offset + readBytes;
     }
 
     public short getUint8() throws IOException {
@@ -259,9 +259,9 @@ public class StreamReader {
     }
 
     public void setPosition(long pixelOffset) throws IOException {
-        inputStream.skip(pixelOffset - offset);
+        long bytesRead = inputStream.skip(pixelOffset - offset);
 
-        offset = pixelOffset;
+        offset = offset + bytesRead;
     }
 
     public byte getInt8() throws IOException {
