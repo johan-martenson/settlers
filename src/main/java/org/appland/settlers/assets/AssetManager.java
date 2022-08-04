@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.maps.StreamReader;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +25,7 @@ import static org.appland.settlers.assets.SoundType.WAVE;
 import static org.appland.settlers.assets.SoundType.WAVE_WITHOUT_HEADER;
 import static org.appland.settlers.assets.SoundType.XMIDI;
 import static org.appland.settlers.assets.SoundType.XMID_DIR;
-import static org.appland.settlers.assets.StreamReader.SIZE_OF_UINT32;
+import static org.appland.settlers.maps.StreamReader.SIZE_OF_UINT32;
 
 public class AssetManager {
 
@@ -363,9 +365,9 @@ public class AssetManager {
                 throw new InvalidFormatException("Size must be less that count * 4 (" + count * SIZE_OF_UINT32 + "). Not " + size);
             }
 
-            List<Integer> starts = streamReader.getUint32ArrayAsList(count);
+            List<Long> starts = streamReader.getUint32ArrayAsList(count);
 
-            int lastStart = 0;
+            long lastStart = 0;
 
             /* Verify that each start offset is correct */
             for (int x = 0; x < count; x++) {
@@ -380,7 +382,7 @@ public class AssetManager {
                 }
             }
 
-            starts.add((int)(size + TEXT_FILE_HEADER_SIZE));
+            starts.add((size + TEXT_FILE_HEADER_SIZE));
 
             /* Read each text item */
             for (int x = 0; x < count; x++) {

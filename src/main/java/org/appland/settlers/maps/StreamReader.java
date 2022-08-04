@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Stack;
 
 public class StreamReader {
+    public static final int SIZE_OF_UINT32 = 4;
+
     private final InputStream inputStream;
     private final Stack<ByteOrder> byteOrderStack;
 
@@ -37,7 +39,11 @@ public class StreamReader {
 
         offset = offset + 2;
 
-        return (ByteBuffer.wrap(bytes).order(this.order).getShort() & 0xffff);
+        return getUint16(ByteBuffer.wrap(bytes).order(this.order));
+    }
+
+    private short getUint16(ByteBuffer byteBuffer) {
+        return (short)(byteBuffer.getShort() & 0xffff);
     }
 
     public void read(byte[] buffer, int offset, int length) throws IOException {
@@ -62,12 +68,16 @@ public class StreamReader {
         short[] shorts = new short[lengthInBytes];
 
         for (int i = 0; i < bytes.length; i++) {
-            shorts[i] = (short)(ByteBuffer.wrap(bytes).order(order).get() & 0xff);
+            shorts[i] = getUint8(ByteBuffer.wrap(bytes));
         }
 
         offset = offset + lengthInBytes;
 
         return shorts;
+    }
+
+    private short getUint8(ByteBuffer byteBuffer) {
+        return ((short)(byteBuffer.get() & 0xff));
     }
 
     public long[] getUint32Array(int length) throws IOException {
