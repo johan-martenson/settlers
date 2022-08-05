@@ -1,5 +1,6 @@
 package org.appland.settlers.maps;
 
+import org.appland.settlers.utils.StreamReader;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;

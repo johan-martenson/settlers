@@ -1,6 +1,6 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.maps.StreamReader;
+import org.appland.settlers.utils.StreamReader;
 
 import java.io.IOException;
 import java.nio.ByteOrder;

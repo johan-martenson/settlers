@@ -1,4 +1,6 @@
-package org.appland.settlers.maps;
+package org.appland.settlers.utils;
+
+import org.appland.settlers.maps.ByteArray;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,10 +1,10 @@
 package org.appland.settlers.model;
 
-public class ShipHasReachedDestionationMessage implements Message {
+public class ShipHasReachedDestinationMessage implements Message {
     private final Ship ship;
     private final Point position;
 
-    public ShipHasReachedDestionationMessage(Ship ship, Point point) {
+    public ShipHasReachedDestinationMessage(Ship ship, Point point) {
         this.ship = ship;
         this.position = point;
     }

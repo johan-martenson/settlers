@@ -1,6 +1,6 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.maps.StreamReader;
+import org.appland.settlers.utils.StreamReader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import static org.appland.settlers.assets.SoundType.WAVE;
 import static org.appland.settlers.assets.SoundType.WAVE_WITHOUT_HEADER;
 import static org.appland.settlers.assets.SoundType.XMIDI;
 import static org.appland.settlers.assets.SoundType.XMID_DIR;
-import static org.appland.settlers.maps.StreamReader.SIZE_OF_UINT32;
+import static org.appland.settlers.utils.StreamReader.SIZE_OF_UINT32;
 
 public class AssetManager {
 
@@ -2080,7 +2080,7 @@ public class AssetManager {
      * 64-71 - Walk south-west
      * 72-79 - Walk west
      * 80-87 - Walk north-west
-     * 88-95 - Walk south east
+     * 88-95 - Walk south-east
      *
      * HEAD 1
      * 96 - East

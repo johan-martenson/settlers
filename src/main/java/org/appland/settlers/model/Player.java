@@ -1396,7 +1396,7 @@ public class Player {
     }
 
     public void reportShipReachedDestination(Ship ship) {
-        ShipHasReachedDestionationMessage message = new ShipHasReachedDestionationMessage(ship, ship.getPosition());
+        ShipHasReachedDestinationMessage message = new ShipHasReachedDestinationMessage(ship, ship.getPosition());
 
         messages.add(message);
     }

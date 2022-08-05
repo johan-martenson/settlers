@@ -1247,7 +1247,7 @@ public class TestForesterHut {
                 map.isFlagAtPoint(point)     ||
                 map.isRoadAtPoint(point)     ||
                 map.isStoneAtPoint(point)    ||
-                map.isOnMinableMountain(point)) {
+                map.isOnMineableMountain(point)) {
                 continue;
             }
 

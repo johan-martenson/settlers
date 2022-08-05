@@ -16,7 +16,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Ship;
-import org.appland.settlers.model.ShipHasReachedDestionationMessage;
+import org.appland.settlers.model.ShipHasReachedDestinationMessage;
 import org.appland.settlers.model.ShipReadyForExpeditionMessage;
 import org.appland.settlers.model.Shipwright;
 import org.appland.settlers.model.Shipyard;
@@ -1323,7 +1323,7 @@ public class TestExpeditionNormalFlow {
         /* Verify that a game message is sent */
         assertFalse(player0.getMessages().isEmpty());
 
-        ShipHasReachedDestionationMessage message = (ShipHasReachedDestionationMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        ShipHasReachedDestinationMessage message = (ShipHasReachedDestinationMessage) player0.getMessages().get(player0.getMessages().size() - 1);
 
         assertEquals(message.getMessageType(), Message.MessageType.SHIP_HAS_REACHED_DESTINATION);
         assertEquals(message.getShip(), ship);

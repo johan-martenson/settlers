@@ -3071,7 +3071,7 @@ public class GameMap {
         }
 
         /* Return false if the point is not on a mountain */
-        if (!isOnMinableMountain(point)) {
+        if (!isOnMineableMountain(point)) {
             return false;
         }
 
@@ -3489,10 +3489,10 @@ public class GameMap {
     /**
      * Returns true if the given point is surrounded by mountain tiles
      *
-     * @param point Point that may be on a minable mountain
-     * @return True if the given point is on a minable mountain, otherwise false
+     * @param point Point that may be on a mineable mountain
+     * @return True if the given point is on a mineable mountain, otherwise false
      */
-    public boolean isOnMinableMountain(Point point) {
+    public boolean isOnMineableMountain(Point point) {
 
         DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
         DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
