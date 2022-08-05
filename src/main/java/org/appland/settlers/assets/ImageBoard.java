@@ -44,14 +44,14 @@ public class ImageBoard {
             height = Math.max(height, imageOnBoard.y + imageOnBoard.image.height);
         }
 
-        for (ImageSeries imageSeries : imageSeries.values()) {
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
 
-            if (imageSeries.layoutDirection == LayoutDirection.ROW) {
-                width = Math.max(width, imageSeries.x + imageSeries.width * imageSeries.images.size());
-                height = Math.max(height, imageSeries.y + imageSeries.height);
+            if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
+                width = Math.max(width, oneImageSeries.x + oneImageSeries.width * oneImageSeries.images.size());
+                height = Math.max(height, oneImageSeries.y + oneImageSeries.height);
             } else {
-                width = Math.max(width, imageSeries.x + imageSeries.width);
-                height = Math.max(height, imageSeries.y + imageSeries.height * imageSeries.images.size());
+                width = Math.max(width, oneImageSeries.x + oneImageSeries.width);
+                height = Math.max(height, oneImageSeries.y + oneImageSeries.height * oneImageSeries.images.size());
             }
         }
 
@@ -67,26 +67,26 @@ public class ImageBoard {
                     imageOnBoard.image.getDimension());
         }
 
-        for (ImageSeries imageSeries : imageSeries.values()) {
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
 
-            if (imageSeries.layoutDirection == LayoutDirection.ROW) {
-                for (int i = 0; i < imageSeries.images.size(); i++) {
-                    Bitmap image = imageSeries.images.get(i);
+            if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
+                for (int i = 0; i < oneImageSeries.images.size(); i++) {
+                    Bitmap image = oneImageSeries.images.get(i);
 
                     imageBoard.copyNonTransparentPixels(
                             image,
-                            new Point(imageSeries.x + imageSeries.width * i, imageSeries.y),
+                            new Point(oneImageSeries.x + oneImageSeries.width * i, oneImageSeries.y),
                             new Point(0, 0),
                             image.getDimension()
                     );
                 }
             } else {
-                for (int i = 0; i < imageSeries.images.size(); i++) {
-                    Bitmap image = imageSeries.images.get(i);
+                for (int i = 0; i < oneImageSeries.images.size(); i++) {
+                    Bitmap image = oneImageSeries.images.get(i);
 
                     imageBoard.copyNonTransparentPixels(
                             image,
-                            new Point(imageSeries.x, imageSeries.y + imageSeries.height * i),
+                            new Point(oneImageSeries.x, oneImageSeries.y + oneImageSeries.height * i),
                             new Point(0, 0),
                             image.getDimension()
                     );
@@ -113,17 +113,17 @@ public class ImageBoard {
     }
 
     public JSONObject imageSeriesLocationToJson(List<Bitmap> images) {
-        ImageSeries imageSeries = this.imageSeries.get(images);
+        ImageSeries oneImageSeries = this.imageSeries.get(images);
 
         JSONObject jsonImages = new JSONObject();
 
-        jsonImages.put("startX", imageSeries.x);
-        jsonImages.put("startY", imageSeries.y);
-        jsonImages.put("width", imageSeries.width);
-        jsonImages.put("height", imageSeries.height);
-        jsonImages.put("nrImages", imageSeries.images.size());
-        jsonImages.put("offsetX", imageSeries.offsetX);
-        jsonImages.put("offsetY", imageSeries.offsetY);
+        jsonImages.put("startX", oneImageSeries.x);
+        jsonImages.put("startY", oneImageSeries.y);
+        jsonImages.put("width", oneImageSeries.width);
+        jsonImages.put("height", oneImageSeries.height);
+        jsonImages.put("nrImages", oneImageSeries.images.size());
+        jsonImages.put("offsetX", oneImageSeries.offsetX);
+        jsonImages.put("offsetY", oneImageSeries.offsetY);
 
         return jsonImages;
     }
@@ -182,12 +182,12 @@ public class ImageBoard {
             currentWidth = Math.max(currentWidth, imageOnBoard.image.width + imageOnBoard.x);
         }
 
-        for (ImageSeries imageSeries : imageSeries.values()) {
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
 
-            if (imageSeries.layoutDirection == LayoutDirection.ROW) {
-                currentWidth = Math.max(currentWidth, imageSeries.width * imageSeries.images.size() + imageSeries.x);
+            if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
+                currentWidth = Math.max(currentWidth, oneImageSeries.width * oneImageSeries.images.size() + oneImageSeries.x);
             } else {
-                currentWidth = Math.max(currentWidth, imageSeries.width + imageSeries.x);
+                currentWidth = Math.max(currentWidth, oneImageSeries.width + oneImageSeries.x);
             }
         }
 

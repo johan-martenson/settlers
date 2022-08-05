@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +20,8 @@ public class BuildingsImageCollection {
     private final Map<Nation, SpecialImages> specialImagesMap;
 
     public BuildingsImageCollection() {
-        this.buildingMap = new HashMap<>();
-        this.specialImagesMap = new HashMap<>();
+        this.buildingMap = new EnumMap<>(Nation.class);
+        this.specialImagesMap = new EnumMap<>(Nation.class);
 
         for (Nation nation : Nation.values()) {
             this.buildingMap.put(nation, new HashMap<>());

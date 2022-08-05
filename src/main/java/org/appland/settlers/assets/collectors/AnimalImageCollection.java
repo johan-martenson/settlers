@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,12 +24,12 @@ public class AnimalImageCollection {
 
     public AnimalImageCollection(String name) {
         this.name = name;
-        directionToImageMap = new HashMap<>();
+        directionToImageMap = new EnumMap<>(CompassDirection.class);
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
             this.directionToImageMap.put(compassDirection, new ArrayList<>());
         }
-        shadowImages = new HashMap<>();
+        shadowImages = new EnumMap<>(CompassDirection.class);
     }
 
     public void addImage(CompassDirection compassDirection, Bitmap workerImage) {

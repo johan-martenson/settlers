@@ -12,19 +12,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class SignImageCollection {
+    private static final List<SignType> SIGN_TYPES = Arrays.asList(SignType.values());
+
     private final Map<SignType, Map<Size, Bitmap>> signTypeToImageMap;
-    private final List<SignType> SIGN_TYPES = Arrays.asList(SignType.values());
+
     private Bitmap shadowImage;
 
     public SignImageCollection() {
-        signTypeToImageMap = new HashMap<>();
+        signTypeToImageMap = new EnumMap<>(SignType.class);
 
-        Arrays.asList(SignType.values()).forEach(signType -> this.signTypeToImageMap.put(signType, new HashMap<>()));
+        Arrays.asList(SignType.values()).forEach(signType -> this.signTypeToImageMap.put(signType, new EnumMap<>(Size.class)));
     }
 
     public void addImage(SignType signType, Size size, Bitmap image) {

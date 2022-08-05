@@ -52,12 +52,12 @@ public class ExpandLandPlayer implements ComputerPlayer {
         WAITING_FOR_BUILDINGS_TO_GET_OCCUPIED
     }
 
-    private final static int MAX_PERIOD = 1000;
-    private final static int MAINTENANCE_PERIOD = 50;
-    private final static int MAX_DISTANCE_FROM_BORDER = 3;
-    private final static int MIN_DISTANCE_TO_EDGE = 3;
-    private final static int THRESHOLD_FOR_EVACUATION = 6;
-    private final static int ENEMY_CLOSE = 6;
+    private static final int MAX_PERIOD = 1000;
+    private static final int MAINTENANCE_PERIOD = 50;
+    private static final int MAX_DISTANCE_FROM_BORDER = 3;
+    private static final int MIN_DISTANCE_TO_EDGE = 3;
+    private static final int THRESHOLD_FOR_EVACUATION = 6;
+    private static final int ENEMY_CLOSE = 6;
 
     public ExpandLandPlayer(Player player, GameMap map) {
         this(player, map, new Stats());

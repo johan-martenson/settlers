@@ -21,7 +21,7 @@ import java.util.List;
  * @author johan
  */
 public class FoodProducer implements ComputerPlayer {
-    private final int RANGE_FISHERY_TO_WATER = 5;
+    private static final int RANGE_FISHERY_TO_WATER = 5;
 
     private final Player          controlledPlayer;
     private final List<Fishery>   fisheries;

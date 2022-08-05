@@ -11,7 +11,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class CropImageCollection {
@@ -19,12 +19,12 @@ public class CropImageCollection {
     private final Map<CropType, Map<Crop.GrowthState, Bitmap>> cropShadowMap;
 
     public CropImageCollection() {
-        cropMap = new HashMap<>();
-        cropShadowMap = new HashMap<>();
+        cropMap = new EnumMap<>(CropType.class);
+        cropShadowMap = new EnumMap<>(CropType.class);
 
         for (CropType type : CropType.values()) {
-            cropMap.put(type, new HashMap<>());
-            cropShadowMap.put(type, new HashMap<>());
+            cropMap.put(type, new EnumMap<>(Crop.GrowthState.class));
+            cropShadowMap.put(type, new EnumMap<>(Crop.GrowthState.class));
         }
     }
 

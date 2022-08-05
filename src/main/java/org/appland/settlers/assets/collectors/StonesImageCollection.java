@@ -11,7 +11,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class StonesImageCollection {
@@ -19,12 +19,12 @@ public class StonesImageCollection {
     private final Map<StoneType, Map<StoneAmount, Bitmap>> stoneShadowMap;
 
     public StonesImageCollection() {
-        stoneMap = new HashMap<>();
-        stoneShadowMap = new HashMap<>();
+        stoneMap = new EnumMap<>(StoneType.class);
+        stoneShadowMap = new EnumMap<>(StoneType.class);
 
         for (StoneType type : StoneType.values()) {
-            stoneMap.put(type, new HashMap<>());
-            stoneShadowMap.put(type, new HashMap<>());
+            stoneMap.put(type, new EnumMap<>(StoneAmount.class));
+            stoneShadowMap.put(type, new EnumMap<>(StoneAmount.class));
         }
     }
 

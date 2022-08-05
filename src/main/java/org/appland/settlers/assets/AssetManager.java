@@ -44,9 +44,8 @@ public class AssetManager {
 
     // int16 + uint 16 + uint 16 + uint 32
     private static final int TEXT_FILE_HEADER_SIZE = 2 + 2 + 2 + 4;
-    private static final Object JOB_FILE = "/media/johan/bb340575-f0b7-4908-abfe-a4a296dc355c1/Spel/BLUEBYTE/SETTLER2/DATA/BOBS/JOBS.BOB";
 
-    private final TextureFormat globalTextureFormat = TextureFormat.BGRA;
+    private static final TextureFormat globalTextureFormat = TextureFormat.BGRA;
 
     private TextureFormat wantedTextureFormat;
     private boolean debug = false;

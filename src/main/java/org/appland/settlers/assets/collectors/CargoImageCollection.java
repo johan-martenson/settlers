@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,12 +21,13 @@ public class CargoImageCollection {
     private final Map<Bitmap, Material> imageToMaterial;
 
     public CargoImageCollection() {
-        nationCargos = new HashMap<>();
-        cargos = new HashMap<>();
+        nationCargos = new EnumMap<>(Nation.class);
+        cargos = new EnumMap<>(Material.class);
 
         for (Nation nation : Nation.values()) {
-            nationCargos.put(nation, new HashMap<>());
+            nationCargos.put(nation, new EnumMap<>(Material.class));
         }
+
         imageToMaterial = new HashMap<>();
     }
 

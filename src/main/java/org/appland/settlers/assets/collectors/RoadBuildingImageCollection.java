@@ -10,7 +10,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class RoadBuildingImageCollection {
@@ -20,8 +20,8 @@ public class RoadBuildingImageCollection {
     private final Map<RoadConnectionDifference, Bitmap> downwardsConnectionImages;
 
     public RoadBuildingImageCollection() {
-        downwardsConnectionImages = new HashMap<>();
-        upwardsConnectionImages = new HashMap<>();
+        downwardsConnectionImages = new EnumMap<>(RoadConnectionDifference.class);
+        upwardsConnectionImages = new EnumMap<>(RoadConnectionDifference.class);
     }
 
     public void addStartPointImage(Bitmap image) {

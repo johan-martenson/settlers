@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,13 +23,13 @@ public class FlagImageCollection {
     private final Map<Nation, Map<FlagType, List<Bitmap>>> flagShadowMap;
 
     public FlagImageCollection() {
-        flagMap = new HashMap<>();
-        flagShadowMap = new HashMap<>();
+        flagMap = new EnumMap<>(Nation.class);
+        flagShadowMap = new EnumMap<>(Nation.class);
 
         for (Nation nation : Nation.values()) {
 
-            flagMap.put(nation, new HashMap<>());
-            flagShadowMap.put(nation, new HashMap<>());
+            flagMap.put(nation, new EnumMap<>(FlagType.class));
+            flagShadowMap.put(nation, new EnumMap<>(FlagType.class));
 
             for (FlagType flagType : FlagType.values()) {
                 flagMap.get(nation).put(flagType, new ArrayList<>());

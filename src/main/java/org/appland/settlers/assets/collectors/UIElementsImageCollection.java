@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class UIElementsImageCollection {
@@ -27,8 +27,8 @@ public class UIElementsImageCollection {
     private Bitmap availableHarbor;
 
     public UIElementsImageCollection() {
-        hoverAvailableBuilding = new HashMap<>();
-        availableBuilding = new HashMap<>();
+        hoverAvailableBuilding = new EnumMap<>(Size.class);
+        availableBuilding = new EnumMap<>(Size.class);
     }
 
     public void addSelectedPointImage(Bitmap image) {

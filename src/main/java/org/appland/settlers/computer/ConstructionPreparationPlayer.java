@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.computer;
 
-import java.util.List;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -14,16 +13,19 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
-import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Woodcutter;
+
+import java.util.List;
+
+import static org.appland.settlers.model.Size.SMALL;
 
 /**
  *
  * @author johan
  */
 public class ConstructionPreparationPlayer implements ComputerPlayer {
-    private final static int PERIODIC_STONES_CHECK = 100;
-    private final static int STONE_RECHECK_COUNTER_MAX = 10000;
+    private static final int PERIODIC_STONES_CHECK = 100;
+    private static final int STONE_RECHECK_COUNTER_MAX = 10000;
 
     private ForesterHut foresterHut;
     private Woodcutter  woodcutter0;

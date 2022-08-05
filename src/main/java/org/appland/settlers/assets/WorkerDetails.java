@@ -4,7 +4,7 @@ import static org.appland.settlers.assets.BodyType.FAT;
 import static org.appland.settlers.assets.BodyType.THIN;
 
 public class WorkerDetails {
-    public final static int NUMBER_NATION_SPECIFIC_JOBS = 6;
+    public static final int NUMBER_NATION_SPECIFIC_JOBS = 6;
 
     private final int id;
     private final BodyType bodyType;

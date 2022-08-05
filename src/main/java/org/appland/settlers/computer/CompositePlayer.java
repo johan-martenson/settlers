@@ -23,20 +23,14 @@ import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
 
 /**
  *
@@ -59,14 +53,14 @@ public class CompositePlayer implements ComputerPlayer {
     private ComputerPlayer previousPlayer;
     private ComputerPlayer currentPlayer;
     private int counter;
-    private final static int PERIODIC_ENEMY_SCAN = 100;
-    private final static int PERIODIC_SCAN_FOR_NEW_MINERALS = 30;
-    private final static int PERIODIC_TRANSPORT_PRIORITY_REVIEW = 200;
-    private final static int COUNTER_MAX         = 1000;
-    private final static int ATTACK_FOLLOW_UP    = 20;
-    private final static int TIME_TO_WAIT_FOR_PROMOTED_SOLDIERS = 200;
-    private final static int PERIODIC_LAKE_SCAN = 40;
-    private final static String AGGREGATED_EACH_STEP_TIME_GROUP = "COLLECT_EACH_TURN";
+    private static final int PERIODIC_ENEMY_SCAN = 100;
+    private static final int PERIODIC_SCAN_FOR_NEW_MINERALS = 30;
+    private static final int PERIODIC_TRANSPORT_PRIORITY_REVIEW = 200;
+    private static final int COUNTER_MAX         = 1000;
+    private static final int ATTACK_FOLLOW_UP    = 20;
+    private static final int TIME_TO_WAIT_FOR_PROMOTED_SOLDIERS = 200;
+    private static final int PERIODIC_LAKE_SCAN = 40;
+    private static final String AGGREGATED_EACH_STEP_TIME_GROUP = "COLLECT_EACH_TURN";
 
     public CompositePlayer(Player player, GameMap map) {
         this.player = player;

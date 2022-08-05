@@ -43,6 +43,7 @@ import org.kohsuke.args4j.Option;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -290,7 +291,7 @@ public class Extractor {
         BobGameResource jobsBobGameResource = (BobGameResource) jobsBobList.get(0);
 
         /* Construct the worker details map */
-        Map<JobType, WorkerDetails> workerDetailsMap = new HashMap<>();
+        Map<JobType, WorkerDetails> workerDetailsMap = new EnumMap<JobType, WorkerDetails>(JobType.class);
 
         // FIXME: assume RANGER == FORESTER
 
@@ -337,7 +338,7 @@ public class Extractor {
 
         /* Composite the worker images and animations */
         Map<JobType, RenderedWorker> renderedWorkers = assetManager.renderWorkerImages(jobsBobGameResource.getBob(), workerDetailsMap);
-        Map<JobType, WorkerImageCollection> workerImageCollectors = new HashMap<>();
+        Map<JobType, WorkerImageCollection> workerImageCollectors = new EnumMap<>(JobType.class);
 
         for (JobType jobType : JobType.values()) {
             RenderedWorker renderedWorker = renderedWorkers.get(jobType);
@@ -800,6 +801,10 @@ public class Extractor {
         // Read walking animation for each type of cargo
         for (CarrierCargo carrierCargo : CarrierCargo.values()) {
             Material material = CarrierBob.CARGO_BOB_ID_TO_MATERIAL_MAP.get(carrierCargo.ordinal());
+
+            if (material == null) {
+                continue;
+            }
 
             thinCarrierWithCargo.readCargoImagesFromBob(material, THIN, carrierCargo.ordinal(), carrierBob);
             fatCarrierWithCargo.readCargoImagesFromBob(material, FAT, carrierCargo.ordinal(), carrierBob);
@@ -1938,7 +1943,7 @@ public class Extractor {
         writeFilesFromMap(romYLst, imagesToFileMap);
 
         // Create the image atlas
-        Map<Nation, String> nationsAndBobFiles = new HashMap<>();
+        Map<Nation, String> nationsAndBobFiles = new EnumMap<>(Nation.class);
 
         nationsAndBobFiles.put(Nation.ROMANS, "DATA/MBOB/ROM_Y.LST");
         nationsAndBobFiles.put(Nation.JAPANESE, "DATA/MBOB/JAP_Y.LST");

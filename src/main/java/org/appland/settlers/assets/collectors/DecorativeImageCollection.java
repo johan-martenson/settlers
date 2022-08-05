@@ -10,22 +10,22 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class DecorativeImageCollection {
-    private final Map<DecorationType, DecorationTypeImage> DecorationTypes;
+    private final Map<DecorationType, DecorationTypeImage> decorationImages;
 
     public DecorativeImageCollection() {
-        DecorationTypes = new HashMap<>();
+        decorationImages = new EnumMap<>(DecorationType.class);
     }
 
     public void addDecorationTypeImage(DecorationType DecorationType, Bitmap image) {
-        DecorationTypes.put(DecorationType, new DecorationTypeImage(image));
+        decorationImages.put(DecorationType, new DecorationTypeImage(image));
     }
 
     public void addDecorationImageWithShadow(DecorationType DecorationType, Bitmap image, Bitmap shadowImage) {
-        DecorationTypes.put(DecorationType, new DecorationTypeImage(image, shadowImage));
+        decorationImages.put(DecorationType, new DecorationTypeImage(image, shadowImage));
     }
 
     public void writeImageAtlas(String dir, Palette palette) throws IOException {
@@ -36,7 +36,7 @@ public class DecorativeImageCollection {
 
         Point cursor = new Point(0, 0);
 
-        for (Map.Entry<DecorationType, DecorationTypeImage> entry : this.DecorationTypes.entrySet()) {
+        for (Map.Entry<DecorationType, DecorationTypeImage> entry : this.decorationImages.entrySet()) {
             DecorationType DecorationType = entry.getKey();
             Bitmap image = entry.getValue().image;
             Bitmap shadowImage = entry.getValue().shadowImage;

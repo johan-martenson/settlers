@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +25,9 @@ public class FireImageCollection {
     private final Map<FireSize, List<Bitmap>> fireShadowMap;
 
     public FireImageCollection() {
-        fireMap = new HashMap<>();
-        fireShadowMap = new HashMap<>();
-        burntDownMap = new HashMap<>();
+        fireMap = new EnumMap<>(FireSize.class);
+        fireShadowMap = new EnumMap<>(FireSize.class);
+        burntDownMap = new EnumMap<>(Size.class);
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {

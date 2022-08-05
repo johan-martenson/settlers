@@ -12,7 +12,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class ShipImageCollection {
@@ -21,8 +21,8 @@ public class ShipImageCollection {
     private final Map<ShipConstructionProgress, ImageWithShadow> underConstructionImages;
 
     public ShipImageCollection() {
-        images = new HashMap<>();
-        underConstructionImages = new HashMap<>();
+        images = new EnumMap<>(CompassDirection.class);
+        underConstructionImages = new EnumMap<>(ShipConstructionProgress.class);
     }
 
     public void addShipImageWithShadow(CompassDirection compassDirection, Bitmap image, Bitmap shadowImage) {

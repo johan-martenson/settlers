@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,14 +43,14 @@ public class WorkerImageCollection {
     public WorkerImageCollection(String name) {
         this.name = name;
 
-        nationSpecificBodyAndHeadImages = new HashMap<>();
-        commonHeadImagesWithoutCargo = new HashMap<>();
-        commonShadowImages = new HashMap<>();
-        commonCargoImages = new HashMap<>();
-        commonBodyImages = new HashMap<>();
-        commonBodyAndHeadImages = new HashMap<>();
-        commonActions = new HashMap<>();
-        commonActionsWithDirection = new HashMap<>();
+        nationSpecificBodyAndHeadImages = new EnumMap<>(Nation.class);
+        commonHeadImagesWithoutCargo = new EnumMap<>(CompassDirection.class);
+        commonShadowImages = new EnumMap<>(CompassDirection.class);
+        commonCargoImages = new EnumMap<>(Material.class);
+        commonBodyImages = new EnumMap<>(CompassDirection.class);
+        commonBodyAndHeadImages = new EnumMap<>(CompassDirection.class);
+        commonActions = new EnumMap<>(WorkerAction.class);
+        commonActionsWithDirection = new EnumMap<>(WorkerAction.class);
     }
 
     public void addNationSpecificFullImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {

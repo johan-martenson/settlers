@@ -39,8 +39,8 @@ import static org.appland.settlers.model.Material.STONE;
  * @author johan
  */
 public class SearchForMineralsPlayer implements ComputerPlayer {
-    private final int RANGE_BETWEEN_FLAG_AND_POINT = 5;
-    private final int GEOLOGIST_WAIT_TIMEOUT = 200;
+    private static final int RANGE_BETWEEN_FLAG_AND_POINT = 5;
+    private static final int GEOLOGIST_WAIT_TIMEOUT = 200;
 
     private final Player                 controlledPlayer;
     private final Set<Point>             concludedPoints;

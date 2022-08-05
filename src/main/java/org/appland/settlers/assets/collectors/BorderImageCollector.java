@@ -10,14 +10,14 @@ import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class BorderImageCollector {
     private final Map<Nation, BorderForNation> borderMap;
 
     public BorderImageCollector() {
-        borderMap = new HashMap<>();
+        borderMap = new EnumMap<>(Nation.class);
 
         for (Nation nation : Nation.values()) {
             borderMap.put(nation, new BorderForNation());
