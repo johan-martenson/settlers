@@ -234,7 +234,9 @@ public class WorkerImageCollection {
 
             jsonCommon.put("cargoImages", jsonMultipleCargoImages);
 
-            for (Material material : commonCargoImages.keySet()) {
+            for (Map.Entry<Material, Map<CompassDirection, List<Bitmap>>> materialMapEntry : commonCargoImages.entrySet()) {
+                Material material = materialMapEntry.getKey();
+                Map<CompassDirection, List<Bitmap>> imagesForMaterial = materialMapEntry.getValue();
 
                 if (material == null) {
                     continue;
@@ -244,10 +246,10 @@ public class WorkerImageCollection {
 
                 jsonMultipleCargoImages.put(material.name().toUpperCase(), jsonMaterialImages);
 
-                for (Map.Entry<CompassDirection, List<Bitmap>> entry : commonCargoImages.get(material).entrySet()) {
+                for (Map.Entry<CompassDirection, List<Bitmap>> compassDirectionListEntry : imagesForMaterial.entrySet()) {
 
-                    CompassDirection compassDirection = entry.getKey();
-                    List<Bitmap> cargoImagesForDirection = entry.getValue();
+                    CompassDirection compassDirection = compassDirectionListEntry.getKey();
+                    List<Bitmap> cargoImagesForDirection = compassDirectionListEntry.getValue();
 
                     cursor.x = 0;
 

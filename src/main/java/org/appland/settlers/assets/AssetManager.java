@@ -1609,18 +1609,18 @@ public class AssetManager {
 
         BitmapFile bitmap = new BitmapFile(width, height, palette, wantedTextureFormat);
 
-        bitmap.setFileSize(fileSize)
-            .setReserved(reserved)
-            .setPixelOffset(pixelOffset)
-            .setHeaderSize(headerSize)
-            .setPlanes(planes)
-            .setBitsPerPixel(bitsPerPixel)
-            .setCompression(compression)
-            .setSize(size)
-            .setXPixelsPerM(xPixelsPerMeter)
-            .setYPixelsPerM(yPixelsPerMeter)
-            .setColorUsed((int)numberColorsUsed)
-            .setColorImp(numberImportantColors);
+        bitmap.setFileSize(fileSize);
+        bitmap.setReserved(reserved);
+        bitmap.setPixelOffset(pixelOffset);
+        bitmap.setHeaderSize(headerSize);
+        bitmap.setPlanes(planes);
+        bitmap.setBitsPerPixel(bitsPerPixel);
+        bitmap.setCompression(compression);
+        bitmap.setSize(size);
+        bitmap.setXPixelsPerM(xPixelsPerMeter);
+        bitmap.setYPixelsPerM(yPixelsPerMeter);
+        bitmap.setColorUsed((int)numberColorsUsed);
+        bitmap.setColorImp(numberImportantColors);
 
         int targetBytesPerPixel = 1;
 

@@ -369,7 +369,7 @@ public class Utils {
         fillRoadWithFlags(map, road);
     }
 
-    private static Set<Flag> findConnectedFlags(GameMap map, Flag from) throws Exception {
+    private static Set<Flag> findConnectedFlags(GameMap map, Flag from) {
         Set<Flag>  fromFlags     = new HashSet<>();
         List<Flag> flagsToSearch = new LinkedList<>();
         Set<Road>  searchedRoads = new HashSet<>();

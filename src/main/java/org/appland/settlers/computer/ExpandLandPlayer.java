@@ -36,7 +36,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
     private final Group collectEachTurnGroup;
 
     private GameMap     map;
-    public Building    unfinishedBarracks;
+    private Building    unfinishedBarracks;
     private Headquarter headquarter;
     private State       state;
     private boolean     newBuildings;

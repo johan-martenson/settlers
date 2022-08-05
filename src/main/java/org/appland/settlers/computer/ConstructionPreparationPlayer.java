@@ -148,20 +148,6 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
         return null;
     }
 
-    private Point findSpotForQuarry(Point stonePoint) {
-
-        /* Get points with available space for houses close to the stone point */
-        List<Point> points = Utils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
-
-        /* Return null if there are no available places */
-        if (points.isEmpty()) {
-            return null;
-        }
-
-        /* Return any point from the available places */
-        return points.get(0);
-    }
-
     boolean basicConstructionDone() {
 
         /* Periodically check if there are remaining stones */

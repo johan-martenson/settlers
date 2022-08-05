@@ -7,7 +7,6 @@ public class BitmapFile extends Bitmap {
     private long pixelOffset;
     private long headerSize;
     private short planes;
-    private short bitsPerPixel;
     private long compression;
     private long size;
     private int xPixelsPerM;
@@ -49,11 +48,6 @@ public class BitmapFile extends Bitmap {
         return this;
     }
 
-    public BitmapFile setBitsPerPixel(short bitsPerPixel) {
-        this.bitsPerPixel = bitsPerPixel;
-
-        return this;
-    }
 
     public BitmapFile setCompression(long compression) {
         this.compression = compression;
@@ -109,10 +103,6 @@ public class BitmapFile extends Bitmap {
 
     public int getPlanes() {
         return planes;
-    }
-
-    public int getBitsPerPixel() {
-        return bitsPerPixel;
     }
 
     public long getCompression() {

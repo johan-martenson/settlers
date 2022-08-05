@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Bitmap {
-    private final int bitsPerPixel;
+    protected int bitsPerPixel;
     protected final int height;
     protected final int width;
     private final TextureFormat format;
@@ -452,5 +452,9 @@ public class Bitmap {
         }
 
         return mirror;
+    }
+
+    public void setBitsPerPixel(short bitsPerPixel) {
+        this.bitsPerPixel = bitsPerPixel;
     }
 }

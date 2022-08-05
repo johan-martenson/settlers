@@ -20,12 +20,12 @@ public class DecorativeImageCollection {
         decorationImages = new EnumMap<>(DecorationType.class);
     }
 
-    public void addDecorationTypeImage(DecorationType DecorationType, Bitmap image) {
-        decorationImages.put(DecorationType, new DecorationTypeImage(image));
+    public void addDecorationTypeImage(DecorationType decorationType, Bitmap image) {
+        decorationImages.put(decorationType, new DecorationTypeImage(image));
     }
 
-    public void addDecorationImageWithShadow(DecorationType DecorationType, Bitmap image, Bitmap shadowImage) {
-        decorationImages.put(DecorationType, new DecorationTypeImage(image, shadowImage));
+    public void addDecorationImageWithShadow(DecorationType decorationType, Bitmap image, Bitmap shadowImage) {
+        decorationImages.put(decorationType, new DecorationTypeImage(image, shadowImage));
     }
 
     public void writeImageAtlas(String dir, Palette palette) throws IOException {
@@ -37,7 +37,7 @@ public class DecorativeImageCollection {
         Point cursor = new Point(0, 0);
 
         for (Map.Entry<DecorationType, DecorationTypeImage> entry : this.decorationImages.entrySet()) {
-            DecorationType DecorationType = entry.getKey();
+            DecorationType decorationType = entry.getKey();
             Bitmap image = entry.getValue().image;
             Bitmap shadowImage = entry.getValue().shadowImage;
 
@@ -46,7 +46,7 @@ public class DecorativeImageCollection {
 
             JSONObject jsonDecorationType = new JSONObject();
 
-            jsonImageAtlas.put(DecorationType.name().toUpperCase(), jsonDecorationType);
+            jsonImageAtlas.put(decorationType.name().toUpperCase(), jsonDecorationType);
 
             // DecorationType image
             imageBoard.placeImage(image, cursor);

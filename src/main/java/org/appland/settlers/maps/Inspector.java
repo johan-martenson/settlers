@@ -811,14 +811,19 @@ public class Inspector {
 
         Map<Point, AvailableBuildingComparison> matched    = new HashMap<>();
         Map<Point, AvailableBuildingComparison> mismatched = new HashMap<>();
-        for (Point point : availablePoints.keySet()) {
+
+        for (Map.Entry<Point, Size> entry : availablePoints.entrySet()) {
+            Point point = entry.getKey();
+            Size size = entry.getValue();
+
             MapFilePoint mapFilePoint = mapFile.getMapFilePoint(point);
 
             if (!availablePoints.containsKey(point)) {
                 continue;
             }
 
-            AvailableBuildingComparison comparison = new AvailableBuildingComparison(availablePoints.get(point),
+            AvailableBuildingComparison comparison = new AvailableBuildingComparison(
+                    size,
                     map.isAvailableFlagPoint(player, point),
                     mapFilePoint.getBuildableSite());
 

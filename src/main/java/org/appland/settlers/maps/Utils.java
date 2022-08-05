@@ -18,7 +18,7 @@ class Utils {
         StringBuilder hex = new StringBuilder();
 
         for (byte b : blockHeader1) {
-            hex.append(Integer.toHexString(b & 0xff));
+            hex.append(String.format("%02X", b & 0xff));
         }
 
         return hex.toString();
