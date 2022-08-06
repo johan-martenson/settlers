@@ -24,7 +24,7 @@ import static org.appland.settlers.model.Tree.TreeType.PINE;
  * @author johan
  */
 public class Tree {
-    public static final TreeType[] PLANTABLE_TREES = new TreeType[]{
+    public static final TreeType[] PLANTABLE_TREES = {
             PINE,
             BIRCH,
             OAK,

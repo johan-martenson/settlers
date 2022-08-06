@@ -26,14 +26,14 @@ public class Utils {
     public static short getUint8FromByteArray(byte[] arr, int i) {
         ByteBuffer bb = ByteBuffer.wrap(arr);
 
-        return ((short)(bb.get(i) & 0xff));
+        return (short)(bb.get(i) & 0xff);
     }
 
     static String getHex(byte[] bytes) {
         StringBuilder hex = new StringBuilder();
 
         for (byte b : bytes) {
-            hex.append(Integer.toHexString((b & 0xff)));
+            hex.append(Integer.toHexString(b & 0xff));
         }
 
         return hex.toString();
@@ -96,7 +96,7 @@ public class Utils {
             return false;
         }
 
-        Set<String> children = Files.walk(fromDirPath, 1, FileVisitOption.FOLLOW_LINKS).map((path -> path.getFileName().toString())).collect(Collectors.toSet());
+        Set<String> children = Files.walk(fromDirPath, 1, FileVisitOption.FOLLOW_LINKS).map(path -> path.getFileName().toString()).collect(Collectors.toSet());
 
         if (!children.contains("BLUEBYTE")) {
             System.out.println("No bluebyte child!");

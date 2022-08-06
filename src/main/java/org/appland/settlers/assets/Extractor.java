@@ -57,8 +57,14 @@ import static org.appland.settlers.assets.CompassDirection.NORTH_WEST;
 import static org.appland.settlers.assets.CompassDirection.SOUTH_EAST;
 import static org.appland.settlers.assets.CompassDirection.SOUTH_WEST;
 import static org.appland.settlers.assets.CompassDirection.WEST;
+import static org.appland.settlers.assets.Nation.AFRICANS;
+import static org.appland.settlers.assets.Nation.JAPANESE;
+import static org.appland.settlers.assets.Nation.ROMANS;
+import static org.appland.settlers.assets.Nation.VIKINGS;
 import static org.appland.settlers.model.Material.AXE;
+import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BOAT;
+import static org.appland.settlers.model.Material.BOW;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.CLEAVER;
 import static org.appland.settlers.model.Material.COAL;
@@ -77,10 +83,14 @@ import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.ROLLING_PIN;
 import static org.appland.settlers.model.Material.SAW;
 import static org.appland.settlers.model.Material.SCYTHE;
+import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.SHOVEL;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.TONGS;
+import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -205,17 +215,17 @@ public class Extractor {
 
         BorderImageCollector borderImageCollector = new BorderImageCollector();
 
-        borderImageCollector.addLandBorderImage(Nation.AFRICANS, getImageFromResourceLocation(afrBobsLst, RomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(Nation.AFRICANS, getImageFromResourceLocation(afrBobsLst, RomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(AFRICANS, getImageFromResourceLocation(afrBobsLst, RomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(AFRICANS, getImageFromResourceLocation(afrBobsLst, RomBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(Nation.JAPANESE, getImageFromResourceLocation(japBobsLst, RomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(Nation.JAPANESE, getImageFromResourceLocation(japBobsLst, RomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(JAPANESE, getImageFromResourceLocation(japBobsLst, RomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(JAPANESE, getImageFromResourceLocation(japBobsLst, RomBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(Nation.ROMANS, getImageFromResourceLocation(romBobsLst, RomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(Nation.ROMANS, getImageFromResourceLocation(romBobsLst, RomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(ROMANS, getImageFromResourceLocation(romBobsLst, RomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(ROMANS, getImageFromResourceLocation(romBobsLst, RomBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(Nation.VIKINGS, getImageFromResourceLocation(vikBobsLst, RomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(Nation.VIKINGS, getImageFromResourceLocation(vikBobsLst, RomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(VIKINGS, getImageFromResourceLocation(vikBobsLst, RomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(VIKINGS, getImageFromResourceLocation(vikBobsLst, RomBobsLst.COAST_BORDER_ICON));
 
         borderImageCollector.writeImageAtlas(toDir, defaultPalette);
     }
@@ -230,44 +240,44 @@ public class Extractor {
         FlagImageCollection flagImageCollection = new FlagImageCollection();
 
         // Africans
-        flagImageCollection.addImagesForFlag(Nation.AFRICANS, FlagType.NORMAL, getImagesFromGameResource(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.AFRICANS, FlagType.NORMAL, getImagesFromGameResource(afrZLst, AfrZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.NORMAL, getImagesFromGameResource(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.NORMAL, getImagesFromGameResource(afrZLst, AfrZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.AFRICANS, FlagType.MAIN, getImagesFromGameResource(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.AFRICANS, FlagType.MAIN, getImagesFromGameResource(afrZLst, AfrZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.MAIN, getImagesFromGameResource(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.MAIN, getImagesFromGameResource(afrZLst, AfrZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.AFRICANS, FlagType.MARINE, getImagesFromGameResource(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.AFRICANS, FlagType.MARINE, getImagesFromGameResource(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.MARINE, getImagesFromGameResource(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.MARINE, getImagesFromGameResource(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Japanese
-        flagImageCollection.addImagesForFlag(Nation.JAPANESE, FlagType.NORMAL, getImagesFromGameResource(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.JAPANESE, FlagType.NORMAL, getImagesFromGameResource(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.NORMAL, getImagesFromGameResource(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.NORMAL, getImagesFromGameResource(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.JAPANESE, FlagType.MAIN, getImagesFromGameResource(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.JAPANESE, FlagType.MAIN, getImagesFromGameResource(japZLst, JapZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.MAIN, getImagesFromGameResource(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.MAIN, getImagesFromGameResource(japZLst, JapZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.JAPANESE, FlagType.MARINE, getImagesFromGameResource(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.JAPANESE, FlagType.MARINE, getImagesFromGameResource(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.MARINE, getImagesFromGameResource(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.MARINE, getImagesFromGameResource(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Romans
-        flagImageCollection.addImagesForFlag(Nation.ROMANS, FlagType.NORMAL, getImagesFromGameResource(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.ROMANS, FlagType.NORMAL, getImagesFromGameResource(romZLst, RomZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, FlagType.NORMAL, getImagesFromGameResource(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.NORMAL, getImagesFromGameResource(romZLst, RomZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.ROMANS, FlagType.MAIN, getImagesFromGameResource(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.ROMANS, FlagType.MAIN, getImagesFromGameResource(romZLst, RomZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, FlagType.MAIN, getImagesFromGameResource(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.MAIN, getImagesFromGameResource(romZLst, RomZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.ROMANS, FlagType.MARINE, getImagesFromGameResource(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.ROMANS, FlagType.MARINE, getImagesFromGameResource(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, FlagType.MARINE, getImagesFromGameResource(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.MARINE, getImagesFromGameResource(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Vikings
-        flagImageCollection.addImagesForFlag(Nation.VIKINGS, FlagType.NORMAL, getImagesFromGameResource(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.VIKINGS, FlagType.NORMAL, getImagesFromGameResource(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.NORMAL, getImagesFromGameResource(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.NORMAL, getImagesFromGameResource(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.VIKINGS, FlagType.MAIN, getImagesFromGameResource(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.VIKINGS, FlagType.MAIN, getImagesFromGameResource(vikZLst, VikZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.MAIN, getImagesFromGameResource(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.MAIN, getImagesFromGameResource(vikZLst, VikZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(Nation.VIKINGS, FlagType.MARINE, getImagesFromGameResource(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(Nation.VIKINGS, FlagType.MARINE, getImagesFromGameResource(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.MARINE, getImagesFromGameResource(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.MARINE, getImagesFromGameResource(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Write the image atlas to file
         flagImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
@@ -452,7 +462,7 @@ public class Extractor {
         Bob bob = ((BobGameResource) jobsBobList.get(0)).getBob();
 
         woodcutterImageCollector.readCargoImagesFromBob(
-                Material.WOOD,
+                WOOD,
                 JobsBob.WOODCUTTER_BOB.getBodyType(),
                 JobsBob.WOODCUTTER_WITH_WOOD_CARGO_BOB_ID,
                 bob
@@ -979,34 +989,34 @@ public class Extractor {
         /* Extract the cargo images that workers carry */
         CargoImageCollection cargoImageCollection = new CargoImageCollection();
 
-        cargoImageCollection.addCargoImage(Material.BEER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BEER_CARGO));
+        cargoImageCollection.addCargoImage(BEER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BEER_CARGO));
         cargoImageCollection.addCargoImage(TONGS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.TONG_CARGO));
         cargoImageCollection.addCargoImage(AXE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.AXE_CARGO));
-        cargoImageCollection.addCargoImage(Material.SAW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SAW_CARGO));
-        cargoImageCollection.addCargoImage(Material.PICK_AXE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PICK_AXE_CARGO));
-        cargoImageCollection.addCargoImage(Material.SHOVEL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SHOVEL_CARGO));
-        cargoImageCollection.addCargoImage(Material.CRUCIBLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CRUCIBLE_CARGO)); //???
-        cargoImageCollection.addCargoImage(Material.FISHING_ROD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISHING_ROD_CARGO));
-        cargoImageCollection.addCargoImage(Material.SCYTHE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SCYTHE_CARGO));
+        cargoImageCollection.addCargoImage(SAW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SAW_CARGO));
+        cargoImageCollection.addCargoImage(PICK_AXE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PICK_AXE_CARGO));
+        cargoImageCollection.addCargoImage(SHOVEL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SHOVEL_CARGO));
+        cargoImageCollection.addCargoImage(CRUCIBLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CRUCIBLE_CARGO)); //???
+        cargoImageCollection.addCargoImage(FISHING_ROD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISHING_ROD_CARGO));
+        cargoImageCollection.addCargoImage(SCYTHE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SCYTHE_CARGO));
         // - empty bucket at 904
 
-        cargoImageCollection.addCargoImage(Material.WATER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WATER_BUCKET_CARGO));
-        cargoImageCollection.addCargoImage(Material.CLEAVER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CLEAVER_CARGO));
-        cargoImageCollection.addCargoImage(Material.ROLLING_PIN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROLLING_PIN_CARGO));
-        cargoImageCollection.addCargoImage(Material.BOW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BOW_CARGO));
+        cargoImageCollection.addCargoImage(WATER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WATER_BUCKET_CARGO));
+        cargoImageCollection.addCargoImage(CLEAVER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CLEAVER_CARGO));
+        cargoImageCollection.addCargoImage(ROLLING_PIN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROLLING_PIN_CARGO));
+        cargoImageCollection.addCargoImage(BOW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BOW_CARGO));
         cargoImageCollection.addCargoImage(BOAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BOAT_CARGO));
-        cargoImageCollection.addCargoImage(Material.SWORD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SWORD_CARGO));
+        cargoImageCollection.addCargoImage(SWORD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SWORD_CARGO));
         // - anvil at 911
 
         cargoImageCollection.addCargoImage(FLOUR, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FLOUR_CARGO));
         cargoImageCollection.addCargoImage(FISH, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISH_CARGO));
         cargoImageCollection.addCargoImage(BREAD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BREAD_CARGO));
-        cargoImageCollection.addCargoImageForNation(Nation.ROMANS, Material.SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROMAN_SHIELD_CARGO));
-        cargoImageCollection.addCargoImage(Material.WOOD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WOOD_CARGO));
+        cargoImageCollection.addCargoImageForNation(ROMANS, SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROMAN_SHIELD_CARGO));
+        cargoImageCollection.addCargoImage(WOOD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WOOD_CARGO));
         cargoImageCollection.addCargoImage(PLANK, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PLANK_CARGO));
         cargoImageCollection.addCargoImage(STONE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_CARGO));
-        cargoImageCollection.addCargoImageForNation(Nation.VIKINGS, Material.SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.VIKING_SHIELD_CARGO));
-        cargoImageCollection.addCargoImageForNation(Nation.AFRICANS, Material.SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.AFRICAN_SHIELD_CARGO));
+        cargoImageCollection.addCargoImageForNation(VIKINGS, SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.VIKING_SHIELD_CARGO));
+        cargoImageCollection.addCargoImageForNation(AFRICANS, SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.AFRICAN_SHIELD_CARGO));
         cargoImageCollection.addCargoImage(WHEAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WHEAT_CARGO));
         cargoImageCollection.addCargoImage(COIN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.COIN_CARGO));
         cargoImageCollection.addCargoImage(GOLD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.GOLD_CARGO));
@@ -1014,7 +1024,7 @@ public class Extractor {
         cargoImageCollection.addCargoImage(COAL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.COAL_CARGO));
         cargoImageCollection.addCargoImage(MEAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.MEAT_CARGO));
         cargoImageCollection.addCargoImage(PIG, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PIG_CARGO));
-        cargoImageCollection.addCargoImageForNation(Nation.JAPANESE, Material.SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.JAPANESE_SHIELD_CARGO));
+        cargoImageCollection.addCargoImageForNation(JAPANESE, SHIELD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.JAPANESE_SHIELD_CARGO));
 
         cargoImageCollection.writeImageAtlas(toDir, defaultPalette);
 
@@ -1945,10 +1955,10 @@ public class Extractor {
         // Create the image atlas
         Map<Nation, String> nationsAndBobFiles = new EnumMap<>(Nation.class);
 
-        nationsAndBobFiles.put(Nation.ROMANS, "DATA/MBOB/ROM_Y.LST");
-        nationsAndBobFiles.put(Nation.JAPANESE, "DATA/MBOB/JAP_Y.LST");
-        nationsAndBobFiles.put(Nation.AFRICANS, "DATA/MBOB/AFR_Y.LST");
-        nationsAndBobFiles.put(Nation.VIKINGS, "DATA/MBOB/VIK_Y.LST");
+        nationsAndBobFiles.put(ROMANS, "DATA/MBOB/ROM_Y.LST");
+        nationsAndBobFiles.put(JAPANESE, "DATA/MBOB/JAP_Y.LST");
+        nationsAndBobFiles.put(AFRICANS, "DATA/MBOB/AFR_Y.LST");
+        nationsAndBobFiles.put(VIKINGS, "DATA/MBOB/VIK_Y.LST");
 
         BuildingsImageCollection buildingsImageCollection = new BuildingsImageCollection();
 

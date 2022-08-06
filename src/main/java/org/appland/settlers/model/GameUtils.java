@@ -220,7 +220,7 @@ public class GameUtils {
 
     public static <T> boolean isAll(Collection<T> collection, T item) {
         for (T itemInList : collection) {
-            if (itemInList != item) {
+            if (!Objects.equals(itemInList, item)) {
                 return false;
             }
         }
@@ -230,7 +230,7 @@ public class GameUtils {
 
     public static <T> boolean isAny(Collection<T> collection, T item) {
         for (T itemInList : collection) {
-            if (itemInList == item) {
+            if (Objects.equals(itemInList, item)) {
                 return true;
             }
         }
@@ -243,7 +243,7 @@ public class GameUtils {
         boolean foundNotMatch = false;
 
         for (T itemInList : collection) {
-            if (itemInList == item) {
+            if (Objects.equals(itemInList, item)) {
                 foundMatch = true;
 
                 continue;
@@ -376,11 +376,11 @@ public class GameUtils {
             /* Below */
             } else {
 
-                if (Math.abs(deltaY) > deltaX * 2) {
+                if (abs(deltaY) > deltaX * 2) {
                     return DOWN;
                 }
 
-                if (deltaX > Math.abs(deltaY) * 2) {
+                if (deltaX > abs(deltaY) * 2) {
                     return RIGHT;
                 }
 
@@ -394,11 +394,11 @@ public class GameUtils {
             /* Above */
             if (deltaY > 0) {
 
-                if (deltaY > Math.abs(deltaX) * 2) {
+                if (deltaY > abs(deltaX) * 2) {
                     return UP;
                 }
 
-                if (Math.abs(deltaX) > deltaY * 2) {
+                if (abs(deltaX) > deltaY * 2) {
                     return LEFT;
                 }
 
@@ -930,7 +930,7 @@ public class GameUtils {
      * @param map The instance of the map
      * @return a detailed list with the steps required to travel from the start to the goal.
      */
-    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map, Point[] avoid) {
+    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map, Point... avoid) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();

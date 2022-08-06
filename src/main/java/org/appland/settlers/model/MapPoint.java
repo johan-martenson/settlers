@@ -245,6 +245,9 @@ public class MapPoint {
                 break;
             case LARGE:
                 mineralAmount = LARGE_AMOUNT_OF_MINERAL;
+                break;
+            default:
+                throw new InvalidGameLogicException("Illegal amount of mineral to se: " + amount);
         }
     }
 

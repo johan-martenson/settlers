@@ -408,7 +408,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 List<Point> wayPoints = map.findAutoSelectedRoad(player, pointDownRight, headquarter.getFlag().getPosition().downRightDownRight(), avoid);
 
-                boolean canPlaceRoadToHeadquarter = (wayPoints != null);
+                boolean canPlaceRoadToHeadquarter = wayPoints != null;
 
                 /* Can a road be placed to the closest flag? */
                 boolean canReachClosestFlag = false;
@@ -433,7 +433,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                     wayPoints = map.findAutoSelectedRoad(player, pointDownRight, closestFlag.getPosition(), avoid);
 
-                    canReachClosestFlag = (wayPoints != null);
+                    canReachClosestFlag = wayPoints != null;
                 }
 
                 if (!canPlaceRoadToHeadquarter && !canReachClosestFlag) {

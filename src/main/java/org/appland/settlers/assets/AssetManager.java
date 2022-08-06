@@ -29,6 +29,7 @@ import static org.appland.settlers.utils.StreamReader.SIZE_OF_UINT32;
 
 public class AssetManager {
 
+    // TODO: use it or lose it
     // char * 4 + uint 32 + uint 16 + uint 16 + int 16
     private static final int MIDI_HEADER_LENGTH = 8 * 4 + 32 + 16 + 16 + 16;
 
@@ -45,7 +46,7 @@ public class AssetManager {
     // int16 + uint 16 + uint 16 + uint 32
     private static final int TEXT_FILE_HEADER_SIZE = 2 + 2 + 2 + 4;
 
-    private static final TextureFormat globalTextureFormat = TextureFormat.BGRA;
+    private static final TextureFormat GLOBAL_TEXTURE_FORMAT = TextureFormat.BGRA;
 
     private TextureFormat wantedTextureFormat;
     private boolean debug = false;
@@ -81,7 +82,7 @@ public class AssetManager {
     public List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, InvalidHeaderException, UnknownResourceTypeException, InvalidFormatException {
         List<GameResource> gameResources = new ArrayList<>();
 
-        FileInputStream fileInputStream = new FileInputStream(filename);
+        InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
         StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
 
         byte[] header = streamReader.getUint8ArrayAsBytes(2);
@@ -319,6 +320,8 @@ public class AssetManager {
             }
         }
 
+        streamReader.close();
+
         return gameResources;
     }
 
@@ -381,7 +384,7 @@ public class AssetManager {
                 }
             }
 
-            starts.add((size + TEXT_FILE_HEADER_SIZE));
+            starts.add(size + TEXT_FILE_HEADER_SIZE);
 
             /* Read each text item */
             for (int x = 0; x < count; x++) {
@@ -487,7 +490,7 @@ public class AssetManager {
 
         // Get wanted format
         TextureFormat wantedFormat = wantedTextureFormat;
-        if (globalTextureFormat == TextureFormat.ORIGINAL) {
+        if (GLOBAL_TEXTURE_FORMAT == TextureFormat.ORIGINAL) {
             wantedFormat = TextureFormat.PALETTED;
         }
 
@@ -552,7 +555,7 @@ public class AssetManager {
     }
 
     public GameResource loadSoundWaveFile(String filename) throws IOException, InvalidFormatException {
-        FileInputStream fileInputStream = new FileInputStream(filename);
+        InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
 
         if (debug) {
             System.out.println("Loading sound from file: " + filename);
@@ -564,14 +567,16 @@ public class AssetManager {
             System.out.println("Loaded sound");
         }
 
+        fileInputStream.close();
+
         return soundGameResource;
     }
 
-    private void loadFontFromStream(FileInputStream fileInputStream) {
+    private void loadFontFromStream(InputStream fileInputStream) {
         throw new RuntimeException("Support for load font is not implemented yet");
     }
 
-    private void loadAnimatedPaletteFromStream(FileInputStream fileInputStream) {
+    private void loadAnimatedPaletteFromStream(InputStream fileInputStream) {
         throw new RuntimeException("Support for load animated palette is not implemented yet");
     }
 
@@ -581,7 +586,7 @@ public class AssetManager {
         return bitmapRaw;
     }
 
-    private void loadMapFromStream(FileInputStream fileInputStream) {
+    private void loadMapFromStream(InputStream fileInputStream) {
         throw new RuntimeException("Support for load map is not implemented yet");
     }
 
@@ -648,7 +653,7 @@ public class AssetManager {
     }
 
     public Bob loadBobFile(String filename, Palette defaultPalette) throws IOException, InvalidFormatException {
-        FileInputStream fileInputStream = new FileInputStream(filename);
+        InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
         StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
 
         byte[] header = streamReader.getUint8ArrayAsBytes(2);
@@ -659,10 +664,12 @@ public class AssetManager {
             return bob;
         }
 
+        streamReader.close();
+
         return null;
     }
 
-    private BobGameResource loadBobFromStream(FileInputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
+    private BobGameResource loadBobFromStream(InputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
         StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
 
         PlayerBitmap[] playerBitmaps = new PlayerBitmap[(int)NUM_BODY_IMAGES];
@@ -759,7 +766,7 @@ public class AssetManager {
         return new BobGameResource(bob);
     }
 
-    private GameResource loadSoundFromStream(FileInputStream fileInputStream) throws IOException, InvalidFormatException {
+    private GameResource loadSoundFromStream(InputStream fileInputStream) throws IOException, InvalidFormatException {
         StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
 
         SoundType soundType;
@@ -1246,8 +1253,8 @@ public class AssetManager {
             long formatSize = 16;
             int formatTag = 1;
             int numberChannels = 1;
-            long samplesPerSec = 11025;
-            long bytesPerSec = 11025;
+            long samplesPerSec = 11_025;
+            long bytesPerSec = 11_025;
             int frameSize = 1;
             int bitsPerSample = 8;
             String dataId = "data";
@@ -1345,7 +1352,7 @@ public class AssetManager {
         return midiFile;
     }
 
-    private static Palette loadPaletteFromStream(FileInputStream fileInputStream, boolean skip) throws IOException, InvalidFormatException {
+    private static Palette loadPaletteFromStream(InputStream fileInputStream, boolean skip) throws IOException, InvalidFormatException {
 
         StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
 
@@ -1998,7 +2005,7 @@ public class AssetManager {
                 short dx = datReader.getUint8();
                 short dy = datReader.getUint8();
 
-                boolean isUnicode = (dx == 255 && dy == 255);
+                boolean isUnicode = dx == 255 && dy == 255;
 
                 long numberChars;
 

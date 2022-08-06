@@ -45,7 +45,7 @@ class MapFilePoint {
     private TreeType treeType;
     private TreeSize treeSize;
     private DecorationType decorativeObject;
-    private org.appland.settlers.model.StoneType stoneType;
+    private StoneType stoneType;
     private short stoneAmount;
 
     public MapFilePoint() {
@@ -240,7 +240,7 @@ class MapFilePoint {
         gamePointPosition = gamePoint;
     }
 
-    public org.appland.settlers.model.Point getGamePointPosition() {
+    public Point getGamePointPosition() {
         return gamePointPosition;
     }
 

@@ -60,7 +60,7 @@ class VariableImpl implements Variable {
     }
 
     @Override
-    public void setUpperThreshold(long upperThresholdValue) {
+    public void setUpperThreshold(final long upperThresholdValue) {
         this.upperThresholdValue = upperThresholdValue;
 
         this.isUpperThresholdValueSet = true;

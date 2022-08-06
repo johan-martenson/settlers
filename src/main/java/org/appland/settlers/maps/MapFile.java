@@ -248,7 +248,7 @@ public class MapFile {
                 throw new InvalidMapException("The starting point " + point + " is outside of the map.");
             }
 
-            startingPositions.add(new org.appland.settlers.model.Point(spot.getGamePointPosition()));
+            startingPositions.add(new Point(spot.getGamePointPosition()));
         }
     }
 

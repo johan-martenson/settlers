@@ -147,7 +147,6 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
 
         return null;
     }
-
     boolean basicConstructionDone() {
 
         /* Periodically check if there are remaining stones */
@@ -161,11 +160,11 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             hasStonesOnLand = Utils.hasStoneWithinArea(map, player);
         }
 
-        return (foresterDone()   &&
-                woodcuttersDone() &&
-                sawmillDone()    &&
+        return foresterDone()    &&
+               woodcuttersDone() &&
+               sawmillDone()     &&
                 ((quarryDone() && !quarry.isOutOfNaturalResources()) ||
-                 (noQuarry() && !hasStonesOnLand)));
+                 (noQuarry() && !hasStonesOnLand));
     }
 
     private boolean foresterDone() {

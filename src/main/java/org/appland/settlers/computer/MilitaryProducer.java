@@ -1,21 +1,21 @@
 package org.appland.settlers.computer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Brewery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import static org.appland.settlers.model.Size.LARGE;
+import org.appland.settlers.model.Well;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 
@@ -261,10 +261,10 @@ public class MilitaryProducer implements ComputerPlayer {
     }
 
     boolean productionDone() {
-        return (Utils.listContainsAtLeastOneReadyBuilding(ironSmelters) &&
-                Utils.listContainsAtLeastOneReadyBuilding(armories)     &&
-                Utils.listContainsAtLeastOneReadyBuilding(breweries)    &&
-                Utils.listContainsAtLeastOneReadyBuilding(farms)        &&
-                Utils.listContainsAtLeastOneReadyBuilding(wells));
+        return Utils.listContainsAtLeastOneReadyBuilding(ironSmelters) &&
+               Utils.listContainsAtLeastOneReadyBuilding(armories)     &&
+               Utils.listContainsAtLeastOneReadyBuilding(breweries)    &&
+               Utils.listContainsAtLeastOneReadyBuilding(farms)        &&
+               Utils.listContainsAtLeastOneReadyBuilding(wells);
     }
 }

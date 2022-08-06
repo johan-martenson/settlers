@@ -28,21 +28,23 @@ class Resource {
 
         int amount = 0;
 
-        if (null != type) switch (type) {
-            case COAL:
-                amount = i - COAL_OFFSET;
-                break;
-            case IRON_ORE:
-                amount = i - IRON_OFFSET;
-                break;
-            case GOLD:
-                amount = i - GOLD_OFFSET;
-                break;
-            case GRANITE:
-                amount = i - GRANITE_OFFSET;
-                break;
-            default:
-                break;
+        if (null != type) {
+            switch (type) {
+                case COAL:
+                    amount = i - COAL_OFFSET;
+                    break;
+                case IRON_ORE:
+                    amount = i - IRON_OFFSET;
+                    break;
+                case GOLD:
+                    amount = i - GOLD_OFFSET;
+                    break;
+                case GRANITE:
+                    amount = i - GRANITE_OFFSET;
+                    break;
+                default:
+                    break;
+            }
         }
 
         if (type == null) {

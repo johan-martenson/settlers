@@ -79,7 +79,7 @@ public class StreamReader {
     }
 
     private short getUint8(ByteBuffer byteBuffer) {
-        return ((short)(byteBuffer.get() & 0xff));
+        return (short)(byteBuffer.get() & 0xff);
     }
 
     public long[] getUint32Array(int length) throws IOException {
@@ -94,7 +94,7 @@ public class StreamReader {
         long[] longArray = new long[length];
 
         for (int i = 0; i < bytes.length; i++) {
-            longArray[i] = ((long)ByteBuffer.wrap(bytes).order(order).getInt(i * 4) & 0xffffffffL);
+            longArray[i] = (long)ByteBuffer.wrap(bytes).order(order).getInt(i * 4) & 0xffffffffL;
         }
 
         offset = offset + length * 4L;
@@ -125,7 +125,7 @@ public class StreamReader {
 
         offset = offset + 4;
 
-        return ((long) ByteBuffer.wrap(bytes).order(order).getInt() & 0xffffffffL);
+        return (long) ByteBuffer.wrap(bytes).order(order).getInt() & 0xffffffffL;
     }
 
     public char[] getUint8ArrayAsChar(int lengthInBytes) throws IOException {
@@ -252,7 +252,7 @@ public class StreamReader {
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytes).order(this.order);
 
         for (int i = 0; i < length; i++) {
-            intArray[i] = (byteBuffer.getShort(i * 2) & 0xffff);
+            intArray[i] = byteBuffer.getShort(i * 2) & 0xffff;
         }
 
         offset = offset + length * 2L;
@@ -287,9 +287,9 @@ public class StreamReader {
     }
 
     public byte getInt8() throws IOException {
-        byte[] b = new byte[1];
+        byte[] oneByte = new byte[1];
 
-        int result = inputStream.read(b, 0, 1);
+        int result = inputStream.read(oneByte, 0, 1);
 
         if (result == -1) {
             isEof = true;
@@ -297,7 +297,7 @@ public class StreamReader {
 
         offset = offset + 1;
 
-        return b[0];
+        return oneByte[0];
     }
 
     public boolean isEof() {
@@ -354,5 +354,9 @@ public class StreamReader {
         offset = offset + length;
 
         return new ByteArray(bytes, this.order);
+    }
+
+    public void close() throws IOException {
+        this.inputStream.close();
     }
 }

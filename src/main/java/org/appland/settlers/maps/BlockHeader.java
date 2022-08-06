@@ -21,9 +21,16 @@ public class BlockHeader {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         BlockHeader that = (BlockHeader) o;
+
         return id == that.id &&
                 mustBeZero == that.mustBeZero &&
                 width == that.width &&

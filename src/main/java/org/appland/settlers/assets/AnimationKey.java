@@ -13,9 +13,16 @@ public class AnimationKey {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         AnimationKey that = (AnimationKey) o;
+
         return nation == that.nation && compassDirection == that.compassDirection;
     }
 

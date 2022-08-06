@@ -57,9 +57,9 @@ public class StonesImageCollection {
             jsonImageAtlas.put(stoneType.name().toUpperCase(), jsonStoneType);
 
             // Stone images for the stone type
-            for (StoneAmount StoneAmount : StoneAmount.values()) {
+            for (StoneAmount stoneAmount : StoneAmount.values()) {
 
-                Bitmap image = this.stoneMap.get(stoneType).get(StoneAmount);
+                Bitmap image = this.stoneMap.get(stoneType).get(stoneAmount);
 
                 imageBoard.placeImage(image, cursor);
 
@@ -67,7 +67,7 @@ public class StonesImageCollection {
                 JSONObject jsonStoneImage = imageBoard.imageLocationToJson(image);
 
                 jsonStoneAmount.put("image", jsonStoneImage);
-                jsonStoneType.put(StoneAmount.name().toUpperCase(), jsonStoneAmount);
+                jsonStoneType.put(stoneAmount.name().toUpperCase(), jsonStoneAmount);
 
                 rowHeight = Math.max(rowHeight, image.getHeight());
 
@@ -75,15 +75,15 @@ public class StonesImageCollection {
             }
 
             // Stone shadow images for the stone type
-            for (StoneAmount StoneAmount : StoneAmount.values()) {
+            for (StoneAmount stoneAmount : StoneAmount.values()) {
 
-                Bitmap shadowImage = this.stoneShadowMap.get(stoneType).get(StoneAmount);
+                Bitmap shadowImage = this.stoneShadowMap.get(stoneType).get(stoneAmount);
 
                 imageBoard.placeImage(shadowImage, cursor);
 
                 JSONObject jsonShadowImage = imageBoard.imageLocationToJson(shadowImage);
 
-                ((JSONObject) jsonStoneType.get(StoneAmount.name().toUpperCase())).put("shadowImage", jsonShadowImage);
+                ((JSONObject) jsonStoneType.get(stoneAmount.name().toUpperCase())).put("shadowImage", jsonShadowImage);
 
                 rowHeight = Math.max(rowHeight, shadowImage.getHeight());
 

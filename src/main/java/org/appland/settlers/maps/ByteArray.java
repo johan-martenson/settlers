@@ -12,7 +12,7 @@ public class ByteArray {
     }
 
     public int getUint16(int position) {
-        return (bytes.getShort(position) & 0xffff);
+        return bytes.getShort(position) & 0xffff;
     }
 
     public String getNullTerminatedString(int length) {

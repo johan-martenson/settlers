@@ -591,7 +591,7 @@ public class Inspector {
         System.out.println("   -- Above 1: " +
                 treeOrStoneOrNoneString(mapFile, infoPoint.upLeft().upLeft()) + " " +
                 treeOrStoneOrNoneString(mapFile, infoPoint.up()) + " " +
-                treeOrStoneOrNoneString(mapFile, (infoPoint.upRight().upRight())));
+                treeOrStoneOrNoneString(mapFile, infoPoint.upRight().upRight()));
         System.out.println("   -- Above 2:    " +
                 treeOrStoneOrNoneString(mapFile, infoPoint.upLeft()) + " " +
                 treeOrStoneOrNoneString(mapFile, infoPoint.upRight()));
@@ -990,12 +990,12 @@ public class Inspector {
         }
 
         public boolean matches() {
-            return ((availableInGame == Size.LARGE  && availableInFile == BuildableSite.CASTLE) ||
-                    (availableInGame == Size.MEDIUM && availableInFile == BuildableSite.HOUSE)  ||
-                    (availableInGame == Size.SMALL  && availableInFile == BuildableSite.HUT)    ||
-                    (availableFlagInGame && availableInGame == null &&
+            return (availableInGame == Size.LARGE  && availableInFile == BuildableSite.CASTLE) ||
+                   (availableInGame == Size.MEDIUM && availableInFile == BuildableSite.HOUSE)  ||
+                   (availableInGame == Size.SMALL  && availableInFile == BuildableSite.HUT)    ||
+                   (availableFlagInGame && availableInGame == null &&
                             (availableInFile == BuildableSite.FLAG ||
-                             availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN)));
+                             availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN));
         }
 
         public BuildableSite getAvailableInFile() {

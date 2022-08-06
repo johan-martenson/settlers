@@ -214,8 +214,8 @@ public class Stats {
         return group;
     }
 
-    public Collection<String> getVariablesInGroup(String s) {
-        GroupImpl group = groups.get(s);
+    public Collection<String> getVariablesInGroup(String groupName) {
+        GroupImpl group = groups.get(groupName);
 
         return group.getVariableNames();
     }

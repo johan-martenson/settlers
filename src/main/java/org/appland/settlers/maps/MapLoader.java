@@ -1,21 +1,22 @@
 package org.appland.settlers.maps;
 
-import org.appland.settlers.utils.StreamReader;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
+import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteOrder;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,7 +48,7 @@ public class MapLoader {
 
             MapFile mapFile = mapLoader.loadMapFromFile(mapLoader.filename);
             GameMap gameMap = mapLoader.convertMapFileToGameMap(mapFile);
-        } catch (Exception | InvalidMapException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MapLoader.class.getName()).log(Level.SEVERE, null, ex);
 
             System.exit(1);
@@ -58,9 +59,13 @@ public class MapLoader {
         printlnIfDebug();
         printlnIfDebug("Loading: " + mapFilename);
 
-        FileInputStream fileInputStream = new FileInputStream(mapFilename);
+        InputStream fileInputStream = Files.newInputStream(Paths.get(mapFilename));
 
-        return loadMapFromStream(fileInputStream);
+        MapFile mapFile = loadMapFromStream(fileInputStream);
+
+        fileInputStream.close();
+
+        return mapFile;
     }
 
     private void printlnIfDebug() {
@@ -124,7 +129,7 @@ public class MapLoader {
         printlnIfDebug(" -- Author: " + mapFile.getAuthor());
 
         /* Go through x coordinates for starting positions */
-        List<java.awt.Point> tmpStartingPositions = new ArrayList<>();
+        List<Point> tmpStartingPositions = new ArrayList<>();
 
         for (int i = 0; i < 7; i++) {
             int x = streamReader.getUint16();
@@ -184,14 +189,14 @@ public class MapLoader {
             int x = streamReader.getUint16();
             int y = streamReader.getUint16();
 
-            java.awt.Point position = new java.awt.Point(x, y);
+            Point position = new Point(x, y);
 
             long totalMass = streamReader.getUint32();
             UniqueMass mass = new UniqueMass(type, position, totalMass);
 
             masses.add(mass);
 
-            if (!position.equals(new java.awt.Point(0, 0))) {
+            if (!position.equals(new Point(0, 0))) {
                 mapFile.addMassStartingPoint(position);
             }
         }

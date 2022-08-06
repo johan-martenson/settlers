@@ -242,8 +242,8 @@ public class FoodProducer implements ComputerPlayer {
 
     boolean basicFoodProductionDone() {
 
-        return ((Utils.listContainsAtLeastOneReadyBuilding(fisheries) || noPlaceForFishery) &&
-                Utils.listContainsAtLeastOneReadyBuilding(hunterHuts));
+        return (Utils.listContainsAtLeastOneReadyBuilding(fisheries) || noPlaceForFishery) &&
+                Utils.listContainsAtLeastOneReadyBuilding(hunterHuts);
     }
 
     boolean fullFoodProductionDone() {

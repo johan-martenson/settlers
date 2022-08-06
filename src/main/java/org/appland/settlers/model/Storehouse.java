@@ -234,7 +234,7 @@ public class Storehouse extends Building {
 
     private boolean assignBuildersToPlannedBuildings() {
 
-        if (!hasAtLeastOne(BUILDER) && !hasAtLeastOne(Material.HAMMER)) {
+        if (!hasAtLeastOne(BUILDER) && !hasAtLeastOne(HAMMER)) {
             return false;
         }
 

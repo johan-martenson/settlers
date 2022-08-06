@@ -156,7 +156,7 @@ public abstract class Worker {
 
         if (state == State.WALKING_AND_EXACTLY_AT_POINT) {
 
-            /* Arrival at target is already handled so in this branch the worker is at a fixed point but not the target point */
+            /* Arrival at target is already handled. In this branch the worker is at a fixed point but not the target */
 
             /* Start the next part of the road */
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
@@ -226,34 +226,37 @@ public abstract class Worker {
     @Override
     public String toString() {
         if (isTraveling()) {
-            String str;
+            StringBuffer stringBuffer = new StringBuffer();
             if (isExactlyAtPoint()) {
-                str = "Worker at " + getPosition() + " traveling to " + target;
+                stringBuffer.append("Worker at " + getPosition() + " traveling to " + target);
             } else {
-                str = "Worker latest at " + getLastPoint() + " traveling to " + target;
+                stringBuffer.append("Worker latest at " + getLastPoint() + " traveling to " + target);
             }
 
             if (targetBuilding != null) {
-                str += " for " + targetBuilding;
+                stringBuffer.append(" for " + targetBuilding);
             }
 
             if (carriedCargo != null) {
-                str += " carrying " + carriedCargo;
+                stringBuffer.append(" carrying " + carriedCargo);
             }
 
-            return str;
+            return stringBuffer.toString();
         }
 
         return "Idle worker at " + getPosition();
     }
 
     void onArrival() throws InvalidUserActionException {
+        // Empty method for subclasses to override if needed
     }
 
     void onIdle() throws InvalidUserActionException {
+        // Empty method for subclasses to override if needed
     }
 
     void onEnterBuilding(Building building) {
+        // Empty method for subclasses to override if needed
     }
 
     private void handleArrival() {
@@ -347,6 +350,7 @@ public abstract class Worker {
     }
 
     void onSetTargetBuilding(Building building) {
+        // Empty method for subclasses to override if needed
     }
 
     public Building getTargetBuilding() {
@@ -592,14 +596,16 @@ public abstract class Worker {
     }
 
     void onReturnToStorage() {
-
+        // Empty method for subclasses to override if needed
     }
 
     public Player getPlayer() {
         return player;
     }
 
-    void onWalkingAndAtFixedPoint() {}
+    void onWalkingAndAtFixedPoint() {
+        // Empty method for subclasses to override if needed
+    }
 
     void walkHalfWayOffroadTo(Point point) {
 
@@ -609,7 +615,9 @@ public abstract class Worker {
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }
 
-    void onWalkedHalfWay() {}
+    void onWalkedHalfWay() {
+        // Empty method for subclasses to override if needed
+    }
 
     void returnToFixedPoint() {
 
@@ -646,7 +654,9 @@ public abstract class Worker {
         return 0;
     }
 
-    public void goToOtherStorage(Building building) { }
+    public void goToOtherStorage(Building building) {
+        // Empty method for subclasses to override if needed
+    }
 
     public boolean isDead() {
         return dead;

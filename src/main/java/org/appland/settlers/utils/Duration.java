@@ -66,7 +66,7 @@ public class Duration {
 
         Stamp(String name) {
             this.name = name;
-            this.timestamp = (new java.util.Date()).getTime();
+            this.timestamp = new java.util.Date().getTime();
         }
     }
 
@@ -79,7 +79,7 @@ public class Duration {
     public Duration(String name) {
         this.name = name;
         timestamps = new ArrayList<>();
-        timestampAtStart = (new java.util.Date()).getTime();
+        timestampAtStart = new java.util.Date().getTime();
 
         timestamps.add(new Stamp(name + ".start"));
     }

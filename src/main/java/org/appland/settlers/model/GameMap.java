@@ -276,7 +276,7 @@ public class GameMap {
      * @return A path a new road can follow
      */
     public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Set<Point> avoid) {
-        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
+        return findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point point, Point goal) {
@@ -1945,7 +1945,7 @@ public class GameMap {
             for (int x = xOffset; x < width; x += 2) {
                 Point point = new Point(x, y);
 
-                if (GameUtils.isEven(point.y)) {
+                if (isEven(point.y)) {
                     mapPoints[point.y * dataRowLength + point.x / 2] = new MapPoint(point);
                 } else {
                     mapPoints[point.y * dataRowLength + (point.x - 1) / 2] = new MapPoint(point);
