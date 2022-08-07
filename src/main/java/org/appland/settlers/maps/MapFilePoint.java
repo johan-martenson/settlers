@@ -118,8 +118,8 @@ class MapFilePoint {
                     int size = (objectProperties >> 4) & 0x03;
                     int step = objectProperties & 0x07;
 
-                    TreeType treeType = TreeTranslator.DEFAULT_ID_TO_TREE_TYPE_MAP.get(id);
-                    TreeSize treeSize = TreeTranslator.TREE_SIZE_MAP.get(size);
+                    treeType = TreeTranslator.DEFAULT_ID_TO_TREE_TYPE_MAP.get(id);
+                    treeSize = TreeTranslator.TREE_SIZE_MAP.get(size);
 
                     // TODO: consider the terrain type and pick tree types accordingly (only greenland for now)
 
@@ -130,9 +130,6 @@ class MapFilePoint {
                     if (treeSize == null) {
                         throw new RuntimeException("Can't handle tree size: " + size);
                     }
-
-                    this.treeType = treeType;
-                    this.treeSize = treeSize;
 
                     // TODO: consider isCut
 

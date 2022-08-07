@@ -55,9 +55,9 @@ public class PlayerBitmap extends Bitmap {
             }
 
             while (x < width) {
+                short shift = Unsigned.getUnsignedByte(sourceByteBuffer, position);
 
-                // FIXME: change position++ to position = position + 1
-                short shift = Unsigned.getUnsignedByte(sourceByteBuffer, position++);
+                position = position + 1;
 
                 // Handle transparent pixel
                 if (shift < 0x40) {
@@ -68,7 +68,9 @@ public class PlayerBitmap extends Bitmap {
                     shift = (short)(shift - 0x40); // uint 8 = uint 8 - 0x40
 
                     for (int i = 0; i < shift; i++, x++) {
-                        setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position++));
+                        setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position));
+
+                        position = position + 1;
                     }
 
                 // Handle pixel with player color
