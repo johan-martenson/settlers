@@ -5,12 +5,13 @@
  */
 package org.appland.settlers.computer;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -32,9 +33,9 @@ public class AttackPlayer implements ComputerPlayer {
         WAITING_FOR_ATTACK_TO_START
     }
 
-    public AttackPlayer(Player p, GameMap m) {
-        player = p;
-        map    = m;
+    public AttackPlayer(Player player, GameMap map) {
+        this.player = player;
+        this.map    = map;
 
         state = State.INITIAL_STATE;
 
@@ -44,7 +45,7 @@ public class AttackPlayer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-        System.out.println(" - State: " + state);
+
         /* Record the state before the turn */
         State stateBefore = state;
 
@@ -53,7 +54,7 @@ public class AttackPlayer implements ComputerPlayer {
             buildingUnderAttack = map.getBuildingAtPoint(buildingUnderAttack.getPosition());
         }
 
-        /* Start with finding the headquarter */
+        /* Start with finding the headquarters */
         if (state == State.INITIAL_STATE) {
 
             /* Find headquarter */
@@ -71,7 +72,6 @@ public class AttackPlayer implements ComputerPlayer {
 
             /* Keep looking for buildings to attack if there is no building now */
             if (buildingToAttack == null) {
-                System.out.println(" - Nothing to attack");
                 return;
             }
 
@@ -113,11 +113,6 @@ public class AttackPlayer implements ComputerPlayer {
 
                 buildingUnderAttack = null;
             }
-        }
-
-        /* Print the old and new state if the state changed */
-        if (stateBefore != state) {
-            System.out.println("Transition: " + stateBefore + " -> " + state);
         }
     }
 

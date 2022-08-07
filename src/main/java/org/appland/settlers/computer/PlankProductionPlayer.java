@@ -120,11 +120,6 @@ public class PlankProductionPlayer implements ComputerPlayer {
             /* Change state to wait for the woodcutter */
             state = State.WAITING_FOR_SAWMILL;
         }
-
-        /* Print the old and new state if the state changed */
-        if (stateBefore != state) {
-            System.out.println("Transition: " + stateBefore + " -> " + state);
-        }
     }
 
     @Override

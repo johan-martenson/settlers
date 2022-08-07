@@ -91,7 +91,6 @@ public class ExpandLandPlayer implements ComputerPlayer {
         State stateBefore = state;
 
         if (counter % MAINTENANCE_PERIOD == 0) {
-            System.out.println(" - Evacuating where possible");
             evacuateWherePossible(player);
 
             duration.after("Evacuate where possible");
@@ -140,8 +139,6 @@ public class ExpandLandPlayer implements ComputerPlayer {
             /* Place barracks */
             unfinishedBarracks = map.placeBuilding(new Barracks(player), site);
 
-            System.out.println("\n\nPlaced barracks at: " + site);
-
             /* Connect the barracks with the headquarters */
             Road road = Utils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
 
@@ -158,8 +155,6 @@ public class ExpandLandPlayer implements ComputerPlayer {
             duration.after("Build new barracks");
 
         } else if (state == State.WAITING_FOR_CONSTRUCTION) {
-
-            System.out.println("Waiting for construction of: " + unfinishedBarracks);
 
             /* Build a new barracks if this barracks was destroyed */
             if (unfinishedBarracks.isBurningDown() || unfinishedBarracks.isDestroyed() || !map.isBuildingAtPoint(unfinishedBarracks.getPosition())) {
@@ -212,11 +207,6 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 state = State.BUILDING_NOT_CONNECTED;
             }
         } else if (state == State.BUILDING_NOT_CONNECTED) {
-            System.out.println("\n - Repairing: " + unfinishedBarracks.getFlag().getPosition() + " to " +
-                    headquarter.getFlag().getPosition());
-            System.out.println("   - On map: " + map.getBuildingAtPoint(unfinishedBarracks.getPosition()));
-            System.out.println("   - On map: " + map.getBuildingAtPoint(headquarter.getPosition()));
-            System.out.println("   - Connection now: " + map.findWayWithExistingRoads(headquarter.getPosition(), unfinishedBarracks.getPosition()));
 
             /* Try to repair the connection */
             Utils.repairConnection(map, player, unfinishedBarracks.getFlag(), headquarter.getFlag());
@@ -248,11 +238,6 @@ public class ExpandLandPlayer implements ComputerPlayer {
             }
 
             duration.after("Waited for building to get occupied");
-        }
-
-        /* Print the old and new state if the state changed */
-        if (stateBefore != state) {
-            System.out.println("Transition: " + stateBefore + " -> " + state);
         }
 
         duration.reportStats(stats);
