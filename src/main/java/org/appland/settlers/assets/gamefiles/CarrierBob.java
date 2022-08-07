@@ -2,6 +2,7 @@ package org.appland.settlers.assets.gamefiles;
 
 import org.appland.settlers.model.Material;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -83,7 +84,7 @@ public class CarrierBob {
         // Japanese shield
     }
 
-    public static final Map<Material, Integer> MATERIAL_BOB_ID_MAP = new HashMap<>();
+    public static final Map<Material, Integer> MATERIAL_BOB_ID_MAP = new EnumMap<>(Material.class);
 
     static {
         MATERIAL_BOB_ID_MAP.put(BEER, 0);

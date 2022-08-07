@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -187,7 +186,7 @@ public class TreeImageCollection {
 
     public void addImageForGrowingTree(Tree.TreeType type, TreeSize treeSize, Bitmap image) {
         if (!growingTreeMap.containsKey(type)) {
-            growingTreeMap.put(type, new HashMap<>());
+            growingTreeMap.put(type, new EnumMap<>(TreeSize.class));
         }
 
         growingTreeMap.get(type).put(treeSize, image);
@@ -207,7 +206,7 @@ public class TreeImageCollection {
 
     public void addImageForGrowingTreeShadow(Tree.TreeType treeType, TreeSize treeSize, Bitmap image) {
         if (!growingTreeShadowMap.containsKey(treeType)) {
-            growingTreeShadowMap.put(treeType, new HashMap<>());
+            growingTreeShadowMap.put(treeType, new EnumMap<>(TreeSize.class));
         }
 
         growingTreeShadowMap.get(treeType).put(treeSize, image);

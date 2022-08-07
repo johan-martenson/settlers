@@ -1188,7 +1188,7 @@ class Utils {
         jsonShip.put("direction", ship.getDirection().name().toUpperCase());
 
         JSONObject jsonCargos = new JSONObject();
-        Map<Material, Integer> cargos = new HashMap<>();
+        Map<Material, Integer> cargos = new EnumMap<>(Material.class);
 
         for (Cargo cargo : ship.getCargos()) {
             Material material = cargo.getMaterial();

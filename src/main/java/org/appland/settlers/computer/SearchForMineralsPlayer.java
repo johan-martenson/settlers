@@ -22,6 +22,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Worker;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -73,7 +74,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
         unreachablePoints   = new HashSet<>();
         geologistFlag       = null;
         foundMinerals       = new HashMap<>();
-        activeMines         = new HashMap<>();
+        activeMines         = new EnumMap<>(Material.class);
 
         activeMines.put(GOLD, 0);
         activeMines.put(IRON, 0);

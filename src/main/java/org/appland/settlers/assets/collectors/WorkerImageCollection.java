@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class WorkerImageCollection {
 
     public void addNationSpecificFullImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {
         if (!nationSpecificBodyAndHeadImages.containsKey(nation)) {
-            nationSpecificBodyAndHeadImages.put(nation, new HashMap<>());
+            nationSpecificBodyAndHeadImages.put(nation, new EnumMap<>(CompassDirection.class));
         }
 
         Map<CompassDirection, List<Bitmap>> directions = nationSpecificBodyAndHeadImages.get(nation);
@@ -307,7 +306,7 @@ public class WorkerImageCollection {
             fatOffset = 1;
         }
 
-        commonCargoImages.put(material, new HashMap<>());
+        commonCargoImages.put(material, new EnumMap<>(CompassDirection.class));
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
 
@@ -420,7 +419,7 @@ public class WorkerImageCollection {
 
     public void addWorkAnimationInDirection(WorkerAction action, CompassDirection direction, List<Bitmap> images) {
         if (!commonActionsWithDirection.containsKey(action)) {
-            commonActionsWithDirection.put(action, new HashMap<>());
+            commonActionsWithDirection.put(action, new EnumMap<>(CompassDirection.class));
         }
 
         commonActionsWithDirection.get(action).put(direction, images);

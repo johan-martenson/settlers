@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -247,20 +248,20 @@ public class Inspector {
     }
 
     private void printPointsSurroundingPointTypeInMapFiles(List<MapFile> mapFiles, InformationType informationType) {
-        Map<BuildableSite, Integer> availableConstructionCenter = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionLeft = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionUpLeft = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionUpRight = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionRight = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionDownRight = new HashMap<>();
-        Map<BuildableSite, Integer> availableConstructionDownLeft = new HashMap<>();
+        Map<BuildableSite, Integer> availableConstructionCenter = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionLeft = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionUpLeft = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionUpRight = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionRight = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionDownRight = new EnumMap<>(BuildableSite.class);
+        Map<BuildableSite, Integer> availableConstructionDownLeft = new EnumMap<>(BuildableSite.class);
 
-        Map<Texture, Integer> vegetationUpLeft = new HashMap<>();
-        Map<Texture, Integer> vegetationAbove = new HashMap<>();
-        Map<Texture, Integer> vegetationUpRight = new HashMap<>();
-        Map<Texture, Integer> vegetationDownRight = new HashMap<>();
-        Map<Texture, Integer> vegetationBelow = new HashMap<>();
-        Map<Texture, Integer> vegetationDownLeft = new HashMap<>();
+        Map<Texture, Integer> vegetationUpLeft = new EnumMap<>(Texture.class);
+        Map<Texture, Integer> vegetationAbove = new EnumMap<>(Texture.class);
+        Map<Texture, Integer> vegetationUpRight = new EnumMap<>(Texture.class);
+        Map<Texture, Integer> vegetationDownRight = new EnumMap<>(Texture.class);
+        Map<Texture, Integer> vegetationBelow = new EnumMap<>(Texture.class);
+        Map<Texture, Integer> vegetationDownLeft = new EnumMap<>(Texture.class);
 
         int measuredPoints = 0;
 
