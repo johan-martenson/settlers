@@ -27,6 +27,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
@@ -123,7 +124,7 @@ public class TestMisc {
     @Test
     public void testScoutReturnsWhenFlagRemainsButRoadHasBeenRemoved() throws Exception {
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 20; i++) {
 
             /* Starting new game */
             Player player = new Player("Player 0", BLUE);
@@ -164,13 +165,19 @@ public class TestMisc {
             map.removeRoad(road0);
 
             /* Wait for the scout to get back to the flag */
-            Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+            for (int j = 0; j < 20000; j++) {
+                if (scout.getPosition().equals(flag0.getPosition()) &&
+                        Objects.equals(scout.getTarget(), headquarter0.getPosition())) {
+                    break;
+                }
 
+                map.stepTime();
+            }
+
+            assertEquals(scout.getTarget(), headquarter0.getPosition());
             assertEquals(scout.getPosition(), flag0.getPosition());
 
             /* Verify that the scout goes back to the headquarters */
-            assertEquals(scout.getTarget(), headquarter0.getPosition());
-
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
 
             assertEquals(scout.getPosition(), headquarter0.getPosition());
