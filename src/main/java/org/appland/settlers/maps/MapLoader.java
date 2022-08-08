@@ -22,17 +22,22 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.String.format;
+
 /**
  * Loads a map binary file into a MapFile instance
  *
  */
 public class MapLoader {
 
-    @Option(name="--file", usage="Map file to load")
+    @Option(name = "--file", usage = "Map file to load")
     String filename;
 
-    @Option(name="--debug", usage="Print debug information")
-    boolean debug = true;
+    @Option(name = "--debug", usage = "Print debug information")
+    boolean debug = false;
+
+    @Option(name = "--info", usage = "Print information about the map")
+    boolean printInfo = false;
 
     private boolean doCropping = true;
 
@@ -48,11 +53,34 @@ public class MapLoader {
 
             MapFile mapFile = mapLoader.loadMapFromFile(mapLoader.filename);
             GameMap gameMap = mapLoader.convertMapFileToGameMap(mapFile);
+
+            if (mapLoader.printInfo) {
+                mapLoader.printMapInformation(mapFile);
+            }
         } catch (Exception ex) {
             Logger.getLogger(MapLoader.class.getName()).log(Level.SEVERE, null, ex);
 
             System.exit(1);
         }
+    }
+
+    private void printMapInformation(MapFile mapFile) {
+        System.out.println(format(" - Title: %s", mapFile.getTitle()));
+        System.out.println(format(" - Author: %s", mapFile.getAuthor()));
+        System.out.println(format(" - Max number of players: %d", mapFile.getMaxNumberOfPlayers()));
+        System.out.println(" - Starting points:");
+
+        mapFile.getStartingPoints().forEach(point -> System.out.println(format("    - %d, %d", point.x, point.y)));
+
+        System.out.println(" - Player types:");
+
+        mapFile.getPlayerFaces().forEach(face -> System.out.println(format("    - %s", face.name().toLowerCase())));
+
+        System.out.println(format(" - Width x height: %d x %d", mapFile.getWidth(), mapFile.getHeight()));
+        System.out.println(format(" - Terrain type: %s", mapFile.getTerrainType().name().toLowerCase()));
+        System.out.println(format(" - Unlimited play: %b", mapFile.isUnlimitedPlay()));
+        System.out.println(format(" - Title type: %s", mapFile.getTitleType()));
+        System.out.println(format(" - File header: %s", mapFile.getHeaderType().name().toLowerCase()));
     }
 
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
@@ -69,7 +97,9 @@ public class MapLoader {
     }
 
     private void printlnIfDebug() {
-        System.out.println();
+        if (debug) {
+            System.out.println();
+        }
     }
 
     private void printlnIfDebug(Object message) {
@@ -86,8 +116,6 @@ public class MapLoader {
 
     public MapFile loadMapFromStream(InputStream inputStream) throws SettlersMapLoadingException, IOException, InvalidMapException {
 
-        debug = true;
-
         StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
 
         MapFile mapFile = new MapFile();
@@ -96,6 +124,8 @@ public class MapLoader {
         String fileHeader = streamReader.getUint8ArrayAsString(10);
 
         printlnIfDebug(" -- File header: " + fileHeader);
+
+        mapFile.setHeader(fileHeader);
 
         /* Read title and potentially width & height.
         *   - Next 24 bytes are either 20 byte title + 2 byte width + 2 byte height, or
@@ -248,9 +278,9 @@ public class MapLoader {
         mapFile.setHeight(newHeight);
         mapFile.setTitle(title);
 
-        System.out.println(" -- Title type is: " + mapFile.getTitleType());
-        System.out.println(" -- Title is: " + title);
-        System.out.println(" -- Width x height: " + newWidth + " x " + newHeight);
+        printlnIfDebug(" -- Title type is: " + mapFile.getTitleType());
+        printlnIfDebug(" -- Title is: " + title);
+        printlnIfDebug(" -- Width x height: " + newWidth + " x " + newHeight);
 
         /* Read first sub block fileHeader with data about heights */
         BlockHeader heightBlockHeader = readBlockHeaderFromStream(streamReader);
@@ -385,8 +415,6 @@ public class MapLoader {
             System.out.println("Current header: " + objectPropertiesBlockHeader);
 
             throw new SettlersMapLoadingException("Header of block for object properties doesn't match. Exiting.");
-        } else {
-            System.out.println("Header for object properties right matches");
         }
 
         /* Read object properties */

@@ -20,6 +20,7 @@ import static org.appland.settlers.maps.Utils.isEven;
  */
 public class MapFile {
 
+    private static final String FILE_HEADER_V1 = "WORLD_V1.0";
     /* Map properties */
     private final List<Point> startingPositions;
     private final List<PlayerFace> playerFaces;
@@ -37,6 +38,7 @@ public class MapFile {
     boolean     unlimitedPlay;
     private     String title;
     private     MapTitleType mapTitleType;
+    private HeaderType headerType;
 
     public MapFile() {
         width                      = -1;
@@ -262,5 +264,21 @@ public class MapFile {
 
     public String getTitleType() {
         return mapTitleType.name();
+    }
+
+    public boolean isUnlimitedPlay() {
+        return unlimitedPlay;
+    }
+
+    public HeaderType getHeaderType() {
+        return headerType;
+    }
+
+    public void setHeader(String fileHeader) {
+        if (FILE_HEADER_V1.equals(fileHeader)) {
+            headerType = HeaderType.V1;
+        } else {
+            throw new RuntimeException("Can't handle header type: " + fileHeader);
+        }
     }
 }

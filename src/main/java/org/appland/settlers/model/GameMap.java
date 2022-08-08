@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import static java.lang.String.format;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
@@ -3677,6 +3678,7 @@ public class GameMap {
             throw new InvalidUserActionException("Can't place dead tree on stone");
         }
 
+        // TODO: make "allow list" instead of "disallow list". One of allow tiles surrounding the tree should be enough
         for (DetailedVegetation vegetation : getSurroundingTiles(point)) {
             if (DEAD_TREE_NOT_ALLOWED.contains(vegetation)) {
                 throw new InvalidUserActionException("Can't place dead tree on " + vegetation);
@@ -3777,7 +3779,12 @@ public class GameMap {
         /* Either building or flag needs to be connected to the right type of water */
         if (!getSurroundingTiles(point).contains(WATER) &&
             !getSurroundingTiles(point.downRight()).contains(WATER)) {
-            throw new InvalidUserActionException("Can't mark a possible point at " + point + " for harbor without access to water");
+            throw new InvalidUserActionException(
+                    format("Can't mark a possible point at %s for harbor without access to water. Surrounding tiles are: %s and %s",
+                            point,
+                            getSurroundingTiles(point),
+                            getSurroundingTiles(point.downRight())
+                    ));
         }
 
         /* The building and the flag can't be completely surrounded by water */
