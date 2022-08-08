@@ -1723,7 +1723,7 @@ public class TestCourier {
             System.out.println("Total time chewing: " + timeSpentChewingGum);
             System.out.println("Time chewing divided by total time: " + timeSpentChewingGum / 5000.0);
 
-            assertTrue(Math.abs(0.16 - (timeSpentChewingGum / 5000.0)) < 0.08);
+            assertTrue(Math.abs(0.16 - (timeSpentChewingGum / 5000.0)) < 0.1);
         }
     }
 
@@ -2044,7 +2044,7 @@ public class TestCourier {
             System.out.println("Total time reading paper: " + timeReadingPaper);
             System.out.println("Time reading paper divided by total" + timeReadingPaper / 5000.0);
 
-            assertTrue(Math.abs(0.14 - (timeReadingPaper / 5000.0)) < 0.08);
+            assertTrue(Math.abs(0.14 - (timeReadingPaper / 5000.0)) < 0.1);
         }
     }
 
@@ -2366,7 +2366,7 @@ public class TestCourier {
             System.out.println("Total time touching nose: " + timeTouchingNose);
             System.out.println("Time touching nose divided by total: " + timeTouchingNose / 10000.0);
 
-            assertTrue(Math.abs(0.15 - (timeTouchingNose / 10000.0)) < 0.08);
+            assertTrue(Math.abs(0.15 - (timeTouchingNose / 10000.0)) < 0.1);
         }
     }
 
@@ -2686,7 +2686,7 @@ public class TestCourier {
         System.out.println("Time jumping skip rope: " + timeJumpingSkipRope);
         System.out.println("Skip rope time divided by total: " + timeJumpingSkipRope / 5000.0);
 
-        assertTrue(Math.abs(0.15 - (timeJumpingSkipRope / 5000.0) ) < 0.08);
+        assertTrue(Math.abs(0.15 - (timeJumpingSkipRope / 5000.0) ) < 0.1);
     }
 
     @Test
@@ -3007,7 +3007,7 @@ public class TestCourier {
             System.out.println("Total time sitting down: " + timeSittingDown);
             System.out.println("Time sitting down divided by total: " + (timeSittingDown / 5000.0));
 
-            assertTrue(Math.abs(0.16 - (timeSittingDown / 5000.0)) < 0.08);
+            assertTrue(Math.abs(0.16 - (timeSittingDown / 5000.0)) < 0.1);
         }
     }
 
