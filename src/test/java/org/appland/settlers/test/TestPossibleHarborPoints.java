@@ -8,7 +8,6 @@ import org.appland.settlers.model.Point;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
@@ -21,9 +20,54 @@ public class TestPossibleHarborPoints {
     /*
      * TODO:
      *   - all types of land
-     *   - other types of water
      *
      */
+
+    @Test
+    public void testCanMarkPlaceForHarborNotDirectlyNextToWater() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place lake of water */
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Verify that there is a possible point for harbor with water one step away */
+        for (Point point : Utils.getHexagonBorder(point0, 2)) {
+            map.setPossiblePlaceForHarbor(point);
+
+            assertTrue(map.isAvailableHarborPoint(point));
+        }
+    }
+
+    @Test
+    public void testCannotMarkPlaceForHarborDirectlyNextToWater() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place lake of water */
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+
+        /* Verify that there is no possible point for harbor with water one step away */
+        for (Point point : Utils.getHexagonBorder(point0, 1)) {
+            try {
+                map.setPossiblePlaceForHarbor(point);
+
+                fail();
+            } catch (InvalidUserActionException e) { }
+
+            assertFalse(map.isAvailableHarborPoint(point));
+        }
+    }
 
     @Test
     public void testCanMarkAvailablePlaceForHarborWithWaterNextToFlag() throws InvalidUserActionException {
@@ -37,24 +81,17 @@ public class TestPossibleHarborPoints {
         /* Place lake */
         Point point0 = new Point(10, 10);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
-        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.WATER, map);
 
         /* Verify that there can be a possible point for harbor with water close to the flag */
         map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
-        map.setPossiblePlaceForHarbor(point0.downLeft().upLeft());
         map.setPossiblePlaceForHarbor(point0.upRight().upLeft());
-        map.setPossiblePlaceForHarbor(point0.left().upLeft());
-        map.setPossiblePlaceForHarbor(point0.right().right().upLeft());
 
         assertTrue(map.isAvailableHarborPoint(point0.upLeft().upLeft()));
-        assertTrue(map.isAvailableHarborPoint(point0.downLeft().upLeft()));
         assertTrue(map.isAvailableHarborPoint(point0.upRight().upLeft()));
-        assertTrue(map.isAvailableHarborPoint(point0.left().upLeft()));
-        assertTrue(map.isAvailableHarborPoint(point0.right().right().upLeft()));
     }
 
     @Test
-    public void testCannotMarkAvailablePlaceForHarborWithBuildableWaterNextToFlag() throws InvalidUserActionException {
+    public void testCanMarkAvailablePlaceForHarborWithWaterOneStepAway() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -64,168 +101,18 @@ public class TestPossibleHarborPoints {
 
         /* Place lake of buildable water */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.BUILDABLE_WATER, map);
-        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.BUILDABLE_WATER, map);
-
-        /* Verify that there is no possible point for harbor with water close to the flag */
-        try {
-            map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.downLeft().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.upRight().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.left().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.right().right().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        assertFalse(map.isAvailableHarborPoint(point0.upLeft().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.downLeft().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.upRight().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.left().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.right().right().upLeft()));
-    }
-
-    @Test
-    public void testCannotMarkAvailablePlaceForHarborWithWater2NextToFlag() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place lake of water_2 */
-        Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER_2, map);
-        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.WATER_2, map);
-
-        /* Verify that there is no a possible point for harbor with water close to the flag */
-        try {
-            map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.downLeft().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.upRight().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.left().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        try {
-            map.setPossiblePlaceForHarbor(point0.right().right().upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        assertFalse(map.isAvailableHarborPoint(point0.upLeft().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.downLeft().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.upRight().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.left().upLeft()));
-        assertFalse(map.isAvailableHarborPoint(point0.right().right().upLeft()));
-    }
-
-    @Test
-    public void testCanMarkAvailablePlaceForHarborWithWaterNextToBuilding() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place lake */
-        Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
-        Utils.surroundPointWithDetailedVegetation(point0.right(), DetailedVegetation.WATER, map);
-
-        /* Verify that there can be a possible point for harbor with water close to the building */
-        map.setPossiblePlaceForHarbor(point0.right().upRight());
-        map.setPossiblePlaceForHarbor(point0.right().right());
-        map.setPossiblePlaceForHarbor(point0.right().downRight());
-        map.setPossiblePlaceForHarbor(point0.downRight());
-        map.setPossiblePlaceForHarbor(point0.downLeft());
-        map.setPossiblePlaceForHarbor(point0.left());
-
-        assertTrue(map.isAvailableHarborPoint(point0.right().upRight()));
-        assertTrue(map.isAvailableHarborPoint(point0.right().right()));
-        assertTrue(map.isAvailableHarborPoint(point0.right().downRight()));
-        assertTrue(map.isAvailableHarborPoint(point0.downRight()));
-        assertTrue(map.isAvailableHarborPoint(point0.downLeft()));
-        assertTrue(map.isAvailableHarborPoint(point0.left()));
-    }
-
-    @Test
-    public void testCannotMarkAvailablePlaceForHarborWithoutWaterNextToBuildingOrFlag() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place lake */
-        Point point0 = new Point(10, 10);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
-        /* Verify that it's not possible to mark a possible point for harbor without being close to water */
-        List<Point> invalidPlaces = new ArrayList<>(Arrays.asList(new Point[]{
-            point0.upLeft().upLeft().upLeft(),
-            point0.upLeft().up(),
-            point0.upRight().upRight(),
-            point0.upRight().right(),
-            point0.right().right(),
-            point0.downRight().downRight(),
-            point0.down(),
-            point0.downLeft().downLeft(),
-            point0.left().left()
-        }));
+        /* Verify that there is no possible point for harbor with water one step away */
+        for (Point point : Utils.getHexagonBorder(point0, 2)) {
+            map.setPossiblePlaceForHarbor(point);
 
-        for (Point point : invalidPlaces) {
-            try {
-                map.setPossiblePlaceForHarbor(point);
-
-                fail();
-            } catch (InvalidUserActionException e) { }
-
-            assertFalse(map.isAvailableHarborPoint(point));
+            assertTrue(map.isAvailableHarborPoint(point));
         }
     }
 
     @Test
-    public void testCannotMarkAvailablePlaceForHarborCompletelySurroundedByWater() throws InvalidUserActionException {
+    public void testCanMarkAvailablePlaceForHarborWithoutWaterOneStepAway() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", BLUE);
@@ -233,40 +120,10 @@ public class TestPossibleHarborPoints {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place lake */
+        /* Verify that there is no possible point for harbor without water one step away */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        map.setPossiblePlaceForHarbor(point0);
 
-        /* Verify that it's not possible to mark a possible point for harbor completely surrounded by water */
-        try {
-            map.setPossiblePlaceForHarbor(point0);
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        assertFalse(map.isAvailableHarborPoint(point0));
-    }
-
-    @Test
-    public void testCannotMarkAvailablePlaceForHarborFlagCompletelySurroundedByWater() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place lake */
-        Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
-
-        /* Verify that it's not possible to mark a possible point for harbor completely surrounded by water */
-        try {
-            map.setPossiblePlaceForHarbor(point0.upLeft());
-
-            fail();
-        } catch (InvalidUserActionException e) { }
-
-        assertFalse(map.isAvailableHarborPoint(point0));
+        assertTrue(map.isAvailableHarborPoint(point0));
     }
 }

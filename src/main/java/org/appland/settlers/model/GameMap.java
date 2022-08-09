@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import static java.lang.String.format;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
@@ -3776,21 +3775,9 @@ public class GameMap {
 
     public void setPossiblePlaceForHarbor(Point point) throws InvalidUserActionException {
 
-        /* Either building or flag needs to be connected to the right type of water */
-        if (!getSurroundingTiles(point).contains(WATER) &&
-            !getSurroundingTiles(point.downRight()).contains(WATER)) {
-            throw new InvalidUserActionException(
-                    format("Can't mark a possible point at %s for harbor without access to water. Surrounding tiles are: %s and %s",
-                            point,
-                            getSurroundingTiles(point),
-                            getSurroundingTiles(point.downRight())
-                    ));
-        }
-
         /* The building and the flag can't be completely surrounded by water */
         // TODO: check for all types of non-buildable terrain as well
-        if (GameUtils.isAll(getSurroundingTiles(point), WATER) ||
-            GameUtils.isAll(getSurroundingTiles(point.downRight()), WATER)) {
+        if (GameUtils.isAny(getSurroundingTiles(point), WATER)) {
             throw new InvalidUserActionException("Can't mark a possible point at " + point + " for harbor without access to land");
         }
 

@@ -1,6 +1,7 @@
 package org.appland.settlers.maps;
 
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
@@ -19,9 +20,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 public class Inspector {
 
@@ -67,6 +72,9 @@ public class Inspector {
 
     @Option(name = "--print-points", usage = "Prints a list of all the points in the map file")
     private boolean printPoints = false;
+
+    @Option(name = "--harbors", usage = "Prints information about harbor points")
+    private boolean harborInfo = false;
 
     @Option(name = "--to-json", usage = "Writes a json file with information about the map")
     private String toJson = null;
@@ -140,6 +148,53 @@ public class Inspector {
         /* Write to json */
         if (inspector.isToJsonChosen()) {
             inspector.writeToJson();
+        }
+
+        if (inspector.harborInfo) {
+            inspector.printInfoOnHarborPoints();
+        }
+    }
+
+    private void printInfoOnHarborPoints() {
+        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
+            if (mapFilePoint.isPossiblePlaceForHarbor()) {
+                Point point = mapFilePoint.getGamePointPosition();
+
+                Set<DetailedVegetation> closeTiles = new HashSet<>(map.getSurroundingTiles(point));
+                Set<DetailedVegetation> closeToFlagTiles = new HashSet<>(map.getSurroundingTiles(point.downRight()));
+                Set<DetailedVegetation> oneStepAwayTiles = new HashSet<>();
+
+                Point pointLeft = point.left();
+                Point pointUpLeft = point.upLeft();
+                Point pointUpRight = point.upRight();
+                Point pointRight = point.right();
+                Point pointDownRight = point.downRight();
+                Point pointDownLeft = point.downLeft();
+
+                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointUpLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointUpLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointUpRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointUpRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationUpRight(pointUpRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointUpRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationUpRight(pointRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointDownRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointDownRight));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointDownLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointDownLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownLeft(pointDownLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointDownLeft));
+                oneStepAwayTiles.add(map.getDetailedVegetationDownLeft(pointLeft));
+
+                System.out.println(" +");
+                System.out.println(format("Close tiles: %s", closeTiles));
+                System.out.println(format("Close to flag tiles: %s", closeToFlagTiles));
+                System.out.println(format("One step away tiles: %s", oneStepAwayTiles));
+            }
         }
     }
 
@@ -570,23 +625,23 @@ public class Inspector {
 
         System.out.println(" - Surrounding available buildings:");
         System.out.println("   -- Above 1: " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.up()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight().upRight()).getBuildableSite()));
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.up()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight().upRight()).getBuildableSite()));
         System.out.println("   -- Above 2:           " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight()).getBuildableSite()));
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight()).getBuildableSite()));
         System.out.println("   -- Same:    " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.left()).getBuildableSite()) + " " +
-                String.format("%-20s", "POINT") + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.right()).getBuildableSite()));
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.left()).getBuildableSite()) + " " +
+                format("%-20s", "POINT") + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.right()).getBuildableSite()));
         System.out.println("   -- Below 1:           " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight()).getBuildableSite()));
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight()).getBuildableSite()));
         System.out.println("   -- Below 2: " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft().downLeft()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.down()).getBuildableSite()) + " " +
-                String.format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight().downRight()).getBuildableSite()));
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft().downLeft()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.down()).getBuildableSite()) + " " +
+                format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight().downRight()).getBuildableSite()));
 
         System.out.println(" - Surrounding stones and trees:");
         System.out.println("   -- Above 1: " +
@@ -685,23 +740,23 @@ public class Inspector {
 
         System.out.println(" - Surrounding available buildings:");
         System.out.println("   -- Above 1: " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.upLeft().upLeft())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.up())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.upRight().upRight())));
+                format("%-20s", availableHousePoints.get(infoPoint.upLeft().upLeft())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.up())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.upRight().upRight())));
         System.out.println("   -- Above 2:           " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.upLeft())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.upRight())));
+                format("%-20s", availableHousePoints.get(infoPoint.upLeft())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.upRight())));
         System.out.println("   -- Same:    " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.left())) + " " +
-                String.format("%-20s", "POINT") + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.right())));
+                format("%-20s", availableHousePoints.get(infoPoint.left())) + " " +
+                format("%-20s", "POINT") + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.right())));
         System.out.println("   -- Below 1:           " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.downLeft())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.downRight())));
+                format("%-20s", availableHousePoints.get(infoPoint.downLeft())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.downRight())));
         System.out.println("   -- Below 2: " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.downLeft().downLeft())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.down())) + " " +
-                String.format("%-20s", availableHousePoints.get(infoPoint.downRight().downRight())));
+                format("%-20s", availableHousePoints.get(infoPoint.downLeft().downLeft())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.down())) + " " +
+                format("%-20s", availableHousePoints.get(infoPoint.downRight().downRight())));
 
         /* Print the closest border point */
         int distance = getDistanceToBorder(infoPoint, player);
