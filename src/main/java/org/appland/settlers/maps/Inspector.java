@@ -4,6 +4,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
@@ -13,6 +14,7 @@ import org.json.simple.JSONObject;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +28,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.awt.Color.BLACK;
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GRAY;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.PINK;
+import static java.awt.Color.RED;
+import static java.awt.Color.WHITE;
+import static java.awt.Color.YELLOW;
 import static java.lang.String.format;
 
 public class Inspector {
@@ -79,7 +89,23 @@ public class Inspector {
     @Option(name = "--to-json", usage = "Writes a json file with information about the map")
     private String toJson = null;
 
+    @Option(name = "--place-players", usage = "When used, a headquarters will be placed on each starting point")
+    private boolean placePlayers = false;
+
     /* Regular fields */
+    private static final List<Color> COLORS = new ArrayList<>();
+
+    static {
+        COLORS.add(BLUE);
+        COLORS.add(RED);
+        COLORS.add(WHITE);
+        COLORS.add(GREEN);
+        COLORS.add(YELLOW);
+        COLORS.add(BLACK);
+        COLORS.add(GRAY);
+        COLORS.add(PINK);
+    }
+
     private final MapLoader mapLoader;
 
     private MapFile mapFile;
@@ -101,7 +127,7 @@ public class Inspector {
 
         /* Load the map directly if a map filename is given */
         if (inspector.isFileSelected()) {
-            inspector.loadMapFile(mapFilename);
+            inspector.loadMapFile(mapFilename, inspector.placePlayers);
         }
 
         /* Print information about points surrounding points of type if chosen */
@@ -521,9 +547,46 @@ public class Inspector {
      * @param mapFilename
      * @throws Exception
      */
-    private void loadMapFile(String mapFilename) throws Exception, InvalidMapException {
+    private void loadMapFile(String mapFilename, boolean placePlayers) throws Exception, InvalidMapException {
         mapFile = mapLoader.loadMapFromFile(mapFilename);
         map = mapLoader.convertMapFileToGameMap(mapFile);
+
+        System.out.println("Max players: " + mapFile.getMaxNumberOfPlayers());
+        System.out.println("Starting positions: " + mapFile.getStartingPoints());
+
+        List<Point> startingPoints = map.getStartingPoints();
+        List<Player> players = new ArrayList<>();
+
+        for (int i = 0; i < startingPoints.size(); i++) {
+            players.add(new Player("" + i, COLORS.get(i)));
+        }
+
+        System.out.println("plong");
+        map.setPlayers(players);
+
+        System.out.println(placePlayers);
+        System.out.println(startingPoints);
+
+        if (placePlayers) {
+
+            if (mapFile.getStartingPoints().isEmpty()) {
+                System.out.println("No starting points found in map file");
+            } else {
+
+                for (int i = 0; i < startingPoints.size(); i++) {
+                    Point point = startingPoints.get(i);
+                    Player player = players.get(i);
+
+                    try {
+                        map.placeBuilding(new Headquarter(player), point);
+
+                        System.out.println("" + point + ": OK");
+                    } catch (InvalidUserActionException e) {
+                        System.out.println("" + point + ": Not OK");
+                    }
+                }
+            }
+        }
     }
 
     /**
