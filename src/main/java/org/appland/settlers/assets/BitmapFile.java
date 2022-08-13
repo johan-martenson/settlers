@@ -13,6 +13,7 @@ public class BitmapFile extends Bitmap {
     private int yPixelsPerM;
     private int colorUsed;
     private int clrimp;
+    private short sourceBitsPerPixel;
 
     public BitmapFile(int width, int height, Palette palette, TextureFormat format) {
         super(width, height, palette, format);
@@ -137,7 +138,8 @@ public class BitmapFile extends Bitmap {
                 ", pixelOffset=" + pixelOffset +
                 ", headerSize=" + headerSize +
                 ", planes=" + planes +
-                ", bitsPerPixel=" + bitsPerPixel +
+                ", bytesPerPixel=" + bytesPerPixel +
+                ", sourceBitsPerPixel=" + sourceBitsPerPixel +
                 ", compression=" + compression +
                 ", size=" + size +
                 ", xPixelsPerM=" + xPixelsPerM +
@@ -145,5 +147,13 @@ public class BitmapFile extends Bitmap {
                 ", colorUsed=" + colorUsed +
                 ", clrimp=" + clrimp +
                 '}';
+    }
+
+    public void setSourceBitsPerPixel(short bitsPerPixel) {
+        sourceBitsPerPixel = bitsPerPixel;
+    }
+
+    public short getSourceBitsPerPixel() {
+        return sourceBitsPerPixel;
     }
 }

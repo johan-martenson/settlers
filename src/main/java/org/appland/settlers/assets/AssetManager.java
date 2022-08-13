@@ -1621,7 +1621,7 @@ public class AssetManager {
         bitmap.setPixelOffset(pixelOffset);
         bitmap.setHeaderSize(headerSize);
         bitmap.setPlanes(planes);
-        bitmap.setBitsPerPixel(bitsPerPixel);
+        bitmap.setSourceBitsPerPixel(bitsPerPixel);
         bitmap.setCompression(compression);
         bitmap.setSize(size);
         bitmap.setXPixelsPerM(xPixelsPerMeter);
@@ -1650,8 +1650,8 @@ public class AssetManager {
                 if (sourceBytesPerPixel == 1) {
 
                     /* Copy one row */
-                    for (int i = 0; i < width; i++) {
-                        bitmap.setPixelByColorIndex(i, y, streamReader.getUint8());
+                    for (int x = 0; x < width; x++) {
+                        bitmap.setPixelByColorIndex(x, y, streamReader.getUint8());
                     }
 
                 /* Read the source as BGR */

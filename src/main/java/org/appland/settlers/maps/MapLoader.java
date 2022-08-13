@@ -11,6 +11,7 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,8 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static org.appland.settlers.maps.MapLoader.TranslationMode.POLISHED;
+import static org.appland.settlers.maps.Utils.isEven;
 
 /**
  * Loads a map binary file into a MapFile instance
@@ -38,8 +42,6 @@ public class MapLoader {
 
     @Option(name = "--info", usage = "Print information about the map")
     boolean printInfo = false;
-
-    private boolean doCropping = true;
 
     public static void main(String[] args) {
 
@@ -70,7 +72,7 @@ public class MapLoader {
         System.out.println(format(" - Max number of players: %d", mapFile.getMaxNumberOfPlayers()));
         System.out.println(" - Starting points:");
 
-        mapFile.getStartingPoints().forEach(point -> System.out.println(format("    - %d, %d", point.x, point.y)));
+        mapFile.getGamePointStartingPoints().forEach(point -> System.out.println(format("    - %d, %d", point.x, point.y)));
 
         System.out.println(" - Player types:");
 
@@ -323,6 +325,22 @@ public class MapLoader {
         }
 
         printlnIfDebug(" -- Loaded heights");
+
+        /* Now that the MapFilePoints are added, set the native position for each one, as used in the original game */
+        int x = 0;
+        int y = 0;
+        for (int i = 0; i < subBlockSize; i++) {
+            MapFilePoint mapFilePoint = mapFile.getMapFilePoints().get(i);
+
+            mapFilePoint.setPosition(new Point(x, y));
+
+            x = x + 1;
+
+            if (x == mapFile.getWidth()) {
+                x = 0;
+                y = y + 1;
+            }
+        }
 
         /* Read textures below */
         printlnIfDebug();
@@ -645,18 +663,21 @@ public class MapLoader {
             players.add(new Player("Player " + i, new Color(i*20, i*20, i*20)));
         }
 
+        TranslationMode translationMode = POLISHED;
+
         /* Create initial game map with correct dimensions */
-        GameMap gameMap = new GameMap(players, mapFile.getWidth() * 2 + 2, mapFile.getHeight() + 3);
+        Dimension gamePointDimension = toGamePointDimension(mapFile.getDimension(), translationMode);
+        GameMap gameMap = new GameMap(players, gamePointDimension.width, gamePointDimension.height);
 
         /* Set up the terrain */
         for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
 
-            org.appland.settlers.model.Point point = mapFilePoint.getGamePointPosition();
-
-            /* Filter points that have been cropped out */ // TODO: support cropping on/off
-            if (doCropping && (point.x < 1 || point.x >= gameMap.getWidth() || point.y < 1 || point.y >= gameMap.getHeight())) {
-                continue;
-            }
+            Point mapFilePosition = mapFilePoint.getPosition();
+            org.appland.settlers.model.Point point = mapFilePositionToGamePoint(
+                    mapFilePosition,
+                    mapFile.getDimension(),
+                    translationMode
+            );
 
             /* Assign textures */
             gameMap.setDetailedVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
@@ -711,18 +732,77 @@ public class MapLoader {
         }
 
         /* Set starting points */
-        gameMap.setStartingPoints(mapFile.getStartingPoints());
+        List<org.appland.settlers.model.Point> gamePointStartingPoints = mapFile.getStartingPoints().stream()
+                .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension(), translationMode))
+                .collect(Collectors.toList());
+
+        gameMap.setStartingPoints(gamePointStartingPoints);
 
         if (debug) {
             printIfDebug(" -- Starting positions: ");
         }
 
         if (debug) {
-            for (Point point : mapFile.getStartingPoints()) {
+            for (Point point : mapFile.getGamePointStartingPoints()) {
                 printIfDebug("(" + point.x + ", " + point.y + ") ");
             }
         }
 
         return gameMap;
+    }
+
+    private Dimension toGamePointDimension(Dimension dimension, TranslationMode translationMode) {
+        if (translationMode == POLISHED) {
+            if (isEven(dimension.height)) {
+                return new Dimension(2 * dimension.width - 2, dimension.height - 1);
+            } else {
+                return new Dimension(2 * dimension.width - 2, dimension.height);
+            }
+        } else {
+            throw new RuntimeException("Only polished translation is supported for now");
+        }
+    }
+
+    private org.appland.settlers.model.Point mapFilePositionToGamePoint(
+            java.awt.Point mapFilePosition,
+            Dimension dimension,
+            TranslationMode translationMode
+    ) {
+        if (translationMode == POLISHED) {
+            if (isEven(dimension.height)) {
+                if (isEven(mapFilePosition.y)) {
+                    return new org.appland.settlers.model.Point(
+                            2 * mapFilePosition.x - 1,
+                            dimension.height - 1 - mapFilePosition.y
+                    );
+                } else {
+                    return new org.appland.settlers.model.Point(
+                            2 * mapFilePosition.x,
+                            dimension.height - 1 - mapFilePosition.y
+                    );
+                }
+
+            // Case where unadjusted height is odd
+            } else {
+                if (isEven(mapFilePosition.y)) {
+                    return new org.appland.settlers.model.Point(
+                            2 * mapFilePosition.x - 1,
+                            dimension.height - mapFilePosition.y
+                    );
+                } else {
+                    return new org.appland.settlers.model.Point(
+                            2 * mapFilePosition.x,
+                            dimension.height - mapFilePosition.y
+                    );
+                }
+            }
+        } else {
+            throw new RuntimeException("Only supports polished translation.");
+        }
+    }
+
+    static enum TranslationMode {
+        POLISHED
+
     }
 }

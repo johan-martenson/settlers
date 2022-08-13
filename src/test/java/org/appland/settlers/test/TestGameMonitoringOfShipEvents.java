@@ -420,11 +420,11 @@ public class TestGameMonitoringOfShipEvents {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(50, 10);
+        Point point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -551,7 +551,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Wait for the ship to sail to the harbor */
         assertEquals(map.getShips().size(), 1);
 
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
         /* Verify that a game monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;
@@ -583,11 +583,11 @@ public class TestGameMonitoringOfShipEvents {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(50, 10);
+        Point point0 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -714,7 +714,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Wait for the ship to sail to the harbor */
         assertEquals(map.getShips().size(), 1);
 
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
         /* Verify that a game monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;

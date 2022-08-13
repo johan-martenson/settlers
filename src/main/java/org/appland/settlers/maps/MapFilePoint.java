@@ -47,6 +47,7 @@ class MapFilePoint {
     private DecorationType decorativeObject;
     private StoneType stoneType;
     private short stoneAmount;
+    private java.awt.Point mapFilePosition;
 
     public MapFilePoint() {
         isPossibleHarbor = false;
@@ -263,5 +264,13 @@ class MapFilePoint {
 
     public TreeSize getTreeSize() {
         return treeSize;
+    }
+
+    public java.awt.Point getPosition() {
+        return mapFilePosition;
+    }
+
+    public void setPosition(java.awt.Point point) {
+        mapFilePosition = point;
     }
 }

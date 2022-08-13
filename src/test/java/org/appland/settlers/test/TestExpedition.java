@@ -83,11 +83,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(52, 10);
+        Point point0 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 10);
+        Point point1 = new Point(12, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -149,11 +149,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(56, 10);
+        Point point0 = new Point(56, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -164,7 +164,7 @@ public class TestExpedition {
         Point point3 = new Point(10, 6);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        /* Connect the shipyard to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         /* Wait for the shipyard to get constructed and occupied */
@@ -355,7 +355,7 @@ public class TestExpedition {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 8);
+        Point point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -460,11 +460,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(11, 27);
+        Point point0 = new Point(9, 27);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 11);
+        Point point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -571,11 +571,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(11, 29);
+        Point point0 = new Point(9, 29);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 11);
+        Point point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -676,11 +676,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(11, 11);
+        Point point0 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 29);
+        Point point1 = new Point(9, 29);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -781,11 +781,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(52, 10);
+        Point point0 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(7, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -886,11 +886,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(11, 11);
+        Point point0 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(52, 10);
+        Point point1 = new Point(52, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -997,11 +997,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(14, 50);
+        Point point0 = new Point(16, 50);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(50, 10);
+        Point point1 = new Point(50, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1108,11 +1108,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(14, 10);
+        Point point0 = new Point(14, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(50, 54);
+        Point point1 = new Point(50, 52);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1219,11 +1219,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(51, 49);
+        Point point0 = new Point(49, 49);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(5, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1234,7 +1234,7 @@ public class TestExpedition {
         Point point3 = new Point(9, 7);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        /* Connect the shipyard to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         /* Wait for the shipyard to get constructed and occupied */
@@ -1300,7 +1300,7 @@ public class TestExpedition {
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        /* Connect the harbor to the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -1319,11 +1319,14 @@ public class TestExpedition {
         map.stepTime();
 
         assertEquals(map.getShips().size(), 1);
-        assertEquals(ship.getTarget(), harbor.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, harbor.getPosition());
+        Point target = ship.getTarget();
 
-        /* Verify that there are no possible expeditions from the harbor */
+        assertTrue(harbor.getPosition().distance(target.x, target.y) < 4);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, target);
+
+        /* Verify that there is a possible expedition up-right */
         Set<Direction> directions = ship.getPossibleDirectionsForExpedition();
 
         assertEquals(directions.size(), 1);
@@ -1353,7 +1356,7 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(51, 9);
+        Point point0 = new Point(49, 9);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
@@ -1464,15 +1467,15 @@ public class TestExpedition {
         }
 
         /* Mark place for harbor */
-        Point pointX = new Point(11, 55);
+        Point pointX = new Point(9, 55);
         map.setPossiblePlaceForHarbor(pointX);
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(11, 15);
+        Point point0 = new Point(9, 15);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(52, 54);
+        Point point1 = new Point(52, 52);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1574,11 +1577,11 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(58, 10);
+        Point point0 = new Point(58, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1659,13 +1662,13 @@ public class TestExpedition {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1790,9 +1793,11 @@ public class TestExpedition {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        Point target = ship.getTarget();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        assertTrue(point1.distance(target.x, target.y) < 4);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, target);
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1827,8 +1832,8 @@ public class TestExpedition {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertFalse(ship.getPosition().distance(point0.downRight()) < 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
@@ -1847,7 +1852,7 @@ public class TestExpedition {
         /* Verify that the ship is not re-used when a second expedition is launched */
         for (int i = 0; i < 500; i++) {
 
-            assertEquals(ship.getPosition(), point5);
+            assertTrue(ship.getPosition().distance(point5) < 4);
             assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 4);
             assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(STONE, 0), 6);
             assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(BUILDER, 0), 1);
@@ -1877,7 +1882,7 @@ public class TestExpedition {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(4, 10);
+        Point point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2015,8 +2020,13 @@ public class TestExpedition {
             map.stepTime();
         }
 
-        assertTrue((ship.getPosition().equals(harbor.getPosition()) && !ship1.getPosition().equals(harbor.getPosition())) ||
-                   (!ship.getPosition().equals(harbor.getPosition()) && ship1.getPosition().equals(harbor.getPosition())));
+        Point shipPosition = ship.getPosition();
+        Point ship1Position = ship1.getPosition();
+        Point harborPosition = harbor.getPosition();
+
+        assertTrue(
+                (shipPosition.distance(harborPosition.x, harborPosition.y) < 4 && ship1Position.distance(harborPosition.x, harborPosition.y) > 4) ||
+                        (shipPosition.distance(harborPosition.x, harborPosition.y) > 4 && ship1Position.distance(harborPosition.x, harborPosition.y) < 4));
     }
 
     @Test
@@ -2040,7 +2050,7 @@ public class TestExpedition {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(4, 10);
+        Point point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2177,11 +2187,16 @@ public class TestExpedition {
             map.stepTime();
         }
 
-        assertTrue(ship.getPosition().equals(harbor.getPosition()) || ship1.getPosition().equals(harbor.getPosition()));
+        Point harborPosition = harbor.getPosition();
+
+        assertTrue(
+                ship.getPosition().distance(harborPosition) < 4 ||
+                        ship1.getPosition().distance(harborPosition) < 4
+        );
 
         Ship shipForSecondExpedition;
 
-        if (ship.getPosition().equals(harbor.getPosition())) {
+        if (ship.getPosition().distance(harbor.getPosition()) < 4) {
             assertEquals(ship.getCargos().size(), 11);
             assertEquals(ship1.getCargos().size(), 0);
 
@@ -2213,10 +2228,10 @@ public class TestExpedition {
         map.stepTime();
 
         /* Verify that the other ship sails to the harbor and takes on the expedition */
-        assertEquals(shipForSecondExpedition.getTarget(), harbor.getPosition());
+        assertTrue(shipForSecondExpedition.getTarget().distance(harbor.getPosition()) < 4);
         assertEquals(shipForSecondExpedition.getCargos().size(), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, shipForSecondExpedition, harbor.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, shipForSecondExpedition, shipForSecondExpedition.getTarget());
 
         assertEquals(shipForSecondExpedition.getCargos().size(), 11);
     }

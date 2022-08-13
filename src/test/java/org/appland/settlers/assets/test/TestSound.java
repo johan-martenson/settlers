@@ -21,10 +21,11 @@ import static junit.framework.TestCase.assertNotNull;
 
 public class TestSound {
 
-    private static final String TEST_STEREO_WAVE_FILE = "/home/johan/projects/settlers-image-manager/src/test/resources/testStereo.wav";
-    private static final String TEST_MONO_WAVE_FILE = "/home/johan/projects/settlers-image-manager/src/test/resources/testMono.wav";
-    private static final String TEST_MIDI_FILE = "/home/johan/projects/settlers-image-manager/src/test/resources/testMidi.mid";
-    private static final String TEST_XMIDI_FILE = "/home/johan/projects/settlers-image-manager/src/test/resources/testXMidi.xmi";
+    private static final String TEST_STEREO_WAVE_FILE = "src/test/resources/testStereo.wav";
+    private static final String TEST_MONO_WAVE_FILE = "src/test/resources/testMono.wav";
+    private static final String TEST_MIDI_FILE = "src/test/resources/testMidi.mid";
+    private static final String TEST_XMIDI_FILE = "src/test/resources/testXMidi.xmi";
+
 
     @Test
     public void testStereoWave() throws InvalidFormatException, IOException {

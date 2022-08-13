@@ -31,6 +31,15 @@ import java.util.Objects;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.DetailedVegetation.DESERT_1;
+import static org.appland.settlers.model.DetailedVegetation.FLOWER_MEADOW;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_2;
+import static org.appland.settlers.model.DetailedVegetation.MEADOW_3;
+import static org.appland.settlers.model.DetailedVegetation.SAVANNAH;
+import static org.appland.settlers.model.DetailedVegetation.STEPPE;
+import static org.appland.settlers.model.DetailedVegetation.SWAMP;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.GENERAL;
@@ -1471,5 +1480,501 @@ public class TestMisc {
         Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), GENERAL_RANK);
+    }
+
+    @Test
+    public void testPlaceHeadquarterInAfricaMap() throws InvalidUserActionException {
+        /*   - Up left: STEPPE
+             - Above: STEPPE
+             - Up right: STEPPE
+             - Down right: STEPPE
+             - Below: STEPPE
+             - Down left: STEPPE
+
+             + Up-left up-right: STEPPE
+             + Up-right above: DESERT_1
+             + Up-right up-right: DESERT_1
+             + Right above: DESERT_1
+             + Right up-right: DESERT_1
+             + Right down-right: DESERT_1
+             + Right below: DESERT_1
+             + Down-right down-right: DESERT_1
+             + Down-right below: STEPPE
+             + Down-right down-left: STEPPE
+             + Down-left below: STEPPE
+             + Down-left down-left: STEPPE
+             + Down-left up-left: STEPPE
+             + Left down-left: STEPPE
+             + Left up-left: STEPPE
+             + Left above: STEPPE
+             + Up-left up-left: STEPPE
+             + Up-left above: STEPPE
+*/
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, STEPPE);
+        map.setDetailedVegetationAbove(point0, STEPPE);
+        map.setDetailedVegetationUpRight(point0, STEPPE);
+        map.setDetailedVegetationDownRight(point0, STEPPE);
+        map.setDetailedVegetationBelow(point0, STEPPE);
+        map.setDetailedVegetationDownLeft(point0, STEPPE);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), STEPPE);
+        map.setDetailedVegetationAbove(point0.upRight(), DESERT_1);
+        map.setDetailedVegetationUpRight(point0.upRight(), DESERT_1);
+        map.setDetailedVegetationAbove(point0.right(), DESERT_1);
+        map.setDetailedVegetationUpRight(point0.right(), DESERT_1);
+        map.setDetailedVegetationDownRight(point0.right(), DESERT_1);
+        map.setDetailedVegetationBelow(point0.right(), DESERT_1);
+        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationBelow(point0.downRight(), STEPPE);
+        map.setDetailedVegetationDownLeft(point0.downRight(), STEPPE);
+        map.setDetailedVegetationBelow(point0.downLeft(), STEPPE);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), STEPPE);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), STEPPE);
+        map.setDetailedVegetationDownLeft(point0.left(), STEPPE);
+        map.setDetailedVegetationUpLeft(point0.left(), STEPPE);
+        map.setDetailedVegetationAbove(point0.left(), STEPPE);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), STEPPE);
+        map.setDetailedVegetationAbove(point0.upLeft(), STEPPE);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInEurope1Map() throws InvalidUserActionException {
+        /*   - Up left: SAVANNAH
+             - Above: SAVANNAH
+             - Up right: STEPPE
+             - Down right: STEPPE
+             - Below: STEPPE
+             - Down left: STEPPE
+             + Up-left up-right: SAVANNAH
+             + Up-right above: SAVANNAH
+             + Up-right up-right: MEADOW_2
+             + Right above: MEADOW_1
+             + Right up-right: STEPPE
+             + Right down-right: STEPPE
+             + Right below: MEADOW_1
+             + Down-right down-right: DESERT_1
+             + Down-right below: DESERT_1
+             + Down-right down-left: STEPPE
+             + Down-left below: STEPPE
+             + Down-left down-left: DESERT_1
+             + Down-left up-left: DESERT_1
+             + Left down-left: DESERT_1
+             + Left up-left: SAVANNAH
+             + Left above: SAVANNAH
+             + Up-left up-left: SAVANNAH
+             + Up-left above: SAVANNAH
+            */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
+        map.setDetailedVegetationAbove(point0, SAVANNAH);
+        map.setDetailedVegetationUpRight(point0, STEPPE);
+        map.setDetailedVegetationDownRight(point0, STEPPE);
+        map.setDetailedVegetationBelow(point0, STEPPE);
+        map.setDetailedVegetationDownLeft(point0, STEPPE);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.upRight(), SAVANNAH);
+        map.setDetailedVegetationUpRight(point0.upRight(), MEADOW_2);
+        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
+        map.setDetailedVegetationUpRight(point0.right(), STEPPE);
+        map.setDetailedVegetationDownRight(point0.right(), STEPPE);
+        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
+        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationBelow(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.downRight(), STEPPE);
+        map.setDetailedVegetationBelow(point0.downLeft(), STEPPE);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.left(), DESERT_1);
+        map.setDetailedVegetationUpLeft(point0.left(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.left(), SAVANNAH);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInEurope2Map() throws InvalidUserActionException {
+        /*   - Up left: SAVANNAH
+             - Above: SAVANNAH
+             - Up right: SAVANNAH
+             - Down right: SAVANNAH
+             - Below: SAVANNAH
+             - Down left: SAVANNAH
+             + Up-left up-right: SAVANNAH
+             + Up-right above: SAVANNAH
+             + Up-right up-right: DESERT_1
+             + Right above: DESERT_1
+             + Right up-right: WATER
+             + Right down-right: WATER
+             + Right below: DESERT_1
+             + Down-right down-right: DESERT_1
+             + Down-right below: DESERT_1
+             + Down-right down-left: DESERT_1
+             + Down-left below: DESERT_1
+             + Down-left down-left: SAVANNAH
+             + Down-left up-left: SAVANNAH
+             + Left down-left: MEADOW_3
+             + Left up-left: MEADOW_3
+             + Left above: MEADOW_3
+             + Up-left up-left: MEADOW_3
+             + Up-left above: MEADOW_2
+            */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
+        map.setDetailedVegetationAbove(point0, SAVANNAH);
+        map.setDetailedVegetationUpRight(point0, SAVANNAH);
+        map.setDetailedVegetationDownRight(point0, SAVANNAH);
+        map.setDetailedVegetationBelow(point0, SAVANNAH);
+        map.setDetailedVegetationDownLeft(point0, SAVANNAH);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.upRight(), SAVANNAH);
+        map.setDetailedVegetationUpRight(point0.upRight(), DESERT_1);
+        map.setDetailedVegetationAbove(point0.right(), DESERT_1);
+        map.setDetailedVegetationUpRight(point0.right(), WATER);
+        map.setDetailedVegetationDownRight(point0.right(), WATER);
+        map.setDetailedVegetationBelow(point0.right(), DESERT_1);
+        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationBelow(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.downRight(), DESERT_1);
+        map.setDetailedVegetationBelow(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), SAVANNAH);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), SAVANNAH);
+        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_3);
+        map.setDetailedVegetationUpLeft(point0.left(), MEADOW_3);
+        map.setDetailedVegetationAbove(point0.left(), MEADOW_3);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), MEADOW_3);
+        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_2);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInNorthAsiaMap() throws InvalidUserActionException {
+        /*   - Up left: MEADOW_1
+             - Above: MEADOW_1
+             - Up right: MEADOW_1
+             - Down right: MEADOW_1
+             - Below: MEADOW_1
+             - Down left: MEADOW_1
+             + Up-left up-right: MEADOW_1
+             + Up-right above: MEADOW_1
+             + Up-right up-right: MEADOW_1
+             + Right above: MEADOW_1
+             + Right up-right: MEADOW_1
+             + Right down-right: MEADOW_1
+             + Right below: MEADOW_1
+             + Down-right down-right: MEADOW_1
+             + Down-right below: MEADOW_1
+             + Down-right down-left: MEADOW_1
+             + Down-left below: DESERT_1
+             + Down-left down-left: DESERT_1
+             + Down-left up-left: DESERT_1
+             + Left down-left: DESERT_1
+             + Left up-left: DESERT_1
+             + Left above: DESERT_1
+             + Up-left up-left: DESERT_1
+             + Up-left above: MEADOW_1
+            */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, MEADOW_1);
+        map.setDetailedVegetationAbove(point0, MEADOW_1);
+        map.setDetailedVegetationUpRight(point0, MEADOW_1);
+        map.setDetailedVegetationDownRight(point0, MEADOW_1);
+        map.setDetailedVegetationBelow(point0, MEADOW_1);
+        map.setDetailedVegetationDownLeft(point0, MEADOW_1);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), MEADOW_1);
+        map.setDetailedVegetationAbove(point0.upRight(), MEADOW_1);
+        map.setDetailedVegetationUpRight(point0.upRight(), MEADOW_1);
+        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
+        map.setDetailedVegetationUpRight(point0.right(), MEADOW_1);
+        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
+        map.setDetailedVegetationDownRight(point0.downRight(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.downRight(), MEADOW_1);
+        map.setDetailedVegetationDownLeft(point0.downRight(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), DESERT_1);
+        map.setDetailedVegetationDownLeft(point0.left(), DESERT_1);
+        map.setDetailedVegetationUpLeft(point0.left(), DESERT_1);
+        map.setDetailedVegetationAbove(point0.left(), DESERT_1);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), DESERT_1);
+        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_1);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInOmap06Map() throws InvalidUserActionException {
+
+    /*
+         - Up left: MEADOW_2
+         - Above: MEADOW_2
+         - Up right: MEADOW_2
+         - Down right: MEADOW_1
+         - Below: MEADOW_1
+         - Down left: MEADOW_2
+         + Up-left up-right: SAVANNAH
+         + Up-right above: WATER
+         + Up-right up-right: WATER
+         + Right above: MEADOW_2
+         + Right up-right: SAVANNAH
+         + Right down-right: MEADOW_1
+         + Right below: MEADOW_1
+         + Down-right down-right: MEADOW_1
+         + Down-right below: MEADOW_1
+         + Down-right down-left: FLOWER_MEADOW
+         + Down-left below: FLOWER_MEADOW
+         + Down-left down-left: MEADOW_2
+         + Down-left up-left: MEADOW_2
+         + Left down-left: MEADOW_2
+         + Left up-left: MEADOW_2
+         + Left above: MEADOW_2
+         + Up-left up-left: SAVANNAH
+         + Up-left above: SAVANNAH
+        */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, MEADOW_2);
+        map.setDetailedVegetationAbove(point0, MEADOW_2);
+        map.setDetailedVegetationUpRight(point0, MEADOW_2);
+        map.setDetailedVegetationDownRight(point0, MEADOW_1);
+        map.setDetailedVegetationBelow(point0, MEADOW_1);
+        map.setDetailedVegetationDownLeft(point0, MEADOW_2);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.upRight(), WATER);
+        map.setDetailedVegetationUpRight(point0.upRight(), WATER);
+        map.setDetailedVegetationAbove(point0.right(), MEADOW_2);
+        map.setDetailedVegetationUpRight(point0.right(), SAVANNAH);
+        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
+        map.setDetailedVegetationDownRight(point0.downRight(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.downRight(), MEADOW_1);
+        map.setDetailedVegetationDownLeft(point0.downRight(), FLOWER_MEADOW);
+        map.setDetailedVegetationBelow(point0.downLeft(), FLOWER_MEADOW);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), MEADOW_2);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), MEADOW_2);
+        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_2);
+        map.setDetailedVegetationUpLeft(point0.left(), MEADOW_2);
+        map.setDetailedVegetationAbove(point0.left(), MEADOW_2);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInWelt21Map() throws InvalidUserActionException {
+
+    /*
+         - Up left: MEADOW_2
+         - Above: MEADOW_2
+         - Up right: MEADOW_1
+         - Down right: MEADOW_3
+         - Below: MEADOW_3
+         - Down left: MEADOW_2
+         + Up-left up-right: MEADOW_3
+         + Up-right above: FLOWER_MEADOW
+         + Up-right up-right: FLOWER_MEADOW
+         + Right above: MEADOW_1
+         + Right up-right: MEADOW_1
+         + Right down-right: MEADOW_1
+         + Right below: MEADOW_3
+         + Down-right down-right: SWAMP
+         + Down-right below: SWAMP
+         + Down-right down-left: MEADOW_2
+         + Down-left below: SWAMP
+         + Down-left down-left: SWAMP
+         + Down-left up-left: MEADOW_2
+         + Left down-left: MEADOW_3
+         + Left up-left: SWAMP
+         + Left above: SWAMP
+         + Up-left up-left: SWAMP
+         + Up-left above: MEADOW_3
+        */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
+        map.setDetailedVegetationAbove(point0, SAVANNAH);
+        map.setDetailedVegetationUpRight(point0, SAVANNAH);
+        map.setDetailedVegetationDownRight(point0, SAVANNAH);
+        map.setDetailedVegetationBelow(point0, SAVANNAH);
+        map.setDetailedVegetationDownLeft(point0, SAVANNAH);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), WATER);
+        map.setDetailedVegetationAbove(point0.upRight(), WATER);
+        map.setDetailedVegetationUpRight(point0.upRight(), WATER);
+        map.setDetailedVegetationAbove(point0.right(), WATER);
+        map.setDetailedVegetationUpRight(point0.right(), WATER);
+        map.setDetailedVegetationDownRight(point0.right(), WATER);
+        map.setDetailedVegetationBelow(point0.right(), WATER);
+        map.setDetailedVegetationDownRight(point0.downRight(), WATER);
+        map.setDetailedVegetationBelow(point0.downRight(), SAVANNAH);
+        map.setDetailedVegetationDownLeft(point0.downRight(), WATER);
+        map.setDetailedVegetationBelow(point0.downLeft(), WATER);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), WATER);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), SAVANNAH);
+        map.setDetailedVegetationDownLeft(point0.left(), SAVANNAH);
+        map.setDetailedVegetationUpLeft(point0.left(), SAVANNAH);
+        map.setDetailedVegetationAbove(point0.left(), SAVANNAH);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), WATER);
+        map.setDetailedVegetationAbove(point0.upLeft(), WATER);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
+    }
+
+    @Test
+    public void testPlaceHeadquarterInWelt47Map() throws InvalidUserActionException {
+
+    /*
+         - Up left: SAVANNAH
+         - Above: SAVANNAH
+         - Up right: SAVANNAH
+         - Down right: SAVANNAH
+         - Below: SAVANNAH
+         - Down left: SAVANNAH
+         + Up-left up-right: WATER
+         + Up-right above: WATER
+         + Up-right up-right: WATER
+         + Right above: WATER
+         + Right up-right: WATER
+         + Right down-right: WATER
+         + Right below: WATER
+         + Down-right down-right: WATER
+         + Down-right below: SAVANNAH
+         + Down-right down-left: WATER
+         + Down-left below: WATER
+         + Down-left down-left: WATER
+         + Down-left up-left: SAVANNAH
+         + Left down-left: SAVANNAH
+         + Left up-left: SAVANNAH
+         + Left above: SAVANNAH
+         + Up-left up-left: WATER
+         + Up-left above: WATER
+        */
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Create the terrain used in the africa map */
+        Point point0 = new Point(68, 68);
+
+        map.setDetailedVegetationUpLeft(point0, MEADOW_2);
+        map.setDetailedVegetationAbove(point0, MEADOW_2);
+        map.setDetailedVegetationUpRight(point0, MEADOW_1);
+        map.setDetailedVegetationDownRight(point0, MEADOW_3);
+        map.setDetailedVegetationBelow(point0, MEADOW_3);
+        map.setDetailedVegetationDownLeft(point0, MEADOW_2);
+
+        map.setDetailedVegetationUpRight(point0.upLeft(), MEADOW_3);
+        map.setDetailedVegetationAbove(point0.upRight(), FLOWER_MEADOW);
+        map.setDetailedVegetationUpRight(point0.upRight(), FLOWER_MEADOW);
+        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
+        map.setDetailedVegetationUpRight(point0.right(), MEADOW_1);
+        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
+        map.setDetailedVegetationBelow(point0.right(), MEADOW_3);
+        map.setDetailedVegetationDownRight(point0.downRight(), SWAMP);
+        map.setDetailedVegetationBelow(point0.downRight(), SWAMP);
+        map.setDetailedVegetationDownLeft(point0.downRight(), MEADOW_2);
+        map.setDetailedVegetationBelow(point0.downLeft(), SWAMP);
+        map.setDetailedVegetationDownLeft(point0.downLeft(), SWAMP);
+        map.setDetailedVegetationUpLeft(point0.downLeft(), MEADOW_2);
+        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_3);
+        map.setDetailedVegetationUpLeft(point0.left(), SWAMP);
+        map.setDetailedVegetationAbove(point0.left(), SWAMP);
+        map.setDetailedVegetationUpLeft(point0.upLeft(), SWAMP);
+        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_3);
+
+        /* Place headquarter */
+        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertEquals(headquarter, map.getBuildingAtPoint(point0));
     }
 }

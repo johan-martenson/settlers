@@ -100,17 +100,17 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(3, 11);
+        Point point1 = new Point(3, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point2 = new Point(9, 5);
+        Point point2 = new Point(13, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        /* Connect the harbor to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -119,10 +119,10 @@ public class TestExpeditionNormalFlow {
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
         /* Place shipyard */
-        Point point3 = new Point(18, 8);
+        Point point3 = new Point(22, 8);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        /* Connect the shipyard to the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         /* Wait for the shipyard to get constructed and occupied */
@@ -210,11 +210,11 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(56, 10);
+        Point point0 = new Point(56, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -292,7 +292,7 @@ public class TestExpeditionNormalFlow {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(4, 10);
+        Point point1 = new Point(4, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -409,12 +409,12 @@ public class TestExpeditionNormalFlow {
         assertEquals(map.getShips().size(), 1);
 
         /* The ship sails to the harbor */
-        assertEquals(ship.getTarget(), point1);
-        assertNotEquals(ship.getPosition(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
+        assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
-        assertEquals(ship.getPosition(), point1);
+        assertTrue(ship.getPosition().distance(point1) < 4);
         assertTrue(ship.isWaitingForExpedition());
 
         /* Verify that a ship is ready for expedition game message is sent */
@@ -447,7 +447,7 @@ public class TestExpeditionNormalFlow {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -565,9 +565,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that the collected material for the expedition was transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -613,7 +613,7 @@ public class TestExpeditionNormalFlow {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -731,9 +731,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -781,13 +781,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -905,9 +905,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -958,13 +958,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1082,9 +1082,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1119,12 +1119,12 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that a harbor is built automatically, only if the player decides to */
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1147,13 +1147,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(56, 10);
+        Point point0 = new Point(56, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1276,9 +1276,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1347,13 +1347,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1471,9 +1471,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1508,12 +1508,12 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that a harbor can be built */
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1549,13 +1549,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1565,7 +1565,7 @@ public class TestExpeditionNormalFlow {
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        /* Connect the harbor to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -1578,10 +1578,10 @@ public class TestExpeditionNormalFlow {
         assertTrue(harbor.isReady());
 
         /* Place shipyard */
-        Point point3 = new Point(14, 8);
+        Point point3 = new Point(18, 8);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        /* Connect the shipyard to the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         /* Wait for the shipyard to get constructed and occupied */
@@ -1666,6 +1666,8 @@ public class TestExpeditionNormalFlow {
         assertTrue(harbor.needsMaterial(BUILDER));
 
         /* Wait for the harbor to collect the required material for the expedition */
+        assertTrue(ship.getPosition().distance(point1) > 4);
+
         for (int i = 0; i < 10000; i++) {
 
             Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
@@ -1682,12 +1684,12 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
-        assertNotEquals(ship.getPosition(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
+        assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
-        assertEquals(ship.getPosition(), point1);
+        assertTrue(ship.getPosition().distance(point1) < 4);
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1722,12 +1724,12 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that a harbor can be built */
         assertFalse(map.isBuildingAtPoint(point0));
@@ -1771,13 +1773,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1896,9 +1898,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -1933,8 +1935,8 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
@@ -1969,13 +1971,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2094,9 +2096,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2131,12 +2133,12 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Start a settlement */
         ship.startSettlement();
@@ -2178,13 +2180,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2305,9 +2307,9 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor0.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2340,12 +2342,12 @@ public class TestExpeditionNormalFlow {
         /* Start the expedition */
         ship.startExpedition(RIGHT);
 
-        assertEquals(ship.getTarget(), point0);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point0) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Start a settlement */
         ship.startSettlement();
@@ -2377,19 +2379,19 @@ public class TestExpeditionNormalFlow {
         map.stepTime();
 
         /* Verify that the harbor gets a delivery of two planks */
-        assertEquals(ship.getTarget(), harbor0.getPosition());
+        assertTrue(ship.getTarget().distance(harbor0.getPosition()) < 4);
         assertEquals(ship.getCargos().size(), 0);
         assertEquals(harbor0.getAmount(PLANK), 30);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, harbor0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         assertEquals(map.getShips().size(), 1);
         assertEquals(ship.getCargos().size(), 2);
         assertEquals(harbor0.getAmount(PLANK), 28);
-        assertEquals(ship.getTarget(), harbor1.getPosition());
+        assertTrue(ship.getTarget().distance(harbor1.getPosition()) < 4);
         assertEquals(harbor1.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, harbor1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         assertEquals(ship.getCargos().size(), 0);
         assertEquals(harbor1.getAmount(PLANK), 2);
@@ -2412,13 +2414,13 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Mark a possible place for a harbor */
-        Point point0 = new Point(54, 10);
+        Point point0 = new Point(54, 8);
         map.setPossiblePlaceForHarbor(point0);
 
         assertTrue(map.isAvailableHarborPoint(point0));
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 10);
+        Point point1 = new Point(6, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2428,7 +2430,7 @@ public class TestExpeditionNormalFlow {
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor to the headquarter */
+        /* Connect the harbor to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -2441,10 +2443,10 @@ public class TestExpeditionNormalFlow {
         assertTrue(harbor.isReady());
 
         /* Place shipyard */
-        Point point3 = new Point(14, 8);
+        Point point3 = new Point(18, 8);
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
 
-        /* Connect the shipyard to the headquarter */
+        /* Connect the shipyard to the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
 
         /* Wait for the shipyard to get constructed and occupied */
@@ -2532,6 +2534,8 @@ public class TestExpeditionNormalFlow {
         assertTrue(harbor.needsMaterial(BUILDER));
 
         /* Wait for the harbor to collect the required material for the expedition */
+        assertTrue(ship.getPosition().distance(point1) > 4);
+
         for (int i = 0; i < 10000; i++) {
 
             Map<Material, Integer> expeditionMaterial = harbor.getMaterialForExpedition();
@@ -2548,12 +2552,10 @@ public class TestExpeditionNormalFlow {
         }
 
         /* Wait for the ship to sail to the harbor */
-        assertEquals(ship.getTarget(), point1);
-        assertNotEquals(ship.getPosition(), point1);
+        assertTrue(ship.getTarget().distance(point1) < 4);
+        assertTrue(ship.getPosition().distance(point1) > 4);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point1);
-
-        assertEquals(ship.getPosition(), point1);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* The collected material for the expedition is transferred to the ship */
         assertEquals((int)harbor.getMaterialForExpedition().getOrDefault(PLANK, 0), 0);
@@ -2588,12 +2590,12 @@ public class TestExpeditionNormalFlow {
 
         Point point5 = new Point(54, 10); // Closest water point for the potential harbor site
 
-        assertEquals(ship.getTarget(), point5);
-        assertNotEquals(ship.getPosition(), point0.downRight());
+        assertTrue(ship.getTarget().distance(point5) < 4);
+        assertTrue(ship.getPosition().distance(point0.downRight()) > 4);
         assertFalse(map.isBuildingAtPoint(point0));
 
         /* Wait for the ship to sail to the possible harbor point */
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, point5);
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that a harbor can be built */
         assertFalse(map.isBuildingAtPoint(point0));
@@ -2623,10 +2625,10 @@ public class TestExpeditionNormalFlow {
 
         assertEquals(map.getShips().size(), 1);
         assertEquals(ship.getCargos().size(), 0);
-        assertEquals(ship.getTarget(), harbor.getPosition());
+        assertTrue(ship.getTarget().distance(harbor.getPosition()) < 4);
         assertFalse(ship.isReadyToStartExpedition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ship, harbor.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         assertEquals(ship.getCargos().size(), 11);
         assertTrue(ship.isReadyToStartExpedition());

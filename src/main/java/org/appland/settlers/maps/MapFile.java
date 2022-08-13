@@ -7,6 +7,7 @@ package org.appland.settlers.maps;
 
 import org.appland.settlers.model.Point;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,11 +116,11 @@ public class MapFile {
         // Ignore for now
     }
 
-    Iterable<MapFilePoint> getMapFilePoints() {
+    List<MapFilePoint> getMapFilePoints() {
         return pointList;
     }
 
-    public List<Point> getStartingPoints() {
+    public List<Point> getGamePointStartingPoints() {
         return startingPositions;
     }
 
@@ -176,7 +177,7 @@ public class MapFile {
         int rowLength = width;
 
         /* Set initial values */
-        int indexWithinRow = 1;
+        int rowIndex = 1;
         int mapFileY = 1; // FIXME: are mapfile coordinates starting at 1 or 0?
         int mapFileX = 1;
         int gamePointX;
@@ -204,8 +205,8 @@ public class MapFile {
             mapFilePoint.setPositionAsGamePoint(gamePoint);
 
             /* Go to next row if the current row is done */
-            if (indexWithinRow == rowLength) {
-                indexWithinRow = 1;
+            if (rowIndex == rowLength) {
+                rowIndex = 1;
 
                 mapFileY = mapFileY + 1;
                 gamePointY = gamePointY - 1;
@@ -220,7 +221,7 @@ public class MapFile {
 
             /* Go to next place in the row */
             } else {
-                indexWithinRow = indexWithinRow + 1;
+                rowIndex = rowIndex + 1;
 
                 mapFileX = mapFileX + 1;
                 gamePointX = gamePointX + 2;
@@ -280,5 +281,13 @@ public class MapFile {
         } else {
             throw new RuntimeException("Can't handle header type: " + fileHeader);
         }
+    }
+
+    public List<java.awt.Point> getStartingPoints() {
+        return fileStartingPoints;
+    }
+
+    public Dimension getDimension() {
+        return new Dimension(width, height);
     }
 }

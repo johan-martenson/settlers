@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Bitmap {
-    protected int bitsPerPixel;
+    protected int bytesPerPixel;
     protected final int height;
     protected final int width;
     private final TextureFormat format;
@@ -41,22 +41,22 @@ public class Bitmap {
         this.ny = ny;
 
         if (format == TextureFormat.BGRA) {
-            bitsPerPixel = 4;
+            bytesPerPixel = 4;
         } else if (format == TextureFormat.BGR) {
-            bitsPerPixel = 3;
+            bytesPerPixel = 3;
         } else {
-            bitsPerPixel = 1;
+            bytesPerPixel = 1;
         }
 
         if (debug) {
-            System.out.println("    ++++ Set bits per pixel to: " + bitsPerPixel);
+            System.out.println("    ++++ Set bits per pixel to: " + bytesPerPixel);
         }
 
-        imageData = new byte[width * height * bitsPerPixel];
+        imageData = new byte[width * height * bytesPerPixel];
 
         if (debug) {
             System.out.println("    ++++ Image size is: " + imageData.length);
-            System.out.println("    ++++ Should be: " + width * height * bitsPerPixel);
+            System.out.println("    ++++ Should be: " + width * height * bytesPerPixel);
         }
     }
 
@@ -64,7 +64,7 @@ public class Bitmap {
 
         /* If format is paletted - assign the color index */
         if (format == TextureFormat.PALETTED) {
-            imageData[(y * width + x) * bitsPerPixel] = (byte)(colorIndex & 0xFF);
+            imageData[(y * width + x) * bytesPerPixel] = (byte)(colorIndex & 0xFF);
 
         /* If format is BGRA - look up the real color and assign */
         } else if (format == TextureFormat.BGRA) {
@@ -72,16 +72,16 @@ public class Bitmap {
             /* Handle transparency */
             if (palette.isColorIndexTransparent(colorIndex)) {
 
-                imageData[(y * width + x) * bitsPerPixel + 3] = 0;
+                imageData[(y * width + x) * bytesPerPixel + 3] = 0;
 
                 /* Look up the color and assign the individual parts */
             } else {
                 RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-                imageData[(y * width + x) * bitsPerPixel] = colorRGB.getBlue();
-                imageData[(y * width + x) * bitsPerPixel + 1] = colorRGB.getGreen();
-                imageData[(y * width + x) * bitsPerPixel + 2] = colorRGB.getRed();
-                imageData[(y * width + x) * bitsPerPixel + 3] = (byte) 0xFF;
+                imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
+                imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
+                imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
+                imageData[(y * width + x) * bytesPerPixel + 3] = (byte) 0xFF;
             }
 
         /*  Handle BGR */
@@ -89,9 +89,9 @@ public class Bitmap {
 
             RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-            imageData[(y * width + x) * bitsPerPixel] = colorRGB.getBlue();
-            imageData[(y * width + x) * bitsPerPixel + 1] = colorRGB.getGreen();
-            imageData[(y * width + x) * bitsPerPixel + 2] = colorRGB.getRed();
+            imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
+            imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
+            imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
         } else {
             throw new RuntimeException("Cannot set pixel in format " + format);
         }
@@ -140,7 +140,7 @@ public class Bitmap {
 
     public void setPixelValue(int x, int y, byte red, byte green, byte blue, byte transparency) {
         if (format == TextureFormat.BGRA) {
-            int offset = (y * width + x) * this.bitsPerPixel;
+            int offset = (y * width + x) * this.bytesPerPixel;
 
             this.imageData[offset] = blue;
             this.imageData[offset + 1] = green;
@@ -155,8 +155,8 @@ public class Bitmap {
         return this.imageData;
     }
 
-    public int getBitsPerPixel() {
-        return bitsPerPixel;
+    public int getBytesPerPixel() {
+        return bytesPerPixel;
     }
 
     public TextureFormat getFormat() {
@@ -454,7 +454,7 @@ public class Bitmap {
         return mirror;
     }
 
-    public void setBitsPerPixel(short bitsPerPixel) {
-        this.bitsPerPixel = bitsPerPixel;
+    public void setBytesPerPixel(short bytesPerPixel) {
+        this.bytesPerPixel = bytesPerPixel;
     }
 }

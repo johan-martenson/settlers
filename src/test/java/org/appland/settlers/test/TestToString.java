@@ -843,7 +843,7 @@ public class TestToString {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -939,7 +939,7 @@ public class TestToString {
         map.setPossiblePlaceForHarbor(point0);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 10);
+        Point point1 = new Point(8, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */

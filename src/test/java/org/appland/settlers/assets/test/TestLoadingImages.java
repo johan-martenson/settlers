@@ -11,18 +11,18 @@ import static org.junit.Assert.*;
 
 public class TestLoadingImages {
 
-    private static final String TEST_PLAYER_BITMAP = "/home/johan/projects/settlers-image-manager/src/test/resources/bmpPlayer.lst";
-    private static final String TEST_BITMAP_RAW = "/home/johan/projects/settlers-image-manager/src/test/resources/bmpRaw.lst";
-    private static final String TEST_PALETTE = "/home/johan/projects/settlers-image-manager/src/test/resources/pal5.act";
-    private static final String TEST_BITMAP_RLE = "/home/johan/projects/settlers-image-manager/src/test/resources/bmpRLE.lst";
-    private static final String TEST_BITMAP_SHADOW = "/home/johan/projects/settlers-image-manager/src/test/resources/bmpShadow.lst";
-    private static final String TEST_BITMAP_LOGO = "/home/johan/projects/settlers-image-manager/src/test/resources/logo.bmp";
-    private static final String TEST_BITMAP_PAL = "/home/johan/projects/settlers-image-manager/src/test/resources/pal.bmp";
-    private static final String TEST_BITMAP_LBM = "/home/johan/projects/settlers-image-manager/src/test/resources/test.lbm";
-    private static final String TEST_TEX_LBM = "/home/johan/projects/settlers-image-manager/src/test/resources/TEX5.LBM";
-    private static final String TEST_BITMAP_PAL_BBM = "/home/johan/projects/settlers-image-manager/src/test/resources/pal.bbm";
-    private static final String TEST_DAT = "/home/johan/projects/settlers-image-manager/src/test/resources/EDITRES.DAT";
-    private static final String TEST_IDX = "/home/johan/projects/settlers-image-manager/src/test/resources/EDITRES.IDX";
+    private static final String TEST_PLAYER_BITMAP = "src/test/resources/bmpPlayer.lst";
+    private static final String TEST_BITMAP_RAW = "src/test/resources/bmpRaw.lst";
+    private static final String TEST_PALETTE = "src/test/resources/pal5.act";
+    private static final String TEST_BITMAP_RLE = "src/test/resources/bmpRLE.lst";
+    private static final String TEST_BITMAP_SHADOW = "src/test/resources/bmpShadow.lst";
+    private static final String TEST_BITMAP_LOGO = "src/test/resources/logo.bmp";
+    private static final String TEST_BITMAP_PAL = "src/test/resources/pal.bmp";
+    private static final String TEST_BITMAP_LBM = "src/test/resources/test.lbm";
+    private static final String TEST_TEX_LBM = "src/test/resources/TEX5.LBM";
+    private static final String TEST_BITMAP_PAL_BBM = "src/test/resources/pal.bbm";
+    private static final String TEST_DAT = "src/test/resources/EDITRES.DAT";
+    private static final String TEST_IDX = "src/test/resources/EDITRES.IDX";
 
     @Test
     public void loadPalBmpFile() throws IOException, InvalidFormatException {
@@ -36,7 +36,8 @@ public class TestLoadingImages {
 
         assertEquals(bitmap.getWidth(), 94);
         assertEquals(bitmap.getHeight(), 63);
-        assertEquals(bitmap.getBitsPerPixel(), 8);
+        assertEquals(bitmap.getSourceBitsPerPixel(), 8);
+        assertEquals(bitmap.getBytesPerPixel(), 4);
         assertEquals(bitmap.getColorUsed(), 256);
         assertEquals(bitmap.getColorImp(), 0);
         assertEquals(bitmap.getPlanes(), 1);
@@ -65,7 +66,7 @@ public class TestLoadingImages {
         assertEquals(bitmap.getPixelOffset(), 54);
         assertEquals(bitmap.getHeaderSize(), 40);
         assertEquals(bitmap.getPlanes(), 1);
-        assertEquals(bitmap.getBitsPerPixel(), 24);
+        assertEquals(bitmap.getSourceBitsPerPixel(), 24);
         assertEquals(bitmap.getCompression(), 0);
         assertEquals(bitmap.getSize(), 0);
         assertEquals(bitmap.getXPixelsPerM(), 2834);
@@ -138,7 +139,7 @@ public class TestLoadingImages {
 
         assertEquals(bitmap.getWidth(), 94);
         assertEquals(bitmap.getHeight(), 63);
-        assertEquals(bitmap.getBitsPerPixel(), 4);
+        assertEquals(bitmap.getBytesPerPixel(), 4);
         assertEquals(bitmap.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());
@@ -246,7 +247,7 @@ public class TestLoadingImages {
 
         assertEquals(bitmap.getWidth(), 256);
         assertEquals(bitmap.getHeight(), 256);
-        assertEquals(bitmap.getBitsPerPixel(), 4);
+        assertEquals(bitmap.getBytesPerPixel(), 4);
         assertEquals(bitmap.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());

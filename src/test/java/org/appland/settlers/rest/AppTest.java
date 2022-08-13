@@ -1174,7 +1174,7 @@ public class AppTest extends TestCase {
         /* Get the id of the player */
         String playerId = getPlayerIds(gameId).get(0);
 
-        /* Get the location of the headquarter */
+        /* Get the location of the headquarters */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/players/{playerId}/houses", gameId, playerId).then()
                 .statusCode(200)
@@ -1183,7 +1183,7 @@ public class AppTest extends TestCase {
         /* Create a house and verify that the house is returned in the response */
         Map<String, Object> house = new HashMap<>();
 
-        int x = (Integer)headquarter.get("x") - 8;
+        int x = (Integer)headquarter.get("x") - 4;
         int y = (Integer)headquarter.get("y");
 
         house.put("type", "Woodcutter");

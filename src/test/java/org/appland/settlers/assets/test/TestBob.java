@@ -11,9 +11,8 @@ import static org.junit.Assert.assertTrue;
 
 public class TestBob {
 
-    private static final String TEST_PALETTE = "/home/johan/projects/settlers-image-manager/src/test/resources/pal5.act";
-    private static final String TEST_BOB_FILE = "/home/johan/projects/settlers-image-manager/src/test/resources/CARRIER.BOB";
-
+    private static final String TEST_PALETTE = "src/test/resources/pal5.act";
+    private static final String TEST_BOB_FILE = "src/test/resources/CARRIER.BOB";
     @Test
     public void testLoadBob() throws IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
         AssetManager assetManager = new AssetManager();

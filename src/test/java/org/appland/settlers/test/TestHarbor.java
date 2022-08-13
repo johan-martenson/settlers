@@ -90,9 +90,9 @@ public class TestHarbor {
         /* Verify that it's possible to mark that it's possible to place a harbor at a point on the map */
         assertFalse(map.isAvailableHarborPoint(point0));
 
-        map.setPossiblePlaceForHarbor(point0.downRight());
+        map.setPossiblePlaceForHarbor(point0.right().right());
 
-        assertTrue(map.isAvailableHarborPoint(point0.downRight()));
+        assertTrue(map.isAvailableHarborPoint(point0.right().right()));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 11);
+        Point point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -179,7 +179,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 11);
+        Point point1 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -220,7 +220,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 11);
+        Point point1 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -261,7 +261,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 12);
+        Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -305,7 +305,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 8);
+        Point point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -333,7 +333,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 8);
+        Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -369,7 +369,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 8);
+        Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -411,7 +411,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(12, 8);
+        Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -453,7 +453,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(7, 9);
+        Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -499,7 +499,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point3 = new Point(17, 9);
+        Point point3 = new Point(15, 9);
         map.setPossiblePlaceForHarbor(point3);
 
         /* Place headquarter */
@@ -559,7 +559,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(9, 13);
+        Point point1 = new Point(7, 13);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -623,7 +623,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(9, 13);
+        Point point1 = new Point(7, 13);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -692,7 +692,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 7);
+        Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -744,7 +744,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(20, 16);
+        Point point1 = new Point(20, 14);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -796,7 +796,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(20, 16);
+        Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -854,7 +854,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(20, 16);
+        Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -915,11 +915,11 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(22, 16);
+        Point point1 = new Point(24, 16);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
-        Point point2 = new Point(13, 9);
+        Point point2 = new Point(13, 17);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
@@ -967,7 +967,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(22, 16);
+        Point point1 = new Point(22, 14);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1020,7 +1020,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(20, 16);
+        Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1076,7 +1076,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 7);
+        Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1133,7 +1133,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 7);
+        Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1185,7 +1185,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(8, 8);
+        Point point1 = new Point(12, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1220,7 +1220,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(11, 7);
+        Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1255,7 +1255,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(10, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1294,11 +1294,11 @@ public class TestHarbor {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a lake */
-        Point point0 = new Point(11, 7);
+        Point point0 = new Point(17, 7);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(10, 6);
+        Point point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1343,7 +1343,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(20, 14);
+        Point point1 = new Point(22, 14);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1393,7 +1393,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(31, 17);
+        Point point1 = new Point(29, 17);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place player 0's headquarter */
@@ -1568,7 +1568,7 @@ public class TestHarbor {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place a lake */
-        Point point0 = new Point(14, 6);
+        Point point0 = new Point(17, 5);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
@@ -1644,7 +1644,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(13, 5);
+        Point point1 = new Point(15, 5);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1657,7 +1657,7 @@ public class TestHarbor {
 
         /* Place harbor */
         Point point4 = new Point(14, 4);
-        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point4.upLeft());
+        Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
@@ -1791,7 +1791,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(17, 13);
+        Point point1 = new Point(15, 13);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1808,7 +1808,7 @@ public class TestHarbor {
         Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
-        Point point3 = new Point(13, 13);
+        Point point3 = new Point(13, 11);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Finish construction of the storehouse */
@@ -1848,7 +1848,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(17, 17);
+        Point point1 = new Point(17, 15);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1904,11 +1904,11 @@ public class TestHarbor {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place a lake */
-        Point point0 = new Point(21, 17);
+        Point point0 = new Point(21, 13);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(22, 16);
+        Point point1 = new Point(24, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -1971,7 +1971,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(23, 9);
+        Point point1 = new Point(27, 9);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2025,7 +2025,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(17, 17);
+        Point point1 = new Point(15, 17);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2076,7 +2076,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2110,7 +2110,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 12);
+        Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2141,7 +2141,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(6, 12);
+        Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2181,7 +2181,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(9, 11);
+        Point point1 = new Point(7, 11);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2217,7 +2217,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(16, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2287,7 +2287,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(16, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2383,7 +2383,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(16, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2440,7 +2440,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(16, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2507,7 +2507,7 @@ public class TestHarbor {
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
-        Point point1 = new Point(16, 6);
+        Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
         /* Place headquarter */
@@ -2560,10 +2560,10 @@ public class TestHarbor {
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place a lake */
-        Point point0 = new Point(17, 7);
+        Point point0 = new Point(21, 7);
         Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
@@ -2581,17 +2581,18 @@ public class TestHarbor {
         Point point3 = new Point(9, 7);
         Well well = map.placeBuilding(new Well(player0), point3);
 
+
         /* Make sure there is enough construction material in the headquarter */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed */
         Utils.waitForBuildingToBeConstructed(harbor);
 
-        /* Connect the well with the headquarter */
+        /* Connect the well with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         /* Wait for the well to get constructed */
@@ -2599,7 +2600,7 @@ public class TestHarbor {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
-        /* Verify that when delivery is blocked for water in the headquarter,
+        /* Verify that when delivery is blocked for water in the headquarters,
            all deliveries from the well go to the harbor even if it's further away
         */
         assertTrue(well.isReady());
@@ -2609,18 +2610,29 @@ public class TestHarbor {
 
         Utils.adjustInventoryTo(harbor, WATER, 0);
 
+        // NOTE - the code below is sensitive to the timing of the well worker vs the couriers.
+
         for (int i = 0; i < 10; i++) {
 
             /* Wait for the well worker to produce a water cargo */
             Cargo cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
 
-            /* Wait for the courier for the road between the well and the headquarter to pick up the water cargo */
+            assertEquals(well.getWorker().getTarget(), well.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, well.getWorker(), well.getFlag().getPosition());
+
+            assertNull(well.getWorker().getCargo());
+
+            /* Stop production in the well worker to keep track of each produced water bucket */
+            well.stopProduction();
+
+            /* Wait for the courier for the road between the well and the headquarters to pick up the water cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
 
             assertEquals(road1.getCourier().getTarget(), headquarter.getFlag().getPosition());
 
-            /* Verify that the cargo is put on the headquarter's flag and picked up by the second courier,
-               instead of delivered to the headquarter
+            /* Verify that the cargo is put on the headquarters' flag and picked up by the second courier,
+               instead of delivered to the headquarters
              */
             Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), headquarter.getFlag().getPosition());
 
@@ -2634,6 +2646,9 @@ public class TestHarbor {
 
             assertNull(road0.getCourier().getCargo());
             assertEquals(harbor.getAmount(WATER), i + 1);
+
+            /* Resume production of water */
+            well.resumeProduction();
         }
     }
 

@@ -227,7 +227,7 @@ public class Reader {
                         System.out.println(" + Bitmap");
                         System.out.println("    - Width: " + bitmap.getWidth());
                         System.out.println("    - Height: " + bitmap.getHeight());
-                        System.out.println("    - Bits per pixel: " + bitmap.getBitsPerPixel());
+                        System.out.println("    - Bits per pixel: " + bitmap.getBytesPerPixel());
                         System.out.println("    - Format: " + bitmap.getFormat());
 
                         break;
@@ -260,7 +260,7 @@ public class Reader {
                         System.out.println("    - Width: " + bitmapRaw.getWidth());
                         System.out.println("    - Height: " + bitmapRaw.getHeight());
                         System.out.println("    - Format: " + bitmapRaw.getFormat());
-                        System.out.println("    - Bits per pixel: " + bitmapRaw.getBitsPerPixel());
+                        System.out.println("    - Bits per pixel: " + bitmapRaw.getBytesPerPixel());
 
                         break;
 

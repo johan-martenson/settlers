@@ -3,6 +3,7 @@ package org.appland.settlers.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.appland.settlers.model.BorderCheck.CAN_PLACE_OUTSIDE_BORDER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 
@@ -292,8 +293,10 @@ public class Ship extends Worker {
 
     public void startSettlement() throws InvalidUserActionException {
 
+        // TODO: make sure the harbor is not within any player's border
+
         /* Place a harbor */
-        Harbor newHarbor = map.placeBuilding(new Harbor(player), targetHarborPoint);
+        Harbor newHarbor = map.placeBuilding(new Harbor(player), targetHarborPoint, CAN_PLACE_OUTSIDE_BORDER);
 
         /* Place the builder */
         Builder builder = new Builder(player, map);

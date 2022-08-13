@@ -805,7 +805,7 @@ class Utils {
         jsonMapFile.put("height", mapFile.getHeight());
         jsonMapFile.put("maxPlayers", mapFile.getMaxNumberOfPlayers());
         jsonMapFile.put("id", idManager.getId(mapFile));
-        jsonMapFile.put("startingPoints", pointsToJson(mapFile.getStartingPoints()));
+        jsonMapFile.put("startingPoints", pointsToJson(mapFile.getGamePointStartingPoints()));
 
         return jsonMapFile;
     }

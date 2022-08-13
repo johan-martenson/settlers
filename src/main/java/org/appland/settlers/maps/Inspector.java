@@ -240,7 +240,7 @@ public class Inspector {
 
         jsonMap.put("startingPoints", jsonStartingPoints);
 
-        for (Point point : mapFile.getStartingPoints()) {
+        for (Point point : mapFile.getGamePointStartingPoints()) {
             JSONObject jsonPoint = new JSONObject();
 
             jsonPoint.put("x", point.x);
@@ -552,7 +552,7 @@ public class Inspector {
         map = mapLoader.convertMapFileToGameMap(mapFile);
 
         System.out.println("Max players: " + mapFile.getMaxNumberOfPlayers());
-        System.out.println("Starting positions: " + mapFile.getStartingPoints());
+        System.out.println("Starting positions: " + mapFile.getGamePointStartingPoints());
 
         List<Point> startingPoints = map.getStartingPoints();
         List<Player> players = new ArrayList<>();
@@ -560,16 +560,11 @@ public class Inspector {
         for (int i = 0; i < startingPoints.size(); i++) {
             players.add(new Player("" + i, COLORS.get(i)));
         }
-
-        System.out.println("plong");
         map.setPlayers(players);
-
-        System.out.println(placePlayers);
-        System.out.println(startingPoints);
 
         if (placePlayers) {
 
-            if (mapFile.getStartingPoints().isEmpty()) {
+            if (mapFile.getGamePointStartingPoints().isEmpty()) {
                 System.out.println("No starting points found in map file");
             } else {
 
@@ -582,7 +577,7 @@ public class Inspector {
 
                         System.out.println("" + point + ": OK");
                     } catch (InvalidUserActionException e) {
-                        System.out.println("" + point + ": Not OK");
+                        System.out.println(format("%s: Not OK (exception is %s)", point, e));
                     }
                 }
             }
@@ -594,7 +589,7 @@ public class Inspector {
      */
     private void printMapFile() {
 
-        String[][] mapFileRender = renderMapFileToStringArray(mapFile, mapFile.getStartingPoints());
+        String[][] mapFileRender = renderMapFileToStringArray(mapFile, mapFile.getGamePointStartingPoints());
 
         /* Print the render of the map file */
         StringBuilder sb = new StringBuilder();
@@ -916,7 +911,7 @@ public class Inspector {
         Player player = map.getPlayers().get(0);
 
         if (debug) {
-            System.out.println("Starting point for player from MapFile: " + new Point(mapFile.getStartingPoints().get(0)));
+            System.out.println("Starting point for player from MapFile: " + new Point(mapFile.getGamePointStartingPoints().get(0)));
             System.out.println("Starting point for player from GameMap: " + map.getStartingPoints().get(0));
         }
 

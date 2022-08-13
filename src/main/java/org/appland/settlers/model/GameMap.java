@@ -18,6 +18,8 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
+import static org.appland.settlers.model.BorderCheck.CAN_PLACE_OUTSIDE_BORDER;
+import static org.appland.settlers.model.BorderCheck.MUST_PLACE_INSIDE_BORDER;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
 import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
 import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
@@ -801,6 +803,10 @@ public class GameMap {
      * @throws InvalidUserActionException Any exceptions encountered while placing the building
      */
     public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException {
+        return placeBuilding(house, point, MUST_PLACE_INSIDE_BORDER);
+    }
+
+    <T extends Building> T placeBuilding(T house, Point point, BorderCheck borderCheck) throws InvalidUserActionException {
 
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
@@ -835,19 +841,25 @@ public class GameMap {
             if (!isAvailableMinePoint(house.getPlayer(), point)) {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
             }
-        } else if (house.isHarbor()) {
-            if (!isAvailableHarborPoint(point)) {
-                throw new InvalidUserActionException("Cannot place harbor on non-harbor point");
-            }
         } else {
 
-            Size canBuild = isAvailableHousePoint(house.getPlayer(), point, isFirstHouse);
+            if (isFirstHouse) {
+                borderCheck = CAN_PLACE_OUTSIDE_BORDER;
+            }
+
+            Size canBuild = isAvailableHousePoint(house.getPlayer(), point, borderCheck);
 
             if (canBuild == null || !canBuild.contains(house.getSize())) {
                 String name = house.getClass().getSimpleName();
                 Size size = house.getSize();
 
                 throw new InvalidUserActionException("Cannot place " + name + " of size " + size + " at " + point + ", only " + canBuild + ".");
+            }
+        }
+
+        if (house.isHarbor()) {
+            if (!isAvailableHarborPoint(point)) {
+                throw new InvalidUserActionException("Cannot place harbor on non-harbor point");
             }
         }
 
@@ -1974,9 +1986,13 @@ public class GameMap {
             return false;
         }
 
+        if (!player.isWithinBorder(point)) {
+            return false;
+        }
+
         MapPoint mapPoint = getMapPoint(point);
 
-        if (mapPoint.isFlag() && player.isWithinBorder(point)) {
+        if (mapPoint.isFlag()) {
             return true;
         }
 
@@ -1995,6 +2011,10 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(point);
 
         if (!isWithinMap(point)) {
+            return false;
+        }
+
+        if (!player.isWithinBorder(point)) {
             return false;
         }
 
@@ -2748,10 +2768,10 @@ public class GameMap {
      * @return The max size of the potential house, otherwise null.
      */
     public Size isAvailableHousePoint(Player player, Point point) {
-        return isAvailableHousePoint(player, point, false);
+        return isAvailableHousePoint(player, point, MUST_PLACE_INSIDE_BORDER);
     }
 
-    private Size isAvailableHousePoint(Player player, Point point, boolean isFirstHouse) {
+    private Size isAvailableHousePoint(Player player, Point point, BorderCheck borderCheck) {
         Point pointDown = point.down();
         Point pointDownRight = point.downRight();
         Point pointUpRight = point.upRight();
@@ -2782,7 +2802,7 @@ public class GameMap {
         }
 
         /* Make sure all houses except for the headquarters are placed within the player's border */
-        if (!isFirstHouse && !player.isWithinBorder(point)) {
+        if (borderCheck == MUST_PLACE_INSIDE_BORDER && !player.isWithinBorder(point)) {
             return null;
         }
 
@@ -2843,6 +2863,7 @@ public class GameMap {
         }
 
         if (mapPointUpLeft != null && mapPointUpLeft.isBuilding()) {
+            System.out.println("N14");
             return null;
         }
 
@@ -2922,7 +2943,7 @@ public class GameMap {
         }
 
         /* It must be possible to place a flag for a new building if there isn't already a flag */
-        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, pointDownRight, !isFirstHouse)) {
+        if (!mapPointDownRight.isFlag() && !isAvailableFlagPoint(player, pointDownRight, borderCheck == MUST_PLACE_INSIDE_BORDER)) {
             return null;
         }
 
@@ -2997,28 +3018,20 @@ public class GameMap {
             return MEDIUM;
         }
 
-        /* A large building needs a larger free area on buildable vegetation */
-        // TODO: check if it's possible to also build large house close to other sides where only flags&roads are possible
+        /* A large building needs free area on the surrounding buildable vegetation */
+        DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(point);
+        DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(point);
+        DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(point);
+        DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(point);
+        DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(point);
+        DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(point);
 
-        DetailedVegetation detailedVegetationUpLeftUpLeft = getDetailedVegetationUpLeft(point.upLeft());
-        DetailedVegetation detailedVegetationUpLeftUp = getDetailedVegetationAbove(point.upLeft());
-        DetailedVegetation detailedVegetationUpUp = getDetailedVegetationUpLeft(point.upRight());
-        DetailedVegetation detailedVegetationUpRightUp = getDetailedVegetationAbove(point.upRight());
-        DetailedVegetation detailedVegetationUpRightUpRight = getDetailedVegetationUpRight(point.upRight());
-
-        if (!CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeftUpLeft)   ||
-            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpLeftUp)       ||
-            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpUp)           ||
-            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRightUp)      ||
-            !CAN_BUILD_ROAD_ON.contains(detailedVegetationUpRightUpRight) ||
-            !isOnBuildable(point.left())                     ||
-            !isOnBuildable(point.right())                    ||
-            !isOnBuildable(point.downRight())                ||
-            !isOnBuildable(point.downLeft())) {
-            return MEDIUM;
-        }
-
-        if (!isOnBuildable(point)) {
+        if (!CAN_BUILD_ON.contains(detailedVegetationUpLeft) ||
+            !CAN_BUILD_ON.contains(detailedVegetationUpRight) ||
+            !CAN_BUILD_ON.contains(detailedVegetationDownRight) ||
+            !CAN_BUILD_ON.contains(detailedVegetationBelow) ||
+            !CAN_BUILD_ON.contains(detailedVegetationDownLeft) ||
+            !CAN_BUILD_ON.contains(detailedVegetationAbove)) {
             return MEDIUM;
         }
 
