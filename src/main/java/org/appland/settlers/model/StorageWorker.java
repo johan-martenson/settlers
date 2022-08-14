@@ -9,6 +9,7 @@ package org.appland.settlers.model;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.BREAD;
@@ -32,12 +33,15 @@ public class StorageWorker extends Worker {
 
     private State state;
     private Storehouse ownStorehouse;
+    private Cargo cargoToReturn;
 
     private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DELIVERING_CARGO_TO_FLAG,
         GOING_BACK_TO_HOUSE,
+        WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO,
+        WALKING_TO_HOME_TO_DELIVER_CARGO,
         RETURNING_TO_STORAGE
     }
 
@@ -179,6 +183,29 @@ public class StorageWorker extends Worker {
                         getHome().getFlag().promiseCargo(getCargo());
                     }
                 }
+
+                // If the storage worker didn't start a new delivery to the flag
+                if (state != State.DELIVERING_CARGO_TO_FLAG) {
+
+                    // See if there is any cargo on the flag that has been rerouted and should go back to the storage
+                    for (Cargo cargo : getHome().getFlag().getStackedCargo()) {
+
+                        // Filter materials that are blocked
+                        if (ownStorehouse.isDeliveryBlocked(cargo.getMaterial())) {
+                            continue;
+                        }
+
+                        if (Objects.equals(cargo.getTarget(), getHome())) {
+                            cargoToReturn = cargo;
+
+                            state = State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO;
+
+                            setTarget(getHome().getFlag().getPosition());
+
+                            break;
+                        }
+                    }
+                }
             } else {
                 countdown.step();
             }
@@ -207,6 +234,22 @@ public class StorageWorker extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == State.WALKING_TO_FLAG_TO_PICK_UP_RETURNED_CARGO) {
+            getHome().getFlag().retrieveCargo(cargoToReturn);
+
+            // TODO: can the cargo be gone when the storage worker gets to the flag?
+
+            setCargo(cargoToReturn);
+
+            state = State.WALKING_TO_HOME_TO_DELIVER_CARGO;
+
+            setTarget(getHome().getPosition());
+        } else if (state == State.WALKING_TO_HOME_TO_DELIVER_CARGO) {
+            getHome().putCargo(getCargo());
+
+            setCargo(null);
+
+            state = State.RESTING_IN_HOUSE;
         }
     }
 

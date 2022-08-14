@@ -3155,7 +3155,8 @@ public class TestCourier {
 
         assertNull(courier.getCargo());
 
-        map.stepTime();
+        /* Wait for the courier to get close to the flag but still not reach it */
+        Utils.fastForward(7, map);
 
         /* Remove the second road */
         map.removeRoad(road1);

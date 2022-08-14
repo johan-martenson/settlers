@@ -2231,18 +2231,22 @@ public class TestHarbor {
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(harbor);
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters */
         Utils.adjustInventoryTo(harbor, PLANK, 50);
         Utils.adjustInventoryTo(harbor, STONE, 50);
+
         /* Fill the flag with flour cargos */
         Utils.placeCargos(map, FLOUR, 8, harbor.getFlag(), headquarter);
+
+        /* Block storage of flour in the harbor to prevent the storage worker from bringing it back in */
+        harbor.blockDeliveryOfMaterial(FLOUR);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -2318,6 +2322,9 @@ public class TestHarbor {
 
         /* Fill the flag with cargos */
         Utils.placeCargos(map, FLOUR, 8, harbor.getFlag(), headquarter);
+
+        /* Block storage of flour in the harbor to keep the flag filled up */
+        harbor.blockDeliveryOfMaterial(FLOUR);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -2666,7 +2673,7 @@ public class TestHarbor {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2674,6 +2681,7 @@ public class TestHarbor {
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 0);
 
         headquarter.pushOutAll(PLANK);
+        headquarter.blockDeliveryOfMaterial(PLANK);
 
         Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 8);
 

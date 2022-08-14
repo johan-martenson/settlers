@@ -13,6 +13,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -1921,11 +1922,15 @@ public class TestStorehouse {
         Utils.waitForBuildingToBeConstructed(storehouse);
         Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters */
         Utils.adjustInventoryTo(storehouse, PLANK, 50);
         Utils.adjustInventoryTo(storehouse, STONE, 50);
+
         /* Fill the flag with flour cargos */
         Utils.placeCargos(map, FLOUR, 8, storehouse.getFlag(), headquarter);
+
+        /* Block storage of flour to keep the flag filled up */
+        storehouse.blockDeliveryOfMaterial(FLOUR);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -1994,6 +1999,9 @@ public class TestStorehouse {
 
         /* Fill the flag with cargos */
         Utils.placeCargos(map, FLOUR, 8, storehouse.getFlag(), headquarter);
+
+        /* Block storage of flour in the storehouse to keep the flag filled up */
+        storehouse.blockDeliveryOfMaterial(FLOUR);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -2299,7 +2307,7 @@ public class TestStorehouse {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters */
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2307,6 +2315,7 @@ public class TestStorehouse {
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 0);
 
         headquarter.pushOutAll(PLANK);
+        headquarter.blockDeliveryOfMaterial(PLANK);
 
         Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 8);
 
@@ -2321,5 +2330,73 @@ public class TestStorehouse {
 
             map.stepTime();
         }
+    }
+    @Test
+    public void testStorehouseWorkerReturnsCargoIfItIsStillOnTheFlagAndItsTargetBecomesUnreachable() throws InvalidUserActionException {
+
+        /* Creating new game map */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 7);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 6);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place flag */
+        Point point2 = new Point(14, 8);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarters and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place road between the flag and the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Wait for the first road to get assigned a courier */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+
+        assertEquals(courier.getPosition(), flag0.getPosition().left());
+
+        /* Set the amount of planks */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+
+        /* Place woodcutter */
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+
+        /* Wait for the courier to start walking to the headquarters' flag to pick up a cargo for the woodcutter */
+        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+
+        assertEquals(headquarter0.getAmount(PLANK), 19);
+        assertNull(courier.getCargo());
+
+        map.stepTime();
+
+        /* Remove the second road */
+        map.removeRoad(road1);
+
+        /* Verify that the storehouse worker brings the cargo back to the storehouse */
+        StorageWorker storageWorker = (StorageWorker) headquarter0.getWorker();
+
+        Utils.waitForWorkerToSetTarget(map, storageWorker, headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getFlag().getPosition());
+
+        assertNotNull(storageWorker.getCargo());
+        assertEquals(storageWorker.getCargo().getMaterial(), PLANK);
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
+
+        assertNull(storageWorker.getCargo());
+        assertEquals(headquarter0.getAmount(PLANK), 20);
     }
 }
