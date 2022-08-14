@@ -206,7 +206,7 @@ public class TestCourierWalksOnItsOwnRoad {
         Point point2 = new Point(27, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), flag0);
 
         /* Connect the flag with the woodcutter */
@@ -229,7 +229,17 @@ public class TestCourierWalksOnItsOwnRoad {
         /* Make sure the courier is stuck */
         Utils.verifyWorkerDoesNotMove(map, courier, 20);
 
-        /* Place a second, longer road between the headquarter and the woodcutter */
+        /* Wait for a second cargo for the woodcutter to get placed on the headquarters' flag */
+        Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 1);
+
+        assertEquals(headquarter.getFlag().getStackedCargo().size(), 1);
+        assertEquals(headquarter.getFlag().getStackedCargo().get(0).getTarget(), woodcutter);
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
+
+        /* Fill up the woodcutter's flag to make it impossible to deliver cargo to it */
+        Utils.placeCargos(map, STONE, 8, woodcutter.getFlag(), woodcutter);
+
+        /* Place a second, longer road between the headquarters and the woodcutter */
         Road road2 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
         /* Wait for the new road to get occupied */
@@ -243,7 +253,6 @@ public class TestCourierWalksOnItsOwnRoad {
         assertNotNull(courier1.getCargo());
         assertEquals(courier1.getCargo().getTarget(), woodcutter);
         assertEquals(courier1.getTarget(), woodcutter.getPosition());
-        assertEquals(courier.getPosition(), flag0.getPosition().left());
 
         Utils.verifyWorkerWalksOnPath(map, courier1,
                 headquarter.getFlag().getPosition(),

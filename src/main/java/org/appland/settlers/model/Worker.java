@@ -45,6 +45,7 @@ public abstract class Worker {
     private Point       position;
     private Point       target;
     private Building    home;
+
     protected Direction   direction;
 
     static class ProductivityMeasurer {
@@ -163,6 +164,14 @@ public abstract class Worker {
 
             /* Keep track of what direction the worker is walking in */
             Point next = path.get(0);
+
+            if (position.x == next.x && position.y == next.y) {
+                throw new RuntimeException("They are the same! I am " + this);
+            }
+
+            if (position.distance(next) > 2) {
+                throw new RuntimeException("Too big distance! I am " + this);
+            }
 
             direction = GameUtils.getDirectionBetweenPoints(position, next);
 
@@ -432,12 +441,15 @@ public abstract class Worker {
             handleArrival();
         } else {
             if (wasInside && !target.equals(home.getFlag().getPosition())) {
+
+                // Get from the flag to the target
                 if (via != null) {
                     path = map.findWayOffroad(home.getFlag().getPosition(), point, via, null);
                 } else {
                     path = map.findWayOffroad(home.getFlag().getPosition(), point, null);
                 }
 
+                // Add the initial step of going from the home to the flag
                 path.add(0, home.getPosition());
             } else {
                 if (via != null) {
@@ -447,6 +459,7 @@ public abstract class Worker {
                 }
             }
 
+            // Remove the current position so the path only contains the steps to take
             path.remove(0);
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
@@ -467,6 +480,13 @@ public abstract class Worker {
 
             handleArrival();
         } else {
+
+            if (!path.get(0).equals(position)) {
+                throw new RuntimeException("The path must start with the current position");
+            }
+
+            path.remove(0);
+
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
@@ -477,6 +497,10 @@ public abstract class Worker {
     void setTargetWithPath(List<Point> pathToWalk) {
         target = pathToWalk.get(pathToWalk.size() - 1);
         path = new ArrayList<>(pathToWalk);
+
+        if (!path.get(0).equals(position)) {
+            throw new RuntimeException("The path must start with the current position");
+        }
 
         path.remove(0);
 

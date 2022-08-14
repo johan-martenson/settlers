@@ -1222,7 +1222,7 @@ public class TestArmory {
 
         assertEquals(armorer0.getPosition(), flag0.getPosition());
 
-        /* Verify that the armorer returns to the headquarter when it reaches the flag */
+        /* Verify that the armorer returns to the headquarters when it reaches the flag */
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());

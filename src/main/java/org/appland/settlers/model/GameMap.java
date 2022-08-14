@@ -2863,7 +2863,6 @@ public class GameMap {
         }
 
         if (mapPointUpLeft != null && mapPointUpLeft.isBuilding()) {
-            System.out.println("N14");
             return null;
         }
 

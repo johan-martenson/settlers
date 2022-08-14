@@ -3112,6 +3112,74 @@ public class TestCourier {
     }
 
 
+    @Test
+    public void testCargoIsReturnedToHeadquartersWhenRoadInPathIsRemoved() throws InvalidUserActionException {
+
+        /* Creating new game map */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 7);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 6);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place flag */
+        Point point2 = new Point(14, 8);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarters and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place road between the flag and the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Wait for the first road to get assigned a courier */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+
+        assertEquals(courier.getPosition(), flag0.getPosition().left());
+
+        /* Place woodcutter */
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
+
+        /* Wait for the courier to start walking to the headquarters' flag to pick up a cargo for the woodcutter */
+        Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
+
+        assertNull(courier.getCargo());
+
+        map.stepTime();
+
+        /* Remove the second road */
+        map.removeRoad(road1);
+
+        map.stepTime();
+
+        assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
+        assertEquals(headquarter0.getFlag().getStackedCargo().get(0).getTarget(), headquarter0);
+
+        /* Verify that the courier goes to the headquarters' flag, doesn't pick up anything,
+           and goes back and becomes idle */
+        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+
+        assertNull(courier.getCargo());
+        assertEquals(courier.getTarget(), flag0.getPosition().left());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition().left());
+
+        assertNull(courier.getCargo());
+        assertTrue(courier.isIdle());
+    }
+
 
     /**
      * TODO:

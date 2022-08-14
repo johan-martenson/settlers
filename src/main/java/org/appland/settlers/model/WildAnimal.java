@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.String.format;
 import static org.appland.settlers.model.Material.MEAT;
 
 /**
@@ -140,5 +141,10 @@ public class WildAnimal extends Worker {
         SHEEP,
         DEER_2,
         DUCK_2
+    }
+
+    @Override
+    public String toString() {
+        return format("%s", type.name());
     }
 }

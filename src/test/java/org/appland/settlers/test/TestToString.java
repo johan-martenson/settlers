@@ -814,12 +814,12 @@ public class TestToString {
         /* Verify that toString is correct */
         assertNotNull(courier);
         assertTrue(courier.isExactlyAtPoint());
-        assertEquals(courier.toString(), "Courier (19, 5)");
+        assertEquals(courier.toString(), "Courier for Road (10, 4) - (20, 4) at (19, 5)");
 
         map.stepTime();
 
         assertFalse(courier.isExactlyAtPoint());
-        assertEquals(courier.toString(), "Courier (19, 5) - (20, 4)");
+        assertEquals(courier.toString(), "Courier for Road (10, 4) - (20, 4) walking (19, 5) - (20, 4)");
     }
 
     @Test

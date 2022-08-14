@@ -74,6 +74,10 @@ public class GameUtils {
             direction = DOWN_LEFT;
         }
 
+        if (direction == null) {
+            throw new RuntimeException("Direction is null which should be impossible. From " + from + " to " + to);
+        }
+
         return direction;
     }
 

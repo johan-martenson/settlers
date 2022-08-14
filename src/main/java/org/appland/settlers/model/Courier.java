@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.appland.settlers.model.BodyType.FAT;
@@ -279,7 +280,19 @@ public class Courier extends Worker {
             Flag flag = map.getFlagAtPoint(getPosition());
             Cargo cargoToPickUp = findCargoToCarry(flag);
 
-            pickUpCargoAndGoDeliver(cargoToPickUp);
+            if (intendedCargo != null) {
+                intendedCargo.cancelPromisedPickUp();
+
+                intendedCargo = null;
+            }
+
+            if (cargoToPickUp != null) {
+                pickUpCargoAndGoDeliver(cargoToPickUp);
+            } else {
+                setTarget(idlePoint);
+
+                state = RETURNING_TO_IDLE_SPOT;
+            }
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
 
             Building building = map.getBuildingAtPoint(getPosition());
@@ -443,9 +456,9 @@ public class Courier extends Worker {
     @Override
     public String toString() {
         if (isExactlyAtPoint()) {
-            return "Courier " + getPosition();
+            return "Courier for " + assignedRoad + " at " + getPosition();
         } else {
-            return "Courier " + getPosition() + " - " + getNextPoint();
+            return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint();
         }
     }
 
@@ -579,7 +592,7 @@ public class Courier extends Worker {
             Building target = cargo.getTarget();
 
             /* Filter cargos where pickup is already planned */
-            if (cargo.isPickupPromised()) {
+            if (cargo.isPickupPromised() && !Objects.equals(cargo, intendedCargo)) {
                 continue;
             }
 
