@@ -711,7 +711,7 @@ class Utils {
                     jsonSign.put("type", "coal");
                     break;
                 case STONE:
-                    jsonSign.put("type", "granite");
+                    jsonSign.put("type", "stone");
                     break;
                 case WATER:
                     jsonSign.put("type", "water");
