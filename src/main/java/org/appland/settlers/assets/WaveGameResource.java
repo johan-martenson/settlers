@@ -1,5 +1,6 @@
 package org.appland.settlers.assets;
 
+import static java.lang.String.format;
 import static org.appland.settlers.assets.GameResourceType.WAVE_SOUND;
 
 public class WaveGameResource implements GameResource {
@@ -16,5 +17,10 @@ public class WaveGameResource implements GameResource {
 
     public WaveFile getWaveFile() {
         return waveFile;
+    }
+
+    @Override
+    public String toString() {
+        return format("Wave game resource");
     }
 }

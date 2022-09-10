@@ -1,6 +1,16 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.utils.DataOutputStreamLittleEndian;
+
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class WaveFile implements Sound {
+    private static final int BITS_PER_BYTE = 8;
+    public static final int NUMBER_OF_BYTES_IN_RIFF_WAVE_AND_FORMAT_CHUNKS = 36;
+
     private final long dataSize;
     private final long bytesPerSec;
     private final String formatId;
@@ -68,5 +78,80 @@ public class WaveFile implements Sound {
 
     public long getFormatSize() {
         return formatSize;
+    }
+
+    public void writeToFile(String outSoundFile) {
+        try {
+            DataOutputStream dataOutputStream = new DataOutputStream(
+                    new BufferedOutputStream(new FileOutputStream(outSoundFile))
+            );
+
+            DataOutputStreamLittleEndian writer;
+            writer = new DataOutputStreamLittleEndian(dataOutputStream);
+
+            int numberOfBytesInSamples = waveData.length * numberChannels * bitsPerSample / BITS_PER_BYTE;
+
+            writer.writeString("RIFF");
+            writer.writeInt((numberOfBytesInSamples + NUMBER_OF_BYTES_IN_RIFF_WAVE_AND_FORMAT_CHUNKS));
+            writer.writeString("WAVE");
+
+            this.writeWaveHeader(writer);
+            this.writeWaveData(writer);
+
+            writer.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void writeWaveHeader(DataOutputStreamLittleEndian writer) throws IOException {
+        writer.writeString("fmt ");
+        writer.writeInt((int)formatSize);
+        writer.writeShort((short)formatTag);
+        writer.writeShort((short)numberChannels);
+        writer.writeInt((int)samplesPerSec);
+        writer.writeInt((int) bytesPerSec);
+        writer.writeShort((short) (numberChannels * bitsPerSample / BITS_PER_BYTE)); // frameSize
+        writer.writeShort((short) bitsPerSample);
+    }
+
+    private void writeWaveData(DataOutputStreamLittleEndian writer) throws IOException {
+        writer.writeString("data");
+
+        int numberOfBytesInSamples = (waveData.length * numberChannels * bitsPerSample / BITS_PER_BYTE);
+
+        writer.writeInt(numberOfBytesInSamples);
+
+        writer.writeBytes(waveData);
+    }
+
+    public WaveFile getClip(int start, int duration) {
+        int position = start * (int)bytesPerSec;
+        byte[] clipData = new byte[duration * (int)bytesPerSec];
+
+        System.out.println(waveData);
+        System.out.println(waveData.length);
+        System.out.println(waveData.length / samplesPerSec);
+
+        for (int i = 0; i < duration * samplesPerSec; i++) {
+            clipData[i] = waveData[position + i];
+        }
+
+        WaveFile waveClip = new WaveFile(
+                formatId,
+                formatSize,
+                formatTag,
+                numberChannels,
+                samplesPerSec,
+                bytesPerSec,
+                frameSize,
+                bitsPerSample,
+                dataId,
+                duration * bytesPerSec
+        );
+
+        waveClip.setData(clipData);
+
+        return waveClip;
     }
 }

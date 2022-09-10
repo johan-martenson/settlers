@@ -1,5 +1,6 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.utils.ByteArrayReader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -7,6 +8,7 @@ import org.kohsuke.args4j.Option;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,9 +19,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 public class Reader {
 
-    private static final String DEFAULT_PALETTE = "/home/johan/projects/settlers-image-manager/src/test/resources/pal5.act";
+    private static final String DEFAULT_PALETTE = "/home/johan/projects/settlers/src/test/resources/pal5.act";
     private static final int NUMBER_LINKS_PER_OVERLAY = 8 * 2 * 6;
 
     @Option(name = "--dir", usage = "Asset directory to load")
@@ -130,9 +134,20 @@ public class Reader {
                 case "DAT":
 
                     try {
-                        List<GameResource> gameResourceList = assetManager.loadDatFile(filename, palette);
+                        System.out.println("Loading as sound stream");
 
-                        gameResourceMap.put(filename, gameResourceList);
+                        byte[] bytes = Files.newInputStream(Paths.get(filename)).readAllBytes();
+
+                        GameResource gameResource = assetManager.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
+
+                        System.out.println(gameResource);
+
+                        List<GameResource> result = new ArrayList<>();
+
+                        result.add(gameResource);
+
+                        gameResourceMap.put(filename, result);
+
                     } catch (Throwable t) {
                         System.out.println("Failed to load " + filename);
                         t.printStackTrace();
@@ -309,6 +324,8 @@ public class Reader {
 
     private static void writeToDirectory(Map<String, List<GameResource>> gameResourceMap, String dirToWrite) throws IOException {
 
+        System.out.println(gameResourceMap);
+
         for (Map.Entry<String, List<GameResource>> entry : gameResourceMap.entrySet()) {
             String inputFilename = entry.getKey();
             List<GameResource> gameResourceList = entry.getValue();
@@ -320,7 +337,8 @@ public class Reader {
 
             for (GameResource gameResource : gameResourceList) {
 
-                String outFile = dirToWrite + "/" + filenameWithoutPath + "-" + i + ".png";
+                String outFile = format("%s/%s-%d.png", dirToWrite, filenameWithoutPath, i);
+                String outSoundFile = format("%s/%s-%d.wav", dirToWrite, filenameWithoutPath, i);
 
                 i = i + 1;
 
@@ -361,7 +379,10 @@ public class Reader {
                         break;
 
                     case WAVE_SOUND:
-                        // not writing wave file
+                        WaveGameResource waveGameResource = (WaveGameResource) gameResource;
+                        WaveFile waveFile = waveGameResource.getWaveFile();
+                        waveFile.writeToFile(outSoundFile);
+
                         break;
 
                     case BOB_RESOURCE:
@@ -532,6 +553,21 @@ public class Reader {
             result.add(assetManager.loadLBMFile(assetFilename, palette));
 
             return result;
+        } else if (fileSuffix.equals("DAT")) {
+
+            try {
+                System.out.println("Loading as sound stream");
+
+                DatLoader datLoader = new DatLoader();
+
+                datLoader.load(assetFilename);
+
+                return null;
+
+            } catch (Throwable t) {
+                System.out.println("Failed to load " + assetFilename);
+                t.printStackTrace();
+            }
         }
 
         return null;

@@ -1,6 +1,6 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.utils.StreamReader;
+import org.appland.settlers.utils.ByteReader;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ public class ColorBlock {
     public int size;
     public byte[] pixels;
 
-    static ColorBlock readColorBlockFromStream(StreamReader streamReader) throws IOException, InvalidFormatException {
+    static ColorBlock readColorBlockFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
         ColorBlock colorBlock = new ColorBlock();
 
         colorBlock.id = streamReader.getUint16();

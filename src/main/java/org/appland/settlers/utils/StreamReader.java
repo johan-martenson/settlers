@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class StreamReader {
+public class StreamReader implements ByteReader {
     public static final int SIZE_OF_UINT32 = 4;
 
     private final InputStream inputStream;
@@ -41,11 +41,23 @@ public class StreamReader {
 
         offset = offset + 2;
 
-        return getUint16(ByteBuffer.wrap(bytes).order(this.order));
+        return (short)(ByteBuffer.wrap(bytes).order(this.order).getShort() & 0xffff);
     }
 
-    private short getUint16(ByteBuffer byteBuffer) {
-        return (short)(byteBuffer.getShort() & 0xffff);
+    @Override
+    public int getUint16(ByteOrder endian) throws IOException {
+        byte[] bytes = new byte[2];
+
+        int result = inputStream.read(bytes, 0, 2);
+
+        if (result == -1) {
+            isEof = true;
+        }
+
+        offset = offset + 2;
+
+        return (short)(ByteBuffer.wrap(bytes).order(endian).getShort() & 0xffff);
+
     }
 
     public void read(byte[] buffer, int offset, int length) throws IOException {
@@ -59,59 +71,35 @@ public class StreamReader {
     }
 
     public short[] getUint8Array(int lengthInBytes) throws IOException {
-        byte[] bytes = new byte[lengthInBytes];
-
-        int result = inputStream.read(bytes, 0, lengthInBytes);
-
-        if (result == -1) {
-            isEof = true;
-        }
-
         short[] shorts = new short[lengthInBytes];
 
-        for (int i = 0; i < bytes.length; i++) {
-            shorts[i] = getUint8(ByteBuffer.wrap(bytes));
+        for (int i = 0; i < lengthInBytes; i++) {
+            shorts[i] = getUint8();
         }
-
-        offset = offset + lengthInBytes;
 
         return shorts;
     }
 
-    private short getUint8(ByteBuffer byteBuffer) {
-        return (short)(byteBuffer.get() & 0xff);
-    }
-
     public long[] getUint32Array(int length) throws IOException {
-        byte[] bytes = new byte[length * 4];
+        long[] uint32Array = new long[length];
 
-        int result = inputStream.read(bytes, 0, length * 4);
-
-        if (result == -1) {
-            isEof = true;
+        for (int i = 0; i < length; i++) {
+            uint32Array[i] = getUint32();
         }
 
-        long[] longArray = new long[length];
-
-        for (int i = 0; i < bytes.length; i++) {
-            longArray[i] = (long)ByteBuffer.wrap(bytes).order(order).getInt(i * 4) & 0xffffffffL;
-        }
-
-        offset = offset + length * 4L;
-
-        return longArray;
+        return uint32Array;
     }
 
     public List<Long> getUint32ArrayAsList(int length) throws IOException {
-        long[] array = getUint32Array(length);
+        long[] uint32Array = getUint32Array(length);
 
-        List<Long> list = new ArrayList<>();
+        List<Long> uint32List = new ArrayList<>();
 
-        for (long l : array) {
-            list.add(l);
+        for (long l : uint32Array) {
+            uint32List.add(l);
         }
 
-        return list;
+        return uint32List;
     }
 
     public long getUint32() throws IOException {
@@ -128,24 +116,29 @@ public class StreamReader {
         return (long) ByteBuffer.wrap(bytes).order(order).getInt() & 0xffffffffL;
     }
 
-    public char[] getUint8ArrayAsChar(int lengthInBytes) throws IOException {
-        byte[] bytes = new byte[lengthInBytes];
+    @Override
+    public long getUint32(ByteOrder byteOrder) throws IOException {
+        byte[] bytes = new byte[4];
 
-        int result = inputStream.read(bytes, 0, lengthInBytes);
+        int result = inputStream.read(bytes, 0, 4);
 
         if (result == -1) {
             isEof = true;
         }
 
-        char[] chars = new char[lengthInBytes];
+        offset = offset + 4;
 
-        for (int i = 0; i < bytes.length; i++) {
-            chars[i] = (char)(ByteBuffer.wrap(bytes).order(order).getShort(i) & 0xffff);
+        return (long) ByteBuffer.wrap(bytes).order(byteOrder).getInt() & 0xffffffffL;
+    }
+
+    public char[] getUint8ArrayAsChar(int lengthInBytes) throws IOException {
+        char[] charArray = new char[lengthInBytes];
+
+        for (int i = 0; i < lengthInBytes; i++) {
+            charArray[i] = (char)getUint8();
         }
 
-        offset = offset + lengthInBytes;
-
-        return chars;
+        return charArray;
     }
 
     public void pushByteOrder(ByteOrder order) {
@@ -186,6 +179,15 @@ public class StreamReader {
         if (skipped > -1) {
             offset = offset + skipped;
         }
+    }
+
+    @Override
+    public void setPosition(int position) throws IOException {
+        if (position > offset) {
+            skip((int) (position - offset));
+        }
+
+        throw new RuntimeException("Can't set a position backwards in the stream reader.");
     }
 
     public short getUint8() throws IOException {
@@ -239,23 +241,11 @@ public class StreamReader {
     }
 
     public int[] getUint16ArrayAsInts(int length) throws IOException {
-        byte[] bytes = new byte[length * 2];
-
         int[] intArray = new int[length];
 
-        int result = inputStream.read(bytes, 0, length * 2);
-
-        if (result == -1) {
-            isEof = true;
-        }
-
-        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes).order(this.order);
-
         for (int i = 0; i < length; i++) {
-            intArray[i] = byteBuffer.getShort(i * 2) & 0xffff;
+            intArray[i] = getUint16();
         }
-
-        offset = offset + length * 2L;
 
         return intArray;
     }
@@ -354,6 +344,11 @@ public class StreamReader {
         offset = offset + length;
 
         return new ByteArray(bytes, this.order);
+    }
+
+    @Override
+    public int getPosition() {
+        return (int) offset;
     }
 
     public void close() throws IOException {

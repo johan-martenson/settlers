@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.utils.ByteArrayReader;
+import org.appland.settlers.utils.ByteReader;
 import org.appland.settlers.utils.StreamReader;
 
 import java.io.FileInputStream;
@@ -15,12 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
+import static java.nio.ByteOrder.BIG_ENDIAN;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.appland.settlers.assets.BodyType.FAT;
 import static org.appland.settlers.assets.GameResourceType.PLAYER_BITMAP_RESOURCE;
 import static org.appland.settlers.assets.ResourceType.NONE;
+import static org.appland.settlers.assets.ResourceType.SOUND;
 import static org.appland.settlers.assets.SoundType.MIDI;
-import static org.appland.settlers.assets.SoundType.MP3;
-import static org.appland.settlers.assets.SoundType.OGG;
 import static org.appland.settlers.assets.SoundType.WAVE;
 import static org.appland.settlers.assets.SoundType.WAVE_WITHOUT_HEADER;
 import static org.appland.settlers.assets.SoundType.XMIDI;
@@ -49,7 +53,7 @@ public class AssetManager {
     private static final TextureFormat GLOBAL_TEXTURE_FORMAT = TextureFormat.BGRA;
 
     private TextureFormat wantedTextureFormat;
-    private boolean debug = false;
+    boolean debug = false;
 
     public AssetManager() {
         wantedTextureFormat = TextureFormat.BGRA;
@@ -82,254 +86,266 @@ public class AssetManager {
     public List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, InvalidHeaderException, UnknownResourceTypeException, InvalidFormatException {
         List<GameResource> gameResources = new ArrayList<>();
 
-        InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+        ByteArrayReader streamReader = new ByteArrayReader(
+                Files.newInputStream(Paths.get(filename)).readAllBytes(),
+                LITTLE_ENDIAN
+        );
 
-        byte[] header = streamReader.getUint8ArrayAsBytes(2);
+        int header = streamReader.getUint16();
 
-        /* Load txt file if needed */
-        if (header[1] == (byte)0xFD && header[0] == (byte)0xE7) {
-            List<String> strings = loadTextFromStream(streamReader);
+        debugPrint(format("Header is: %s", Integer.toHexString(header)));
 
-            gameResources.add(new TextResource(strings));
-        }
+        switch (header) {
 
-        /* Try to load as bob file if needed */
-        if (header[1] == 0x01 && Unsigned.getUnsignedByte(ByteBuffer.wrap(header)) == 0xF6) {
-            gameResources.add(loadBobFromStream(fileInputStream, defaultPalette));
+            /* Load text file */
+            case 0xFDE7:
+                List<String> strings = loadTextFromStream(streamReader);
 
-            return gameResources;
-        }
+                gameResources.add(new TextResource(strings));
+            break;
 
-        /* Verify that this is really a bob file */
-        if (header[1] != 0x4e || header[0] != 0x20) {
-            throw new InvalidHeaderException("Header must be 0x4E20. " + Utils.getHex(header) + " is not valid.");
-        }
+            /* Load BOB file (?) */
+            case 0x01F6:
+                gameResources.add(loadBobFromStream(streamReader, defaultPalette));
 
-        if (debug) {
-            System.out.println(" - Header is valid for LST bob file");
-        }
+            break;
 
-        long numberItems = streamReader.getUint32();
-
-        if (debug) {
-            System.out.println(" - Contains number of items: " + numberItems);
-        }
-
-        /* Loop through and read each item */
-        for (long i = 0; i < numberItems; i++) {
-            short used = streamReader.getInt16();
-
-            /* Filter un-used items */
-            if (used != 1) {
+            /* Load BOB file */
+            case 0x4E20:
 
                 if (debug) {
-                    System.out.println(" - Filter un-used item");
+                    System.out.println(" - Header is valid for LST bob file");
                 }
 
-                continue;
-            }
+                long numberItems = streamReader.getUint32();
 
-            /* Find what type of resource it is */
-            int type = streamReader.getInt16();
+                if (debug) {
+                    System.out.println(" - Contains number of items: " + numberItems);
+                }
 
-            ResourceType resourceType = ResourceType.fromInt(type);
+                /* Loop through and read each item */
+                for (long i = 0; i < numberItems; i++) {
+                    short used = streamReader.getInt16();
 
-            if (debug) {
-                System.out.println(" - Resource type number: " + type);
-                System.out.println(" - Resource type: " + resourceType);
-            }
+                    /* Filter un-used items */
+                    if (used != 1) {
 
-            /* Load the resource */
-            switch (resourceType) {
+                        if (debug) {
+                            System.out.println(" - Filter un-used item");
+                        }
 
-                case SOUND:
-
-                    if (debug) {
-                        System.out.println("Loading sound");
+                        continue;
                     }
 
-                    GameResource soundGameResource = loadSoundFromStream(fileInputStream);
+                    /* Find what type of resource it is */
+                    int type = streamReader.getInt16();
+
+                    ResourceType resourceType = ResourceType.fromInt(type);
 
                     if (debug) {
-                        System.out.println("Loaded sound");
+                        System.out.println(" - Resource type number: " + type);
+                        System.out.println(" - Resource type: " + resourceType);
                     }
 
-                    gameResources.add(soundGameResource);
+                    /* Load the resource */
+                    switch (resourceType) {
 
-                    break;
+                        case SOUND:
 
-                case BITMAP_RLE:
+                            if (debug) {
+                                System.out.println("Loading sound");
+                            }
 
-                    if (debug) {
-                        System.out.println("Loading bitmap rle");
+                            GameResource soundGameResource = loadSoundFromStream(streamReader);
+
+                            if (debug) {
+                                System.out.println("Loaded sound");
+                            }
+
+                            gameResources.add(soundGameResource);
+
+                            break;
+
+                        case BITMAP_RLE:
+
+                            if (debug) {
+                                System.out.println("Loading bitmap rle");
+                            }
+
+                            BitmapRLE bitmapRLE = loadBitmapRLEFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded bitmap rle");
+                            }
+
+                            gameResources.add(new BitmapRLEResource(bitmapRLE));
+
+                            break;
+
+                        case FONT:
+
+                            if (debug) {
+                                System.out.println("Loading font");
+                            }
+
+                            loadFontFromStream(streamReader);
+
+                            if (debug) {
+                                System.out.println("Loaded font");
+                            }
+
+                            break;
+
+                        case BITMAP_PLAYER:
+
+                            if (debug) {
+                                System.out.println("Loading player bitmap");
+                            }
+
+                            PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded player bitmap");
+                            }
+
+                            gameResources.add(new PlayerBitmapResource(playerBitmap));
+
+                            break;
+
+                        case PALETTE:
+
+                            if (debug) {
+                                System.out.println("Loading palette");
+                            }
+
+                            Palette palette = loadPaletteFromStream(streamReader, true);
+
+                            if (debug) {
+                                System.out.println("Loaded palette");
+                            }
+
+                            gameResources.add(new PaletteResource(palette));
+
+                            break;
+
+                        case BOB:
+
+                            if (debug) {
+                                System.out.println("Loading bob");
+                            }
+
+                            GameResource bobG = loadBobFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded bob");
+                            }
+
+                            gameResources.add(bobG);
+
+                            break;
+
+                        case BITMAP_SHADOW:
+
+                            if (debug) {
+                                System.out.println("Loading bitmap shadow");
+                            }
+
+                            Bitmap bitmap = loadBitmapShadowFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded bitmap shadow");
+                            }
+
+                            gameResources.add(new BitmapResource(bitmap));
+
+                            break;
+
+                        case MAP:
+
+                            if (debug) {
+                                System.out.println("Loading map");
+                            }
+
+                            loadMapFromStream(streamReader);
+
+                            if (debug) {
+                                System.out.println("Loaded map");
+                            }
+
+                            break;
+
+                        case RAW:
+
+                            if (debug) {
+                                System.out.println("Loading raw bitmap");
+                            }
+
+                            loadRawBitmapFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded raw bitmap");
+                            }
+
+                            break;
+
+                        case PALETTE_ANIM:
+
+                            if (debug) {
+                                System.out.println("Loading animated palette");
+                            }
+
+                            loadAnimatedPaletteFromStream(streamReader);
+
+                            if (debug) {
+                                System.out.println("Loaded animated palette");
+                            }
+
+                            break;
+
+                        case BITMAP:
+
+                            if (debug) {
+                                System.out.println("Loading bitmap (not in original S2)");
+                            }
+
+                            BitmapRaw bitmapRaw = loadUncompressedBitmapFromStream(streamReader, defaultPalette);
+
+                            if (debug) {
+                                System.out.println("Loaded bitmap");
+                            }
+
+                            gameResources.add(new BitmapRawResource(bitmapRaw));
+
+                            break;
+
+                        default:
+
+                            System.out.println("UNKNOWN RESOURCE: " + type);
+                            System.out.println(resourceType);
+
+                            throw new UnknownResourceTypeException("Can't handle resource type " + resourceType);
                     }
+                }
+            break;
 
-                    BitmapRLE bitmapRLE = loadBitmapRLEFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded bitmap rle");
-                    }
-
-                    gameResources.add(new BitmapRLEResource(bitmapRLE));
-
-                    break;
-
-                case FONT:
-
-                    if (debug) {
-                        System.out.println("Loading font");
-                    }
-
-                    loadFontFromStream(fileInputStream);
-
-                    if (debug) {
-                        System.out.println("Loaded font");
-                    }
-
-                    break;
-
-                case BITMAP_PLAYER:
-
-                    if (debug) {
-                        System.out.println("Loading player bitmap");
-                    }
-
-                    PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded player bitmap");
-                    }
-
-                    gameResources.add(new PlayerBitmapResource(playerBitmap));
-
-                    break;
-
-                case PALETTE:
-
-                    if (debug) {
-                        System.out.println("Loading palette");
-                    }
-
-                    Palette palette = loadPaletteFromStream(fileInputStream, true);
-
-                    if (debug) {
-                        System.out.println("Loaded palette");
-                    }
-
-                    gameResources.add(new PaletteResource(palette));
-
-                    break;
-
-                case BOB:
-
-                    if (debug) {
-                        System.out.println("Loading bob");
-                    }
-
-                    GameResource bobG = loadBobFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded bob");
-                    }
-
-                    gameResources.add(bobG);
-
-                    break;
-
-                case BITMAP_SHADOW:
-
-                    if (debug) {
-                        System.out.println("Loading bitmap shadow");
-                    }
-
-                    Bitmap bitmap = loadBitmapShadowFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded bitmap shadow");
-                    }
-
-                    gameResources.add(new BitmapResource(bitmap));
-
-                    break;
-
-                case MAP:
-
-                    if (debug) {
-                        System.out.println("Loading map");
-                    }
-
-                    loadMapFromStream(fileInputStream);
-
-                    if (debug) {
-                        System.out.println("Loaded map");
-                    }
-
-                    break;
-
-                case RAW:
-
-                    if (debug) {
-                        System.out.println("Loading raw bitmap");
-                    }
-
-                    loadRawBitmapFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded raw bitmap");
-                    }
-
-                    break;
-
-                case PALETTE_ANIM:
-
-                    if (debug) {
-                        System.out.println("Loading animated palette");
-                    }
-
-                    loadAnimatedPaletteFromStream(fileInputStream);
-
-                    if (debug) {
-                        System.out.println("Loaded animated palette");
-                    }
-
-                    break;
-
-                case BITMAP:
-
-                    if (debug) {
-                        System.out.println("Loading bitmap (not in original S2)");
-                    }
-
-                    BitmapRaw bitmapRaw = loadUncompressedBitmapFromStream(fileInputStream, defaultPalette);
-
-                    if (debug) {
-                        System.out.println("Loaded bitmap");
-                    }
-
-                    gameResources.add(new BitmapRawResource(bitmapRaw));
-
-                    break;
-
-                default:
-
-                    System.out.println("UNKNOWN RESOURCE: " + type);
-                    System.out.println(resourceType);
-
-                    throw new UnknownResourceTypeException("Can't handle resource type " + resourceType);
-            }
+            default:
+                throw new RuntimeException("Can't handle unknown header type: " + Integer.toHexString(header));
         }
-
-        streamReader.close();
 
         return gameResources;
     }
 
-    public List<String> loadTextFile(String filename) throws IOException, InvalidFormatException {
-        return loadTextFromStream(new StreamReader(new FileInputStream(filename), ByteOrder.LITTLE_ENDIAN));
+    private void debugPrint(String debugString) {
+        if (debug) {
+            System.out.println(debugString);
+        }
     }
 
-    private List<String> loadTextFromStream(StreamReader streamReader) throws IOException, InvalidFormatException {
+    public List<String> loadTextFile(String filename) throws IOException, InvalidFormatException {
+        return loadTextFromStream(new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN));
+    }
+
+    private List<String> loadTextFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
 
         List<String> textsLoaded = new ArrayList<>();
 
@@ -402,7 +418,7 @@ public class AssetManager {
                         }
                     }
 
-                    streamReader.setPosition(itemPosition);
+                    streamReader.setPosition((int) itemPosition);
 
                     if (itemSize > 0) {
                         String textItem = streamReader.getUint8ArrayAsString((int) itemSize);
@@ -420,8 +436,7 @@ public class AssetManager {
         return textsLoaded;
     }
 
-    private BitmapRLE loadBitmapRLEFromStream(InputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    private BitmapRLE loadBitmapRLEFromStream(ByteReader streamReader, Palette palette) throws IOException, InvalidFormatException {
 
         /* Read header */
         short nx = streamReader.getInt16();
@@ -453,8 +468,7 @@ public class AssetManager {
         return bitmap;
     }
 
-    private BitmapRaw loadUncompressedBitmapFromStream(InputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    private BitmapRaw loadUncompressedBitmapFromStream(ByteReader streamReader, Palette palette) throws IOException, InvalidFormatException {
 
         /* Read header */
         int unknown1 = streamReader.getUint16();
@@ -556,12 +570,14 @@ public class AssetManager {
 
     public GameResource loadSoundWaveFile(String filename) throws IOException, InvalidFormatException {
         InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
+        byte[] bytes = fileInputStream.readAllBytes();
+        ByteArrayReader byteArrayReader = new ByteArrayReader(bytes, LITTLE_ENDIAN);
 
         if (debug) {
             System.out.println("Loading sound from file: " + filename);
         }
 
-        GameResource soundGameResource = loadSoundFromStream(fileInputStream);
+        GameResource soundGameResource = loadSoundFromStream(byteArrayReader);
 
         if (debug) {
             System.out.println("Loaded sound");
@@ -572,27 +588,25 @@ public class AssetManager {
         return soundGameResource;
     }
 
-    private void loadFontFromStream(InputStream fileInputStream) {
+    private void loadFontFromStream(ByteReader byteReader) {
         throw new RuntimeException("Support for load font is not implemented yet");
     }
 
-    private void loadAnimatedPaletteFromStream(InputStream fileInputStream) {
+    private void loadAnimatedPaletteFromStream(ByteReader byteReader) {
         throw new RuntimeException("Support for load animated palette is not implemented yet");
     }
 
-    private BitmapRaw loadRawBitmapFromStream(InputStream fileInputStream, Palette defaultPalette) throws IOException, InvalidFormatException {
-        BitmapRaw bitmapRaw = loadUncompressedBitmapFromStream(fileInputStream, defaultPalette);
+    private BitmapRaw loadRawBitmapFromStream(ByteReader streamReader, Palette defaultPalette) throws IOException, InvalidFormatException {
+        BitmapRaw bitmapRaw = loadUncompressedBitmapFromStream(streamReader, defaultPalette);
 
         return bitmapRaw;
     }
 
-    private void loadMapFromStream(InputStream fileInputStream) {
+    private void loadMapFromStream(ByteReader byteReader) {
         throw new RuntimeException("Support for load map is not implemented yet");
     }
 
-    private Bitmap loadBitmapShadowFromStream(InputStream inputStream, Palette palette) throws IOException {
-
-        StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
+    private Bitmap loadBitmapShadowFromStream(ByteReader streamReader, Palette palette) throws IOException {
 
         /* Read header */
         short nx = streamReader.getInt16();
@@ -654,12 +668,12 @@ public class AssetManager {
 
     public Bob loadBobFile(String filename, Palette defaultPalette) throws IOException, InvalidFormatException {
         InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+        StreamReader streamReader = new StreamReader(fileInputStream, LITTLE_ENDIAN);
 
         byte[] header = streamReader.getUint8ArrayAsBytes(2);
 
         if (header[1] == 0x01 && Unsigned.getUnsignedByte(ByteBuffer.wrap(header)) == 0xF6) {
-            Bob bob = loadBobFromStream(fileInputStream, defaultPalette).getBob();
+            Bob bob = loadBobFromStream(streamReader, defaultPalette).getBob();
 
             return bob;
         }
@@ -669,8 +683,7 @@ public class AssetManager {
         return null;
     }
 
-    private BobGameResource loadBobFromStream(InputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    private BobGameResource loadBobFromStream(ByteReader streamReader, Palette palette) throws IOException, InvalidFormatException {
 
         PlayerBitmap[] playerBitmaps = new PlayerBitmap[(int)NUM_BODY_IMAGES];
 
@@ -766,68 +779,22 @@ public class AssetManager {
         return new BobGameResource(bob);
     }
 
-    private GameResource loadSoundFromStream(InputStream fileInputStream) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    GameResource loadSoundFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
+        streamReader.pushByteOrder(LITTLE_ENDIAN);
 
-        SoundType soundType;
+        long length = streamReader.getUint32();
 
-        long length = 0;
+        SoundType soundType = getSoundTypeFromByteReader(streamReader);
 
-        String headerAsString = streamReader.getUint8ArrayAsString(4);
+        debugPrint(format("Got sound type: %s", soundType.name()));
 
-        if (debug) {
-            System.out.println(" - Length is: " + length);
-            System.out.println(" - File header is: " + headerAsString);
-        }
-
-        if (headerAsString.equals("FORM") || headerAsString.equals("RIFF")) {
-            long subLength = streamReader.getUint32(); // uint 32
-
-            if (debug) {
-                System.out.println("   - Sub length is: " + subLength);
-            }
-
-            String subHeaderAsString = streamReader.getUint8ArrayAsString(4); // 4 x uint 8
-
-            switch (subHeaderAsString) {
-                case "XMID":
-                    soundType = XMIDI;
-                    break;
-                case "XDIR":
-                    soundType = XMID_DIR;
-                    break;
-                case "WAVE":
-                    soundType = WAVE;
-                    break;
-                default:
-                    throw new InvalidFormatException("Failed to locate sound type.");
-            }
-
-            if (debug) {
-                System.out.println("   - Sub type is: " + soundType);
-            }
-        } else if (headerAsString.equals("MThd")) {
-            soundType = MIDI;
-        } else if (headerAsString.equals("OggS")) {
-            soundType = OGG;
-        } else if (headerAsString.equals("ID3")) { // TODO: handle \xFF\xFB which should also mean mp3
-            soundType = MP3;
-        } else {
-            soundType = WAVE_WITHOUT_HEADER;
-        }
-
-        if (debug) {
-            System.out.println(" - Sound type is: " + soundType);
-        }
 
         if (soundType == MIDI) {
             return new MidiGameResource(loadSoundMidiFromStream(streamReader));
         } else if (soundType == WAVE) {
             return new WaveGameResource(loadWaveSoundFromStream(streamReader, length, true));
-        } else if (soundType == XMIDI) {
-            return new XMidiGameResource(loadXMidiSoundFromStream(streamReader, length, false));
-        } else if (soundType == XMID_DIR) {
-            return new XMidiGameResource(loadXMidiSoundFromStream(streamReader, length, true));
+        } else if (soundType == XMIDI || soundType == XMID_DIR) {
+            return new XMidiGameResource(loadXMidiSoundFromStream(streamReader, length, soundType == XMID_DIR));
         } else if (soundType == WAVE_WITHOUT_HEADER) {
             return new WaveGameResource(loadWaveSoundFromStream(streamReader, length, false));
         } else {
@@ -835,8 +802,53 @@ public class AssetManager {
         }
     }
 
+    private SoundType getSoundTypeFromByteReader(ByteReader streamReader) throws IOException {
+        int position = streamReader.getPosition();
+
+        String header = streamReader.getUint8ArrayAsString(4);
+
+        debugPrint(Utils.bytesToHex(header.getBytes()));
+
+        SoundType soundType = null;
+
+        switch (header) {
+            case "FORM":
+            case "RIFF":
+
+                long length = streamReader.getUint32();
+                String subHeader = streamReader.getUint8ArrayAsString(4);
+
+                switch (subHeader) {
+                    case "XMID":
+                    case "XDIR":
+                        soundType = XMIDI;
+
+                    break;
+
+                    case "WAVE":
+                        soundType = WAVE;
+
+                    break;
+                }
+
+            break;
+
+            case "MThd":
+                soundType = MIDI;
+
+            break;
+
+            default:
+                soundType = WAVE_WITHOUT_HEADER;
+        }
+
+        streamReader.setPosition(position);
+
+        return soundType;
+    }
+
     public XMidiFile loadSoundXMidiFile(String filename) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.LITTLE_ENDIAN);
+        StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         // Read header
         String headerId = streamReader.getUint8ArrayAsString(4);
@@ -1063,95 +1075,107 @@ public class AssetManager {
         return xMidiFile;
     }
 
-    private List<XMidiTrack> loadXMidiSoundFromStream(StreamReader streamReader, long length, boolean isDir) throws IOException, InvalidFormatException {
-        StreamReader streamReaderBigEndian = new StreamReader(streamReader.getInputStream(), ByteOrder.BIG_ENDIAN);
+    private List<XMidiTrack> loadXMidiSoundFromStream(ByteReader streamReader, long length, boolean isDir) throws IOException, InvalidFormatException {
 
-        long formHeaderLength = streamReader.getUint32();
+        String chunk0Header = streamReader.getUint8ArrayAsString(4);
 
-        if ((formHeaderLength & 1) != 0) {
-            formHeaderLength = formHeaderLength + 1;
+        // The first chunk must be a form
+        if (!chunk0Header.equals("FORM")) {
+            throw new RuntimeException(format("Can't handle unknown header: %s", chunk0Header));
         }
+
+        // Read the length of the first chunk
+        long chunk0Length = streamReader.getUint32(BIG_ENDIAN);
 
         List<XMidiTrack> tracks = new ArrayList<>();
         long numberTracks = 1;
 
-        if (isDir) {
-            char[] chunk = streamReader.getUint8ArrayAsChar(4);
+        String chunk1Header = streamReader.getUint8ArrayAsString(4);
 
-            if (!String.copyValueOf(chunk).equals("INFO")) {
-                throw new InvalidFormatException("Must have INFO chunk id. Not " + String.copyValueOf(chunk));
-            }
+        switch (chunk1Header) {
+            case "XMID":
+                numberTracks = 1;
+            break;
 
-            long chunkLength = streamReader.getUint32();
+            case "XDIR":
+                String chunk2Header = streamReader.getUint8ArrayAsString(4);
 
-            if ((chunkLength & 1) != 0) {
-                chunkLength = chunkLength + 1;
-            }
+                if (!chunk2Header.equals("INFO")) {
+                    throw new RuntimeException(format("Must be INFO, %s is not allowed.", chunk2Header));
+                }
 
-            if (chunkLength != SIZE_NUMBER_TRACKS) {
-                throw new InvalidFormatException("Remaining chunk length must match size of number_tracks. Not " + chunkLength);
-            }
+                long chunk2Length = streamReader.getUint32(BIG_ENDIAN);
 
-            numberTracks = streamReaderBigEndian.getUint32();
+                if ((chunk2Length & 1) != 0) {
+                    chunk2Length = chunk2Length + 1;
+                }
 
-            if (debug) {
-                System.out.println("Number of tracks: " + numberTracks);
-            }
+                if (chunk2Length != SIZE_NUMBER_TRACKS) {
+                    throw new RuntimeException(format("Chunk size is wrong! %d != %d", chunk2Length, SIZE_NUMBER_TRACKS));
+                }
 
-            chunk = streamReader.getUint8ArrayAsChar(4);
+                numberTracks = streamReader.getUint16();
 
-            if (!String.copyValueOf(chunk).equals("CAT ")) {
-                throw new InvalidFormatException("Chunk must match 'CAT '. Not " + String.copyValueOf(chunk));
-            }
+                String chunk3Header = streamReader.getUint8ArrayAsString(4);
 
-            // Skip 4
-            streamReader.skip(4);
+                if (!chunk3Header.equals("CAT ")) {
+                    throw new RuntimeException(format("Must be CAT, %s is not allowed.", chunk3Header));
+                }
 
-            chunk = streamReader.getUint8ArrayAsChar(4);
+                streamReader.skip(4);
 
-            if (!String.copyValueOf(chunk).equals("XMID")) {
-                throw new InvalidFormatException("Must match 'XMID'. Not " + String.copyValueOf(chunk));
-            }
+                String chunk4Header = streamReader.getUint8ArrayAsString(4);
+
+                if (!chunk4Header.equals("XMID")) {
+                    throw new RuntimeException(format("Must be CAT, %s is not allowed.", chunk4Header));
+                }
+
+                break;
+
+            default:
+                throw new RuntimeException(format("Can't handle header type %s at this place.", chunk1Header));
         }
+
+        debugPrint(format("Number of tracks: %d", numberTracks));
 
         // Read tracks
         for (long i = 0; i < numberTracks; i++) {
             XMidiTrack xMidiTrack = new XMidiTrack();
 
-            char[] chunk = streamReader.getUint8ArrayAsChar(4);
+            String trackChunkHeader0 = streamReader.getUint8ArrayAsString(4);
 
-            if (!String.copyValueOf(chunk).equals("FORM")) {
-                throw new InvalidFormatException("Must match 'FORM'. Not " + String.copyValueOf(chunk));
+            if (!trackChunkHeader0.equals("FORM")) {
+                throw new InvalidFormatException("Must match 'FORM'. Not " + trackChunkHeader0);
             }
 
-            long chunkLength = streamReader.getUint32(); // FIXME: is it correct to read two lengths like this?
+            long trackChunkLength0 = streamReader.getUint32();
 
-            formHeaderLength = streamReader.getUint32();
-
-            if ((formHeaderLength & 1) != 0) {
-                formHeaderLength = formHeaderLength + 1;
+            if ((trackChunkLength0 & 1) != 0) {
+                trackChunkLength0 = trackChunkLength0 + 1;
             }
 
-            chunk = streamReader.getUint8ArrayAsChar(4);
+            String trackChunkHeader1 = streamReader.getUint8ArrayAsString(4);
 
-            if (!String.copyValueOf(chunk).equals("XMID")) {
-                throw new InvalidFormatException("Must match 'XMID'. Not " + String.copyValueOf(chunk));
+            if (!trackChunkHeader1.equals("XMID")) {
+                throw new InvalidFormatException("Must match 'XMID'. Not " + trackChunkHeader1);
             }
 
-            chunk = streamReader.getUint8ArrayAsChar(4);
+            // XMID has no content, skip reading length and data
+
+            String trackChunkHeader2 = streamReader.getUint8ArrayAsString(4);
 
             // Read timbres, if any
-            if (String.copyValueOf(chunk).equals("TIMB")) {
-                chunkLength = streamReader.getUint32();
+            if (trackChunkHeader2.equals("TIMB")) {
+                long trackChunkLength2 = streamReader.getUint32(BIG_ENDIAN);
 
-                if ((chunkLength & 1) != 0) {
-                    chunkLength = chunkLength + 1;
+                if ((trackChunkLength2 & 1) != 0) {
+                    trackChunkLength2 = trackChunkLength2 + 1;
                 }
 
-                int numberTimbres = streamReaderBigEndian.getUint16();
+                int numberTimbres = streamReader.getUint16(LITTLE_ENDIAN);
 
-                if (numberTimbres * 2L + 2 != chunkLength) {
-                    throw new InvalidFormatException("Chunk length must match number timbres (" + numberTimbres + ") * 2 + 2. Not " + chunkLength);
+                if (numberTimbres * 2L + 2 != trackChunkLength2) {
+                    throw new InvalidFormatException("Chunk length must match number timbres (" + numberTimbres + ") * 2 + 2. Not " + trackChunkLength0);
                 }
 
                 // Read timbres
@@ -1163,21 +1187,21 @@ public class AssetManager {
                 }
             }
 
-            chunk = streamReader.getUint8ArrayAsChar(4);
+            String trackChunkHeader3 = streamReader.getUint8ArrayAsString(4);
 
-            if (!String.copyValueOf(chunk).equals("EVNT")) {
-                throw new InvalidFormatException("Must match 'EVNT'. Not " + String.copyValueOf(chunk));
+            if (!trackChunkHeader3.equals("EVNT")) {
+                throw new InvalidFormatException("Must match 'EVNT'. Not " + trackChunkHeader3);
             }
 
-            chunkLength = streamReader.getUint32();
+            long trackChunkLength3 = streamReader.getUint32(BIG_ENDIAN);
 
-            if ((chunkLength & 1) != 0) {
-                chunkLength = chunkLength + 1;
+            if ((trackChunkLength3 & 1) != 0) {
+                trackChunkLength3 = trackChunkLength3 + 1;
             }
 
-            byte[] trackData = new byte[(int) chunkLength];
+            debugPrint(format("Reading EVNT data, number bytes: %d", trackChunkLength3));
 
-            streamReader.read(trackData, 0, (int) chunkLength);
+            byte[] trackData = streamReader.getUint8ArrayAsBytes((int) trackChunkLength3);
 
             xMidiTrack.setData(trackData);
 
@@ -1187,7 +1211,7 @@ public class AssetManager {
         return tracks;
     }
 
-    private WaveFile loadWaveSoundFromStream(StreamReader streamReader, long length, boolean hasHeader) throws InvalidFormatException, IOException {
+    private WaveFile loadWaveSoundFromStream(ByteReader streamReader, long length, boolean hasHeader) throws InvalidFormatException, IOException {
 
         if (debug) {
             System.out.println("   - Loading wave sound");
@@ -1195,7 +1219,7 @@ public class AssetManager {
             System.out.println("      - Has header: " + hasHeader);
         }
 
-        if (length > WAVE_HEADER_SIZE) { //
+        if (hasHeader && length < WAVE_HEADER_SIZE) { //
             throw new InvalidFormatException("Length must be larger than header size. Was " + length);
         }
 
@@ -1273,7 +1297,7 @@ public class AssetManager {
             );
         }
 
-        byte[] waveData = streamReader.getRemainingBytes();
+        byte[] waveData = streamReader.getUint8ArrayAsBytes((int) length);
 
         waveFile.setData(waveData);
 
@@ -1281,14 +1305,14 @@ public class AssetManager {
     }
 
     public MidiFile loadSoundMidiFile(String filename) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.LITTLE_ENDIAN);
+        StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         MidiFile midiFile = loadSoundMidiFromStream(streamReader);
 
         return midiFile;
     }
 
-    public MidiFile loadSoundMidiFromStream(StreamReader streamReader) throws InvalidFormatException, IOException {
+    public MidiFile loadSoundMidiFromStream(ByteReader streamReader) throws InvalidFormatException, IOException {
 
         // Read the file in big endian format
         streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
@@ -1334,9 +1358,7 @@ public class AssetManager {
 
             if (chunkId.equals("MTrk")) {
 
-                byte[] midiTrackData = new byte[(int)chunkLen];
-
-                streamReader.read(midiTrackData, 0, (int)chunkLen);
+                byte[] midiTrackData = streamReader.getUint8ArrayAsBytes((int) chunkLen);
 
                 midiFile.addTrack(new MidiTrack(midiTrackData));
             } else {
@@ -1352,9 +1374,7 @@ public class AssetManager {
         return midiFile;
     }
 
-    private static Palette loadPaletteFromStream(InputStream fileInputStream, boolean skip) throws IOException, InvalidFormatException {
-
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    private static Palette loadPaletteFromStream(ByteReader streamReader, boolean skip) throws IOException, InvalidFormatException {
 
         if (skip) {
             int numberColors = streamReader.getUint16();
@@ -1371,8 +1391,7 @@ public class AssetManager {
         return new Palette(colors);
     }
 
-    private PlayerBitmap loadPlayerBitmapFromStream(InputStream fileInputStream, Palette palette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(fileInputStream, ByteOrder.LITTLE_ENDIAN);
+    private PlayerBitmap loadPlayerBitmapFromStream(ByteReader streamReader, Palette palette) throws IOException, InvalidFormatException {
 
         /* Read header */
         int nx = streamReader.getInt16();
@@ -1430,7 +1449,7 @@ public class AssetManager {
     }
 
     public Palette loadPaletteFromFile(String filename) throws IOException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.LITTLE_ENDIAN);
+        StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         byte[] colors = streamReader.getUint8ArrayAsBytes(256 * 3); // uint 8 x 3, rgb
 
@@ -1484,7 +1503,7 @@ public class AssetManager {
      * @throws InvalidFormatException
      */
     public BitmapFile loadBitmapFile(String filename, Palette defaultPalette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.LITTLE_ENDIAN);
+        StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         String headerId = streamReader.getUint8ArrayAsString(2);
         long fileSize = streamReader.getUint32();
@@ -1953,11 +1972,24 @@ public class AssetManager {
         String idxFilename = baseFile + ".IDX";
 
         if (!Files.exists(Paths.get(datFilename)) || !Files.exists(Paths.get(idxFilename))) {
-            throw new InvalidFormatException("Both DAT and IDX file must exist. Not only " + filename);
+            //throw new InvalidFormatException("Both DAT and IDX file must exist. Not only " + filename);
+            StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
+            short datBobtype = datReader.getInt16();
+
+            //ResourceType resourceType = ResourceType.fromInt(datBobtype);
+            ResourceType resourceType = SOUND;
+
+            GameResource gameResource = loadType(resourceType, datReader, defaultPalette);
+
+            List<GameResource> result = new ArrayList<>();
+
+            result.add(gameResource);
+
+            return result;
         }
 
-        StreamReader datReader = new StreamReader(new FileInputStream(datFilename), ByteOrder.LITTLE_ENDIAN);
-        StreamReader idxReader = new StreamReader(new FileInputStream(idxFilename), ByteOrder.LITTLE_ENDIAN);
+        StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
+        StreamReader idxReader = new StreamReader(new FileInputStream(idxFilename), LITTLE_ENDIAN);
 
         long count = idxReader.getUint32();
 
@@ -2000,7 +2032,7 @@ public class AssetManager {
         switch (resourceType) {
             case FONT:
 
-                datReader.pushByteOrder(ByteOrder.LITTLE_ENDIAN);
+                datReader.pushByteOrder(LITTLE_ENDIAN);
 
                 short dx = datReader.getUint8();
                 short dy = datReader.getUint8();
@@ -2045,7 +2077,7 @@ public class AssetManager {
 
             case BITMAP_PLAYER:
 
-                PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(datReader.getInputStream(), defaultPalette);
+                PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(datReader, defaultPalette);
 
                 if (debug) {
                     System.out.println("Loaded player bitmap");
@@ -2055,15 +2087,20 @@ public class AssetManager {
 
             case BITMAP:
 
-                BitmapRaw bitmapRaw = loadRawBitmapFromStream(datReader.getInputStream(), defaultPalette);
+                BitmapRaw bitmapRaw = loadRawBitmapFromStream(datReader, defaultPalette);
 
                 return new BitmapRawResource(bitmapRaw);
 
             case BITMAP_RLE:
 
-                BitmapRLE bitmapRLE = loadBitmapRLEFromStream(datReader.getInputStream(), defaultPalette);
+                BitmapRLE bitmapRLE = loadBitmapRLEFromStream(datReader, defaultPalette);
 
                 return new BitmapRLEResource(bitmapRLE);
+
+            case SOUND:
+                WaveFile waveFile = loadWaveSoundFromStream(datReader, 5, false);
+
+                return new WaveGameResource(waveFile);
 
             default:
                 throw new RuntimeException("Not implemented yet. " + resourceType);

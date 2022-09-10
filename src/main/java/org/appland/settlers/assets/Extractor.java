@@ -26,6 +26,7 @@ import org.appland.settlers.assets.gamefiles.MapBobsLst;
 import org.appland.settlers.assets.gamefiles.RomBobsLst;
 import org.appland.settlers.assets.gamefiles.RomYLst;
 import org.appland.settlers.assets.gamefiles.RomZLst;
+import org.appland.settlers.assets.gamefiles.SoundLst;
 import org.appland.settlers.assets.gamefiles.Tex5Lbm;
 import org.appland.settlers.assets.gamefiles.Tex7Lbm;
 import org.appland.settlers.assets.gamefiles.VikZLst;
@@ -36,12 +37,16 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -111,6 +116,10 @@ public class Extractor {
     private static final String TERRAIN_SUB_DIRECTORY = "terrain";
     private static final String GREENLAND_DIRECTORY = "greenland";
     private static final String WINTER_DIRECTORY = "winter";
+    private static final String SONG_0_FILENAME = "audio/song0.mp3";
+    private static final String SONG_1_FILENAME = "audio/song1.mp3";
+    private static final String SONG_0_TITLE = "Song 1";
+    private static final String SONG_1_TITLE = "Song 2";
 
     @Option(name = "--from-dir", usage = "Asset directory to load from")
     static String fromDir;
@@ -148,6 +157,69 @@ public class Extractor {
         extractor.populateBorders(fromDir, toDir);
 
         extractor.populateShips(fromDir, toDir);
+
+        extractor.populateAudio(fromDir, toDir);
+    }
+
+    private void populateAudio(String fromDir, String toDir) throws IOException, InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException {
+
+        // Write the music atlas
+        JSONArray jsonSongs = new JSONArray();
+
+        JSONObject jsonSong0 = new JSONObject();
+        JSONObject jsonSong1 = new JSONObject();
+
+        jsonSong0.put("path", toDir + "/" + SONG_0_FILENAME);
+        jsonSong0.put("title", SONG_0_TITLE);
+        jsonSong1.put("path", toDir + "/" + SONG_1_FILENAME);
+        jsonSong1.put("title", SONG_1_TITLE);
+
+        jsonSongs.add(jsonSong0);
+        jsonSongs.add(jsonSong1);
+
+        // Write the audio atlas for the music
+        Files.writeString(Paths.get(toDir, "audio-atlas-music.json"), jsonSongs.toJSONString());
+
+        Files.createDirectory(Paths.get(toDir, "audio"));
+
+        // The music files are converted from XMI to MP3s outside this tool. Tell the user where to place them:
+        System.out.println("ACTION: place the music files in audio/song[0-9].mp3");
+
+        // Extract each individual sound
+        assetManager.debug = true;
+
+        List<GameResource> gameResources = assetManager.loadLstFile(fromDir + "/" + SoundLst.FILENAME, defaultPalette);
+
+        for (GameResource gameResource : gameResources) {
+            System.out.println(gameResource);
+        }
+
+        for (int i = 0; i < gameResources.size(); i++) {
+            GameResource gameResource = gameResources.get(i);
+
+            if (gameResource.getType() == GameResourceType.WAVE_SOUND) {
+                WaveGameResource waveGameResource = (WaveGameResource) gameResource;
+                WaveFile waveFile1 = waveGameResource.getWaveFile();
+
+                waveFile1.writeToFile(toDir + "/wavefile-" + i + ".wave");
+            }
+        }
+
+        // Write sounds
+        Map<Integer, String> sounds = new HashMap<>();
+
+        sounds.put(SoundLst.DUCK_QUACK, toDir + "/audio-duck-quack.wave");
+        sounds.put(SoundLst.GEOLOGIST_FOUND_ORE, toDir + "/audio-geologist-finding.wave");
+        sounds.put(SoundLst.MILITARY_BUILDING_OCCUPIED, toDir + "/audio-new-message.wave");
+        sounds.put(SoundLst.NEW_MESSAGE, toDir + "/audio-new-message.wave");
+
+
+        for (Entry<Integer, String> entry : sounds.entrySet()) {
+            int index = entry.getKey();
+            String path = entry.getValue();
+
+            ((WaveGameResource) gameResources.get(index)).getWaveFile().writeToFile(path);
+        }
     }
 
     private void populateShips(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidHeaderException, InvalidFormatException {
