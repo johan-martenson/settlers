@@ -7,7 +7,6 @@ import org.appland.settlers.utils.StreamReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,10 +31,6 @@ import static org.appland.settlers.assets.SoundType.XMID_DIR;
 import static org.appland.settlers.utils.StreamReader.SIZE_OF_UINT32;
 
 public class AssetManager {
-
-    // TODO: use it or lose it
-    // char * 4 + uint 32 + uint 16 + uint 16 + int 16
-    private static final int MIDI_HEADER_LENGTH = 8 * 4 + 32 + 16 + 16 + 16;
 
     // char x 4 + uint 32 + char x 4 + char x 4 + uint 32 + uint 16 + uint 16 + uint 32 + uint 16 + char x 4 + uint 32
     private static final int WAVE_HEADER_SIZE = 304;
@@ -83,7 +78,7 @@ public class AssetManager {
      *          ... (extensions if any)
      *
      */
-    public List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, InvalidHeaderException, UnknownResourceTypeException, InvalidFormatException {
+    public List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
         List<GameResource> gameResources = new ArrayList<>();
 
         ByteArrayReader streamReader = new ByteArrayReader(
@@ -113,15 +108,11 @@ public class AssetManager {
             /* Load BOB file */
             case 0x4E20:
 
-                if (debug) {
-                    System.out.println(" - Header is valid for LST bob file");
-                }
+                debugPrint(" - Header is valid for LST bob file");
 
                 long numberItems = streamReader.getUint32();
 
-                if (debug) {
-                    System.out.println(" - Contains number of items: " + numberItems);
-                }
+                debugPrint(" - Contains number of items: " + numberItems);
 
                 /* Loop through and read each item */
                 for (long i = 0; i < numberItems; i++) {
@@ -130,9 +121,7 @@ public class AssetManager {
                     /* Filter un-used items */
                     if (used != 1) {
 
-                        if (debug) {
-                            System.out.println(" - Filter un-used item");
-                        }
+                        debugPrint(" - Filter un-used item");
 
                         continue;
                     }
@@ -142,25 +131,19 @@ public class AssetManager {
 
                     ResourceType resourceType = ResourceType.fromInt(type);
 
-                    if (debug) {
-                        System.out.println(" - Resource type number: " + type);
-                        System.out.println(" - Resource type: " + resourceType);
-                    }
+                    debugPrint(" - Resource type number: " + type);
+                    debugPrint(" - Resource type: " + resourceType);
 
                     /* Load the resource */
                     switch (resourceType) {
 
                         case SOUND:
 
-                            if (debug) {
-                                System.out.println("Loading sound");
-                            }
+                            debugPrint("Loading sound");
 
                             GameResource soundGameResource = loadSoundFromStream(streamReader);
 
-                            if (debug) {
-                                System.out.println("Loaded sound");
-                            }
+                            debugPrint("Loaded sound");
 
                             gameResources.add(soundGameResource);
 
@@ -168,15 +151,11 @@ public class AssetManager {
 
                         case BITMAP_RLE:
 
-                            if (debug) {
-                                System.out.println("Loading bitmap rle");
-                            }
+                            debugPrint("Loading bitmap rle");
 
                             BitmapRLE bitmapRLE = loadBitmapRLEFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded bitmap rle");
-                            }
+                            debugPrint("Loaded bitmap rle");
 
                             gameResources.add(new BitmapRLEResource(bitmapRLE));
 
@@ -184,29 +163,21 @@ public class AssetManager {
 
                         case FONT:
 
-                            if (debug) {
-                                System.out.println("Loading font");
-                            }
+                            debugPrint("Loading font");
 
                             loadFontFromStream(streamReader);
 
-                            if (debug) {
-                                System.out.println("Loaded font");
-                            }
+                            debugPrint("Loaded font");
 
                             break;
 
                         case BITMAP_PLAYER:
 
-                            if (debug) {
-                                System.out.println("Loading player bitmap");
-                            }
+                            debugPrint("Loading player bitmap");
 
                             PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded player bitmap");
-                            }
+                            debugPrint("Loaded player bitmap");
 
                             gameResources.add(new PlayerBitmapResource(playerBitmap));
 
@@ -214,15 +185,11 @@ public class AssetManager {
 
                         case PALETTE:
 
-                            if (debug) {
-                                System.out.println("Loading palette");
-                            }
+                            debugPrint("Loading palette");
 
                             Palette palette = loadPaletteFromStream(streamReader, true);
 
-                            if (debug) {
-                                System.out.println("Loaded palette");
-                            }
+                            debugPrint("Loaded palette");
 
                             gameResources.add(new PaletteResource(palette));
 
@@ -230,15 +197,11 @@ public class AssetManager {
 
                         case BOB:
 
-                            if (debug) {
-                                System.out.println("Loading bob");
-                            }
+                            debugPrint("Loading bob");
 
                             GameResource bobG = loadBobFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded bob");
-                            }
+                            debugPrint("Loaded bob");
 
                             gameResources.add(bobG);
 
@@ -246,15 +209,11 @@ public class AssetManager {
 
                         case BITMAP_SHADOW:
 
-                            if (debug) {
-                                System.out.println("Loading bitmap shadow");
-                            }
+                            debugPrint("Loading bitmap shadow");
 
                             Bitmap bitmap = loadBitmapShadowFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded bitmap shadow");
-                            }
+                            debugPrint("Loaded bitmap shadow");
 
                             gameResources.add(new BitmapResource(bitmap));
 
@@ -262,57 +221,41 @@ public class AssetManager {
 
                         case MAP:
 
-                            if (debug) {
-                                System.out.println("Loading map");
-                            }
+                            debugPrint("Loading map");
 
                             loadMapFromStream(streamReader);
 
-                            if (debug) {
-                                System.out.println("Loaded map");
-                            }
+                            debugPrint("Loaded map");
 
                             break;
 
                         case RAW:
 
-                            if (debug) {
-                                System.out.println("Loading raw bitmap");
-                            }
+                            debugPrint("Loading raw bitmap");
 
                             loadRawBitmapFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded raw bitmap");
-                            }
+                            debugPrint("Loaded raw bitmap");
 
                             break;
 
                         case PALETTE_ANIM:
 
-                            if (debug) {
-                                System.out.println("Loading animated palette");
-                            }
+                            debugPrint("Loading animated palette");
 
                             loadAnimatedPaletteFromStream(streamReader);
 
-                            if (debug) {
-                                System.out.println("Loaded animated palette");
-                            }
+                            debugPrint("Loaded animated palette");
 
                             break;
 
                         case BITMAP:
 
-                            if (debug) {
-                                System.out.println("Loading bitmap (not in original S2)");
-                            }
+                            debugPrint("Loading bitmap (not in original S2)");
 
                             BitmapRaw bitmapRaw = loadUncompressedBitmapFromStream(streamReader, defaultPalette);
 
-                            if (debug) {
-                                System.out.println("Loaded bitmap");
-                            }
+                            debugPrint("Loaded bitmap");
 
                             gameResources.add(new BitmapRawResource(bitmapRaw));
 
@@ -447,15 +390,13 @@ public class AssetManager {
         int unknown2 = streamReader.getUint16();
         long length = streamReader.getUint32();
 
-        if (debug) {
-            System.out.println(" - nx: " + nx);
-            System.out.println(" - ny: " + ny);
-            System.out.println(" - Unknown 1: " + unknown1);
-            System.out.println(" - Width: " + width);
-            System.out.println(" - Height: " + height);
-            System.out.println(" - Unknown 2: " + unknown2);
-            System.out.println(" - Length: " + length);
-        }
+        debugPrint(" - nx: " + nx);
+        debugPrint(" - ny: " + ny);
+        debugPrint(" - Unknown 1: " + unknown1);
+        debugPrint(" - Width: " + width);
+        debugPrint(" - Height: " + height);
+        debugPrint(" - Unknown 2: " + unknown2);
+        debugPrint(" - Length: " + length);
 
         // Load the image data
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
@@ -508,9 +449,7 @@ public class AssetManager {
             wantedFormat = TextureFormat.PALETTED;
         }
 
-        if (debug) {
-            System.out.println(" - Loading format: " + wantedFormat);
-        }
+        debugPrint(" - Loading format: " + wantedFormat);
 
         if (length == 0) {
             throw new RuntimeException("No implementation for empty raw bitmap image");
@@ -530,20 +469,16 @@ public class AssetManager {
 
         int rowSize = width * bpp;
 
-        if (debug) {
-            System.out.println(" - Height: " + height);
-            System.out.println(" - Width: " + width);
-            System.out.println(" - Row size: " + rowSize);
-            System.out.println(" - Length: " + length);
-            System.out.println(" - Width x height: " + width * height);
-            System.out.println(" - Width x height x 4: " + width * height * 4);
-            System.out.println(" - Data size: " + data.length);
-        }
+        debugPrint(" - Height: " + height);
+        debugPrint(" - Width: " + width);
+        debugPrint(" - Row size: " + rowSize);
+        debugPrint(" - Length: " + length);
+        debugPrint(" - Width x height: " + width * height);
+        debugPrint(" - Width x height x 4: " + width * height * 4);
+        debugPrint(" - Data size: " + data.length);
 
-        if (debug) {
-            System.out.println(" - Source format: " + sourceFormat);
-            System.out.println(" - Wanted format: " + wantedFormat);
-        }
+        debugPrint(" - Source format: " + sourceFormat);
+        debugPrint(" - Wanted format: " + wantedFormat);
 
         BitmapRaw bitmapRaw = new BitmapRaw(width, height, length, palette, wantedFormat);
 
@@ -573,15 +508,11 @@ public class AssetManager {
         byte[] bytes = fileInputStream.readAllBytes();
         ByteArrayReader byteArrayReader = new ByteArrayReader(bytes, LITTLE_ENDIAN);
 
-        if (debug) {
-            System.out.println("Loading sound from file: " + filename);
-        }
+        debugPrint("Loading sound from file: " + filename);
 
         GameResource soundGameResource = loadSoundFromStream(byteArrayReader);
 
-        if (debug) {
-            System.out.println("Loaded sound");
-        }
+        debugPrint("Loaded sound");
 
         fileInputStream.close();
 
@@ -625,11 +556,9 @@ public class AssetManager {
 
         short grayIndex = palette.getIndexForColor(255, 255, 255);
 
-        if (debug) {
-            System.out.println(" - Width: " + width);
-            System.out.println(" - Height: " + height);
-            System.out.println(" - Length: " + length);
-        }
+        debugPrint(" - Width: " + width);
+        debugPrint(" - Height: " + height);
+        debugPrint(" - Length: " + length);
 
         if (length == 0) {
             throw new RuntimeException("Not implemented support for empty images");
@@ -670,9 +599,9 @@ public class AssetManager {
         InputStream fileInputStream = Files.newInputStream(Paths.get(filename));
         StreamReader streamReader = new StreamReader(fileInputStream, LITTLE_ENDIAN);
 
-        byte[] header = streamReader.getUint8ArrayAsBytes(2);
+        short header = streamReader.getInt16();
 
-        if (header[1] == 0x01 && Unsigned.getUnsignedByte(ByteBuffer.wrap(header)) == 0xF6) {
+        if (header == 0x01F6) {
             Bob bob = loadBobFromStream(streamReader, defaultPalette).getBob();
 
             return bob;
@@ -857,9 +786,7 @@ public class AssetManager {
             throw new InvalidFormatException("Header must match 'FORM'. Not " + headerId);
         }
 
-        if (debug) {
-            System.out.println("FORM");
-        }
+        debugPrint("FORM");
 
         // Read headerSize as big endian
         streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
@@ -876,9 +803,7 @@ public class AssetManager {
         int numberTracks;
         String chunkId = streamReader.getUint8ArrayAsString(4);
 
-        if (debug) {
-            System.out.println(chunkId);
-        }
+        debugPrint(chunkId);
 
         if (chunkId.equals("XMID")) {
             numberTracks = 1;
@@ -889,9 +814,7 @@ public class AssetManager {
                 throw new InvalidFormatException("Must match 'INFO'. Not " + chunkId);
             }
 
-            if (debug) {
-                System.out.println(chunkId);
-            }
+            debugPrint(chunkId);
 
             // Read chunk length as big endian! -- test
             streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
@@ -920,9 +843,7 @@ public class AssetManager {
             throw new InvalidFormatException("Must match 'CAT '. Not " + chunkId);
         }
 
-        if (debug) {
-            System.out.println(chunkId);
-        }
+        debugPrint(chunkId);
 
         // Ignore the following 4 bytes
         streamReader.skip(4);
@@ -933,23 +854,19 @@ public class AssetManager {
             throw new InvalidFormatException("Must match 'XMID'. Not " + chunkId);
         }
 
-        if (debug) {
-            System.out.println(chunkId);
+        debugPrint(chunkId);
 
-            System.out.println(" - Read header");
-            System.out.println("    - Header id: " + headerId);
-            System.out.println("    - Header size: " + headerSize);
-            System.out.println("    - Number tracks: " + numberTracks);
-        }
+        debugPrint(" - Read header");
+        debugPrint("    - Header id: " + headerId);
+        debugPrint("    - Header size: " + headerSize);
+        debugPrint("    - Number tracks: " + numberTracks);
 
         // Read tracks
         List<XMidiTrack> trackList = new ArrayList<>();
 
         for (long i = 0; i < numberTracks; i++) {
 
-            if (debug) {
-                System.out.println(" - Reading track: " + i);
-            }
+            debugPrint(" - Reading track: " + i);
 
             XMidiTrack xMidiTrack = new XMidiTrack();
 
@@ -959,9 +876,7 @@ public class AssetManager {
                 throw new InvalidFormatException("Must match 'FORM'. Not " + chunkId);
             }
 
-            if (debug) {
-                System.out.println(" - " + chunkId);
-            }
+            debugPrint(" - " + chunkId);
 
             long chunkLength = streamReader.getUint32();
 
@@ -975,15 +890,11 @@ public class AssetManager {
                 throw new InvalidFormatException("Must match 'XMID'. Not " + chunkId);
             }
 
-            if (debug) {
-                System.out.println(" - " + chunkId);
-            }
+            debugPrint(" - " + chunkId);
 
             chunkId = streamReader.getUint8ArrayAsString(4);
 
-            if (debug) {
-                System.out.println(" - " + chunkId);
-            }
+            debugPrint(" - " + chunkId);
 
             // Read timbres, if any
             if (chunkId.equals("TIMB")) {
@@ -1001,10 +912,8 @@ public class AssetManager {
 
                 int numberTimbres = streamReader.getUint16();
 
-                if (debug) {
-                    System.out.println(" Number of timbres: " + numberTimbres);
-                    System.out.println(" Chunk length: " + chunkLength);
-                }
+                debugPrint(" Number of timbres: " + numberTimbres);
+                debugPrint(" Chunk length: " + chunkLength);
 
                 if (numberTimbres * 2L + 2 != chunkLength) {
                     throw new InvalidFormatException("Chunk length must match number timbres (" + numberTimbres + ") * 2 + 2. Not " + chunkLength);
@@ -1013,26 +922,20 @@ public class AssetManager {
                 // Read timbres
                 for (int j = 0; j < numberTimbres; j++) {
 
-                    if (debug) {
-                        System.out.println("Read timbre pair!");
-                    }
+                    debugPrint("Read timbre pair!");
 
                     short patch = streamReader.getUint8();
                     short bank = streamReader.getUint8();
 
-                    if (debug) {
-                        System.out.println(" Patch: " + patch);
-                        System.out.println(" Bank: " + bank);
-                    }
+                    debugPrint(" Patch: " + patch);
+                    debugPrint(" Bank: " + bank);
 
                     xMidiTrack.addTimbre(patch, bank);
                 }
 
                 chunkId = streamReader.getUint8ArrayAsString(4);
 
-                if (debug) {
-                    System.out.println(" - Next section: " + chunkId);
-                }
+                debugPrint(" - Next section: " + chunkId);
             }
 
             Utils.getHex(chunkId.getBytes());
@@ -1042,9 +945,7 @@ public class AssetManager {
                 throw new InvalidFormatException("Must match 'EVNT'. Not " + chunkId);
             }
 
-            if (debug) {
-                System.out.println(" - Read EVTN section");
-            }
+            debugPrint(" - Read EVTN section");
 
             // Read the length as big endian!
             streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
@@ -1057,9 +958,7 @@ public class AssetManager {
                 chunkLength = chunkLength + 1;
             }
 
-            if (debug) {
-                System.out.println("   - Length is: " + chunkLength);
-            }
+            debugPrint("   - Length is: " + chunkLength);
 
             byte[] trackData = new byte[(int) chunkLength];
 
@@ -1213,22 +1112,19 @@ public class AssetManager {
 
     private WaveFile loadWaveSoundFromStream(ByteReader streamReader, long length, boolean hasHeader) throws InvalidFormatException, IOException {
 
-        if (debug) {
-            System.out.println("   - Loading wave sound");
-            System.out.println("      - Length: " + length);
-            System.out.println("      - Has header: " + hasHeader);
-        }
+        debugPrint("   - Loading wave sound");
+        debugPrint("      - Length: " + length);
+        debugPrint("      - Has header: " + hasHeader);
 
         if (hasHeader && length < WAVE_HEADER_SIZE) { //
             throw new InvalidFormatException("Length must be larger than header size. Was " + length);
         }
 
-        // Read the remaining parts of the header
         WaveFile waveFile;
 
+        // Read the header if it exists
         if (hasHeader) {
 
-            /* Read header */
             String formatId = streamReader.getUint8ArrayAsString(4);
             long formatSize = streamReader.getUint32();
             int formatTag = streamReader.getUint16();
@@ -1240,19 +1136,17 @@ public class AssetManager {
             String dataId = streamReader.getUint8ArrayAsString(4);
             long dataSize = streamReader.getUint32();
 
-            if (debug) {
-                System.out.println("      - Read wave header");
-                System.out.println("         - Format id: " + formatId);
-                System.out.println("         - Format size: " + formatSize);
-                System.out.println("         - Format tag: " + formatTag);
-                System.out.println("         - Number of channels: " + numberChannels);
-                System.out.println("         - Samples per sec: " + samplesPerSec);
-                System.out.println("         - Bytes per sec: " + bytesPerSec);
-                System.out.println("         - Frame size: " + frameSize);
-                System.out.println("         - Bits per sample: " + bitsPerSample);
-                System.out.println("         - Data id: " + dataId);
-                System.out.println("         - Data size: " + dataSize);
-            }
+            debugPrint("      - Read wave header");
+            debugPrint("         - Format id: " + formatId);
+            debugPrint("         - Format size: " + formatSize);
+            debugPrint("         - Format tag: " + formatTag);
+            debugPrint("         - Number of channels: " + numberChannels);
+            debugPrint("         - Samples per sec: " + samplesPerSec);
+            debugPrint("         - Bytes per sec: " + bytesPerSec);
+            debugPrint("         - Frame size: " + frameSize);
+            debugPrint("         - Bits per sample: " + bitsPerSample);
+            debugPrint("         - Data id: " + dataId);
+            debugPrint("         - Data size: " + dataSize);
 
             waveFile = new WaveFile(
                     formatId,
@@ -1272,7 +1166,6 @@ public class AssetManager {
         // Create default header
         } else {
 
-            /* Set a default header */
             String formatId = "fmt ";
             long formatSize = 16;
             int formatTag = 1;
@@ -1328,14 +1221,12 @@ public class AssetManager {
             throw new InvalidFormatException("Header id must match 'MThd'. Not " + headerId);
         }
 
-        if (debug) {
-            System.out.println(" - Read header");
-            System.out.println("    - Header id: " + headerId);
-            System.out.println("    - Header size: " + headerSize);
-            System.out.println("    - Format: " + format);
-            System.out.println("    - Number tracks: " + numTracks);
-            System.out.println("    - ppqs: " + ppqs);
-        }
+        debugPrint(" - Read header");
+        debugPrint("    - Header id: " + headerId);
+        debugPrint("    - Header size: " + headerSize);
+        debugPrint("    - Format: " + format);
+        debugPrint("    - Number tracks: " + numTracks);
+        debugPrint("    - ppqs: " + ppqs);
 
         MidiFile midiFile = new MidiFile(headerSize, format, numTracks, ppqs);
 
@@ -1348,9 +1239,7 @@ public class AssetManager {
         // Read the tracks
         for (int i = 0; i < numTracks; i++) {
 
-            if (debug) {
-                System.out.println(" - Reading track: " + i);
-            }
+            debugPrint(" - Reading track: " + i);
 
             String chunkId = streamReader.getUint8ArrayAsString(4);
 
@@ -1411,23 +1300,19 @@ public class AssetManager {
             throw new InvalidFormatException("Length (" + length + ") must be larger than height (" + height + ") * 2");
         }
 
-        if (debug) {
-            System.out.println("    - Width: " + width);
-            System.out.println("    - Height: " + height);
-            System.out.println("    - Length: " + length);
-            System.out.println("    - Height * 2: " + height * 2);
-            System.out.println("    - Length - height * 2: " + (int) (length - height * 2));
-        }
+        debugPrint("    - Width: " + width);
+        debugPrint("    - Height: " + height);
+        debugPrint("    - Length: " + length);
+        debugPrint("    - Height * 2: " + height * 2);
+        debugPrint("    - Length - height * 2: " + (int) (length - height * 2));
 
         int[] starts = streamReader.getUint16ArrayAsInts(height);
         byte[] imageData = streamReader.getUint8ArrayAsBytes((int)(length - height * 2));
 
-        if (debug) {
-            System.out.println("    - Number starts: " + starts.length);
-            System.out.println("    - Size of image data: " + imageData.length);
-            System.out.println("    - Image dimensions are: " + width + "x" + height);
-            System.out.println("    - Multiplied: " + width * height);
-        }
+        debugPrint("    - Number starts: " + starts.length);
+        debugPrint("    - Size of image data: " + imageData.length);
+        debugPrint("    - Image dimensions are: " + width + "x" + height);
+        debugPrint("    - Multiplied: " + width * height);
 
         PlayerBitmap playerBitmap = new PlayerBitmap(width, height, palette, TextureFormat.BGRA);
 
@@ -1435,15 +1320,11 @@ public class AssetManager {
         playerBitmap.setNy(ny);
         playerBitmap.setLength(length);
 
-        if (debug) {
-            System.out.println(" Loading from image data");
-        }
+        debugPrint(" Loading from image data");
 
         playerBitmap.loadImageFromData(imageData, starts, false);
 
-        if (debug) {
-            System.out.println(" Loaded from image data");
-        }
+        debugPrint(" Loaded from image data");
 
         return playerBitmap;
     }
@@ -1510,12 +1391,10 @@ public class AssetManager {
         long reserved = streamReader.getUint32();
         long pixelOffset = streamReader.getUint32();
 
-        if (debug) {
-            System.out.println(" - BMP header:");
-            System.out.println("    - File size: " + fileSize);
-            System.out.println("    - Reserved: " + reserved);
-            System.out.println("    - Pixel offset: " + pixelOffset);
-        }
+        debugPrint(" - BMP header:");
+        debugPrint("    - File size: " + fileSize);
+        debugPrint("    - Reserved: " + reserved);
+        debugPrint("    - Pixel offset: " + pixelOffset);
 
         if (!headerId.equals("BM")) {
             throw new InvalidFormatException("Must match 'BM'. Not " + headerId);
@@ -1533,20 +1412,18 @@ public class AssetManager {
         long numberColorsUsed = streamReader.getUint32(); // int 32 in file
         int numberImportantColors = streamReader.getInt32();
 
-        if (debug) {
-            System.out.println(" - More header info");
-            System.out.println("    - Header size: " + headerSize);
-            System.out.println("    - Width: " + width);
-            System.out.println("    - Height: " + height);
-            System.out.println("    - Planes: " + planes);
-            System.out.println("    - Bits per pixel: " + bitsPerPixel);
-            System.out.println("    - Compression: " + compression);
-            System.out.println("    - Size: " + size);
-            System.out.println("    - X Pixels per M: " + xPixelsPerMeter);
-            System.out.println("    - Y Pixels per M: " + yPixelsPerMeter);
-            System.out.println("    - Color used: " + numberColorsUsed);
-            System.out.println("    - Color imp: " + numberImportantColors);
-        }
+        debugPrint(" - More header info");
+        debugPrint("    - Header size: " + headerSize);
+        debugPrint("    - Width: " + width);
+        debugPrint("    - Height: " + height);
+        debugPrint("    - Planes: " + planes);
+        debugPrint("    - Bits per pixel: " + bitsPerPixel);
+        debugPrint("    - Compression: " + compression);
+        debugPrint("    - Size: " + size);
+        debugPrint("    - X Pixels per M: " + xPixelsPerMeter);
+        debugPrint("    - Y Pixels per M: " + yPixelsPerMeter);
+        debugPrint("    - Color used: " + numberColorsUsed);
+        debugPrint("    - Color imp: " + numberImportantColors);
 
         if (headerSize != BMP_HEADER_SIZE) {
             throw new InvalidFormatException("Header size must match " + BMP_HEADER_SIZE + ". Not " + headerSize);
@@ -1571,22 +1448,17 @@ public class AssetManager {
         if (numberColorsUsed == 0) {
             numberColorsUsed = 1L << bitsPerPixel; // bmih.clrused = 1u << uint32_t(bmih.bpp); // 2^n
 
-            if (debug) {
-                System.out.println(" ---- 2^" + bitsPerPixel + " = " + numberColorsUsed);
-            }
+            debugPrint(" ---- 2^" + bitsPerPixel + " = " + numberColorsUsed);
         }
 
-        if (debug) {
-            System.out.println("COLORS USED: " + numberColorsUsed);
-        }
+        debugPrint("COLORS USED: " + numberColorsUsed);
 
         Palette palette = defaultPalette;
 
         if (bitsPerPixel == 8) {
 
-            if (debug) {
-                System.out.println("    - Loading palette");
-            }
+            debugPrint("    - Loading palette");
+
 
             long numberColorsUsedAdjusted = Math.min(numberColorsUsed, 256);
 
@@ -1614,12 +1486,9 @@ public class AssetManager {
 
         long rowSize = (int)Math.ceil((bitsPerPixel * width) / 32.0) * 4L;
 
-        if (debug) {
-            System.out.println(" ---- Calculated row size: " + rowSize);
-            System.out.println(" ---- Width * bytes per pixel: " + width * sourceBytesPerPixel);
-
-            System.out.println("    - Bytes per pixel: " + sourceBytesPerPixel);
-        }
+        debugPrint(" ---- Calculated row size: " + rowSize);
+        debugPrint(" ---- Width * bytes per pixel: " + width * sourceBytesPerPixel);
+        debugPrint("    - Bytes per pixel: " + sourceBytesPerPixel);
 
         TextureFormat sourceFormat = TextureFormat.PALETTED;
 
@@ -1629,9 +1498,7 @@ public class AssetManager {
             sourceFormat = TextureFormat.BGR;
         }
 
-        if (debug) {
-            System.out.println("WANTED TEXTURE FORMAT: " + wantedTextureFormat);
-        }
+        debugPrint("WANTED TEXTURE FORMAT: " + wantedTextureFormat);
 
         BitmapFile bitmap = new BitmapFile(width, height, palette, wantedTextureFormat);
 
@@ -1658,9 +1525,7 @@ public class AssetManager {
 
         streamReader.setPosition(pixelOffset);
 
-        if (debug) {
-            System.out.println("    - Read bottom up: " + bottomUp);
-        }
+        debugPrint("    - Read bottom up: " + bottomUp);
 
         if (bottomUp) {
             for (int y = height - 1; y >= 0; y--) {
@@ -1964,9 +1829,7 @@ public class AssetManager {
 
         String baseFile = filename.substring(0, filename.length() - 4);
 
-        if (debug) {
-            System.out.println(baseFile);
-        }
+        debugPrint(baseFile);
 
         String datFilename = baseFile + ".DAT";
         String idxFilename = baseFile + ".IDX";
@@ -2007,12 +1870,10 @@ public class AssetManager {
 
             if (idxBobType != datBobtype) {
 
-                if (debug) {
-                    System.out.println("Seems like an invalid item??");
-                    System.out.println(idxFilename);
-                    System.out.println(datFilename);
-                    System.out.println(i);
-                }
+                debugPrint("Seems like an invalid item??");
+                debugPrint(idxFilename);
+                debugPrint(datFilename);
+                debugPrint("" + i);
 
                 continue;
             }
@@ -2079,9 +1940,7 @@ public class AssetManager {
 
                 PlayerBitmap playerBitmap = loadPlayerBitmapFromStream(datReader, defaultPalette);
 
-                if (debug) {
-                    System.out.println("Loaded player bitmap");
-                }
+                debugPrint("Loaded player bitmap");
 
                 return new PlayerBitmapResource(playerBitmap);
 
@@ -2107,145 +1966,6 @@ public class AssetManager {
         }
     }
 
-    /**
-     * JOBS.BOB
-     * SLIM GUY (no head)
-     * 0-7   - Walk east
-     * 8-15  - Walk north-east
-     * 16-23 - Walk south-west
-     * 24-31 - Walk west
-     * 32-39 - Walk north-west
-     * 40-47 - Walk east (south-east?)
-     *
-     * FAT GUY (no head)
-     * 48-55 - Walk east
-     * 56-63 - Walk north-east (?)
-     * 64-71 - Walk south-west
-     * 72-79 - Walk west
-     * 80-87 - Walk north-west
-     * 88-95 - Walk south-east
-     *
-     * HEAD 1
-     * 96 - East
-     * 97 - South-east (?)
-     * 98 - South-west
-     * 99 - West
-     * 100 - North-west
-     * 101 - North-east
-     *
-     * HEAD 2
-     * 102 - East
-     * 103 - South-east
-     * 104 - South-west
-     * 105 - West
-     * 106 - North-west
-     * 107 - North-east
-     *
-     * HEAD 3
-     * 108 - East
-     * 109 - South-east
-     * 110 - South-west
-     * 111 - West
-     * 112 - North-west
-     * 113 - North-east
-     *
-     * HEAD 4
-     * 114 - East
-     * 115 - South-east
-     * 116 - South-west
-     * 117 - West
-     * 118 - North-west
-     * 119 - North-east
-     *
-     * HEAD 5
-     * 120 - East
-     * 121 - South-east
-     * 122 - South-west
-     * 123 - West
-     * 124 - North-west
-     * 125 - North-east
-     *
-     * HEAD 6
-     * 126 - East
-     * 127 - South-east
-     * 128 - South-west
-     * 129 - West
-     * 130 - North-west
-     * 131 - North-east
-     *
-     * HEAD 7
-     * 132-137 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 8
-     * 138-142 - E, SE, SW, (W missing) NW, NE
-     *
-     * HEAD 9
-     * 143-148 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 10
-     * 149-152 - E, SE, W, NE
-     *
-     * HEAD 11
-     * 153-156 - E, SE, W, NE
-     *
-     * HEAD 12
-     * 157-158 - E, NE
-     *
-     * HEAD 13
-     * 159-162 - E, SE, NW, NE
-     *
-     * HEAD 14
-     * 163-167 - E, SE, SW, NW, NE
-     *
-     * HEAD 15
-     * 168-172 - E, SE, W, NW, NE
-     *
-     * HEAD 16
-     * 173-178 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 17
-     * 179-184 - E, SE, SW, W, NW, NE
-     *
-     * VERY MINOR DETAIL (overlay?)
-     * 185-189
-     *
-     * HEAD 18
-     * 190-195 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 19
-     * 196-201 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 20
-     * 202-207 - E, SE, SW, W, NW, NE
-     *
-     * HEAD 21
-     * 208-213 - E, SE, SW, W, NW, NE
-     *
-     * ... more heads ...
-     *
-     * HEAD WITH AXE OR HAMMER
-     * 278-283 - E, SE, SW, W, NW, NE
-     *
-     * ...
-     *
-     * WOODCUTTER HEAD
-     * 310-315 - E, SE, SW, W, NW, NE
-     * 316-17 - W - animation(?)
-     *
-     * ... more heads and sometimes a bit of body ...
-     *
-     * MILITARY
-     * 859-906 - Roman private (?)
-     * 907-1098 - Other roman soldiers
-     * 1099-1338 - Viking soldiers
-     * 1339-1626 - Japanese soldiers
-     * 1627-1962 - African soldiers (?)
-     *
-     *
-     * @param jobsBob
-     * @param workerDetailsMap
-     * @return
-     */
     public Map<JobType, RenderedWorker> renderWorkerImages(Bob jobsBob, Map<JobType, WorkerDetails> workerDetailsMap) {
         Map<JobType, RenderedWorker> workerImages = new EnumMap<>(JobType.class);
 

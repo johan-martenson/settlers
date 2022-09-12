@@ -5,6 +5,143 @@ import org.appland.settlers.assets.WorkerDetails;
 import static org.appland.settlers.assets.BodyType.FAT;
 import static org.appland.settlers.assets.BodyType.THIN;
 
+
+/**
+ * JOBS.BOB
+ * SLIM GUY (no head)
+ * 0-7   - Walk east
+ * 8-15  - Walk north-east
+ * 16-23 - Walk south-west
+ * 24-31 - Walk west
+ * 32-39 - Walk north-west
+ * 40-47 - Walk east (south-east?)
+ *
+ * FAT GUY (no head)
+ * 48-55 - Walk east
+ * 56-63 - Walk north-east (?)
+ * 64-71 - Walk south-west
+ * 72-79 - Walk west
+ * 80-87 - Walk north-west
+ * 88-95 - Walk south-east
+ *
+ * HEAD 1
+ * 96 - East
+ * 97 - South-east (?)
+ * 98 - South-west
+ * 99 - West
+ * 100 - North-west
+ * 101 - North-east
+ *
+ * HEAD 2
+ * 102 - East
+ * 103 - South-east
+ * 104 - South-west
+ * 105 - West
+ * 106 - North-west
+ * 107 - North-east
+ *
+ * HEAD 3
+ * 108 - East
+ * 109 - South-east
+ * 110 - South-west
+ * 111 - West
+ * 112 - North-west
+ * 113 - North-east
+ *
+ * HEAD 4
+ * 114 - East
+ * 115 - South-east
+ * 116 - South-west
+ * 117 - West
+ * 118 - North-west
+ * 119 - North-east
+ *
+ * HEAD 5
+ * 120 - East
+ * 121 - South-east
+ * 122 - South-west
+ * 123 - West
+ * 124 - North-west
+ * 125 - North-east
+ *
+ * HEAD 6
+ * 126 - East
+ * 127 - South-east
+ * 128 - South-west
+ * 129 - West
+ * 130 - North-west
+ * 131 - North-east
+ *
+ * HEAD 7
+ * 132-137 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 8
+ * 138-142 - E, SE, SW, (W missing) NW, NE
+ *
+ * HEAD 9
+ * 143-148 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 10
+ * 149-152 - E, SE, W, NE
+ *
+ * HEAD 11
+ * 153-156 - E, SE, W, NE
+ *
+ * HEAD 12
+ * 157-158 - E, NE
+ *
+ * HEAD 13
+ * 159-162 - E, SE, NW, NE
+ *
+ * HEAD 14
+ * 163-167 - E, SE, SW, NW, NE
+ *
+ * HEAD 15
+ * 168-172 - E, SE, W, NW, NE
+ *
+ * HEAD 16
+ * 173-178 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 17
+ * 179-184 - E, SE, SW, W, NW, NE
+ *
+ * VERY MINOR DETAIL (overlay?)
+ * 185-189
+ *
+ * HEAD 18
+ * 190-195 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 19
+ * 196-201 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 20
+ * 202-207 - E, SE, SW, W, NW, NE
+ *
+ * HEAD 21
+ * 208-213 - E, SE, SW, W, NW, NE
+ *
+ * ... more heads ...
+ *
+ * HEAD WITH AXE OR HAMMER
+ * 278-283 - E, SE, SW, W, NW, NE
+ *
+ * ...
+ *
+ * WOODCUTTER HEAD
+ * 310-315 - E, SE, SW, W, NW, NE
+ * 316-17 - W - animation(?)
+ *
+ * ... more heads and sometimes a bit of body ...
+ *
+ * MILITARY
+ * 859-906 - Roman private (?)
+ * 907-1098 - Other roman soldiers
+ * 1099-1338 - Viking soldiers
+ * 1339-1626 - Japanese soldiers
+ * 1627-1962 - African soldiers (?)
+ *
+ *
+ */
 public class JobsBob {
     public static final String FILENAME = "DATA/BOBS/JOBS.BOB";
 
