@@ -1173,13 +1173,15 @@ public class SettlersAPI {
 
         List<Point> points = utils.jsonToPoints(jsonPoints);
 
+        Flag flag = null;
+
         if (jsonRoad.containsKey("flag")) {
             JSONObject jsonFlag = (JSONObject) jsonRoad.get("flag");
 
             Point point = utils.jsonToPoint(jsonFlag);
 
             synchronized (map) {
-                map.placeFlag(player, point);
+                flag = map.placeFlag(player, point);
             }
         }
 
@@ -1197,7 +1199,13 @@ public class SettlersAPI {
             }
         }
 
-        return Response.status(201).entity(utils.roadToJson(road).toJSONString()).build();
+        JSONObject jsonResponse = utils.roadToJson(road);
+
+        if (flag != null) {
+            jsonResponse.put("flag", utils.flagToJson(flag));
+        }
+
+        return Response.status(201).entity(jsonResponse.toJSONString()).build();
     }
 
     @DELETE
