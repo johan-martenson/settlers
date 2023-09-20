@@ -107,7 +107,7 @@ import static org.appland.settlers.model.WorkerAction.TOUCH_NOSE;
 
 public class Extractor {
 
-    private static final String DEFAULT_PALETTE = "/home/johan/projects/settlers/src/main/resources/default-palette.act";
+    private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
 
     private static final String ROMAN_BUILDINGS_DIRECTORY = "roman-buildings";
     private static final String UI_ELEMENTS_DIRECTORY = "ui-elements";

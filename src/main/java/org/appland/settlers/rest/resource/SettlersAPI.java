@@ -1173,6 +1173,16 @@ public class SettlersAPI {
 
         List<Point> points = utils.jsonToPoints(jsonPoints);
 
+        if (jsonRoad.containsKey("flag")) {
+            JSONObject jsonFlag = (JSONObject) jsonRoad.get("flag");
+
+            Point point = utils.jsonToPoint(jsonFlag);
+
+            synchronized (map) {
+                map.placeFlag(player, point);
+            }
+        }
+
         Road road;
 
         if (points.size() == 2) {
