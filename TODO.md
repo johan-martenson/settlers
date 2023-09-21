@@ -5,8 +5,6 @@ LARGER CHANGES
 
 * Add the missing "needs planing" state for house construction and add planer
 
-* Add ships, shipyard, harbour
-
 * Add ability to configure military parameters
 
 * Improve available construction compared to map information through analytical regression
@@ -17,11 +15,9 @@ LARGER CHANGES
 
 * Add small boats
 
-* Make discovered and owned land separate from defended land, and make sure it's correct for all military buildings
-
 * Make it possible to configure allocation of planks
 
-* Correct range for workers
+* Correct range for workers - forester, fisherman, hunter, stonemason
 
 * Reduce the amount of wild animals and make sure new wild animals only appear in forests
 
@@ -34,13 +30,9 @@ SMALLER CHANGES
 
 RE-FACTOR
 =========
-
+*  worker setTarget and setTargetOffroad should share much more code
 *  Fix ugly heuristic in Land::<init>
-
-*  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
-
 *  Fix TestCourier and TestDonkey to use occupyRoad() instead of manually placing courier or donkey
-
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
 
@@ -52,10 +44,6 @@ TEST
 *  Test that all mines want all types of food!!
 
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers 
-
-*  Test expanding computer player that it recovers when a barracks under construction is destroyed
-
-*  Test Size::contains(Size, Size)
 
 *  Test that all deployed soldiers in a military building return to the storehouse if it's torn down
 
@@ -87,8 +75,6 @@ TEST
 
 *  Test that production can't be resumed unless it's stopped
 
-*  Test that splitting a main road results in two main roads
-
 *  Test signs can be placed outside border
 
 *  Test geologist has an ok movement pattern
@@ -99,7 +85,7 @@ TEST
 
 *  Test that the pig farmer goes to the right place when he feeds the pigs
 
-*  farm puts crops on road
+*  Test farmer doesn't put crops on road
  
 *  farm seems to always place crop on its flag
 
@@ -124,7 +110,3 @@ TO IMPLEMENT
 *  Adjust attack radius in military buildings
 
 *  Make sure all tests for stopped production have more material than necessary
-
-*  Add list of all possible building types to the model
-
-*  worker setTarget and setTargetOffroad should share much more code

@@ -781,6 +781,7 @@ public class Player {
     public void sendMonitoringEvents(long time) {
 
         /* Don't send an event if there is no new information */
+        // Missing discoveredDeadTrees, changedAvailableConstruction, newWorkers
         if (newFlags.isEmpty() && removedFlags.isEmpty() && newBuildings.isEmpty() &&
             newRoads.isEmpty() && removedRoads.isEmpty() && removedWorkers.isEmpty() &&
             changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
@@ -794,6 +795,8 @@ public class Player {
             removedDecorations.isEmpty() && newDecorations.isEmpty()) {
             return;
         }
+
+
 
         /* If the player has discovered new land - find out what is on that land */
         if (!newDiscoveredLand.isEmpty()) {

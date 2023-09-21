@@ -187,7 +187,7 @@ public class GameChangesList {
     @Override
     public String toString() {
         return "GameChangesList{" +
-                "\ntime=" + time +
+                "time=" + time +
                 ", \nworkersWithNewTargets=" + workersWithNewTargets +
                 ", \nnewFlags=" + newFlags +
                 ", \nremovedFlags=" + removedFlags +
@@ -219,6 +219,8 @@ public class GameChangesList {
                 ", \nfinishedShips=" + finishedShips +
                 ", \nshipsWithNewTargets=" + shipsWithNewTargets +
                 ", \nworkersWithStartedActions=" + workersWithStartedActions +
+                ", \nremovedDecorations=" + removedDecorations +
+                ", \nnewDecorations=" + newDecorations +
                 '}';
     }
 

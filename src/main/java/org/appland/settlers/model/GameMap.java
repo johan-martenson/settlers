@@ -1529,6 +1529,12 @@ public class GameMap {
             Road newRoad1 = doPlaceRoad(flag.getPlayer(), points.subList(0, index + 1));
             Road newRoad2 = doPlaceRoad(flag.getPlayer(), points.subList(index, points.size()));
 
+            /* Make the new roads into main roads if the original road was a main road */
+            if (existingRoad.isMainRoad()) {
+                newRoad1.makeMainRoad();
+                newRoad2.makeMainRoad();
+            }
+
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
                 Road roadToAssign;

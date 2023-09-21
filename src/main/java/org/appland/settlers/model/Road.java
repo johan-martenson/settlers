@@ -203,4 +203,8 @@ public class Road {
     public void setMap(GameMap gameMap) {
         map = gameMap;
     }
+
+    void makeMainRoad() {
+        isMainRoad = true;
+    }
 }

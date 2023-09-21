@@ -75,7 +75,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
             break;
 
