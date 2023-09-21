@@ -1590,7 +1590,7 @@ class Utils {
         jsonWildAnimal.put("betweenPoints", !wildAnimal.isExactlyAtPoint());
         jsonWildAnimal.put("direction", wildAnimal.getDirection().name().toUpperCase());
 
-        if (wildAnimal.getPlannedPath() != null && wildAnimal.getPlannedPath().size() > 0) {
+        if (wildAnimal.getPlannedPath() != null && wildAnimal.getPlannedPath().isEmpty()) {
             jsonWildAnimal.put("path", pointsToJson(wildAnimal.getPlannedPath()));
         }
 

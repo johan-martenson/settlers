@@ -67,7 +67,7 @@ public class Unsigned {
         Unsigned.putUnsignedInt (buffer, 0xcafebabe);
 
         for (int i = 0; i < 8; i++) {
-            System.out.println ("" + i + ": "
+            System.out.println (i + ": "
                     + Integer.toHexString (getUnsignedByte (buffer, i)));
         }
 

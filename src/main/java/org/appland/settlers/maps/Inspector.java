@@ -575,7 +575,7 @@ public class Inspector {
                     try {
                         map.placeBuilding(new Headquarter(player), point);
 
-                        System.out.println("" + point + ": OK");
+                        System.out.println(point + ": OK");
                     } catch (InvalidUserActionException e) {
                         System.out.printf("%s: Not OK (exception is %s)%n", point, e);
                     }

@@ -299,7 +299,7 @@ public class Scout extends Worker {
         }
 
         public String toString() {
-            return "" + entity + ", " + score;
+            return entity + ", " + score;
         }
     }
 

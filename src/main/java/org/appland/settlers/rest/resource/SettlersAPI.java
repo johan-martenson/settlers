@@ -227,7 +227,7 @@ public class SettlersAPI {
     public Response createGame(String body) throws Exception {
 
         /* Return 400 (bad request) if the body is empty */
-        if (body.equals("")) {
+        if (body.isEmpty()) {
             return Response.status(400).build();
         }
 
@@ -1575,7 +1575,7 @@ public class SettlersAPI {
                     continue;
                 }
 
-                String key = "" + point.x + "," + point.y;
+                String key = point.x + "," + point.y;
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 
@@ -1589,11 +1589,11 @@ public class SettlersAPI {
                     continue;
                 }
 
-                String key = "" + site.getKey().x + "," + site.getKey().y;
+                String key = site.getKey().x + "," + site.getKey().y;
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 
-                ((JSONArray)jsonAvailableConstruction.get(key)).add("" + site.getValue().toString().toLowerCase());
+                ((JSONArray)jsonAvailableConstruction.get(key)).add(site.getValue().toString().toLowerCase());
             }
 
             for (Point point : map.getAvailableMinePoints(player)) {
@@ -1603,7 +1603,7 @@ public class SettlersAPI {
                     continue;
                 }
 
-                String key = "" + point.x + "," + point.y;
+                String key = point.x + "," + point.y;
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 

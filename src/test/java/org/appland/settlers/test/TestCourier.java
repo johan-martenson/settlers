@@ -1722,6 +1722,7 @@ public class TestCourier {
 
             System.out.println("Total time chewing: " + timeSpentChewingGum);
             System.out.println("Time chewing divided by total time: " + timeSpentChewingGum / 5000.0);
+            System.out.println("\n" + (Math.abs(0.16 - (timeSpentChewingGum / 5000.0)) < 0.1) + "\n");
 
             assertTrue(Math.abs(0.16 - (timeSpentChewingGum / 5000.0)) < 0.1);
         }
