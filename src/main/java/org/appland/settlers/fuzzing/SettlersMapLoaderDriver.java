@@ -27,9 +27,7 @@ public class SettlersMapLoaderDriver {
             players.add(new Player("Player 0", Color.BLUE));
 
             map.stepTime();
-        } catch (SettlersMapLoadingException e) {
-            e.printStackTrace();
-        } catch (InvalidMapException e) {
+        } catch (SettlersMapLoadingException | InvalidMapException e) {
             e.printStackTrace();
         }
     }

@@ -71,7 +71,7 @@ public class DatLoader {
                 System.out.print(" ");
             }
 
-            System.out.println(format("%s (%d)", chunk.getTypeId(), chunk.getTotalSize()));
+            System.out.printf("%s (%d)%n", chunk.getTypeId(), chunk.getTotalSize());
 
             List<Chunk> children = chunk.getChildren();
 
@@ -94,8 +94,8 @@ public class DatLoader {
         if (debug) {
             System.out.println("\nNew chunk. (byte array)");
 
-            System.out.println(format("Offset: %d", offset));
-            System.out.println(format("Type id: %s", typeId));
+            System.out.printf("Offset: %d%n", offset);
+            System.out.printf("Type id: %s%n", typeId);
         }
 
         Chunk chunk = new Chunk(typeId);
@@ -120,14 +120,14 @@ public class DatLoader {
             }
 
             if (debug) {
-                System.out.println(format("Defined size of data: %d", contentSize));
+                System.out.printf("Defined size of data: %d%n", contentSize);
             }
 
             byte[] content = new byte[(int)contentSize];
             byteBuffer.get(content, 0, (int)contentSize);
 
             if (debug) {
-                System.out.println(format("Actual size of data: %d", content.length));
+                System.out.printf("Actual size of data: %d%n", content.length);
             }
 
             chunk.setContent(content);
@@ -166,7 +166,7 @@ public class DatLoader {
         if (debug) {
             System.out.println("\nNew chunk. (stream)");
 
-            System.out.println(format("Type id: %s", typeId));
+            System.out.printf("Type id: %s%n", typeId);
         }
 
         Chunk chunk = new Chunk(typeId);
@@ -193,13 +193,13 @@ public class DatLoader {
             }
 
             if (debug) {
-                System.out.println(format("Defined size of data: %d", contentSize));
+                System.out.printf("Defined size of data: %d%n", contentSize);
             }
 
             byte[] content = streamReader.getUint8ArrayAsBytes((int)contentSize);
 
             if (debug) {
-                System.out.println(format("Actual size of data: %d", content.length));
+                System.out.printf("Actual size of data: %d%n", content.length);
             }
 
             chunk.setContent(content);

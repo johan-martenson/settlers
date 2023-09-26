@@ -286,9 +286,7 @@ public class SettlersModelDriver {
                         System.out.println("CAN'T HANDLE: '" + commandIndex + "'");
                         return;
                 }
-            } catch (SettlersModelDriverException e) {
-                System.out.println(e);
-            } catch (InvalidUserActionException e) {
+            } catch (SettlersModelDriverException | InvalidUserActionException e) {
                 System.out.println(e);
             } catch (EOFException e) {
                 return;

@@ -119,7 +119,7 @@ public class Inspector {
      * @param args
      * @throws Exception
      */
-    public static void main(String[] args) throws Exception, InvalidMapException {
+    public static void main(String[] args) throws Exception {
         Inspector inspector = new Inspector();
         CmdLineParser parser = new CmdLineParser(inspector);
 
@@ -217,9 +217,9 @@ public class Inspector {
                 oneStepAwayTiles.add(map.getDetailedVegetationDownLeft(pointLeft));
 
                 System.out.println(" +");
-                System.out.println(format("Close tiles: %s", closeTiles));
-                System.out.println(format("Close to flag tiles: %s", closeToFlagTiles));
-                System.out.println(format("One step away tiles: %s", oneStepAwayTiles));
+                System.out.printf("Close tiles: %s%n", closeTiles);
+                System.out.printf("Close to flag tiles: %s%n", closeToFlagTiles);
+                System.out.printf("One step away tiles: %s%n", oneStepAwayTiles);
             }
         }
     }
@@ -547,7 +547,7 @@ public class Inspector {
      * @param mapFilename
      * @throws Exception
      */
-    private void loadMapFile(String mapFilename, boolean placePlayers) throws Exception, InvalidMapException {
+    private void loadMapFile(String mapFilename, boolean placePlayers) throws Exception {
         mapFile = mapLoader.loadMapFromFile(mapFilename);
         map = mapLoader.convertMapFileToGameMap(mapFile);
 
@@ -577,7 +577,7 @@ public class Inspector {
 
                         System.out.println("" + point + ": OK");
                     } catch (InvalidUserActionException e) {
-                        System.out.println(format("%s: Not OK (exception is %s)", point, e));
+                        System.out.printf("%s: Not OK (exception is %s)%n", point, e);
                     }
                 }
             }

@@ -21,6 +21,6 @@ public class WaveGameResource implements GameResource {
 
     @Override
     public String toString() {
-        return format("Wave game resource");
+        return "Wave game resource";
     }
 }

@@ -530,7 +530,7 @@ public class Reader {
         this.palette = assetManager.loadPaletteFromFile(DEFAULT_PALETTE);
     }
 
-    private List<GameResource> loadFile(String assetFilename) throws IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
+    private List<GameResource> loadFile(String assetFilename) throws IOException, UnknownResourceTypeException, InvalidFormatException {
 
         int lastSeparator = assetFilename.lastIndexOf("/");
         String filenameWithoutPath = assetFilename.substring(lastSeparator + 1);

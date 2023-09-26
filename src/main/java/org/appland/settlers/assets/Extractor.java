@@ -161,7 +161,7 @@ public class Extractor {
         extractor.populateAudio(fromDir, toDir);
     }
 
-    private void populateAudio(String fromDir, String toDir) throws IOException, InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException {
+    private void populateAudio(String fromDir, String toDir) throws IOException, InvalidFormatException, UnknownResourceTypeException {
 
         // Write the music atlas
         JSONArray jsonSongs = new JSONArray();
@@ -190,10 +190,7 @@ public class Extractor {
 
         List<GameResource> gameResources = assetManager.loadLstFile(fromDir + "/" + SoundLst.FILENAME, defaultPalette);
 
-        for (GameResource gameResource : gameResources) {
-            System.out.println(gameResource);
-        }
-
+        // Save each wave file, so we can try to figure out when they are used
         for (int i = 0; i < gameResources.size(); i++) {
             GameResource gameResource = gameResources.get(i);
 
@@ -208,11 +205,53 @@ public class Extractor {
         // Write sounds
         Map<Integer, String> sounds = new HashMap<>();
 
-        sounds.put(SoundLst.DUCK_QUACK, toDir + "/audio-duck-quack.wave");
-        sounds.put(SoundLst.GEOLOGIST_FOUND_ORE, toDir + "/audio-geologist-finding.wave");
-        sounds.put(SoundLst.MILITARY_BUILDING_OCCUPIED, toDir + "/audio-new-message.wave");
-        sounds.put(SoundLst.NEW_MESSAGE, toDir + "/audio-new-message.wave");
+        sounds.put(SoundLst.FIRE, toDir + "/audio/fire.wave");
+        sounds.put(SoundLst.FIGHTING_HIT_0, toDir + "/audio/fighting-hit-0.wave");
+        sounds.put(SoundLst.FIGHTING_UNKNOWN, toDir + "/audio/fighting-unknown.wave");
+        sounds.put(SoundLst.FIGHTING_SOLDIER_DIED, toDir + "/audio/fighting-soldier-died.wave");
+        sounds.put(SoundLst.FIGHTING_HIT_1, toDir + "/audio/fighting-hit-1.wave");
+        sounds.put(SoundLst.SAWMILL_WORKER_0, toDir + "/audio/woodcutter-0.wave");
+        sounds.put(SoundLst.SAWMILL_WORKER_1, toDir + "/audio/woodcutter-1.wave");
+        sounds.put(SoundLst.PIG_BREEDER_0, toDir + "/audio/pig-breeder-0.wave");
+        sounds.put(SoundLst.PIG_BREEDER_1, toDir + "/audio/pig-breeder-1.wave");
+        sounds.put(SoundLst.SHIPWRIGHT_0, toDir + "/audio/shipwright-0.wave");
+        sounds.put(SoundLst.SHIPWRIGHT_1, toDir + "/audio/shipwright-1.wave");
+        sounds.put(SoundLst.FORESTER_0, toDir + "/audio/forester-0.wave");
+        sounds.put(SoundLst.FORESTER_1, toDir + "/audio/forester-1.wave");
+        sounds.put(SoundLst.IRON_FOUNDER_AND_BREWER, toDir + "/audio/iron-founder-and-brewer.wave");
+        sounds.put(SoundLst.FARMER, toDir + "/audio/farmer.wave");
+        sounds.put(SoundLst.MINER, toDir + "/audio/miner.wave");
+        sounds.put(SoundLst.GEOLOGIST_DIGGING_0, toDir + "/audio/geologist-digging-0.wave");
+        sounds.put(SoundLst.GEOLOGIST_DIGGING_1, toDir + "/audio/geologist-digging-1.wave");
 
+        // TODO: brewer is at 51 which maps where?
+
+        sounds.put(SoundLst.BUILDER_KNEELING_HAMMERING, toDir + "/audio/builder-kneeling-hammering.wave");
+        sounds.put(SoundLst.BUILDER_STANDING_HAMMERING, toDir + "/audio/builder-standing-hammering.wave");
+        sounds.put(SoundLst.STONEMASON_HACKING, toDir + "/audio/stonemason-hacking.wave");
+        sounds.put(SoundLst.MILLER, toDir + "/audio/miller.wave");
+        sounds.put(SoundLst.BUTCHER, toDir + "/audio/butcher.wave");
+        sounds.put(SoundLst.FISHERMAN, toDir + "/audio/fisherman.wave");
+        sounds.put(SoundLst.PLANER_0, toDir + "/audio/planer-0.wave");
+        sounds.put(SoundLst.PLANER_1, toDir + "/audio/planer-1.wave");
+        sounds.put(SoundLst.WOODCUTTER_CUTTING, toDir + "/audio/woodcutter-cutting.wave");
+        sounds.put(SoundLst.FALLING_TREE, toDir + "/audio/falling-tree.wave");
+        sounds.put(SoundLst.BAKER, toDir + "/audio/baker-baking.wave");
+        sounds.put(SoundLst.HUNTER, toDir + "/audio/hunter.wave");
+        sounds.put(SoundLst.METALWORKER_0, toDir + "/audio/metalworker-0.wave");
+        sounds.put(SoundLst.METALWORKER_1, toDir + "/audio/metalworker-1.wave");
+        sounds.put(SoundLst.METALWORKER_2, toDir + "/audio/metalworker-2.wave");
+        sounds.put(SoundLst.ARMORER, toDir + "/audio/armorer.wave");
+        sounds.put(SoundLst.COURIER_WITH_BOAT, toDir + "/audio/courier-with-boat.wave");
+        sounds.put(SoundLst.WELL_WORKER, toDir + "/audio/well-worker.wave");
+
+        sounds.put(SoundLst.DUCK_QUACK, toDir + "/audio/duck-quack.wave");
+        sounds.put(SoundLst.GEOLOGIST_FOUND_ORE, toDir + "/audio/geologist-finding.wave");
+        sounds.put(SoundLst.MILITARY_BUILDING_OCCUPIED, toDir + "/audio/new-message.wave");
+        sounds.put(SoundLst.NEW_MESSAGE, toDir + "/audio/new-message.wave");
+
+        // TODO: add additional sounds
+        // TODO: verify that the offset remains correct. Brewer has sound 51?
 
         for (Entry<Integer, String> entry : sounds.entrySet()) {
             int index = entry.getKey();
@@ -222,7 +261,7 @@ public class Extractor {
         }
     }
 
-    private void populateShips(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidHeaderException, InvalidFormatException {
+    private void populateShips(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidFormatException {
         List<GameResource> bootBobsLst = assetManager.loadLstFile(fromDir + "/" + BootBobsLst.FILENAME, defaultPalette);
 
         ShipImageCollection shipImageCollection = new ShipImageCollection();
@@ -279,7 +318,7 @@ public class Extractor {
         shipImageCollection.writeImageAtlas(toDir, defaultPalette);
     }
 
-    private void populateBorders(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidHeaderException, InvalidFormatException {
+    private void populateBorders(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidFormatException {
         List<GameResource> afrBobsLst = assetManager.loadLstFile(fromDir + "/DATA/MBOB/AFR_BOBS.LST", defaultPalette);
         List<GameResource> japBobsLst = assetManager.loadLstFile(fromDir + "/DATA/MBOB/JAP_BOBS.LST", defaultPalette);
         List<GameResource> romBobsLst = assetManager.loadLstFile(fromDir + "/DATA/MBOB/ROM_BOBS.LST", defaultPalette);
@@ -302,7 +341,7 @@ public class Extractor {
         borderImageCollector.writeImageAtlas(toDir, defaultPalette);
     }
 
-    private void populateFlags(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException, IOException {
+    private void populateFlags(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         List<GameResource> afrZLst = assetManager.loadLstFile(fromDir + "/" + AfrZLst.FILENAME, defaultPalette);
         List<GameResource> japZLst = assetManager.loadLstFile(fromDir + "/" + JapZLst.FILENAME, defaultPalette);
@@ -355,7 +394,7 @@ public class Extractor {
         flagImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
     }
 
-    private void populateWorkers(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException, IOException {
+    private void populateWorkers(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load worker image parts */
         List<GameResource> jobsBobList = assetManager.loadLstFile(fromDir + "/" + JobsBob.FILENAME, defaultPalette);
@@ -940,7 +979,7 @@ public class Extractor {
      * @param fromDir
      * @param toDir
      */
-    private void populateNatureAndUIElements(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException, IOException {
+    private void populateNatureAndUIElements(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load from the map asset file */
         List<GameResource> mapBobsLst = assetManager.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
@@ -1780,10 +1819,9 @@ public class Extractor {
      * @param toDir
      * @throws InvalidFormatException
      * @throws UnknownResourceTypeException
-     * @throws InvalidHeaderException
      * @throws IOException
      */
-    private void populateRomanBuildings(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, InvalidHeaderException, IOException {
+    private void populateRomanBuildings(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load from the roman asset file */
         List<GameResource> romYLst = assetManager.loadLstFile(fromDir + "/" + RomYLst.FILENAME, defaultPalette);

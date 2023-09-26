@@ -11,6 +11,7 @@ import org.appland.settlers.model.Road;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ArgumentsHandler {
@@ -31,7 +32,7 @@ public class ArgumentsHandler {
             throw new EOFException();
         }
 
-        String remaining = new String(bytes, "ISO-8859-1");
+        String remaining = new String(bytes, StandardCharsets.ISO_8859_1);
 
         if (remaining.length() < 3) {
             throw new SettlersModelDriverException();
@@ -50,7 +51,7 @@ public class ArgumentsHandler {
             throw new EOFException();
         }
 
-        String remaining = new String(bytes, "ISO-8859-1");
+        String remaining = new String(bytes, StandardCharsets.ISO_8859_1);
 
         if (remaining.length() < 2) {
             throw new SettlersModelDriverException();
@@ -80,7 +81,7 @@ public class ArgumentsHandler {
             throw new EOFException();
         }
 
-        return new String(bytes, "ISO-8859-1");
+        return new String(bytes, StandardCharsets.ISO_8859_1);
     }
 
     public Point getPointForChars() throws IOException {

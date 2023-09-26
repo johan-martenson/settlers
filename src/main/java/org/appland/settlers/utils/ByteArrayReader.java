@@ -168,7 +168,7 @@ public class ByteArrayReader implements ByteReader {
     }
 
     @Override
-    public String getUint8ArrayAsString(int i) throws IOException {
+    public String getUint8ArrayAsString(int i) {
         byte[] bytes = getUint8ArrayAsBytes(i);
 
         String string = new String(bytes, StandardCharsets.US_ASCII);
@@ -239,14 +239,14 @@ public class ByteArrayReader implements ByteReader {
     }
 
     @Override
-    public void skip(int length) throws IOException {
+    public void skip(int length) {
         for (int i = 0; i < length; i++) {
             byteArray.get();
         }
     }
 
     @Override
-    public void setPosition(int position) throws IOException {
+    public void setPosition(int position) {
         byteArray.position(position);
     }
 }

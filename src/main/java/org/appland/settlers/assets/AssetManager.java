@@ -102,7 +102,6 @@ public class AssetManager {
             /* Load BOB file (?) */
             case 0x01F6:
                 gameResources.add(loadBobFromStream(streamReader, defaultPalette));
-
             break;
 
             /* Load BOB file */
@@ -115,6 +114,8 @@ public class AssetManager {
                 debugPrint(" - Contains number of items: " + numberItems);
 
                 /* Loop through and read each item */
+                int hits = 0;
+
                 for (long i = 0; i < numberItems; i++) {
                     short used = streamReader.getInt16();
 
@@ -125,6 +126,9 @@ public class AssetManager {
 
                         continue;
                     }
+
+                    debugPrint(format("HIT: %d - %d", i, hits));
+                    hits = hits + 1;
 
                     /* Find what type of resource it is */
                     int type = streamReader.getInt16();
@@ -416,7 +420,7 @@ public class AssetManager {
         long length = streamReader.getUint32();
 
         if (unknown1 != 1) {
-            throw new InvalidFormatException("Must match '1'. Not " + unknown1);
+            throw new InvalidFormatException(format("Must match '1'. Not: %d", unknown1));
         }
 
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
@@ -429,7 +433,7 @@ public class AssetManager {
 
         /* Verify that the length is correct */
         if (length != (long) width * height) {
-            throw new InvalidFormatException("Length (" + length + ") must equal width (" + width + ") * height (" + height + ")");
+            throw new InvalidFormatException(format("Length (%d) must equal width (%d) * height (%d)", length, width, height));
         }
 
         // Guess at source format
@@ -549,7 +553,7 @@ public class AssetManager {
         long length = streamReader.getUint32();
 
         if (unknown1 != 0 || unknown2 != 1) {
-            throw new RuntimeException("Invalid format. Unknown 1 must be 0, was " + unknown1 + ". Unknown 2 must be 1, was " + unknown2);
+            throw new RuntimeException(format("Invalid format. Unknown 1 must be 0, was: %d. Unknown 2 must be 1, was: %d.", unknown1, unknown2));
         }
 
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
@@ -625,7 +629,7 @@ public class AssetManager {
             short bodyImageHeight = streamReader.getUint8();
 
             if (bodyImageId != BOB_IMAGE_DATA_HEADER) {
-                throw new InvalidFormatException("Body image id must match '0x01F4'. Not " + bodyImageId);
+                throw new InvalidFormatException(format("Body image id must match '0x01F4'. Not: %s", Integer.toHexString(bodyImageId)));
             }
 
             int[] starts = streamReader.getUint16ArrayAsInts(bodyImageHeight);
@@ -656,7 +660,7 @@ public class AssetManager {
             short overlayImageHeight = streamReader.getUint8();
 
             if (overlayImageId != BOB_IMAGE_DATA_HEADER) {
-                throw new InvalidFormatException("Must match '0x01F4'. Not " + overlayImageId);
+                throw new InvalidFormatException(format("Must match '0x01F4'. Not: %s ", Integer.toHexString(overlayImageId)));
             }
 
             overlayImageStarts[i] = streamReader.getUint16ArrayAsInts(overlayImageHeight);
@@ -676,7 +680,10 @@ public class AssetManager {
             int unknown = streamReader.getUint16();
 
             if (links[(int)i] >= numberOverlayImages) {
-                throw new InvalidFormatException("Number of overlay images is: " + numberOverlayImages + ". Cannot have more than: " + links[(int)i]);
+                throw new InvalidFormatException(format(
+                        "Number of overlay images is: %d. Cannot have more than: %d",
+                        numberOverlayImages,
+                        links[(int)i]));
             }
 
             /* Skip the image if it's already loaded */

@@ -646,12 +646,10 @@ public class Building implements EndPoint {
         Material[] materialsArray        = houseSize.material();
         Map<Material, Integer> materials = new EnumMap<>(Material.class);
 
-        if (materialsArray.length != 0) {
-            for (Material material : materialsArray) {
+        for (Material material : materialsArray) {
 
-                int amount = materials.getOrDefault(material, 0);
-                materials.put(material, amount + 1);
-            }
+            int amount = materials.getOrDefault(material, 0);
+            materials.put(material, amount + 1);
         }
 
         return materials;

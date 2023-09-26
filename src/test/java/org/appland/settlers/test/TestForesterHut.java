@@ -65,7 +65,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -101,7 +101,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -136,7 +136,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -147,7 +147,7 @@ public class TestForesterHut {
         assertTrue(foresterHut0.isPlanned());
         assertFalse(foresterHut0.needsWorker());
 
-        /* Connect the forester with the headquarter */
+        /* Connect the forester with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -203,7 +203,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -231,7 +231,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -259,7 +259,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -270,7 +270,7 @@ public class TestForesterHut {
         assertTrue(foresterHut0.isPlanned());
         assertFalse(foresterHut0.needsWorker());
 
-        /* Connect the forester with the headquarter */
+        /* Connect the forester with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -299,7 +299,7 @@ public class TestForesterHut {
         /* Create single player game */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -307,7 +307,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
@@ -330,7 +330,7 @@ public class TestForesterHut {
         /* Create single player game */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -338,7 +338,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
@@ -362,11 +362,11 @@ public class TestForesterHut {
         /* Create single player game */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Remove all foresters and place shovels in the headquarter */
+        /* Remove all foresters and place shovels in the headquarters */
         Utils.adjustInventoryTo(headquarter, FORESTER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SHOVEL, 1);
 
@@ -374,7 +374,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
@@ -397,7 +397,7 @@ public class TestForesterHut {
         /* Create single player game */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -405,7 +405,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
@@ -431,7 +431,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -439,7 +439,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -473,7 +473,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -481,7 +481,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -521,7 +521,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -529,7 +529,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -569,7 +569,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -577,7 +577,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -624,7 +624,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 19);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -632,7 +632,7 @@ public class TestForesterHut {
         Point point1 = new Point(20, 20);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -690,7 +690,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -731,7 +731,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -739,7 +739,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -793,7 +793,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -801,7 +801,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -894,7 +894,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -902,7 +902,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -955,7 +955,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -963,7 +963,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -992,7 +992,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1000,7 +1000,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1044,7 +1044,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1104,7 +1104,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1160,7 +1160,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1168,7 +1168,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1220,7 +1220,7 @@ public class TestForesterHut {
         Utils.surroundPointWithVegetation(point5, MOUNTAIN_1, map);
         Utils.surroundPointWithVegetation(point6, MOUNTAIN_1, map);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter =  map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1228,7 +1228,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 14);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1276,7 +1276,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1284,7 +1284,7 @@ public class TestForesterHut {
         Point point26 = new Point(8, 8);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1299,7 +1299,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
@@ -1307,7 +1307,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
-        /* Verify that the miner is stored correctly in the headquarter */
+        /* Verify that the miner is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
     }
 
@@ -1320,7 +1320,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1328,10 +1328,10 @@ public class TestForesterHut {
         Point point1 = new Point(8, 8);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1346,7 +1346,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
@@ -1371,7 +1371,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1379,7 +1379,7 @@ public class TestForesterHut {
         Point point1 = new Point(8, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut and the headquarter */
+        /* Connect the forester hut and the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1439,7 +1439,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1447,7 +1447,7 @@ public class TestForesterHut {
         Point point1 = new Point(8, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut and the headquarter */
+        /* Connect the forester hut and the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1522,7 +1522,7 @@ public class TestForesterHut {
         /* Create single player game */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1533,10 +1533,10 @@ public class TestForesterHut {
         /* Finish construction of the forester hut */
         constructHouse(foresterHut0);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
-        /* Wait for forester to get assigned and leave the headquarter */
+        /* Wait for forester to get assigned and leave the headquarters */
         List<Forester> workers = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
         assertNotNull(workers);
@@ -1565,15 +1565,15 @@ public class TestForesterHut {
         /* Create single player game choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters */
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1591,7 +1591,7 @@ public class TestForesterHut {
         Point point4 = new Point(28, 18);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1615,7 +1615,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1623,7 +1623,7 @@ public class TestForesterHut {
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1692,7 +1692,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1704,7 +1704,7 @@ public class TestForesterHut {
         Point point2 = new Point(14, 4);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1739,7 +1739,7 @@ public class TestForesterHut {
 
         assertEquals(forester.getPosition(), flag0.getPosition());
 
-        /* Verify that the forester returns to the headquarter when it reaches the flag */
+        /* Verify that the forester returns to the headquarters when it reaches the flag */
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
@@ -1754,7 +1754,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1766,7 +1766,7 @@ public class TestForesterHut {
         Point point2 = new Point(14, 4);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1819,7 +1819,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1831,7 +1831,7 @@ public class TestForesterHut {
         Point point2 = new Point(14, 4);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1880,7 +1880,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1888,7 +1888,7 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1913,7 +1913,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), storehouse0.getPosition());
 
@@ -1921,7 +1921,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, storehouse0.getPosition());
 
-        /* Verify that the forester is stored correctly in the headquarter */
+        /* Verify that the forester is stored correctly in the headquarters */
         assertEquals(storehouse0.getAmount(FORESTER), amount + 1);
     }
 
@@ -1934,7 +1934,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1942,7 +1942,7 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -1970,7 +1970,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
@@ -1978,7 +1978,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
-        /* Verify that the forester is stored correctly in the headquarter */
+        /* Verify that the forester is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
     }
 
@@ -1991,7 +1991,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1999,7 +1999,7 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -2030,7 +2030,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
@@ -2038,7 +2038,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
-        /* Verify that the forester is stored correctly in the headquarter */
+        /* Verify that the forester is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
     }
 
@@ -2051,7 +2051,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2059,7 +2059,7 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -2078,7 +2078,7 @@ public class TestForesterHut {
 
         foresterHut0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
 
@@ -2086,7 +2086,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
-        /* Verify that the forester is stored correctly in the headquarter */
+        /* Verify that the forester is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
     }
 
@@ -2099,7 +2099,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2107,7 +2107,7 @@ public class TestForesterHut {
         Point point1 = new Point(17, 17);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Place road to connect the headquarter and the forester hut */
+        /* Place road to connect the headquarters and the forester hut */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
         /* Finish construction of the forester hut */
@@ -2122,7 +2122,7 @@ public class TestForesterHut {
         /* Tear down the building */
         foresterHut0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        /* Verify that the worker goes to the building and then returns to the headquarters instead of entering */
         assertEquals(worker.getTarget(), foresterHut0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getPosition());
@@ -2141,7 +2141,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2204,7 +2204,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2212,7 +2212,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Connect the forester hut with the headquarter */
+        /* Connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the forester hut to get constructed */
@@ -2234,7 +2234,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2258,7 +2258,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2289,7 +2289,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2317,7 +2317,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2329,13 +2329,13 @@ public class TestForesterHut {
         Point point2 = new Point(18, 6);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the forester hut */
+        /* Place road to connect the headquarters with the forester hut */
         Road road1 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2380,7 +2380,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2392,13 +2392,13 @@ public class TestForesterHut {
         Point point2 = new Point(18, 6);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the forester hut */
+        /* Place road to connect the headquarters with the forester hut */
         Road road1 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2444,7 +2444,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2482,7 +2482,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2527,7 +2527,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2535,7 +2535,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Place road to connect the forester hut with the headquarter */
+        /* Place road to connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2545,8 +2545,8 @@ public class TestForesterHut {
         Utils.waitForBuildingToBeConstructed(foresterHut0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(foresterHut0);
 
-        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter
+        /* Verify that worker goes out and then walks away and dies when
+           the building is torn down because delivery is blocked in the headquarters
         */
         headquarter0.blockDeliveryOfMaterial(FORESTER);
 
@@ -2587,7 +2587,7 @@ public class TestForesterHut {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2595,7 +2595,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Place road to connect the forester hut with the headquarter */
+        /* Place road to connect the forester hut with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2607,7 +2607,7 @@ public class TestForesterHut {
         /* Wait for a forester to start walking to the forester hut */
         Forester forester = Utils.waitForWorkerOutsideBuilding(Forester.class, player0);
 
-        /* Wait for the forester to go past the headquarter's flag */
+        /* Wait for the forester to go past the headquarters' flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
 
         map.stepTime();

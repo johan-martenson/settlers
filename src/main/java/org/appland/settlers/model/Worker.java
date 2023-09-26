@@ -235,7 +235,7 @@ public abstract class Worker {
     @Override
     public String toString() {
         if (isTraveling()) {
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuffer = new StringBuilder();
             if (isExactlyAtPoint()) {
                 stringBuffer.append("Worker at " + getPosition() + " traveling to " + target);
             } else {

@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.lang.String.format;
 import static org.appland.settlers.maps.MapLoader.TranslationMode.POLISHED;
 import static org.appland.settlers.maps.Utils.isEven;
 
@@ -67,22 +66,22 @@ public class MapLoader {
     }
 
     private void printMapInformation(MapFile mapFile) {
-        System.out.println(format(" - Title: %s", mapFile.getTitle()));
-        System.out.println(format(" - Author: %s", mapFile.getAuthor()));
-        System.out.println(format(" - Max number of players: %d", mapFile.getMaxNumberOfPlayers()));
+        System.out.printf(" - Title: %s%n", mapFile.getTitle());
+        System.out.printf(" - Author: %s%n", mapFile.getAuthor());
+        System.out.printf(" - Max number of players: %d%n", mapFile.getMaxNumberOfPlayers());
         System.out.println(" - Starting points:");
 
-        mapFile.getGamePointStartingPoints().forEach(point -> System.out.println(format("    - %d, %d", point.x, point.y)));
+        mapFile.getGamePointStartingPoints().forEach(point -> System.out.printf("    - %d, %d%n", point.x, point.y));
 
         System.out.println(" - Player types:");
 
-        mapFile.getPlayerFaces().forEach(face -> System.out.println(format("    - %s", face.name().toLowerCase())));
+        mapFile.getPlayerFaces().forEach(face -> System.out.printf("    - %s%n", face.name().toLowerCase()));
 
-        System.out.println(format(" - Width x height: %d x %d", mapFile.getWidth(), mapFile.getHeight()));
-        System.out.println(format(" - Terrain type: %s", mapFile.getTerrainType().name().toLowerCase()));
-        System.out.println(format(" - Unlimited play: %b", mapFile.isUnlimitedPlay()));
-        System.out.println(format(" - Title type: %s", mapFile.getTitleType()));
-        System.out.println(format(" - File header: %s", mapFile.getHeaderType().name().toLowerCase()));
+        System.out.printf(" - Width x height: %d x %d%n", mapFile.getWidth(), mapFile.getHeight());
+        System.out.printf(" - Terrain type: %s%n", mapFile.getTerrainType().name().toLowerCase());
+        System.out.printf(" - Unlimited play: %b%n", mapFile.isUnlimitedPlay());
+        System.out.printf(" - Title type: %s%n", mapFile.getTitleType());
+        System.out.printf(" - File header: %s%n", mapFile.getHeaderType().name().toLowerCase());
     }
 
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
@@ -801,7 +800,7 @@ public class MapLoader {
         }
     }
 
-    static enum TranslationMode {
+    enum TranslationMode {
         POLISHED
 
     }
