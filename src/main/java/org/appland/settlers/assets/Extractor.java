@@ -116,8 +116,17 @@ public class Extractor {
     private static final String TERRAIN_SUB_DIRECTORY = "terrain";
     private static final String GREENLAND_DIRECTORY = "greenland";
     private static final String WINTER_DIRECTORY = "winter";
-    private static final String SONG_0_FILENAME = "audio/song0.mp3";
-    private static final String SONG_1_FILENAME = "audio/song1.mp3";
+
+    private static final List<String> MUSIC_FILENAMES = new ArrayList<>(List.of(
+            "audio/01_-_Track_01.mp3",
+            "audio/02_-_Track_02.mp3",
+            "audio/03_-_Track_03.mp3",
+            "audio/04_-_Track_04.mp3",
+            "audio/05_-_Track_05.mp3",
+            "audio/06_-_Track_06.mp3",
+            "audio/07_-_Track_07.mp3",
+            "audio/08_-_Track_08.mp3"
+            ));
     private static final String SONG_0_TITLE = "Song 1";
     private static final String SONG_1_TITLE = "Song 2";
 
@@ -166,16 +175,14 @@ public class Extractor {
         // Write the music atlas
         JSONArray jsonSongs = new JSONArray();
 
-        JSONObject jsonSong0 = new JSONObject();
-        JSONObject jsonSong1 = new JSONObject();
+        for (String songFilename : MUSIC_FILENAMES) {
+            JSONObject jsonSong = new JSONObject();
 
-        jsonSong0.put("path", toDir + "/" + SONG_0_FILENAME);
-        jsonSong0.put("title", SONG_0_TITLE);
-        jsonSong1.put("path", toDir + "/" + SONG_1_FILENAME);
-        jsonSong1.put("title", SONG_1_TITLE);
+            jsonSong.put("path", toDir + "/" + songFilename);
+            jsonSong.put("title", songFilename);
 
-        jsonSongs.add(jsonSong0);
-        jsonSongs.add(jsonSong1);
+            jsonSongs.add(jsonSong);
+        }
 
         // Write the audio atlas for the music
         Files.writeString(Paths.get(toDir, "audio-atlas-music.json"), jsonSongs.toJSONString());
