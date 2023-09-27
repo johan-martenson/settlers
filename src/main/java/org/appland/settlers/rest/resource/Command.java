@@ -7,5 +7,7 @@ public enum Command {
     REMOVE_ROAD,
     REMOVE_FLAG,
     REMOVE_BUILDING,
+    CALL_SCOUT,
+    CALL_GEOLOGIST,
     PLACE_FLAG_AND_ROAD
 }

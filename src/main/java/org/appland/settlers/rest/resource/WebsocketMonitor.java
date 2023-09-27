@@ -62,6 +62,30 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case CALL_SCOUT: {
+                JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
+                Point point = utils.jsonToPoint(jsonPoint);
+
+                synchronized (map) {
+                    Flag flag = map.getFlagAtPoint(point);
+
+                    flag.callScout();
+                }
+            }
+            break;
+
+            case CALL_GEOLOGIST: {
+                JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
+                Point point = utils.jsonToPoint(jsonPoint);
+
+                synchronized (map) {
+                    Flag flag = map.getFlagAtPoint(point);
+
+                    flag.callGeologist();
+                }
+            }
+            break;
+
             case PLACE_BUILDING: {
 
                 Point point = utils.jsonToPoint(jsonBody);
