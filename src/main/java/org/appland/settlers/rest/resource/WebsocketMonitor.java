@@ -14,13 +14,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.websocket.EndpointConfig;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +58,21 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case FULL_SYNC: {
+                synchronized (map) {
+                    String playerId = (String) jsonBody.get("playerId");
+
+                    JSONObject jsonFullSync = new JSONObject();
+
+                    jsonFullSync.put("playerView", utils.playerViewToJson(playerId, map, player));
+
+                    System.out.println("Replying with full sync message");
+
+                    session.getAsyncRemote().sendText(jsonFullSync.toJSONString());
+                }
+            }
+            break;
+
             case CALL_SCOUT: {
                 JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
                 Point point = utils.jsonToPoint(jsonPoint);
@@ -241,20 +252,25 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
     }
 
     @OnOpen
-    public void onOpen(Session session, @javax.websocket.server.PathParam("gameId") String gameId, @javax.websocket.server.PathParam("playerId") String playerId, EndpointConfig config) {
+    public void onOpen(Session session, @javax.websocket.server.PathParam("gameId") String gameId, @javax.websocket.server.PathParam("playerId") String playerId, EndpointConfig config) throws IOException {
 
         System.out.println("Websocket opened");
 
         /* Subscribe to changes */
         Player player = (Player) idManager.getObject(playerId);
 
-        session.getUserProperties().put("PLAYER", player);
+        if (player == null && idManager.getObject(gameId) == null) {
+            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "The player or game doesn't exist"));
+        } else {
 
-        System.out.println("Storing session");
-        this.playerToSession.put(player, session);
+            session.getUserProperties().put("PLAYER", player);
 
-        System.out.println("Starting to monitor");
-        player.monitorGameView(this);
+            System.out.println("Storing session");
+            this.playerToSession.put(player, session);
+
+            System.out.println("Starting to monitor");
+            player.monitorGameView(this);
+        }
     }
 
     @Override

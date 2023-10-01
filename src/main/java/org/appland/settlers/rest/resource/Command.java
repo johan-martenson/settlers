@@ -9,5 +9,6 @@ public enum Command {
     REMOVE_BUILDING,
     CALL_SCOUT,
     CALL_GEOLOGIST,
+    FULL_SYNC,
     PLACE_FLAG_AND_ROAD
 }
