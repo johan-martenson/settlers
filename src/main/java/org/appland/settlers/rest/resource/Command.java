@@ -10,5 +10,6 @@ public enum Command {
     CALL_SCOUT,
     CALL_GEOLOGIST,
     FULL_SYNC,
+    INFORMATION_ON_POINTS,
     PLACE_FLAG_AND_ROAD
 }

@@ -58,6 +58,27 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case INFORMATION_ON_POINTS:
+
+                JSONObject jsonResponse = new JSONObject();
+                JSONArray jsonPointsInformation = new JSONArray();
+
+                List<Point> points = utils.jsonToPoints((JSONArray) jsonBody.get("points"));
+                long requestId = (long) jsonBody.get("requestId");
+
+                jsonResponse.put("requestId", requestId);
+                jsonResponse.put("pointsWithInformation", jsonPointsInformation);
+
+                synchronized (map) {
+                    for (Point point : points) {
+                        jsonPointsInformation.add(utils.pointToDetailedJson(point, player, map));
+                    }
+                }
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+
+                break;
+
             case FULL_SYNC: {
                 synchronized (map) {
                     String playerId = (String) jsonBody.get("playerId");
@@ -148,6 +169,8 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
             case PLACE_FLAG_AND_ROAD: {
 
+                // TODO: handle case where the flag already exists
+
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
                 JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
 
@@ -168,6 +191,9 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                                     flagPoint,
                                     new HashSet<>(roadPoints)
                             );
+
+                            // Remove the first point in the extended list because it overlaps with the given road points
+                            additionalRoad.remove(0);
 
                             roadPoints.addAll(additionalRoad);
                         }
