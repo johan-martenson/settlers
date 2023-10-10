@@ -70,7 +70,7 @@ public class GameTicker {
 
             for (GameResource game : games) {
 
-                GameMap map = game.getMap();
+                GameMap map = game.getGameMap();
 
                 List<ComputerPlayer> computerPlayers = game.getComputerPlayers();
 
@@ -182,7 +182,7 @@ public class GameTicker {
     public void startGame(GameResource gameResource) {
         games.add(gameResource);
 
-        GameMap map = gameResource.getMap();
+        GameMap map = gameResource.getGameMap();
 
         for (Building building : map.getBuildings()) {
             if (building instanceof Headquarter) {

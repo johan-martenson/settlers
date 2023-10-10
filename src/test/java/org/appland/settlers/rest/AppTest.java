@@ -609,7 +609,7 @@ public class AppTest extends TestCase {
     @Test
     public void testCannotGetNonexistentGame() {
 
-        String NON_EXISTING_GAME = "123";
+        String NON_EXISTING_GAME = "123123123";
 
         /* Make sure the game is non-existing */
         given().contentType(ContentType.JSON).when()

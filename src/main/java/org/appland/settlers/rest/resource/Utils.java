@@ -641,6 +641,7 @@ class Utils {
 
         jsonFlag.put("id", idManager.getId(flag));
         jsonFlag.put("playerId", idManager.getId(flag.getPlayer()));
+        jsonFlag.put("type", flag.getType().name());
 
         if (!flag.getStackedCargo().isEmpty()) {
             jsonFlag.put("stackedCargo", cargosToMaterialJson(flag.getStackedCargo()));
@@ -745,37 +746,6 @@ class Utils {
         return jsonCrop;
     }
 
-    JSONObject gamePlaceholderToJson(GameResource gamePlaceholder) {
-        JSONObject jsonGamePlaceholder = new JSONObject();
-
-        if (gamePlaceholder.getPlayers() != null) {
-            jsonGamePlaceholder.put("players", playersToJson(gamePlaceholder.getPlayers()));
-        } else {
-            jsonGamePlaceholder.put("players", Collections.emptyList());
-        }
-
-        MapFile mapFile = gamePlaceholder.getMapFile();
-
-        if (mapFile != null) {
-            jsonGamePlaceholder.put("mapId", idManager.getId(mapFile));
-
-            jsonGamePlaceholder.put("map", mapFileToJson(mapFile));
-        }
-
-        if (gamePlaceholder.isNameSet()) {
-            jsonGamePlaceholder.put("name", gamePlaceholder.getName());
-        }
-
-        jsonGamePlaceholder.put("id", idManager.getId(gamePlaceholder));
-
-        /* Return a status of NOT_STARTED because this is a game placeholder */
-        jsonGamePlaceholder.put("status", "NOT_STARTED");
-
-        jsonGamePlaceholder.put("resources", gamePlaceholder.getResources().name());
-
-        return jsonGamePlaceholder;
-    }
-
     JSONObject playerToJson(Player player) {
         JSONObject jsonPlayer = new JSONObject();
 
@@ -808,16 +778,6 @@ class Utils {
         jsonMapFile.put("startingPoints", pointsToJson(mapFile.getGamePointStartingPoints()));
 
         return jsonMapFile;
-    }
-
-    JSONArray gamePlaceholdersToJson(List<GameResource> gamePlaceholders) {
-        JSONArray jsonGamePlaceholders = new JSONArray();
-
-        for (GameResource gamePlaceholder : gamePlaceholders) {
-            jsonGamePlaceholders.add(gamePlaceholderToJson(gamePlaceholder));
-        }
-
-        return jsonGamePlaceholders;
     }
 
     GameMap gamePlaceholderToGame(GameResource gamePlaceholder) throws Exception {
@@ -1821,5 +1781,37 @@ class Utils {
         jsonView.put("messages", messagesToJson(player.getMessages()));
 
         return jsonView;
+    }
+
+    public JSONObject gameResourceToJson(GameResource gameResource) {
+        JSONObject jsonGameResource = new JSONObject();
+
+        if (gameResource.getPlayers() != null) {
+            jsonGameResource.put("players", playersToJson(gameResource.getPlayers()));
+        } else {
+            jsonGameResource.put("players", Collections.emptyList());
+        }
+
+        MapFile mapFile = gameResource.getMapFile();
+
+        if (mapFile != null) {
+            jsonGameResource.put("mapId", idManager.getId(mapFile));
+
+            jsonGameResource.put("map", mapFileToJson(mapFile));
+        }
+
+        if (gameResource.isNameSet()) {
+            jsonGameResource.put("name", gameResource.getName());
+        } else {
+            jsonGameResource.put("name", "");
+        }
+
+        jsonGameResource.put("id", idManager.getId(gameResource));
+
+        jsonGameResource.put("status", gameResource.status.name());
+
+        jsonGameResource.put("resources", gameResource.getResources().name());
+
+        return jsonGameResource;
     }
 }

@@ -4,8 +4,6 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.BuildingCapturedMessage;
 import org.appland.settlers.model.BuildingLostMessage;
-import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GeologistFindMessage;
@@ -23,16 +21,11 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.ProductionDataPoint;
 import org.appland.settlers.model.ProductionDataSeries;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.Size;
 import org.appland.settlers.model.StatisticsManager;
-import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.TransportCategory;
-import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.UnderAttackMessage;
 import org.appland.settlers.model.WildAnimal;
-import org.appland.settlers.model.Worker;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -56,7 +49,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static java.lang.String.format;
@@ -75,6 +67,8 @@ import static org.appland.settlers.model.Message.MessageType.MILITARY_BUILDING_R
 import static org.appland.settlers.model.Message.MessageType.NO_MORE_RESOURCES;
 import static org.appland.settlers.model.Message.MessageType.STORE_HOUSE_IS_READY;
 import static org.appland.settlers.model.Message.MessageType.UNDER_ATTACK;
+import static org.appland.settlers.rest.resource.GameStatus.NOT_STARTED;
+import static org.appland.settlers.rest.resource.GameStatus.STARTED;
 
 @Path("/settlers/api")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -99,13 +93,10 @@ public class SettlersAPI {
 
     private final IdManager idManager = IdManager.idManager;
     private final Utils utils;
-    private final List<GameResource> startedGames;
     private final JSONParser parser;
     private final List<GameResource> gameResources;
 
     public SettlersAPI() {
-        startedGames = new ArrayList<>();
-
         utils = new Utils(idManager);
 
         parser = new JSONParser();
@@ -159,24 +150,14 @@ public class SettlersAPI {
 
     @GET
     @Path("/games")
-    public Response getStartedGames() {
-        List<GameMap> startedGameMaps = new ArrayList<>();
-        List<GameResource> notStartedGames = new ArrayList<>();
+    public Response getGames() {
+        JSONArray jsonGameResources = new JSONArray();
 
         for (GameResource gameResource : gameResources) {
-
-            if (gameResource.isStarted()) {
-                startedGameMaps.add(gameResource.getMap());
-            } else {
-                notStartedGames.add(gameResource);
-            }
+            jsonGameResources.add(utils.gameResourceToJson(gameResource));
         }
 
-        JSONArray jsonGames = utils.gamesToJson(startedGameMaps);
-
-        jsonGames.addAll(utils.gamePlaceholdersToJson(notStartedGames));
-
-        return Response.status(200).entity(jsonGames.toJSONString()).build();
+        return Response.status(200).entity(jsonGameResources.toJSONString()).build();
     }
 
     @DELETE
@@ -194,12 +175,10 @@ public class SettlersAPI {
     @GET
     @Path("/games/{id}")
     public Response getGame(@PathParam("id") String gameId) {
-
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
 
         /* Return 404 if the game doesn't exist */
-
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -209,15 +188,11 @@ public class SettlersAPI {
         }
 
         /* Return the game as a JSON document */
-        if (gameObject instanceof GameMap) {
-            JSONObject jsonGame = utils.gameToJson((GameMap)gameObject);
+        JSONObject jsonGameResource = utils.gameResourceToJson(gameResource);
 
-            return Response.status(200).entity(jsonGame.toJSONString()).build();
-        } else {
-            JSONObject jsonGame = utils.gamePlaceholderToJson((GameResource)gameObject);
+        System.out.println(jsonGameResource.toJSONString());
 
-            return Response.status(200).entity(jsonGame.toJSONString()).build();
-        }
+        return Response.status(200).entity(jsonGameResource.toJSONString()).build();
     }
 
     @POST
@@ -233,33 +208,32 @@ public class SettlersAPI {
 
         JSONObject jsonGame = (JSONObject) parser.parse(body);
 
-        /* Create a real game instance if the game is immediately started */
-        if (jsonGame.containsKey("status") && jsonGame.get("status").equals("STARTED")) {
+        /* Create a placeholder if there are missing attributes */
+        GameResource gameResource = new GameResource(utils);
 
-            return null;
-        } else {
-
-            /* Create a placeholder if there are missing attributes */
-            GameResource gameResource = new GameResource(utils);
-
-            if (jsonGame.containsKey("name")) {
-                gameResource.setName((String) jsonGame.get("name"));
-            }
-
-            if (jsonGame.containsKey("players")) {
-                gameResource.setPlayers(utils.jsonToPlayers((JSONArray) jsonGame.get("players")));
-            }
-
-            if (jsonGame.containsKey("mapId")) {
-                String mapId = (String) jsonGame.get("mapId");
-
-                gameResource.setMap((MapFile) idManager.getObject(Integer.parseInt(mapId)));
-            }
-
-            gameResources.add(gameResource);
-
-            return Response.status(201).entity(utils.gamePlaceholderToJson(gameResource).toJSONString()).build();
+        if (jsonGame.containsKey("name")) {
+            gameResource.setName((String) jsonGame.get("name"));
         }
+
+        if (jsonGame.containsKey("players")) {
+            gameResource.setPlayers(utils.jsonToPlayers((JSONArray) jsonGame.get("players")));
+        }
+
+        if (jsonGame.containsKey("mapId")) {
+            String mapId = (String) jsonGame.get("mapId");
+
+            gameResource.setMap((MapFile) idManager.getObject(Integer.parseInt(mapId)));
+        }
+
+        if (jsonGame.get("status") != null && jsonGame.get("status").equals("STARTED")) {
+            gameResource.setStatus(STARTED);
+        } else {
+            gameResource.setStatus(NOT_STARTED);
+        }
+
+        gameResources.add(gameResource);
+
+        return Response.status(201).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
     }
 
     @PATCH
@@ -267,9 +241,9 @@ public class SettlersAPI {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response modifyGame(@PathParam("gameId") String gameId, String body) throws Exception {
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
 
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -280,99 +254,103 @@ public class SettlersAPI {
 
         JSONObject jsonUpdates = (JSONObject) parser.parse(body);
 
-        if (jsonUpdates.containsKey("mapId") && gameObject instanceof GameResource) {
+        if (gameResource.isStarted()) {
+            JSONObject message = new JSONObject();
+
+            message.put("status", "Error");
+            message.put("message", format("The game %s is already started and can't be modified.", gameId));
+
+            return Response.status(409).entity(message.toJSONString()).build();
+        }
+
+        if (jsonUpdates.containsKey("mapId")) {
             String updatedMapFileId = (String) jsonUpdates.get("mapId");
 
             MapFile updatedMapFile = (MapFile) idManager.getObject(updatedMapFileId);
 
-            GameResource gamePlaceholder = (GameResource) gameObject;
+            gameResource.setMap(updatedMapFile);
 
-            gamePlaceholder.setMap(updatedMapFile);
-
-            return Response.status(200).entity(utils.gamePlaceholderToJson(gamePlaceholder).toJSONString()).build();
+            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
 
-        if (jsonUpdates.containsKey("status") && gameObject instanceof GameResource) {
+        if (jsonUpdates.containsKey("status")) {
             String updatedStatus = (String) jsonUpdates.get("status");
 
-            GameResource gameResource = (GameResource) gameObject;
-
             if (updatedStatus.equals("STARTED")) {
+                startGame(gameResource);
 
-                /* Create the game map */
-                gameResource.createGameMap();
-                GameMap map = gameResource.getMap();
+                gameResource.setStatus(STARTED);
 
-                startedGames.add(gameResource);
-
-                idManager.updateObject(gameObject, gameResource.getMap());
-
-                /* Limit the amount of wild animals to make performance bearable -- temporary! */
-                List<WildAnimal> wildAnimals = map.getWildAnimals();
-                List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
-
-                if (reducedWildAnimals.size() > 10) {
-                    reducedWildAnimals = reducedWildAnimals.subList(0, 10);
-                }
-
-                wildAnimals.clear();
-
-                wildAnimals.addAll(reducedWildAnimals);
-
-                /* Place a headquarter for each player */
-                List<Player> players = map.getPlayers();
-                List<Point> startingPoints = map.getStartingPoints();
-
-                for (int i = 0; i < startingPoints.size(); i++) {
-
-                    if (i == players.size()) {
-                        break;
-                    }
-
-                    map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
-
-                    try {
-                        map.placeDeadTree(startingPoints.get(i).right().right());
-                    } catch (Throwable t) {
-
-                    }
-                }
-
-                /* Adjust the initial set of resources */
-                utils.adjustResources(map, gameResource.getResources());
-
-                /* Start the time for the game by adding it to the game ticker */
-                GameTicker gameTicker = (GameTicker) context.getAttribute(GAME_TICKER);
-
-                gameTicker.startGame(gameResource);
-
-                return Response.status(200).entity(utils.gameToJson(map).toJSONString()).build();
+                return Response.status(200).entity(utils.gameToJson(gameResource.getGameMap()).toJSONString()).build();
             }
 
             return Response.status(400).build();  // Add a bad request message
         }
 
-        if (jsonUpdates.containsKey("resources") && gameObject instanceof GameResource) {
+        if (jsonUpdates.containsKey("resources")) {
             ResourceLevel level = ResourceLevel.valueOf((String) jsonUpdates.get("resources"));
 
-            GameResource gamePlaceholder = (GameResource) gameObject;
+            gameResource.setResource(level);
 
-            gamePlaceholder.setResource(level);
-
-            return Response.status(200).entity(utils.gamePlaceholderToJson(gamePlaceholder).toJSONString()).build();
+            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
 
         /* Return bad request (400) if there is no mapFileId included */
         return Response.status(400).build(); // The scope of this is all changes, not only mapId
     }
 
+    private void startGame(GameResource gameResource) throws Exception {
+
+        /* Create the game map */
+        gameResource.createGameMap();
+        GameMap map = gameResource.getGameMap();
+
+        /* Limit the amount of wild animals to make performance bearable -- temporary! */
+        List<WildAnimal> wildAnimals = map.getWildAnimals();
+        List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
+
+        if (reducedWildAnimals.size() > 10) {
+            reducedWildAnimals = reducedWildAnimals.subList(0, 10);
+        }
+
+        wildAnimals.clear();
+
+        wildAnimals.addAll(reducedWildAnimals);
+
+        /* Place a headquarters for each player */
+        List<Player> players = map.getPlayers();
+        List<Point> startingPoints = map.getStartingPoints();
+
+        for (int i = 0; i < startingPoints.size(); i++) {
+
+            if (i == players.size()) {
+                break;
+            }
+
+            map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
+
+            try {
+                map.placeDeadTree(startingPoints.get(i).right().right());
+            } catch (Throwable t) {
+
+            }
+        }
+
+        /* Adjust the initial set of resources */
+        utils.adjustResources(map, gameResource.getResources());
+
+        /* Start the time for the game by adding it to the game ticker */
+        GameTicker gameTicker = (GameTicker) context.getAttribute(GAME_TICKER);
+
+        gameTicker.startGame(gameResource);
+    }
+
     @DELETE
     @Path("/games/{gameId}")
     public Response deleteGame(@PathParam("gameId") String gameId) {
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
 
-
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -381,14 +359,10 @@ public class SettlersAPI {
             return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        if (gameObject instanceof GameResource) {
-            gameResources.remove(gameObject);
-        } else {
-            startedGames.remove(gameObject); // TODO: type is wrong - startedGames is GameResources, gameObject is GameMap
-        }
+        gameResources.remove(gameResource);
 
         /* Free up the id */
-        idManager.remove(gameObject);
+        idManager.remove(gameResource);
 
         return Response.status(200).build();
     }
@@ -396,9 +370,9 @@ public class SettlersAPI {
     @GET
     @Path("/games/{gameId}/players")
     public Response getPlayersForGame(@PathParam("gameId") String gameId) {
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
 
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -407,26 +381,22 @@ public class SettlersAPI {
             return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        if (gameObject instanceof GameResource) {
-            GameResource gamePlaceholder = (GameResource) gameObject;
-
-            return Response.status(200).entity(utils.playersToJson(gamePlaceholder.getPlayers()).toJSONString()).build();
-        } else {
-            GameMap map = (GameMap) gameObject;
-
-            JSONArray jsonPlayers = utils.playersToJson(map.getPlayers());
+        if (gameResource.isStarted()) {
+            JSONArray jsonPlayers = utils.playersToJson(gameResource.getGameMap().getPlayers());
 
             return Response.status(200).entity(jsonPlayers.toJSONString()).build();
+        } else {
+            return Response.status(200).entity(utils.playersToJson(gameResource.getPlayers()).toJSONString()).build();
         }
     }
 
     @POST
     @Path("/games/{gameId}/players")
     public Response addPlayerToGame(@PathParam("gameId") String gameId, String playerBody) throws ParseException {
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
         JSONObject jsonPlayer = (JSONObject) parser.parse(playerBody);
 
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -443,14 +413,10 @@ public class SettlersAPI {
 
         Player player = utils.jsonToPlayer(jsonPlayer);
 
-        if (gameObject instanceof GameResource) {
-            GameResource gameResource = (GameResource) gameObject;
-
-            if (isComputer) {
-                gameResource.addComputerPlayer(player);
-            } else {
-                gameResource.addHumanPlayer(player);
-            }
+        if (isComputer) {
+            gameResource.addComputerPlayer(player);
+        } else {
+            gameResource.addHumanPlayer(player);
         }
 
         return Response.status(201).entity(utils.playerToJson(player).toJSONString()).build();
@@ -459,11 +425,11 @@ public class SettlersAPI {
     @PATCH
     @Path("/games/{gameId}/players/{playerId}")
     public Response updatePlayerInGame(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String body) throws ParseException {
-        GameResource gamePlaceholder = (GameResource) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
         Player player = (Player) idManager.getObject(playerId);
         JSONObject jsonUpdates = (JSONObject) parser.parse(body);
 
-        if (gamePlaceholder == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -481,7 +447,7 @@ public class SettlersAPI {
             return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        if (!gamePlaceholder.getPlayers().contains(player)) {
+        if (!gameResource.getPlayers().contains(player)) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -543,9 +509,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/players/{playerId}")
     public Response getPlayerForGame(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
         Player player = (Player) idManager.getObject(playerId);
-        Object gameObject = idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
 
-        if (gameObject == null) {
+        if (gameResource == null) {
             JSONObject message = new JSONObject();
 
             message.put("status", "Error");
@@ -564,21 +530,17 @@ public class SettlersAPI {
         }
 
         /* Check that the player belongs to the given game */
-        if (gameObject instanceof GameResource) {
-            GameResource gameResource = (GameResource) gameObject;
+        if (!gameResource.getPlayers().contains(player)) {
+            JSONObject message = new JSONObject();
 
-            if (!gameResource.getPlayers().contains(player)) {
-                JSONObject message = new JSONObject();
+            message.put("status", "Error");
+            message.put("message", format("No player with id %s exists in game with id %s", playerId, gameId));
 
-                message.put("status", "Error");
-                message.put("message", format("No player with id %s exists in game with id %s", playerId, gameId));
-
-                return Response.status(404).entity(message.toJSONString()).build();
-            }
+            return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        if (gameObject instanceof GameMap) {
-            GameMap map = (GameMap) gameObject;
+        if (gameResource.isStarted()) {
+            GameMap map = (GameMap) gameResource.getGameMap();
 
             if (!map.getPlayers().contains(player)) {
                 JSONObject message = new JSONObject();
@@ -597,7 +559,8 @@ public class SettlersAPI {
     @GET
     @Path("/games/{gameId}/map/terrain")
     public Response getTerrainForMapInGame(@PathParam("gameId") String gameId) {
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
 
         if (map == null) {
             JSONObject message = new JSONObject();
@@ -621,7 +584,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/map/points")
     public Response putPoint(@PathParam("gameId") String gameId, @QueryParam("x") int x, @QueryParam("y") int y, String body) throws Exception {
         Point point = new Point(x, y);
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
 
         if (map == null) {
             JSONObject message = new JSONObject();
@@ -660,7 +625,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/map/points")
     public Response getPoint(@PathParam("gameId") String gameId, @QueryParam("playerId") String playerId, @QueryParam("x") int x, @QueryParam("y") int y) {
         Point point = new Point(x, y);
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player)idManager.getObject(playerId);
 
         if (map == null) {
@@ -699,7 +666,9 @@ public class SettlersAPI {
     @DELETE
     @Path("/games/{gameId}/players/{playerId}/flags/{flagId}")
     public Response removeFlag(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("flagId") int flagId) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
         Flag flag = (Flag) idManager.getObject(flagId);
 
@@ -763,7 +732,9 @@ public class SettlersAPI {
     @GET
     @Path("/games/{gameId}/players/{playerId}/houses/{houseId}")
     public Response getHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("houseId") String houseId, @QueryParam("askingPlayerId") String askingPlayerId) {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
         Building building = (Building) idManager.getObject(houseId);
 
@@ -845,7 +816,9 @@ public class SettlersAPI {
     @DELETE
     @Path("/games/{gameId}/players/{playerId}/houses/{houseId}")
     public Response removeHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("houseId") String houseId) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
         Building building = (Building) idManager.getObject(houseId);
 
@@ -914,7 +887,9 @@ public class SettlersAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getHouses(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
 
         if (map == null) {
@@ -953,7 +928,9 @@ public class SettlersAPI {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String body) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
 
         utils.printTimestamp("Entered createHouse on server");
@@ -1006,7 +983,9 @@ public class SettlersAPI {
     @PATCH
     @Path("/games/{gameId}/players/{playerId}/houses/{houseId}")
     public Response updateHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("houseId") String houseId, String body) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Building building = (Building) idManager.getObject(houseId);
         Player player = (Player) idManager.getObject(playerId);
 
@@ -1136,7 +1115,9 @@ public class SettlersAPI {
     @POST
     @Path("/games/{gameId}/players/{playerId}/roads")
     public Response createRoad(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String bodyRoad) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
 
         if (map == null) {
@@ -1211,7 +1192,8 @@ public class SettlersAPI {
     @DELETE
     @Path("/games/{gameId}/players/{playerId}/roads/{roadId}")
     public Response removeRoad(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("roadId") String roadId) {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
         Player player = (Player) idManager.getObject(playerId);
         Road road = (Road) idManager.getObject(roadId);
 
@@ -1278,7 +1260,8 @@ public class SettlersAPI {
     @POST
     @Path("/games/{gameId}/players/{playerId}/flags")
     public Response createFlag(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String bodyFlag) throws Exception {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
         Player player = (Player) idManager.getObject(playerId);
         JSONObject jsonPoint = (JSONObject) parser.parse(bodyFlag);
 
@@ -1324,7 +1307,8 @@ public class SettlersAPI {
     @GET
     @Path("/games/{gameId}/players/{playerId}/flags/{flagId}")
     public Response getFlag(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("flagId") String flagId) {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
         Player player = (Player) idManager.getObject(playerId);
         Flag flag = (Flag) idManager.getObject(flagId);
 
@@ -1381,8 +1365,9 @@ public class SettlersAPI {
     @GET
     @Path("/games/{gameId}/players/{playerId}/view")
     public Response getViewForPlayer(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
 
-        GameMap map = (GameMap) idManager.getObject(gameId);
         Player player = (Player) idManager.getObject(playerId);
 
         if (map == null) {
@@ -1423,7 +1408,9 @@ public class SettlersAPI {
     @Path("/rpc/games/{gameId}/players/{playerId}/find-new-road")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findNewRoad(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String bodyFindNewRoad) throws ParseException {
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player)idManager.getObject(playerId);
 
         if (map == null) {
@@ -1488,7 +1475,8 @@ public class SettlersAPI {
     @Path("/games/{gameId}/statistics/land")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLandStatistics(@PathParam("gameId") String gameId) {
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
 
         if (map == null) {
             JSONObject message = new JSONObject();
@@ -1550,7 +1538,8 @@ public class SettlersAPI {
     @Path("/games/{gameId}/statistics/production")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMaterialStatistics(@PathParam("gameId") String gameId) {
-        GameMap map = (GameMap)idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
 
         if (map == null) {
             JSONObject message = new JSONObject();
@@ -1616,7 +1605,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/players/{playerId}/transportPriority")
     @Produces(MediaType.APPLICATION_JSON)
     public Response setTransportPriority(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, String body) throws ParseException, InvalidUserActionException {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
 
         JSONObject jsonBody = (JSONObject) parser.parse(body);
@@ -1644,7 +1635,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/players/{playerId}/transportPriority")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTransportPriority(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
-        GameMap map = (GameMap) idManager.getObject(gameId);
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
+
         Player player = (Player) idManager.getObject(playerId);
 
         JSONArray jsonTransportPriority = utils.transportPriorityToJson(player.getTransportPriorities());
@@ -1656,8 +1649,9 @@ public class SettlersAPI {
     @Path("/games/{gameId}/players/{playerId}/gameMessages")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getGameMessagesForPlayer(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
+        GameResource gameResource = (GameResource) idManager.getObject(gameId);
+        GameMap map = gameResource.getGameMap();
 
-        GameMap map = (GameMap) idManager.getObject(gameId);
         Player player = (Player) idManager.getObject(playerId);
 
         if (map == null) {

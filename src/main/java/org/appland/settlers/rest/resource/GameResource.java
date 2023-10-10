@@ -12,6 +12,7 @@ import java.util.List;
 import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
 
 public class GameResource {
+    public GameStatus status;
     private int height;
     private int width;
     private final List<Player> players;
@@ -29,6 +30,8 @@ public class GameResource {
 
         this.utils = utils;
         computerPlayers = new ArrayList<>();
+
+        status = GameStatus.NOT_STARTED;
     }
 
     void setPlayers(List<Player> players) {
@@ -78,7 +81,7 @@ public class GameResource {
         this.players.remove(player);
     }
 
-    public GameMap getMap() {
+    public GameMap getGameMap() {
         return this.map;
     }
 
@@ -107,5 +110,9 @@ public class GameResource {
 
     public boolean isStarted() {
         return map != null;
+    }
+
+    public void setStatus(GameStatus gameStatus) {
+        status = gameStatus;
     }
 }

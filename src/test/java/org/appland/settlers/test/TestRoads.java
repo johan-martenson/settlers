@@ -5,28 +5,7 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Fortress;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Military;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
-import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Well;
-import org.appland.settlers.model.WellWorker;
-import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -2643,7 +2622,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testSplitMainRoadResultsInTwoMainRoads() throws Exception {
+    public void testSplitMainRoadResultsInTwoMainRoadsAndMainFlag() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", BLUE);
@@ -2717,5 +2696,6 @@ public class TestRoads {
 
         assertTrue(map.getRoad(flag0.getPosition(), flag2.getPosition()).isMainRoad());
         assertTrue(map.getRoad(flag2.getPosition(), flag1.getPosition()).isMainRoad());
+        assertEquals(flag2.getType(), FlagType.MAIN);
     }
 }
