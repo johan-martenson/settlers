@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.assets.Nation;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ public class Player {
 
     private GameMap            map;
     private Color              color;
+    private Nation             nation;
     private String             name;
     private boolean            treeConservationProgramActive;
     private boolean            treeConservationProgramEnabled;
@@ -83,6 +86,7 @@ public class Player {
     public Player(String name, Color color) {
         this.name           = name;
         this.color          = color;
+        this.nation         = Nation.ROMANS;
         buildings           = new LinkedList<>();
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
@@ -1432,5 +1436,13 @@ public class Player {
 
     public void reportRemovedDecoration(Point point) {
         removedDecorations.add(point);
+    }
+
+    public Nation getNation() {
+        return nation;
+    }
+
+    public void setNation(Nation nation) {
+        this.nation = nation;
     }
 }

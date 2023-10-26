@@ -5,14 +5,8 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -303,5 +297,44 @@ public class TestPlayer {
 
             fail();
         } catch (Exception e) {}
+    }
+
+    @Test
+    public void testPlayerDefaultNationIsRoman() throws InvalidUserActionException {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        assertEquals(player0.getNation(), Nation.ROMANS);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        assertEquals(player0.getNation(), Nation.ROMANS);
+
+        /* Verify that it's not possible to have two players with the same color */
+        GameMap map = new GameMap(players, 20, 20);
+
+        assertEquals(player0.getNation(), Nation.ROMANS);
+    }
+
+    @Test
+    public void testSetNationForPlayer() throws InvalidUserActionException {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", BLUE);
+
+        assertEquals(player0.getNation(), Nation.ROMANS);
+
+        player0.setNation(Nation.VIKINGS);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        assertEquals(player0.getNation(), Nation.VIKINGS);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        assertEquals(player0.getNation(), Nation.VIKINGS);
     }
 }
