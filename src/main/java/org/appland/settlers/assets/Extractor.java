@@ -107,6 +107,16 @@ import static org.appland.settlers.model.WorkerAction.TOUCH_NOSE;
 
 public class Extractor {
 
+    private static class TitleAndFilename {
+        private final String filename;
+        private final String title;
+
+        TitleAndFilename(String title, String filename) {
+            this.title = title;
+            this.filename = filename;
+        }
+    }
+
     private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
 
     private static final String ROMAN_BUILDINGS_DIRECTORY = "roman-buildings";
@@ -117,15 +127,15 @@ public class Extractor {
     private static final String GREENLAND_DIRECTORY = "greenland";
     private static final String WINTER_DIRECTORY = "winter";
 
-    private static final List<String> MUSIC_FILENAMES = new ArrayList<>(List.of(
-            "audio/01_-_Track_01.mp3",
-            "audio/02_-_Track_02.mp3",
-            "audio/03_-_Track_03.mp3",
-            "audio/04_-_Track_04.mp3",
-            "audio/05_-_Track_05.mp3",
-            "audio/06_-_Track_06.mp3",
-            "audio/07_-_Track_07.mp3",
-            "audio/08_-_Track_08.mp3"
+    private static final List<TitleAndFilename> MUSIC_TITLE_AND_FILENAMES = new ArrayList<>(List.of(
+            new TitleAndFilename("Track 1", "audio/01_-_Track_01.mp3"),
+            new TitleAndFilename("Track 2", "audio/02_-_Track_02.mp3"),
+            new TitleAndFilename("Track 3", "audio/03_-_Track_03.mp3"),
+            new TitleAndFilename("Track 4", "audio/04_-_Track_04.mp3"),
+            new TitleAndFilename("Track 5", "audio/05_-_Track_05.mp3"),
+            new TitleAndFilename("Track 6", "audio/06_-_Track_06.mp3"),
+            new TitleAndFilename("Track 7", "audio/07_-_Track_07.mp3"),
+            new TitleAndFilename("Track 8", "audio/08_-_Track_08.mp3")
             ));
     private static final String SONG_0_TITLE = "Song 1";
     private static final String SONG_1_TITLE = "Song 2";
@@ -175,11 +185,11 @@ public class Extractor {
         // Write the music atlas
         JSONArray jsonSongs = new JSONArray();
 
-        for (String songFilename : MUSIC_FILENAMES) {
+        for (TitleAndFilename titleAndFilename : MUSIC_TITLE_AND_FILENAMES) {
             JSONObject jsonSong = new JSONObject();
 
-            jsonSong.put("path", toDir + "/" + songFilename);
-            jsonSong.put("title", songFilename);
+            jsonSong.put("path", toDir + "/" + titleAndFilename.filename);
+            jsonSong.put("title", titleAndFilename.title);
 
             jsonSongs.add(jsonSong);
         }
