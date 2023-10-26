@@ -1,5 +1,6 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.Armory;
@@ -142,12 +143,13 @@ class Utils {
         return jsonPlayers;
     }
 
-    private JSONObject playerToJson(Player player, String playerId) {
+    JSONObject playerToJson(Player player, String playerId) {
         JSONObject jsonPlayer = new JSONObject();
 
         jsonPlayer.put("name", player.getName());
         jsonPlayer.put("color", colorToHexString(player.getColor()));
         jsonPlayer.put("id", playerId);
+        jsonPlayer.put("nation", player.getNation().name());
 
         /* Get the player's "center spot" */
         for (Building building : player.getBuildings()) {
@@ -219,7 +221,12 @@ class Utils {
         String name = (String) jsonPlayer.get("name");
         Color color = jsonToColor((String) jsonPlayer.get("color"));
 
+        String nationString = (String) jsonPlayer.get("nation");
+        Nation nation = Nation.valueOf(nationString);
+
         Player player = new Player(name, color);
+
+        player.setNation(nation);
 
         return player;
     }
@@ -375,7 +382,7 @@ class Utils {
             jsonHouse.put("produces", jsonProduces);
 
             for (Material material : building.getProducedMaterial()) {
-                jsonProduces.add(material.name());
+                jsonProduces.add(material.name().toUpperCase());
             }
 
             jsonHouse.put("productionEnabled", building.isProductionEnabled());
@@ -396,7 +403,7 @@ class Utils {
                     jsonResource.put("totalNeeded", amountTotalNeeded);
                 }
 
-                jsonResources.put(material.name().toLowerCase(), jsonResource);
+                jsonResources.put(material.name().toUpperCase(), jsonResource);
             }
         }
 
@@ -656,7 +663,7 @@ class Utils {
         for (Cargo cargo : cargos) {
             Material material = cargo.getMaterial();
 
-            jsonMaterial.add(material.getSimpleName());
+            jsonMaterial.add(material.getSimpleName().toUpperCase());
         }
 
         return jsonMaterial;
@@ -752,6 +759,7 @@ class Utils {
         jsonPlayer.put("id", idManager.getId(player));
         jsonPlayer.put("name", player.getName());
         jsonPlayer.put("color", colorToHexString(player.getColor()));
+        jsonPlayer.put("nation", player.getNation().name());
 
         return jsonPlayer;
     }
@@ -1517,7 +1525,7 @@ class Utils {
         JSONArray jsonTransportPriority = new JSONArray();
 
         for (TransportCategory category : transportPriorityList) {
-            jsonTransportPriority.add(category.name().toLowerCase());
+            jsonTransportPriority.add(category.name().toUpperCase());
         }
 
         return jsonTransportPriority;
@@ -1807,10 +1815,10 @@ class Utils {
         }
 
         jsonGameResource.put("id", idManager.getId(gameResource));
-
         jsonGameResource.put("status", gameResource.status.name());
-
         jsonGameResource.put("resources", gameResource.getResources().name());
+        jsonGameResource.put("othersCanJoin", gameResource.getOthersCanJoin());
+
 
         return jsonGameResource;
     }

@@ -1,5 +1,6 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.BuildingCapturedMessage;
@@ -295,6 +296,14 @@ public class SettlersAPI {
             return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
 
+        if (jsonUpdates.containsKey("othersCanJoin")) {
+            System.out.println(jsonUpdates.get("othersCanJoin"));
+
+            gameResource.setOthersCanJoin((Boolean) jsonUpdates.get("othersCanJoin"));
+
+            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
+        }
+
         /* Return bad request (400) if there is no mapFileId included */
         return Response.status(400).build(); // The scope of this is all changes, not only mapId
     }
@@ -381,13 +390,21 @@ public class SettlersAPI {
             return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        if (gameResource.isStarted()) {
-            JSONArray jsonPlayers = utils.playersToJson(gameResource.getGameMap().getPlayers());
+        JSONArray jsonPlayers = new JSONArray();
 
-            return Response.status(200).entity(jsonPlayers.toJSONString()).build();
-        } else {
-            return Response.status(200).entity(utils.playersToJson(gameResource.getPlayers()).toJSONString()).build();
+        for (Player player : gameResource.getPlayers()) {
+            JSONObject jsonPlayer = utils.playerToJson(player, idManager.getId(player));
+
+            if (gameResource.isComputerPlayer(player)) {
+                jsonPlayer.put("type", "COMPUTER");
+            } else {
+                jsonPlayer.put("type", "HUMAN");
+            }
+
+            jsonPlayers.add(jsonPlayer);
         }
+
+        return Response.status(200).entity(jsonPlayers.toJSONString()).build();
     }
 
     @POST
@@ -407,7 +424,7 @@ public class SettlersAPI {
 
         boolean isComputer = false;
 
-        if (jsonPlayer.getOrDefault("type", "").equals("COMPUTER_PLAYER")) {
+        if (jsonPlayer.getOrDefault("type", "").equals("COMPUTER")) {
             isComputer = true;
         }
 
@@ -419,7 +436,15 @@ public class SettlersAPI {
             gameResource.addHumanPlayer(player);
         }
 
-        return Response.status(201).entity(utils.playerToJson(player).toJSONString()).build();
+        JSONObject jsonPlayerResponse = utils.playerToJson(player);
+
+        if (isComputer) {
+            jsonPlayerResponse.put("type", "COMPUTER");
+        } else {
+            jsonPlayerResponse.put("type", "HUMAN");
+        }
+
+        return Response.status(201).entity(jsonPlayerResponse.toJSONString()).build();
     }
 
     @PATCH
@@ -1554,7 +1579,7 @@ public class SettlersAPI {
 
         jsonResponse.put("players", utils.playersToShortJson(map.getPlayers()));
 
-        JSONArray jsonProductionStatisticsForAllMaterials = new JSONArray();
+        JSONObject jsonProductionStatisticsForAllMaterials = new JSONObject();
         StatisticsManager statisticsManager = map.getStatisticsManager();
 
         for (Material material : PRODUCTION_STATISTICS_MATERIALS) {
@@ -1566,11 +1591,8 @@ public class SettlersAPI {
                 JSONObject jsonMaterialStatisticsDataAndMeta = new JSONObject();
                 JSONArray jsonMaterialStatisticsDataSeries = new JSONArray();
 
-                jsonMaterialStatisticsDataAndMeta.put("material", material.name().toLowerCase());
-                jsonMaterialStatisticsDataAndMeta.put("materialStatistics", jsonMaterialStatisticsDataSeries);
-
                 /* Add the statistics for this material to the array */
-                jsonProductionStatisticsForAllMaterials.add(jsonMaterialStatisticsDataAndMeta);
+                jsonProductionStatisticsForAllMaterials.put(material.name().toUpperCase(), jsonMaterialStatisticsDataSeries);
 
                 for (ProductionDataPoint dataPoint : materialProductionDataSeries.getProductionDataPoints()) {
 
@@ -1628,7 +1650,7 @@ public class SettlersAPI {
     }
 
     private TransportCategory jsonToTransportCategory(String category) {
-        return TransportCategory.valueOf(category.toUpperCase());
+        return TransportCategory.valueOf(category);
     }
 
     @GET

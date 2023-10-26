@@ -67,7 +67,7 @@ public class AppTest extends TestCase {
         //context.addServlet(restEasyServlet, APPLICATION_PATH + "/*");
         context.addServlet(restEasyServlet, APPLICATION_PATH);
 
-        // Setup the DefaultServlet at "/".
+        // Set the DefaultServlet at "/".
 
         server.setStopAtShutdown(true);
         server.start();
@@ -111,7 +111,6 @@ public class AppTest extends TestCase {
         /* Get the id of the first map */
         String mapId = getIdOfFirstMap();
 
-
         /* Create the map body */
         Map<String, Object> game = new HashMap<>();
 
@@ -121,6 +120,7 @@ public class AppTest extends TestCase {
 
         player0.put("name", "Player 0");
         player0.put("color", "#000000");
+        player0.put("nation", "ROMANS");
 
         players.add(player0);
 
@@ -240,6 +240,7 @@ public class AppTest extends TestCase {
 
         player0.put("name", "Player 0");
         player0.put("color", "#000000");
+        player0.put("nation", "ROMANS");
 
         players.add(player0);
 
@@ -433,6 +434,7 @@ public class AppTest extends TestCase {
 
         player0.put("name", "Player 0");
         player0.put("color", "#000000");
+        player0.put("nation", "ROMANS");
 
         players.add(player0);
 
@@ -506,6 +508,7 @@ public class AppTest extends TestCase {
 
         player0.put("name", "Player 0");
         player0.put("color", "#000000");
+        player0.put("nation", "ROMANS");
 
         players.add(player0);
 
@@ -804,6 +807,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Name");
         player.put("color", "#121212");
+        player.put("nation", "ROMANS");
 
         given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId).then()
@@ -845,6 +849,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId0).then()
@@ -887,6 +892,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId0).then()
@@ -962,6 +968,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId).then()
@@ -1002,6 +1009,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId).then()
@@ -1047,6 +1055,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId).then()
@@ -1090,6 +1099,7 @@ public class AppTest extends TestCase {
 
         player.put("name", "Some Other Name");
         player.put("color", "#343434");
+        player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
                 .when().post("/games/{id}/players", gameId).then()
@@ -1820,6 +1830,7 @@ public class AppTest extends TestCase {
 
         player0.put("name", "Player 0");
         player0.put("color", "#000000");
+        player0.put("nation", "ROMANS");
 
         players.add(player0);
 

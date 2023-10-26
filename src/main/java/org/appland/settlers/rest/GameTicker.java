@@ -12,6 +12,7 @@ import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.Variable;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class GameTicker {
 
                 GameMap map = game.getGameMap();
 
-                List<ComputerPlayer> computerPlayers = game.getComputerPlayers();
+                Collection<ComputerPlayer> computerPlayers = game.getComputerPlayers();
 
                 synchronized (map) {
 

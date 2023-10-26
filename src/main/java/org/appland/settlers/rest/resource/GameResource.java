@@ -6,8 +6,7 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
 
@@ -21,7 +20,8 @@ public class GameResource {
     private ResourceLevel resourceLevel;
     private GameMap map;
     private final Utils utils;
-    private final List<ComputerPlayer> computerPlayers;
+    private final Map<Player, ComputerPlayer> computerPlayers;
+    private boolean othersCanJoin;
 
     GameResource(Utils utils) {
         players = new ArrayList<>();
@@ -29,9 +29,11 @@ public class GameResource {
         resourceLevel = MEDIUM;
 
         this.utils = utils;
-        computerPlayers = new ArrayList<>();
+        computerPlayers = new HashMap<>();
 
         status = GameStatus.NOT_STARTED;
+
+        othersCanJoin = true;
     }
 
     void setPlayers(List<Player> players) {
@@ -94,17 +96,17 @@ public class GameResource {
         }
 
         /* Assign the map to each computer player */
-        for (ComputerPlayer computerPlayer : computerPlayers) {
+        for (ComputerPlayer computerPlayer : computerPlayers.values()) {
             computerPlayer.setMap(map);
         }
     }
 
-    public List<ComputerPlayer> getComputerPlayers() {
-        return this.computerPlayers;
+    public Collection<ComputerPlayer> getComputerPlayers() {
+        return this.computerPlayers.values();
     }
 
     public void addComputerPlayer(Player player) {
-        computerPlayers.add(new CompositePlayer(player, player.getMap()));
+        computerPlayers.put(player, new CompositePlayer(player, player.getMap()));
         players.add(player);
     }
 
@@ -114,5 +116,17 @@ public class GameResource {
 
     public void setStatus(GameStatus gameStatus) {
         status = gameStatus;
+    }
+
+    public boolean isComputerPlayer(Player player) {
+        return computerPlayers.containsKey(player);
+    }
+
+    public void setOthersCanJoin(boolean othersCanJoin) {
+        this.othersCanJoin = othersCanJoin;
+    }
+
+    public boolean getOthersCanJoin() {
+        return othersCanJoin;
     }
 }
