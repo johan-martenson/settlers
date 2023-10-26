@@ -35,7 +35,8 @@ class DeploymentListener implements ServletContextListener {
         gameTicker.activate();
 
         /* Load all maps and put them into the servlet context */
-        String largeMapDirectoryPath = "/home/johan/projects/settlers-map-manager/maps/WORLDS/";
+        //String largeMapDirectoryPath = "/home/johan/projects/settlers-map-manager/maps/WORLDS/";
+        String largeMapDirectoryPath = "maps/WORLDS/";
 
         File largeMapDirectory = new File(largeMapDirectoryPath);
 
