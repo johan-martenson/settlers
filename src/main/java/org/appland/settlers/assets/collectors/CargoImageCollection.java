@@ -67,7 +67,7 @@ public class CargoImageCollection {
 
             JSONObject jsonCargoImage = imageBoard.imageLocationToJson(image);
 
-            jsonGeneric.put(material.name().toLowerCase(), jsonCargoImage);
+            jsonGeneric.put(material.name().toUpperCase(), jsonCargoImage);
 
             maxGenericCargoWidth = Math.max(maxGenericCargoWidth, image.getWidth());
 
@@ -92,7 +92,7 @@ public class CargoImageCollection {
 
                 JSONObject jsonCargoImage = imageBoard.imageLocationToJson(image);
 
-                jsonNation.put(material.name().toLowerCase(), jsonCargoImage);
+                jsonNation.put(material.name().toUpperCase(), jsonCargoImage);
 
                 cursor.y = cursor.y + image.getHeight();
             }
