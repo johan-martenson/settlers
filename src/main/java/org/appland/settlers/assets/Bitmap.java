@@ -1,19 +1,12 @@
 package org.appland.settlers.assets;
 
 import javax.imageio.ImageIO;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
-import java.awt.image.DataBufferByte;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class Bitmap {
     protected int bytesPerPixel;
@@ -103,6 +96,10 @@ public class Bitmap {
 
     public int getWidth() {
         return width;
+    }
+
+    public void writeToFile(Path path) throws IOException {
+        writeToFile(path.toString());
     }
 
     public void writeToFile(String filename) throws IOException {

@@ -23,7 +23,7 @@ import static java.lang.String.format;
 
 public class Reader {
 
-    private static final String DEFAULT_PALETTE = "/home/johan/projects/settlers/src/test/resources/pal5.act";
+    private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
     private static final int NUMBER_LINKS_PER_OVERLAY = 8 * 2 * 6;
 
     @Option(name = "--dir", usage = "Asset directory to load")

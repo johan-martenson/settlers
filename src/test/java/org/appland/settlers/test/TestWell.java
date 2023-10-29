@@ -31,11 +31,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WELL_WORKER;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -235,6 +231,38 @@ public class TestWell {
             assertTrue(well.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWellworkerIsCreatedWhenNeeded() throws Exception {
+
+        /* Create gamemap */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all well workers from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WELL_WORKER, 0);
+
+        /* Place the well */
+        Point point1 = new Point(8, 6);
+        Well well = map.placeBuilding(new Well(player0), point1);
+
+        /* Connect the well with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), well.getFlag());
+
+        /* Finish the well */
+        Utils.constructHouse(well);
+
+        /* Verify that the headquarters uses the bucket to create a new well worker */
+        WellWorker wellWorker = Utils.waitForWorkerOutsideBuilding(WellWorker.class, player0);
+
+        assertEquals(headquarter.getAmount(WELL_WORKER), 0);
     }
 
     @Test

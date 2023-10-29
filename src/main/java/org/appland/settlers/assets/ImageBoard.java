@@ -128,6 +128,12 @@ public class ImageBoard {
         return jsonImages;
     }
 
+    public void placeImageBottom(Bitmap image) {
+        int currentMaxY = this.getCurrentHeight();
+
+        placeImage(image, 0, currentMaxY);
+    }
+
     private static class ImageOnBoard {
         private final int x;
         private final int y;
@@ -192,5 +198,23 @@ public class ImageBoard {
         }
 
         return currentWidth;
+    }
+
+    public int getCurrentHeight() {
+        int currentHeight = 0;
+
+        for (ImageOnBoard imageOnBoard : images.values()) {
+            currentHeight = Math.max(currentHeight, imageOnBoard.image.height + imageOnBoard.y);
+        }
+
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
+            if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
+                currentHeight = Math.max(currentHeight, oneImageSeries.height + oneImageSeries.y);
+            } else {
+                currentHeight = Math.max(currentHeight, oneImageSeries.height * oneImageSeries.images.size() + oneImageSeries.y);
+            }
+        }
+
+        return currentHeight;
     }
 }

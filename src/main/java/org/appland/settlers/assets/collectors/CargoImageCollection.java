@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -102,5 +103,32 @@ public class CargoImageCollection {
         imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-cargos.png");
 
         Files.writeString(Paths.get(toDir, "image-atlas-cargos.json"), jsonImageAtlas.toJSONString());
+
+        // Write cargo icons
+        Path cargoIconDir = Paths.get(toDir, "cargo-icons");
+
+        Files.createDirectory(cargoIconDir);
+
+        // Write generic material icons
+        for (Map.Entry<Material, Bitmap> entry : cargos.entrySet()) {
+            Path iconPath = Paths.get(cargoIconDir.toString(), entry.getKey().name().toUpperCase() + ".png");
+
+            entry.getValue().writeToFile(iconPath);
+        }
+
+        // Write nation-specific material icons
+        for (Nation nation : Nation.values()) {
+            Path nationIconPath = Paths.get(cargoIconDir.toString(), nation.name().toUpperCase());
+
+            if (!Files.isDirectory(nationIconPath)) {
+                Files.createDirectory(nationIconPath);
+            }
+
+            for (Map.Entry<Material, Bitmap> entry : nationCargos.get(nation).entrySet()) {
+                Path iconPath = Paths.get(nationIconPath.toString(), entry.getKey().name().toUpperCase() + ".png");
+
+                entry.getValue().writeToFile(iconPath);
+            }
+        }
     }
 }

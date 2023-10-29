@@ -1,20 +1,6 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.assets.collectors.AnimalImageCollection;
-import org.appland.settlers.assets.collectors.BorderImageCollector;
-import org.appland.settlers.assets.collectors.BuildingsImageCollection;
-import org.appland.settlers.assets.collectors.CargoImageCollection;
-import org.appland.settlers.assets.collectors.CropImageCollection;
-import org.appland.settlers.assets.collectors.DecorativeImageCollection;
-import org.appland.settlers.assets.collectors.FireImageCollection;
-import org.appland.settlers.assets.collectors.FlagImageCollection;
-import org.appland.settlers.assets.collectors.RoadBuildingImageCollection;
-import org.appland.settlers.assets.collectors.ShipImageCollection;
-import org.appland.settlers.assets.collectors.SignImageCollection;
-import org.appland.settlers.assets.collectors.StonesImageCollection;
-import org.appland.settlers.assets.collectors.TreeImageCollection;
-import org.appland.settlers.assets.collectors.UIElementsImageCollection;
-import org.appland.settlers.assets.collectors.WorkerImageCollection;
+import org.appland.settlers.assets.collectors.*;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
@@ -66,36 +52,7 @@ import static org.appland.settlers.assets.Nation.AFRICANS;
 import static org.appland.settlers.assets.Nation.JAPANESE;
 import static org.appland.settlers.assets.Nation.ROMANS;
 import static org.appland.settlers.assets.Nation.VIKINGS;
-import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.BOAT;
-import static org.appland.settlers.model.Material.BOW;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.CLEAVER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHING_ROD;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.HAMMER;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PICK_AXE;
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.ROLLING_PIN;
-import static org.appland.settlers.model.Material.SAW;
-import static org.appland.settlers.model.Material.SCYTHE;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.SHOVEL;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.TONGS;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -1079,6 +1036,81 @@ public class Extractor {
 
         uiElementsImageCollection.writeImageAtlas(toDir, defaultPalette);
 
+        /* Extract the inventory icons */
+        InventoryImageCollection inventoryImageCollection = new InventoryImageCollection();
+
+        inventoryImageCollection.addIcon(BEER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BEER_ICON));
+        inventoryImageCollection.addIcon(TONGS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PLIER_ICON));
+        inventoryImageCollection.addIcon(HAMMER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.HAMMER_ICON));
+        inventoryImageCollection.addIcon(AXE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.AXE_ICON));
+        inventoryImageCollection.addIcon(SAW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SAW_ICON));
+        inventoryImageCollection.addIcon(PICK_AXE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PICK_AXE_ICON));
+        inventoryImageCollection.addIcon(SHOVEL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SHOVEL_ICON));
+        inventoryImageCollection.addIcon(CRUCIBLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CRUCIBLE_ICON));
+        inventoryImageCollection.addIcon(FISHING_ROD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISHING_HOOK_ICON));
+        inventoryImageCollection.addIcon(SCYTHE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SCYTHE_ICON));
+        //inventoryImageCollection.addIcon(BUCKET, getImageFromResourceLocation(mapBobsLst, MapBobsLst.EMPTY_BUCKET_ICON));
+        inventoryImageCollection.addIcon(WATER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BUCKET_WITH_WATER_ICON));
+        inventoryImageCollection.addIcon(CLEAVER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CLEAVER_ICON));
+        inventoryImageCollection.addIcon(ROLLING_PIN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROLLING_PIN_ICON));
+        inventoryImageCollection.addIcon(BOW, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SPEAR_ICON));
+        inventoryImageCollection.addIcon(BOAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BOAT_ICON));
+        inventoryImageCollection.addIcon(SWORD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.GOLD_SWORD_ICON));
+        inventoryImageCollection.addIcon(IRON_BAR, getImageFromResourceLocation(mapBobsLst, MapBobsLst.IRON_BAR_ICON));
+        inventoryImageCollection.addIcon(FLOUR, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FLOUR_BAG_ICON));
+        inventoryImageCollection.addIcon(FISH, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISH_ICON));
+        inventoryImageCollection.addIcon(BREAD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BREAD_ICON));
+        inventoryImageCollection.addNationSpecificIcon(SHIELD, ROMANS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ROMAN_SHIELD_ICON));
+        inventoryImageCollection.addIcon(WOOD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WOOD_ICON));
+        inventoryImageCollection.addIcon(PLANK, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PLANKS_ICON));
+        inventoryImageCollection.addIcon(STONE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_ICON));
+        inventoryImageCollection.addNationSpecificIcon(SHIELD, VIKINGS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.VIKING_SHIELD_ICON));
+        inventoryImageCollection.addNationSpecificIcon(SHIELD, AFRICANS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.AFRICAN_SHIELD_ICON));
+        inventoryImageCollection.addIcon(WHEAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WHEAT_ICON));
+        inventoryImageCollection.addIcon(COIN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.COIN_ICON));
+        inventoryImageCollection.addIcon(GOLD, getImageFromResourceLocation(mapBobsLst, MapBobsLst.GOLD_ICON));
+        inventoryImageCollection.addIcon(IRON, getImageFromResourceLocation(mapBobsLst, MapBobsLst.IRON_ICON));
+        inventoryImageCollection.addIcon(COAL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.COAL_ICON));
+        inventoryImageCollection.addIcon(MEAT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.MEAT_ICON));
+        inventoryImageCollection.addIcon(PIG, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PIG_ICON));
+        inventoryImageCollection.addNationSpecificIcon(SHIELD, JAPANESE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.JAPANESE_SHIELD_ICON));
+        //inventoryImageCollection.addIcon(, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BACKGROUND_UNKNOWN_1);
+        //inventoryImageCollection.addIcon(, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BACKGROUND_UNKNOWN_2);
+        inventoryImageCollection.addIcon(COURIER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.CARRIER_ICON));
+        inventoryImageCollection.addIcon(WOODCUTTER_WORKER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.WOODCUTTER_ICON));
+        inventoryImageCollection.addIcon(FISHERMAN, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FISHERMAN_ICON));
+        inventoryImageCollection.addIcon(FORESTER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FORESTER_ICON));
+        inventoryImageCollection.addIcon(SAWMILL_WORKER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SAWMILL_WORKER_ICON));
+        inventoryImageCollection.addIcon(STONEMASON, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONEMASON_ICON));
+        inventoryImageCollection.addIcon(HUNTER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.HUNTER_ICON));
+        inventoryImageCollection.addIcon(FARMER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FARMER_ICON));
+        inventoryImageCollection.addIcon(MILLER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.MILLER_ICON));
+        inventoryImageCollection.addIcon(BAKER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BAKER_ICON));
+        inventoryImageCollection.addIcon(BUTCHER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BUTCHER_ICON));
+        inventoryImageCollection.addIcon(MINER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.MINER_ICON));
+        inventoryImageCollection.addIcon(BREWER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BREWER_ICON));
+        inventoryImageCollection.addIcon(PIG_BREEDER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PIG_BREEDER_ICON));
+        inventoryImageCollection.addIcon(DONKEY_BREEDER, getImageFromResourceLocation(mapBobs0Lst, MapBobs0Lst.DONKEY_BREEDER_ICON));
+        inventoryImageCollection.addIcon(IRON_FOUNDER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.IRON_MELTER_ICON));
+        inventoryImageCollection.addIcon(MINTER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.MINTER_ICON));
+        inventoryImageCollection.addIcon(METALWORKER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.TOOL_MAKER_ICON));
+        inventoryImageCollection.addIcon(ARMORER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SMITH_ICON));
+        inventoryImageCollection.addIcon(BUILDER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.BUILDER_ICON));
+        inventoryImageCollection.addIcon(PLANER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PLANER_ICON));
+        inventoryImageCollection.addIcon(PRIVATE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PRIVATE_SOLDIER_ICON));
+        inventoryImageCollection.addIcon(PRIVATE_FIRST_CLASS, getImageFromResourceLocation(mapBobsLst, MapBobsLst.PRIVATE_FIRST_RANK_SOLDIER_ICON));
+        inventoryImageCollection.addIcon(SERGEANT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SERGEANT_SOLDIER_ICON));
+        inventoryImageCollection.addIcon(OFFICER, getImageFromResourceLocation(mapBobsLst, MapBobsLst.OFFICER_SOLDIER_ICON));
+        inventoryImageCollection.addIcon(GENERAL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.GENERAL_SOLDIER_ICON));
+        inventoryImageCollection.addIcon(GEOLOGIST, getImageFromResourceLocation(mapBobsLst, MapBobsLst.GEOLOGIST_ICON));
+        inventoryImageCollection.addIcon(SHIPWRIGHT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.SHIP_ICON));
+        inventoryImageCollection.addIcon(SCOUT, getImageFromResourceLocation(mapBobsLst, MapBobsLst.FUR_HAT_UNKNOWN_ICON));
+
+        inventoryImageCollection.addIcon(DONKEY, getImageFromResourceLocation(mapBobs0Lst, 1027));
+        //        inventoryImageCollection.addIcon(, getImageFromResourceLocation(mapBobsLst, MapBobsLst.ICON_BACKGROUND);
+
+        inventoryImageCollection.writeImageAtlas(toDir, defaultPalette);
+
         /*  Extract the crops */
         CropImageCollection cropImageCollection = new CropImageCollection();
 
@@ -1658,179 +1690,6 @@ public class Extractor {
     }
 
     /**
-     * Layout of data in ROM_Y.LST
-     *
-     *
-     * 0 ...
-     * 4-11        Flag animation
-     * 12-19       Corresponding shadows
-     * 20-27       Main road flag animation
-     * 28-35       Corresponding shadows
-     * 36-43       Sea flag animation
-     * 44-51       Corresponding flag animation
-     * 51-59       ??
-     * 60          Headquarter
-     * 61          ??
-     * 62          Headquarter open door
-     * 63          Barracks
-     * 64          ??
-     * 65          Barracks under construction
-     * 66          ??
-     * 67          Barracks open door
-     * 68          Guardhouse
-     * 69          ??
-     * 70          Guardhouse under construction
-     * 71          ??
-     * 72          Guardhouse open door
-     * 73          Watch tower
-     * 74          ??
-     * 75          Watch tower under construction
-     * 76          Watch tower under construction shadow (??)
-     * 77          Watch tower open door
-     * 78          Fortress
-     * 79          ??
-     * 80          Fortress under construction
-     * 81          Fortress under construction shadow (??)
-     * 82          Fortress open door
-     * 83          Granite mine
-     * 84          Granite mine shadow (??)
-     * 85          Granite mine under construction
-     * 86          Granite mine under construction shadow (??)
-     * 87          Coal mine
-     * 88          Coal mine shadow (??)
-     * 89          Coal mine under construction
-     * 90          Coal mine under construction shadow (??)
-     * 91          Iron mine
-     * 92          Iron mine shadow (??)
-     * 93          Iron mine under construction
-     * 94          Iron mine under construction shadow (??)
-     * 95          Gold mine
-     * 96          Gold mine shadow (??)
-     * 97          Gold mine under construction
-     * 98          Gold mine under construction shadow (??)
-     * 99          Lookout tower
-     * 100         Lookout tower shadow (??)
-     * 101         Lookout tower under construction
-     * 102         Lookout tower under construction shadow (??)
-     * 103         Lookout tower open door
-     * 104         Catapult
-     * 105         Catapult shadow (??)
-     * 106         Catapult under construction
-     * 107         Catapult open door
-     * 108         Woodcutter
-     * 109         Woodcutter shadow (??)
-     * 110         Woodcutter under construction
-     * 111         Woodcutter under construction shadow (??)
-     * 112         Woodcutter open door
-     * 113         Fishery
-     * 114         Fishery shadow
-     * 115         Fishery under construction
-     * 116         Fishery under construction shadow
-     * 117         Fishery open door
-     * 118         Quarry
-     * 119         Quarry shadow
-     * 120         Quarry under construction
-     * 121         Quarry under construction shadow
-     * 122         Quarry open door
-     * 123         Forester hut
-     * 124         Forester hut shadow
-     * 125         Forester hut under construction
-     * 126         Forester hut under construction shadow
-     * 127         Forester hut open door
-     * 128         Slaughter house
-     * 129         Slaughter house shadow
-     * 130         Slaughter house under construction
-     * 131         Slaughter house under construction shadow
-     * 132         Slaughter house open door
-     * 133         Hunter hut
-     * 134         Hunter hut shadow
-     * 135         Hunter hut under construction
-     * 136         Hunter hut under construction shadow
-     * 137         Hunter hut open door
-     * 138         Brewery
-     * 139         Brewery shadow
-     * 140         Brewery under construction
-     * 141         Brewery under construction shadow
-     * 142         Brewery open door
-     * 143         Armory
-     * 144         Armory shadow
-     * 145         Armory under construction
-     * 146         Armory under construction shadow
-     * 147         Armory open door
-     * 148         Metalworks
-     * 149         Metalworks shadow
-     * 150         Metalworks under construction
-     * 151         Metalworks under construction shadow
-     * 152         Metalworks open door
-     * 153         Iron Smelter
-     * 154         Iron Smelter shadow
-     * 155         Iron Smelter under construction
-     * 156         Iron Smelter under construction shadow
-     * 157         Iron Smelter open door
-     * 158         Pig farm
-     * 159         Pig farm shadow
-     * 160         Pig farm under construction
-     * 161         Pig farm under construction shadow
-     * 162         Pig farm open door
-     * 163         Store house
-     * 164         Store house shadow
-     * 165         Store house under construction
-     * 166         Store house under construction shadow
-     * 167         Store house open door
-     * 168         Mill - no fan
-     * 169         Mill - no fan shadow
-     * 170         Mill - no fan under construction
-     * 171         Mill - no fan under construction shadow
-     * 172         Mill - open door
-     * 173         Bakery
-     * 174         Bakery shadow
-     * 175         Bakery under construction
-     * 176         Bakery under construction shadow
-     * 177         Bakery open door
-     * 178         Sawmill
-     * 179         Sawmill shadow
-     * 180         Sawmill under construction
-     * 181         Sawmill under construction shadow
-     * 182         Sawmill open door
-     * 183         Mint
-     * 184         Mint shadow
-     * 185         Mint under construction
-     * 186         Mint under construction shadow
-     * 187         Mint open door
-     * 188         Well
-     * 189         Well shadow
-     * 190         Well under construction
-     * 191         Well under construction shadow
-     * 192         Well open door
-     * 193         Shipyard
-     * 194         Shipyard shadow
-     * 195         Shipyard under construction
-     * 196         Shipyard under construction shadow
-     * 197         Shipyard open door
-     * 198         Farm
-     * 199         Farm shadow
-     * 200         Farm under construction
-     * 201         Farm under construction shadow
-     * 202         Farm open door
-     * 203         Donkey breeder
-     * 204         Donkey breeder shadow
-     * 205         Donkey breeder under construction
-     * 206         Donkey breeder under construction shadow
-     * 207         Donkey breeder open door
-     * 208         Harbor
-     * 209         Harbor shadow
-     * 210         Harbor under construction
-     * 211         Harbor under construction shadow
-     * 212         Construction planned sign
-     * 213         Construction planned sign shadow
-     * 214         Construction just started
-     * 215         Construction just started shadow
-     * 216         Mill fan not spinning
-     * 217-223     Pairs of mill fan+shadow
-     * 224-227     Unknown fire
-     *
-     *
-     *
      *
      * @param fromDir
      * @param toDir
@@ -2083,10 +1942,10 @@ public class Extractor {
             buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Farm", getImageFromResourceLocation(nationResourceList, RomYLst.FARM + 2));
             buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Farm", getImageFromResourceLocation(nationResourceList, RomYLst.FARM_UNDER_CONSTRUCTION_SHADOW));
 
-            buildingsImageCollection.addBuildingForNation(nation, "DonkeyBreeder", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "DonkeyBreeder", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "DonkeyBreeder", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "DonkeyBreeder", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER_UNDER_CONSTRUCTION_SHADOW));
+            buildingsImageCollection.addBuildingForNation(nation, "DonkeyFarm", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER));
+            buildingsImageCollection.addBuildingShadowForNation(nation, "DonkeyFarm", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER_SHADOW));
+            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "DonkeyFarm", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER + 2));
+            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "DonkeyFarm", getImageFromResourceLocation(nationResourceList, RomYLst.DONKEY_BREEDER_UNDER_CONSTRUCTION_SHADOW));
 
             buildingsImageCollection.addBuildingForNation(nation, "Harbor", getImageFromResourceLocation(nationResourceList, RomYLst.HARBOR));
             buildingsImageCollection.addBuildingShadowForNation(nation, "Harbor", getImageFromResourceLocation(nationResourceList, RomYLst.HARBOR_SHADOW));

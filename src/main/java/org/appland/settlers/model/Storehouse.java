@@ -402,7 +402,7 @@ public class Storehouse extends Building {
                     Material toolForWorker = getToolForWorker(material);
 
                     boolean hasWorker = hasAtLeastOne(material);
-                    boolean canMakeWorker = toolForWorker != null && hasAtLeastOne(toolForWorker);
+                    boolean canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker)) || material == WELL_WORKER;
 
                     /* Filter buildings that need a worker that this storehouse cannot assign */
                     if (!hasWorker && !canMakeWorker) {
@@ -592,7 +592,7 @@ public class Storehouse extends Building {
 
                 inventory.put(tool, toolAmount - 1);
                 inventory.put(workerType, workerAmount + 1);
-            } else {
+            } else if (workerType != WELL_WORKER) {
                 throw new InvalidGameLogicException("There are no " + workerType + " to retrieve");
             }
         }
@@ -786,6 +786,8 @@ public class Storehouse extends Building {
         if (material == COURIER) {
             return;
         } else if (material == CATAPULT_WORKER) {
+            return;
+        } else if (material == WELL_WORKER && inventory.getOrDefault(WELL_WORKER, 0) == 0) {
             return;
         }
 

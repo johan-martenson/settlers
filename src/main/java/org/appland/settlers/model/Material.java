@@ -70,7 +70,7 @@ public enum Material {
     METALWORKER,
     BUILDER,
     HAMMER,
-    SHIPWRIGHT, BOAT;
+    SHIPWRIGHT, BOAT, PLANER;
 
     public static final Set<? extends Material> TRANSPORTABLE_GOODS = EnumSet.copyOf(Arrays.asList(
             SWORD,

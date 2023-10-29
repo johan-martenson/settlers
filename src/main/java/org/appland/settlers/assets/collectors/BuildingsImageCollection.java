@@ -1,9 +1,6 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.Bitmap;
-import org.appland.settlers.assets.ImageBoard;
-import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.Palette;
+import org.appland.settlers.assets.*;
 import org.json.simple.JSONObject;
 
 import java.awt.Point;
@@ -227,6 +224,23 @@ public class BuildingsImageCollection {
         // Write the image and the meta-data to files
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/image-atlas-buildings.png");
         Files.writeString(Paths.get(directory, "image-atlas-buildings.json"), jsonImageAtlas.toJSONString());
+
+        // Write individual images for icons
+        for (Nation nation : Nation.values()) {
+
+            String buildingDir = directory + "/" + nation.name();
+
+            // Create directory
+            Utils.createDirectory(buildingDir);
+
+            for (Map.Entry<String, BuildingImages> entry : this.buildingMap.get(nation).entrySet()) {
+
+                String buildingFile = buildingDir + "/" + entry.getKey() + ".png";
+
+                // Write each ready building as a separate image
+                entry.getValue().buildingReadyImage.writeToFile(buildingFile);
+            }
+        }
     }
 
     public void addBuildingShadowForNation(Nation nation, String building, Bitmap image) {

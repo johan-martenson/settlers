@@ -38,4 +38,6 @@ public class MapBobs0Lst {
     public static final int SOME_WATER_SHADOW = 394;
     public static final int LITTLE_GRASS_SHADOW = 395;
     public static final int SNOWMAN_SHADOW = 396;
+
+    public static final int DONKEY_BREEDER_ICON = 1012;
 }
