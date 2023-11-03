@@ -2278,16 +2278,16 @@ public class TestFishery {
         Building fisher0 = map.placeBuilding(new Fishery(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(fisher0.getMaterialNeeded().size(), 1);
-        assertTrue(fisher0.getMaterialNeeded().contains(PLANK));
-        assertEquals(fisher0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(fisher0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(fisher0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(fisher0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(fisher0.getTotalAmountNeeded(material), 0);
+            assertEquals(fisher0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2312,10 +2312,10 @@ public class TestFishery {
         constructHouse(fishery0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(fishery0.getMaterialNeeded().size(), 0);
+        assertEquals(fishery0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(fishery0.getTotalAmountNeeded(material), 0);
+            assertEquals(fishery0.getCanHoldAmount(material), 0);
         }
     }
 

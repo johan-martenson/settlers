@@ -2523,16 +2523,16 @@ public class TestWoodcutter {
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(woodcutter0.getMaterialNeeded().size(), 1);
-        assertTrue(woodcutter0.getMaterialNeeded().contains(PLANK));
-        assertEquals(woodcutter0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(woodcutter0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(woodcutter0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(woodcutter0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(woodcutter0.getTotalAmountNeeded(material), 0);
+            assertEquals(woodcutter0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2557,10 +2557,10 @@ public class TestWoodcutter {
         constructHouse(woodcutter0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(woodcutter0.getMaterialNeeded().size(), 0);
+        assertEquals(woodcutter0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(woodcutter0.getTotalAmountNeeded(material), 0);
+            assertEquals(woodcutter0.getCanHoldAmount(material), 0);
         }
     }
 

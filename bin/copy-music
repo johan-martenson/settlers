@@ -1,0 +1,38 @@
+#! /bin/bash
+
+echo "From: $1"
+echo "To: $2"
+
+from="$1"
+to="$2"
+
+if [ ! -d "$from" ]; then
+  echo "Error: from directory $1 doesn't exist"
+
+  exit 1
+fi
+
+if [ ! -d "$to" ]; then
+  echo "Error: to directory $to doesn't exist"
+
+  exit 2
+fi
+
+echo -n
+
+echo "Music files:"
+ls "$from"/*.mp3
+
+
+echo -n
+cp "$from"/*.mp3 "$2/"
+
+echo "Copied files"
+
+for old_name in "$2"/*mp3; do
+  new_name=$(echo "$old_name" | sed 's/ /_/g')
+
+  cp "$old_name" "$new_name"
+done
+
+echo "Renamed files"

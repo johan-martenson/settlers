@@ -2120,16 +2120,16 @@ public class TestQuarry {
         Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(quarry0.getMaterialNeeded().size(), 1);
-        assertTrue(quarry0.getMaterialNeeded().contains(PLANK));
-        assertEquals(quarry0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(quarry0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(quarry0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(quarry0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(quarry0.getTotalAmountNeeded(material), 0);
+            assertEquals(quarry0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2154,10 +2154,10 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(quarry0.getMaterialNeeded().size(), 0);
+        assertEquals(quarry0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(quarry0.getTotalAmountNeeded(material), 0);
+            assertEquals(quarry0.getCanHoldAmount(material), 0);
         }
     }
 

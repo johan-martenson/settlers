@@ -1794,18 +1794,18 @@ public class TestBrewery {
         Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(brewery0.getMaterialNeeded().size(), 2);
-        assertTrue(brewery0.getMaterialNeeded().contains(PLANK));
-        assertTrue(brewery0.getMaterialNeeded().contains(STONE));
-        assertEquals(brewery0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(brewery0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(brewery0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(brewery0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(brewery0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(brewery0.getCanHoldAmount(PLANK), 2);
+        assertEquals(brewery0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(brewery0.getTotalAmountNeeded(material), 0);
+            assertEquals(brewery0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1831,18 +1831,18 @@ public class TestBrewery {
         Utils.constructHouse(brewery0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(brewery0.getMaterialNeeded().size(), 2);
-        assertTrue(brewery0.getMaterialNeeded().contains(WATER));
-        assertTrue(brewery0.getMaterialNeeded().contains(WHEAT));
-        assertEquals(brewery0.getTotalAmountNeeded(WATER), 1);
-        assertEquals(brewery0.getTotalAmountNeeded(WHEAT), 1);
+        assertEquals(brewery0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(brewery0.getTypesOfMaterialNeeded().contains(WATER));
+        assertTrue(brewery0.getTypesOfMaterialNeeded().contains(WHEAT));
+        assertEquals(brewery0.getCanHoldAmount(WATER), 1);
+        assertEquals(brewery0.getCanHoldAmount(WHEAT), 1);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {
                 continue;
             }
 
-            assertEquals(brewery0.getTotalAmountNeeded(material), 0);
+            assertEquals(brewery0.getCanHoldAmount(material), 0);
         }
     }
 

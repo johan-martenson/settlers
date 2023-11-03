@@ -1644,16 +1644,16 @@ public class TestWell {
         Well well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(well0.getMaterialNeeded().size(), 1);
-        assertTrue(well0.getMaterialNeeded().contains(PLANK));
-        assertEquals(well0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(well0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(well0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(well0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(well0.getTotalAmountNeeded(material), 0);
+            assertEquals(well0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1678,10 +1678,10 @@ public class TestWell {
         Utils.constructHouse(well0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(well0.getMaterialNeeded().size(), 0);
+        assertEquals(well0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(well0.getTotalAmountNeeded(material), 0);
+            assertEquals(well0.getCanHoldAmount(material), 0);
         }
     }
 

@@ -2,60 +2,8 @@ package org.appland.settlers.model;
 
 import java.util.*;
 
-import static org.appland.settlers.model.Material.ARMORER;
-import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BAKER;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.BOW;
-import static org.appland.settlers.model.Material.BREWER;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.BUTCHER;
-import static org.appland.settlers.model.Material.CATAPULT_WORKER;
-import static org.appland.settlers.model.Material.CLEAVER;
-import static org.appland.settlers.model.Material.COURIER;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.FARMER;
-import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.FISHING_ROD;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GEOLOGIST;
-import static org.appland.settlers.model.Material.HAMMER;
-import static org.appland.settlers.model.Material.HUNTER;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
-import static org.appland.settlers.model.Material.METALWORKER;
-import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PICK_AXE;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.ROLLING_PIN;
-import static org.appland.settlers.model.Material.SAW;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.SCOUT;
-import static org.appland.settlers.model.Material.SCYTHE;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.SHIPWRIGHT;
-import static org.appland.settlers.model.Material.SHOVEL;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STONEMASON;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.TONGS;
-import static org.appland.settlers.model.Material.WELL_WORKER;
-import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Military.Rank.*;
 import static org.appland.settlers.model.Size.MEDIUM;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
@@ -480,15 +428,13 @@ public class Storehouse extends Building {
         if (!isReady()) {
             super.putCargo(cargo);
         } else {
-
             storeOneInInventory(cargo.getMaterial());
 
-            getPlayer().reportProduction(cargo.getMaterial());
+            getPlayer().reportProduction(cargo.getMaterial(), this);
         }
     }
 
     public Cargo retrieve(Material material) {
-
         if (!hasAtLeastOne(material)) {
             throw new InvalidGameLogicException("Can't retrieve " + material);
         }
@@ -499,6 +445,7 @@ public class Storehouse extends Building {
 
         cargo.setPosition(getFlag().getPosition());
 
+        getPlayer().reportChangedInventory(this);
 
         return cargo;
     }
@@ -705,28 +652,18 @@ public class Storehouse extends Building {
         return worker;
     }
 
-    public Military retrieveMilitary(Material material) {
-        Military.Rank rank;
+    public Military retrieveSoldierFromInventory(Military.Rank rank) {
+        return retrieveSoldierFromInventory(rank.toMaterial());
+    }
 
+    public Military retrieveSoldierFromInventory(Material material) {
         if (!hasAtLeastOne(material)) {
             throw new InvalidGameLogicException("Can't retrieve military " + material);
         }
 
         retrieveOneFromInventory(material);
 
-        switch (material) {
-        case GENERAL:
-            rank = GENERAL_RANK;
-            break;
-        case SERGEANT:
-            rank = SERGEANT_RANK;
-            break;
-        case PRIVATE:
-            rank = PRIVATE_RANK;
-            break;
-        default:
-            throw new InvalidGameLogicException("Can't retrieve worker of type " + material);
-        }
+        Military.Rank rank = material.toRank();
 
         Military military = new Military(getPlayer(), rank, getMap());
 

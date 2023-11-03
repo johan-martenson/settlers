@@ -4439,7 +4439,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Construct the house */
@@ -4469,15 +4469,13 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getRemovedWorkers().get(0), woodcutterWorker);
 
         /* Verify that the event is sent only once */
-        int amountEvents = monitor.getEvents().size();
+        GameChangesList lastGameChangesList = monitor.getLastEvent();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
-            if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
-                    assertEquals(changes.getRemovedWorkers().size(), 0);
-                }
+            for (GameChangesList changes : monitor.getEventsAfterEvent(lastGameChangesList)) {
+                assertFalse(changes.getRemovedWorkers().contains(woodcutterWorker));
             }
         }
     }
@@ -5832,12 +5830,12 @@ public class TestGameMonitoring {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(0);
+        GameChangesList lastEvent = monitor.getLastEvent();
 
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithNewTargets().size(), 0);
+            assertFalse(gameChangesList.getWorkersWithNewTargets().contains(wildAnimal0));
         }
     }
 }

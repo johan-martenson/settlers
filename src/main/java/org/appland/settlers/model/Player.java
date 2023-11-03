@@ -3,16 +3,7 @@ package org.appland.settlers.model;
 import org.appland.settlers.assets.Nation;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.appland.settlers.model.Material.PLANK;
 
@@ -44,7 +35,7 @@ public class Player {
     private final List<Message> messages;
     private final Set<PlayerGameViewMonitor> gameViewMonitors;
     private final List<Worker> workersWithNewTargets;
-    private final List<Building> changedBuildings;
+    private final Set<Building> changedBuildings;
     private final List<Flag> newFlags;
     private final List<Flag> removedFlags;
     private final List<Building> newBuildings;
@@ -82,35 +73,39 @@ public class Player {
     private final Map<Worker, WorkerAction> workersWithStartedActions;
     private final List<Point> removedDecorations;
     private final Map<Point, DecorationType> newDecorations;
+    private final Set<Object> detailedMonitoring;
 
     public Player(String name, Color color) {
         this.name           = name;
         this.color          = color;
+
         this.nation         = Nation.ROMANS;
+
         buildings           = new LinkedList<>();
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
         ownedLand           = new HashSet<>();
         producedMaterials   = new EnumMap<>(Material.class);
+        detailedMonitoring  = new HashSet<>();
+        foodQuota           = new HashMap<>();
+        coalQuota           = new HashMap<>();
+        messages            = new ArrayList<>();
+        gameViewMonitors    = new HashSet<>();
+
+        transportCategoryPriorities = new ArrayList<>();
 
         /* Create the food quota and set it to equal distribution */
-        foodQuota = new HashMap<>();
-
         foodQuota.put(GoldMine.class, 1);
         foodQuota.put(IronMine.class, 1);
         foodQuota.put(CoalMine.class, 1);
         foodQuota.put(GraniteMine.class, 1);
 
         /* Create the coal quota and set it to equal distribution */
-        coalQuota = new HashMap<>();
-
         coalQuota.put(IronSmelter.class, 1);
         coalQuota.put(Mint.class, 1);
         coalQuota.put(Armory.class, 1);
 
         /* Set the initial transport priority */
-        transportCategoryPriorities = new ArrayList<>();
-
         transportCategoryPriorities.add(TransportCategory.PLANK);
         transportCategoryPriorities.add(TransportCategory.WOOD);
         transportCategoryPriorities.add(TransportCategory.STONE);
@@ -132,7 +127,6 @@ public class Player {
         setTransportPriorityForMaterials();
 
         /* There are no messages at start */
-        messages = new ArrayList<>();
 
         /* The tree conservation program is not active at start */
         treeConservationProgramActive = false;
@@ -141,10 +135,8 @@ public class Player {
         treeConservationProgramEnabled = true;
 
         /* Prepare for monitors of the game */
-        gameViewMonitors = new HashSet<>();
-
         workersWithNewTargets = new ArrayList<>();
-        changedBuildings = new ArrayList<>();
+        changedBuildings = new HashSet<>();
         newFlags = new ArrayList<>();
         removedFlags = new ArrayList<>();
         newBuildings = new ArrayList<>();
@@ -333,7 +325,7 @@ public class Player {
                 }
 
                 /* Retrieve a military from the building */
-                Military military = building.retrieveMilitary();
+                Military military = building.retrieveHostedSoldier();
 
                 /* Make the military move to close to the building to attack */
                 foundSpot = false;
@@ -648,10 +640,14 @@ public class Player {
         return producedMaterials.getOrDefault(material, 0);
     }
 
-    public void reportProduction(Material material) {
+    public void reportProduction(Material material, Building building) {
         int amount = producedMaterials.getOrDefault(material, 0);
 
         producedMaterials.put(material, amount + 1);
+
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
     }
 
     public List<Message> getMessages() {
@@ -1444,5 +1440,77 @@ public class Player {
 
     public void setNation(Nation nation) {
         this.nation = nation;
+    }
+
+    public Optional<Building> getHeadquarter() {
+        return buildings.stream().filter(Building::isHeadquarter).findFirst();
+    }
+
+    public void addDetailedMonitoring(Building building) {
+        detailedMonitoring.add(building);
+    }
+
+    public void removeDetailedMonitoring(Building building) {
+        detailedMonitoring.remove(building);
+    }
+
+    public void reportChangedInventory(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportSoldierEnteredBuilding(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportBuildingEvacuated(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportBuildingEvacuationCanceled(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportDisabledPromotions(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportEnabledPromotions(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportProductionResumed(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportProductionStopped(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportUpgradeStarted(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
+    }
+
+    public void reportChangedReserveAmount(Building building) {
+        if (detailedMonitoring.contains(building)) {
+            changedBuildings.add(building);
+        }
     }
 }

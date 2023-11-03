@@ -1193,18 +1193,18 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(fortress0.getMaterialNeeded().size(), 2);
-        assertTrue(fortress0.getMaterialNeeded().contains(PLANK));
-        assertTrue(fortress0.getMaterialNeeded().contains(STONE));
-        assertEquals(fortress0.getTotalAmountNeeded(PLANK), 4);
-        assertEquals(fortress0.getTotalAmountNeeded(STONE), 7);
+        assertEquals(fortress0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(fortress0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(fortress0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(fortress0.getCanHoldAmount(PLANK), 4);
+        assertEquals(fortress0.getCanHoldAmount(STONE), 7);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(fortress0.getTotalAmountNeeded(material), 0);
+            assertEquals(fortress0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1229,15 +1229,15 @@ public class TestFortress {
         Utils.constructHouse(fortress0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(fortress0.getMaterialNeeded().size(), 1);
-        assertEquals(fortress0.getTotalAmountNeeded(COIN), 4);
+        assertEquals(fortress0.getTypesOfMaterialNeeded().size(), 1);
+        assertEquals(fortress0.getCanHoldAmount(COIN), 4);
 
         for (Material material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
 
-            assertEquals(fortress0.getTotalAmountNeeded(material), 0);
+            assertEquals(fortress0.getCanHoldAmount(material), 0);
         }
     }
 

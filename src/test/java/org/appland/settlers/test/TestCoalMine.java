@@ -2099,16 +2099,16 @@ public class TestCoalMine {
         CoalMine coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(coalMine0.getMaterialNeeded().size(), 1);
-        assertTrue(coalMine0.getMaterialNeeded().contains(PLANK));
-        assertEquals(coalMine0.getTotalAmountNeeded(PLANK), 4);
+        assertEquals(coalMine0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(coalMine0.getCanHoldAmount(PLANK), 4);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(coalMine0.getTotalAmountNeeded(material), 0);
+            assertEquals(coalMine0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2136,20 +2136,20 @@ public class TestCoalMine {
         constructHouse(coalMine0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(coalMine0.getMaterialNeeded().size(), 3);
-        assertTrue(coalMine0.getMaterialNeeded().contains(BREAD));
-        assertTrue(coalMine0.getMaterialNeeded().contains(MEAT));
-        assertTrue(coalMine0.getMaterialNeeded().contains(FISH));
-        assertEquals(coalMine0.getTotalAmountNeeded(BREAD), 1);
-        assertEquals(coalMine0.getTotalAmountNeeded(MEAT), 1);
-        assertEquals(coalMine0.getTotalAmountNeeded(FISH), 1);
+        assertEquals(coalMine0.getTypesOfMaterialNeeded().size(), 3);
+        assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(BREAD));
+        assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(MEAT));
+        assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(FISH));
+        assertEquals(coalMine0.getCanHoldAmount(BREAD), 1);
+        assertEquals(coalMine0.getCanHoldAmount(MEAT), 1);
+        assertEquals(coalMine0.getCanHoldAmount(FISH), 1);
 
         for (Material material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {
                 continue;
             }
 
-            assertEquals(coalMine0.getTotalAmountNeeded(material), 0);
+            assertEquals(coalMine0.getCanHoldAmount(material), 0);
         }
     }
 

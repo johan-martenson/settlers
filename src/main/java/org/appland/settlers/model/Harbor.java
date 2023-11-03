@@ -367,8 +367,8 @@ public class Harbor extends Storehouse {
         /* Collect needed material for each building */
         for (Building building : reachableBuildings) {
 
-            for (Material material : building.getMaterialNeeded()) {
-                int amountNeededByHouse = building.getTotalAmountNeeded(material);
+            for (Material material : building.getTypesOfMaterialNeeded()) {
+                int amountNeededByHouse = building.getCanHoldAmount(material);
                 int amountInStorage = getAmount(material);
 
                 int currentAmountNeeded = shipmentsNeeded.getOrDefault(material, 0);

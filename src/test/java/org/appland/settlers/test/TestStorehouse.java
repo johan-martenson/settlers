@@ -1850,18 +1850,18 @@ public class TestStorehouse {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(storehouse0.getMaterialNeeded().size(), 2);
-        assertTrue(storehouse0.getMaterialNeeded().contains(PLANK));
-        assertTrue(storehouse0.getMaterialNeeded().contains(STONE));
-        assertEquals(storehouse0.getTotalAmountNeeded(PLANK), 4);
-        assertEquals(storehouse0.getTotalAmountNeeded(STONE), 3);
+        assertEquals(storehouse0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(storehouse0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(storehouse0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(storehouse0.getCanHoldAmount(PLANK), 4);
+        assertEquals(storehouse0.getCanHoldAmount(STONE), 3);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(storehouse0.getTotalAmountNeeded(material), 0);
+            assertEquals(storehouse0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1886,10 +1886,10 @@ public class TestStorehouse {
         Utils.constructHouse(storehouse0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(storehouse0.getMaterialNeeded().size(), 0);
+        assertEquals(storehouse0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(storehouse0.getTotalAmountNeeded(material), 0);
+            assertEquals(storehouse0.getCanHoldAmount(material), 0);
         }
     }
 

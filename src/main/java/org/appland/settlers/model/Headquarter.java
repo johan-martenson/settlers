@@ -2,63 +2,62 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.policy.InitialState;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.ARMORER;
-import static org.appland.settlers.model.Material.BAKER;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.BREWER;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.BUTCHER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.FARMER;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GEOLOGIST;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.HUNTER;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.METALWORKER;
-import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.SCOUT;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.SHIPWRIGHT;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STONEMASON;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WELL_WORKER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
+import static org.appland.settlers.model.Material.*;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
 
+    private Map<Military.Rank, Integer> reservedSoldiers;
+
     public Headquarter(Player player) {
         super(player);
 
+        reservedSoldiers = new HashMap<>();
+
         setHeadquarterDefaultInventory(inventory);
         setConstructionReady();
+    }
+
+    @Override
+    void stepTime() {
+        super.stepTime();
+
+        List<Military> hostedSoldiers = getHostedMilitary();
+
+        Long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == Military.Rank.PRIVATE_RANK).count();
+
+        boolean lackReservedSoldiers = this.reservedSoldiers.getOrDefault(Military.Rank.PRIVATE_RANK, 0) > amountHostedPrivates.intValue();
+
+        if (lackReservedSoldiers && getAmount(PRIVATE) > 0) {
+            deployMilitary(retrieveSoldierFromInventory(PRIVATE));
+        }
+    }
+
+    @Override
+    public void putCargo(Cargo cargo) {
+        if (cargo.getMaterial().isMilitary()) {
+            Military.Rank rank = cargo.getMaterial().toRank();
+
+            if (reservedSoldiers.getOrDefault(rank, 0) > getHostedSoldiersWithRank(rank)) {
+                deployMilitary(new Military(getPlayer(), rank, getMap()));
+
+                return;
+            }
+        }
+
+        super.putCargo(cargo);
+    }
+
+    @Override
+    boolean spaceAvailableToHostSoldier(Military soldier) {
+        Military.Rank rank = soldier.getRank();
+
+        return reservedSoldiers.getOrDefault(rank, 0) > getHostedSoldiersWithRank(rank);
     }
 
     @Override
@@ -149,5 +148,38 @@ public class Headquarter extends Storehouse {
     @Override
     public boolean isHeadquarter() {
         return true;
+    }
+
+    public void setReservedSoldiers(Military.Rank rank, int reservedAmount) {
+        reservedSoldiers.put(rank, reservedAmount);
+
+        int hostedAmount = getHostedSoldiersWithRank(rank);
+        int amountInInventory = getAmount(rank.toMaterial());
+        int reserveGap = reservedAmount - hostedAmount;
+
+        // Increase the amount of hosted soldiers to close the gap as much as possible
+        if (reservedAmount > hostedAmount && amountInInventory > 0) {
+            for (int i = 0; i < Math.min(reserveGap, amountInInventory); i++) {
+                deployMilitary(retrieveSoldierFromInventory(rank));
+            }
+
+            getPlayer().reportChangedInventory(this);
+
+        // Decrease the amount of hosted soldiers if needed
+        } else if (hostedAmount > reservedAmount) {
+            for (int i = 0; i < hostedAmount - reservedAmount; i++) {
+                retrieveHostedSoldierWithRank(rank);
+
+                putCargo(new Cargo(rank.toMaterial(), getMap()));
+            }
+
+            getPlayer().reportChangedInventory(this);
+        } else {
+            getPlayer().reportChangedReserveAmount(this);
+        }
+    }
+
+    public int getReservedSoldiers(Military.Rank rank) {
+        return reservedSoldiers.getOrDefault(rank, 0);
     }
 }

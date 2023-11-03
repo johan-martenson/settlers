@@ -1182,18 +1182,18 @@ public class TestWatchTower {
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(watchTower0.getMaterialNeeded().size(), 2);
-        assertTrue(watchTower0.getMaterialNeeded().contains(PLANK));
-        assertTrue(watchTower0.getMaterialNeeded().contains(STONE));
-        assertEquals(watchTower0.getTotalAmountNeeded(PLANK), 3);
-        assertEquals(watchTower0.getTotalAmountNeeded(STONE), 5);
+        assertEquals(watchTower0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(watchTower0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(watchTower0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(watchTower0.getCanHoldAmount(PLANK), 3);
+        assertEquals(watchTower0.getCanHoldAmount(STONE), 5);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(watchTower0.getTotalAmountNeeded(material), 0);
+            assertEquals(watchTower0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1218,15 +1218,15 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(watchTower0.getMaterialNeeded().size(), 1);
-        assertEquals(watchTower0.getTotalAmountNeeded(COIN), 3);
+        assertEquals(watchTower0.getTypesOfMaterialNeeded().size(), 1);
+        assertEquals(watchTower0.getCanHoldAmount(COIN), 3);
 
         for (Material material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
 
-            assertEquals(watchTower0.getTotalAmountNeeded(material), 0);
+            assertEquals(watchTower0.getCanHoldAmount(material), 0);
         }
     }
 

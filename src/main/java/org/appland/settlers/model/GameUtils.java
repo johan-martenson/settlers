@@ -284,7 +284,7 @@ public class GameUtils {
         for (int i = 0; i < currentMilitary; i++) {
 
             /* Move one military from the old to the new building */
-            Military military = fromBuilding.retrieveMilitary();
+            Military military = fromBuilding.retrieveHostedSoldier();
 
             upgraded.promiseMilitary(military);
             military.enterBuilding(upgraded);

@@ -166,7 +166,7 @@ public class TestBarracks {
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Verify that a military is sent from the headquarter */
+        /* Verify that a military is sent from the headquarters */
         map.stepTime();
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
@@ -218,6 +218,42 @@ public class TestBarracks {
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
         assertTrue(player0.getBorderPoints().contains(point2));
+    }
+
+    @Test
+    public void testCanHoldCoinAmountIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(6, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(5, 23);
+        GuardHouse guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse.getFlag());
+
+        /* Wait for the guard house to finish construction */
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse);
+
+        /* Verify that the guard house can hold the right amount of coins */
+        assertEquals(guardHouse.getCanHoldAmount(COIN), 2);
+        assertTrue(guardHouse.isPromotionEnabled());
+
+        /* Verify that the guard house can still hold the right amount of coins when promotions are disabled */
+        guardHouse.disablePromotions();
+
+        assertEquals(guardHouse.getCanHoldAmount(COIN), 2);
+        assertFalse(guardHouse.isPromotionEnabled());
     }
 
     @Test
@@ -2666,16 +2702,16 @@ public class TestBarracks {
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(barracks0.getMaterialNeeded().size(), 1);
-        assertTrue(barracks0.getMaterialNeeded().contains(PLANK));
-        assertEquals(barracks0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(barracks0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(barracks0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(barracks0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(barracks0.getTotalAmountNeeded(material), 0);
+            assertEquals(barracks0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2700,15 +2736,15 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(barracks0.getMaterialNeeded().size(), 1);
-        assertEquals(barracks0.getTotalAmountNeeded(COIN), 1);
+        assertEquals(barracks0.getTypesOfMaterialNeeded().size(), 1);
+        assertEquals(barracks0.getCanHoldAmount(COIN), 1);
 
         for (Material material : Material.values()) {
             if (material == COIN) {
                 continue;
             }
 
-            assertEquals(barracks0.getTotalAmountNeeded(material), 0);
+            assertEquals(barracks0.getCanHoldAmount(material), 0);
         }
     }
 

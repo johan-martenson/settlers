@@ -2267,16 +2267,16 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(foresterHut0.getMaterialNeeded().size(), 1);
-        assertTrue(foresterHut0.getMaterialNeeded().contains(PLANK));
-        assertEquals(foresterHut0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(foresterHut0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(foresterHut0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(foresterHut0.getCanHoldAmount(PLANK), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(foresterHut0.getTotalAmountNeeded(material), 0);
+            assertEquals(foresterHut0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2301,10 +2301,10 @@ public class TestForesterHut {
         constructHouse(foresterHut0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(foresterHut0.getMaterialNeeded().size(), 0);
+        assertEquals(foresterHut0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(foresterHut0.getTotalAmountNeeded(material), 0);
+            assertEquals(foresterHut0.getCanHoldAmount(material), 0);
         }
     }
 

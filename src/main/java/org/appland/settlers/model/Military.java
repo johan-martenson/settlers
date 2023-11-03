@@ -49,6 +49,16 @@ public class Military extends Worker {
                 return "General";
             }
         }
+
+        Material toMaterial() {
+            return switch (this) {
+                case PRIVATE_RANK -> PRIVATE;
+                case PRIVATE_FIRST_CLASS_RANK -> PRIVATE_FIRST_CLASS;
+                case SERGEANT_RANK -> SERGEANT;
+                case OFFICER_RANK -> OFFICER;
+                case GENERAL_RANK -> GENERAL;
+            };
+        }
     }
 
     protected enum State {

@@ -2195,18 +2195,18 @@ public class TestDonkeyFarm {
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(donkeyFarm0.getMaterialNeeded().size(), 2);
-        assertTrue(donkeyFarm0.getMaterialNeeded().contains(PLANK));
-        assertTrue(donkeyFarm0.getMaterialNeeded().contains(STONE));
-        assertEquals(donkeyFarm0.getTotalAmountNeeded(PLANK), 3);
-        assertEquals(donkeyFarm0.getTotalAmountNeeded(STONE), 3);
+        assertEquals(donkeyFarm0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(donkeyFarm0.getCanHoldAmount(PLANK), 3);
+        assertEquals(donkeyFarm0.getCanHoldAmount(STONE), 3);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(donkeyFarm0.getTotalAmountNeeded(material), 0);
+            assertEquals(donkeyFarm0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2231,18 +2231,18 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(donkeyFarm0.getMaterialNeeded().size(), 2);
-        assertTrue(donkeyFarm0.getMaterialNeeded().contains(WATER));
-        assertTrue(donkeyFarm0.getMaterialNeeded().contains(WHEAT));
-        assertEquals(donkeyFarm0.getTotalAmountNeeded(WATER), 1);
-        assertEquals(donkeyFarm0.getTotalAmountNeeded(WHEAT), 1);
+        assertEquals(donkeyFarm0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(WATER));
+        assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(WHEAT));
+        assertEquals(donkeyFarm0.getCanHoldAmount(WATER), 1);
+        assertEquals(donkeyFarm0.getCanHoldAmount(WHEAT), 1);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {
                 continue;
             }
 
-            assertEquals(donkeyFarm0.getTotalAmountNeeded(material), 0);
+            assertEquals(donkeyFarm0.getCanHoldAmount(material), 0);
         }
     }
 

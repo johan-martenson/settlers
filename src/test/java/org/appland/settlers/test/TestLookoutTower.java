@@ -1260,17 +1260,17 @@ public class TestLookoutTower {
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(lookoutTower0.getMaterialNeeded().size(), 1);
-        assertTrue(lookoutTower0.getMaterialNeeded().contains(PLANK));
-        assertFalse(lookoutTower0.getMaterialNeeded().contains(STONE));
-        assertEquals(lookoutTower0.getTotalAmountNeeded(PLANK), 4);
+        assertEquals(lookoutTower0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(lookoutTower0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertFalse(lookoutTower0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(lookoutTower0.getCanHoldAmount(PLANK), 4);
 
         for (Material material : Material.values()) {
             if (material == PLANK) {
                 continue;
             }
 
-            assertEquals(lookoutTower0.getTotalAmountNeeded(material), 0);
+            assertEquals(lookoutTower0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1295,7 +1295,7 @@ public class TestLookoutTower {
         Utils.constructHouse(lookoutTower0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(lookoutTower0.getMaterialNeeded().size(), 0);
+        assertEquals(lookoutTower0.getTypesOfMaterialNeeded().size(), 0);
     }
 
     @Test

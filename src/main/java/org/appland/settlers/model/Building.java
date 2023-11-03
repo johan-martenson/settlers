@@ -5,20 +5,10 @@ import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
@@ -47,6 +37,10 @@ public class Building implements EndPoint {
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
+
+    public int getHostedSoldiersWithRank(Rank rank) {
+        return ((Long) hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).count()).intValue();
+    }
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
@@ -113,7 +107,7 @@ public class Building implements EndPoint {
         materialsToBuildHouse = getMaterialsToBuildHouse();
         totalAmountNeededForProduction = getMaterialNeededForProduction();
         totalAmountNeededForUpgrade = getMaterialNeededForUpgrade();
-        maxCoins = getMaxCoins();
+        maxCoins = getCanStoreAmountCoins();
 
         /* Remember how many soldiers can be hosted to avoid repeated lookups */
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
@@ -180,7 +174,7 @@ public class Building implements EndPoint {
         return false;
     }
 
-    private int getMaxCoins() {
+    private int getCanStoreAmountCoins() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
         if (militaryBuilding != null) {
@@ -297,13 +291,17 @@ public class Building implements EndPoint {
         onBuildingOccupied();
     }
 
+    boolean spaceAvailableToHostSoldier(Military soldier) {
+        return hostedMilitary.size() < getMaxHostedMilitary();
+    }
+
     void deployMilitary(Military military) {
 
         if (!isReady()) {
             throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
         }
 
-        if (hostedMilitary.size() >= getMaxHostedMilitary()) {
+        if (!spaceAvailableToHostSoldier(military)) {
             throw new InvalidGameLogicException("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " soldiers");
         }
 
@@ -324,6 +322,8 @@ public class Building implements EndPoint {
             promisedMilitary.remove(military);
             military.returnToStorage();
         }
+
+        getPlayer().reportSoldierEnteredBuilding(this);
     }
 
     public Worker getWorker() {
@@ -355,7 +355,7 @@ public class Building implements EndPoint {
             }
 
             /* Throw an exception if too much is being delivered */
-            if (getAmount(material) >= getTotalAmountNeeded(material)) {
+            if (getAmount(material) >= getCanHoldAmount(material)) {
                 throw new InvalidGameLogicException("Can't accept delivery of " + material);
             }
         }
@@ -367,7 +367,7 @@ public class Building implements EndPoint {
 
         if (state == State.UNOCCUPIED || state == State.OCCUPIED) {
 
-            if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
+            if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getCanStoreAmountCoins()) {
                 throw new InvalidGameLogicException("This building doesn't need any more coins");
             }
 
@@ -391,8 +391,16 @@ public class Building implements EndPoint {
         if (material == COIN && isMilitaryBuilding()) {
             countdown.countFrom(TIME_TO_PROMOTE_SOLDIER - 1);
         }
+
+        player.reportChangedInventory(this);
     }
 
+    /**
+     * Returns whether the given material is needed by the building based on the total need and the current inventory.
+     *
+     * @param material that might be needed
+     * @return whether the given material is needed
+     */
     public boolean needsMaterial(Material material) {
         return getLackingAmountWithProjected(material) > 0;
     }
@@ -449,7 +457,7 @@ public class Building implements EndPoint {
                 if (isAttackerAtFlag() && ownDefender == null) {
 
                     /* Retrieve a defender locally */
-                    ownDefender = retrieveMilitary();
+                    ownDefender = retrieveHostedSoldier();
 
                     /* Tell the defender to handle the attacker at the flag */
                     ownDefender.defendBuilding(this);
@@ -598,37 +606,6 @@ public class Building implements EndPoint {
         return hs.size();
     }
 
-    public int getTotalAmountOfMaterialNeededForProduction(Material material) {
-
-        if (isMilitaryBuilding()) {
-
-            if (material == COIN && getMaxCoins() > 0 && enablePromotions) {
-                return getMaxCoins();
-            }
-
-            if (isUpgrading()) {
-
-                if (material == PLANK) {
-                    int planks = getTotalAmountNeededForUpgrade(PLANK);
-
-                    if (planks > 0) {
-                        return planks;
-                    }
-                }
-
-                if (material == STONE) {
-                    int stones = getTotalAmountNeededForUpgrade(STONE);
-
-                    if (stones > 0) {
-                        return stones;
-                    }
-                }
-            }
-        }
-
-        return requiredGoodsForProduction.getOrDefault(material, 0);
-    }
-
     private void consumeConstructionMaterial() {
         Map<Material, Integer> materialToConsume = getMaterialsToBuildHouse();
 
@@ -687,18 +664,7 @@ public class Building implements EndPoint {
     }
 
     private boolean isAccepted(Material material) {
-
-        /* Return true if the production in the building requires the material */
-        if (getTotalAmountOfMaterialNeededForProduction(material) > 0) {
-            return true;
-        }
-
-        /* Return true if the building is being upgraded and requires the material for the upgrade */
-        if (getTotalAmountNeededForUpgrade(material) > 0) {
-            return true;
-        }
-
-        return false;
+        return getCanHoldAmount(material) > 0;
     }
 
     private boolean canAcceptGoods() {
@@ -709,7 +675,7 @@ public class Building implements EndPoint {
 
         if (isMilitaryBuilding()) {
 
-            if (isPromotionEnabled() && getMaxCoins() > getAmount(COIN)) {
+            if (isPromotionEnabled() && getCanStoreAmountCoins() > getAmount(COIN)) {
                 return true;
             }
 
@@ -796,10 +762,14 @@ public class Building implements EndPoint {
 
     public void disablePromotions() {
         enablePromotions = false;
+
+        getPlayer().reportDisabledPromotions(this);
     }
 
     public void enablePromotions() {
         enablePromotions = true;
+
+        getPlayer().reportEnabledPromotions(this);
     }
 
     public void evacuate() {
@@ -810,18 +780,26 @@ public class Building implements EndPoint {
         hostedMilitary.clear();
 
         evacuated = true;
+
+        player.reportBuildingEvacuated(this);
     }
 
     public void cancelEvacuation() {
         evacuated = false;
+
+        getPlayer().reportBuildingEvacuationCanceled(this);
     }
 
     public void stopProduction() throws InvalidUserActionException {
         productionEnabled = false;
+
+        getPlayer().reportProductionStopped(this);
     }
 
     public void resumeProduction() throws InvalidUserActionException {
         productionEnabled = true;
+
+        player.reportProductionResumed(this);
     }
 
     public boolean isProductionEnabled() {
@@ -862,8 +840,16 @@ public class Building implements EndPoint {
         return mb.attackRadius();
     }
 
-    Military retrieveMilitary() {
+    Military retrieveHostedSoldier() {
         return hostedMilitary.remove(0);
+    }
+
+    Military retrieveHostedSoldierWithRank(Rank rank) {
+        Optional<Military> optionalMilitary = hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+
+        hostedMilitary.remove(optionalMilitary.get());
+
+        return optionalMilitary.get();
     }
 
     public boolean isEvacuated() {
@@ -980,16 +966,47 @@ public class Building implements EndPoint {
         promisedDeliveries.put(cargo.getMaterial(), amount - 1);
     }
 
-    public int getTotalAmountNeeded(Material material) {
+    /**
+     * Returns the total amount needed for the given material
+     *
+     * Considers:
+     *  - Building planned, under construction, unoccupied/occupied
+     *
+     * Does not consider:
+     *  - Current inventory
+     *  - Whether promotions are enabled/disabled
+     *  - Whether production is paused/resumed
+     *
+     * NOTE: Will not return valid response when called for ready Storehouse or for Headquarters
+     *
+     * @param material to find the total need for
+     * @return the total need for the material
+     */
+    public int getCanHoldAmount(Material material) {
 
-        if (state == State.PLANNED || state == State.UNDER_CONSTRUCTION) {
+        switch (state) {
+            case PLANNED:
+            case UNDER_CONSTRUCTION:
+                return materialsToBuildHouse.getOrDefault(material, 0);
 
-            return materialsToBuildHouse.getOrDefault(material, 0);
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            return getTotalAmountOfMaterialNeededForProduction(material);
+            case UNOCCUPIED:
+            case OCCUPIED:
+
+                if (isMilitaryBuilding()) {
+                    if (material == COIN) {
+                        return getCanStoreAmountCoins();
+                    }
+
+                    if (isUpgrading()) {
+                        return getMaterialNeededForUpgrade().getOrDefault(material, 0);
+                    }
+                } else {
+                    return requiredGoodsForProduction.getOrDefault(material, 0);
+                }
+
+            default:
+                return 0;
         }
-
-        return 0;
     }
 
     private int getLackingAmountWithProjected(Material material) {
@@ -1093,6 +1110,8 @@ public class Building implements EndPoint {
         upgrading = true;
 
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
+
+        player.reportUpgradeStarted(this);
     }
 
     void doUpgradeBuilding() {
@@ -1203,7 +1222,18 @@ public class Building implements EndPoint {
         return materialNeeded;
     }
 
-    public Collection<Material> getMaterialNeeded() {
+    /**
+     * Returns the set of materials the building needs. Does not consider:
+     *  - Current inventory
+     *  - Whether production is enabled/disabled
+     *  - Whether in case of military building evacuations are ordered
+     *
+     * NOTE: It does not return material needed because of upgrade if the building is military and is being upgraded
+     *
+     * NOTE: It does consider whether max amount of coins are already stored. This is most likely a bug
+     * @return the set of materials the building type needs
+     */
+    public Collection<Material> getTypesOfMaterialNeeded() {
 
         Set<Material> result = EnumSet.noneOf(Material.class);
 
@@ -1218,7 +1248,7 @@ public class Building implements EndPoint {
                 result.addAll(Arrays.asList(production.requiredGoods()));
             }
 
-            if (isMilitaryBuilding() && getAmount(COIN) < getMaxCoins() && isPromotionEnabled()) {
+            if (isMilitaryBuilding() && getAmount(COIN) < getCanStoreAmountCoins() && isPromotionEnabled()) {
                 result.add(COIN);
             }
         }

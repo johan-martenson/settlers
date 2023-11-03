@@ -1568,18 +1568,18 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(catapult0.getMaterialNeeded().size(), 2);
-        assertTrue(catapult0.getMaterialNeeded().contains(PLANK));
-        assertTrue(catapult0.getMaterialNeeded().contains(STONE));
-        assertEquals(catapult0.getTotalAmountNeeded(PLANK), 4);
-        assertEquals(catapult0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(catapult0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(catapult0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(catapult0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(catapult0.getCanHoldAmount(PLANK), 4);
+        assertEquals(catapult0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(catapult0.getTotalAmountNeeded(material), 0);
+            assertEquals(catapult0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1604,16 +1604,16 @@ public class TestCatapult {
         Utils.constructHouse(catapult0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(catapult0.getMaterialNeeded().size(), 1);
-        assertTrue(catapult0.getMaterialNeeded().contains(STONE));
-        assertEquals(catapult0.getTotalAmountNeeded(STONE), 4);
+        assertEquals(catapult0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(catapult0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(catapult0.getCanHoldAmount(STONE), 4);
 
         for (Material material : Material.values()) {
             if (material == STONE) {
                 continue;
             }
 
-            assertEquals(catapult0.getTotalAmountNeeded(material), 0);
+            assertEquals(catapult0.getCanHoldAmount(material), 0);
         }
     }
 }

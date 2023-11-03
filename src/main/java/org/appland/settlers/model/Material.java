@@ -1,10 +1,6 @@
 package org.appland.settlers.model;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public enum Material {
 
@@ -155,6 +151,14 @@ public enum Material {
             TONGS,
             SCYTHE);
 
+    static final List<Material> SOLDIERS = Arrays.asList(
+        PRIVATE,
+        PRIVATE_FIRST_CLASS,
+        SERGEANT,
+        OFFICER,
+        GENERAL
+    );
+
     static final Set<Material> TOOLS_SET = EnumSet.copyOf(TOOLS);
 
     private static final List<Material> transportableItems = List.of(SWORD, SHIELD, BEER, GOLD, IRON, COAL, WOOD, PLANK, STONE, WHEAT, WATER, FLOUR, BREAD, IRON_BAR, FISH, COIN, PIG, MEAT);
@@ -190,5 +194,20 @@ public enum Material {
         String nameWithSpaces = name().replace("_", " ");
 
         return nameWithSpaces.toLowerCase();
+    }
+
+    public boolean isMilitary() {
+        return SOLDIERS.contains(this);
+    }
+
+    public Military.Rank toRank() {
+        return switch (this) {
+            case PRIVATE -> Military.Rank.PRIVATE_RANK;
+            case PRIVATE_FIRST_CLASS -> Military.Rank.PRIVATE_FIRST_CLASS_RANK;
+            case SERGEANT -> Military.Rank.SERGEANT_RANK;
+            case OFFICER -> Military.Rank.OFFICER_RANK;
+            case GENERAL -> Military.Rank.GENERAL_RANK;
+            default -> throw new InvalidGameLogicException("Can't translate " + this + " to rank");
+        };
     }
 }

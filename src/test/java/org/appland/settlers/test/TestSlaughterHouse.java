@@ -1838,18 +1838,18 @@ public class TestSlaughterHouse {
         SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(slaughterHouse0.getMaterialNeeded().size(), 2);
-        assertTrue(slaughterHouse0.getMaterialNeeded().contains(PLANK));
-        assertTrue(slaughterHouse0.getMaterialNeeded().contains(STONE));
-        assertEquals(slaughterHouse0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(slaughterHouse0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(slaughterHouse0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(slaughterHouse0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(slaughterHouse0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(slaughterHouse0.getCanHoldAmount(PLANK), 2);
+        assertEquals(slaughterHouse0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(slaughterHouse0.getTotalAmountNeeded(material), 0);
+            assertEquals(slaughterHouse0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1874,16 +1874,16 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(slaughterHouse0.getMaterialNeeded().size(), 1);
-        assertTrue(slaughterHouse0.getMaterialNeeded().contains(PIG));
-        assertEquals(slaughterHouse0.getTotalAmountNeeded(PIG), 1);
+        assertEquals(slaughterHouse0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(slaughterHouse0.getTypesOfMaterialNeeded().contains(PIG));
+        assertEquals(slaughterHouse0.getCanHoldAmount(PIG), 1);
 
         for (Material material : Material.values()) {
             if (material == PIG) {
                 continue;
             }
 
-            assertEquals(slaughterHouse0.getTotalAmountNeeded(material), 0);
+            assertEquals(slaughterHouse0.getCanHoldAmount(material), 0);
         }
     }
 

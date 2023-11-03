@@ -1909,18 +1909,18 @@ public class TestArmory {
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(armory0.getMaterialNeeded().size(), 2);
-        assertTrue(armory0.getMaterialNeeded().contains(PLANK));
-        assertTrue(armory0.getMaterialNeeded().contains(STONE));
-        assertEquals(armory0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(armory0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(armory0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(armory0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(armory0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(armory0.getCanHoldAmount(PLANK), 2);
+        assertEquals(armory0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(armory0.getTotalAmountNeeded(material), 0);
+            assertEquals(armory0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1945,18 +1945,18 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(armory0.getMaterialNeeded().size(), 2);
-        assertTrue(armory0.getMaterialNeeded().contains(COAL));
-        assertTrue(armory0.getMaterialNeeded().contains(IRON_BAR));
-        assertEquals(armory0.getTotalAmountNeeded(COAL), 2);
-        assertEquals(armory0.getTotalAmountNeeded(IRON_BAR), 2);
+        assertEquals(armory0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(armory0.getTypesOfMaterialNeeded().contains(COAL));
+        assertTrue(armory0.getTypesOfMaterialNeeded().contains(IRON_BAR));
+        assertEquals(armory0.getCanHoldAmount(COAL), 2);
+        assertEquals(armory0.getCanHoldAmount(IRON_BAR), 2);
 
         for (Material material : Material.values()) {
             if (material == COAL || material == IRON_BAR) {
                 continue;
             }
 
-            assertEquals(armory0.getTotalAmountNeeded(material), 0);
+            assertEquals(armory0.getCanHoldAmount(material), 0);
         }
     }
 

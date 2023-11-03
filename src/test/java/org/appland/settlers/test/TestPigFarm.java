@@ -2051,18 +2051,18 @@ public class TestPigFarm {
         PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(pigFarm0.getMaterialNeeded().size(), 2);
-        assertTrue(pigFarm0.getMaterialNeeded().contains(PLANK));
-        assertTrue(pigFarm0.getMaterialNeeded().contains(STONE));
-        assertEquals(pigFarm0.getTotalAmountNeeded(PLANK), 3);
-        assertEquals(pigFarm0.getTotalAmountNeeded(STONE), 3);
+        assertEquals(pigFarm0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(pigFarm0.getCanHoldAmount(PLANK), 3);
+        assertEquals(pigFarm0.getCanHoldAmount(STONE), 3);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(pigFarm0.getTotalAmountNeeded(material), 0);
+            assertEquals(pigFarm0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2087,18 +2087,18 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(pigFarm0.getMaterialNeeded().size(), 2);
-        assertTrue(pigFarm0.getMaterialNeeded().contains(WATER));
-        assertTrue(pigFarm0.getMaterialNeeded().contains(WHEAT));
-        assertEquals(pigFarm0.getTotalAmountNeeded(WATER), 1);
-        assertEquals(pigFarm0.getTotalAmountNeeded(WHEAT), 1);
+        assertEquals(pigFarm0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(WATER));
+        assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(WHEAT));
+        assertEquals(pigFarm0.getCanHoldAmount(WATER), 1);
+        assertEquals(pigFarm0.getCanHoldAmount(WHEAT), 1);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {
                 continue;
             }
 
-            assertEquals(pigFarm0.getTotalAmountNeeded(material), 0);
+            assertEquals(pigFarm0.getCanHoldAmount(material), 0);
         }
     }
 

@@ -177,21 +177,21 @@ public class TestInventory {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertEquals(storehouse.getAmount(PRIVATE), 1);
         assertTrue(storehouse.isInStock(PRIVATE));
-        storehouse.retrieveMilitary(PRIVATE);
+        storehouse.retrieveSoldierFromInventory(PRIVATE);
         assertNoMilitaryInInventory(storehouse);
         assertFalse(storehouse.isInStock(PRIVATE));
 
         storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
         assertEquals(storehouse.getAmount(GENERAL), 1);
         assertTrue(storehouse.isInStock(GENERAL));
-        storehouse.retrieveMilitary(GENERAL);
+        storehouse.retrieveSoldierFromInventory(GENERAL);
         assertNoMilitaryInInventory(storehouse);
         assertFalse(storehouse.isInStock(GENERAL));
 
         storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertEquals(storehouse.getAmount(SERGEANT), 1);
         assertTrue(storehouse.isInStock(SERGEANT));
-        storehouse.retrieveMilitary(SERGEANT);
+        storehouse.retrieveSoldierFromInventory(SERGEANT);
         assertNoMilitaryInInventory(storehouse);
         assertFalse(storehouse.isInStock(SERGEANT));
     }
@@ -249,7 +249,7 @@ public class TestInventory {
         assertFalse(storehouse.isInStock(PRIVATE));
 
         try {
-            storehouse.retrieveMilitary(PRIVATE);
+            storehouse.retrieveSoldierFromInventory(PRIVATE);
 
             fail();
         } catch (Exception e) {}
@@ -260,7 +260,7 @@ public class TestInventory {
         assertFalse(storehouse.isInStock(SERGEANT));
 
         try {
-        storehouse.retrieveMilitary(SERGEANT);
+        storehouse.retrieveSoldierFromInventory(SERGEANT);
 
             fail();
         } catch (Exception e) {}
@@ -271,7 +271,7 @@ public class TestInventory {
         assertFalse(storehouse.isInStock(GENERAL));
 
         try {
-            storehouse.retrieveMilitary(GENERAL);
+            storehouse.retrieveSoldierFromInventory(GENERAL);
 
             fail();
         } catch (Exception e) {}
@@ -281,17 +281,17 @@ public class TestInventory {
     public void testDepositAndRetrieveMilitaryOfEachKind() {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertEquals(storehouse.getAmount(PRIVATE), 1);
-        storehouse.retrieveMilitary(PRIVATE);
+        storehouse.retrieveSoldierFromInventory(PRIVATE);
         assertEquals(storehouse.getAmount(PRIVATE), 0);
 
         storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertEquals(storehouse.getAmount(SERGEANT), 1);
-        storehouse.retrieveMilitary(SERGEANT);
+        storehouse.retrieveSoldierFromInventory(SERGEANT);
         assertEquals(storehouse.getAmount(SERGEANT), 0);
 
         storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
         assertEquals(storehouse.getAmount(GENERAL), 1);
-        storehouse.retrieveMilitary(GENERAL);
+        storehouse.retrieveSoldierFromInventory(GENERAL);
         assertEquals(storehouse.getAmount(GENERAL), 0);
     }
 

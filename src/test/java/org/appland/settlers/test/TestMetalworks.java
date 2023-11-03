@@ -2263,18 +2263,18 @@ public class TestMetalworks {
         Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(metalworks0.getMaterialNeeded().size(), 2);
-        assertTrue(metalworks0.getMaterialNeeded().contains(PLANK));
-        assertTrue(metalworks0.getMaterialNeeded().contains(STONE));
-        assertEquals(metalworks0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(metalworks0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(metalworks0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(metalworks0.getCanHoldAmount(PLANK), 2);
+        assertEquals(metalworks0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(metalworks0.getTotalAmountNeeded(material), 0);
+            assertEquals(metalworks0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2300,18 +2300,18 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(metalworks0.getMaterialNeeded().size(), 2);
-        assertTrue(metalworks0.getMaterialNeeded().contains(IRON_BAR));
-        assertTrue(metalworks0.getMaterialNeeded().contains(PLANK));
-        assertEquals(metalworks0.getTotalAmountNeeded(IRON_BAR), 1);
-        assertEquals(metalworks0.getTotalAmountNeeded(PLANK), 1);
+        assertEquals(metalworks0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(IRON_BAR));
+        assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertEquals(metalworks0.getCanHoldAmount(IRON_BAR), 1);
+        assertEquals(metalworks0.getCanHoldAmount(PLANK), 1);
 
         for (Material material : Material.values()) {
             if (material == IRON_BAR || material == PLANK) {
                 continue;
             }
 
-            assertEquals(metalworks0.getTotalAmountNeeded(material), 0);
+            assertEquals(metalworks0.getCanHoldAmount(material), 0);
         }
     }
 

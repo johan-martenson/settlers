@@ -2152,18 +2152,18 @@ public class TestHarbor {
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(harbor0.getMaterialNeeded().size(), 2);
-        assertTrue(harbor0.getMaterialNeeded().contains(PLANK));
-        assertTrue(harbor0.getMaterialNeeded().contains(STONE));
-        assertEquals(harbor0.getTotalAmountNeeded(PLANK), 4);
-        assertEquals(harbor0.getTotalAmountNeeded(STONE), 6);
+        assertEquals(harbor0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(harbor0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(harbor0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(harbor0.getCanHoldAmount(PLANK), 4);
+        assertEquals(harbor0.getCanHoldAmount(STONE), 6);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(harbor0.getTotalAmountNeeded(material), 0);
+            assertEquals(harbor0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -2195,10 +2195,10 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(harbor0.getMaterialNeeded().size(), 0);
+        assertEquals(harbor0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(harbor0.getTotalAmountNeeded(material), 0);
+            assertEquals(harbor0.getCanHoldAmount(material), 0);
         }
     }
 

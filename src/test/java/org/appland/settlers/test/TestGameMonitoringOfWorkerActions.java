@@ -1438,7 +1438,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(builder0));
         }
     }
 

@@ -1909,18 +1909,18 @@ public class TestIronSmelter {
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(ironSmelter0.getMaterialNeeded().size(), 2);
-        assertTrue(ironSmelter0.getMaterialNeeded().contains(PLANK));
-        assertTrue(ironSmelter0.getMaterialNeeded().contains(STONE));
-        assertEquals(ironSmelter0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(ironSmelter0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(ironSmelter0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(ironSmelter0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(ironSmelter0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(ironSmelter0.getCanHoldAmount(PLANK), 2);
+        assertEquals(ironSmelter0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(ironSmelter0.getTotalAmountNeeded(material), 0);
+            assertEquals(ironSmelter0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1945,18 +1945,18 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(ironSmelter0.getMaterialNeeded().size(), 2);
-        assertTrue(ironSmelter0.getMaterialNeeded().contains(COAL));
-        assertTrue(ironSmelter0.getMaterialNeeded().contains(IRON));
-        assertEquals(ironSmelter0.getTotalAmountNeeded(COAL), 1);
-        assertEquals(ironSmelter0.getTotalAmountNeeded(IRON), 1);
+        assertEquals(ironSmelter0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(ironSmelter0.getTypesOfMaterialNeeded().contains(COAL));
+        assertTrue(ironSmelter0.getTypesOfMaterialNeeded().contains(IRON));
+        assertEquals(ironSmelter0.getCanHoldAmount(COAL), 1);
+        assertEquals(ironSmelter0.getCanHoldAmount(IRON), 1);
 
         for (Material material : Material.values()) {
             if (material == COAL || material == IRON) {
                 continue;
             }
 
-            assertEquals(ironSmelter0.getTotalAmountNeeded(material), 0);
+            assertEquals(ironSmelter0.getCanHoldAmount(material), 0);
         }
     }
 

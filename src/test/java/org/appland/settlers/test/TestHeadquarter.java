@@ -5,61 +5,13 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.StorageWorker;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.*;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static org.appland.settlers.model.Material.BAKER;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.BUTCHER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.FARMER;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.HUNTER;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -332,10 +284,10 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the reported needed production material is correct */
-        assertEquals(headquarter0.getMaterialNeeded().size(), 0);
+        assertEquals(headquarter0.getTypesOfMaterialNeeded().size(), 0);
 
         for (Material material : Material.values()) {
-            assertEquals(headquarter0.getTotalAmountNeeded(material), 0);
+            assertEquals(headquarter0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -517,5 +469,820 @@ public class TestHeadquarter {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }
+    }
+
+
+    @Test
+    public void testCreatedSoldierPlacedInInventoryWhenReservedAmountIsZero() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
+
+        /* Adjust resources in the headquarters */
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Wait for the road to get an assigned courier */
+        Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Place a cask of beer to be delivered to the headquarters */
+        Cargo beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
+
+        /* Wait for the courier to pick up the beer and carry it to the headquarters */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), beerCargo);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+
+        /* Verify that no private soldier is kept as reserve */
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getAmount(PRIVATE), 0);
+    }
+
+    @Test
+    public void testCreatedSoldierHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Wait for the road to get an assigned courier */
+        Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Place a cask of beer to be delivered to the headquarters */
+        Cargo beerCargo = Utils.placeCargo(map, BEER, flag0, headquarter0);
+
+        /* Wait for the courier to pick up the beer and carry it to the headquarters */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), beerCargo);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+
+        /* Verify that the new private soldier is kept as reserve */
+        Utils.fastForward(110, map);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getAmount(PRIVATE), 0);
+    }
+
+    @Test
+    public void testArrivingPrivateIsHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as reserve */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getAmount(PRIVATE), 0);
+    }
+
+    @Test
+    public void testArrivingPrivateFirstRankIsHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as reserve */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 1);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
+    }
+
+    @Test
+    public void testArrivingSergeantIsHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as reserve */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 1);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+    }
+
+    @Test
+    public void testArrivingOfficerIsHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as reserve */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 1);
+        assertEquals(headquarter0.getAmount(OFFICER), 0);
+    }
+
+    @Test
+    public void testArrivingGeneralIsHostedWhenReservedAmountIsHigher() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as reserve */
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 1);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
+    }
+
+    @Test
+    public void testArrivingPrivateIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as inventory */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getAmount(PRIVATE), 1);
+    }
+
+    @Test
+    public void testArrivingPrivateFirstClassIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as inventory */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 1);
+    }
+
+    @Test
+    public void testArrivingSergeantIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as inventory */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getAmount(SERGEANT), 1);
+    }
+
+    @Test
+    public void testArrivingOfficerIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as inventory */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getAmount(OFFICER), 1);
+    }
+
+    @Test
+    public void testArrivingGeneralIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 1);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 1);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
+
+        /* Set reserved privates to zero */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Place and construct barracks */
+        Point point2 = new Point(9, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        Utils.constructHouse(barracks0);
+
+        /* Place private in the barracks, burn it down, so it walks to the headquarters */
+        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
+
+        barracks0.tearDown();
+
+        /* Verify that the new private soldier is kept as inventory */
+        Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 1);
+    }
+
+    @Test
+    public void testIncreasingReservedAmountMovesPrivateFromInventoryToHosted() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
+
+        /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getAmount(PRIVATE), 2);
+    }
+
+    @Test
+    public void testIncreasingReservedAmountMovesPrivateFirstClassFromInventoryToHosted() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 5);
+
+        /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 2);
+    }
+
+    @Test
+    public void testIncreasingReservedAmountMovesSergeantFromInventoryToHosted() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 5);
+
+        /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
+        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getAmount(SERGEANT), 2);
+    }
+
+    @Test
+    public void testIncreasingReservedAmountMovesOfficerFromInventoryToHosted() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, OFFICER, 5);
+
+        /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
+        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getAmount(OFFICER), 2);
+    }
+
+    @Test
+    public void testIncreasingReservedAmountMovesGeneralFromInventoryToHosted() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
+
+        /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
+        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 3);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getAmount(GENERAL), 2);
+    }
+
+    @Test
+    public void testDecreasingReservedAmountMovesPrivateFromHostedToInventory() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Adjust resources in the headquarters */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+
+        Utils.adjustInventoryTo(headquarter0, BEER, 0);
+        Utils.adjustInventoryTo(headquarter0, SWORD, 0);
+        Utils.adjustInventoryTo(headquarter0, SHIELD, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
+
+        /* Reserve four soldiers */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 4);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 4);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 4);
+        assertEquals(headquarter0.getAmount(PRIVATE), 1);
+
+        /* Verify that decreasing the reserved amount moves the soldier from hosted to inventory */
+        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 2);
+
+        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 2);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 2);
+        assertEquals(headquarter0.getAmount(PRIVATE), 3);
     }
 }

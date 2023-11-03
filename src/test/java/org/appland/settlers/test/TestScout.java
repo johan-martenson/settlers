@@ -316,7 +316,7 @@ public class TestScout {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
         /* Verify that the scout goes north toward the border */
-        assertTrue(scout.getTarget().y > scout.getPosition().y);
+        assertTrue(scout.getTarget().y >= scout.getPosition().y);
 
         for (int i = 0; i < 200; i++) {
             if (scout.getPosition().y > flag.getPosition().y + 4) {

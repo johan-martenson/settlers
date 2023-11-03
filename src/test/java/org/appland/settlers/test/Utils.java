@@ -334,7 +334,7 @@ public class Utils {
             if (storehouse.getAmount(material) > amount) {
 
                 if (isSoldier(material)) {
-                    storehouse.retrieveMilitary(material);
+                    storehouse.retrieveSoldierFromInventory(material);
                 } else {
                     storehouse.retrieve(material);
                 }
@@ -2615,6 +2615,28 @@ public class Utils {
 
     }
 
+    public static void waitForNoWorkerOutsideBuilding(Class<? extends Worker> workerClass, Player player) throws InvalidUserActionException {
+        GameMap map = player.getMap();
+
+        while (true) {
+            if (map.getWorkers().stream().noneMatch(worker -> worker.getClass().equals(workerClass) && !worker.isInsideBuilding())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.getWorkers().stream().noneMatch(worker -> worker.getClass().equals(workerClass) && !worker.isInsideBuilding()));
+    }
+
+    public static void removeAllSoldiersFromStorage(Storehouse storehouse) {
+        adjustInventoryTo(storehouse, PRIVATE, 0);
+        adjustInventoryTo(storehouse, PRIVATE_FIRST_CLASS, 0);
+        adjustInventoryTo(storehouse, SERGEANT, 0);
+        adjustInventoryTo(storehouse, OFFICER, 0);
+        adjustInventoryTo(storehouse, GENERAL, 0);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -2691,13 +2713,17 @@ public class Utils {
         }
 
         public List<GameChangesList> getEventsAfterEvent(GameChangesList gameChangesEvent) {
+            if (gameChangesEvent == null) {
+                return gameChanges;
+            }
+
             if (gameChangesEvent.equals(getLastEvent())) {
                 return new ArrayList<>();
             }
 
             int index = gameChanges.indexOf(gameChangesEvent);
 
-            return gameChanges.subList(index + 1, gameChanges.size() - 1);
+            return gameChanges.subList(index + 1, gameChanges.size());
         }
 
         public void setAvailableConstruction(Map<Point, Size> availableHousePoints, Collection<Point> availableFlagPoints, List<Point> availableMinePoints) {
@@ -2799,6 +2825,10 @@ public class Utils {
             for (Point minePoint : availableMinesOnMap) {
                 assertEquals(availableConstruction.get(minePoint).getAvailableBuilding(), MINE_POSSIBLE);
             }
+        }
+
+        public void clearEvents() {
+            this.gameChanges.clear();
         }
     }
 

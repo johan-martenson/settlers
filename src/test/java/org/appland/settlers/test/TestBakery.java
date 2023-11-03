@@ -1773,18 +1773,18 @@ public class TestBakery {
         Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(bakery0.getMaterialNeeded().size(), 2);
-        assertTrue(bakery0.getMaterialNeeded().contains(PLANK));
-        assertTrue(bakery0.getMaterialNeeded().contains(STONE));
-        assertEquals(bakery0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(bakery0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(bakery0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(bakery0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(bakery0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(bakery0.getCanHoldAmount(PLANK), 2);
+        assertEquals(bakery0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(bakery0.getTotalAmountNeeded(material), 0);
+            assertEquals(bakery0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1809,18 +1809,18 @@ public class TestBakery {
         Utils.constructHouse(bakery0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(bakery0.getMaterialNeeded().size(), 2);
-        assertTrue(bakery0.getMaterialNeeded().contains(WATER));
-        assertTrue(bakery0.getMaterialNeeded().contains(FLOUR));
-        assertEquals(bakery0.getTotalAmountNeeded(WATER), 1);
-        assertEquals(bakery0.getTotalAmountNeeded(FLOUR), 1);
+        assertEquals(bakery0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(bakery0.getTypesOfMaterialNeeded().contains(WATER));
+        assertTrue(bakery0.getTypesOfMaterialNeeded().contains(FLOUR));
+        assertEquals(bakery0.getCanHoldAmount(WATER), 1);
+        assertEquals(bakery0.getCanHoldAmount(FLOUR), 1);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == FLOUR) {
                 continue;
             }
 
-            assertEquals(bakery0.getTotalAmountNeeded(material), 0);
+            assertEquals(bakery0.getCanHoldAmount(material), 0);
         }
     }
 

@@ -1,32 +1,8 @@
 package org.appland.settlers.rest.resource;
 
-import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.BuildingCapturedMessage;
-import org.appland.settlers.model.BuildingLostMessage;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GeologistFindMessage;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.LandDataPoint;
-import org.appland.settlers.model.LandStatistics;
-import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Message;
-import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
-import org.appland.settlers.model.MilitaryBuildingReadyMessage;
-import org.appland.settlers.model.NoMoreResourcesMessage;
-import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.ProductionDataPoint;
-import org.appland.settlers.model.ProductionDataSeries;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.StatisticsManager;
-import org.appland.settlers.model.StoreHouseIsReadyMessage;
-import org.appland.settlers.model.TransportCategory;
-import org.appland.settlers.model.UnderAttackMessage;
-import org.appland.settlers.model.WildAnimal;
+import org.appland.settlers.model.*;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,40 +10,19 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import static java.lang.String.format;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Message.MessageType.BUILDING_CAPTURED;
-import static org.appland.settlers.model.Message.MessageType.BUILDING_LOST;
-import static org.appland.settlers.model.Message.MessageType.GEOLOGIST_FIND;
-import static org.appland.settlers.model.Message.MessageType.MILITARY_BUILDING_OCCUPIED;
-import static org.appland.settlers.model.Message.MessageType.MILITARY_BUILDING_READY;
-import static org.appland.settlers.model.Message.MessageType.NO_MORE_RESOURCES;
-import static org.appland.settlers.model.Message.MessageType.STORE_HOUSE_IS_READY;
-import static org.appland.settlers.model.Message.MessageType.UNDER_ATTACK;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Message.MessageType.*;
 import static org.appland.settlers.rest.resource.GameStatus.NOT_STARTED;
 import static org.appland.settlers.rest.resource.GameStatus.STARTED;
 
@@ -1121,9 +1076,6 @@ public class SettlersAPI {
             Player attackingPlayer = (Player) idManager.getObject(attackingPlayerId);
 
             if (!building.getPlayer().equals(attackingPlayer)) {
-
-                System.out.println();
-
                 synchronized (player.getMap()) {
                     attackingPlayer.attack(building, 1);
                 }
@@ -1131,6 +1083,18 @@ public class SettlersAPI {
                 jsonResponse.put("message", "Attacking building");
             } else {
                 jsonResponse.put("message", "Cannot attack own building");
+            }
+        }
+
+        if (jsonHouseModification.containsKey("production")) {
+            if (jsonHouseModification.get("production").equals("PAUSED")) {
+                synchronized (player.getMap()) {
+                    building.stopProduction();
+                }
+            } else {
+                synchronized (player.getMap()) {
+                    building.resumeProduction();
+                }
             }
         }
 

@@ -6,41 +6,17 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Fortress;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.SawmillWorker;
-import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -187,6 +163,45 @@ public class TestSawmill {
         Utils.constructHouse(sawmill);
 
         assertTrue(sawmill.needsWorker());
+    }
+
+    @Test
+    public void testSawmillCanHoldTotal() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all wood from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        /* Place sawmill */
+        Point point3 = new Point(7, 9);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill);
+
+        /* Verify that the sawmill can hold the right amount when it's empty */
+        assertEquals(sawmill.getCanHoldAmount(WOOD), 6);
+
+        /* Verify that the sawmill can hold the right amount when production is stopped */
+        sawmill.stopProduction();
+
+        assertEquals(sawmill.getCanHoldAmount(WOOD), 6);
+
+        /* Verify that the sawmill can hold the right amount when it has one piece of wood in its inventory */
+        sawmill.resumeProduction();
+
+        Utils.deliverCargo(sawmill, WOOD);
+
+        assertEquals(sawmill.getCanHoldAmount(WOOD), 6);
     }
 
     @Test
@@ -1808,18 +1823,18 @@ public class TestSawmill {
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(sawmill0.getMaterialNeeded().size(), 2);
-        assertTrue(sawmill0.getMaterialNeeded().contains(PLANK));
-        assertTrue(sawmill0.getMaterialNeeded().contains(STONE));
-        assertEquals(sawmill0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(sawmill0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(sawmill0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(sawmill0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(sawmill0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(sawmill0.getCanHoldAmount(PLANK), 2);
+        assertEquals(sawmill0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(sawmill0.getTotalAmountNeeded(material), 0);
+            assertEquals(sawmill0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1844,16 +1859,16 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(sawmill0.getMaterialNeeded().size(), 1);
-        assertTrue(sawmill0.getMaterialNeeded().contains(WOOD));
-        assertEquals(sawmill0.getTotalAmountNeeded(WOOD), 6);
+        assertEquals(sawmill0.getTypesOfMaterialNeeded().size(), 1);
+        assertTrue(sawmill0.getTypesOfMaterialNeeded().contains(WOOD));
+        assertEquals(sawmill0.getCanHoldAmount(WOOD), 6);
 
         for (Material material : Material.values()) {
             if (material == WOOD) {
                 continue;
             }
 
-            assertEquals(sawmill0.getTotalAmountNeeded(material), 0);
+            assertEquals(sawmill0.getCanHoldAmount(material), 0);
         }
     }
 

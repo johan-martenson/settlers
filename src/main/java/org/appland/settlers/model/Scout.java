@@ -305,7 +305,7 @@ public class Scout extends Worker {
 
     private Point findNextPoint() {
 
-        /* 1. Get list of available next adjacent offroad points */
+        /* 1. Get list of available next adjacent off-road points */
         Collection<Point> possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(getPosition());
 
         /* 2. Calculate scores for each point based on how closely they match the existing direction */

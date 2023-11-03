@@ -1901,18 +1901,18 @@ public class TestMint {
         Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(mint0.getMaterialNeeded().size(), 2);
-        assertTrue(mint0.getMaterialNeeded().contains(PLANK));
-        assertTrue(mint0.getMaterialNeeded().contains(STONE));
-        assertEquals(mint0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(mint0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(mint0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(mint0.getTypesOfMaterialNeeded().contains(PLANK));
+        assertTrue(mint0.getTypesOfMaterialNeeded().contains(STONE));
+        assertEquals(mint0.getCanHoldAmount(PLANK), 2);
+        assertEquals(mint0.getCanHoldAmount(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(mint0.getTotalAmountNeeded(material), 0);
+            assertEquals(mint0.getCanHoldAmount(material), 0);
         }
     }
 
@@ -1937,18 +1937,18 @@ public class TestMint {
         Utils.constructHouse(mint0);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(mint0.getMaterialNeeded().size(), 2);
-        assertTrue(mint0.getMaterialNeeded().contains(COAL));
-        assertTrue(mint0.getMaterialNeeded().contains(GOLD));
-        assertEquals(mint0.getTotalAmountNeeded(COAL), 1);
-        assertEquals(mint0.getTotalAmountNeeded(GOLD), 1);
+        assertEquals(mint0.getTypesOfMaterialNeeded().size(), 2);
+        assertTrue(mint0.getTypesOfMaterialNeeded().contains(COAL));
+        assertTrue(mint0.getTypesOfMaterialNeeded().contains(GOLD));
+        assertEquals(mint0.getCanHoldAmount(COAL), 1);
+        assertEquals(mint0.getCanHoldAmount(GOLD), 1);
 
         for (Material material : Material.values()) {
             if (material == COAL || material == GOLD) {
                 continue;
             }
 
-            assertEquals(mint0.getTotalAmountNeeded(material), 0);
+            assertEquals(mint0.getCanHoldAmount(material), 0);
         }
     }
 

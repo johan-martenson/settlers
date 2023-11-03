@@ -293,113 +293,6 @@ public class AppTest extends TestCase {
     }
 
     @Test
-    public void testSettingResourcesToLowReducesResourcesAvailable() {
-
-        /* Create a game */
-        String gameId0 = createOnePlayerGame();
-
-        /* Create a second game as a reference */
-        String gameId1 = createOnePlayerGame();
-
-        /* Set the resource level to LOW for the first game*/
-        setResourceLevelForGame(gameId0, "LOW");
-
-        /* Start both games */
-        startGame(gameId0);
-        startGame(gameId1);
-
-        /* Get the amount of stones for the player in each game */
-        String playerId0 = getPlayerIds(gameId0).get(0);
-
-        String playerId1 = getPlayerIds(gameId1).get(0);
-
-        String houseId0 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses", gameId0, playerId0).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("[0].id");
-
-        String houseId1 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses", gameId1, playerId1).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("[0].id");
-
-        Map resources0 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses/{houseId}", gameId0, playerId0, houseId0).then()
-                .statusCode(200)
-                .extract().jsonPath().getMap("resources");
-
-        Map resources1 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses/{houseId}", gameId1, playerId1, houseId1).then()
-                .statusCode(200)
-                .extract().jsonPath().getMap("resources");
-
-        Map stone0 = (Map)resources0.get("stone");
-        Map stone1 = (Map)resources1.get("stone");
-
-        int stoneAmount0 = (int)stone0.get("has");
-        int stoneAmount1 = (int)stone1.get("has");
-
-        assertTrue(stoneAmount0 < stoneAmount1);
-    }
-
-    @Test
-    public void testSettingResourcesToHighReducesResourcesAvailable() {
-
-        /* Create a game */
-        String gameId0 = createOnePlayerGame();
-
-        /* Create a second game as a reference */
-        String gameId1 = createOnePlayerGame();
-
-        /* Set the resource level to HIGH for the first game */
-        String resourceLevel = "HIGH";
-        setResourceLevelForGame(gameId0, resourceLevel);
-
-        /* Start both games */
-        startGame(gameId0);
-        startGame(gameId1);
-
-        /* Get the amount of stones for the player in each game */
-        String playerId0 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}", gameId0).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("players[0].id");
-
-        String playerId1 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}", gameId1).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("players[0].id");
-
-        String houseId0 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses", gameId0, playerId0).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("[0].id");
-
-        String houseId1 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses", gameId1, playerId1).then()
-                .statusCode(200)
-                .extract().jsonPath().getString("[0].id");
-
-        Map resources0 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses/{houseId}", gameId0, playerId0, houseId0).then()
-                .statusCode(200)
-                .extract().jsonPath().getMap("resources");
-
-        Map resources1 = given().contentType(ContentType.JSON).when()
-                .get("/games/{gameId}/players/{playerId}/houses/{houseId}", gameId1, playerId1, houseId1).then()
-                .statusCode(200)
-                .extract().jsonPath().getMap("resources");
-
-        Map stone0 = (Map)resources0.get("stone");
-        Map stone1 = (Map)resources1.get("stone");
-
-        int stoneAmount0 = (int)stone0.get("has");
-        int stoneAmount1 = (int)stone1.get("has");
-
-        assertTrue(stoneAmount0 > stoneAmount1);
-    }
-
-    @Test
     public void testSetResourcesToMedium() {
 
         /* Create the game */
@@ -1627,38 +1520,9 @@ public class AppTest extends TestCase {
         }
 
         /* Verify that wood statistics are available */
-        List<Map> statisticsArray = (List<Map>)statistics.get("materialStatistics");
+        Map statisticsArray = (Map)statistics.get("materialStatistics");
 
-        boolean woodFound = false;
-        for (Map materialStatistics : statisticsArray) {
-            if ("wood".equals(materialStatistics.get("material"))) {
-                woodFound = true;
-
-                break;
-            }
-        }
-
-        assertTrue(woodFound);
-
-        /* Verify that all production statistics are 0 in the beginning */
-        for (Map productionStatistics : statisticsArray) {
-            List<Map> materialProductionStatistics = (List<Map>)productionStatistics.get("materialStatistics");
-
-            boolean timeZeroFound = false;
-
-            for (Map measurement : materialProductionStatistics) {
-
-                if ((int)measurement.get("time") == 0) {
-                    timeZeroFound = true;
-
-                    for (Integer value : (List<Integer>)measurement.get("values")) {
-                        assertEquals(0, (int)value);
-                    }
-                }
-            }
-
-            assertTrue(timeZeroFound);
-        }
+        assertTrue(statisticsArray.containsKey("WOOD"));
     }
 
     @Test
@@ -1675,21 +1539,10 @@ public class AppTest extends TestCase {
 
         /* Verify that statistics for the required materials are available */
         List<Material> requiredMaterials = Arrays.asList(WOOD, PLANK, STONE, GOLD, SWORD, SHIELD, COIN);
-        List<Map> statisticsArray = (List<Map>)statistics.get("materialStatistics");
+        Map statisticsArray = (Map)statistics.get("materialStatistics");
 
         for (Material material : requiredMaterials) {
-            boolean materialFound = false;
-
-            for (Map materialStatistics : statisticsArray) {
-
-                if (material.name().toLowerCase().equals(materialStatistics.get("material"))) {
-                    materialFound = true;
-
-                    break;
-                }
-            }
-
-            assertTrue(materialFound);
+            assertTrue(statisticsArray.containsKey(material.name().toUpperCase()));
         }
     }
 

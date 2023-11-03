@@ -1,14 +1,6 @@
 package org.appland.settlers.rest.resource;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameChangesList;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.PlayerGameViewMonitor;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
+import org.appland.settlers.model.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,10 +9,7 @@ import org.json.simple.parser.ParseException;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ServerEndpoint(value = "/ws/monitor/games/{gameId}/players/{playerId}")
 
@@ -58,6 +47,54 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case START_DETAILED_MONITORING: {
+                String buildingId = (String) jsonBody.get("buildingId");
+
+                Building building = (Building) idManager.getObject(buildingId);
+
+                synchronized (map) {
+                    player.addDetailedMonitoring(building);
+                }
+            }
+
+                break;
+
+            case STOP_DETAILED_MONITORING: {
+                String buildingId = (String) jsonBody.get("buildingId");
+
+                Building building = (Building) idManager.getObject(buildingId);
+
+                synchronized (map) {
+                    player.removeDetailedMonitoring(building);
+                }
+            }
+
+                break;
+
+            case SET_RESERVED_IN_HEADQUARTERS:
+
+                synchronized (map) {
+                    Optional<Building> optionalHeadquarter = player.getHeadquarter();
+
+                    if (optionalHeadquarter.isPresent()) {
+                        Headquarter headquarter = (Headquarter) optionalHeadquarter.get();
+
+                        Arrays.stream(Military.Rank.values()).iterator().forEachRemaining(
+                                rank -> {
+                                    if (jsonBody.containsKey(rank.name().toUpperCase())) {
+                                        Long amountLong = (Long) jsonBody.get(rank.name().toUpperCase());
+                                        int amount = amountLong.intValue();
+                                        headquarter.setReservedSoldiers(rank, amount);
+                                    }
+                                }
+                        );
+                    } else {
+                        System.out.println("Can't find headquarters for the player!");
+                    }
+                }
+
+                break;
+
             case INFORMATION_ON_POINTS:
 
                 JSONObject jsonResponse = new JSONObject();
