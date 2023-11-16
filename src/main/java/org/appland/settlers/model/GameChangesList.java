@@ -41,6 +41,8 @@ public class GameChangesList {
     private final Map<Worker, WorkerAction> workersWithStartedActions;
     private final List<Point> removedDecorations;
     private final Map<Point, DecorationType> newDecorations;
+    private final Collection<NewAndOldBuilding> upgradedBuildings;
+    private final Collection<Message> removedMessages;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -75,7 +77,9 @@ public class GameChangesList {
                            List<Ship> shipsWithNewTargets,
                            Map<Worker, WorkerAction> workersWithStartedActions,
                            List<Point> removedDecorations,
-                           Map<Point, DecorationType> newDecorations) {
+                           Map<Point, DecorationType> newDecorations,
+                           Collection<NewAndOldBuilding> upgradedBuildings,
+                           Collection<Message> removedMessages) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -110,6 +114,8 @@ public class GameChangesList {
         this.workersWithStartedActions = workersWithStartedActions;
         this.removedDecorations = removedDecorations;
         this.newDecorations = newDecorations;
+        this.upgradedBuildings = upgradedBuildings;
+        this.removedMessages = removedMessages;
     }
 
     public long getTime() {
@@ -188,39 +194,41 @@ public class GameChangesList {
     public String toString() {
         return "GameChangesList{" +
                 "time=" + time +
-                ", \nworkersWithNewTargets=" + workersWithNewTargets +
-                ", \nnewFlags=" + newFlags +
-                ", \nremovedFlags=" + removedFlags +
-                ", \nnewBuildings=" + newBuildings +
-                ", \nchangedBuildings=" + changedBuildings +
-                ", \nremovedBuildings=" + removedBuildings +
-                ", \naddedRoads=" + addedRoads +
-                ", \nremovedRoads=" + removedRoads +
-                ", \nremovedWorkers=" + removedWorkers +
-                ", \nnewTrees=" + newTrees +
-                ", \nremovedTrees=" + removedTrees +
-                ", \nremovedStones=" + removedStones +
-                ", \nnewSigns=" + newSigns +
-                ", \nremovedSigns=" + removedSigns +
-                ", \nnewCrops=" + newCrops +
-                ", \nremovedCrops=" + removedCrops +
-                ", \nnewDiscoveredLand=" + newDiscoveredLand +
-                ", \nborderChanges=" + borderChanges +
-                ", \nnewStones=" + newStones +
-                ", \nnewWorkers=" + newWorkers +
-                ", \nchangedAvailableConstruction=" + changedAvailableConstruction +
-                ", \nnewMessages=" + newMessages +
-                ", \npromotedRoads=" + promotedRoads +
-                ", \nchangedFlags=" + changedFlags +
-                ", \nremovedDeadTrees=" + removedDeadTrees +
-                ", \ndiscoveredDeadTrees=" + discoveredDeadTrees +
-                ", \nharvestedCrops=" + harvestedCrops +
-                ", \nnewShips=" + newShips +
-                ", \nfinishedShips=" + finishedShips +
-                ", \nshipsWithNewTargets=" + shipsWithNewTargets +
-                ", \nworkersWithStartedActions=" + workersWithStartedActions +
-                ", \nremovedDecorations=" + removedDecorations +
-                ", \nnewDecorations=" + newDecorations +
+                ((workersWithNewTargets.isEmpty()) ? "" : ", workersWithNewTargets=" + workersWithNewTargets) +
+                ((newFlags.isEmpty()) ? "" : ", newFlags=" + newFlags) +
+                ((removedFlags.isEmpty()) ? "" : ", removedFlags=" + removedFlags) +
+                ((newBuildings.isEmpty()) ? "" : ", newBuildings=" + newBuildings) +
+                ((changedBuildings.isEmpty()) ? "" : ", changedBuildings=" + changedBuildings) +
+                ((removedBuildings.isEmpty()) ? "" : ", removedBuildings=" + removedBuildings) +
+                ((addedRoads.isEmpty()) ? "" : ", addedRoads=" + addedRoads) +
+                ((removedRoads.isEmpty()) ? "" : ", removedRoads=" + removedRoads) +
+                ((removedWorkers.isEmpty()) ? "" : ", removedWorkers=" + removedWorkers) +
+                ((newTrees.isEmpty()) ? "" : ", newTrees=" + newTrees) +
+                ((removedTrees.isEmpty()) ? "" : ", removedTrees=" + removedTrees) +
+                ((removedStones.isEmpty()) ? "" : ", removedStones=" + removedStones) +
+                ((newSigns.isEmpty()) ? "" : ", newSigns=" + newSigns) +
+                ((removedSigns.isEmpty()) ? "" : ", removedSigns=" + removedSigns) +
+                ((newCrops.isEmpty()) ? "" : ", newCrops=" + newCrops) +
+                ((removedCrops.isEmpty()) ? "" : ", removedCrops=" + removedCrops) +
+                ((newDiscoveredLand.isEmpty()) ? "" : ", newDiscoveredLand=" + newDiscoveredLand) +
+                ((borderChanges.isEmpty()) ? "" : ", borderChanges=" + borderChanges) +
+                ((newStones.isEmpty()) ? "" : ", newStones=" + newStones) +
+                ((newWorkers.isEmpty()) ? "" : ", newWorkers=" + newWorkers) +
+                ((changedAvailableConstruction.isEmpty()) ? "" : ", changedAvailableConstruction=" + changedAvailableConstruction) +
+                ((newMessages.isEmpty()) ? "" : ", newMessages=" + newMessages) +
+                ((promotedRoads.isEmpty()) ? "" : ", promotedRoads=" + promotedRoads) +
+                ((changedFlags.isEmpty()) ? "" : ", changedFlags=" + changedFlags) +
+                ((removedDeadTrees.isEmpty()) ? "" : ", removedDeadTrees=" + removedDeadTrees) +
+                ((discoveredDeadTrees.isEmpty()) ? "" : ", discoveredDeadTrees=" + discoveredDeadTrees) +
+                ((harvestedCrops.isEmpty()) ? "" : ", harvestedCrops=" + harvestedCrops) +
+                ((newShips.isEmpty()) ? "" : ", newShips=" + newShips) +
+                ((finishedShips.isEmpty()) ? "" : ", finishedShips=" + finishedShips) +
+                ((shipsWithNewTargets.isEmpty()) ? "" : ", shipsWithNewTargets=" + shipsWithNewTargets) +
+                ((workersWithStartedActions.isEmpty()) ? "" : ", workersWithStartedActions=" + workersWithStartedActions) +
+                ((removedDecorations.isEmpty()) ? "" : ", removedDecorations=" + removedDecorations) +
+                ((newDecorations.isEmpty()) ? "" : ", newDecorations=" + newDecorations) +
+                ((upgradedBuildings.isEmpty()) ? "" : ", upgradedBuildings=" + upgradedBuildings) +
+                ((removedMessages.isEmpty()) ? "" : ", removedMessages=" + removedMessages) +
                 '}';
     }
 
@@ -286,5 +294,23 @@ public class GameChangesList {
 
     public Map<Point, DecorationType> getNewDecorations() {
         return newDecorations;
+    }
+
+    public Collection<NewAndOldBuilding> getUpgradedBuildings() {
+        return upgradedBuildings;
+    }
+
+    public Collection<Message> getRemovedMessages() {
+        return removedMessages;
+    }
+
+    public static class NewAndOldBuilding {
+        public Building newBuilding;
+        public Building oldBuilding;
+
+        public NewAndOldBuilding(Building fromBuilding, Building upgraded) {
+            newBuilding = upgraded;
+            oldBuilding = fromBuilding;
+        }
     }
 }

@@ -20,20 +20,12 @@ import java.util.Set;
 
 import static org.appland.settlers.model.BorderCheck.CAN_PLACE_OUTSIDE_BORDER;
 import static org.appland.settlers.model.BorderCheck.MUST_PLACE_INSIDE_BORDER;
-import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ON;
-import static org.appland.settlers.model.DetailedVegetation.CAN_BUILD_ROAD_ON;
-import static org.appland.settlers.model.DetailedVegetation.DEAD_TREE_NOT_ALLOWED;
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.DetailedVegetation.*;
 import static org.appland.settlers.model.FlagType.MAIN;
 import static org.appland.settlers.model.FlagType.MARINE;
-import static org.appland.settlers.model.GameUtils.ConnectionsProvider;
-import static org.appland.settlers.model.GameUtils.areNonePartOf;
-import static org.appland.settlers.model.GameUtils.findShortestPath;
-import static org.appland.settlers.model.GameUtils.isEven;
+import static org.appland.settlers.model.GameUtils.*;
 import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
 
 public class GameMap {
@@ -122,6 +114,7 @@ public class GameMap {
     private final Map<Worker, WorkerAction> workersWithStartedActions;
     private final Map<Point, DecorationType> decorations;
     private final List<Point> removedDecorations;
+    private final Set<GameChangesList.NewAndOldBuilding> upgradedBuildings;
 
     private Player winner;
     private long time;
@@ -233,6 +226,7 @@ public class GameMap {
         finishedShips = new ArrayList<>();
         shipsWithNewTargets = new ArrayList<>();
         workersWithStartedActions = new HashMap<>();
+        upgradedBuildings = new HashSet<>();
 
         winnerReported = false;
 
@@ -729,6 +723,12 @@ public class GameMap {
                 }
             });
 
+            upgradedBuildings.forEach(newAndOldBuilding -> {
+                if (player.getDiscoveredLand().contains(newAndOldBuilding.newBuilding.getPosition())) {
+                    player.reportUpgradedBuilding(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
+                }
+            });
+
             player.sendMonitoringEvents(time);
         }
 
@@ -759,6 +759,7 @@ public class GameMap {
         shipsWithNewTargets.clear();
         workersWithStartedActions.clear();
         removedDecorations.clear();
+        upgradedBuildings.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3298,8 +3299,8 @@ public class GameMap {
         /* Plan to add the upgraded building */
         buildingsToAdd.add(upgradedBuilding);
 
-        /* Report that the building has changed */
-        changedBuildings.add(upgradedBuilding);
+        /* Report that the building has been upgraded */
+        upgradedBuildings.add(new GameChangesList.NewAndOldBuilding(oldBuilding, upgradedBuilding));
     }
 
     /**

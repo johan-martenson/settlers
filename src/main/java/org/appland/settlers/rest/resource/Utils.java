@@ -42,11 +42,11 @@ class Utils {
         return jsonDecoration;
     }
 
-    JSONArray gamesToJson(List<GameMap> games) {
+    JSONArray gamesToJson(List<GameMap> games, GameResource gameResource) {
         JSONArray jsonGames = new JSONArray();
 
         for (GameMap map : games) {
-            JSONObject jsonGame = gameToJson(map);
+            JSONObject jsonGame = gameToJson(map, gameResource);
 
             jsonGames.add(jsonGame);
         }
@@ -54,13 +54,13 @@ class Utils {
         return jsonGames;
     }
 
-    JSONObject gameToJson(GameMap map) {
+    JSONObject gameToJson(GameMap map, GameResource gameResource) {
         JSONObject jsonGame = new JSONObject();
 
         String id = idManager.getId(map);
 
         jsonGame.put("id", id);
-        jsonGame.put("players", playersToJson(map.getPlayers()));
+        jsonGame.put("players", playersToJson(map.getPlayers(), gameResource));
 
         /* Set the status to STARTED because this is an instance of GameMap */
         jsonGame.put("status", "STARTED");
@@ -68,11 +68,11 @@ class Utils {
         return jsonGame;
     }
 
-    JSONArray playersToJson(Collection<Player> players) {
+    JSONArray playersToJson(Collection<Player> players, GameResource gameResource) {
         JSONArray jsonPlayers = new JSONArray();
 
         for (Player player : players) {
-            JSONObject jsonPlayer = playerToJson(player, idManager.getId(player));
+            JSONObject jsonPlayer = playerToJson(player, idManager.getId(player), gameResource);
 
             jsonPlayers.add(jsonPlayer);
         }
@@ -80,13 +80,19 @@ class Utils {
         return jsonPlayers;
     }
 
-    JSONObject playerToJson(Player player, String playerId) {
+    JSONObject playerToJson(Player player, String playerId, GameResource gameResource) {
         JSONObject jsonPlayer = new JSONObject();
 
         jsonPlayer.put("name", player.getName());
         jsonPlayer.put("color", colorToHexString(player.getColor()));
         jsonPlayer.put("id", playerId);
         jsonPlayer.put("nation", player.getNation().name());
+
+        if (gameResource.isComputerPlayer(player)) {
+            jsonPlayer.put("type", "COMPUTER");
+        } else {
+            jsonPlayer.put("type", "HUMAN");
+        }
 
         /* Get the player's "center spot" */
         for (Building building : player.getBuildings()) {
@@ -245,7 +251,7 @@ class Utils {
         return ""; // Should never be reached but the compiler complains
     }
 
-    JSONObject pointToDetailedJson(Point point, Player player, GameMap map) {
+    JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
 
         JSONObject jsonPointInfo = pointToJson(point);
 
@@ -253,7 +259,7 @@ class Utils {
 
             if (map.isBuildingAtPoint(point)) {
                 Building building = map.getBuildingAtPoint(point);
-                jsonPointInfo.put("building", houseToJson(building));
+                jsonPointInfo.put("building", houseToJson(building, player));
                 jsonPointInfo.put("is", "building");
                 jsonPointInfo.put("buildingId", idManager.getId(building));
             } else if (map.isFlagAtPoint(point)) {
@@ -305,7 +311,7 @@ class Utils {
         return jsonPointInfo;
     }
 
-    JSONObject houseToJson(Building building) {
+    JSONObject houseToJson(Building building, Player player) throws InvalidUserActionException {
         JSONObject jsonHouse = pointToJson(building.getPosition());
 
         jsonHouse.put("type", building.getClass().getSimpleName());
@@ -390,6 +396,12 @@ class Utils {
             Arrays.stream(Military.Rank.values()).iterator().forEachRemaining(
                     rank -> jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank))
             );
+        }
+
+        if (!building.getPlayer().equals(player) && building.isMilitaryBuilding() && building.isOccupied()) {
+            int availableAttackers = player.getAvailableAttackersForBuilding(building);
+
+            jsonHouse.put("availableAttackers", availableAttackers);
         }
 
         return jsonHouse;
@@ -528,6 +540,9 @@ class Utils {
             case "LookoutTower":
                 building = new LookoutTower(player);
                 break;
+            case "Metalworks":
+                building = new Metalworks(player);
+                break;
             default:
                 System.out.println("DON'T KNOW HOW TO CREATE BUILDING " + buildingType);
                 System.exit(1);
@@ -599,6 +614,7 @@ class Utils {
         jsonFlag.put("id", idManager.getId(flag));
         jsonFlag.put("playerId", idManager.getId(flag.getPlayer()));
         jsonFlag.put("type", flag.getType().name());
+        jsonFlag.put("nation", flag.getPlayer().getNation().name().toUpperCase());
 
         if (!flag.getStackedCargo().isEmpty()) {
             jsonFlag.put("stackedCargo", cargosToMaterialJson(flag.getStackedCargo()));
@@ -632,6 +648,12 @@ class Utils {
 
         jsonRoad.put("points", jsonPoints);
         jsonRoad.put("id", idManager.getId(road));
+
+        if (road.isMainRoad()) {
+            jsonRoad.put("type", "MAIN");
+        } else {
+            jsonRoad.put("type", "NORMAL");
+        }
 
         return jsonRoad;
     }
@@ -786,11 +808,11 @@ class Utils {
         }
     }
 
-    JSONArray housesToJson(List<Building> buildings) {
+    JSONArray housesToJson(Collection<Building> buildings, Player player) throws InvalidUserActionException {
         JSONArray jsonHouses = new JSONArray();
 
         for (Building building : buildings) {
-            jsonHouses.add(houseToJson(building));
+            jsonHouses.add(houseToJson(building, player));
         }
 
         return jsonHouses;
@@ -825,9 +847,11 @@ class Utils {
 
         Building building = buildingLostMessage.getBuilding();
 
+        jsonBuildingLostMessage.put("id", idManager.getId(buildingLostMessage));
         jsonBuildingLostMessage.put("type", "BUILDING_LOST");
         jsonBuildingLostMessage.put("houseId", idManager.getId(buildingLostMessage.getBuilding()));
         jsonBuildingLostMessage.put("houseType", building.getSimpleName());
+        jsonBuildingLostMessage.put("point", buildingToPoint(building));
 
         return jsonBuildingLostMessage;
     }
@@ -837,9 +861,11 @@ class Utils {
 
         Building building = buildingCapturedMessage.getBuilding();
 
+        jsonBuildingCapturedMessage.put("id", idManager.getId(buildingCapturedMessage));
         jsonBuildingCapturedMessage.put("type", "BUILDING_CAPTURED");
         jsonBuildingCapturedMessage.put("houseId", idManager.getId(buildingCapturedMessage.getBuilding()));
         jsonBuildingCapturedMessage.put("houseType", building.getSimpleName());
+        jsonBuildingCapturedMessage.put("point", buildingToPoint(building));
 
         return jsonBuildingCapturedMessage;
     }
@@ -849,9 +875,11 @@ class Utils {
 
         Building building = storeHouseIsReadyMessage.getBuilding();
 
+        jsonStoreHouseIsReadyMessage.put("id", idManager.getId(storeHouseIsReadyMessage));
         jsonStoreHouseIsReadyMessage.put("type", "STORE_HOUSE_IS_READY");
         jsonStoreHouseIsReadyMessage.put("houseId", idManager.getId(storeHouseIsReadyMessage.getBuilding()));
         jsonStoreHouseIsReadyMessage.put("houseType", building.getSimpleName());
+        jsonStoreHouseIsReadyMessage.put("point", buildingToPoint(building));
 
         return jsonStoreHouseIsReadyMessage;
     }
@@ -861,9 +889,11 @@ class Utils {
 
         Building building = militaryBuildingReadyMessage.getBuilding();
 
+        jsonMilitaryBuildingOccupiedMessage.put("id", idManager.getId(militaryBuildingReadyMessage));
         jsonMilitaryBuildingOccupiedMessage.put("type", MILITARY_BUILDING_READY.toString());
         jsonMilitaryBuildingOccupiedMessage.put("houseId", idManager.getId(militaryBuildingReadyMessage.getBuilding()));
         jsonMilitaryBuildingOccupiedMessage.put("houseType", building.getSimpleName());
+        jsonMilitaryBuildingOccupiedMessage.put("point", buildingToPoint(building));
 
         return jsonMilitaryBuildingOccupiedMessage;
     }
@@ -873,9 +903,11 @@ class Utils {
 
         Building building = noMoreResourcesMessage.getBuilding();
 
+        jsonNoMoreResourcesMessage.put("id", idManager.getId(noMoreResourcesMessage));
         jsonNoMoreResourcesMessage.put("type", NO_MORE_RESOURCES.toString());
         jsonNoMoreResourcesMessage.put("houseId", idManager.getId(noMoreResourcesMessage.getBuilding()));
         jsonNoMoreResourcesMessage.put("houseType", building.getSimpleName());
+        jsonNoMoreResourcesMessage.put("point", buildingToPoint(building));
 
         return jsonNoMoreResourcesMessage;
     }
@@ -885,9 +917,11 @@ class Utils {
 
         Building building = militaryBuildingOccupiedMessage.getBuilding();
 
+        jsonMilitaryBuildingOccupiedMessage.put("id", idManager.getId(militaryBuildingOccupiedMessage));
         jsonMilitaryBuildingOccupiedMessage.put("type", MILITARY_BUILDING_OCCUPIED.toString());
         jsonMilitaryBuildingOccupiedMessage.put("houseId", idManager.getId(building));
         jsonMilitaryBuildingOccupiedMessage.put("houseType", building.getSimpleName());
+        jsonMilitaryBuildingOccupiedMessage.put("point", buildingToPoint(building));
 
         return jsonMilitaryBuildingOccupiedMessage;
     }
@@ -898,9 +932,11 @@ class Utils {
 
         Building building = underAttackMessage.getBuilding();
 
+        jsonUnderAttackMessage.put("id", idManager.getId(underAttackMessage));
         jsonUnderAttackMessage.put("type", UNDER_ATTACK.toString());
         jsonUnderAttackMessage.put("houseId", idManager.getId(underAttackMessage.getBuilding()));
         jsonUnderAttackMessage.put("houseType", building.getSimpleName());
+        jsonUnderAttackMessage.put("point", buildingToPoint(building));
 
         return jsonUnderAttackMessage;
     }
@@ -913,6 +949,7 @@ class Utils {
         jsonGeologistFindPoint.put("x", geologistFindMessage.getPoint().x);
         jsonGeologistFindPoint.put("y", geologistFindMessage.getPoint().y);
 
+        jsonGeologistFindMessage.put("id", idManager.getId(geologistFindMessage));
         jsonGeologistFindMessage.put("type", GEOLOGIST_FIND.toString());
         jsonGeologistFindMessage.put("point", jsonGeologistFindPoint);
 
@@ -921,14 +958,24 @@ class Utils {
         return jsonGeologistFindMessage;
     }
 
-    public JSONObject gameMonitoringEventsToJson(GameChangesList gameChangesList, Player player) {
+    public JSONObject gameMonitoringEventsToJson(GameChangesList gameChangesList, Player player) throws InvalidUserActionException {
         JSONObject jsonMonitoringEvents = new JSONObject();
 
         jsonMonitoringEvents.put("time", gameChangesList.getTime());
 
+        Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.getChangedBuildings());
+
         if (!gameChangesList.getNewStones().isEmpty()) {
             jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.getNewStones()));
         }
+
+        gameChangesList.getUpgradedBuildings().forEach(newAndOldBuilding -> {
+            // Move the id to the new building
+            idManager.updateObject(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
+
+            // Tell the frontend that the house has changed
+            allChangedBuildings.add(newAndOldBuilding.newBuilding);
+        });
 
         if (!gameChangesList.getWorkersWithNewTargets().isEmpty()) {
             jsonMonitoringEvents.put("workersWithNewTargets", workersWithNewTargetsToJson(gameChangesList.getWorkersWithNewTargets()));
@@ -951,7 +998,7 @@ class Utils {
         }
 
         if (!gameChangesList.getNewBuildings().isEmpty()) {
-            jsonMonitoringEvents.put("newBuildings", newBuildingsToJson(gameChangesList.getNewBuildings()));
+            jsonMonitoringEvents.put("newBuildings", newBuildingsToJson(gameChangesList.getNewBuildings(), player));
         }
 
         if (!gameChangesList.getNewFlags().isEmpty()) {
@@ -982,8 +1029,8 @@ class Utils {
             jsonMonitoringEvents.put("newSigns", newSignsToJson(gameChangesList.getNewSigns()));
         }
 
-        if (!gameChangesList.getChangedBuildings().isEmpty()) {
-            jsonMonitoringEvents.put("changedBuildings", changedBuildingsToJson(gameChangesList.getChangedBuildings()));
+        if (!allChangedBuildings.isEmpty()) {
+            jsonMonitoringEvents.put("changedBuildings", changedBuildingsToJson(allChangedBuildings, player));
         }
 
         if (!gameChangesList.getChangedFlags().isEmpty()) {
@@ -1055,7 +1102,19 @@ class Utils {
             jsonMonitoringEvents.put("newMessages", messagesToJson(gameChangesList.getNewGameMessages()));
         }
 
+        if (!gameChangesList.getRemovedMessages().isEmpty()) {
+            jsonMonitoringEvents.put("removedMessages", removedMessagesToJson(gameChangesList.getRemovedMessages()));
+        }
+
         return jsonMonitoringEvents;
+    }
+
+    private JSONArray removedMessagesToJson(Collection<Message> removedMessages) {
+        JSONArray jsonRemovedMessages = new JSONArray();
+
+        removedMessages.forEach(message -> jsonRemovedMessages.add(idManager.getId(message)));
+
+        return jsonRemovedMessages;
     }
 
     private JSONArray pointsAndDecorationsToJson(Map<Point, DecorationType> pointsAndDecorations) {
@@ -1225,10 +1284,22 @@ class Utils {
     private JSONObject militaryBuildingCausedLostLandMessageToJson(MilitaryBuildingCausedLostLandMessage message) {
         JSONObject jsonMilitaryBuildingCausedLostLandMessage = new JSONObject();
 
+        Building building = message.getBuilding();
+
         jsonMilitaryBuildingCausedLostLandMessage.put("type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString());
-        jsonMilitaryBuildingCausedLostLandMessage.put("houseId", idManager.getId(message.getBuilding()));
+        jsonMilitaryBuildingCausedLostLandMessage.put("houseId", idManager.getId(building));
+        jsonMilitaryBuildingCausedLostLandMessage.put("point", buildingToPoint(building));
 
         return jsonMilitaryBuildingCausedLostLandMessage;
+    }
+
+    private JSONObject buildingToPoint(Building building) {
+        JSONObject jsonPoint = new JSONObject();
+
+        jsonPoint.put("x", building.getPosition().x);
+        jsonPoint.put("y", building.getPosition().y);
+
+        return jsonPoint;
     }
 
     private JSONObject treeConservationProgramDeactivatedMessageToJson(TreeConservationProgramDeactivatedMessage message) {
@@ -1374,8 +1445,8 @@ class Utils {
         return jsonTrees;
     }
 
-    private JSONArray changedBuildingsToJson(List<Building> changedBuildings) {
-        return housesToJson(changedBuildings);
+    private JSONArray changedBuildingsToJson(Collection<Building> changedBuildings, Player player) throws InvalidUserActionException {
+        return housesToJson(changedBuildings, player);
     }
 
     private JSONArray removedRoadsToJson(List<Road> removedRoads) {
@@ -1434,11 +1505,11 @@ class Utils {
         return jsonFlags;
     }
 
-    private JSONArray newBuildingsToJson(List<Building> newBuildings) {
+    private JSONArray newBuildingsToJson(List<Building> newBuildings, Player player) throws InvalidUserActionException {
         JSONArray jsonNewBuildings = new JSONArray();
 
         for (Building building : newBuildings) {
-            jsonNewBuildings.add(houseToJson(building));
+            jsonNewBuildings.add(houseToJson(building, player));
         }
 
         return jsonNewBuildings;
@@ -1543,7 +1614,7 @@ class Utils {
         return jsonWildAnimal;
     }
 
-    public JSONObject playerViewToJson(String playerId, GameMap map, Player player) {
+    public JSONObject playerViewToJson(String playerId, GameMap map, Player player) throws InvalidUserActionException {
         JSONObject jsonView = new JSONObject();
 
         JSONArray  jsonHouses                = new JSONArray();
@@ -1560,6 +1631,7 @@ class Utils {
         JSONObject jsonAvailableConstruction = new JSONObject();
         JSONArray  jsonDeadTrees             = new JSONArray();
         JSONArray  jsonDecorations           = new JSONArray();
+        JSONArray  jsonMessages              = new JSONArray();
 
         jsonView.put("trees", trees);
         jsonView.put("houses", jsonHouses);
@@ -1588,7 +1660,7 @@ class Utils {
                     continue;
                 }
 
-                jsonHouses.add(houseToJson(building));
+                jsonHouses.add(houseToJson(building, player));
             }
 
             /* Fill in trees */
@@ -1740,23 +1812,23 @@ class Utils {
 
                 ((JSONArray)jsonAvailableConstruction.get(key)).add("mine");
             }
-        }
 
-        /* Fill in decorations */
-        for (Map.Entry<Point, DecorationType> entry : map.getDecorations().entrySet()) {
-            Point point = entry.getKey();
-            DecorationType decorationType = entry.getValue();
+            /* Fill in decorations */
+            for (Map.Entry<Point, DecorationType> entry : map.getDecorations().entrySet()) {
+                Point point = entry.getKey();
+                DecorationType decorationType = entry.getValue();
 
-            /* Filter points not discovered yet */
-            if (!player.getDiscoveredLand().contains(point)) {
-                continue;
+                /* Filter points not discovered yet */
+                if (!player.getDiscoveredLand().contains(point)) {
+                    continue;
+                }
+
+                jsonDecorations.add(decorationToJson(decorationType, point));
             }
 
-            jsonDecorations.add(decorationToJson(decorationType, point));
+            /* Add the messages */
+            jsonView.put("messages", messagesToJson(player.getMessages()));
         }
-
-        /* Add the messages */
-        jsonView.put("messages", messagesToJson(player.getMessages()));
 
         return jsonView;
     }
@@ -1765,7 +1837,7 @@ class Utils {
         JSONObject jsonGameResource = new JSONObject();
 
         if (gameResource.getPlayers() != null) {
-            jsonGameResource.put("players", playersToJson(gameResource.getPlayers()));
+            jsonGameResource.put("players", playersToJson(gameResource.getPlayers(), gameResource));
         } else {
             jsonGameResource.put("players", Collections.emptyList());
         }

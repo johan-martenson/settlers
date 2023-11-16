@@ -31,7 +31,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) {
+    public void onMessage(Session session, String message) throws InvalidUserActionException {
         System.out.println("\nON MESSAGE: " + message);
 
         Player player = (Player) session.getUserProperties().get("PLAYER");
@@ -47,13 +47,28 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case REMOVE_MESSAGE:
+                String messageId = (String) jsonBody.get("messageId");
+
+                Message gameMessage = (Message) idManager.getObject(messageId);
+
+                player.removeMessage(gameMessage);
+
+                break;
+
             case START_DETAILED_MONITORING: {
-                String buildingId = (String) jsonBody.get("buildingId");
+                String id = (String) jsonBody.get("id");
 
-                Building building = (Building) idManager.getObject(buildingId);
+                Object object = idManager.getObject(id);
 
-                synchronized (map) {
-                    player.addDetailedMonitoring(building);
+                if (object instanceof Building building) {
+                    synchronized (map) {
+                        player.addDetailedMonitoring(building);
+                    }
+                } else if (object instanceof Flag flag) {
+                    synchronized (map) {
+                        player.addDetailedMonitoring(flag);
+                    }
                 }
             }
 

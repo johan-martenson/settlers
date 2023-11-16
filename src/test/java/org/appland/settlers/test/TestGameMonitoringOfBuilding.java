@@ -1,10 +1,33 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.*;
+import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Builder;
+import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Farm;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.GameChangesList;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.StoneType;
+import org.appland.settlers.model.WatchTower;
+import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
@@ -1267,6 +1290,8 @@ public class TestGameMonitoringOfBuilding {
 
         Building guardHouse = map.getBuildingAtPoint(point1);
 
+        assertEquals(guardHouse.getClass(), GuardHouse.class);
+
         /* Start detailed monitoring */
         player0.addDetailedMonitoring(guardHouse);
 
@@ -1295,7 +1320,20 @@ public class TestGameMonitoringOfBuilding {
 
         found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(watchTower)) {
+
+            assertTrue(gameChangesList.getNewBuildings().isEmpty());
+            assertTrue(gameChangesList.getRemovedBuildings().isEmpty());
+
+            if (!gameChangesList.getUpgradedBuildings().isEmpty()) {
+                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.getUpgradedBuildings().stream().findFirst();
+
+                assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+                assertTrue(newAndOldBuildingOptional.isPresent());
+                assertEquals(newAndOldBuildingOptional.get().oldBuilding, guardHouse);
+                assertEquals(newAndOldBuildingOptional.get().newBuilding.getPosition(), guardHouse.getPosition());
+                assertEquals(newAndOldBuildingOptional.get().newBuilding.getClass(), WatchTower.class);
+                assertEquals(newAndOldBuildingOptional.get().newBuilding, watchTower);
+
                 found++;
             }
         }
@@ -1305,7 +1343,7 @@ public class TestGameMonitoringOfBuilding {
         /* Stop detailed monitoring */
         player0.removeDetailedMonitoring(watchTower);
 
-        /* Verify that no events are sent for the next upgrade */
+        /* Verify that there is still an event sent for the next upgrade */
         monitor.clearEvents();
 
         watchTower.upgrade();
@@ -1314,9 +1352,28 @@ public class TestGameMonitoringOfBuilding {
 
         Building fortress = map.getBuildingAtPoint(point1);
 
+
+        found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(watchTower));
+            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+            assertTrue(gameChangesList.getNewBuildings().isEmpty());
+            assertTrue(gameChangesList.getRemovedBuildings().isEmpty());
+
+            if (!gameChangesList.getUpgradedBuildings().isEmpty()) {
+                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.getUpgradedBuildings().stream().findFirst();
+
+                assertTrue(newAndOldBuildingOptional.isPresent());
+                assertEquals(newAndOldBuildingOptional.get().oldBuilding, watchTower);
+
+                assertEquals(newAndOldBuildingOptional.get().newBuilding.getPosition(), watchTower.getPosition());
+                assertEquals(newAndOldBuildingOptional.get().newBuilding.getClass(), Fortress.class);
+                assertEquals(newAndOldBuildingOptional.get().newBuilding, fortress);
+
+                found++;
+            }
         }
+
+        assertEquals(found, 1);
     }
 
 
@@ -1386,5 +1443,220 @@ public class TestGameMonitoringOfBuilding {
     }
 
     // TODO: test detailed monitoring continues when a building is upgraded (and thus replaced)
-    // TODO: monitor changes in ability to attack building
+    // TODO: monitor changes in ability to attack building - add soldier, remove soldier, upgrade, tear down
+
+    @Test
+    public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding () throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarters for the second player */
+        Point point1 = new Point(29, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Remove all soldiers from player 0's headquarters */
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+
+        /* Place barracks for player 0, connect it to the headquarters, and wait until it's constructed */
+        Point point2 = new Point(15, 5);
+        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(watchTower);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+
+        /* Start monitoring, and add detailed monitoring for player 0 of player 1's headquarters */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        player0.addDetailedMonitoring(headquarter1);
+
+        /* Verify that an event is sent when a soldier enters the watch tower and the available attackers increases */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
+
+        monitor.clearEvents();
+
+        Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+
+        int found = 0;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+                found++;
+            }
+        }
+
+        assertEquals(found, 1);
+
+        /* Stop detailed monitoring */
+        player0.removeDetailedMonitoring(headquarter1);
+
+        /* Verify that no event is sent when another soldier enters the watch tower and the available attackers increases */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
+
+        monitor.clearEvents();
+
+        Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 3);
+
+        map.stepTime();
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 2);
+
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter1));
+        }
+    }
+
+    @Test
+    public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding () throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarters for the second player */
+        Point point1 = new Point(29, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Remove all soldiers from player 0's headquarters */
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+
+        /* Place barracks for player 0, connect it to the headquarters, and wait until it's constructed */
+        Point point2 = new Point(15, 5);
+        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(watchTower);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+
+        /* Start monitoring */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for two soldiers to enter the watch tower */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+
+        /* Add detailed monitoring for player 0 of player 1's headquarters */
+        player0.addDetailedMonitoring(headquarter1);
+
+        /* Verify that an event is sent when the soldiers leave the watch tower and the available attackers decrease */
+        monitor.clearEvents();
+
+        watchTower.evacuate();
+
+        Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+
+        map.stepTime();
+
+        int found = 0;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+                found++;
+            }
+        }
+
+        assertEquals(found, 1);
+    }
+
+    @Test
+    public void testAttackCapabilityIncreasesWhenBuildingIsUpgradedAndRangeIsExtended() {
+
+    }
+
+    @Test
+    public void testAttackCapabilityDecreasesWhenMilitaryBuildingIsTornDown() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarters for the second player */
+        Point point1 = new Point(29, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Remove all soldiers from player 0's headquarters */
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+
+        /* Place barracks for player 0, connect it to the headquarters, and wait until it's constructed */
+        Point point2 = new Point(15, 5);
+        WatchTower watchTower = map.placeBuilding(new WatchTower(player0), point2);
+
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(watchTower);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
+
+        /* Start monitoring */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for two soldiers to enter the watch tower */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(watchTower, 2);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 1);
+
+        /* Add detailed monitoring for player 0 of player 1's headquarters */
+        player0.addDetailedMonitoring(headquarter1);
+
+        /* Verify that an event is sent when the soldiers leave the watch tower and the available attackers decrease */
+        monitor.clearEvents();
+
+        watchTower.tearDown();
+
+        Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+
+        map.stepTime();
+
+        int found = 0;
+        for (GameChangesList gameChangesList : monitor.getEvents()) {
+            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+                found++;
+            }
+        }
+
+        assertEquals(found, 1);
+    }
+
+    // TODO: test when soldiers leave for other reason - i.e. going out to attack or defend, changing military settings
 }

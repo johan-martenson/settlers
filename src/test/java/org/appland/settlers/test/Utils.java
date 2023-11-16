@@ -2866,7 +2866,9 @@ public class Utils {
                 new ArrayList<>(gameChangesList.getShipsWithNewTargets()),
                 new HashMap<>(gameChangesList.getWorkersWithStartedActions()),
                 new ArrayList<>(gameChangesList.getRemovedDecorations()),
-                new HashMap<>(gameChangesList.getNewDecorations()));
+                new HashMap<>(gameChangesList.getNewDecorations()),
+                new ArrayList<>(gameChangesList.getUpgradedBuildings()),
+                new ArrayList<>(gameChangesList.getRemovedMessages()));
 
         return copy;
     }

@@ -3,7 +3,17 @@ package org.appland.settlers.model;
 import org.appland.settlers.assets.Nation;
 
 import java.awt.Color;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.PLANK;
 
@@ -74,6 +84,8 @@ public class Player {
     private final List<Point> removedDecorations;
     private final Map<Point, DecorationType> newDecorations;
     private final Set<Object> detailedMonitoring;
+    private final Collection<GameChangesList.NewAndOldBuilding> upgradedBuildings;
+    private final Set<Message> removedMessages;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -174,6 +186,8 @@ public class Player {
         workersWithStartedActions = new HashMap<>();
         removedDecorations = new ArrayList<>();
         newDecorations = new HashMap<>();
+        upgradedBuildings = new ArrayList<>();
+        removedMessages = new HashSet<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -792,11 +806,15 @@ public class Player {
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
             finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
-            removedDecorations.isEmpty() && newDecorations.isEmpty()) {
+            removedDecorations.isEmpty() && newDecorations.isEmpty() &&upgradedBuildings.isEmpty()) {
             return;
         }
 
-
+        /* Don't send reports about changes in the old building when an upgrade is finished */
+        upgradedBuildings.forEach(newAndOldBuilding -> {
+            changedBuildings.remove(newAndOldBuilding.oldBuilding);
+            changedBuildings.remove(newAndOldBuilding.newBuilding);
+        });
 
         /* If the player has discovered new land - find out what is on that land */
         if (!newDiscoveredLand.isEmpty()) {
@@ -1023,7 +1041,9 @@ public class Player {
                 new ArrayList<>(shipsWithNewTargets),
                 new HashMap<>(workersWithStartedActions),
                 new ArrayList<>(removedDecorations),
-                newDecorations);
+                newDecorations,
+                new ArrayList<>(upgradedBuildings),
+                new ArrayList<>(removedMessages));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1068,6 +1088,8 @@ public class Player {
         newWorkers.clear();
         removedDecorations.clear();
         newDecorations.clear();
+        upgradedBuildings.clear();
+        removedMessages.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1454,6 +1476,10 @@ public class Player {
         detailedMonitoring.remove(building);
     }
 
+    public void removeDetailedMonitoring(Flag flag) {
+        detailedMonitoring.remove(flag);
+    }
+
     public void reportChangedInventory(Building building) {
         if (detailedMonitoring.contains(building)) {
             changedBuildings.add(building);
@@ -1463,6 +1489,30 @@ public class Player {
     public void reportSoldierEnteredBuilding(Building building) {
         if (detailedMonitoring.contains(building)) {
             changedBuildings.add(building);
+        }
+
+        /* Does this soldier affect the number of available attackers in another building? */
+        if (building.isMilitaryBuilding() && building.getHostedMilitary().size() > 1) {
+
+            for (Object monitoredObject : detailedMonitoring) {
+                if (monitoredObject instanceof Building monitoredBuilding) {
+                    if (!monitoredBuilding.isMilitaryBuilding()) {
+                        continue;
+                    }
+
+                    if (!monitoredBuilding.isOccupied()) {
+                        continue;
+                    }
+
+                    if (monitoredBuilding.getPlayer().equals(this)) {
+                        continue;
+                    }
+
+                    if (building.canAttack(monitoredBuilding)) {
+                        changedBuildings.add(monitoredBuilding);
+                    }
+                }
+            }
         }
     }
 
@@ -1512,5 +1562,73 @@ public class Player {
         if (detailedMonitoring.contains(building)) {
             changedBuildings.add(building);
         }
+    }
+
+    public void reportSoldierLeftBuilding(Building building) {
+
+        /* Does this soldier affect the number of available attackers in another building? */
+        if (building.isMilitaryBuilding() && !building.getHostedMilitary().isEmpty()) {
+
+            for (Object monitoredObject : detailedMonitoring) {
+                if (monitoredObject instanceof Building monitoredBuilding) {
+                    if (!monitoredBuilding.isMilitaryBuilding()) {
+                        continue;
+                    }
+
+                    if (!monitoredBuilding.isOccupied()) {
+                        continue;
+                    }
+
+                    if (monitoredBuilding.getPlayer().equals(this)) {
+                        continue;
+                    }
+
+                    if (building.canAttack(monitoredBuilding)) {
+                        changedBuildings.add(monitoredBuilding);
+                    }
+                }
+            }
+        }
+    }
+
+    public void reportBuildingTornDown(Building building) {
+
+        /* Does this soldier affect the number of available attackers in another building? */
+        if (building.isMilitaryBuilding() && !building.getHostedMilitary().isEmpty()) {
+
+            for (Object monitoredObject : detailedMonitoring) {
+                if (monitoredObject instanceof Building monitoredBuilding) {
+                    if (!monitoredBuilding.isMilitaryBuilding()) {
+                        continue;
+                    }
+
+                    if (!monitoredBuilding.isOccupied()) {
+                        continue;
+                    }
+
+                    if (monitoredBuilding.getPlayer().equals(this)) {
+                        continue;
+                    }
+
+                    if (building.canAttack(monitoredBuilding)) {
+                        changedBuildings.add(monitoredBuilding);
+                    }
+                }
+            }
+        }
+    }
+
+    public void reportUpgradedBuilding(Building fromBuilding, Building upgraded) {
+        upgradedBuildings.add(new GameChangesList.NewAndOldBuilding(fromBuilding, upgraded));
+    }
+
+    public void removeMessage(Message gameMessage) {
+        messages.remove(gameMessage);
+
+        removedMessages.add(gameMessage);
+    }
+
+    public void addDetailedMonitoring(Flag flag) {
+        detailedMonitoring.add(flag);
     }
 }

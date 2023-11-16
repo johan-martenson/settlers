@@ -59,7 +59,6 @@ public class Flag implements EndPoint {
                 player.getMap().reportChangedFlag(this);
             }
         }
-
     }
 
     @Override

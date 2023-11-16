@@ -1,8 +1,32 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.model.Building;
+import org.appland.settlers.model.BuildingCapturedMessage;
+import org.appland.settlers.model.BuildingLostMessage;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GeologistFindMessage;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.LandDataPoint;
+import org.appland.settlers.model.LandStatistics;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Message;
+import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
+import org.appland.settlers.model.MilitaryBuildingReadyMessage;
+import org.appland.settlers.model.NoMoreResourcesMessage;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.*;
+import org.appland.settlers.model.ProductionDataPoint;
+import org.appland.settlers.model.ProductionDataSeries;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.StatisticsManager;
+import org.appland.settlers.model.StoreHouseIsReadyMessage;
+import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.UnderAttackMessage;
+import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,11 +34,19 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -237,7 +269,7 @@ public class SettlersAPI {
 
                 gameResource.setStatus(STARTED);
 
-                return Response.status(200).entity(utils.gameToJson(gameResource.getGameMap()).toJSONString()).build();
+                return Response.status(200).entity(utils.gameToJson(gameResource.getGameMap(), gameResource).toJSONString()).build();
             }
 
             return Response.status(400).build();  // Add a bad request message
@@ -348,7 +380,7 @@ public class SettlersAPI {
         JSONArray jsonPlayers = new JSONArray();
 
         for (Player player : gameResource.getPlayers()) {
-            JSONObject jsonPlayer = utils.playerToJson(player, idManager.getId(player));
+            JSONObject jsonPlayer = utils.playerToJson(player, idManager.getId(player), gameResource);
 
             if (gameResource.isComputerPlayer(player)) {
                 jsonPlayer.put("type", "COMPUTER");
@@ -438,6 +470,12 @@ public class SettlersAPI {
 
         if (jsonUpdates.containsKey("name")) {
             player.setName((String)jsonUpdates.get("name"));
+        }
+
+        if (jsonUpdates.containsKey("nation")) {
+            Nation nation = Nation.valueOf((String) jsonUpdates.get("nation"));
+
+            player.setNation(nation);
         }
 
         if (jsonUpdates.containsKey("color")) {
@@ -603,7 +641,7 @@ public class SettlersAPI {
 
     @GET
     @Path("/games/{gameId}/map/points")
-    public Response getPoint(@PathParam("gameId") String gameId, @QueryParam("playerId") String playerId, @QueryParam("x") int x, @QueryParam("y") int y) {
+    public Response getPoint(@PathParam("gameId") String gameId, @QueryParam("playerId") String playerId, @QueryParam("x") int x, @QueryParam("y") int y) throws InvalidUserActionException {
         Point point = new Point(x, y);
         GameResource gameResource = (GameResource) idManager.getObject(gameId);
         GameMap map = gameResource.getGameMap();
@@ -711,7 +749,7 @@ public class SettlersAPI {
 
     @GET
     @Path("/games/{gameId}/players/{playerId}/houses/{houseId}")
-    public Response getHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("houseId") String houseId, @QueryParam("askingPlayerId") String askingPlayerId) {
+    public Response getHouse(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId, @PathParam("houseId") String houseId, @QueryParam("askingPlayerId") String askingPlayerId) throws InvalidUserActionException {
         GameResource gameResource = (GameResource) idManager.getObject(gameId);
         GameMap map = gameResource.getGameMap();
 
@@ -774,7 +812,7 @@ public class SettlersAPI {
 
         synchronized (building.getMap()) {
 
-            jsonHouse = utils.houseToJson(building);
+            jsonHouse = utils.houseToJson(building, player);
 
             if (askingPlayer != null) {
                 try {
@@ -866,7 +904,7 @@ public class SettlersAPI {
     @Path("/games/{gameId}/players/{playerId}/houses")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response getHouses(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
+    public Response getHouses(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) throws InvalidUserActionException {
         GameResource gameResource = (GameResource) idManager.getObject(gameId);
         GameMap map = gameResource.getGameMap();
 
@@ -900,7 +938,7 @@ public class SettlersAPI {
             return Response.status(404).entity(message.toJSONString()).build();
         }
 
-        return Response.status(200).entity(utils.housesToJson(player.getBuildings()).toJSONString()).build();
+        return Response.status(200).entity(utils.housesToJson(player.getBuildings(), player).toJSONString()).build();
     }
 
     @POST
@@ -957,7 +995,7 @@ public class SettlersAPI {
             utils.printTimestamp("Placed building");
         }
 
-        return Response.status(201).entity(utils.houseToJson(building).toJSONString()).build();
+        return Response.status(201).entity(utils.houseToJson(building, player).toJSONString()).build();
     }
 
     @PATCH
@@ -1059,7 +1097,7 @@ public class SettlersAPI {
                     }
                 }
 
-                jsonResponse = utils.houseToJson(building);
+                jsonResponse = utils.houseToJson(building, player);
             }
         }
 
@@ -1353,7 +1391,7 @@ public class SettlersAPI {
 
     @GET
     @Path("/games/{gameId}/players/{playerId}/view")
-    public Response getViewForPlayer(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) {
+    public Response getViewForPlayer(@PathParam("gameId") String gameId, @PathParam("playerId") String playerId) throws InvalidUserActionException {
         GameResource gameResource = (GameResource) idManager.getObject(gameId);
         GameMap map = gameResource.getGameMap();
 

@@ -598,6 +598,8 @@ public class Building implements EndPoint {
         } else {
             map.reportTornDownBuilding(this);
         }
+
+        player.reportBuildingTornDown(this);
     }
 
     public Size getSize() {
@@ -775,6 +777,8 @@ public class Building implements EndPoint {
     public void evacuate() {
         for (Military military : hostedMilitary) {
             military.returnToStorage();
+
+            player.reportSoldierLeftBuilding(this);
         }
 
         hostedMilitary.clear();

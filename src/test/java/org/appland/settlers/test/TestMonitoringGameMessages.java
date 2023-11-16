@@ -151,6 +151,75 @@ public class TestMonitoringGameMessages {
     }
 
     @Test
+    public void testMonitoringEventWhenMessageIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point21 = new Point(5, 17);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place barracks */
+        Point point22 = new Point(5, 23);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* A message is sent when the barracks is finished */
+        assertTrue(player0.getMessages().isEmpty());
+
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.getNewGameMessages().size(), 1);
+
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().get(0);
+
+        assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertEquals(message.getBuilding(), barracks0);
+
+        /* Verify that an event is sent when the message is removed */
+        monitor.clearEvents();
+
+        player0.removeMessage(message);
+
+        map.stepTime();
+
+        int found = 0;
+        for (GameChangesList gameChangesList1 : monitor.getEvents()) {
+            if (!gameChangesList1.getRemovedMessages().isEmpty()) {
+                found++;
+
+                assertTrue(gameChangesList1.getRemovedMessages().contains(message));
+                assertEquals(gameChangesList1.getRemovedMessages().size(), 1);
+            }
+        }
+
+        assertEquals(found, 1);
+
+        /* Verify that the event is only sent once */
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        for (GameChangesList gameChangesList1 : monitor.getEvents()) {
+            assertTrue(gameChangesList1.getRemovedMessages().isEmpty());
+        }
+    }
+
+    @Test
     public void testMonitoringEventForMessageIsReceivedWhenBarracksIsReadyIsOnlySentOnce() throws Exception {
 
         /* Starting new game */

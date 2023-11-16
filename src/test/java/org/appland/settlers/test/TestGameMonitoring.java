@@ -5005,8 +5005,8 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
-        assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), map.getBuildingAtPoint(point1));
+        assertEquals(gameChanges.getUpgradedBuildings().size(), 1);
+        assertEquals(gameChanges.getUpgradedBuildings().iterator().next().newBuilding, map.getBuildingAtPoint(point1));
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getNewRoads().size(), 0);
@@ -5058,8 +5058,8 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
-        assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), map.getBuildingAtPoint(point1));
+        assertEquals(gameChanges.getUpgradedBuildings().size(), 1);
+        assertEquals(gameChanges.getUpgradedBuildings().iterator().next().newBuilding, map.getBuildingAtPoint(point1));
 
         /* Verify that the message is only sent once */
         Utils.fastForward(10, map);
@@ -5293,12 +5293,12 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
-        assertTrue(monitor.getEvents().size() > 0);
+        assertFalse(monitor.getEvents().isEmpty());
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.getTime() > 0);
-        assertTrue(gameChanges.getChangedFlags().size() > 0);
+        assertFalse(gameChanges.getChangedFlags().isEmpty());
         assertTrue(gameChanges.getChangedFlags().contains(flag0));
         assertFalse(gameChanges.getChangedFlags().contains(woodcutter0.getFlag()));
         assertEquals(gameChanges.getNewFlags().size(), 0);
