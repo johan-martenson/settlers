@@ -5,13 +5,18 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.StoneType;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -365,5 +370,65 @@ public class TestConstruction {
 
             fail();
         } catch (InvalidStateForProduction e) {}
+    }
+
+    @Test
+    public void testCannotPlaceMineOnTree() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players,20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 10);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place tree on the mountain */
+        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        /* Verify that it's not possible to place a mine on the tree */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+
+            assertFalse(true);
+        } catch (InvalidUserActionException e) { }
+    }
+
+    @Test
+    public void testCannotPlaceMineOnStone() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players,20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 10);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place a stone on the mountain */
+        map.placeStone(point1, StoneType.STONE_1, 10);
+
+        /* Verify that it's not possible to place a mine on the stone */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+
+            assertFalse(true);
+        } catch (InvalidUserActionException e) { }
     }
 }

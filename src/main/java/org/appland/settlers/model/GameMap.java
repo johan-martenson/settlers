@@ -3104,6 +3104,16 @@ public class GameMap {
             return false;
         }
 
+        /* Return false if the point is on a tree */
+        if (mapPoint.isTree()) {
+            return false;
+        }
+
+        /* Return false if the point is on a stone */
+        if (mapPoint.isStone()) {
+            return false;
+        }
+
         /* Return false if the point is on a road */
         if (mapPoint.isRoad()) {
             return false;

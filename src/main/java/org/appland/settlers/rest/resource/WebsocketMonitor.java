@@ -230,6 +230,23 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
 
+                // Handle the case where the last point overlaps with the flag point
+                if (roadPoints.getLast().equals(flagPoint)) {
+                    Point lastPoint = roadPoints.getLast();
+                    Point secondLastPoint = roadPoints.get(roadPoints.size() - 2);
+                    int gapX = Math.abs(lastPoint.x - secondLastPoint.x);
+                    int gapY = Math.abs(lastPoint.y - secondLastPoint.y);
+
+                    // Is the gap between the last point and the one before too long? Then remove it and let the code
+                    // downstream fill the gap
+                    if (!((gapX == 2 && gapY == 0) || gapY == 1 && gapX == 1)) {
+                        roadPoints.removeLast();
+                    }
+
+                    // As long as there as each step is allowed, the following code can handle that last point of the
+                    // road overlaps with the flag point
+                }
+
                 synchronized (map) {
                     try {
                         Flag flag = map.placeFlag(player, flagPoint);
