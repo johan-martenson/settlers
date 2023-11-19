@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;
@@ -33,28 +34,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_WATER;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static java.awt.Color.*;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.DetailedVegetation.WATER_2;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.appland.settlers.test.Utils.occupyBuilding;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -746,6 +733,71 @@ public class TestFishery {
 
         assertTrue(fisherman.isArrived());
         assertTrue(fisherman.isInsideBuilding());
+    }
+
+    @Test
+    public void testFishCargoIsDeliveredToMineWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all bread from the headquarters */
+        Utils.adjustInventoryTo(headquarter, FISH, 0);
+
+        /* Place a small mountain */
+        Point point4 = new Point(10, 4);
+        Utils.surroundPointWithMinableMountain(point4, map);
+
+        /* Place coal mine */
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point4);
+
+        /* Connect the coal mine to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+
+        /* Wait for the coal mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(coalMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
+
+        /* Place a small lake */
+        Point point5 = new Point(17, 5);
+        Utils.surroundPointWithWater(point5, map);
+
+        /* Place the fishery */
+        Point point1 = new Point(14, 4);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the coal mine */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), coalMine.getFlag());
+
+        /* Wait for the fishery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Wait for the courier on the road between the coal mine and the fishery hut to have a fish cargo */
+        Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
+
+        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
+        assertEquals(fishery.getAmount(FISH), 0);
+        assertTrue(coalMine.needsMaterial(FISH));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
+
+        assertEquals(coalMine.getAmount(FISH), 1);
     }
 
     @Test

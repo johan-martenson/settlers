@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
@@ -25,25 +26,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.HUNTER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestHunterHut {
 
@@ -781,6 +768,69 @@ public class TestHunterHut {
 
         assertEquals(hunter.getPosition(), hunterHut.getPosition());
         assertTrue(hunter.isInsideBuilding());
+    }
+
+    @Test
+    public void testMeatCargoIsDeliveredToMineWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all food from the headquarters */
+        Utils.adjustInventoryTo(headquarter, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter, FISH, 0);
+
+        /* Place a small mountain */
+        Point point4 = new Point(10, 4);
+        Utils.surroundPointWithMinableMountain(point4, map);
+
+        /* Place coal mine */
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point4);
+
+        /* Connect the coal mine to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
+
+        /* Wait for the coal mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(coalMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
+
+        /* Place the hunter */
+        Point point1 = new Point(14, 4);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Connect the hunter hut with the coal mine */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), coalMine.getFlag());
+
+        /* Wait for the hunter hut to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        /* Wait for the courier on the road between the coal mine and the hunter hut to have a meat cargo */
+        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
+
+        assertEquals(hunterHut.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
+        assertEquals(hunterHut.getAmount(MEAT), 0);
+        assertTrue(coalMine.needsMaterial(MEAT));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
+
+        assertEquals(coalMine.getAmount(MEAT), 1);
     }
 
     @Test

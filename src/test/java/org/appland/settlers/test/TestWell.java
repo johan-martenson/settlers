@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -27,18 +28,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
+import static java.awt.Color.*;
 import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -459,6 +453,64 @@ public class TestWell {
         Utils.fastForwardUntilWorkersReachTarget(map, worker);
 
         assertTrue(worker.isInsideBuilding());
+    }
+
+    @Test
+    public void testWaterCargoIsDeliveredToBakeryWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all stone from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WATER, 0);
+
+        /* Place bakery */
+        Point point4 = new Point(10, 4);
+        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+
+        /* Connect the bakery to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the bakery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(bakery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        /* Place the well */
+        Point point1 = new Point(14, 4);
+        Well well = map.placeBuilding(new Well(player0), point1);
+
+        /* Connect the well with the bakery */
+        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), bakery.getFlag());
+
+        /* Wait for the well to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(well);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+
+        /* Wait for the courier on the road between the bakery and the well hut to have a water cargo */
+        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+
+        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the bakery (and not the headquarters) */
+        assertEquals(well.getAmount(WATER), 0);
+        assertTrue(bakery.needsMaterial(WATER));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), bakery.getPosition());
+
+        assertEquals(bakery.getAmount(WATER), 1);
     }
 
     @Test

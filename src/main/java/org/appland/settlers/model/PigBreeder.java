@@ -6,20 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.PigBreeder.State.FEEDING;
-import static org.appland.settlers.model.PigBreeder.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.PigBreeder.State.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
-import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_FEED;
-import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.PigBreeder.State.PREPARING_PIG_FOR_DELIVERY;
-import static org.appland.settlers.model.PigBreeder.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.PigBreeder.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.PigBreeder.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.PigBreeder.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.PigBreeder.State.*;
 
 /**
  *
@@ -47,7 +35,11 @@ public class PigBreeder extends Worker {
         PREPARING_PIG_FOR_DELIVERY,
         GOING_BACK_TO_HOUSE,
         GOING_OUT_TO_PUT_CARGO,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public PigBreeder(Player player, GameMap map) {
@@ -151,13 +143,25 @@ public class PigBreeder extends Worker {
         }
     }
 
+    private boolean isPigReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(PIG);
+        }
+
+        if (building.isReady() && building.needsMaterial(PIG)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onArrival() {
         if (state == GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isPigReceiver);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

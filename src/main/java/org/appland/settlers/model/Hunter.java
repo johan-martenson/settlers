@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.HUNTER;
+import static org.appland.settlers.model.Material.MEAT;
 
 @Walker(speed = 10)
 public class Hunter extends Worker {
@@ -32,7 +33,11 @@ public class Hunter extends Worker {
         SHOOTING,
         GOING_TO_PICK_UP_MEAT,
         GOING_TO_FLAG_TO_LEAVE_CARGO,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, GOING_BACK_TO_HOUSE_WITHOUT_CARGO
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        GOING_BACK_TO_HOUSE_WITHOUT_CARGO
     }
 
     public Hunter(Player player, GameMap map) {
@@ -137,6 +142,18 @@ public class Hunter extends Worker {
         }
     }
 
+    private boolean isMeatReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(MEAT);
+        }
+
+        if (building.isReady() && building.needsMaterial(MEAT)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == State.TRACKING) {
@@ -145,9 +162,7 @@ public class Hunter extends Worker {
             if (prey.getPosition().distance(getPosition()) > SHOOTING_DISTANCE) {
 
                 /* Get way to target */
-                List<Point> steps = getMap().findWayOffroad(getPosition(),
-                                                            prey.getPosition(),
-                                                            null);
+                List<Point> steps = getMap().findWayOffroad(getPosition(), prey.getPosition(), null);
 
                 /* Take the first step toward the prey */
                 setOffroadTarget(steps.get(1));
@@ -183,15 +198,20 @@ public class Hunter extends Worker {
             productivityMeasurer.reportProductivity();
             productivityMeasurer.nextProductivityCycle();
         } else if (state == State.GOING_TO_FLAG_TO_LEAVE_CARGO) {
+            Flag flag = map.getFlagAtPoint(getPosition());
+
             Cargo cargo = getCargo();
+
+            cargo.setPosition(getPosition());
+            cargo.transportToReceivingBuilding(this::isMeatReceiver);
+
+            flag.putCargo(getCargo());
 
             setCargo(null);
 
-            getHome().getFlag().putCargo(cargo);
-
             state = State.GOING_BACK_TO_HOUSE_WITHOUT_CARGO;
 
-            returnHome();
+            setTarget(getHome().getPosition());
         } else if (state == State.GOING_BACK_TO_HOUSE_WITHOUT_CARGO) {
             state = State.RESTING_IN_HOUSE;
 

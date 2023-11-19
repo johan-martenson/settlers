@@ -6,16 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Miller.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Miller.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Miller.State.GRINDING_WHEAT;
-import static org.appland.settlers.model.Miller.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Miller.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Miller.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.Miller.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Miller.State.*;
 
 /**
  *
@@ -31,7 +23,10 @@ public class Miller extends Worker {
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE,
-        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, WAITING_FOR_SPACE_ON_FLAG
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        WAITING_FOR_SPACE_ON_FLAG
     }
 
     private static final int PRODUCTION_TIME = 49;
@@ -132,6 +127,18 @@ public class Miller extends Worker {
         }
     }
 
+    private boolean isFlourReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(FLOUR);
+        }
+
+        if (building.isReady() && building.needsMaterial(FLOUR)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
@@ -140,7 +147,7 @@ public class Miller extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isFlourReceiver);
 
             flag.putCargo(getCargo());
 

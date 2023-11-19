@@ -12,6 +12,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -28,24 +29,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
+import static java.awt.Color.*;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STONEMASON;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.StoneType.STONE_1;
 import static org.appland.settlers.model.StoneType.STONE_2;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -569,6 +560,64 @@ public class TestQuarry {
         Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
 
         assertTrue(stonemason.isInsideBuilding());
+    }
+
+    @Test
+    public void testStoneCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place stone */
+        Point point2 = new Point(14, 6);
+        Stone stone = map.placeStone(point2, STONE_1, 10);
+
+        /* Remove all stone from the headquarters */
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place guard house */
+        Point point4 = new Point(10, 4);
+        GuardHouse guardHouse = map.placeBuilding(new GuardHouse(player0), point4);
+
+        /* Connect the guard house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter.getFlag());
+
+        /* Place the quarry */
+        Point point1 = new Point(14, 4);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Connect the quarry with the guard house */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), guardHouse.getFlag());
+
+        /* Wait for the quarry to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(quarry);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
+
+        /* Wait for the courier on the road between the guard house and the quarry hut to have a stone cargo */
+        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+
+        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the guard house (and not the headquarters) */
+        assertEquals(quarry.getAmount(STONE), 0);
+        assertTrue(guardHouse.needsMaterial(STONE));
+        assertTrue(guardHouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), guardHouse.getPosition());
+
+        assertEquals(guardHouse.getAmount(STONE), 1);
     }
 
     @Test

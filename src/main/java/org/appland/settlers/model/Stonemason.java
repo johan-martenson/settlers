@@ -172,13 +172,29 @@ public class Stonemason extends Worker {
         }
     }
 
+    public boolean isReceiverForStone(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(STONE);
+        }
+
+        if (building.isUnderConstruction() && building.needsMaterial(STONE)) {
+            return true;
+        }
+
+        if (building instanceof Catapult catapult) {
+            return catapult.isReady() && catapult.needsMaterial(STONE);
+        }
+
+        return false;
+    }
+
     @Override
     public void onArrival() {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isReceiverForStone);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

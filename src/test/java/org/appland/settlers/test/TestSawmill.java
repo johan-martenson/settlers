@@ -6,7 +6,21 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.*;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -492,6 +506,67 @@ public class TestSawmill {
         Utils.fastForwardUntilWorkersReachTarget(map, sawmillWorker0);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
+    }
+
+    @Test
+    public void testPlankCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place flag */
+        Point point2 = new Point(11, 3);
+        Flag flag = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarters and the flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag, headquarter.getFlag());
+
+        /* Place the sawmill */
+        Point point1 = new Point(14, 4);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), flag);
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Remove all planks from the headquarters */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+
+        /* Place guard house */
+        Point point4 = new Point(10, 4);
+        GuardHouse guardHouse = map.placeBuilding(new GuardHouse(player0), point4);
+
+        /* Deliver wood to the sawmill */
+        Utils.deliverCargo(sawmill, WOOD);
+
+        /* Wait for the courier on the road between the guard house and the quarry hut to have a cargo */
+        Utils.waitForFlagToGetStackedCargo(map, sawmill.getFlag(), 1);
+
+        assertEquals(sawmill.getFlag().getStackedCargo().get(0).getMaterial(), PLANK);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the guard house (and not the headquarters) */
+        assertEquals(sawmill.getAmount(PLANK), 0);
+        assertTrue(guardHouse.needsMaterial(PLANK));
+        assertTrue(guardHouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), guardHouse.getPosition());
+
+        assertEquals(guardHouse.getAmount(PLANK), 1);
     }
 
     @Test

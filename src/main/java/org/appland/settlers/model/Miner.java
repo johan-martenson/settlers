@@ -6,10 +6,7 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Miner.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.State.GOING_OUT_TO_FLAG;
 import static org.appland.settlers.model.Miner.State.MINING;
@@ -41,7 +38,11 @@ public class Miner extends Worker {
         GOING_OUT_TO_FLAG,
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, DEAD, GOING_TO_DIE, NO_MORE_RESOURCES
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        DEAD,
+        GOING_TO_DIE,
+        NO_MORE_RESOURCES
     }
 
     public Miner(Player player, GameMap map) {
@@ -161,13 +162,29 @@ public class Miner extends Worker {
         }
     }
 
+    private boolean isOreReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(mineral);
+        }
+
+        if (mineral == STONE && building.needsMaterial(STONE)) {
+            return true;
+        }
+
+        if (building.isReady() && building.needsMaterial(mineral)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_OUT_TO_FLAG) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isOreReceiver);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

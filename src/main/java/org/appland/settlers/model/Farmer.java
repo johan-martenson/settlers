@@ -15,21 +15,7 @@ import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import static org.appland.settlers.model.Farmer.State.DEAD;
-import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_HARVEST;
-import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PLANT;
-import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.Farmer.State.GOING_TO_DIE;
-import static org.appland.settlers.model.Farmer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-import static org.appland.settlers.model.Farmer.State.HARVESTING;
-import static org.appland.settlers.model.Farmer.State.IN_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Farmer.State.PLANTING;
-import static org.appland.settlers.model.Farmer.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Farmer.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Farmer.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.Farmer.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Farmer.State.*;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -207,6 +193,18 @@ public class Farmer extends Worker {
         return result;
     }
 
+    public boolean isWheatReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(WHEAT);
+        }
+
+        if (building.isReady() && building.needsMaterial(WHEAT)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onArrival() {
 
@@ -215,7 +213,7 @@ public class Farmer extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isWheatReceiver);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

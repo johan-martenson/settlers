@@ -14,6 +14,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronMine;
+import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Player;
@@ -27,28 +28,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -463,6 +449,65 @@ public class TestIronMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
+    }
+
+    @Test
+    public void testIronCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all iron from the headquarters */
+        Utils.adjustInventoryTo(headquarter, IRON, 0);
+
+        /* Place iron smelter */
+        Point point4 = new Point(10, 4);
+        IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(player0), point4);
+
+        /* Connect the iron smelter to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the iron mine */
+        IronMine ironMine = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Connect the iron mine with the iron smelter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), ironSmelter.getFlag());
+
+        /* Wait for the iron mine and the iron smelter to get constructed and occupied */
+        Utils.waitForBuildingsToBeConstructed(ironMine, ironSmelter);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(ironMine, ironSmelter);
+
+        /* Wait for the courier on the road between the iron smelter and the iron mine hut to have an iron cargo */
+        Utils.deliverCargo(ironMine, FISH);
+
+        Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
+
+        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the iron to the iron smelter (and not the headquarters) */
+        assertEquals(ironMine.getAmount(IRON), 0);
+        assertTrue(ironSmelter.needsMaterial(IRON));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), ironSmelter.getPosition());
+
+        assertEquals(ironSmelter.getAmount(IRON), 1);
     }
 
     @Test

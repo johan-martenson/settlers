@@ -14,21 +14,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.Function;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-import static java.lang.Math.round;
-import static org.appland.settlers.model.Direction.DOWN;
-import static org.appland.settlers.model.Direction.DOWN_LEFT;
-import static org.appland.settlers.model.Direction.DOWN_RIGHT;
-import static org.appland.settlers.model.Direction.LEFT;
-import static org.appland.settlers.model.Direction.RIGHT;
-import static org.appland.settlers.model.Direction.UP;
-import static org.appland.settlers.model.Direction.UP_LEFT;
-import static org.appland.settlers.model.Direction.UP_RIGHT;
+import static java.lang.Math.*;
+import static org.appland.settlers.model.Direction.*;
 import static org.appland.settlers.model.Material.COIN;
 
 /**
@@ -79,6 +71,85 @@ public class GameUtils {
         }
 
         return direction;
+    }
+
+    static class ToSearchItem implements Comparable {
+        final int cost;
+        final Point point;
+
+        ToSearchItem(Point point, int cost) {
+            this.point = point;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            if (o == null) {
+                return -1;
+            }
+
+            ToSearchItem otherItem = (ToSearchItem) o;
+
+            if (cost < otherItem.cost) {
+                return -1;
+            } else if (cost > otherItem.cost) {
+                return 1;
+            }
+
+            return 0;
+        }
+    }
+
+    static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
+        PriorityQueue<ToSearchItem> toSearch = new PriorityQueue<>();
+        Set<Point> searched = new HashSet<>();
+
+        toSearch.add(new ToSearchItem(start, 0));
+
+        // Keep searching the closest point
+        while (!toSearch.isEmpty()) {
+            ToSearchItem toSearchItem = toSearch.remove();
+
+            Point point = toSearchItem.point;
+            int cost = toSearchItem.cost;
+
+            // Avoid coming back to the same point again
+            searched.add(point);
+
+            // Return the building if it fulfills the criteria
+            if (map.isBuildingAtPoint(point)) {
+                Building building = map.getBuildingAtPoint(point);
+
+                HouseOrRoad houseOrRoad = new HouseOrRoad(building);
+
+                if (isMatch.apply(houseOrRoad)) {
+                    return Optional.of(houseOrRoad);
+                }
+            }
+
+            // Otherwise check each connected road except for the one we came with. Add each matching endpoint to be searched
+            for (Road road : map.getMapPoint(point).getConnectedRoads()) {
+
+                Point otherEnd = road.getOtherPoint(point);
+
+                // Skip the road we used to get to this point
+                if (searched.contains(otherEnd)) {
+                    continue;
+                }
+
+                // Return the road if it matches the criteria
+                HouseOrRoad houseOrRoad = new HouseOrRoad(road);
+
+                if (isMatch.apply(houseOrRoad)) {
+                    return Optional.of(houseOrRoad);
+                }
+
+                // Add the other end of the road to be searched
+                toSearch.add(new ToSearchItem(otherEnd, cost + road.getLength()));
+            }
+        }
+
+        return Optional.empty();
     }
 
     public static class BuildingAndData<B extends Building, D> {
@@ -1284,6 +1355,43 @@ public class GameUtils {
         return storehouse;
     }
 
+    public static Building getClosestBuildingConnectedByRoads(Point point, Building avoid, GameMap map, Function <Building, Boolean> func) {
+        Building building = null;
+        int distance = Integer.MAX_VALUE;
+
+        for (Building candidate : map.getBuildings()) {
+
+            /* Filter buildings to avoid */
+            if (candidate.equals(avoid)) {
+                continue;
+            }
+
+            /* Filter buildings that don't match the requirement */
+            if (!func.apply(candidate)) {
+                continue;
+            }
+
+            /* If the building has its flag on the point we know we have found the closest building */
+            if (candidate.getFlag().getPosition().equals(point)) {
+                building = candidate;
+                break;
+            }
+
+            List<Point> path = map.findWayWithExistingRoads(point, candidate.getFlag().getPosition());
+
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() < distance) {
+                distance = path.size();
+                building = candidate;
+            }
+        }
+
+        return building;
+    }
+
     public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
@@ -1462,5 +1570,28 @@ public class GameUtils {
         }
 
         return angle;
+    }
+
+    static class HouseOrRoad {
+        final Building building;
+        final Road road;
+
+        HouseOrRoad(Building building) {
+            this.building = building;
+            this.road = null;
+        }
+
+        HouseOrRoad(Road road) {
+            this.road = road;
+            this.building = null;
+        }
+
+        public boolean isBuilding() {
+            return building != null;
+        }
+
+        public boolean isRoad() {
+            return road != null;
+        }
     }
 }

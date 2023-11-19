@@ -16,6 +16,7 @@ import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -27,27 +28,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -468,6 +455,63 @@ public class TestGraniteMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
+    }
+
+    @Test
+    public void testStoneCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all stone from the headquarters */
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place mint */
+        Point point4 = new Point(10, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point4);
+
+        /* Connect the mint to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the granite mine */
+        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Connect the granite mine with the mint */
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), mint.getFlag());
+
+        /* Wait for the granite mine to get constructed and occupied */
+        Utils.waitForBuildingsToBeConstructed(graniteMine);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(graniteMine);
+
+        /* Wait for the courier on the road between the mint and the granite mine hut to have a stone cargo */
+        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+
+        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the granite to the mint (and not the headquarters) */
+        assertEquals(graniteMine.getAmount(STONE), 0);
+        assertTrue(mint.needsMaterial(STONE));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
+
+        assertEquals(mint.getAmount(STONE), 1);
     }
 
     @Test

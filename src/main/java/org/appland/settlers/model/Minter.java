@@ -6,17 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Minter.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Minter.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Minter.State.MAKING_COIN;
-import static org.appland.settlers.model.Minter.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Minter.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Minter.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Minter.State.*;
 
 /**
  *
@@ -31,7 +22,11 @@ public class Minter extends Worker {
         MAKING_COIN,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     private static final int PRODUCTION_TIME = 49;
@@ -128,6 +123,19 @@ public class Minter extends Worker {
         }
     }
 
+    private boolean isCoinReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(COIN);
+        }
+
+        if (building.isReady() && building.needsMaterial(COIN)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
@@ -136,7 +144,7 @@ public class Minter extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isCoinReceiver);
 
             flag.putCargo(getCargo());
 

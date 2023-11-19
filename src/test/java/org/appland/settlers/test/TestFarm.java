@@ -17,6 +17,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -33,24 +34,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
+import static java.awt.Color.*;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
-import static org.appland.settlers.model.Material.FARMER;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -685,6 +674,64 @@ public class TestFarm {
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
         assertEquals(farmer.getCargo().getMaterial(), WHEAT);
+    }
+
+    @Test
+    public void testWheatCargoIsDeliveredToMillWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all wheat from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WHEAT, 0);
+
+        /* Place mill */
+        Point point4 = new Point(10, 4);
+        Mill mill = map.placeBuilding(new Mill(player0), point4);
+
+        /* Connect the mill to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Place the farm */
+        Point point1 = new Point(14, 4);
+        Farm farm = map.placeBuilding(new Farm(player0), point1);
+
+        /* Connect the farm with the mill */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), mill.getFlag());
+
+        /* Wait for the farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(farm);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+
+        /* Wait for the courier on the road between the mill and the farm hut to have a wheat cargo */
+        Utils.waitForFlagToGetStackedCargo(map, farm.getFlag(), 1);
+
+        assertEquals(farm.getFlag().getStackedCargo().get(0).getMaterial(), WHEAT);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the mill (and not the headquarters) */
+        assertEquals(farm.getAmount(WHEAT), 0);
+        assertTrue(mill.needsMaterial(WHEAT));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mill.getPosition());
+
+        assertEquals(mill.getAmount(WHEAT), 1);
     }
 
     @Test

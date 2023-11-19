@@ -727,7 +727,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertNull(farmer.getCargo());
         assertEquals(map.getCropAtPoint(point).getGrowthState(), JUST_PLANTED);
 
-        /* Verify that an event was sent when the stonemason started picking the stone */
+        /* Verify that an event was sent when the farmer started picking the crop */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             if (gameChangesList.getWorkersWithStartedActions().containsKey(farmer)) {
@@ -749,7 +749,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(farmer));
         }
     }
 
@@ -1070,7 +1070,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(geologist));
         }
     }
 

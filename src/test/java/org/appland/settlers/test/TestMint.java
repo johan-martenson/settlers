@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -27,25 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -530,6 +516,67 @@ public class TestMint {
         Utils.fastForwardUntilWorkersReachTarget(map, minter);
 
         assertTrue(minter.isInsideBuilding());
+    }
+
+    @Test
+    public void testCoinCargoIsDeliveredToBarracksWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all coins from the headquarters */
+        Utils.adjustInventoryTo(headquarter, COIN, 0);
+
+        /* Place barracks */
+        Point point4 = new Point(10, 4);
+        Barracks barracks = map.placeBuilding(new Barracks(player0), point4);
+
+        /* Connect the barracks to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter.getFlag());
+
+        /* Wait for the barracks to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(barracks);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks);
+
+        /* Place the mint */
+        Point point1 = new Point(14, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the mint with the barracks */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), barracks.getFlag());
+
+        /* Wait for the mint to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mint);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mint);
+
+        /* Wait for the courier on the road between the coal mine and the mint hut to have a bread cargo */
+        Utils.adjustInventoryTo(headquarter, COAL, 1);
+        Utils.adjustInventoryTo(headquarter, GOLD, 1);
+
+        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+
+        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
+        assertEquals(mint.getAmount(COIN), 0);
+        assertTrue(barracks.needsMaterial(COIN));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), barracks.getPosition());
+
+        assertEquals(barracks.getAmount(COIN), 1);
     }
 
     @Test

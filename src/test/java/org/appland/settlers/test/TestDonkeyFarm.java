@@ -26,22 +26,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -581,6 +569,74 @@ public class TestDonkeyFarm {
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
 
         assertEquals(donkey.getPosition(), headquarter.getPosition());
+    }
+
+    @Test
+    public void testDonkeyWalksToMainRoadWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all donkeys, water and wheat from the headquarters */
+        Utils.adjustInventoryTo(headquarter, DONKEY, 0);
+        Utils.adjustInventoryTo(headquarter, WATER, 0);
+        Utils.adjustInventoryTo(headquarter, WHEAT, 0);
+
+        /* Place donkey farm */
+        Point point4 = new Point(10, 4);
+        DonkeyFarm donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point4);
+
+        /* Connect the donkey farm to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
+
+        /* Make the road between the donkey farm and the headquarters into a main road */
+        for (int i = 0; i < 10000; i++) {
+            if (road2.isMainRoad()) {
+                break;
+            }
+
+            if (donkeyFarm.getFlag().getStackedCargo().isEmpty()) {
+                Utils.placeCargo(map, PLANK, donkeyFarm.getFlag(), headquarter);
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(road2.isMainRoad());
+
+        /* Wait for the donkey farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(donkeyFarm);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(donkeyFarm);
+
+        /* Wait for the donkey farm to produce a donkey */
+        Utils.adjustInventoryTo(headquarter, WATER, 2);
+        Utils.adjustInventoryTo(headquarter, WHEAT, 2);
+
+        Worker donkey = Utils.waitForWorkerOutsideBuilding(Donkey.class, player0);
+
+        /* Verify that the donkey goes to the main road and starts working there directly */
+        assertTrue(road2.isMainRoad());
+
+        for (int i = 0; i < 1000; i++) {
+            assertFalse(donkey.getPosition().equals(headquarter.getFlag().getPosition()));
+
+            if (donkey.equals(road2.getDonkey())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(road2.getDonkey(), donkey);
     }
 
     @Test

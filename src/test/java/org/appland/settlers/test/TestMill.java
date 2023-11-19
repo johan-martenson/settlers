@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -27,22 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WHEAT;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -541,6 +530,61 @@ public class TestMill {
         Utils.fastForwardUntilWorkersReachTarget(map, miller);
 
         assertTrue(miller.isInsideBuilding());
+    }
+
+    @Test
+    public void testFlourCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all flour from the headquarters */
+        Utils.adjustInventoryTo(headquarter, FLOUR, 0);
+
+        /* Place bakery */
+        Point point4 = new Point(10, 4);
+        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+
+        /* Connect the bakery to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Place the mill */
+        Point point1 = new Point(14, 4);
+        Mill mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the bakery */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
+
+        /* Wait for the mill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Wait for the courier on the road between the bakery and the mill hut to have a flour cargo */
+        Utils.deliverCargo(mill, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
+
+        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the bakery (and not the headquarters) */
+        assertEquals(mill.getAmount(FLOUR), 0);
+        assertTrue(bakery.needsMaterial(FLOUR));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), bakery.getPosition());
+
+        assertEquals(bakery.getAmount(FLOUR), 1);
     }
 
     @Test

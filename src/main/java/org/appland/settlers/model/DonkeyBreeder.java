@@ -5,20 +5,10 @@
  */
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.DonkeyBreeder.State.DEAD;
-import static org.appland.settlers.model.DonkeyBreeder.State.FEEDING;
-import static org.appland.settlers.model.DonkeyBreeder.State.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
-import static org.appland.settlers.model.DonkeyBreeder.State.GOING_OUT_TO_FEED;
-import static org.appland.settlers.model.DonkeyBreeder.State.GOING_TO_DIE;
-import static org.appland.settlers.model.DonkeyBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-import static org.appland.settlers.model.DonkeyBreeder.State.PREPARING_DONKEY_FOR_DELIVERY;
-import static org.appland.settlers.model.DonkeyBreeder.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.DonkeyBreeder.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.DonkeyBreeder.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import java.util.Optional;
+
+import static org.appland.settlers.model.DonkeyBreeder.State.*;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
@@ -44,7 +34,10 @@ public class DonkeyBreeder extends Worker {
         FEEDING,
         GOING_BACK_TO_HOUSE_AFTER_FEEDING,
         PREPARING_DONKEY_FOR_DELIVERY,
-        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public DonkeyBreeder(Player player, GameMap map) {
@@ -67,6 +60,16 @@ public class DonkeyBreeder extends Worker {
         countdown.countFrom(TIME_TO_REST);
 
         productivityMeasurer.setBuilding(building);
+    }
+
+    private boolean isDonkeyReceiver(GameUtils.HouseOrRoad buildingOrRoad) {
+        if (buildingOrRoad.isBuilding() &&
+                buildingOrRoad.building.isReady() &&
+                buildingOrRoad.building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(DONKEY);
+        }
+
+        return buildingOrRoad.isRoad() && buildingOrRoad.road.isMainRoad() && buildingOrRoad.road.needsDonkey();
     }
 
     @Override
@@ -102,19 +105,25 @@ public class DonkeyBreeder extends Worker {
         } else if (state == PREPARING_DONKEY_FOR_DELIVERY) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
 
-                /* Don't create a donkey if no delivery is possible */
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getHome().getPosition(), null, map, DONKEY);
+                Optional<GameUtils.HouseOrRoad> optionalHouseOrRoad = GameUtils.getClosestHouseOrRoad(getHome().getPosition(), this::isDonkeyReceiver, map);
 
-                if (storehouse == null) {
+                /* Don't create a donkey if no delivery is possible */
+                if (optionalHouseOrRoad.isEmpty()) {
                     return;
                 }
 
-                /* Create a donkey and send it to the closest storage */
+                GameUtils.HouseOrRoad houseOrRoad = optionalHouseOrRoad.get();
+
+                /* Create a donkey and send it to the closest storage or main road missing a donkey */
                 Donkey donkey = new Donkey(getPlayer(), map);
 
                 map.placeWorkerFromStepTime(donkey, getHome());
 
-                donkey.returnToStorage();
+                if (houseOrRoad.isBuilding()) {
+                    donkey.returnToStorage(houseOrRoad.building);
+                } else {
+                    donkey.assignToRoad(houseOrRoad.road);
+                }
 
                 /* Report that the worker was productive */
                 productivityMeasurer.reportProductivity();

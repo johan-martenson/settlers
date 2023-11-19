@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class Cargo {
 
@@ -88,6 +89,12 @@ public class Cargo {
 
     void cancelPromisedPickUp() {
         pickupPromised = false;
+    }
+
+    void transportToReceivingBuilding(Function <Building, Boolean> func) {
+        Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, func);
+
+        setTarget(receivingBuilding);
     }
 
     void transportToStorage() {

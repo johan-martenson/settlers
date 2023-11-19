@@ -20,7 +20,7 @@ import static org.appland.settlers.model.Fisherman.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Fisherman.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Fisherman.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Fisherman.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
@@ -177,6 +177,18 @@ public class Fisherman extends Worker {
         }
     }
 
+    private boolean isFishReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(FISH);
+        }
+
+        if (building.isReady() && building.needsMaterial(FISH)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_OUT_TO_FISH) {
@@ -229,7 +241,7 @@ public class Fisherman extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isFishReceiver);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

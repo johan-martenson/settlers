@@ -18,6 +18,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -618,6 +619,70 @@ public class TestWoodcutter {
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
+    }
+
+    @Test
+    public void testWoodCargoIsDeliveredToSawmillWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Place and grow the tree */
+        Point point2 = new Point(14, 6);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        /* Wait for the tree to grow */
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Remove all wood from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        /* Place sawmill */
+        Point point4 = new Point(10, 4);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point4);
+
+        /* Connect the sawmill to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(14, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the sawmill */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
+
+        /* Wait for the woodcutter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        WoodcutterWorker wcWorker = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        /* Wait for the courier on the road between the sawmill and the woodcutter hut to have a wood cargo */
+        Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+
+        /* Wait for the courier to pick up the wood cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the sawmill (and not the headquarters) */
+        assertEquals(sawmill.getAmount(WOOD), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getPosition());
+
+        assertEquals(sawmill.getAmount(WOOD), 1);
     }
 
     @Test

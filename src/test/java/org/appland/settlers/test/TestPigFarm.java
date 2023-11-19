@@ -19,6 +19,7 @@ import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -27,23 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -569,6 +557,62 @@ public class TestPigFarm {
         Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
 
         assertTrue(pigBreeder.isInsideBuilding());
+    }
+
+    @Test
+    public void testPigCargoIsDeliveredToGuardHouseUnderConstructionWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all pigs from the headquarters */
+        Utils.adjustInventoryTo(headquarter, PIG, 0);
+
+        /* Place slaughter house */
+        Point point4 = new Point(10, 4);
+        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point4);
+
+        /* Connect the slaughter house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+
+        /* Place the pig farm */
+        Point point1 = new Point(14, 4);
+        PigFarm pigFarm = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Connect the pig farm with the slaughter house */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), slaughterHouse.getFlag());
+
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        /* Wait for the courier on the road between the guard house and the pig farm hut to have a pig cargo */
+        Utils.deliverCargo(pigFarm, WATER);
+        Utils.deliverCargo(pigFarm, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the slaughter house (and not the headquarters) */
+        assertEquals(pigFarm.getAmount(PIG), 0);
+        assertTrue(slaughterHouse.needsMaterial(PIG));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), slaughterHouse.getPosition());
+
+        assertEquals(slaughterHouse.getAmount(PIG), 1);
     }
 
     @Test

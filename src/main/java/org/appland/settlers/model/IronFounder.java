@@ -6,17 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.IronFounder.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.IronFounder.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.IronFounder.State.MELTING_IRON;
-import static org.appland.settlers.model.IronFounder.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.IronFounder.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.IronFounder.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.IronFounder.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
+import static org.appland.settlers.model.IronFounder.State.*;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
@@ -37,7 +28,11 @@ public class IronFounder extends Worker {
         MELTING_IRON,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     private State state;
@@ -128,6 +123,19 @@ public class IronFounder extends Worker {
         }
     }
 
+    private boolean isIronBarReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(IRON_BAR);
+        }
+
+        if (building.isReady() && building.needsMaterial(IRON_BAR)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
@@ -137,7 +145,7 @@ public class IronFounder extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isIronBarReceiver);
 
             flag.putCargo(getCargo());
 

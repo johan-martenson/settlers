@@ -6,16 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SAWMILL_WORKER;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.SawmillWorker.State.CUTTING_WOOD;
-import static org.appland.settlers.model.SawmillWorker.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.SawmillWorker.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.SawmillWorker.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.SawmillWorker.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.SawmillWorker.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.SawmillWorker.State.*;
 
 /**
  *
@@ -125,6 +117,18 @@ public class SawmillWorker extends Worker {
         }
     }
 
+    public boolean isPlankReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(PLANK);
+        }
+
+        if (building.isUnderConstruction() && building.needsMaterial(PLANK)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
@@ -133,7 +137,7 @@ public class SawmillWorker extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isPlankReceiver);
 
             flag.putCargo(getCargo());
 

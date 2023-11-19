@@ -6,16 +6,8 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Butcher.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Butcher.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Butcher.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Butcher.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Butcher.State.SLAUGHTERING_PIG;
-import static org.appland.settlers.model.Butcher.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.Butcher.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.BUTCHER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PIG;
+import static org.appland.settlers.model.Butcher.State.*;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
@@ -38,7 +30,11 @@ public class Butcher extends Worker {
         SLAUGHTERING_PIG,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public Butcher(Player player, GameMap map) {
@@ -123,6 +119,18 @@ public class Butcher extends Worker {
         }
     }
 
+    private boolean isMeatReceiver(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(MEAT);
+        }
+
+        if (building.isReady() && building.needsMaterial(MEAT)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
@@ -131,7 +139,7 @@ public class Butcher extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isMeatReceiver);
 
             flag.putCargo(getCargo());
 

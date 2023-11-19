@@ -152,13 +152,25 @@ public class WoodcutterWorker extends Worker {
         }
     }
 
+    public boolean isReceiverForWood(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(WOOD);
+        }
+
+        if (building instanceof Sawmill sawmill) {
+            return sawmill.isReady() && sawmill.needsMaterial(WOOD);
+        }
+
+        return false;
+    }
+
     @Override
     public void onArrival() {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isReceiverForWood);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

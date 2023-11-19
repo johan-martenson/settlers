@@ -688,4 +688,10 @@ public class Courier extends Worker {
     public boolean isSittingDown() {
         return state == IDLE_SITTING_DOWN;
     }
+
+    public void returnToStorage(Building building) {
+        setTarget(building.getPosition());
+
+        state = RETURNING_TO_STORAGE;
+    }
 }

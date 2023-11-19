@@ -207,4 +207,8 @@ public class Road {
     void makeMainRoad() {
         isMainRoad = true;
     }
+
+    public int getLength() {
+        return this.steps.size();
+    }
 }

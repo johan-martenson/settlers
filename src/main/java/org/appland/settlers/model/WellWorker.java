@@ -39,7 +39,11 @@ public class WellWorker extends Worker {
         DRAWING_WATER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     @Override
@@ -112,6 +116,18 @@ public class WellWorker extends Worker {
         }
     }
 
+    public boolean isReceiverForWater(Building building) {
+        if (building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(WATER);
+        }
+
+        if (building.isReady() && building.needsMaterial(WATER)) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     protected void onArrival() {
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
@@ -119,7 +135,7 @@ public class WellWorker extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isReceiverForWater);
 
             flag.putCargo(getCargo());
 

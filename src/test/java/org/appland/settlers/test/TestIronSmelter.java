@@ -16,6 +16,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Metalworks;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -27,23 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -480,6 +468,67 @@ public class TestIronSmelter {
         Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
 
         assertTrue(ironFounder0.isInsideBuilding());
+    }
+
+    @Test
+    public void testIronBarCargoIsDeliveredToMetalworksWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all iron bars from the headquarters */
+        Utils.adjustInventoryTo(headquarter, IRON_BAR, 0);
+
+        /* Place metal works */
+        Point point4 = new Point(10, 4);
+        Metalworks metalworks = map.placeBuilding(new Metalworks(player0), point4);
+
+        /* Connect the metal works to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Wait for the metal works to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(metalworks);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(metalworks);
+
+        /* Place the iron smelter */
+        Point point1 = new Point(14, 4);
+        IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Connect the iron smelter with the metal works */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), metalworks.getFlag());
+
+        /* Wait for the iron smelter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(ironSmelter);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter);
+
+        /* Wait for the courier on the road between the metal works and the iron smelter hut to have a cargo */
+        Utils.adjustInventoryTo(headquarter, IRON, 2);
+        Utils.adjustInventoryTo(headquarter, COAL, 2);
+
+        Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
+
+        assertEquals(ironSmelter.getFlag().getStackedCargo().get(0).getMaterial(), IRON_BAR);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the METAL WORKS (and not the headquarters) */
+        assertEquals(ironSmelter.getAmount(IRON_BAR), 0);
+        assertTrue(metalworks.needsMaterial(IRON_BAR));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), metalworks.getPosition());
+
+        assertEquals(metalworks.getAmount(IRON_BAR), 1);
     }
 
     @Test

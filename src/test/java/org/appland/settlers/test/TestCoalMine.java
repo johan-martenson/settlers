@@ -16,6 +16,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -27,29 +28,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PICK_AXE;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -546,6 +531,63 @@ public class TestCoalMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
 
         assertTrue(miner.isInsideBuilding());
+    }
+
+    @Test
+    public void testCoalCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all coal from the headquarters */
+        Utils.adjustInventoryTo(headquarter, COAL, 0);
+
+        /* Place mint */
+        Point point4 = new Point(10, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point4);
+
+        /* Connect the mint to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the coal mine */
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Connect the coal mine with the mint */
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
+
+        /* Wait for the coal mine and the mint to get constructed and occupied */
+        Utils.waitForBuildingsToBeConstructed(coalMine, mint);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(coalMine, mint);
+
+        /* Wait for the courier on the road between the mint and the coal mine hut to have a coal cargo */
+        Utils.waitForFlagToGetStackedCargo(map, coalMine.getFlag(), 1);
+
+        assertEquals(coalMine.getFlag().getStackedCargo().get(0).getMaterial(), COAL);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the mint (and not the headquarters) */
+        assertEquals(coalMine.getAmount(COAL), 0);
+        assertTrue(mint.needsMaterial(COAL));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
+
+        assertEquals(mint.getAmount(COAL), 1);
     }
 
     @Test
