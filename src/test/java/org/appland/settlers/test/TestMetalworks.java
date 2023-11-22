@@ -27,32 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BOW;
-import static org.appland.settlers.model.Material.CLEAVER;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.FISHING_ROD;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.METALWORKER;
-import static org.appland.settlers.model.Material.PICK_AXE;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.ROLLING_PIN;
-import static org.appland.settlers.model.Material.SAW;
-import static org.appland.settlers.model.Material.SCYTHE;
-import static org.appland.settlers.model.Material.SHOVEL;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.TONGS;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestMetalworks {
 
@@ -468,6 +446,74 @@ public class TestMetalworks {
         Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
 
         assertTrue(metalworker0.isInsideBuilding());
+    }
+
+    @Test
+    public void testToolIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, PLANK, STONE);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the metalworks */
+        Point point1 = new Point(14, 4);
+        Metalworks metalworks = map.placeBuilding(new Metalworks(player0), point1);
+
+        /* Connect the metalworks with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the metalworks */
+        Utils.deliverCargos(metalworks, PLANK, 2);
+        Utils.deliverCargos(metalworks, STONE, 2);
+
+        /* Wait for the metalworks to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(metalworks);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(metalworks);
+
+        /* Wait for the courier on the road between the storehouse and the metalworks to have a tool cargo */
+        Utils.deliverCargo(metalworks, IRON_BAR);
+        Utils.deliverCargo(metalworks, PLANK);
+
+        Utils.waitForFlagToGetStackedCargo(map, metalworks.getFlag(), 1);
+
+        Material tool = metalworks.getFlag().getStackedCargo().get(0).getMaterial();
+
+        assertTrue(Material.isTool(tool));
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        Utils.adjustInventoryTo(headquarter, tool, 0);
+
+        assertEquals(headquarter.getAmount(tool), 0);
+        assertEquals(metalworks.getAmount(tool), 0);
+        assertFalse(storehouse.needsMaterial(tool));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(tool));
+        assertNull(road0.getCourier().getCargo());
     }
 
     @Test

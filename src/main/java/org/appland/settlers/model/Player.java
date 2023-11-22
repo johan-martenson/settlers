@@ -118,23 +118,7 @@ public class Player {
         coalQuota.put(Armory.class, 1);
 
         /* Set the initial transport priority */
-        transportCategoryPriorities.add(TransportCategory.PLANK);
-        transportCategoryPriorities.add(TransportCategory.WOOD);
-        transportCategoryPriorities.add(TransportCategory.STONE);
-        transportCategoryPriorities.add(TransportCategory.COIN);
-        transportCategoryPriorities.add(TransportCategory.GOLD);
-        transportCategoryPriorities.add(TransportCategory.COAL);
-        transportCategoryPriorities.add(TransportCategory.WEAPONS);
-        transportCategoryPriorities.add(TransportCategory.IRON_BAR);
-        transportCategoryPriorities.add(TransportCategory.IRON);
-        transportCategoryPriorities.add(TransportCategory.FOOD);
-        transportCategoryPriorities.add(TransportCategory.WHEAT);
-        transportCategoryPriorities.add(TransportCategory.FLOUR);
-        transportCategoryPriorities.add(TransportCategory.WATER);
-        transportCategoryPriorities.add(TransportCategory.PIG);
-        transportCategoryPriorities.add(TransportCategory.TOOLS);
-        transportCategoryPriorities.add(TransportCategory.BEER);
-        transportCategoryPriorities.add(TransportCategory.WATER);
+        transportCategoryPriorities.addAll(Arrays.asList(TransportCategory.values()));
 
         setTransportPriorityForMaterials();
 
@@ -570,11 +554,11 @@ public class Player {
         setTransportPriorityForMaterials();
     }
 
-    int getTransportPriority(Cargo crop) {
+    int getTransportPriority(Cargo cargo) {
         int i = 0;
 
         for (Material material : transportPriorities) {
-            if (crop.getMaterial() == material) {
+            if (cargo.getMaterial() == material) {
                 return i;
             }
 

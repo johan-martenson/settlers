@@ -231,8 +231,9 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
 
                 // Handle the case where the last point overlaps with the flag point
-                if (roadPoints.getLast().equals(flagPoint)) {
-                    Point lastPoint = roadPoints.getLast();
+                Point lastPoint = roadPoints.getLast();
+
+                if (lastPoint.equals(flagPoint)) {
                     Point secondLastPoint = roadPoints.get(roadPoints.size() - 2);
                     int gapX = Math.abs(lastPoint.x - secondLastPoint.x);
                     int gapY = Math.abs(lastPoint.y - secondLastPoint.y);

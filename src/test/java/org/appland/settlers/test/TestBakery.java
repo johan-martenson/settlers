@@ -15,7 +15,9 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -564,11 +566,144 @@ public class TestBakery {
 
         /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
         assertEquals(bakery.getAmount(BREAD), 0);
-        assertTrue(coalMine.needsMaterial(BREAD));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
 
         assertEquals(coalMine.getAmount(BREAD), 1);
+    }
+
+    @Test
+    public void testBreadIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, STONE, PLANK, WATER, FLOUR, BREAD);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the bakery */
+        Point point1 = new Point(14, 4);
+        var bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Connect the bakery with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the bakery */
+        Utils.deliverCargos(bakery, PLANK, 2);
+        Utils.deliverCargos(bakery, STONE, 2);
+
+        /* Wait for the bakery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(bakery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        /* Wait for the courier on the road between the storehouse and the bakery to have a plank cargo */
+        Utils.deliverCargos(bakery, WATER, FLOUR);
+
+        Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
+
+        assertEquals(bakery.getFlag().getStackedCargo().get(0).getMaterial(), BREAD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(BREAD), 0);
+        assertEquals(bakery.getAmount(BREAD), 0);
+        assertFalse(storehouse.needsMaterial(BREAD));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BREAD));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testBreadIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, PLANK ,STONE, BREAD, MEAT, FISH, WATER, FLOUR);
+
+        /* Place mountain */
+        Point point4 = new Point(10, 4);
+        Utils.surroundPointWithMinableMountain(point4, map);
+
+        /* Place gold mine */
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point4);
+
+        /* Connect the gold mine to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
+
+        /* Construct the gold mine */
+        Utils.constructHouse(goldMine);
+
+        /* Place the bakery */
+        Point point1 = new Point(14, 4);
+        var bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Connect the bakery with the gold mine */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), goldMine.getFlag());
+
+        /* Deliver the needed material to construct the bakery */
+        Utils.deliverCargos(bakery, PLANK, 2);
+        Utils.deliverCargos(bakery, STONE, 2);
+
+        /* Wait for the bakery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(bakery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        /* Wait for the flag on the road between the gold mine and the bakery to have a plank cargo */
+        Utils.deliverCargos(bakery, WATER, FLOUR);
+
+        Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
+
+        assertEquals(bakery.getFlag().getStackedCargo().get(0).getMaterial(), BREAD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, BREAD, 1);
+
+        assertEquals(goldMine.getCanHoldAmount(BREAD) - goldMine.getAmount(BREAD), 1);
+        assertFalse(goldMine.needsMaterial(BREAD));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(BREAD), 1);
     }
 
     @Test

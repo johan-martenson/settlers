@@ -178,7 +178,7 @@ public class Fisherman extends Worker {
     }
 
     private boolean isFishReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(FISH);
         }
 

@@ -143,7 +143,7 @@ public class Baker extends Worker {
     }
 
     private boolean isBreadReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(BREAD);
         }
 

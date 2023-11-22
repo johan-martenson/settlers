@@ -14,6 +14,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Mint;
@@ -501,11 +502,153 @@ public class TestGoldMine {
 
         /* Verify that the courier delivers the gold to the mint (and not the headquarters) */
         assertEquals(goldMine.getAmount(GOLD), 0);
-        assertTrue(mint.needsMaterial(GOLD));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
 
         assertEquals(mint.getAmount(GOLD), 1);
+    }
+
+    @Test
+    public void testGoldIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, GOLD, STONE, MEAT, BREAD, FISH, PLANK);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Add stones to the storehouse doesn't need any more stones */
+        Utils.deliverMaxCargos(storehouse, STONE);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the gold mine */
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Connect the gold mine with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the gold mine */
+        Utils.deliverCargos(goldMine, PLANK, 4);
+
+        /* Wait for the gold mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(goldMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
+
+        /* Wait for the courier on the road between the storehouse and the gold mine to have a gold cargo */
+        Utils.deliverCargo(goldMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
+
+        assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(GOLD), 0);
+        assertEquals(goldMine.getAmount(GOLD), 0);
+        assertFalse(storehouse.needsMaterial(GOLD));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(GOLD));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testGoldIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, BREAD, FISH, MEAT, GOLD, COAL);
+
+        /* Place mint */
+        Point point4 = new Point(10, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point4);
+
+        /* Connect the mint to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mint to get constructed */
+        Utils.waitForBuildingToBeConstructed(mint);
+
+        /* Ensure that the mint only needs one more gold */
+        assertEquals(mint.getCanHoldAmount(GOLD) - mint.getAmount(GOLD), 1);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the gold mine */
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Connect the gold mine with the mint */
+        Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), mint.getFlag());
+
+        /* Deliver the needed material to construct the gold mine */
+        Utils.deliverCargos(goldMine, PLANK, 4);
+
+        /* Wait for the gold mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(goldMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
+
+        /* Wait for the flag on the road between the mint and the gold mine to have a gold cargo */
+        Utils.deliverCargo(goldMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
+
+        assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, GOLD, 1);
+
+        assertEquals(mint.getCanHoldAmount(GOLD) - mint.getAmount(GOLD), 1);
+        assertFalse(mint.needsMaterial(GOLD));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(GOLD), 1);
     }
 
     @Test

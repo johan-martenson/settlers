@@ -118,7 +118,7 @@ public class SawmillWorker extends Worker {
     }
 
     public boolean isPlankReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(PLANK);
         }
 

@@ -15,7 +15,9 @@ import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -793,11 +795,152 @@ public class TestFishery {
 
         /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
         assertEquals(fishery.getAmount(FISH), 0);
-        assertTrue(coalMine.needsMaterial(FISH));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
 
         assertEquals(coalMine.getAmount(FISH), 1);
+    }
+
+    @Test
+    public void testFishIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, PLANK, STONE, IRON_BAR, COAL, FISH);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place lake */
+        Point point5 = new Point(17, 5);
+        Utils.surroundPointWithWater(point5, map);
+
+        /* Place the fishery */
+        Point point1 = new Point(14, 4);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the fishery */
+        Utils.deliverCargos(fishery, PLANK, 2);
+
+        /* Wait for the fishery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Wait for the courier on the road between the storehouse and the fishery to have a fish cargo */
+        Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
+
+        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(FISH), 0);
+        assertEquals(fishery.getAmount(FISH), 0);
+        assertFalse(storehouse.needsMaterial(FISH));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(FISH));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testFishIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, FISH, COAL, IRON, BREAD, MEAT);
+
+        /* Place mountain */
+        Point point4 = new Point(10, 4);
+        Utils.surroundPointWithMinableMountain(point4, map);
+
+        /* Place gold mine */
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point4);
+
+        /* Construct the gold mine */
+        Utils.constructHouse(goldMine);
+
+        /* Ensure the gold mine can hold one (and only one) more fish */
+        assertEquals(goldMine.getCanHoldAmount(FISH) - goldMine.getAmount(FISH), 1);
+
+        /* Connect the gold mine to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
+
+        /* Place lake */
+        Point point5 = new Point(17, 5);
+        Utils.surroundPointWithWater(point5, map);
+
+        /* Place the fishery */
+        Point point1 = new Point(14, 4);
+        var fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the gold mine */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), goldMine.getFlag());
+
+        /* Deliver the needed material to construct the fishery */
+        Utils.deliverCargos(fishery, PLANK, 2);
+
+        /* Wait for the fishery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(fishery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Wait for the flag on the road between the gold mine and the fishery to have a fish cargo */
+        Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
+
+        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no iron bar is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, FISH, 1);
+
+        assertEquals(goldMine.getCanHoldAmount(FISH) - goldMine.getAmount(FISH), 1);
+        assertFalse(goldMine.needsMaterial(FISH));
+
+        for (int i = 0; i < 200; i++) {
+            if (goldMine.getAmount(IRON_BAR) == 0) {
+                break;
+            }
+
+            assertEquals(headquarter.getAmount(IRON_BAR), 1);
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
     }
 
     @Test

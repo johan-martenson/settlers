@@ -13,6 +13,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.PigFarm;
@@ -608,11 +609,152 @@ public class TestPigFarm {
 
         /* Verify that the courier delivers the cargo to the slaughter house (and not the headquarters) */
         assertEquals(pigFarm.getAmount(PIG), 0);
-        assertTrue(slaughterHouse.needsMaterial(PIG));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), slaughterHouse.getPosition());
 
         assertEquals(slaughterHouse.getAmount(PIG), 1);
+    }
+
+    @Test
+    public void testPigIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks, or pigs */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+        Utils.adjustInventoryTo(headquarter, PIG, 0);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the pig farm */
+        Point point1 = new Point(14, 4);
+        PigFarm pigFarm = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Connect the pig farm with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the pig farm */
+        Utils.deliverCargos(pigFarm, PLANK, 3);
+        Utils.deliverCargos(pigFarm, STONE, 3);
+
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        /* Wait for the courier on the road between the storehouse and the pig farm to have a pig cargo */
+        Utils.deliverCargo(pigFarm, WATER);
+        Utils.deliverCargo(pigFarm, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(PIG), 0);
+        assertEquals(pigFarm.getAmount(PIG), 0);
+        assertFalse(storehouse.needsMaterial(PIG));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(PIG));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testPigIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no pigs, wheat, or water */
+        Utils.adjustInventoryTo(headquarter, PIG, 0);
+        Utils.adjustInventoryTo(headquarter, WATER, 0);
+        Utils.adjustInventoryTo(headquarter, WHEAT, 0);
+
+        /* Place slaughter house */
+        Point point4 = new Point(10, 4);
+        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point4);
+
+        /* Connect the slaughter house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
+
+        /* Wait for the slaughter house to get constructed */
+        Utils.waitForBuildingToBeConstructed(slaughterHouse);
+
+        /* Stop production in the slaughter house to prevent it from consuming its resources */
+        slaughterHouse.stopProduction();
+
+        /* Place the pig farm */
+        Point point1 = new Point(14, 4);
+        PigFarm pigFarm = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Connect the pig farm with the slaughter house */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), slaughterHouse.getFlag());
+
+        /* Deliver the needed material to construct the pig farm */
+        Utils.deliverCargos(pigFarm, PLANK, 3);
+        Utils.deliverCargos(pigFarm, STONE, 3);
+
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        /* Wait for the flag on the road between the slaughter house and the pig farm to have a stone cargo */
+        Utils.deliverCargo(pigFarm, WHEAT);
+        Utils.deliverCargo(pigFarm, WATER);
+
+        Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+        assertEquals(pigFarm.getAmount(WHEAT), 0);
+        assertEquals(pigFarm.getAmount(WATER), 0);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, PIG, 1);
+
+        assertEquals(slaughterHouse.getCanHoldAmount(PIG) - slaughterHouse.getAmount(PIG), 1);
+        assertFalse(slaughterHouse.needsMaterial(PIG));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(PIG), 1);
     }
 
     @Test

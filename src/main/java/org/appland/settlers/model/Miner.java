@@ -163,7 +163,7 @@ public class Miner extends Worker {
     }
 
     private boolean isOreReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(mineral);
         }
 

@@ -580,11 +580,141 @@ public class TestMill {
 
         /* Verify that the courier delivers the cargo to the bakery (and not the headquarters) */
         assertEquals(mill.getAmount(FLOUR), 0);
-        assertTrue(bakery.needsMaterial(FLOUR));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), bakery.getPosition());
 
         assertEquals(bakery.getAmount(FLOUR), 1);
+    }
+
+    @Test
+    public void testFlourIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks, or wood */
+        Utils.clearInventory(headquarter, PLANK, STONE, FLOUR, WHEAT);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the mill */
+        Point point1 = new Point(14, 4);
+        Mill mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the mill */
+        Utils.deliverCargos(mill, PLANK, 2);
+        Utils.deliverCargos(mill, STONE, 2);
+
+        /* Wait for the mill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Wait for the courier on the road between the storehouse and the mill to have a plank cargo */
+        Utils.deliverCargo(mill, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
+
+        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(FLOUR), 0);
+        assertEquals(mill.getAmount(FLOUR), 0);
+        assertFalse(storehouse.needsMaterial(FLOUR));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(FLOUR));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testFlourIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no planks, stones, flour, or wheat */
+        Utils.clearInventory(headquarter, PLANK, STONE, FLOUR, WHEAT);
+
+        /* Place bakery */
+        Point point4 = new Point(10, 4);
+        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+
+        /* Construct the bakery */
+        Utils.constructHouse(bakery);
+
+        /* Connect the bakery to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Place the mill */
+        Point point1 = new Point(14, 4);
+        Mill mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the bakery */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), bakery.getFlag());
+
+        /* Deliver the needed material to construct the mill */
+        Utils.deliverCargos(mill, PLANK, 2);
+        Utils.deliverCargos(mill, STONE, 2);
+
+        /* Wait for the mill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Wait for the flag on the road between the bakery and the mill to have a flour cargo */
+        Utils.deliverCargo(mill, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
+
+        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no flour is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, FLOUR, 1);
+
+        assertEquals(bakery.getCanHoldAmount(FLOUR) - bakery.getAmount(FLOUR), 1);
+        assertFalse(bakery.needsMaterial(FLOUR));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(FLOUR), 1);
     }
 
     @Test

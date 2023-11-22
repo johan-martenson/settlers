@@ -144,7 +144,7 @@ public class PigBreeder extends Worker {
     }
 
     private boolean isPigReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(PIG);
         }
 

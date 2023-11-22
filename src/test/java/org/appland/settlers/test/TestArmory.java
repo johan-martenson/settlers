@@ -28,26 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.ARMORER;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -519,6 +503,71 @@ public class TestArmory {
         Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
 
         assertTrue(armorer0.isInsideBuilding());
+    }
+
+    @Test
+    public void testWeaponsAreNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks, or wood */
+        Utils.clearInventory(headquarter, STONE, PLANK, IRON_BAR, COAL, SHIELD, SWORD);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the armory */
+        Point point1 = new Point(14, 4);
+        var armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Connect the armory with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the armory */
+        Utils.deliverCargos(armory, PLANK, 2);
+        Utils.deliverCargos(armory, STONE, 2);
+
+        /* Wait for the armory to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(armory);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
+
+        /* Wait for the courier on the road between the storehouse and the armory to have a plank cargo */
+        Utils.deliverCargos(armory, COAL, IRON_BAR);
+
+        Utils.waitForFlagToGetStackedCargo(map, armory.getFlag(), 1);
+
+        var weapon = armory.getFlag().getStackedCargo().get(0).getMaterial();
+
+        assertTrue(weapon == SWORD || weapon == SHIELD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(weapon), 0);
+        assertEquals(armory.getAmount(weapon), 0);
+        assertFalse(storehouse.needsMaterial(weapon));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(weapon));
+        assertNull(road0.getCourier().getCargo());
     }
 
     @Test

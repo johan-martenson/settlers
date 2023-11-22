@@ -120,7 +120,7 @@ public class Butcher extends Worker {
     }
 
     private boolean isMeatReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(MEAT);
         }
 

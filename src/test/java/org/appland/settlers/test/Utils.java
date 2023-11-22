@@ -57,47 +57,13 @@ import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
-import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BOW;
-import static org.appland.settlers.model.Material.CLEAVER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.FISHING_ROD;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PICK_AXE;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.ROLLING_PIN;
-import static org.appland.settlers.model.Material.SAW;
-import static org.appland.settlers.model.Material.SCYTHE;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.SHOVEL;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.TONGS;
-import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.NO_BUILDING_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE;
+import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class Utils {
 
@@ -2635,6 +2601,43 @@ public class Utils {
         adjustInventoryTo(storehouse, SERGEANT, 0);
         adjustInventoryTo(storehouse, OFFICER, 0);
         adjustInventoryTo(storehouse, GENERAL, 0);
+    }
+
+    public static void waitUntilBuildingDoesntNeedMaterial(Building building, Material material) throws InvalidUserActionException {
+        for (int i = 0; i < 20000; i++) {
+            if (!building.needsMaterial(material)) {
+                break;
+            }
+
+            building.getMap().stepTime();
+        }
+
+        assertFalse(building.needsMaterial(material));
+    }
+
+    public static void clearInventory(Storehouse storehouse, Material... materials) {
+        for (var material : materials) {
+            adjustInventoryTo(storehouse, material, 0);
+        }
+    }
+
+    public static void deliverCargos(Building building, Material... materials) {
+        for (var material : materials) {
+            deliverCargo(building, material);
+        }
+    }
+
+    public static void deliverMaxCargos(Building building, Material material) {
+        for (int i = 0; i < 10; i++) {
+            if (!building.needsMaterial(material)) {
+                break;
+            }
+
+            deliverCargo(building, material);
+        }
+
+        assertEquals(building.getAmount(material), building.getCanHoldAmount(material));
+        assertFalse(building.needsMaterial(material));
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

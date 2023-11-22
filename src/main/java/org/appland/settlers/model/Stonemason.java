@@ -37,7 +37,11 @@ public class Stonemason extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public Stonemason(Player player, GameMap map) {
@@ -173,7 +177,7 @@ public class Stonemason extends Worker {
     }
 
     public boolean isReceiverForStone(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(STONE);
         }
 

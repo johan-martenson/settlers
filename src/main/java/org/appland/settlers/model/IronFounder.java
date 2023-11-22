@@ -124,7 +124,7 @@ public class IronFounder extends Worker {
     }
 
     private boolean isIronBarReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(IRON_BAR);
         }
 

@@ -13,6 +13,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -29,23 +30,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BOAT;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.HAMMER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SHIPWRIGHT;
-import static org.appland.settlers.model.Material.STONE;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -2815,6 +2803,75 @@ public class TestShipyard {
 
         /* Verify that the worker produces a boat cargo and puts it on the flag */
         Utils.fastForwardUntilWorkerCarriesCargo(map, shipyard.getWorker(), BOAT);
+    }
+
+    // TODO: test that boat is delivered to water way directly if it's closer than the nearest storehouse
+    // TODO: test that promiseCargo is used so the water way doesn't get two boats
+    // TODO: double-check required material to construct shipyard. 2 or 3 planks?
+
+    @Test
+    public void testBoatIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Remove all planks and stones from the headquarters to prevent the storehouse from being finished */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place store house */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the store house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the shipyard */
+        Point point1 = new Point(14, 4);
+        Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point1);
+
+        /* Connect the shipyard with the store house */
+        Road road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the shipyard */
+        Utils.deliverCargos(shipyard, PLANK, 3);
+        Utils.deliverCargos(shipyard, STONE, 3);
+
+        /* Wait for the shipyard to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(shipyard);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(shipyard);
+
+        /* Wait for the courier on the road between the store house and the shipyard hut to have a boat cargo */
+        Utils.deliverCargos(shipyard, PLANK, 3);
+
+        Utils.waitForFlagToGetStackedCargo(map, shipyard.getFlag(), 1);
+
+        assertEquals(shipyard.getFlag().getStackedCargo().get(0).getMaterial(), BOAT);
+        assertEquals(shipyard.getFlag().getStackedCargo().get(0).getTarget(), headquarter);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the store house's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(BOAT), 0);
+        assertEquals(shipyard.getAmount(BOAT), 0);
+        assertFalse(storehouse.needsMaterial(BOAT));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BOAT));
+        assertNull(road0.getCourier().getCargo());
     }
 
     @Test

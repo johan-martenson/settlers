@@ -13,6 +13,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -567,6 +568,146 @@ public class TestSawmill {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), guardHouse.getPosition());
 
         assertEquals(guardHouse.getAmount(PLANK), 1);
+    }
+
+    @Test
+    public void testPlankIsNotDeliveredToStorehouseUnderConstructionThatDoesntNeedPlanks() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks, or wood */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Add planks to the storehouse doesn't need any more planks */
+        Utils.deliverCargos(storehouse, PLANK, 4);
+
+        assertFalse(storehouse.needsMaterial(PLANK));
+
+        /* Place the sawmill */
+        Point point1 = new Point(14, 4);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the sawmill */
+        Utils.deliverCargos(sawmill, PLANK, 2);
+        Utils.deliverCargos(sawmill, STONE, 2);
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Wait for the courier on the road between the storehouse and the sawmill to have a plank cargo */
+        Utils.deliverCargo(sawmill, WOOD);
+
+        Utils.waitForFlagToGetStackedCargo(map, sawmill.getFlag(), 1);
+
+        assertEquals(sawmill.getFlag().getStackedCargo().get(0).getMaterial(), PLANK);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(PLANK), 0);
+        assertEquals(sawmill.getAmount(PLANK), 0);
+        assertFalse(storehouse.needsMaterial(PLANK));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(PLANK));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testPlankIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no planks, stones or wood*/
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Deliver planks to the storehouse so it only needs one more plank */
+        Utils.deliverCargos(storehouse, PLANK, 3);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the sawmill */
+        Point point1 = new Point(14, 4);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the sawmill */
+        Utils.deliverCargos(sawmill, PLANK, 2);
+        Utils.deliverCargos(sawmill, STONE, 2);
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Wait for the flag on the road between the storehouse and the sawmill to have a plank cargo */
+        Utils.deliverCargo(sawmill, WOOD);
+
+        Utils.waitForFlagToGetStackedCargo(map, sawmill.getFlag(), 1);
+
+        assertEquals(sawmill.getFlag().getStackedCargo().get(0).getMaterial(), PLANK);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, PLANK, 1);
+
+        assertEquals(storehouse.getCanHoldAmount(PLANK) - storehouse.getAmount(PLANK), 1);
+        assertFalse(storehouse.needsMaterial(PLANK));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(PLANK), 1);
     }
 
     @Test

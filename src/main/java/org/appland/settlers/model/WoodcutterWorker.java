@@ -153,7 +153,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     public boolean isReceiverForWood(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(WOOD);
         }
 

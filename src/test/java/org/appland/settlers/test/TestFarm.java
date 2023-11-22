@@ -727,7 +727,6 @@ public class TestFarm {
 
         /* Verify that the courier delivers the cargo to the mill (and not the headquarters) */
         assertEquals(farm.getAmount(WHEAT), 0);
-        assertTrue(mill.needsMaterial(WHEAT));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mill.getPosition());
 

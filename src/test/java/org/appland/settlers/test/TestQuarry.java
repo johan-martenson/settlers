@@ -14,6 +14,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -618,6 +619,145 @@ public class TestQuarry {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), guardHouse.getPosition());
 
         assertEquals(guardHouse.getAmount(STONE), 1);
+    }
+
+    @Test
+    public void testStoneIsNotDeliveredToStorehouseUnderConstructionThatDoesntNeedStone() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are stones but no planks */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 20);
+
+        /* Place stone */
+        Point point2 = new Point(14, 6);
+        Stone stone = map.placeStone(point2, STONE_1, 10);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Wait until the storehouse doesn't need stones */
+        assertEquals(map, storehouse.getMap());
+        Utils.waitUntilBuildingDoesntNeedMaterial(storehouse, STONE);
+
+        /* Place the quarry */
+        Point point1 = new Point(14, 4);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Connect the quarry with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed planks to the quarry */
+        Utils.deliverCargos(quarry, PLANK, 2);
+
+        /* Wait for the quarry to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(quarry);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
+
+        /* Wait for the courier on the road between the storehouse and the quarry hut to have a stone cargo */
+        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+
+        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(STONE), 17);
+        assertEquals(quarry.getAmount(STONE), 0);
+        assertFalse(storehouse.needsMaterial(STONE));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(STONE));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testStoneIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are stones but no planks */
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place stone */
+        Point point2 = new Point(14, 6);
+        Stone stone = map.placeStone(point2, STONE_1, 10);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Deliver stones to the storehouse so it only needs one more stone */
+        Utils.deliverCargos(storehouse, PLANK, 4);
+        Utils.deliverCargos(storehouse, STONE, 2);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the quarry */
+        Point point1 = new Point(14, 4);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Connect the quarry with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed planks to the quarry */
+        Utils.deliverCargos(quarry, PLANK, 2);
+
+        /* Wait for the quarry to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(quarry);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
+
+        /* Wait for the flag on the road between the storehouse and the quarry to have a stone cargo */
+        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
+
+        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, STONE, 1);
+
+        assertEquals(storehouse.getCanHoldAmount(STONE) - storehouse.getAmount(STONE), 1);
+        assertFalse(storehouse.needsMaterial(STONE));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(STONE), 1);
     }
 
     @Test
@@ -2327,7 +2467,7 @@ public class TestQuarry {
         Point point2 = new Point(18, 6);
         Stone stone = map.placeStone(point2, STONE_1, 7);
 
-        /* Connect the quarry with the headquarter */
+        /* Connect the quarry with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
 
         /* Wait for the quarry to get constructed and assigned a worker */

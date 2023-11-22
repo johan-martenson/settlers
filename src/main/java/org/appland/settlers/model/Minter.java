@@ -124,7 +124,7 @@ public class Minter extends Worker {
     }
 
     private boolean isCoinReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(COIN);
         }
 

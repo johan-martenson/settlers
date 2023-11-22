@@ -14,6 +14,7 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -31,22 +32,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -683,6 +673,150 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getPosition());
 
         assertEquals(sawmill.getAmount(WOOD), 1);
+    }
+
+    @Test
+    public void testWoodIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no planks and no wood */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        /* Place tree */
+        Point point2 = new Point(14, 6);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        /* Place store house */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the store house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the woodcutter */
+        Point point1 = new Point(14, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the store house */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed planks to the woodcutter */
+        Utils.deliverCargos(woodcutter, PLANK, 2);
+
+        /* Wait for the woodcutter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        /* Wait for the courier on the road between the store house and the woodcutter hut to have a wood cargo */
+        Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the store house's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(WOOD), 0);
+        assertEquals(woodcutter.getAmount(WOOD), 0);
+        assertFalse(storehouse.needsMaterial(WOOD));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(WOOD));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testWoodIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there is no wood */
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        /* Place tree */
+        Point point2 = new Point(14, 6);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        /* Place sawmill */
+        Point point4 = new Point(10, 4);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point4);
+
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill);
+
+        /* Connect the sawmill to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Place the woodcutter */
+        Point point1 = new Point(14, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the sawmill */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), sawmill.getFlag());
+
+        /* Deliver the needed planks to the woodcutter */
+        Utils.deliverCargos(woodcutter, PLANK, 2);
+
+        /* Wait for the woodcutter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        /* Wait for the flag on the road between the sawmill and the woodcutter to have a tree cargo */
+        Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+
+        /* Deliver wood to the sawmill so it only needs one more tree */
+        Utils.deliverCargos(sawmill, WOOD, 5);
+
+        assertEquals(sawmill.getAmount(WOOD), 5);
+        assertFalse(sawmill.needsMaterial(WOOD));
+        assertEquals(sawmill.getCanHoldAmount(WOOD), 6);
+
+        /* Stop production in the sawmill so it doesn't consume it's wood */
+        sawmill.stopProduction();
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no tree is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WOOD, 1);
+
+        assertEquals(sawmill.getCanHoldAmount(WOOD) - sawmill.getAmount(WOOD), 1);
+        assertFalse(sawmill.needsMaterial(WOOD));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(WOOD), 1);
     }
 
     @Test

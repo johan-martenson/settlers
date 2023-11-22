@@ -1999,7 +1999,7 @@ public class TestPrioritization {
 
     @Test
     public void testTransportationCategories() {
-        assertEquals(TransportCategory.values().length, 16);
+        assertEquals(TransportCategory.values().length, 17);
 
         assertEquals(TransportCategory.valueOf("WEAPONS"), TransportCategory.WEAPONS);
         assertEquals(TransportCategory.valueOf("BEER"), TransportCategory.BEER);
@@ -2017,6 +2017,7 @@ public class TestPrioritization {
         assertEquals(TransportCategory.valueOf("STONE"), TransportCategory.STONE);
         assertEquals(TransportCategory.valueOf("TOOLS"), TransportCategory.TOOLS);
         assertEquals(TransportCategory.valueOf("PIG"), TransportCategory.PIG);
+        assertEquals(TransportCategory.valueOf("BOAT"), TransportCategory.BOAT);
     }
 
     @Test
@@ -2346,7 +2347,7 @@ public class TestPrioritization {
 
         /* Verify that it's not possible to set for an index higher than the number of items - 1 */
         try {
-            player0.setTransportPriority(16, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
+            player0.setTransportPriority(17, TransportCategory.WOOD); // There are 16 items, and indexing starts at 0
 
             fail();
         } catch (InvalidUserActionException e) {

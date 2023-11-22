@@ -14,7 +14,9 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -551,11 +553,147 @@ public class TestSlaughterHouse {
 
         /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
         assertEquals(slaughterHouse.getAmount(MEAT), 0);
-        assertTrue(coalMine.needsMaterial(MEAT));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), coalMine.getPosition());
 
         assertEquals(coalMine.getAmount(MEAT), 1);
+    }
+
+    @Test
+    public void testMeatIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are stones, planks, or meat */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+        Utils.adjustInventoryTo(headquarter, MEAT, 0);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the slaughter house */
+        Point point1 = new Point(14, 4);
+        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Connect the slaughter house with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed planks to the slaughter house */
+        Utils.deliverCargos(slaughterHouse, PLANK, 2);
+        Utils.deliverCargos(slaughterHouse, STONE, 2);
+
+        /* Wait for the slaughter house to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(slaughterHouse);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(slaughterHouse);
+
+        /* Wait for the courier on the road between the storehouse and the slaughter house hut to have a meat cargo */
+        Utils.deliverCargo(slaughterHouse, PIG);
+
+        Utils.waitForFlagToGetStackedCargo(map, slaughterHouse.getFlag(), 1);
+
+        assertEquals(slaughterHouse.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(MEAT), 0);
+        assertEquals(slaughterHouse.getAmount(MEAT), 0);
+        assertFalse(storehouse.needsMaterial(MEAT));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(MEAT));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testMeatIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there is no meat */
+        Utils.adjustInventoryTo(headquarter, MEAT, 0);
+
+        /* Place mountain */
+        Point point2 = new Point(10, 4);
+        Utils.surroundPointWithMinableMountain(point2, map);
+
+        /* Place mine */
+        GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point2);
+
+        /* Construct the gold mine */
+        Utils.constructHouse(goldMine);
+
+        /* Connect the gold mine to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
+
+        /* Place the slaughter house */
+        Point point1 = new Point(14, 4);
+        SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Connect the slaughter house with the gold mine */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), goldMine.getFlag());
+
+        /* Deliver the needed planks to construct the slaughter house */
+        Utils.deliverCargos(slaughterHouse, PLANK, 2);
+        Utils.deliverCargos(slaughterHouse, STONE, 2);
+
+        /* Wait for the slaughter house to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(slaughterHouse);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(slaughterHouse);
+
+        /* Wait for the flag on the road between the gold mine and the slaughter house to have a meat cargo */
+        Utils.deliverCargo(slaughterHouse, PIG);
+
+        Utils.waitForFlagToGetStackedCargo(map, slaughterHouse.getFlag(), 1);
+
+        assertEquals(slaughterHouse.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, MEAT, 1);
+
+        assertEquals(goldMine.getAmount(MEAT), 0);
+        assertEquals(goldMine.getCanHoldAmount(MEAT) - goldMine.getAmount(MEAT), 1);
+        assertFalse(goldMine.needsMaterial(MEAT));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(MEAT), 1);
     }
 
     @Test

@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -27,22 +28,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.BREWER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
+import static java.awt.Color.*;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -447,6 +436,69 @@ public class TestBrewery {
         Utils.fastForwardUntilWorkersReachTarget(map, brewer0);
 
         assertTrue(brewer0.isInsideBuilding());
+    }
+
+    @Test
+    public void testBeerIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, STONE, PLANK, BEER, WHEAT, WATER);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the brewery */
+        Point point1 = new Point(14, 4);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Connect the brewery with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the brewery */
+        Utils.deliverCargos(brewery, PLANK, 2);
+        Utils.deliverCargos(brewery, STONE, 2);
+
+        /* Wait for the brewery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(brewery);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
+
+        /* Wait for the courier on the road between the storehouse and the brewery to have a beer cargo */
+        Utils.deliverCargos(brewery, WATER, WHEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, brewery.getFlag(), 1);
+
+        assertEquals(brewery.getFlag().getStackedCargo().get(0).getMaterial(), BEER);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(BEER), 0);
+        assertEquals(brewery.getAmount(BEER), 0);
+        assertFalse(storehouse.needsMaterial(BEER));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BEER));
+        assertNull(road0.getCourier().getCargo());
     }
 
     @Test

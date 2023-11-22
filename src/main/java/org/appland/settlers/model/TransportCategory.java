@@ -28,7 +28,9 @@ public enum TransportCategory {
     WOOD,
     STONE,
     FLOUR,
-    PIG, TOOLS;
+    PIG,
+    TOOLS,
+    BOAT;
 
     public Material[] getMaterials() {
 
@@ -64,6 +66,8 @@ public enum TransportCategory {
             return new Material[]{Material.PIG};
         } else if (this == TOOLS) {
             return new Material[]{Material.AXE, Material.SHOVEL, Material.PICK_AXE, FISHING_ROD, Material.BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE};
+        } else if (this == BOAT) {
+            return new Material[]{Material.BOAT};
         }
 
         return null;

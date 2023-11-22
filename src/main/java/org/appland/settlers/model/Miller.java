@@ -128,7 +128,7 @@ public class Miller extends Worker {
     }
 
     private boolean isFlourReceiver(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(FLOUR);
         }
 

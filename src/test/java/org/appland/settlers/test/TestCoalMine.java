@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Mint;
@@ -583,11 +584,153 @@ public class TestCoalMine {
 
         /* Verify that the courier delivers the cargo to the mint (and not the headquarters) */
         assertEquals(coalMine.getAmount(COAL), 0);
-        assertTrue(mint.needsMaterial(COAL));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
 
         assertEquals(mint.getAmount(COAL), 1);
+    }
+
+    @Test
+    public void testCoalIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, GOLD, STONE, MEAT, BREAD, FISH, PLANK, COAL);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Add stones to the storehouse doesn't need any more stones */
+        Utils.deliverMaxCargos(storehouse, STONE);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the coal mine */
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Connect the coal mine with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the coal mine */
+        Utils.deliverCargos(coalMine, PLANK, 4);
+
+        /* Wait for the coal mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(coalMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
+
+        /* Wait for the courier on the road between the storehouse and the coal mine to have a coal cargo */
+        Utils.deliverCargo(coalMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, coalMine.getFlag(), 1);
+
+        assertEquals(coalMine.getFlag().getStackedCargo().get(0).getMaterial(), COAL);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(COAL), 0);
+        assertEquals(coalMine.getAmount(COAL), 0);
+        assertFalse(storehouse.needsMaterial(COAL));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(COAL));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testGoldIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, BREAD, FISH, MEAT, GOLD, COAL, GOLD);
+
+        /* Place mint */
+        Point point4 = new Point(10, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point4);
+
+        /* Connect the mint to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mint to get constructed */
+        Utils.waitForBuildingToBeConstructed(mint);
+
+        /* Ensure that the mint only needs one more coal */
+        assertEquals(mint.getCanHoldAmount(COAL) - mint.getAmount(COAL), 1);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the coal mine */
+        CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Connect the coal mine with the mint */
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), mint.getFlag());
+
+        /* Deliver the needed material to construct the coal mine */
+        Utils.deliverCargos(coalMine, PLANK, 4);
+
+        /* Wait for the coal mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(coalMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
+
+        /* Wait for the flag on the road between the mint and the coal mine to have a coal cargo */
+        Utils.deliverCargo(coalMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, coalMine.getFlag(), 1);
+
+        assertEquals(coalMine.getFlag().getStackedCargo().get(0).getMaterial(), COAL);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, COAL, 1);
+
+        assertEquals(mint.getCanHoldAmount(COAL) - mint.getAmount(COAL), 1);
+        assertFalse(mint.needsMaterial(COAL));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(COAL), 1);
     }
 
     @Test
@@ -627,7 +770,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMinableMountain(point0, map);
         Utils.putCoalAtSurroundingTiles(point0, SMALL, map);
 
-        /* Remove all gold but one */
+        /* Remove all coal but one */
         for (int i = 0; i < 1000; i++) {
             if (map.getAmountOfMineralAtPoint(COAL, point0) > 1) {
                 map.mineMineralAtPoint(COAL, point0);
@@ -638,13 +781,13 @@ public class TestCoalMine {
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the gold mine */
+        /* Construct the coal mine */
         constructHouse(mine);
 
         /* Deliver food to the miner */
@@ -662,12 +805,12 @@ public class TestCoalMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the miner to mine gold */
+        /* Wait for the miner to mine coal */
         Utils.fastForward(50, map);
 
         assertFalse(mine.isOutOfNaturalResources());
 
-        /* Wait for the miner to leave the gold at the flag */
+        /* Wait for the miner to leave the coal at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
@@ -678,7 +821,7 @@ public class TestCoalMine {
 
         assertTrue(miner.isInsideBuilding());
 
-        /* Verify that the gold is gone and that the miner gets no gold */
+        /* Verify that the coal is gone and that the miner gets no coal */
         assertEquals(map.getAmountOfMineralAtPoint(COAL, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -709,13 +852,13 @@ public class TestCoalMine {
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
-        /* Construct the gold mine */
+        /* Construct the coal mine */
         constructHouse(mine);
 
         /* Deliver food to the miner */
@@ -732,7 +875,7 @@ public class TestCoalMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
 
-        /* Verify that there is no gold and that the miner gets no gold */
+        /* Verify that there is no coal and that the miner gets no coal */
         assertEquals(map.getAmountOfMineralAtPoint(COAL, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -761,10 +904,10 @@ public class TestCoalMine {
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the coal mine */
         constructHouse(mine);
 
         /* Manually place miner */
@@ -777,7 +920,7 @@ public class TestCoalMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
 
-        /* Verify that the miner gets no gold */
+        /* Verify that the miner gets no coal */
 
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
@@ -805,10 +948,10 @@ public class TestCoalMine {
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the coal mine */
         constructHouse(mine);
 
         /* Deliver food to the miner */
@@ -825,7 +968,7 @@ public class TestCoalMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
 
-        /* Verify that the miner mines for gold */
+        /* Verify that the miner mines for coal */
         assertEquals(mine.getAmount(BREAD), 1);
 
         Utils.fastForward(50, map);
@@ -852,7 +995,7 @@ public class TestCoalMine {
         Point point1 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point1);
 
-        /* Place a gold mine */
+        /* Place a coal mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
         /* Construct the coal mine */

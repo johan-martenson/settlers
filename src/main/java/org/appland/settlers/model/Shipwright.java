@@ -3,9 +3,7 @@ package org.appland.settlers.model;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.BOAT;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SHIPWRIGHT;
+import static org.appland.settlers.model.Material.*;
 
 @Walker(speed = 10)
 public class Shipwright extends Worker {
@@ -201,6 +199,16 @@ public class Shipwright extends Worker {
         return null;
     }
 
+    private boolean isBoatReceiver(Building building) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
+            return !storehouse.isDeliveryBlocked(BOAT);
+        }
+
+        // TODO: add direct delivery to roads in shallow water
+
+        return false;
+    }
+
     @Override
     public void onArrival() {
 
@@ -209,7 +217,7 @@ public class Shipwright extends Worker {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+            cargo.transportToReceivingBuilding(this::isBoatReceiver);
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);

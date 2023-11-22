@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -506,11 +507,137 @@ public class TestWell {
 
         /* Verify that the courier delivers the cargo to the bakery (and not the headquarters) */
         assertEquals(well.getAmount(WATER), 0);
-        assertTrue(bakery.needsMaterial(WATER));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), bakery.getPosition());
 
         assertEquals(bakery.getAmount(WATER), 1);
+    }
+
+    @Test
+    public void testWaterIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks or water */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+        Utils.adjustInventoryTo(headquarter, WATER, 0);
+
+        /* Place store house */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the store house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the well */
+        Point point1 = new Point(14, 4);
+        Well well = map.placeBuilding(new Well(player0), point1);
+
+        /* Connect the well with the store house */
+        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed planks to the well */
+        Utils.deliverCargos(well, PLANK, 2);
+
+        /* Wait for the well to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(well);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+
+        /* Wait for the courier on the road between the store house and the well hut to have a stone cargo */
+        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+
+        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the store house's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(WATER), 0);
+        assertEquals(well.getAmount(WATER), 0);
+        assertFalse(storehouse.needsMaterial(WATER));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(WATER));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testWaterIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are stones but no planks */
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+
+        /* Place bakery */
+        Point point4 = new Point(10, 4);
+        Bakery bakery = map.placeBuilding(new Bakery(player0), point4);
+
+        /* Construct the bakery */
+        Utils.constructHouse(bakery);
+
+        /* Connect the store house to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Place the well */
+        Point point1 = new Point(14, 4);
+        Well well = map.placeBuilding(new Well(player0), point1);
+
+        /* Connect the well with the bakery */
+        Road road0 = map.placeAutoSelectedRoad(player0, well.getFlag(), bakery.getFlag());
+
+        /* Deliver the needed planks to the well */
+        Utils.deliverCargos(well, PLANK, 2);
+
+        /* Wait for the well to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(well);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+
+        /* Wait for the flag on the road between the bakery and the well to have a water cargo */
+        Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
+
+        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no water is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, WATER, 1);
+
+        assertEquals(bakery.getCanHoldAmount(WATER) - bakery.getAmount(WATER), 1);
+        assertFalse(bakery.needsMaterial(WATER));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(WATER), 1);
     }
 
     @Test

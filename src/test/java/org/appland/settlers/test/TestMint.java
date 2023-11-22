@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.Minter;
@@ -572,11 +573,150 @@ public class TestMint {
 
         /* Verify that the courier delivers the cargo to the coal mine (and not the headquarters) */
         assertEquals(mint.getAmount(COIN), 0);
-        assertTrue(barracks.needsMaterial(COIN));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), barracks.getPosition());
 
         assertEquals(barracks.getAmount(COIN), 1);
+    }
+
+    @Test
+    public void testCoinIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no stones, planks, or coins */
+        Utils.adjustInventoryTo(headquarter, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter, STONE, 0);
+        Utils.adjustInventoryTo(headquarter, COIN, 0);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place the mint */
+        Point point1 = new Point(14, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the mint with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the mint */
+        Utils.deliverCargos(mint, PLANK, 2);
+        Utils.deliverCargos(mint, STONE, 2);
+
+        /* Wait for the mint to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mint);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mint);
+
+        /* Wait for the courier on the road between the storehouse and the mint to have a plank cargo */
+        Utils.deliverCargo(mint, COAL);
+        Utils.deliverCargo(mint, GOLD);
+
+        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+
+        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(COIN), 0);
+        assertEquals(mint.getAmount(COIN), 0);
+        assertFalse(storehouse.needsMaterial(COIN));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(COIN));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testCoinIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory so that there are no planks, stones or coins */
+        Utils.clearInventory(headquarter, PLANK, COIN, STONE, COAL, GOLD);
+
+        /* Place barracks */
+        Point point4 = new Point(10, 4);
+        Barracks barracks = map.placeBuilding(new Barracks(player0), point4);
+
+        /* Construct the barracks */
+        Utils.constructHouse(barracks);
+
+        /* Connect the barracks to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter.getFlag());
+
+        /* Place the mint */
+        Point point1 = new Point(14, 4);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the mint with the barracks */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), barracks.getFlag());
+
+        /* Deliver the needed material to construct the mint */
+        Utils.deliverCargos(mint, PLANK, 2);
+        Utils.deliverCargos(mint, STONE, 2);
+
+        /* Wait for the mint to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mint);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mint);
+
+        /* Wait for the flag on the road between the barracks and the mint to have a coin cargo */
+        Utils.deliverCargo(mint, COAL);
+        Utils.deliverCargo(mint, GOLD);
+
+        Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
+
+        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        assertEquals(road0.getCourier().getCargo().getTarget(), barracks);
+
+        /* Verify that no coin is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, COIN, 1);
+
+        assertEquals(barracks.getCanHoldAmount(COIN) - barracks.getAmount(COIN), 1);
+        assertFalse(barracks.needsMaterial(COIN));
+
+        for (int i = 0; i < 200; i++) {
+            if (barracks.getAmount(COIN) == 0) {
+                break;
+            }
+
+            assertNull(headquarter.getWorker().getCargo());
+            assertEquals(headquarter.getAmount(COIN), 1);
+
+            map.stepTime();
+        }
     }
 
     @Test

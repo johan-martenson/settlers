@@ -95,6 +95,10 @@ public class Cargo {
         Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, func);
 
         setTarget(receivingBuilding);
+
+        if (receivingBuilding != null) {
+            receivingBuilding.promiseDelivery(material);
+        }
     }
 
     void transportToStorage() {

@@ -14,6 +14,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Mint;
@@ -512,6 +513,146 @@ public class TestGraniteMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mint.getPosition());
 
         assertEquals(mint.getAmount(STONE), 1);
+    }
+
+    @Test
+    public void testStoneIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, STONE, MEAT, BREAD, FISH, PLANK);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Add stones to the storehouse doesn't need any more stones */
+        Utils.deliverMaxCargos(storehouse, STONE);
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the granite mine */
+        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Connect the granite mine with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the granite mine */
+        Utils.deliverCargos(graniteMine, PLANK, 4);
+
+        /* Wait for the granite mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(graniteMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
+
+        /* Wait for the courier on the road between the storehouse and the granite mine to have a plank cargo */
+        Utils.deliverCargo(graniteMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+
+        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(STONE), 0);
+        assertEquals(graniteMine.getAmount(STONE), 0);
+        assertFalse(storehouse.needsMaterial(STONE));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(STONE));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testStoneIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, PLANK, STONE, BREAD, FISH, MEAT);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Deliver stones to the storehouse so it only needs one more stone */
+        Utils.deliverCargos(storehouse, STONE, 2);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place the granite mine */
+        GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Connect the granite mine with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the granite mine */
+        Utils.deliverCargos(graniteMine, PLANK, 4);
+
+        /* Wait for the granite mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(graniteMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
+
+        /* Wait for the flag on the road between the storehouse and the granite mine to have a stone cargo */
+        Utils.deliverCargo(graniteMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
+
+        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, STONE, 1);
+
+        assertEquals(storehouse.getCanHoldAmount(STONE) - storehouse.getAmount(STONE), 1);
+        assertFalse(storehouse.needsMaterial(STONE));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(STONE), 1);
     }
 
     @Test

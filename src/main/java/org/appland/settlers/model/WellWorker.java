@@ -117,7 +117,7 @@ public class WellWorker extends Worker {
     }
 
     public boolean isReceiverForWater(Building building) {
-        if (building instanceof Storehouse storehouse) {
+        if (building.isReady() && building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(WATER);
         }
 

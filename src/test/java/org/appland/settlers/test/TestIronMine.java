@@ -13,6 +13,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Material;
@@ -503,11 +504,152 @@ public class TestIronMine {
 
         /* Verify that the courier delivers the iron to the iron smelter (and not the headquarters) */
         assertEquals(ironMine.getAmount(IRON), 0);
-        assertTrue(ironSmelter.needsMaterial(IRON));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), ironSmelter.getPosition());
 
         assertEquals(ironSmelter.getAmount(IRON), 1);
+    }
+
+    @Test
+    public void testIronIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, BREAD, FISH, MEAT, IRON, PLANK, STONE);
+
+        /* Place storehouse */
+        Point point4 = new Point(10, 4);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
+
+        /* Connect the storehouse to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1,LARGE, map);
+
+        /* Place the iron mine */
+        IronMine ironMine = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Connect the iron mine with the storehouse */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), storehouse.getFlag());
+
+        /* Deliver the needed material to construct the iron mine */
+        Utils.deliverCargos(ironMine, PLANK, 4);
+
+        /* Wait for the iron mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(ironMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironMine);
+
+        /* Wait for the courier on the road between the storehouse and the iron mine to have an iron cargo */
+        Utils.deliverCargo(ironMine, BREAD);
+
+        Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
+
+        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that the courier delivers the cargo to the storehouse's flag so that it can continue to the headquarters */
+        assertEquals(headquarter.getAmount(IRON), 0);
+        assertEquals(ironMine.getAmount(IRON), 0);
+        assertFalse(storehouse.needsMaterial(IRON));
+        assertTrue(storehouse.isUnderConstruction());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
+        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(IRON));
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testIronIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point3 = new Point(6, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+
+        /* Adjust the inventory */
+        Utils.clearInventory(headquarter, PLANK, STONE, BREAD, FISH, MEAT, IRON);
+
+        /* Place iron smelter */
+        Point point4 = new Point(10, 4);
+        IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(player0), point4);
+
+        /* Construct the iron smelter */
+        Utils.constructHouse(ironSmelter);
+
+        /* Stop production in the iron smelter */
+        ironSmelter.stopProduction();
+
+        /* Connect the iron smelter to the headquarters */
+        Road road2 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Place mountain */
+        Point point1 = new Point(14, 4);
+        Utils.surroundPointWithMinableMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1,LARGE, map);
+
+        /* Place the iron mine */
+        IronMine ironMine = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Connect the iron mine with the iron smelter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), ironSmelter.getFlag());
+
+        /* Deliver the needed material to construct the iron mine */
+        Utils.deliverCargos(ironMine, PLANK, 4);
+
+        /* Wait for the iron mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(ironMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironMine);
+
+        /* Wait for the flag on the road between the iron smelter and the iron mine to have an iron cargo */
+        Utils.deliverCargo(ironMine, MEAT);
+
+        Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
+
+        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+
+        /* Verify that no stone is delivered from the headquarters */
+        Utils.adjustInventoryTo(headquarter, IRON, 1);
+
+        assertEquals(ironSmelter.getAmount(IRON), 0);
+        assertEquals(ironSmelter.getCanHoldAmount(IRON), 1);
+        assertEquals(ironSmelter.getCanHoldAmount(IRON) - ironSmelter.getAmount(IRON), 1);
+        assertFalse(ironSmelter.needsMaterial(IRON));
+
+        for (int i = 0; i < 200; i++) {
+            assertNull(headquarter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        assertEquals(headquarter.getAmount(IRON), 1);
     }
 
     @Test
