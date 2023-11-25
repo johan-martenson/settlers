@@ -3,8 +3,10 @@ package org.appland.settlers.assets.collectors;
 import org.appland.settlers.assets.Bitmap;
 import org.appland.settlers.assets.CompassDirection;
 import org.appland.settlers.assets.ImageBoard;
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.NormalizedImageList;
 import org.appland.settlers.assets.Palette;
+import org.appland.settlers.model.Material;
 import org.json.simple.JSONObject;
 
 import java.awt.Point;
@@ -21,6 +23,8 @@ public class AnimalImageCollection {
     private final String name;
     private final Map<CompassDirection, List<Bitmap>> directionToImageMap;
     private final Map<CompassDirection, Bitmap> shadowImages;
+    private final Map<Material, Bitmap> cargoImages;
+    private final Map<Nation, Map<Material, Bitmap>> nationCargoImages;
 
     public AnimalImageCollection(String name) {
         this.name = name;
@@ -30,6 +34,8 @@ public class AnimalImageCollection {
             this.directionToImageMap.put(compassDirection, new ArrayList<>());
         }
         shadowImages = new EnumMap<>(CompassDirection.class);
+        cargoImages = new EnumMap<>(Material.class);
+        nationCargoImages = new EnumMap<>(Nation.class);
     }
 
     public void addImage(CompassDirection compassDirection, Bitmap workerImage) {
@@ -87,6 +93,57 @@ public class AnimalImageCollection {
             }
         }
 
+        // Write the cargos (if any)
+        if (!cargoImages.isEmpty()) {
+            JSONObject jsonCargos = new JSONObject();
+
+            jsonImageAtlas.put("cargos", jsonCargos);
+
+            cursor.y = imageBoard.getCurrentHeight();
+            cursor.x = 0;
+
+            for (Map.Entry<Material, Bitmap> entry : cargoImages.entrySet()) {
+                Material material = entry.getKey();
+                Bitmap image = entry.getValue();
+
+                imageBoard.placeImage(image, cursor);
+
+                jsonCargos.put(material.name().toUpperCase(), imageBoard.imageLocationToJson(image));
+
+                cursor.x += image.getWidth();
+            }
+        }
+
+        // Write nation-specific cargos (if any)
+        if (!nationCargoImages.isEmpty()) {
+            JSONObject jsonNationSpecific = new JSONObject();
+
+            jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
+
+            cursor.y = imageBoard.getCurrentHeight();
+            cursor.x = 0;
+
+            for (Map.Entry<Nation, Map<Material, Bitmap>> nationEntry : nationCargoImages.entrySet()) {
+                Nation nation = nationEntry.getKey();
+                Map<Material, Bitmap> materialBitmapMap = nationEntry.getValue();
+
+                JSONObject jsonNationCargos = new JSONObject();
+
+                jsonNationSpecific.put(nation.name().toUpperCase(), jsonNationCargos);
+
+                for (Map.Entry<Material, Bitmap> entry : materialBitmapMap.entrySet()) {
+                    Material material = entry.getKey();
+                    Bitmap image = entry.getValue();
+
+                    imageBoard.placeImage(image, cursor);
+
+                    jsonNationCargos.put(material.name().toUpperCase(), imageBoard.imageLocationToJson(image));
+
+                    cursor.x += image.getWidth();
+                }
+            }
+        }
+
         // Write the image atlas
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-" + name.toLowerCase() + ".png");
 
@@ -101,5 +158,17 @@ public class AnimalImageCollection {
 
     public void addShadowImage(CompassDirection compassDirection, Bitmap image) {
         shadowImages.put(compassDirection, image);
+    }
+
+    public void addCargoImage(Material material, Bitmap image) {
+        cargoImages.put(material, image);
+    }
+
+    public void addNationSpecificCargoImage(Nation nation, Material material, Bitmap image) {
+        if (!nationCargoImages.containsKey(nation)) {
+            nationCargoImages.put(nation, new EnumMap<>(Material.class));
+        }
+
+        nationCargoImages.get(nation).put(material, image);
     }
 }

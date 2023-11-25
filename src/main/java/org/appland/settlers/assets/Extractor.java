@@ -958,6 +958,7 @@ public class Extractor {
         /* Load from the map asset file */
         List<GameResource> mapBobsLst = assetManager.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
         List<GameResource> mapBobs0Lst = assetManager.loadLstFile(fromDir + "/" + MapBobs0Lst.FILENAME, defaultPalette);
+        List<GameResource> map0ZLst = assetManager.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
 
         /* Create the out directories */
         String uiDir = toDir + "/" + UI_ELEMENTS_DIRECTORY;
@@ -1503,6 +1504,42 @@ public class Extractor {
         donkeyImageCollection.addShadowImage(EAST, getImageFromResourceLocation(mapBobs0Lst, MapBobs0Lst.DONKEY_EAST_SHADOW));
         donkeyImageCollection.addShadowImage(SOUTH_EAST, getImageFromResourceLocation(mapBobs0Lst, MapBobs0Lst.DONKEY_SOUTH_EAST_SHADOW));
         donkeyImageCollection.addShadowImage(SOUTH_WEST, getImageFromResourceLocation(mapBobs0Lst, MapBobs0Lst.DONKEY_SOUTH_WEST_SHADOW));
+
+        donkeyImageCollection.addCargoImage(BEER, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_BEER));
+        donkeyImageCollection.addCargoImage(TONGS, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_TONGS));
+        donkeyImageCollection.addCargoImage(HAMMER, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_HAMMER));
+        donkeyImageCollection.addCargoImage(AXE, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_AXE));
+        donkeyImageCollection.addCargoImage(SAW, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_SAW));
+        donkeyImageCollection.addCargoImage(PICK_AXE, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_PICK_AXE));
+        donkeyImageCollection.addCargoImage(SHOVEL, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_SHOVEL));
+        donkeyImageCollection.addCargoImage(CRUCIBLE, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_CRUCIBLE));
+        donkeyImageCollection.addCargoImage(FISHING_ROD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_FISHING_ROD));
+        donkeyImageCollection.addCargoImage(SCYTHE, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_SCYTHE));
+        //donkeyImageCollection.addCargoImage(, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_EMPTY_BARREL));
+        donkeyImageCollection.addCargoImage(WATER, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_WATER));
+        donkeyImageCollection.addCargoImage(CLEAVER, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_CLEAVER));
+        donkeyImageCollection.addCargoImage(ROLLING_PIN, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_ROLLING_PIN));
+        donkeyImageCollection.addCargoImage(BOW, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_BOW));
+        donkeyImageCollection.addCargoImage(BOAT, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_BOAT));
+        donkeyImageCollection.addCargoImage(SWORD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_SWORD));
+        donkeyImageCollection.addCargoImage(IRON_BAR, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_IRON_BAR));
+        donkeyImageCollection.addCargoImage(FLOUR, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_FLOUR));
+        donkeyImageCollection.addCargoImage(FISH, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_FISH));
+        donkeyImageCollection.addCargoImage(BREAD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_BREAD));
+        donkeyImageCollection.addNationSpecificCargoImage(ROMANS, SHIELD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_ROMAN_SHIELD));
+        donkeyImageCollection.addCargoImage(WOOD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_WOOD));
+        donkeyImageCollection.addCargoImage(PLANK, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_PLANK));
+        donkeyImageCollection.addCargoImage(STONE, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_STONE));
+        donkeyImageCollection.addNationSpecificCargoImage(VIKINGS, SHIELD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_VIKING_SHIELD));
+        donkeyImageCollection.addNationSpecificCargoImage(AFRICANS, SHIELD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_AFRICAN_SHIELD));
+        donkeyImageCollection.addCargoImage(WHEAT, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_WHEAT));
+        donkeyImageCollection.addCargoImage(COIN, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_COIN));
+        donkeyImageCollection.addCargoImage(GOLD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_GOLD));
+        donkeyImageCollection.addCargoImage(IRON, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_IRON));
+        donkeyImageCollection.addCargoImage(COAL, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_COAL));
+        donkeyImageCollection.addCargoImage(MEAT, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_MEAT));
+        donkeyImageCollection.addCargoImage(PIG, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_PIG));
+        donkeyImageCollection.addNationSpecificCargoImage(JAPANESE, SHIELD, getImageFromResourceLocation(map0ZLst, Map0ZLst.DONKEY_JAPANESE_SHIELD));
 
         donkeyImageCollection.writeImageAtlas(natureDir + "/animals/", defaultPalette);
 

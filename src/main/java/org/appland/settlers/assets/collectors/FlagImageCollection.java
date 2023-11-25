@@ -50,7 +50,7 @@ public class FlagImageCollection {
 
             JSONObject jsonNationInfo = new JSONObject();
 
-            jsonImageAtlas.put(nation.name().toLowerCase(), jsonNationInfo);
+            jsonImageAtlas.put(nation.name().toUpperCase(), jsonNationInfo);
 
             cursor.x = 0;
 

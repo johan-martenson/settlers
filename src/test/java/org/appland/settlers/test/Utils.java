@@ -2771,62 +2771,89 @@ public class Utils {
 
             /* Run monitored against real */
             for (Map.Entry<Point, AvailableConstruction> entry : availableConstruction.entrySet()) {
+                Point point = entry.getKey();
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
-                    assertFalse(availableBuildingsOnMap.containsKey(entry.getKey()));
-                } else if (entry.getValue().getAvailableBuilding() == LARGE_POSSIBLE) {
-                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), LARGE);
-                } else if (entry.getValue().getAvailableBuilding() == MEDIUM_POSSIBLE) {
-                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), MEDIUM);
-                } else if (entry.getValue().getAvailableBuilding() == SMALL_POSSIBLE) {
-                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), SMALL);
+                    System.out.println(point);
+
+                    assertFalse(availableBuildingsOnMap.containsKey(point));
+                    assertNull(map.isAvailableHousePoint(player0, point));
+                }
+
+                if (entry.getValue().getAvailableBuilding() == LARGE_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(point), LARGE);
+                    assertEquals(map.isAvailableHousePoint(player0, point), LARGE);
+                }
+
+                if (entry.getValue().getAvailableBuilding() == MEDIUM_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(point), MEDIUM);
+                    assertEquals(map.isAvailableHousePoint(player0, point), MEDIUM);
+                }
+
+                if (entry.getValue().getAvailableBuilding() == SMALL_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(point), SMALL);
+                    assertEquals(map.isAvailableHousePoint(player0, point), SMALL);
                 }
 
                 if (entry.getValue().getAvailableFlag() == FLAG_POSSIBLE) {
-                    assertTrue(availableFlagsOnMap.contains(entry.getKey()));
+                    assertTrue(availableFlagsOnMap.contains(point));
+                    assertTrue(map.isAvailableFlagPoint(player0, point));
                 } else {
-                    assertFalse(availableFlagsOnMap.contains(entry.getKey()));
+                    assertFalse(availableFlagsOnMap.contains(point));
+                    assertFalse(map.isAvailableFlagPoint(player0, point));
                 }
 
                 if (entry.getValue().getAvailableBuilding() == MINE_POSSIBLE) {
-                    assertTrue(availableMinesOnMap.contains(entry.getKey()));
+                    assertTrue(availableMinesOnMap.contains(point));
+                    assertTrue(map.isAvailableMinePoint(player0, point));
                 } else {
-                    assertFalse(availableMinesOnMap.contains(entry.getKey()));
+                    assertFalse(availableMinesOnMap.contains(point));
+                    assertFalse(map.isAvailableMinePoint(player0, point));
                 }
             }
 
             /* Run real against monitored */
-            for (Map.Entry<Point, Size> entry : map.getAvailableHousePoints(player0).entrySet()) {
-                if (entry.getValue() == LARGE) {
-                    assertNotNull(availableConstruction.get(entry.getKey()));
-                    assertEquals(
-                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            LARGE_POSSIBLE
-                    );
-                } else if (entry.getValue() == MEDIUM) {
-                    assertEquals(
-                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            MEDIUM_POSSIBLE
-                    );
-                } else if (entry.getValue() == SMALL) {
-                    assertEquals(
-                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            SMALL_POSSIBLE
-                    );
-                } else {
-                    assertEquals(
-                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            NO_BUILDING_POSSIBLE
+            for (Point point : player0.getDiscoveredLand()) {
+                Size availableHouse = map.isAvailableHousePoint(player0, point);
+                boolean availableMine = map.isAvailableMinePoint(player0, point);
+                boolean availableFlag = map.isAvailableFlagPoint(player0, point);
+
+                if (availableHouse == LARGE) {
+                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), LARGE_POSSIBLE);
+                }
+
+                if (availableHouse == MEDIUM) {
+                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), MEDIUM_POSSIBLE);
+                }
+
+                if (availableHouse == SMALL) {
+                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), SMALL_POSSIBLE);
+                }
+
+                if (availableHouse == null) {
+                    assertTrue(
+                            !availableConstruction.containsKey(point) ||
+                                    availableConstruction.get(point).getAvailableBuilding() == NO_BUILDING_POSSIBLE
                     );
                 }
-            }
 
-            for (Point flagPoint : availableFlagsOnMap) {
-                assertEquals(availableConstruction.get(flagPoint).getAvailableFlag(), FLAG_POSSIBLE);
-            }
+                if (availableMine) {
+                    assertEquals(availableConstruction.get(point).getAvailableBuilding(), MINE_POSSIBLE);
+                } else {
+                    assertTrue(
+                            !availableConstruction.containsKey(point) ||
+                                    availableConstruction.get(point).getAvailableBuilding() != MINE_POSSIBLE
+                    );
+                }
 
-            for (Point minePoint : availableMinesOnMap) {
-                assertEquals(availableConstruction.get(minePoint).getAvailableBuilding(), MINE_POSSIBLE);
+                if (availableFlag) {
+                    assertEquals(availableConstruction.get(point).getAvailableFlag(), FLAG_POSSIBLE);
+                } else {
+                    assertTrue(
+                            !availableConstruction.containsKey(point) ||
+                                    availableConstruction.get(point).getAvailableFlag() == NO_FLAG_POSSIBLE
+                    );
+                }
             }
         }
 

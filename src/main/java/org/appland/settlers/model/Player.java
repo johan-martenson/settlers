@@ -987,8 +987,18 @@ public class Player {
 
         /* Add changed available construction if the border has been extended */
         if (!newBorder.isEmpty()) {
+            System.out.println("\nNEW BORDER\n");
+
             changedAvailableConstruction.addAll(newOwnedLand);
             changedAvailableConstruction.addAll(newLostLand);
+
+            removedBorder.forEach(newBorderPoint -> {
+                var pointUpLeft = newBorderPoint.upLeft();
+
+                if (!newOwnedLand.contains(pointUpLeft)) {
+                    changedAvailableConstruction.add(pointUpLeft);
+                }
+            });
         }
 
         /* Create the event message */

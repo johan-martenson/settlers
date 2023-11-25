@@ -2384,7 +2384,7 @@ public class TestMonitoringOfAvailableConstruction {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place barracks */
-        Point point22 = new Point(5, 23);
+        Point point22 = new Point(15, 11);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Place road */
@@ -2403,13 +2403,13 @@ public class TestMonitoringOfAvailableConstruction {
         assertNotNull(military);
 
         /* Verify that an event is sent when the military reaches the barracks and the border is extended */
-        Point point3 = new Point(6, 24);
-        Point point4 = new Point(5, 31);
+        Point point3 = new Point(21, 13);
+        Point point4 = new Point(29, 13);
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
 
-        /* Set up monitoring subscription for the player */
+        /* Set up monitoring subscription for the player and store the currently available construction */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2419,6 +2419,10 @@ public class TestMonitoringOfAvailableConstruction {
                 map.getAvailableMinePoints(player0)
         );
 
+        /* Verify that all changed available construction is reported when the border is extended */
+        assertEquals(map.isAvailableHousePoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()), null);
+        assertTrue(map.isAvailableFlagPoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
+
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
         assertFalse(player0.getBorderPoints().contains(point3));
@@ -2427,6 +2431,9 @@ public class TestMonitoringOfAvailableConstruction {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertNotEquals(gameChangesList.getChangedAvailableConstruction().size(), 0);
+
+        assertNotEquals(map.isAvailableHousePoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()), null);
+        assertTrue(map.isAvailableFlagPoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
