@@ -1590,7 +1590,6 @@ public class SettlersAPI {
                 ProductionDataSeries materialProductionDataSeries = statisticsManager.getProductionStatisticsForMaterial(material);
 
                 /* Set the meta data for the report for this material */
-                JSONObject jsonMaterialStatisticsDataAndMeta = new JSONObject();
                 JSONArray jsonMaterialStatisticsDataSeries = new JSONArray();
 
                 /* Add the statistics for this material to the array */

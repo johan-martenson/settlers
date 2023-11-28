@@ -1631,7 +1631,6 @@ class Utils {
         JSONObject jsonAvailableConstruction = new JSONObject();
         JSONArray  jsonDeadTrees             = new JSONArray();
         JSONArray  jsonDecorations           = new JSONArray();
-        JSONArray  jsonMessages              = new JSONArray();
 
         jsonView.put("trees", trees);
         jsonView.put("houses", jsonHouses);

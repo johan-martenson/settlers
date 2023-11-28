@@ -945,8 +945,6 @@ public class AssetManager {
                 debugPrint(" - Next section: " + chunkId);
             }
 
-            Utils.getHex(chunkId.getBytes());
-
             // Read EVTN section
             if (!chunkId.equals("EVNT")) {
                 throw new InvalidFormatException("Must match 'EVNT'. Not " + chunkId);
