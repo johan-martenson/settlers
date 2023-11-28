@@ -1025,17 +1025,17 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MEAT, 0);
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
-        /* Make sure the headquarter has no miners so the coal mine will not be constructed */
+        /* Make sure the headquarter has no miners so the coal mine will not be occupied */
         Utils.adjustInventoryTo(headquarter0, MINER, 0);
 
         /* Fill the stock in the coal mine so it doesn't need anything */
-        Utils.deliverCargo(coalMine0, FISH);
-        Utils.deliverCargo(coalMine0, BREAD);
-        Utils.deliverCargo(coalMine0, MEAT);
+        Utils.deliverCargos(coalMine0, FISH, 2);
+        Utils.deliverCargos(coalMine0, BREAD, 2);
+        Utils.deliverCargos(coalMine0, MEAT, 2);
 
-        assertEquals(coalMine0.getAmount(FISH), 1);
-        assertEquals(coalMine0.getAmount(BREAD), 1);
-        assertEquals(coalMine0.getAmount(MEAT), 1);
+        assertEquals(coalMine0.getAmount(FISH), 2);
+        assertEquals(coalMine0.getAmount(BREAD), 2);
+        assertEquals(coalMine0.getAmount(MEAT), 2);
 
         assertFalse(coalMine0.needsMaterial(FISH));
         assertFalse(coalMine0.needsMaterial(BREAD));
@@ -2180,6 +2180,20 @@ public class TestPrioritization {
         Road road3 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), mill0.getFlag());
         Road road4 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), well0.getFlag());
 
+        /* Fill up the buildings so there is only space for one more resource of each type */
+        Utils.deliverCargos(mint0, COAL, 5);
+        Utils.deliverCargos(mint0, GOLD, 5);
+        Utils.deliverCargos(bakery0, WATER, 5);
+        Utils.deliverCargos(bakery0, FLOUR, 5);
+        Utils.deliverCargos(sawmill0, WOOD, 5);
+        Utils.deliverCargos(mill0, WHEAT, 5);
+
+        /* Stop production in the buildings */
+        mint0.stopProduction();
+        bakery0.stopProduction();
+        sawmill0.stopProduction();
+        mill0.stopProduction();
+
         /* Assign couriers to the roads */
         Utils.occupyRoad(road0, map);
         Utils.occupyRoad(road1, map);
@@ -2224,8 +2238,6 @@ public class TestPrioritization {
 
         /* Wait for the worker to deliver the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
-
-        assertFalse(mill0.needsMaterial(WHEAT));
 
         /* Verify that the storage worker then delivers planks */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);

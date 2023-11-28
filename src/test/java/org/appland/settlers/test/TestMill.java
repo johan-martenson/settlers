@@ -40,6 +40,55 @@ import static org.junit.Assert.*;
 public class TestMill {
 
     @Test
+    public void testMillCanHoldSixWheatBarsAndSixWater() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(6, 12);
+        var mill0 = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, WATER, 20);
+        Utils.adjustInventoryTo(headquarter0, BREWER, 20);
+
+        /* Wait for the mill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(mill0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill0);
+
+        /* Stop production */
+        mill0.stopProduction();
+
+        /* Wait for the mill to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(mill0, WHEAT, 6);
+
+        /* Verify that the mill doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(mill0.needsMaterial(WHEAT));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(mill0.needsMaterial(WHEAT));
+            assertEquals(mill0.getAmount(WHEAT), 6);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testMillOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
@@ -691,6 +740,12 @@ public class TestMill {
         Utils.waitForBuildingToBeConstructed(mill);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Stop production */
+        bakery.stopProduction();
+
+        /* Fill up the bakery so there is only space for one more wheat */
+        Utils.deliverCargos(bakery, FLOUR, 5);
 
         /* Wait for the flag on the road between the bakery and the mill to have a flour cargo */
         Utils.deliverCargo(mill, WHEAT);
@@ -2009,7 +2064,7 @@ public class TestMill {
         /* Verify that the reported needed construction material is correct */
         assertEquals(mill0.getTypesOfMaterialNeeded().size(), 1);
         assertTrue(mill0.getTypesOfMaterialNeeded().contains(WHEAT));
-        assertEquals(mill0.getCanHoldAmount(WHEAT), 1);
+        assertEquals(mill0.getCanHoldAmount(WHEAT), 6);
 
         for (Material material : Material.values()) {
             if (material == WHEAT) {

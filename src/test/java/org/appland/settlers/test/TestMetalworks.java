@@ -49,6 +49,59 @@ public class TestMetalworks {
     );
 
     @Test
+    public void testMetalworksCanHoldSixIronBarsAndSixPlanks() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point1 = new Point(6, 12);
+        Building metalworks0 = map.placeBuilding(new Metalworks(player0), point1);
+
+        /* Connect the metalworks with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 20);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, METALWORKER, 20);
+
+        /* Wait for the metalworks to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(metalworks0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(metalworks0);
+
+        /* Stop production */
+        metalworks0.stopProduction();
+
+        /* Wait for the metalworks to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(metalworks0, IRON_BAR, 6);
+        Utils.waitForBuildingToGetAmountOfMaterial(metalworks0, PLANK, 6);
+
+        /* Verify that the metalworks doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(metalworks0.needsMaterial(IRON_BAR));
+        assertFalse(metalworks0.needsMaterial(PLANK));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(metalworks0.needsMaterial(IRON_BAR));
+            assertFalse(metalworks0.needsMaterial(PLANK));
+            assertEquals(metalworks0.getAmount(IRON_BAR), 6);
+            assertEquals(metalworks0.getAmount(PLANK), 6);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testMetalworksOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
@@ -463,7 +516,7 @@ public class TestMetalworks {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Adjust the inventory */
-        Utils.clearInventory(headquarter, PLANK, STONE);
+        Utils.clearInventory(headquarter, PLANK, STONE, IRON_BAR);
 
         /* Place storehouse */
         Point point4 = new Point(10, 4);
@@ -510,6 +563,8 @@ public class TestMetalworks {
         assertTrue(storehouse.isUnderConstruction());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        System.out.println(storehouse.getFlag().getStackedCargo());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(tool));
@@ -2349,8 +2404,8 @@ public class TestMetalworks {
         assertEquals(metalworks0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(IRON_BAR));
         assertTrue(metalworks0.getTypesOfMaterialNeeded().contains(PLANK));
-        assertEquals(metalworks0.getCanHoldAmount(IRON_BAR), 1);
-        assertEquals(metalworks0.getCanHoldAmount(PLANK), 1);
+        assertEquals(metalworks0.getCanHoldAmount(IRON_BAR), 6);
+        assertEquals(metalworks0.getCanHoldAmount(PLANK), 6);
 
         for (Material material : Material.values()) {
             if (material == IRON_BAR || material == PLANK) {

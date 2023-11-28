@@ -41,6 +41,59 @@ import static org.junit.Assert.*;
 public class TestMint {
 
     @Test
+    public void testMintCanHoldSixCoalBarsAndSixGold() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(6, 12);
+        var brewery0 = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the brewery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, COAL, 20);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 20);
+        Utils.adjustInventoryTo(headquarter0, BREWER, 20);
+
+        /* Wait for the brewery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(brewery0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery0);
+
+        /* Stop production */
+        brewery0.stopProduction();
+
+        /* Wait for the brewery to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(brewery0, COAL, 6);
+        Utils.waitForBuildingToGetAmountOfMaterial(brewery0, GOLD, 6);
+
+        /* Verify that the brewery doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(brewery0.needsMaterial(COAL));
+        assertFalse(brewery0.needsMaterial(GOLD));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(brewery0.needsMaterial(COAL));
+            assertFalse(brewery0.needsMaterial(GOLD));
+            assertEquals(brewery0.getAmount(COAL), 6);
+            assertEquals(brewery0.getAmount(GOLD), 6);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testMintOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
@@ -594,9 +647,7 @@ public class TestMint {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Adjust the inventory so that there are no stones, planks, or coins */
-        Utils.adjustInventoryTo(headquarter, PLANK, 0);
-        Utils.adjustInventoryTo(headquarter, STONE, 0);
-        Utils.adjustInventoryTo(headquarter, COIN, 0);
+        Utils.clearInventory(headquarter, PLANK, STONE, COIN, COAL, GOLD);
 
         /* Place storehouse */
         Point point4 = new Point(10, 4);
@@ -639,6 +690,8 @@ public class TestMint {
         assertTrue(storehouse.isUnderConstruction());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
+
+        System.out.println(storehouse.getFlag().getStackedCargo());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(COIN));
@@ -720,7 +773,7 @@ public class TestMint {
     }
 
     @Test
-    public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
+    public void testProductionOfOneBreadConsumesOneGoldAndOneFlour() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -2127,8 +2180,8 @@ public class TestMint {
         assertEquals(mint0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(mint0.getTypesOfMaterialNeeded().contains(COAL));
         assertTrue(mint0.getTypesOfMaterialNeeded().contains(GOLD));
-        assertEquals(mint0.getCanHoldAmount(COAL), 1);
-        assertEquals(mint0.getCanHoldAmount(GOLD), 1);
+        assertEquals(mint0.getCanHoldAmount(COAL), 6);
+        assertEquals(mint0.getCanHoldAmount(GOLD), 6);
 
         for (Material material : Material.values()) {
             if (material == COAL || material == GOLD) {

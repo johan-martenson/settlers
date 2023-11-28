@@ -87,6 +87,7 @@ public class Player {
     private final Collection<GameChangesList.NewAndOldBuilding> upgradedBuildings;
     private final Set<Message> removedMessages;
     private final Map<Class<? extends Building>, Integer> wheatAllocation;
+    private final Map<Class<? extends Building>, Integer> waterAllocation;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -103,6 +104,7 @@ public class Player {
         foodAllocation      = new HashMap<>();
         coalAllocation      = new HashMap<>();
         wheatAllocation     = new HashMap<>();
+        waterAllocation     = new HashMap<>();
         messages            = new ArrayList<>();
         gameViewMonitors    = new HashSet<>();
 
@@ -124,6 +126,12 @@ public class Player {
         wheatAllocation.put(DonkeyFarm.class, 1);
         wheatAllocation.put(PigFarm.class, 1);
         wheatAllocation.put(Brewery.class, 1);
+
+        /* Create the water quota and set it to equal distribution */
+        waterAllocation.put(Bakery.class, 1);
+        waterAllocation.put(DonkeyFarm.class, 1);
+        waterAllocation.put(PigFarm.class, 1);
+        waterAllocation.put(Brewery.class, 1);
 
         /* Set the initial transport priority */
         transportCategoryPriorities.addAll(Arrays.asList(TransportCategory.values()));
@@ -1640,5 +1648,13 @@ public class Player {
 
     public int getWheatQuota(Class<? extends Building> aClass) {
         return wheatAllocation.get(aClass);
+    }
+
+    public void setWaterQuota(Class<? extends Building> aClass, int amount) {
+        waterAllocation.put(aClass, amount);
+    }
+
+    public int getWaterQuota(Class<? extends Building> aClass) {
+        return waterAllocation.get(aClass);
     }
 }

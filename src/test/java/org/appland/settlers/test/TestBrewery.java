@@ -40,6 +40,59 @@ import static org.junit.Assert.*;
 public class TestBrewery {
 
     @Test
+    public void testBreweryCanHoldSixWheatBarsAndSixWater() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(6, 12);
+        var brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Connect the brewery with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, WATER, 20);
+        Utils.adjustInventoryTo(headquarter0, BREWER, 20);
+
+        /* Wait for the brewery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(brewery0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery0);
+
+        /* Stop production */
+        brewery0.stopProduction();
+
+        /* Wait for the brewery to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(brewery0, WHEAT, 6);
+        Utils.waitForBuildingToGetAmountOfMaterial(brewery0, WATER, 6);
+
+        /* Verify that the brewery doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(brewery0.needsMaterial(WHEAT));
+        assertFalse(brewery0.needsMaterial(WATER));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(brewery0.needsMaterial(WHEAT));
+            assertFalse(brewery0.needsMaterial(WATER));
+            assertEquals(brewery0.getAmount(WHEAT), 6);
+            assertEquals(brewery0.getAmount(WATER), 6);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testBreweryOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
@@ -1886,8 +1939,8 @@ public class TestBrewery {
         assertEquals(brewery0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(brewery0.getTypesOfMaterialNeeded().contains(WATER));
         assertTrue(brewery0.getTypesOfMaterialNeeded().contains(WHEAT));
-        assertEquals(brewery0.getCanHoldAmount(WATER), 1);
-        assertEquals(brewery0.getCanHoldAmount(WHEAT), 1);
+        assertEquals(brewery0.getCanHoldAmount(WATER), 6);
+        assertEquals(brewery0.getCanHoldAmount(WHEAT), 6);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {

@@ -19,7 +19,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  * @author johan
  */
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
-@Production(output = BEER, requiredGoods = {WHEAT, WATER})
+@Production(output = BEER, requiredGoods = {WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WATER, WATER, WATER, WATER, WATER, WATER})
 @RequiresWorker(workerType = BREWER)
 public class Brewery extends Building {
 

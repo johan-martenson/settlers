@@ -44,6 +44,66 @@ import static org.junit.Assert.*;
 public class TestCoalMine {
 
     @Test
+    public void testCoalMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(6, 12);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place coal mine */
+        var coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Connect the coal mine with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, FISH, 20);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 20);
+
+        /* Wait for the coal mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(coalMine0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine0);
+
+        /* Stop production */
+        coalMine0.stopProduction();
+
+        /* Wait for the coal mine to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(coalMine0, FISH, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(coalMine0, MEAT, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(coalMine0, BREAD, 2);
+
+        /* Verify that the coal mine doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(coalMine0.needsMaterial(FISH));
+        assertFalse(coalMine0.needsMaterial(MEAT));
+        assertFalse(coalMine0.needsMaterial(BREAD));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(coalMine0.needsMaterial(FISH));
+            assertFalse(coalMine0.needsMaterial(MEAT));
+            assertFalse(coalMine0.needsMaterial(BREAD));
+            assertEquals(coalMine0.getAmount(FISH), 2);
+            assertEquals(coalMine0.getAmount(MEAT), 2);
+            assertEquals(coalMine0.getAmount(BREAD), 2);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testCoalMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
@@ -685,6 +745,12 @@ public class TestCoalMine {
 
         /* Wait for the mint to get constructed */
         Utils.waitForBuildingToBeConstructed(mint);
+
+        /* Stop production */
+        mint.stopProduction();
+
+        /* Fill up the mint so there is only space for one more coal */
+        Utils.deliverCargos(mint, COAL, 5);
 
         /* Ensure that the mint only needs one more coal */
         assertEquals(mint.getCanHoldAmount(COAL) - mint.getAmount(COAL), 1);
@@ -2325,9 +2391,9 @@ public class TestCoalMine {
         assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(BREAD));
         assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(MEAT));
         assertTrue(coalMine0.getTypesOfMaterialNeeded().contains(FISH));
-        assertEquals(coalMine0.getCanHoldAmount(BREAD), 1);
-        assertEquals(coalMine0.getCanHoldAmount(MEAT), 1);
-        assertEquals(coalMine0.getCanHoldAmount(FISH), 1);
+        assertEquals(coalMine0.getCanHoldAmount(BREAD), 2);
+        assertEquals(coalMine0.getCanHoldAmount(MEAT), 2);
+        assertEquals(coalMine0.getCanHoldAmount(FISH), 2);
 
         for (Material material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {

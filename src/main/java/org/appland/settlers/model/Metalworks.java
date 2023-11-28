@@ -30,7 +30,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
         CRUCIBLE,
         TONGS,
         SCYTHE
-}, requiredGoods = {PLANK, IRON_BAR})
+}, requiredGoods = {PLANK, PLANK, PLANK, PLANK, PLANK, PLANK, IRON_BAR, IRON_BAR, IRON_BAR, IRON_BAR, IRON_BAR, IRON_BAR})
 @RequiresWorker(workerType = METALWORKER)
 public class Metalworks extends Building {
     public Metalworks(Player player0) {

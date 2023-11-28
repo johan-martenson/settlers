@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -36,6 +37,59 @@ import static org.junit.Assert.*;
  * @author johan
  */
 public class TestDonkeyFarm {
+
+    @Test
+    public void testDonkeyFarmCanHoldSixWheatBarsAndSixWater() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(6, 12);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Connect the donkey farm with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, WATER, 20);
+        Utils.adjustInventoryTo(headquarter0, BREWER, 20);
+
+        /* Wait for the donkey farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(donkeyFarm0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(donkeyFarm0);
+
+        /* Stop production */
+        donkeyFarm0.stopProduction();
+
+        /* Wait for the donkey farm to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(donkeyFarm0, WHEAT, 6);
+        Utils.waitForBuildingToGetAmountOfMaterial(donkeyFarm0, WATER, 6);
+
+        /* Verify that the donkey farm doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(donkeyFarm0.needsMaterial(WHEAT));
+        assertFalse(donkeyFarm0.needsMaterial(WATER));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(donkeyFarm0.needsMaterial(WHEAT));
+            assertFalse(donkeyFarm0.needsMaterial(WATER));
+            assertEquals(donkeyFarm0.getAmount(WHEAT), 6);
+            assertEquals(donkeyFarm0.getAmount(WATER), 6);
+
+            map.stepTime();
+        }
+    }
 
     @Test
     public void testDonkeyFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
@@ -2290,8 +2344,8 @@ public class TestDonkeyFarm {
         assertEquals(donkeyFarm0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(WATER));
         assertTrue(donkeyFarm0.getTypesOfMaterialNeeded().contains(WHEAT));
-        assertEquals(donkeyFarm0.getCanHoldAmount(WATER), 1);
-        assertEquals(donkeyFarm0.getCanHoldAmount(WHEAT), 1);
+        assertEquals(donkeyFarm0.getCanHoldAmount(WATER), 6);
+        assertEquals(donkeyFarm0.getCanHoldAmount(WHEAT), 6);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {

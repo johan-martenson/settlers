@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  * @author johan
  */
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
-@Production(requiredGoods = WHEAT, output = FLOUR)
+@Production(requiredGoods = {WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WHEAT}, output = FLOUR)
 @RequiresWorker(workerType = MILLER)
 public class Mill extends Building {
 

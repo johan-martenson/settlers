@@ -681,6 +681,12 @@ public class TestBakery {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
 
+        /* Fill up the gold mine so there is only space for one more bread */
+        Utils.deliverCargo(goldMine, BREAD);
+
+        /* Stop production */
+        goldMine.stopProduction();
+
         /* Wait for the flag on the road between the gold mine and the bakery to have a plank cargo */
         Utils.deliverCargos(bakery, WATER, FLOUR);
 
@@ -2000,8 +2006,8 @@ public class TestBakery {
         assertEquals(bakery0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(bakery0.getTypesOfMaterialNeeded().contains(WATER));
         assertTrue(bakery0.getTypesOfMaterialNeeded().contains(FLOUR));
-        assertEquals(bakery0.getCanHoldAmount(WATER), 1);
-        assertEquals(bakery0.getCanHoldAmount(FLOUR), 1);
+        assertEquals(bakery0.getCanHoldAmount(WATER), 6);
+        assertEquals(bakery0.getCanHoldAmount(FLOUR), 6);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == FLOUR) {

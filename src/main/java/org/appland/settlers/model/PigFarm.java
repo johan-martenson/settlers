@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Size.LARGE;
  * @author johan
  */
 @HouseSize(size = LARGE, material = {PLANK, PLANK, PLANK, STONE, STONE, STONE})
-@Production(output = PIG, requiredGoods = {WHEAT, WATER})
+@Production(output = PIG, requiredGoods = {WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WATER, WATER, WATER, WATER, WATER, WATER})
 @RequiresWorker(workerType = PIG_BREEDER)
 public class PigFarm extends Building {
 

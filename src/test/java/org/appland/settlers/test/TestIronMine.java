@@ -44,6 +44,66 @@ import static org.junit.Assert.*;
 public class TestIronMine {
 
     @Test
+    public void testIronMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(6, 12);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place iron mine */
+        var ironMine = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Connect the iron mine with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, FISH, 20);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 20);
+
+        /* Wait for the iron mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(ironMine);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironMine);
+
+        /* Stop production */
+        ironMine.stopProduction();
+
+        /* Wait for the iron mine to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(ironMine, FISH, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(ironMine, MEAT, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(ironMine, BREAD, 2);
+
+        /* Verify that the iron mine doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(ironMine.needsMaterial(FISH));
+        assertFalse(ironMine.needsMaterial(MEAT));
+        assertFalse(ironMine.needsMaterial(BREAD));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(ironMine.needsMaterial(FISH));
+            assertFalse(ironMine.needsMaterial(MEAT));
+            assertFalse(ironMine.needsMaterial(BREAD));
+            assertEquals(ironMine.getAmount(FISH), 2);
+            assertEquals(ironMine.getAmount(MEAT), 2);
+            assertEquals(ironMine.getAmount(BREAD), 2);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testIronMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
@@ -2246,9 +2306,9 @@ public class TestIronMine {
         assertTrue(ironMine0.getTypesOfMaterialNeeded().contains(BREAD));
         assertTrue(ironMine0.getTypesOfMaterialNeeded().contains(MEAT));
         assertTrue(ironMine0.getTypesOfMaterialNeeded().contains(FISH));
-        assertEquals(ironMine0.getCanHoldAmount(BREAD), 1);
-        assertEquals(ironMine0.getCanHoldAmount(MEAT), 1);
-        assertEquals(ironMine0.getCanHoldAmount(FISH), 1);
+        assertEquals(ironMine0.getCanHoldAmount(BREAD), 2);
+        assertEquals(ironMine0.getCanHoldAmount(MEAT), 2);
+        assertEquals(ironMine0.getCanHoldAmount(FISH), 2);
 
         for (Material material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {

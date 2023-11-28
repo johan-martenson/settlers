@@ -20,7 +20,7 @@ import static org.appland.settlers.model.Size.SMALL;
  */
 @HouseSize(size = SMALL, material = {PLANK, PLANK, PLANK, PLANK})
 @RequiresWorker(workerType = MINER)
-@Production(output = IRON, requiredGoods = {BREAD, FISH, MEAT})
+@Production(output = IRON, requiredGoods = {BREAD, BREAD, FISH, FISH, MEAT, MEAT})
 public class IronMine extends Building {
 
     public IronMine(Player player0) {

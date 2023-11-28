@@ -44,6 +44,66 @@ import static org.junit.Assert.*;
 public class TestGoldMine {
 
     @Test
+    public void testGoldMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mountain */
+        Point point1 = new Point(6, 12);
+        Utils.surroundPointWithMinableMountain(point1, map);
+
+        /* Place gold mine */
+        var goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Connect the gold mine with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
+
+        /* Make sure the headquarters has enough resources */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
+        Utils.adjustInventoryTo(headquarter0, FISH, 20);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 20);
+
+        /* Wait for the gold mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(goldMine0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine0);
+
+        /* Stop production */
+        goldMine0.stopProduction();
+
+        /* Wait for the gold mine to get six iron bars and six planks */
+        Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, FISH, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, MEAT, 2);
+        Utils.waitForBuildingToGetAmountOfMaterial(goldMine0, BREAD, 2);
+
+        /* Verify that the gold mine doesn't need any more resources and doesn't get any more deliveries */
+        assertFalse(goldMine0.needsMaterial(FISH));
+        assertFalse(goldMine0.needsMaterial(MEAT));
+        assertFalse(goldMine0.needsMaterial(BREAD));
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(goldMine0.needsMaterial(FISH));
+            assertFalse(goldMine0.needsMaterial(MEAT));
+            assertFalse(goldMine0.needsMaterial(BREAD));
+            assertEquals(goldMine0.getAmount(FISH), 2);
+            assertEquals(goldMine0.getAmount(MEAT), 2);
+            assertEquals(goldMine0.getAmount(BREAD), 2);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testGoldMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
@@ -492,7 +552,7 @@ public class TestGoldMine {
 
         Utils.waitForNonMilitaryBuildingsToGetPopulated(goldMine, mint);
 
-        /* Wait for the courier on the road between the mint and the coal mine hut to have a gold cargo */
+        /* Wait for the courier on the road between the mint and the gold mine hut to have a gold cargo */
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
         assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
@@ -603,6 +663,12 @@ public class TestGoldMine {
 
         /* Wait for the mint to get constructed */
         Utils.waitForBuildingToBeConstructed(mint);
+
+        /* Stop production */
+        mint.stopProduction();
+
+        /* Fill up the gold so there is only space for one more gold */
+        Utils.deliverCargos(mint, GOLD, 5);
 
         /* Ensure that the mint only needs one more gold */
         assertEquals(mint.getCanHoldAmount(GOLD) - mint.getAmount(GOLD), 1);
@@ -2238,9 +2304,9 @@ public class TestGoldMine {
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(BREAD));
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(MEAT));
         assertTrue(goldMine0.getTypesOfMaterialNeeded().contains(FISH));
-        assertEquals(goldMine0.getCanHoldAmount(BREAD), 1);
-        assertEquals(goldMine0.getCanHoldAmount(MEAT), 1);
-        assertEquals(goldMine0.getCanHoldAmount(FISH), 1);
+        assertEquals(goldMine0.getCanHoldAmount(BREAD), 2);
+        assertEquals(goldMine0.getCanHoldAmount(MEAT), 2);
+        assertEquals(goldMine0.getCanHoldAmount(FISH), 2);
 
         for (Material material : Material.values()) {
             if (material == BREAD || material == MEAT || material == FISH) {

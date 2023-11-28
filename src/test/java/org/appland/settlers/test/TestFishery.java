@@ -892,6 +892,12 @@ public class TestFishery {
         /* Construct the gold mine */
         Utils.constructHouse(goldMine);
 
+        /* Fill up the gold mine so there is only space for one more fish */
+        Utils.deliverCargo(goldMine, FISH);
+
+        /* Stop production */
+        goldMine.stopProduction();
+
         /* Ensure the gold mine can hold one (and only one) more fish */
         assertEquals(goldMine.getCanHoldAmount(FISH) - goldMine.getAmount(FISH), 1);
 

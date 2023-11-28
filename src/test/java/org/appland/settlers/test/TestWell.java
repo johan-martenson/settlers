@@ -617,6 +617,12 @@ public class TestWell {
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(well);
 
+        /* Stop production */
+        bakery.stopProduction();
+
+        /* Fill up the bakery so there is only space for one more wheat */
+        Utils.deliverCargos(bakery, WATER, 5);
+
         /* Wait for the flag on the road between the bakery and the well to have a water cargo */
         Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
 

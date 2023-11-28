@@ -654,6 +654,12 @@ public class TestSlaughterHouse {
         /* Connect the gold mine to the headquarters */
         Road road2 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
+        /* Fill up the gold mine so there is only space for one more meat */
+        Utils.deliverCargo(goldMine, MEAT);
+
+        /* Stop production */
+        goldMine.stopProduction();
+
         /* Place the slaughter house */
         Point point1 = new Point(14, 4);
         SlaughterHouse slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point1);
@@ -683,7 +689,6 @@ public class TestSlaughterHouse {
         /* Verify that no stone is delivered from the headquarters */
         Utils.adjustInventoryTo(headquarter, MEAT, 1);
 
-        assertEquals(goldMine.getAmount(MEAT), 0);
         assertEquals(goldMine.getCanHoldAmount(MEAT) - goldMine.getAmount(MEAT), 1);
         assertFalse(goldMine.needsMaterial(MEAT));
 

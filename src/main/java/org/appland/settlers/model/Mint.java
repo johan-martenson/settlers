@@ -19,7 +19,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  * @author johan
  */
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
-@Production(requiredGoods = {GOLD, COAL}, output = COIN)
+@Production(requiredGoods = {GOLD, GOLD, GOLD, GOLD, GOLD, GOLD, COAL, COAL, COAL, COAL, COAL, COAL}, output = COIN)
 @RequiresWorker(workerType = MINTER)
 public class Mint extends Building {
 

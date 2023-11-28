@@ -2276,8 +2276,8 @@ public class TestPigFarm {
         assertEquals(pigFarm0.getTypesOfMaterialNeeded().size(), 2);
         assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(WATER));
         assertTrue(pigFarm0.getTypesOfMaterialNeeded().contains(WHEAT));
-        assertEquals(pigFarm0.getCanHoldAmount(WATER), 1);
-        assertEquals(pigFarm0.getCanHoldAmount(WHEAT), 1);
+        assertEquals(pigFarm0.getCanHoldAmount(WATER), 6);
+        assertEquals(pigFarm0.getCanHoldAmount(WHEAT), 6);
 
         for (Material material : Material.values()) {
             if (material == WATER || material == WHEAT) {

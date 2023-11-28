@@ -924,6 +924,9 @@ public class TestHunterHut {
         /* Wait for the gold mine to get constructed */
         Utils.waitForBuildingToBeConstructed(goldMine);
 
+        /* Fill up the gold mine so there is only space for one more meat */
+        Utils.deliverCargo(goldMine, MEAT);
+
         /* Stop production in the gold mine */
         goldMine.stopProduction();
 
@@ -950,8 +953,6 @@ public class TestHunterHut {
         /* Verify that no stone is delivered from the headquarters */
         Utils.adjustInventoryTo(headquarter, MEAT, 1);
 
-        assertEquals(goldMine.getAmount(MEAT), 0);
-        assertEquals(goldMine.getCanHoldAmount(MEAT), 1);
         assertEquals(goldMine.getCanHoldAmount(MEAT) - goldMine.getAmount(MEAT), 1);
         assertFalse(goldMine.needsMaterial(MEAT));
 

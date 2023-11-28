@@ -27,6 +27,7 @@ public class StorageWorker extends Worker {
     private final Map<Class<? extends Building>, Integer> assignedFood;
     private final Map<Class<? extends Building>, Integer> assignedCoal;
     private final Map<Class<? extends Building>, Integer> assignedWheat;
+    private final Map<Class<? extends Building>, Integer> assignedWater;
 
     private State state;
     private Storehouse ownStorehouse;
@@ -73,6 +74,14 @@ public class StorageWorker extends Worker {
         assignedWheat.put(DonkeyFarm.class, 0);
         assignedWheat.put(PigFarm.class, 0);
         assignedWheat.put(Brewery.class, 0);
+
+        /* Set the initial assignments of water to zero */
+        assignedWater = new HashMap<>();
+
+        assignedWater.put(Bakery.class, 0);
+        assignedWater.put(DonkeyFarm.class, 0);
+        assignedWater.put(PigFarm.class, 0);
+        assignedWater.put(Brewery.class, 0);
     }
 
     // FIXME: HOTSPOT
@@ -326,6 +335,22 @@ public class StorageWorker extends Worker {
             }
 
             return true;
+        } else if (material == WATER) {
+
+            /* Reset count if all type of buildings have reached their quota */
+            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+
+            if ((!needyConsumerExists(reachableBuildings, Bakery.class, WATER) || overQuota(Bakery.class, WATER)) &&
+                (!needyConsumerExists(reachableBuildings, DonkeyFarm.class, WATER) || overQuota(DonkeyFarm.class, WATER)) &&
+                (!needyConsumerExists(reachableBuildings, PigFarm.class, WATER) || overQuota(PigFarm.class, WATER)) &&
+                (!needyConsumerExists(reachableBuildings, Brewery.class, WATER) || overQuota(Brewery.class, WATER))) {
+                assignedWater.put(Bakery.class, 0);
+                assignedWater.put(DonkeyFarm.class, 0);
+                assignedWater.put(PigFarm.class, 0);
+                assignedWater.put(Brewery.class, 0);
+            }
+
+            return true;
         }
 
         return false;
@@ -344,6 +369,9 @@ public class StorageWorker extends Worker {
         } else if (material == WHEAT) {
             int amount = assignedWheat.get(building.getClass());
             assignedWheat.put(building.getClass(), amount + 1);
+        } else if (material == WATER) {
+            int amount = assignedWater.get(building.getClass());
+            assignedWater.put(building.getClass(), amount + 1);
         }
     }
 
@@ -368,6 +396,13 @@ public class StorageWorker extends Worker {
             int quota = player.getWheatQuota(building.getClass());
 
             return assignedWheat.get(building.getClass()) < quota;
+        }
+
+        /* Handle quota for water */
+        if (material == WATER) {
+            int quota = player.getWaterQuota(building.getClass());
+
+            return assignedWater.get(building.getClass()) < quota;
         }
 
         /* All other materials are without quota */
@@ -400,6 +435,15 @@ public class StorageWorker extends Worker {
                 buildingType.equals(PigFarm.class) ||
                 buildingType.equals(Brewery.class))) {
             return assignedWheat.get(buildingType) >= player.getWheatQuota(buildingType);
+        }
+
+        /* Handle water quota for consumers */
+        if (material == WATER &&
+                (buildingType.equals(Bakery.class) ||
+                buildingType.equals(DonkeyFarm.class) ||
+                buildingType.equals(PigFarm.class) ||
+                buildingType.equals(Brewery.class))) {
+            return assignedWater.get(buildingType) >= player.getWaterQuota((buildingType));
         }
 
         /* All other buildings have no quota */
