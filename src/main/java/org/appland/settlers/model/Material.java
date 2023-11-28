@@ -210,4 +210,8 @@ public enum Material {
             default -> throw new InvalidGameLogicException("Can't translate " + this + " to rank");
         };
     }
+
+    public boolean isFood() {
+        return this == FISH || this == BREAD || this == MEAT;
+    }
 }

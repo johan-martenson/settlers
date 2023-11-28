@@ -27,20 +27,20 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
-    private GameMap            map;
-    private Color              color;
-    private Nation             nation;
-    private String             name;
-    private boolean            treeConservationProgramActive;
-    private boolean            treeConservationProgramEnabled;
+    private GameMap map;
+    private Color   color;
+    private Nation  nation;
+    private String  name;
+    private boolean treeConservationProgramActive;
+    private boolean treeConservationProgramEnabled;
 
     private final List<BorderChange> changedBorders;
     private final List<Building> buildings;
     private final Set<Point> discoveredLand;
     private final List<Material> transportPriorities;
     private final Set<Point> ownedLand;
-    private final Map<Class<? extends Building>, Integer> foodQuota;
-    private final Map<Class<? extends Building>, Integer> coalQuota;
+    private final Map<Class<? extends Building>, Integer> foodAllocation;
+    private final Map<Class<? extends Building>, Integer> coalAllocation;
     private final Map<Material, Integer> producedMaterials;
     private final List<Message> messages;
     private final Set<PlayerGameViewMonitor> gameViewMonitors;
@@ -86,6 +86,7 @@ public class Player {
     private final Set<Object> detailedMonitoring;
     private final Collection<GameChangesList.NewAndOldBuilding> upgradedBuildings;
     private final Set<Message> removedMessages;
+    private final Map<Class<? extends Building>, Integer> wheatAllocation;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -99,23 +100,30 @@ public class Player {
         ownedLand           = new HashSet<>();
         producedMaterials   = new EnumMap<>(Material.class);
         detailedMonitoring  = new HashSet<>();
-        foodQuota           = new HashMap<>();
-        coalQuota           = new HashMap<>();
+        foodAllocation      = new HashMap<>();
+        coalAllocation      = new HashMap<>();
+        wheatAllocation     = new HashMap<>();
         messages            = new ArrayList<>();
         gameViewMonitors    = new HashSet<>();
 
         transportCategoryPriorities = new ArrayList<>();
 
         /* Create the food quota and set it to equal distribution */
-        foodQuota.put(GoldMine.class, 1);
-        foodQuota.put(IronMine.class, 1);
-        foodQuota.put(CoalMine.class, 1);
-        foodQuota.put(GraniteMine.class, 1);
+        foodAllocation.put(GoldMine.class, 1);
+        foodAllocation.put(IronMine.class, 1);
+        foodAllocation.put(CoalMine.class, 1);
+        foodAllocation.put(GraniteMine.class, 1);
 
         /* Create the coal quota and set it to equal distribution */
-        coalQuota.put(IronSmelter.class, 1);
-        coalQuota.put(Mint.class, 1);
-        coalQuota.put(Armory.class, 1);
+        coalAllocation.put(IronSmelter.class, 1);
+        coalAllocation.put(Mint.class, 1);
+        coalAllocation.put(Armory.class, 1);
+
+        /* Create the wheat quota and set it to equal distribution */
+        wheatAllocation.put(Mill.class, 1);
+        wheatAllocation.put(DonkeyFarm.class, 1);
+        wheatAllocation.put(PigFarm.class, 1);
+        wheatAllocation.put(Brewery.class, 1);
 
         /* Set the initial transport priority */
         transportCategoryPriorities.addAll(Arrays.asList(TransportCategory.values()));
@@ -517,20 +525,20 @@ public class Player {
         return result;
     }
 
-    int getFoodQuota(Class<? extends Building> aClass) {
-        return foodQuota.get(aClass);
+    public int getFoodQuota(Class<? extends Building> aClass) {
+        return foodAllocation.get(aClass);
     }
 
     public void setFoodQuota(Class<? extends Building> aClass, int i) {
-        foodQuota.put(aClass, i);
+        foodAllocation.put(aClass, i);
     }
 
     public void setCoalQuota(Class<? extends Building> aClass, int i) {
-        coalQuota.put(aClass, i);
+        coalAllocation.put(aClass, i);
     }
 
-    int getCoalQuota(Class<? extends Building> aClass) {
-        return coalQuota.get(aClass);
+    public int getCoalQuota(Class<? extends Building> aClass) {
+        return coalAllocation.get(aClass);
     }
 
     public GameMap getMap() {
@@ -1624,5 +1632,13 @@ public class Player {
 
     public void addDetailedMonitoring(Flag flag) {
         detailedMonitoring.add(flag);
+    }
+
+    public void setWheatQuota(Class<? extends Building> aClass, int amount) {
+        wheatAllocation.put(aClass, amount);
+    }
+
+    public int getWheatQuota(Class<? extends Building> aClass) {
+        return wheatAllocation.get(aClass);
     }
 }

@@ -47,6 +47,96 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_WHEAT_QUOTAS: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("donkeyFarm", player.getWheatQuota(DonkeyFarm.class));
+                jsonResponse.put("pigFarm", player.getWheatQuota(PigFarm.class));
+                jsonResponse.put("mill", player.getWheatQuota(Mill.class));
+                jsonResponse.put("brewery", player.getWheatQuota(Brewery.class));
+
+                jsonResponse.put("requestId", requestId);
+
+                System.out.println(jsonResponse.toJSONString());
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case SET_WHEAT_QUOTAS: {
+                Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
+                Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
+                Long millAmount = (Long) jsonBody.get("mill");
+                Long breweryAmount = (Long) jsonBody.get("brewery");
+
+                player.setWheatQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
+                player.setWheatQuota(PigFarm.class, pigFarmAmount.intValue());
+                player.setWheatQuota(Mill.class, millAmount.intValue());
+                player.setWheatQuota(Brewery.class, breweryAmount.intValue());
+            }
+            break;
+
+            case GET_FOOD_QUOTAS: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("ironMine", player.getFoodQuota(IronMine.class));
+                jsonResponse.put("coalMine", player.getFoodQuota(CoalMine.class));
+                jsonResponse.put("goldMine", player.getFoodQuota(GoldMine.class));
+                jsonResponse.put("graniteMine", player.getFoodQuota(GraniteMine.class));
+
+                jsonResponse.put("requestId", requestId);
+
+                System.out.println(jsonResponse.toJSONString());
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case GET_COAL_QUOTAS: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("mint", player.getCoalQuota(Mint.class));
+                jsonResponse.put("armory", player.getCoalQuota(Armory.class));
+                jsonResponse.put("ironSmelter", player.getCoalQuota(IronSmelter.class));
+
+                jsonResponse.put("requestId", requestId);
+
+                System.out.println(jsonResponse.toJSONString());
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case SET_FOOD_QUOTAS:
+                Long ironMineAmount = (Long) jsonBody.get("ironMine");
+                Long coalMineAmount = (Long) jsonBody.get("coalMine");
+                Long goldMineAmount = (Long) jsonBody.get("goldMine");
+                Long graniteMineAmount = (Long) jsonBody.get("graniteMine");
+
+                player.setCoalQuota(IronMine.class, ironMineAmount.intValue());
+                player.setCoalQuota(CoalMine.class, coalMineAmount.intValue());
+                player.setCoalQuota(GoldMine.class, goldMineAmount.intValue());
+                player.setCoalQuota(GraniteMine.class, graniteMineAmount.intValue());
+
+                break;
+
+            case SET_COAL_QUOTAS:
+                Long mintAmount = (Long) jsonBody.get("mint");
+                Long armoryAmount = (Long) jsonBody.get("armory");
+                Long ironSmelterAmount = (Long) jsonBody.get("ironSmelter");
+
+                player.setCoalQuota(Mint.class, mintAmount.intValue());
+                player.setCoalQuota(Armory.class, armoryAmount.intValue());
+                player.setCoalQuota(IronSmelter.class, ironSmelterAmount.intValue());
+
+                break;
+
             case REMOVE_MESSAGE:
                 String messageId = (String) jsonBody.get("messageId");
 
@@ -110,8 +200,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 break;
 
-            case INFORMATION_ON_POINTS:
-
+            case INFORMATION_ON_POINTS: {
                 JSONObject jsonResponse = new JSONObject();
                 JSONArray jsonPointsInformation = new JSONArray();
 
@@ -128,7 +217,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
-
+            }
                 break;
 
             case FULL_SYNC: {
