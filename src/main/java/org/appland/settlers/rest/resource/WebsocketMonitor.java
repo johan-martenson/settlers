@@ -47,6 +47,31 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case SET_IRON_BAR_QUOTAS: {
+                Long armoryAmount = (Long) jsonBody.get("armory");
+                Long metalworksAmount = (Long) jsonBody.get("metalworks");
+
+                player.setIronBarQuota(Armory.class, armoryAmount.intValue());
+                player.setIronBarQuota(Metalworks.class, metalworksAmount.intValue());
+            }
+            break;
+
+            case GET_IRON_BAR_QUOTAS: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("armory", player.getIronBarQuota(Armory.class));
+                jsonResponse.put("metalworks", player.getIronBarQuota(Metalworks.class));
+
+                jsonResponse.put("requestId", requestId);
+
+                System.out.println(jsonResponse.toJSONString());
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
             case GET_WATER_QUOTAS: {
                 JSONObject jsonResponse = new JSONObject();
 

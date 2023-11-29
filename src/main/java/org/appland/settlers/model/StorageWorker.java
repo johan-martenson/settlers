@@ -32,6 +32,7 @@ public class StorageWorker extends Worker {
     private State state;
     private Storehouse ownStorehouse;
     private Cargo cargoToReturn;
+    private final Map<Class<? extends Building>, Integer> assignedIronBars;
 
     private enum State {
         WALKING_TO_TARGET,
@@ -82,6 +83,12 @@ public class StorageWorker extends Worker {
         assignedWater.put(DonkeyFarm.class, 0);
         assignedWater.put(PigFarm.class, 0);
         assignedWater.put(Brewery.class, 0);
+
+        /* Set the initial assignments of iron bars to zero */
+        assignedIronBars = new HashMap<>();
+
+        assignedIronBars.put(Armory.class, 0);
+        assignedIronBars.put(Metalworks.class, 0);
     }
 
     // FIXME: HOTSPOT
@@ -351,6 +358,18 @@ public class StorageWorker extends Worker {
             }
 
             return true;
+        } else if (material == IRON_BAR) {
+
+            /* Reset count if all type of buildings have reached their quota */
+            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
+
+            if ((!needyConsumerExists(reachableBuildings, Armory.class, IRON_BAR) || overQuota(Armory.class, IRON_BAR)) &&
+                (!needyConsumerExists(reachableBuildings, Metalworks.class, IRON_BAR) || overQuota(Metalworks.class, IRON_BAR))) {
+                assignedIronBars.put(Armory.class, 0);
+                assignedIronBars.put(Metalworks.class, 0);
+            }
+
+            return true;
         }
 
         return false;
@@ -372,6 +391,9 @@ public class StorageWorker extends Worker {
         } else if (material == WATER) {
             int amount = assignedWater.get(building.getClass());
             assignedWater.put(building.getClass(), amount + 1);
+        } else if (material == IRON_BAR) {
+            int amount = assignedIronBars.get(building.getClass());
+            assignedIronBars.put(building.getClass(), amount + 1);
         }
     }
 
@@ -405,6 +427,13 @@ public class StorageWorker extends Worker {
             return assignedWater.get(building.getClass()) < quota;
         }
 
+        /* Handle quota for iron bars */
+        if (material == IRON_BAR) {
+            int quota = player.getIronBarQuota(building.getClass());
+
+            return assignedIronBars.get(building.getClass()) < quota;
+        }
+
         /* All other materials are without quota */
         return true;
     }
@@ -413,37 +442,44 @@ public class StorageWorker extends Worker {
 
         /* Handle food quota for mines */
         if (material.isFood() &&
-                (buildingType.equals(GoldMine.class) ||
-                buildingType.equals(IronMine.class) ||
-                buildingType.equals(CoalMine.class) ||
-                buildingType.equals(GraniteMine.class))) {
+            (buildingType.equals(GoldMine.class) ||
+            buildingType.equals(IronMine.class) ||
+            buildingType.equals(CoalMine.class) ||
+            buildingType.equals(GraniteMine.class))) {
             return assignedFood.get(buildingType) >= player.getFoodQuota(buildingType);
         }
 
         /* Handle coal quota for coal consumers */
         if (material == COAL &&
-                (buildingType.equals(IronSmelter.class) ||
-                buildingType.equals(Mint.class) ||
-                buildingType.equals(Armory.class))) {
+            (buildingType.equals(IronSmelter.class) ||
+            buildingType.equals(Mint.class) ||
+            buildingType.equals(Armory.class))) {
             return assignedCoal.get(buildingType) >= player.getCoalQuota(buildingType);
         }
 
         /* Handle wheat quota for wheat consumers */
         if (material == WHEAT &&
-                (buildingType.equals(Mill.class) ||
-                buildingType.equals(DonkeyFarm.class) ||
-                buildingType.equals(PigFarm.class) ||
-                buildingType.equals(Brewery.class))) {
+            (buildingType.equals(Mill.class) ||
+            buildingType.equals(DonkeyFarm.class) ||
+            buildingType.equals(PigFarm.class) ||
+            buildingType.equals(Brewery.class))) {
             return assignedWheat.get(buildingType) >= player.getWheatQuota(buildingType);
         }
 
         /* Handle water quota for consumers */
         if (material == WATER &&
-                (buildingType.equals(Bakery.class) ||
-                buildingType.equals(DonkeyFarm.class) ||
-                buildingType.equals(PigFarm.class) ||
-                buildingType.equals(Brewery.class))) {
+            (buildingType.equals(Bakery.class) ||
+            buildingType.equals(DonkeyFarm.class) ||
+            buildingType.equals(PigFarm.class) ||
+            buildingType.equals(Brewery.class))) {
             return assignedWater.get(buildingType) >= player.getWaterQuota((buildingType));
+        }
+
+        /* Handle iron bar quota for consumers */
+        if (material == IRON_BAR &&
+            (buildingType.equals(Armory.class) ||
+            buildingType.equals(Metalworks.class))) {
+            return assignedIronBars.get(buildingType) >= player.getIronBarQuota(buildingType);
         }
 
         /* All other buildings have no quota */

@@ -88,6 +88,7 @@ public class Player {
     private final Set<Message> removedMessages;
     private final Map<Class<? extends Building>, Integer> wheatAllocation;
     private final Map<Class<? extends Building>, Integer> waterAllocation;
+    private final Map<Class<? extends Building>, Integer> ironBarAllocation;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -105,6 +106,7 @@ public class Player {
         coalAllocation      = new HashMap<>();
         wheatAllocation     = new HashMap<>();
         waterAllocation     = new HashMap<>();
+        ironBarAllocation   = new HashMap<>();
         messages            = new ArrayList<>();
         gameViewMonitors    = new HashSet<>();
 
@@ -132,6 +134,10 @@ public class Player {
         waterAllocation.put(DonkeyFarm.class, 1);
         waterAllocation.put(PigFarm.class, 1);
         waterAllocation.put(Brewery.class, 1);
+
+        /* Create the iron bar quota and set it to equal distribution */
+        ironBarAllocation.put(Armory.class, 1);
+        ironBarAllocation.put(Metalworks.class, 1);
 
         /* Set the initial transport priority */
         transportCategoryPriorities.addAll(Arrays.asList(TransportCategory.values()));
@@ -1656,5 +1662,13 @@ public class Player {
 
     public int getWaterQuota(Class<? extends Building> aClass) {
         return waterAllocation.get(aClass);
+    }
+
+    public void setIronBarQuota(Class<? extends Building> buildingClass, int amount) {
+        ironBarAllocation.put(buildingClass, amount);
+    }
+
+    public int getIronBarQuota(Class<? extends Building> buildingClass) {
+        return ironBarAllocation.get(buildingClass);
     }
 }
