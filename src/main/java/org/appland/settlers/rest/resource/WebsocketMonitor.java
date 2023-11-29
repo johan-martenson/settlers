@@ -47,6 +47,24 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_WATER_QUOTAS: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("donkeyFarm", player.getWaterQuota(DonkeyFarm.class));
+                jsonResponse.put("pigFarm", player.getWaterQuota(PigFarm.class));
+                jsonResponse.put("bakery", player.getWaterQuota(Bakery.class));
+                jsonResponse.put("brewery", player.getWaterQuota(Brewery.class));
+
+                jsonResponse.put("requestId", requestId);
+
+                System.out.println(jsonResponse.toJSONString());
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
             case GET_WHEAT_QUOTAS: {
                 JSONObject jsonResponse = new JSONObject();
 
@@ -62,6 +80,19 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 System.out.println(jsonResponse.toJSONString());
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case SET_WATER_QUOTAS: {
+                Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
+                Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
+                Long bakeryAmount = (Long) jsonBody.get("bakery");
+                Long breweryAmount = (Long) jsonBody.get("brewery");
+
+                player.setWaterQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
+                player.setWaterQuota(PigFarm.class, pigFarmAmount.intValue());
+                player.setWaterQuota(Bakery.class, bakeryAmount.intValue());
+                player.setWaterQuota(Brewery.class, breweryAmount.intValue());
             }
             break;
 
