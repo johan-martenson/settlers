@@ -78,4 +78,12 @@ class Utils {
     public static boolean isEven(int number) {
         return number % 2 == 0;
     }
+
+    public static String shortAsHex(short s) {
+        Short sh = s;
+        String intHexString = Integer.toHexString(sh.intValue());
+        String shortHexString = intHexString.substring(4);
+
+        return shortHexString;
+    }
 }

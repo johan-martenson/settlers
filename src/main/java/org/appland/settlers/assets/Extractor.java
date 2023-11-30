@@ -1,6 +1,21 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.assets.collectors.*;
+import org.appland.settlers.assets.collectors.AnimalImageCollection;
+import org.appland.settlers.assets.collectors.BorderImageCollector;
+import org.appland.settlers.assets.collectors.BuildingsImageCollection;
+import org.appland.settlers.assets.collectors.CargoImageCollection;
+import org.appland.settlers.assets.collectors.CropImageCollection;
+import org.appland.settlers.assets.collectors.DecorativeImageCollection;
+import org.appland.settlers.assets.collectors.FireImageCollection;
+import org.appland.settlers.assets.collectors.FlagImageCollection;
+import org.appland.settlers.assets.collectors.InventoryImageCollection;
+import org.appland.settlers.assets.collectors.RoadBuildingImageCollection;
+import org.appland.settlers.assets.collectors.ShipImageCollection;
+import org.appland.settlers.assets.collectors.SignImageCollection;
+import org.appland.settlers.assets.collectors.StonesImageCollection;
+import org.appland.settlers.assets.collectors.TreeImageCollection;
+import org.appland.settlers.assets.collectors.UIElementsImageCollection;
+import org.appland.settlers.assets.collectors.WorkerImageCollection;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
@@ -42,25 +57,13 @@ import java.util.Map.Entry;
 
 import static org.appland.settlers.assets.BodyType.FAT;
 import static org.appland.settlers.assets.BodyType.THIN;
-import static org.appland.settlers.assets.CompassDirection.EAST;
-import static org.appland.settlers.assets.CompassDirection.NORTH_EAST;
-import static org.appland.settlers.assets.CompassDirection.NORTH_WEST;
-import static org.appland.settlers.assets.CompassDirection.SOUTH_EAST;
-import static org.appland.settlers.assets.CompassDirection.SOUTH_WEST;
-import static org.appland.settlers.assets.CompassDirection.WEST;
-import static org.appland.settlers.assets.Nation.AFRICANS;
-import static org.appland.settlers.assets.Nation.JAPANESE;
-import static org.appland.settlers.assets.Nation.ROMANS;
-import static org.appland.settlers.assets.Nation.VIKINGS;
+import static org.appland.settlers.assets.CompassDirection.*;
+import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
-import static org.appland.settlers.model.WorkerAction.JUMP_SKIP_ROPE;
-import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
-import static org.appland.settlers.model.WorkerAction.SIT_DOWN;
-import static org.appland.settlers.model.WorkerAction.TOUCH_NOSE;
+import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.model.StoneType.STONE_1;
+import static org.appland.settlers.model.StoneType.STONE_2;
+import static org.appland.settlers.model.WorkerAction.*;
 
 public class Extractor {
 
@@ -989,31 +992,31 @@ public class Extractor {
         /* Extract the stones */
         StonesImageCollection stonesImageCollection = new StonesImageCollection();
 
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_MORE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_MORE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MIDDLE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MIDDLE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_ALMOST_FULL));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_ALMOST_FULL_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_1, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_FULL));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_1, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_FULL_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_MORE));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_LITTLE_MORE_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MIDDLE));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_MIDDLE_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_ALMOST_FULL));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_ALMOST_FULL_SHADOW));
+        stonesImageCollection.addImage(STONE_1, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_FULL));
+        stonesImageCollection.addShadowImage(STONE_1, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_1_FULL_SHADOW));
 
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_MORE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_MORE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MIDDLE));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MIDDLE_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_ALMOST_FULL));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_ALMOST_FULL_SHADOW));
-        stonesImageCollection.addImage(StoneType.TYPE_2, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_FULL));
-        stonesImageCollection.addShadowImage(StoneType.TYPE_2, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_FULL_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.MINI, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.LITTLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_MORE));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.LITTLE_MORE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_LITTLE_MORE_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MIDDLE));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.MIDDLE, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_MIDDLE_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_ALMOST_FULL));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.ALMOST_FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_ALMOST_FULL_SHADOW));
+        stonesImageCollection.addImage(STONE_2, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_FULL));
+        stonesImageCollection.addShadowImage(STONE_2, StoneAmount.FULL, getImageFromResourceLocation(mapBobsLst, MapBobsLst.STONE_TYPE_2_FULL_SHADOW));
 
         stonesImageCollection.writeImageAtlas(toDir, defaultPalette);
 

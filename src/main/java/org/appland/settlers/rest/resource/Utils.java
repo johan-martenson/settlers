@@ -564,6 +564,8 @@ class Utils {
     JSONObject stoneToJson(Stone stone) {
         JSONObject jsonStone = pointToJson(stone.getPosition());
 
+        jsonStone.put("id", idManager.getId(stone));
+        jsonStone.put("type", stone.getStoneType().name().toUpperCase());
         jsonStone.put("amount", stone.getAmount());
 
         return jsonStone;
@@ -1373,7 +1375,7 @@ class Utils {
         JSONArray jsonRemovedStones = new JSONArray();
 
         for (Stone stone : removedStones) {
-            jsonRemovedStones.add(pointToJson(stone.getPosition()));
+            jsonRemovedStones.add(idManager.getId(removedStones));
         }
 
         return jsonRemovedStones;
