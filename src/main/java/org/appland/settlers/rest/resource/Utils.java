@@ -566,7 +566,7 @@ class Utils {
 
         jsonStone.put("id", idManager.getId(stone));
         jsonStone.put("type", stone.getStoneType().name().toUpperCase());
-        jsonStone.put("amount", stone.getAmount());
+        jsonStone.put("amount", stone.getStoneAmount().name().toUpperCase());
 
         return jsonStone;
     }

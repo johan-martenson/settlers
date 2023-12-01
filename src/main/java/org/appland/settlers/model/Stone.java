@@ -6,6 +6,8 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.assets.StoneAmount;
+
 /**
  *
  * @author johan
@@ -45,5 +47,17 @@ public class Stone {
 
     public StoneType getStoneType() {
         return stoneType;
+    }
+
+    public StoneAmount getStoneAmount() {
+        return switch(amount) {
+            case 1 -> StoneAmount.MINI;
+            case 2 -> StoneAmount.LITTLE;
+            case 3 -> StoneAmount.LITTLE_MORE;
+            case 4 -> StoneAmount.MIDDLE;
+            case 5 -> StoneAmount.ALMOST_FULL;
+            case 6 -> StoneAmount.FULL;
+            default -> throw new InvalidGameLogicException("Invalid stone amount: " + amount);
+        };
     }
 }

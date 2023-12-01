@@ -157,6 +157,10 @@ class MapFilePoint {
                 default:
                     throw new RuntimeException("Unknown object type value: " + type);
             }
+        } else if (isTerrainObject) {
+            System.out.println("We ended up ignoring a terrain object");
+
+            System.exit(1);
         }
     }
 
