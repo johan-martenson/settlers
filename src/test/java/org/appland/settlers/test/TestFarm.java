@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -179,7 +180,7 @@ public class TestFarm {
 
         /* Place crop */
         Point point0 = new Point(3, 3);
-        Crop crop = map.placeCrop(point0);
+        Crop crop = map.placeCrop(point0, CropType.TYPE_1);
 
         assertNotNull(crop);
         assertTrue(map.isCropAtPoint(point0));
@@ -196,7 +197,7 @@ public class TestFarm {
 
         /* Place crop */
         Point point0 = new Point(3, 3);
-        Crop crop = map.placeCrop(point0);
+        Crop crop = map.placeCrop(point0, CropType.TYPE_1);
 
         assertEquals(crop.getGrowthState(), JUST_PLANTED);
 
@@ -619,7 +620,7 @@ public class TestFarm {
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight());
+        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
 
         /* Finish construction of the farm */
         Utils.constructHouse(farm);
@@ -754,7 +755,7 @@ public class TestFarm {
         Utils.constructHouse(farm);
 
         /* Wait for the crop to grow */
-        Crop crop = map.placeCrop(point3.upRight().upRight());
+        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
         /* Assign a farmer to the farm */
@@ -849,7 +850,7 @@ public class TestFarm {
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight());
+        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
 
         /* Construct the farm */
         Utils.constructHouse(farm);
@@ -901,7 +902,7 @@ public class TestFarm {
 
         /*      ... place crops  */
         for (Point point : possibleSpotsToPlant) {
-            crops.add(map.placeCrop(point));
+            crops.add(map.placeCrop(point, CropType.TYPE_1));
         }
 
         /*      ... harvest crops  */
@@ -970,13 +971,13 @@ public class TestFarm {
         Point point0 = new Point(5, 5);
 
         /* Place a crop */
-        Crop crop = map.placeCrop(point0);
+        Crop crop = map.placeCrop(point0, CropType.TYPE_1);
 
         /* Harvest the crop */
         crop.harvest();
 
         /* Verify that it's possible to place a new crop on the harvested crop */
-        Crop crop1 = map.placeCrop(point0);
+        Crop crop1 = map.placeCrop(point0, CropType.TYPE_1);
 
         assertTrue(map.isCropAtPoint(point0));
         assertEquals(map.getCropAtPoint(point0), crop1);
@@ -994,7 +995,7 @@ public class TestFarm {
         Point point0 = new Point(5, 5);
 
         /* Place a crop */
-        Crop crop = map.placeCrop(point0);
+        Crop crop = map.placeCrop(point0, CropType.TYPE_1);
 
         /* Harvest the crop */
         crop.harvest();
@@ -1023,11 +1024,11 @@ public class TestFarm {
 
         /* Place crop */
         Point point0 = new Point(5, 5);
-        Crop crop = map.placeCrop(point0);
+        Crop crop = map.placeCrop(point0, CropType.TYPE_1);
 
         /* Verify that it's not possible to place a second crop at the same place */
         try {
-            map.placeCrop(point0);
+            map.placeCrop(point0, CropType.TYPE_1);
 
             fail();
         } catch (Exception e) {}
@@ -1557,7 +1558,7 @@ public class TestFarm {
 
         /* Place a crop */
         Point point1 = new Point(10, 10);
-        Crop crop = map.placeCrop(point1);
+        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
 
         /* Verify that it's not possible to place a building on the growing crop */
         try {
@@ -1584,7 +1585,7 @@ public class TestFarm {
 
         /* Place a crop */
         Point point1 = new Point(10, 10);
-        Crop crop = map.placeCrop(point1);
+        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
 
         /* Verify that there is no available building space on the growing crop */
         assertNull(map.isAvailableHousePoint(player0, point0));

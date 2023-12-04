@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
@@ -2341,18 +2342,19 @@ public class GameMap {
     /**
      * Places a crop at the given point
      *
-     * @param point The point to place the crop on
+     * @param point    The point to place the crop on
+     * @param cropType
      * @return The placed crop
      * @throws InvalidUserActionException Throws exception if the crop cannot be placed
      */
-    public Crop placeCrop(Point point) throws InvalidUserActionException {
+    public Crop placeCrop(Point point, CropType cropType) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isUnHarvestedCrop()) {
             throw new InvalidUserActionException("Can't place crop on non-harvested crop at " + point);
         }
 
-        Crop crop = new Crop(point, this);
+        Crop crop = new Crop(point, this, cropType);
 
         mapPoint.setCrop(crop);
 

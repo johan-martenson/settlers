@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.*;
 import org.junit.Test;
 
@@ -849,7 +850,7 @@ public class TestRoads {
 
         /* Place crop */
         Point point2 = new Point(12, 8);
-        Crop crop0 = map.placeCrop(point2);
+        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -902,7 +903,7 @@ public class TestRoads {
 
         /* Place crop */
         Point point2 = new Point(12, 8);
-        Crop crop0 = map.placeCrop(point2);
+        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
 
         /* Place flag */
         Point point3 = new Point(10, 8);

@@ -6,11 +6,9 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
-import static org.appland.settlers.model.Crop.GrowthState.ALMOST_GROWN;
-import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
-import static org.appland.settlers.model.Crop.GrowthState.SMALL;
+import org.appland.settlers.assets.CropType;
+
+import static org.appland.settlers.model.Crop.GrowthState.*;
 import static org.appland.settlers.model.Material.WHEAT;
 
 /**
@@ -18,6 +16,8 @@ import static org.appland.settlers.model.Material.WHEAT;
  * @author johan
  */
 public class Crop {
+
+    private CropType type;
 
     public enum GrowthState {
         JUST_PLANTED,
@@ -37,10 +37,11 @@ public class Crop {
 
     private GrowthState state;
 
-    public Crop(Point point, GameMap map) {
-        position = point;
-        state    = JUST_PLANTED;
-        this.map = map;
+    public Crop(Point point, GameMap map, CropType cropType) {
+        position  = point;
+        state     = JUST_PLANTED;
+        this.map  = map;
+        this.type = cropType;
 
         growthCountdown = new Countdown();
         growthCountdown.countFrom(TIME_TO_GROW);
@@ -85,5 +86,9 @@ public class Crop {
         growthCountdown.countFrom(TIME_TO_WITHER);
 
         return new Cargo(WHEAT, null);
+    }
+
+    public CropType getType() {
+        return type;
     }
 }

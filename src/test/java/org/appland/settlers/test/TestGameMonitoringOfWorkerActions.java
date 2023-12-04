@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
@@ -1092,7 +1093,7 @@ public class TestGameMonitoringOfWorkerActions {
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight());
+        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
 
         /* Finish construction of the farm */
         Utils.constructHouse(farm);
@@ -1179,7 +1180,7 @@ public class TestGameMonitoringOfWorkerActions {
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight());
+        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
 
         /* Finish construction of the farm */
         Utils.constructHouse(farm);

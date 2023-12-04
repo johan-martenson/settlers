@@ -723,6 +723,7 @@ class Utils {
 
         jsonCrop.put("id", idManager.getId(crop));
         jsonCrop.put("state", "" + crop.getGrowthState());
+        jsonCrop.put("type", crop.getType());
 
         return jsonCrop;
     }

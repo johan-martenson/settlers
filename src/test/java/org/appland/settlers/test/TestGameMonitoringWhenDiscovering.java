@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Building;
@@ -948,7 +949,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a crop for player 0 to discover */
         Point point2 = new Point(33, 5);
-        Crop crop0 = map.placeCrop(point2);
+        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
 
         /* Place lookout tower */
         Point point3 = new Point(19, 5);
@@ -1002,7 +1003,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a crop for player 0 to discover */
         Point point2 = new Point(33, 5);
-        Crop crop0 = map.placeCrop(point2);
+        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
 
         /* Place lookout tower */
         Point point3 = new Point(19, 5);

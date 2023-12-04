@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Crop;
@@ -2083,7 +2084,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         Point point1 = new Point(14, 10);
 
-        Crop crop = map.placeCrop(point1);
+        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
 
         assertTrue(player0.getDiscoveredLand().contains(point1));
 
@@ -2128,7 +2129,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         Point point1 = new Point(14, 10);
 
-        Crop crop = map.placeCrop(point1);
+        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
 
         map.stepTime();
 

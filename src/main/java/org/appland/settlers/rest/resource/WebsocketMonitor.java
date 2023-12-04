@@ -207,15 +207,31 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 Object object = idManager.getObject(id);
 
+                JSONObject jsonUpdate = new JSONObject();
+
                 if (object instanceof Building building) {
                     synchronized (map) {
                         player.addDetailedMonitoring(building);
+
+                        JSONArray jsonUpdatedBuildings = new JSONArray();
+
+                        jsonUpdate.put("changedBuildings", jsonUpdatedBuildings);
+
+                        jsonUpdatedBuildings.add(utils.houseToJson(building, player));
                     }
                 } else if (object instanceof Flag flag) {
                     synchronized (map) {
                         player.addDetailedMonitoring(flag);
+
+                        JSONArray jsonUpdatedFlags = new JSONArray();
+
+                        jsonUpdate.put("changedFlags", jsonUpdatedFlags);
+
+                        jsonUpdatedFlags.add(utils.flagToJson(flag));
                     }
                 }
+
+                session.getAsyncRemote().sendText(jsonUpdate.toJSONString());
             }
 
                 break;

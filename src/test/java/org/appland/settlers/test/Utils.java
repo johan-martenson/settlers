@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.CropType;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Builder;
@@ -2946,7 +2947,7 @@ public class Utils {
                     continue;
                 }
 
-                Crop crop = map.placeCrop(point);
+                Crop crop = map.placeCrop(point, CropType.TYPE_1);
             }
         }
     }

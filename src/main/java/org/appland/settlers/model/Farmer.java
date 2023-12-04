@@ -6,11 +6,14 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.assets.CropType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
@@ -29,6 +32,7 @@ public class Farmer extends Worker {
     private static final int TIME_TO_PLANT   = 19;
     private static final int TIME_TO_HARVEST = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final Random random = new Random(0);
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -114,7 +118,14 @@ public class Farmer extends Worker {
             }
         } else if (state == PLANTING) {
             if (countdown.hasReachedZero()) {
-                map.placeCrop(getPosition());
+
+                var cropType = CropType.TYPE_1;
+
+                if (random.nextInt(10) % 2 == 0) {
+                    cropType = CropType.TYPE_2;
+                }
+
+                map.placeCrop(getPosition(), cropType);
 
                 state = GOING_BACK_TO_HOUSE;
 
