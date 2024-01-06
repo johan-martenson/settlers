@@ -1,15 +1,52 @@
 package org.appland.settlers.rest.resource;
 
-import org.appland.settlers.model.*;
+import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.Bakery;
+import org.appland.settlers.model.Brewery;
+import org.appland.settlers.model.Building;
+import org.appland.settlers.model.CoalMine;
+import org.appland.settlers.model.DonkeyFarm;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameChangesList;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
+import org.appland.settlers.model.GraniteMine;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.IronMine;
+import org.appland.settlers.model.IronSmelter;
+import org.appland.settlers.model.Message;
+import org.appland.settlers.model.Metalworks;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.Mint;
+import org.appland.settlers.model.PigFarm;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerGameViewMonitor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.websocket.*;
+import javax.servlet.ServletContext;
+import javax.websocket.CloseReason;
+import javax.websocket.EndpointConfig;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
+import javax.ws.rs.core.Context;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @ServerEndpoint(value = "/ws/monitor/games/{gameId}/players/{playerId}")
 
@@ -19,6 +56,8 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
     private final Utils utils;
     private final JSONParser parser;
 
+    @Context
+    ServletContext context;
 
     private final IdManager idManager = IdManager.idManager;
 
@@ -47,6 +86,32 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case PAUSE_GAME: {
+                GameResource game = (GameResource) session.getUserProperties().get("GAME");
+
+                game.status = GameStatus.PAUSED;
+
+                JSONObject jsonResponse = new JSONObject();
+
+                jsonResponse.put("gameState", "PAUSED");
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case RESUME_GAME: {
+                GameResource game = (GameResource) session.getUserProperties().get("GAME");
+
+                game.status = GameStatus.STARTED;
+
+                JSONObject jsonResponse = new JSONObject();
+
+                jsonResponse.put("gameState", "STARTED");
+
+                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
             case SET_IRON_BAR_QUOTAS: {
                 Long armoryAmount = (Long) jsonBody.get("armory");
                 Long metalworksAmount = (Long) jsonBody.get("metalworks");
@@ -521,6 +586,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         } else {
 
             session.getUserProperties().put("PLAYER", player);
+            session.getUserProperties().put("GAME", idManager.getObject(gameId));
 
             System.out.println("Storing session");
             this.playerToSession.put(player, session);

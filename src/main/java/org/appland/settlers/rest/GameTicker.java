@@ -14,7 +14,6 @@ import org.appland.settlers.utils.Variable;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -70,6 +69,10 @@ public class GameTicker {
             }
 
             for (GameResource game : games) {
+
+                if (game.isPaused()) {
+                    continue;
+                }
 
                 GameMap map = game.getGameMap();
 

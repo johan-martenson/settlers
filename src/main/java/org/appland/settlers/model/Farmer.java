@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ public class Farmer extends Worker {
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+    private Optional<GameUtils.AllocationTracker> wheatAllocationTracker;
 
     private State state;
 
@@ -64,6 +66,7 @@ public class Farmer extends Worker {
         countdown = new Countdown();
 
         productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);
+        wheatAllocationTracker = Optional.empty();
     }
 
     public boolean isHarvesting() {
@@ -81,6 +84,10 @@ public class Farmer extends Worker {
         countdown.countFrom(TIME_TO_REST);
 
         productivityMeasurer.setBuilding(building);
+
+        if (wheatAllocationTracker.isEmpty()) {
+            wheatAllocationTracker = Optional.of(new GameUtils.AllocationTracker(GameUtils.AllocationType.WHEAT_ALLOCATION, player, building.getPosition()));
+        }
     }
 
     @Override
@@ -204,34 +211,47 @@ public class Farmer extends Worker {
         return result;
     }
 
-    public boolean isWheatReceiver(Building building) {
+    public boolean isWheatReceiverAndAllocationAllowed(Building building) {
         if (building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(WHEAT);
         }
 
-        if (building.isReady() && building.needsMaterial(WHEAT)) {
-            return true;
+        if (wheatAllocationTracker.isEmpty()) {
+            return false;
         }
 
-        return false;
+        GameUtils.AllocationTracker allocationTracker = wheatAllocationTracker.get();
+
+        return building.isReady() &&
+                building.needsMaterial(WHEAT) &&
+                allocationTracker.isDeliveryAllowed(building);
     }
 
     @Override
     public void onArrival() {
 
         if (state == GOING_OUT_TO_PUT_CARGO) {
-
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isWheatReceiver);
-            getHome().getFlag().putCargo(cargo);
 
-            setCargo(null);
+            Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, this::isWheatReceiverAndAllocationAllowed);
 
-            state = GOING_BACK_TO_HOUSE;
+            if (receivingBuilding != null) {
+                cargo.setTarget(receivingBuilding);
+                receivingBuilding.promiseDelivery(cargo.getMaterial());
+                getHome().getFlag().putCargo(cargo);
 
-            setTarget(getHome().getPosition());
+                GameUtils.AllocationTracker at = wheatAllocationTracker.get();
+
+                at.trackAllocation(receivingBuilding);
+
+                setCargo(null);
+
+                state = GOING_BACK_TO_HOUSE;
+
+                setTarget(getHome().getPosition());
+            }
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
 

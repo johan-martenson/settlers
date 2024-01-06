@@ -1143,6 +1143,31 @@ public class Utils {
         return cargo;
     }
 
+    public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag, Material material) throws InvalidUserActionException {
+        Cargo cargo = null;
+
+        for (int i = 0; i < 1000; i++) {
+
+            for (Cargo cargoCandidate : flag.getStackedCargo()) {
+                if (cargoCandidate.getMaterial() == material) {
+                    cargo = cargoCandidate;
+
+                    break;
+                }
+            }
+
+            if (cargo != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(cargo);
+
+        return cargo;
+    }
+
     public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws InvalidUserActionException {
         Set<Courier> couriers = new HashSet<>();
 
@@ -2639,6 +2664,32 @@ public class Utils {
 
         assertEquals(building.getAmount(material), building.getCanHoldAmount(material));
         assertFalse(building.needsMaterial(material));
+    }
+
+    public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker... workers) throws InvalidUserActionException {
+        Worker workerWithCargo = null;
+
+        for (int j = 0; j < 20000; j++) {
+            for (Worker worker : workers) {
+                if (Objects.equals(worker.getCargo(), cargo)) {
+                    workerWithCargo = worker;
+
+                    break;
+                }
+            }
+
+            if (workerWithCargo != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(workerWithCargo);
+        assertNotNull(workerWithCargo.getCargo());
+        assertEquals(workerWithCargo.getCargo(), cargo);
+
+        return workerWithCargo;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

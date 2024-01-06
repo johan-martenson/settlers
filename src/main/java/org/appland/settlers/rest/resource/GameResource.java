@@ -129,4 +129,8 @@ public class GameResource {
     public boolean getOthersCanJoin() {
         return othersCanJoin;
     }
+
+    public boolean isPaused() {
+        return status == GameStatus.PAUSED;
+    }
 }

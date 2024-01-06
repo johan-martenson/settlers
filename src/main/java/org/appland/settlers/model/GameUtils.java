@@ -21,13 +21,143 @@ import java.util.function.Function;
 
 import static java.lang.Math.*;
 import static org.appland.settlers.model.Direction.*;
-import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.*;
 
 /**
  *
  * @author johan
  */
 public class GameUtils {
+
+    public enum AllocationType {
+        WHEAT_ALLOCATION,
+        COAL_ALLOCATION,
+        WATER_ALLOCATION,
+        FOOD_ALLOCATION,
+        PLANK_ALLOCATION,
+        IRON_BAR_ALLOCATION
+    }
+
+    public static class AllocationTracker {
+        private static final Map<AllocationType, Set<Class<? extends Building>>> AFFECTED_BUILDING_TYPES = new HashMap<>();
+        private static final Map<AllocationType, Set<Material>> TRACKED_MATERIALS = new HashMap<>();
+
+        static {
+            AFFECTED_BUILDING_TYPES.put(
+                    AllocationType.WHEAT_ALLOCATION,
+                    new HashSet<>(Arrays.asList(Mill.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
+                    ));
+
+            AFFECTED_BUILDING_TYPES.put(
+                    AllocationType.COAL_ALLOCATION,
+                    new HashSet<>(Arrays.asList(Mint.class, Metalworks.class)
+                    ));
+
+            AFFECTED_BUILDING_TYPES.put(
+                    AllocationType.WATER_ALLOCATION,
+                    new HashSet<>(Arrays.asList(Bakery.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
+                    ));
+
+            AFFECTED_BUILDING_TYPES.put(
+                    AllocationType.FOOD_ALLOCATION,
+                    new HashSet<>(Arrays.asList(CoalMine.class, IronMine.class, GoldMine.class, GraniteMine.class)
+                    ));
+
+            AFFECTED_BUILDING_TYPES.put(
+                    AllocationType.IRON_BAR_ALLOCATION,
+                    new HashSet<>(Arrays.asList(Armory.class, Metalworks.class)
+                    ));
+
+            TRACKED_MATERIALS.put(AllocationType.WHEAT_ALLOCATION, new HashSet<>(List.of(WHEAT)));
+            TRACKED_MATERIALS.put(AllocationType.COAL_ALLOCATION, new HashSet<>(List.of(COAL)));
+            TRACKED_MATERIALS.put(AllocationType.WATER_ALLOCATION, new HashSet<>(List.of(WATER)));
+            TRACKED_MATERIALS.put(AllocationType.IRON_BAR_ALLOCATION, new HashSet<>(List.of(IRON_BAR)));
+            TRACKED_MATERIALS.put(AllocationType.PLANK_ALLOCATION, new HashSet<>(List.of(PLANK)));
+            TRACKED_MATERIALS.put(AllocationType.FOOD_ALLOCATION, new HashSet<>(List.of(BREAD, FISH, MEAT)));
+        }
+
+        private final Map<Class<? extends Building>, Integer> consumed;
+        private final AllocationType allocationType;
+        private final Player player;
+        private final Point position;
+
+        AllocationTracker(AllocationType allocationType, Player player, Point position) {
+            this.player = player;
+            this.allocationType = allocationType;
+            this.position = position;
+
+            consumed = new HashMap<>();
+        }
+
+        public void trackAllocation(Building building) {
+            int amount = consumed.getOrDefault(building.getClass(), 0);
+            consumed.put(building.getClass(), amount + 1);
+        }
+
+        public boolean isDeliveryAllowed(Building building) {
+            Material material = TRACKED_MATERIALS.get(allocationType).stream().findFirst().get();
+
+            return isDeliveryAllowed(building, material);
+        }
+
+        public boolean isDeliveryAllowed(Building building, Material material) {
+            int quota = quotaForBuilding(building);
+
+            var withinQuota = consumed.getOrDefault(building.getClass(), 0) < quota;
+
+            if (withinQuota) {
+                return true;
+            }
+
+            var didReset = resetAllocationIfNeeded(material);
+
+            if (!didReset) {
+                return false;
+            }
+
+            return consumed.getOrDefault(building.getClass(), 0) < quota;
+        }
+
+        private int quotaForBuilding(Building building) {
+            return quotaForBuildingType(building.getClass());
+        }
+
+        private int quotaForBuildingType(Class<? extends Building> buildingType) {
+            return switch (allocationType) {
+                case WHEAT_ALLOCATION -> player.getWheatQuota(buildingType);
+                case COAL_ALLOCATION -> player.getCoalQuota(buildingType);
+                case FOOD_ALLOCATION -> player.getFoodQuota(buildingType);
+                case WATER_ALLOCATION -> player.getWaterQuota(buildingType);
+                case IRON_BAR_ALLOCATION -> player.getIronBarQuota(buildingType);
+                case PLANK_ALLOCATION -> throw new RuntimeException("Plank allocation is not implemented yet.");
+            };
+        }
+
+        public boolean isOverQuota(Class<? extends Building> buildingType) {
+            return consumed.getOrDefault(buildingType, 0) >= quotaForBuildingType(buildingType);
+        }
+
+        public boolean resetAllocationIfNeeded(Material material) {
+            Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(position, player);
+
+            if (AFFECTED_BUILDING_TYPES.get(allocationType).stream().allMatch(buildingType ->
+                    !needyConsumerExists(reachableBuildings, buildingType, material) || isOverQuota(buildingType)
+            )) {
+                AFFECTED_BUILDING_TYPES.get(allocationType).forEach(buildingType -> consumed.put(buildingType, 0));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private boolean needyConsumerExists(Collection<Building> buildings, Class<? extends Building> buildingType, Material material) {
+            return buildings.stream().anyMatch(building ->
+                    building.getClass().equals(buildingType) &&
+                    building.isReady() &&
+                    building.needsMaterial(material));
+        }
+    }
 
     public static boolean setContainsNone(Set<Point> set, List<Point> needles) {
         for (Point point : needles) {
@@ -1484,14 +1614,17 @@ public class GameUtils {
         return reachable;
     }
 
-    public static Set<Building> getBuildingsWithinReach(Flag startFlag) {
+    public static Set<Building> getBuildingsWithinReach(Flag flag) {
+        return getBuildingsWithinReach(flag.getPosition(), flag.getPlayer());
+    }
+
+    public static Set<Building> getBuildingsWithinReach(Point startPosition, Player player) {
         List<Point>   toEvaluate = new LinkedList<>();
         Set<Point>    visited    = new HashSet<>();
         Set<Building> reachable  = new HashSet<>();
-        Player        player     = startFlag.getPlayer();
         GameMap       map        = player.getMap();
 
-        toEvaluate.add(startFlag.getPosition());
+        toEvaluate.add(startPosition);
 
         /* Declare variables outside the loop to keep memory churn down */
         Point point;
