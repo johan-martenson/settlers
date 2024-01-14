@@ -734,8 +734,6 @@ public class TestWaterPrioritization {
             }
         }
 
-        System.out.println(waterAllocation);
-
         assertEquals(waterAllocation.keySet().size(), 3);
         assertEquals((int)waterAllocation.get(pigFarm0), 2);
         assertEquals((int)waterAllocation.get(donkeyFarm0), 2);

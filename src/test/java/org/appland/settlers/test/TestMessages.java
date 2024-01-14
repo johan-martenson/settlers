@@ -51,16 +51,7 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Message.MessageType.BOMBARDED_BY_CATAPULT;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_CAPTURED;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_LOST;
@@ -105,7 +96,7 @@ public class TestMessages {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -124,7 +115,7 @@ public class TestMessages {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -158,7 +149,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -166,7 +157,7 @@ public class TestMessages {
         Point point3 = new Point(7, 9);
         Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
-        /* Connect the bakery with the headquarter */
+        /* Connect the bakery with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the bakery */
@@ -187,7 +178,7 @@ public class TestMessages {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -241,7 +232,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -259,7 +250,7 @@ public class TestMessages {
         assertEquals(stonemason.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason);
 
-        /* Connect the quarry with the headquarter */
+        /* Connect the quarry with the headquarters */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         /* Put a new stone if the current one is gone */
@@ -319,7 +310,7 @@ public class TestMessages {
             map.catchFishAtPoint(point0);
         }
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -327,7 +318,7 @@ public class TestMessages {
         Point point4 = new Point(7, 5);
         Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
-        /* Place a road from the headquarter to the fishery */
+        /* Place a road from the headquarters to the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         /* Construct the fisherman hut */
@@ -409,7 +400,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -438,7 +429,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -450,7 +441,7 @@ public class TestMessages {
         Utils.createMinableMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -510,7 +501,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -521,7 +512,7 @@ public class TestMessages {
         /* Create a mountain with gold */
         Utils.createMinableMountainWithinRadius(point1, 9, map);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -579,11 +570,11 @@ public class TestMessages {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 13);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -643,13 +634,17 @@ public class TestMessages {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear all soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
@@ -681,7 +676,7 @@ public class TestMessages {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        /* Wait for the attacker to reach the barracks */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -690,18 +685,13 @@ public class TestMessages {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
         assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
 
-        /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
-
-        assertNotNull(defender);
-        assertEquals(defender.getTarget(), attacker.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
-
-        assertEquals(defender.getPosition(), attacker.getPosition());
+        /* Wait for the defender to come out from the barracks */
+        Military defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
         /* Wait for the general to beat the private */
-        Utils.waitForWorkerToDisappear(defender, map);
+        Utils.waitForFightToStart(map, attacker, defender);
+
+        Utils.waitForSoldierToWinFight(attacker, map);
 
         assertFalse(map.getWorkers().contains(defender));
 
@@ -759,14 +749,14 @@ public class TestMessages {
             }
         }
 
-        /* Place a headquarter */
+        /* Place a headquarters */
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
-        /* Place a road from headquarter to mine */
+        /* Place a road from headquarters to mine */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the gold mine */
@@ -844,14 +834,14 @@ public class TestMessages {
             }
         }
 
-        /* Place a headquarter */
+        /* Place a headquarters */
         Point point1 = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
-        /* Place a road from headquarter to mine */
+        /* Place a road from headquarters to mine */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the gold mine */
@@ -921,7 +911,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -975,7 +965,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -990,7 +980,7 @@ public class TestMessages {
         Point point2 = new Point(10, 6);
         Armory armory0 = map.placeBuilding(new Armory(player0), point2);
 
-        /* Connect the armory to the headquarter */
+        /* Connect the armory to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Verify that a message is sent */
@@ -1014,7 +1004,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1032,7 +1022,7 @@ public class TestMessages {
         Point point3 = new Point(10, 16);
         Brewery brewery0 = map.placeBuilding(new Brewery(player0), point3);
 
-        /* Connect the buildings to the headquarter */
+        /* Connect the buildings to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
         Road road1 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
 
@@ -1060,7 +1050,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1075,7 +1065,7 @@ public class TestMessages {
         Point point2 = new Point(10, 6);
         Armory armory0 = map.placeBuilding(new Armory(player0), point2);
 
-        /* Connect the armory to the headquarter */
+        /* Connect the armory to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the tree conservation program message to be sent */
@@ -1086,7 +1076,7 @@ public class TestMessages {
         assertEquals(player0.getMessages().size(), 1);
         assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
-        /* Put in more planks to the headquarter */
+        /* Put in more planks to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 50);
 
         /* Wait for the tree conservation program deactivation message to be sent */
@@ -1108,7 +1098,7 @@ public class TestMessages {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -1126,7 +1116,7 @@ public class TestMessages {
         Point point3 = new Point(10, 18);
         Brewery brewery0 = map.placeBuilding(new Brewery(player0), point3);
 
-        /* Connect the buildings to the headquarter */
+        /* Connect the buildings to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
         Road road1 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
 
@@ -1138,7 +1128,7 @@ public class TestMessages {
         assertEquals(player0.getMessages().size(), 1);
         assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
-        /* Put in more planks to the headquarter */
+        /* Put in more planks to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 50);
 
         /* Wait for the tree conservation program deactivation message to be sent */
@@ -1171,11 +1161,11 @@ public class TestMessages {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(21, 23);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1233,11 +1223,11 @@ public class TestMessages {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(25, 25);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1308,11 +1298,11 @@ public class TestMessages {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(39, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1326,7 +1316,7 @@ public class TestMessages {
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
-        /* Empty all soldiers from the second player's headquarter */
+        /* Empty all soldiers from the second player's headquarters */
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -1350,7 +1340,7 @@ public class TestMessages {
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
-        /* Verify that the headquarter is destroyed and the first player won the game */
+        /* Verify that the headquarters is destroyed and the first player won the game */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
@@ -1389,11 +1379,11 @@ public class TestMessages {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(39, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1407,7 +1397,7 @@ public class TestMessages {
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
-        /* Empty all soldiers from the second player's headquarter */
+        /* Empty all soldiers from the second player's headquarters */
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -1431,7 +1421,7 @@ public class TestMessages {
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
-        /* Verify that the headquarter is destroyed and the first player won the game */
+        /* Verify that the headquarters is destroyed and the first player won the game */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
@@ -1482,11 +1472,11 @@ public class TestMessages {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(39, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1500,7 +1490,7 @@ public class TestMessages {
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
-        /* Empty all soldiers from the second player's headquarter */
+        /* Empty all soldiers from the second player's headquarters */
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -1524,7 +1514,7 @@ public class TestMessages {
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
-        /* Verify that the headquarter is destroyed and the first player won the game */
+        /* Verify that the headquarters is destroyed and the first player won the game */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
@@ -1575,11 +1565,11 @@ public class TestMessages {
         players.add(player1);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1607,7 +1597,7 @@ public class TestMessages {
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
-        /* Remove all the stones in the headquarter */
+        /* Remove all the stones in the headquarters */
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Verify that a message is sent when the catapult destroys the barracks */
@@ -1657,11 +1647,11 @@ public class TestMessages {
         players.add(player1);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1689,7 +1679,7 @@ public class TestMessages {
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
-        /* Remove all the stones in the headquarter */
+        /* Remove all the stones in the headquarters */
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Verify that a message is sent when the catapult destroys the barracks */

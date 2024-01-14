@@ -691,8 +691,6 @@ public class TestMint {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
-        System.out.println(storehouse.getFlag().getStackedCargo());
-
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
         assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(COIN));
         assertNull(road0.getCourier().getCargo());

@@ -37,14 +37,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SCOUT;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
-import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
@@ -104,7 +97,7 @@ public class TestHarbor {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -141,7 +134,7 @@ public class TestHarbor {
         Point point1 = new Point(9, 11);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -182,7 +175,7 @@ public class TestHarbor {
         Point point1 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -223,7 +216,7 @@ public class TestHarbor {
         Point point1 = new Point(11, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -264,7 +257,7 @@ public class TestHarbor {
         Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -308,7 +301,7 @@ public class TestHarbor {
         Point point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -336,14 +329,14 @@ public class TestHarbor {
         Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed */
@@ -372,20 +365,20 @@ public class TestHarbor {
         Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the harbor */
         Utils.waitForBuildingToBeConstructed(harbor);
 
-        /* Run game logic once to let the headquarter assign a harbor worker to the harbor */
+        /* Run game logic once to let the headquartersassign a harbor worker to the harbor */
         StorageWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorageWorker.class, player0);
 
         assertNotNull(harborWorker);
@@ -414,20 +407,20 @@ public class TestHarbor {
         Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed */
         Utils.waitForBuildingToBeConstructed(harbor);
 
-        /* Run game logic once to let the headquarter assign a harbor worker to the harbor */
+        /* Run game logic once to let the headquartersassign a harbor worker to the harbor */
         StorageWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorageWorker.class, player0);
 
         assertNotNull(harborWorker);
@@ -456,14 +449,14 @@ public class TestHarbor {
         Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
         /* Wait for the harbor to get constructed */
@@ -502,7 +495,7 @@ public class TestHarbor {
         Point point3 = new Point(15, 9);
         map.setPossiblePlaceForHarbor(point3);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point4 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point4);
 
@@ -562,7 +555,7 @@ public class TestHarbor {
         Point point1 = new Point(7, 13);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -626,7 +619,7 @@ public class TestHarbor {
         Point point1 = new Point(7, 13);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -695,14 +688,14 @@ public class TestHarbor {
         Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the harbor to get constructed and occupied*/
@@ -718,7 +711,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
@@ -726,7 +719,7 @@ public class TestHarbor {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
-        /* Verify that the harbor worker is stored correctly in the headquarter */
+        /* Verify that the harbor worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -747,14 +740,14 @@ public class TestHarbor {
         Point point1 = new Point(20, 14);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -799,14 +792,14 @@ public class TestHarbor {
         Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -857,14 +850,14 @@ public class TestHarbor {
         Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(13, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -918,14 +911,14 @@ public class TestHarbor {
         Point point1 = new Point(24, 16);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(13, 17);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the harbor to get constructed and occupied */
@@ -970,7 +963,7 @@ public class TestHarbor {
         Point point1 = new Point(22, 14);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1023,7 +1016,7 @@ public class TestHarbor {
         Point point1 = new Point(18, 16);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1079,14 +1072,14 @@ public class TestHarbor {
         Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the harbor */
@@ -1103,7 +1096,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
@@ -1136,14 +1129,14 @@ public class TestHarbor {
         Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the harbor */
@@ -1188,7 +1181,7 @@ public class TestHarbor {
         Point point1 = new Point(12, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1223,7 +1216,7 @@ public class TestHarbor {
         Point point1 = new Point(9, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1258,14 +1251,14 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor and the headquarter */
+        /* Connect the harbor and the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter.getFlag());
 
         /* Finish the harbor */
@@ -1301,14 +1294,14 @@ public class TestHarbor {
         Point point1 = new Point(12, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor and the headquarter */
+        /* Connect the harbor and the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor0.getFlag(), headquarter.getFlag());
 
         /* Finish the harbor */
@@ -1346,7 +1339,7 @@ public class TestHarbor {
         Point point1 = new Point(22, 14);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(13, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1356,10 +1349,10 @@ public class TestHarbor {
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
-        /* Wait for harbor worker to get assigned and leave the headquarter */
+        /* Wait for harbor worker to get assigned and leave the headquarters*/
         List<StorageWorker> workers = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
 
         assertNotNull(workers);
@@ -1396,15 +1389,15 @@ public class TestHarbor {
         Point point1 = new Point(29, 17);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters*/
         Point point2 = new Point(7, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters*/
         Point point3 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point3);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters*/
         Point point4 = new Point(37, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
 
@@ -1459,17 +1452,22 @@ public class TestHarbor {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(13, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 17);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters */
         Point point2 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point2);
+
+        /* Remove the soldiers from each headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter2, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         /* Place fortress for player 0 */
         Point point3 = new Point(21, 5);
@@ -1481,7 +1479,7 @@ public class TestHarbor {
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
-        /* Connect the fortress with the headquarter */
+        /* Connect the fortress with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Occupy the road */
@@ -1497,7 +1495,7 @@ public class TestHarbor {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
 
         /* Occupy the road */
@@ -1508,7 +1506,6 @@ public class TestHarbor {
 
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 2000; i++) {
-
             if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedMilitary() > 0) {
                 break;
             }
@@ -1519,7 +1516,7 @@ public class TestHarbor {
         assertEquals(barracks0.getPlayer(), player0);
         assertTrue(barracks0.getNumberOfHostedMilitary() > 0);
 
-        /* Connect the captured barracks with the headquarter */
+        /* Connect the captured barracks with the headquarters */
         Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
 
         /* Occupy the road */
@@ -1532,13 +1529,13 @@ public class TestHarbor {
         /* Place road */
         Road road3 = map.placeAutoSelectedRoad(player0, flag0, barracks0.getFlag());
 
-        /* Verify that player 1's headquarter is closer to the road */
+        /* Verify that player 1's headquartersis closer to the road */
         for (Point point : road3.getWayPoints()) {
 
             assertTrue(point.distance(headquarter1.getPosition()) < point.distance(headquarter0.getPosition()));
         }
 
-        /* Verify that the barracks gets populated from the right headquarter only */
+        /* Verify that the barracks gets populated from the right headquartersonly */
         int player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
         int player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
 
@@ -1575,7 +1572,7 @@ public class TestHarbor {
         Point point1 = new Point(13, 5);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1589,7 +1586,7 @@ public class TestHarbor {
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1624,7 +1621,7 @@ public class TestHarbor {
 
         assertEquals(harborWorker.getPosition(), flag0.getPosition());
 
-        /* Verify that the harbor worker returns to the headquarter when it reaches the flag */
+        /* Verify that the harbor worker returns to the headquarterswhen it reaches the flag */
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
@@ -1647,7 +1644,7 @@ public class TestHarbor {
         Point point1 = new Point(15, 5);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(16, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1662,7 +1659,7 @@ public class TestHarbor {
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1723,7 +1720,7 @@ public class TestHarbor {
         Point point1 = new Point(15, 7);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1737,7 +1734,7 @@ public class TestHarbor {
         /* Finish construction of the harbor */
         Utils.constructHouse(harbor0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1794,7 +1791,7 @@ public class TestHarbor {
         Point point1 = new Point(15, 13);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1822,7 +1819,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), storehouse.getPosition());
 
@@ -1830,7 +1827,7 @@ public class TestHarbor {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, storehouse.getPosition());
 
-        /* Verify that the harbor worker is stored correctly in the headquarter */
+        /* Verify that the harbor worker is stored correctly in the headquarters*/
         assertEquals(storehouse.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1851,7 +1848,7 @@ public class TestHarbor {
         Point point1 = new Point(17, 15);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1882,7 +1879,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
@@ -1890,7 +1887,7 @@ public class TestHarbor {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
-        /* Verify that the harbor worker is stored correctly in the headquarter */
+        /* Verify that the harbor worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1911,7 +1908,7 @@ public class TestHarbor {
         Point point1 = new Point(24, 10);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1945,7 +1942,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
@@ -1953,7 +1950,7 @@ public class TestHarbor {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
-        /* Verify that the harbor worker is stored correctly in the headquarter */
+        /* Verify that the harbor worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1974,7 +1971,7 @@ public class TestHarbor {
         Point point1 = new Point(27, 9);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -1999,7 +1996,7 @@ public class TestHarbor {
 
         harbor0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
@@ -2007,7 +2004,7 @@ public class TestHarbor {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
-        /* Verify that the harbor worker is stored correctly in the headquarter */
+        /* Verify that the harbor worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -2028,14 +2025,14 @@ public class TestHarbor {
         Point point1 = new Point(15, 17);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor0 = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Place road to connect the headquarter and the harbor */
+        /* Place road to connect the headquartersand the harbor */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
         /* Finish construction of the harbor */
@@ -2051,7 +2048,7 @@ public class TestHarbor {
         harbor0.tearDown();
 
         /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
+           headquartersinstead of entering
         */
         assertEquals(worker.getTarget(), harbor0.getPosition());
 
@@ -2079,7 +2076,7 @@ public class TestHarbor {
         Point point1 = new Point(10, 8);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2113,7 +2110,7 @@ public class TestHarbor {
         Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2144,7 +2141,7 @@ public class TestHarbor {
         Point point1 = new Point(6, 10);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2184,7 +2181,7 @@ public class TestHarbor {
         Point point1 = new Point(7, 11);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2220,11 +2217,11 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2294,21 +2291,21 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2393,17 +2390,17 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2411,7 +2408,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, FISH, 10);
 
         headquarter.pushOutAll(FISH);
@@ -2450,17 +2447,17 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2468,7 +2465,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, SCOUT, 10);
 
         headquarter.pushOutAll(SCOUT);
@@ -2517,17 +2514,17 @@ public class TestHarbor {
         Point point1 = new Point(14, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
         /* Place harbor */
         Harbor harbor = map.placeBuilding(new Harbor(player0), point1);
 
-        /* Connect the harbor with the headquarter */
+        /* Connect the harbor with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, harbor.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2535,7 +2532,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
         Utils.waitForNonMilitaryBuildingToGetPopulated(harbor);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, FISH, 10);
         Utils.adjustInventoryTo(headquarter, COIN, 10);
 
@@ -2577,7 +2574,7 @@ public class TestHarbor {
         Point point1 = new Point(16, 6);
         map.setPossiblePlaceForHarbor(point1);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point2 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point2);
 
@@ -2589,7 +2586,7 @@ public class TestHarbor {
         Well well = map.placeBuilding(new Well(player0), point3);
 
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2669,7 +2666,7 @@ public class TestHarbor {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 

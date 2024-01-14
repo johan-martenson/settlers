@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.CropType;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Builder;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
@@ -18,6 +19,7 @@ import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -34,23 +36,22 @@ import org.appland.settlers.model.WorkerAction;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.BodyType.FAT;
 import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
 import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestGameMonitoringOfWorkerActions {
 
@@ -63,7 +64,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -135,7 +136,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -216,7 +217,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -306,7 +307,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -405,7 +406,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -497,7 +498,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -598,7 +599,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -676,7 +677,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -768,7 +769,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -868,7 +869,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         map.setDetailedVegetationBelow(point2, WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), point3);
 
@@ -943,7 +944,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -951,7 +952,7 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -1009,7 +1010,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1017,7 +1018,7 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -1084,7 +1085,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1171,7 +1172,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1267,7 +1268,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1355,7 +1356,7 @@ public class TestGameMonitoringOfWorkerActions {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1883,5 +1884,1092 @@ public class TestGameMonitoringOfWorkerActions {
         jumpSkipRopeCount = Utils.countMonitoredWorkerActionForWorker(courier, WorkerAction.JUMP_SKIP_ROPE, monitor);
 
         assertEquals(jumpSkipRopeCount, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenHitting() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+        assertFalse(attacker.isFighting());
+
+        /* Wait for the military to reach the attacked building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+        assertFalse(defender.isFighting());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for one of the soldiers to attack */
+        Utils.waitForOneOfSoldiersToHit(map, attacker, defender);
+
+        /* Verify that an event was sent when there was an attack */
+        int hitCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.HIT, monitor);
+        hitCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.HIT, monitor);
+
+        assertEquals(hitCount, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenHittingIsOnlySentOnce() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+        assertFalse(attacker.isFighting());
+
+        /* Wait for the military to reach the attacked building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+        assertFalse(defender.isFighting());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for one of the soldiers to attack */
+        Utils.waitForOneOfSoldiersToHit(map, attacker, defender);
+
+        /* Verify that an event was sent when there was an attack */
+        int hitCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.HIT, monitor);
+        hitCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.HIT, monitor);
+
+        assertEquals(hitCount, 1);
+
+        /* Verify that the event is only sent once */
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor
+                .getEvents()
+                .stream()
+                .noneMatch(gameChangesList -> gameChangesList
+                        .getWorkersWithStartedActions()
+                        .values()
+                        .stream()
+                        .anyMatch(action -> action == WorkerAction.HIT)));
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierJumpsBack() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventory */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Keep attacking until a soldier stands aside during a fight */
+        boolean jumpBackFound = false;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Order an attack */
+            assertTrue(player0.canAttack(barracks1));
+
+            player0.attack(barracks1, 1);
+
+            /* Find the military that was chosen to attack */
+            map.stepTime();
+
+            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+            assertNotNull(attacker);
+            assertEquals(attacker.getPlayer(), player0);
+            assertFalse(attacker.isFighting());
+
+            /* Wait for the military to reach the attacked building */
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+            assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+            /* Wait for a defender to come out */
+            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+            assertNotNull(defender);
+            assertEquals(defender.getTarget(), attacker.getPosition());
+            assertFalse(defender.isFighting());
+
+            /* Add a new soldier to the attacked barracks */
+            Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+            /* Wait for the fight to start */
+            Utils.waitForFightToStart(map, attacker, defender);
+
+            /* Find out if a soldier stands aside during the fight */
+            Military soldierJumpingBack = null;
+
+            for (int j = 0; j < 10000; j++) {
+                if (attacker.isJumpingBack()) {
+                    soldierJumpingBack = attacker;
+
+                    break;
+                }
+
+                if (defender.isJumpingBack()) {
+                    soldierJumpingBack = defender;
+
+                    break;
+                }
+
+                if (attacker.isDying() || defender.isDying()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            /* If a soldier stood aside, verify that an event was sent correctly */
+            if (soldierJumpingBack != null) {
+
+                jumpBackFound = true;
+
+                /* Verify that an event was sent when one of the soldiers jumped back */
+                int standAsideCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.JUMP_BACK, monitor);
+                standAsideCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.JUMP_BACK, monitor);
+
+                assertEquals(standAsideCount, 1);
+
+                break;
+            }
+
+            /* Finish the fight if it's not done yet */
+            if (!attacker.isDying() && !defender.isDying()) {
+                Utils.waitForFightToEnd(map, attacker, defender);
+            }
+
+            /* Handle the case where the attacker died */
+            if (attacker.isDying()) {
+
+                /* Add a soldier to make it possible to attack again */
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+                /* Wait for the defender to go back to the attacked barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+            }
+
+            /* Handle the case where the defender died */
+            if (defender.isDying()) {
+
+                /* Wait for another soldier to come out and beat the attacker */
+                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+
+                /* Wait for the fight to start */
+                Utils.waitForFightToStart(map, attacker, otherDefender);
+
+                /* Wait for the defender to beat the attacker */
+                Utils.waitForSoldierToWinFight(otherDefender, map);
+
+                /* Wait for the defender to go back to the barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+            }
+        }
+
+        /* Verify that a soldier did stand aside */
+        assertTrue(jumpBackFound);
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierJumpsBackIsOnlySentOnce() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventory */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Keep attacking until a soldier stands aside during a fight */
+        boolean jumpBackFound = false;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Order an attack */
+            assertTrue(player0.canAttack(barracks1));
+
+            player0.attack(barracks1, 1);
+
+            /* Find the military that was chosen to attack */
+            map.stepTime();
+
+            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+            assertNotNull(attacker);
+            assertEquals(attacker.getPlayer(), player0);
+            assertFalse(attacker.isFighting());
+
+            /* Wait for the military to reach the attacked building */
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+            assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+            /* Wait for a defender to come out */
+            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+            assertNotNull(defender);
+            assertEquals(defender.getTarget(), attacker.getPosition());
+            assertFalse(defender.isFighting());
+
+            /* Add a new soldier to the attacked barracks */
+            Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+            /* Wait for the fight to start */
+            Utils.waitForFightToStart(map, attacker, defender);
+
+            /* Find out if a soldier stands aside during the fight */
+            Military soldierJumpingBack = null;
+
+            for (int j = 0; j < 10000; j++) {
+                if (attacker.isJumpingBack()) {
+                    soldierJumpingBack = attacker;
+
+                    break;
+                }
+
+                if (defender.isJumpingBack()) {
+                    soldierJumpingBack = defender;
+
+                    break;
+                }
+
+                if (attacker.isDying() || defender.isDying()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            /* If a soldier stood aside, verify that an event was sent correctly */
+            if (soldierJumpingBack != null) {
+
+                jumpBackFound = true;
+
+                /* Verify that an event was sent when one of the soldiers jumped back */
+                int standAsideCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.JUMP_BACK, monitor);
+                standAsideCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.JUMP_BACK, monitor);
+
+                assertEquals(standAsideCount, 1);
+
+                break;
+            }
+
+            /* Finish the fight if it's not done yet */
+            if (!attacker.isDying() && !defender.isDying()) {
+                Utils.waitForFightToEnd(map, attacker, defender);
+            }
+
+            /* Handle the case where the attacker died */
+            if (attacker.isDying()) {
+
+                /* Add a soldier to make it possible to attack again */
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+                /* Wait for the defender to go back to the attacked barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+            }
+
+            /* Handle the case where the defender died */
+            if (defender.isDying()) {
+
+                /* Wait for another soldier to come out and beat the attacker */
+                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+
+                /* Wait for the fight to start */
+                Utils.waitForFightToStart(map, attacker, otherDefender);
+
+                /* Wait for the defender to beat the attacker */
+                Utils.waitForSoldierToWinFight(otherDefender, map);
+
+                /* Wait for the defender to go back to the barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+            }
+        }
+
+        /* Verify that a soldier did stand aside */
+        assertTrue(jumpBackFound);
+
+        /* Verify that the event is only sent once */
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor
+                .getEvents()
+                .stream()
+                .noneMatch(gameChangesList -> gameChangesList
+                        .getWorkersWithStartedActions()
+                        .values()
+                        .stream()
+                        .anyMatch(action -> action == WorkerAction.JUMP_BACK)));
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierStandsAside() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventory */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Keep attacking until a soldier stands aside during a fight */
+        boolean standAsideFound = false;
+
+        for (int i = 0; i < 20; i++) {
+            System.out.println(i);
+            /* Order an attack */
+            assertTrue(player0.canAttack(barracks1));
+
+            player0.attack(barracks1, 1);
+
+            /* Find the military that was chosen to attack */
+            map.stepTime();
+
+            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+            assertNotNull(attacker);
+            assertEquals(attacker.getPlayer(), player0);
+            assertFalse(attacker.isFighting());
+
+            /* Wait for the military to reach the attacked building */
+            assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+            assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+
+            /* Wait for a defender to come out */
+            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+            assertNotNull(defender);
+            assertEquals(defender.getTarget(), attacker.getPosition());
+            assertFalse(defender.isFighting());
+
+            /* Wait for the fight to start */
+            Utils.waitForFightToStart(map, attacker, defender);
+
+            /* Find out if a soldier stands aside during the fight */
+            Military soldierStandingAside = null;
+
+            for (int j = 0; j < 10000; j++) {
+                if (attacker.isStandingAside()) {
+                    soldierStandingAside = attacker;
+
+                    break;
+                }
+
+                if (defender.isStandingAside()) {
+                    soldierStandingAside = defender;
+
+                    break;
+                }
+
+                if (attacker.isDying() || defender.isDying()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            /* If a soldier stood aside, verify that an event was sent correctly */
+            if (soldierStandingAside != null) {
+
+                standAsideFound = true;
+
+                /* Verify that an event was sent when one of the soldiers jumped back */
+                int standAsideCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.STAND_ASIDE, monitor);
+                standAsideCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.STAND_ASIDE, monitor);
+
+                assertEquals(standAsideCount, 1);
+
+                break;
+            }
+
+            /* Finish the fight if it's not done yet */
+            if (!attacker.isDying() && !defender.isDying()) {
+                Utils.waitForFightToEnd(map, attacker, defender);
+            }
+
+            /* Handle the case where the attacker died */
+            if (attacker.isDying()) {
+
+                /* Add a soldier to make it possible to attack again */
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+                /* Wait for the defender to go back to the attacked barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+            }
+
+            /* Handle the case where the defender died */
+            if (defender.isDying()) {
+
+                /* Add a new soldier to the attacked barracks */
+                Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+                /* Wait for another soldier to come out and beat the attacker */
+                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+
+                /* Wait for the fight to start */
+                Utils.waitForFightToStart(map, attacker, otherDefender);
+
+                /* Wait for the defender to beat the attacker */
+                Utils.waitForSoldierToWinFight(otherDefender, map);
+
+                /* Wait for the defender to go back to the barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+            }
+        }
+
+        /* Verify that a soldier did stand aside */
+        assertTrue(standAsideFound);
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierStandsAsideIsOnlySentOnce() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventory */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Keep attacking until a soldier stands aside during a fight */
+        boolean standAsideFound = false;
+
+        for (int i = 0; i < 20; i++) {
+
+            /* Order an attack */
+            assertTrue(player0.canAttack(barracks1));
+
+            player0.attack(barracks1, 1);
+
+            /* Find the military that was chosen to attack */
+            map.stepTime();
+
+            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+            assertNotNull(attacker);
+            assertEquals(attacker.getPlayer(), player0);
+            assertFalse(attacker.isFighting());
+
+            /* Wait for the military to reach the attacked building */
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+            assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+            /* Wait for a defender to come out */
+            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+            assertNotNull(defender);
+            assertEquals(defender.getTarget(), attacker.getPosition());
+            assertFalse(defender.isFighting());
+
+            /* Add a new soldier to the attacked barracks */
+            Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
+            /* Wait for the fight to start */
+            Utils.waitForFightToStart(map, attacker, defender);
+
+            /* Find out if a soldier stands aside during the fight */
+            Military soldierStandingAside = null;
+
+            for (int j = 0; j < 10000; j++) {
+                if (attacker.isStandingAside()) {
+                    soldierStandingAside = attacker;
+
+                    break;
+                }
+
+                if (defender.isStandingAside()) {
+                    soldierStandingAside = defender;
+
+                    break;
+                }
+
+                if (attacker.isDying() || defender.isDying()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            /* If a soldier stood aside, verify that an event was sent correctly */
+            if (soldierStandingAside != null) {
+
+                standAsideFound = true;
+
+                /* Verify that an event was sent when one of the soldiers jumped back */
+                int standAsideCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.STAND_ASIDE, monitor);
+                standAsideCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.STAND_ASIDE, monitor);
+
+                assertEquals(standAsideCount, 1);
+
+                break;
+            }
+
+            /* Finish the fight if it's not done yet */
+            if (!attacker.isDying() && !defender.isDying()) {
+                Utils.waitForFightToEnd(map, attacker, defender);
+            }
+
+            /* Handle the case where the attacker died */
+            if (attacker.isDying()) {
+
+                /* Add a soldier to make it possible to attack again */
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+                /* Wait for the defender to go back to the attacked barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+            }
+
+            /* Handle the case where the defender died */
+            if (defender.isDying()) {
+
+                /* Wait for another soldier to come out and beat the attacker */
+                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+
+                /* Wait for the fight to start */
+                Utils.waitForFightToStart(map, attacker, otherDefender);
+
+                /* Wait for the defender to beat the attacker */
+                Utils.waitForSoldierToWinFight(otherDefender, map);
+
+                /* Wait for the defender to go back to the barracks */
+                Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+            }
+        }
+
+        /* Verify that a soldier did stand aside */
+        assertTrue(standAsideFound);
+
+        /* Verify that the event is only sent once */
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor
+                .getEvents()
+                .stream()
+                .noneMatch(gameChangesList -> gameChangesList
+                        .getWorkersWithStartedActions()
+                        .values()
+                        .stream()
+                        .anyMatch(action -> action == WorkerAction.STAND_ASIDE)));
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierGetsHit() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+        assertFalse(attacker.isFighting());
+
+        /* Wait for the military to reach the attacked building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+        assertFalse(defender.isFighting());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for one of the soldiers to jump back */
+        Utils.waitForOneOfSoldiersToGetHit(map, attacker, defender);
+
+        /* Verify that an event was sent when one of the soldiers jumped back */
+        int jumpBackCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.GET_HIT, monitor);
+        jumpBackCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.GET_HIT, monitor);
+
+        assertEquals(jumpBackCount, 1);
+    }
+
+    @Test
+    public void testMonitoringEventWhenSoldierGetsHitIsOnlySentOnce() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+        assertFalse(attacker.isFighting());
+
+        /* Wait for the military to reach the attacked building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+        assertFalse(defender.isFighting());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for one of the soldiers to jump back */
+        Utils.waitForOneOfSoldiersToGetHit(map, attacker, defender);
+
+        /* Verify that an event was sent when one of the soldiers jumped back */
+        int jumpBackCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.GET_HIT, monitor);
+        jumpBackCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.GET_HIT, monitor);
+
+        assertEquals(jumpBackCount, 1);
+
+        /* Verify that the event is only sent once */
+        monitor.clearEvents();
+
+        map.stepTime();
+
+        assertTrue(monitor
+                .getEvents()
+                .stream()
+                .noneMatch(gameChangesList -> gameChangesList
+                        .getWorkersWithStartedActions()
+                        .values()
+                        .stream()
+                        .anyMatch(action -> action == WorkerAction.GET_HIT)));
     }
 }

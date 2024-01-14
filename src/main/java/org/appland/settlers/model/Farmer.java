@@ -240,18 +240,19 @@ public class Farmer extends Worker {
             if (receivingBuilding != null) {
                 cargo.setTarget(receivingBuilding);
                 receivingBuilding.promiseDelivery(cargo.getMaterial());
-                getHome().getFlag().putCargo(cargo);
 
                 GameUtils.AllocationTracker at = wheatAllocationTracker.get();
 
                 at.trackAllocation(receivingBuilding);
-
-                setCargo(null);
-
-                state = GOING_BACK_TO_HOUSE;
-
-                setTarget(getHome().getPosition());
             }
+
+            getHome().getFlag().putCargo(cargo);
+
+            setCargo(null);
+
+            state = GOING_BACK_TO_HOUSE;
+
+            setTarget(getHome().getPosition());
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
 

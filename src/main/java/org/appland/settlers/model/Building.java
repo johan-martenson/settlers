@@ -407,7 +407,7 @@ public class Building implements EndPoint {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + buildingToString();
+        return getClass().getSimpleName() + buildingToString() + " state: " + state;
     }
 
     private String buildingToString() {
@@ -487,7 +487,7 @@ public class Building implements EndPoint {
             } else {
                 countdown.step();
             }
-        } else if (isBurningDown()) {
+        } else if (state == State.BURNING) {
             if (countdown.hasReachedZero()) {
                 state = State.DESTROYED;
 
@@ -888,7 +888,9 @@ public class Building implements EndPoint {
             attackers.add(attacker);
         }
 
-        waitingAttackers.add(attacker);
+        if (!waitingAttackers.contains(attacker)) {
+            waitingAttackers.add(attacker);
+        }
     }
 
     void removeAttacker(Military attacker) {

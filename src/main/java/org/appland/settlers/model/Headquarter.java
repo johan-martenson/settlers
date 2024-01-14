@@ -12,7 +12,7 @@ import static org.appland.settlers.model.Material.*;
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
 
-    private Map<Military.Rank, Integer> reservedSoldiers;
+    private final Map<Military.Rank, Integer> reservedSoldiers;
 
     public Headquarter(Player player) {
         super(player);
@@ -181,5 +181,31 @@ public class Headquarter extends Storehouse {
 
     public int getReservedSoldiers(Military.Rank rank) {
         return reservedSoldiers.getOrDefault(rank, 0);
+    }
+
+    @Override
+    public int getNumberOfHostedMilitary() {
+        return inventory.getOrDefault(PRIVATE, 0) +
+                inventory.getOrDefault(PRIVATE_FIRST_CLASS, 0) +
+                inventory.getOrDefault(SERGEANT, 0) +
+                inventory.getOrDefault(OFFICER, 0) +
+                inventory.getOrDefault(GENERAL, 0);
+    }
+
+    @Override
+    Military retrieveHostedSoldier() {
+        if (isInStock(PRIVATE)) {
+            Military defender = (Military) retrieveWorker(PRIVATE);
+
+            getMap().placeWorker(defender, this);
+
+            defender.setHome(this);
+
+            defender.setPosition(getPosition());
+
+            return defender;
+        }
+
+        throw new InvalidGameLogicException("Can't retrieve soldier!");
     }
 }

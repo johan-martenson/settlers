@@ -25,12 +25,26 @@ public class ImageBoard {
         images.put(image, new ImageOnBoard(image, x, y));
     }
 
-    public void placeImageSeries(List<Bitmap> images, Point position, LayoutDirection layoutDirection) {
-        placeImageSeries(images, position.x, position.y, layoutDirection);
+    public JSONObject placeImageSeries(List<Bitmap> images, Point position, LayoutDirection layoutDirection) {
+        return placeImageSeries(images, position.x, position.y, layoutDirection);
     }
 
-    public void placeImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection) {
-        imageSeries.put(images, new ImageSeries(images, x, y, layoutDirection));
+    public JSONObject placeImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection) {
+        ImageSeries imageSeriesToPlace = new ImageSeries(images, x, y, layoutDirection);
+
+        imageSeries.put(images, imageSeriesToPlace);
+
+        JSONObject jsonImages = new JSONObject();
+
+        jsonImages.put("startX", imageSeriesToPlace.x);
+        jsonImages.put("startY", imageSeriesToPlace.y);
+        jsonImages.put("width", imageSeriesToPlace.width);
+        jsonImages.put("height", imageSeriesToPlace.height);
+        jsonImages.put("nrImages", imageSeriesToPlace.images.size());
+        jsonImages.put("offsetX", imageSeriesToPlace.offsetX);
+        jsonImages.put("offsetY", imageSeriesToPlace.offsetY);
+
+        return jsonImages;
     }
 
     public Bitmap writeBoardToBitmap(Palette palette) {
@@ -132,6 +146,12 @@ public class ImageBoard {
         int currentMaxY = this.getCurrentHeight();
 
         placeImage(image, 0, currentMaxY);
+    }
+
+    public JSONObject placeImageSeriesBottom(List<Bitmap> images) {
+        int currentMaxY = this.getCurrentHeight();
+
+        return placeImageSeries(images, new Point(0, currentMaxY), LayoutDirection.ROW);
     }
 
     private static class ImageOnBoard {

@@ -1,27 +1,10 @@
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
-import static org.appland.settlers.model.Military.State.ATTACKING;
-import static org.appland.settlers.model.Military.State.DEFENDING;
-import static org.appland.settlers.model.Military.State.DEPLOYED;
-import static org.appland.settlers.model.Military.State.IN_STORAGE;
-import static org.appland.settlers.model.Military.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Military.State.STANDBY_WAITING_DEFEND;
-import static org.appland.settlers.model.Military.State.WAITING_FOR_DEFENDING_OPPONENT;
-import static org.appland.settlers.model.Military.State.WALKING_APART_TO_ATTACK;
-import static org.appland.settlers.model.Military.State.WALKING_HOME_AFTER_FIGHT;
-import static org.appland.settlers.model.Military.State.WALKING_TO_ATTACK;
-import static org.appland.settlers.model.Military.State.WALKING_TO_FIGHT_TO_DEFEND;
-import static org.appland.settlers.model.Military.State.WALKING_TO_TAKE_OVER_BUILDING;
-import static org.appland.settlers.model.Military.State.WALKING_TO_TARGET;
+import java.util.Random;
+
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Military.Rank.*;
+import static org.appland.settlers.model.Military.State.*;
 
 /**
  * @author johan
@@ -29,6 +12,21 @@ import static org.appland.settlers.model.Military.State.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Military extends Worker {
+
+    private static final Random random = new Random(1);
+    private static final int TIME_FOR_HIT = 10;
+    private static final int TIME_TO_DIE = 10;
+    private int countdown;
+
+    enum FightState {
+        HITTING,
+        GETTING_HIT,
+        JUMPING_BACK,
+        STANDING_ASIDE,
+        DYING,
+        WAITING
+    }
+
     public enum Rank {
         PRIVATE_RANK,
         SERGEANT_RANK,
@@ -94,6 +92,7 @@ public class Military extends Worker {
     private State     state;
     private int       health;
     private Building  defendedBuilding;
+    private FightState fightState;
 
     public Military(Player player, Rank rank, GameMap map) {
         super(player, map);
@@ -129,7 +128,6 @@ public class Military extends Worker {
 
     @Override
     public String toString() {
-
         if (isExactlyAtPoint()) {
             return rank.getSimpleName() + " soldier " + getPosition();
         } else {
@@ -138,16 +136,96 @@ public class Military extends Worker {
     }
 
     @Override
+    public void stepTime() throws InvalidUserActionException {
+        super.stepTime();
+
+        if (state == ATTACKING || state == DEFENDING) {
+            switch (fightState) {
+                case GETTING_HIT -> {
+                    if (countdown == 0) {
+                        health -= 5; // Todo: fix so that damage depends on rank of the opponent
+
+                        if (health <= 0) {
+                            fightState = FightState.DYING;
+
+                            countdown = TIME_TO_DIE;
+                        } else {
+                            fightState = FightState.WAITING;
+                        }
+                    } else {
+                        countdown -= 1;
+                    }
+                }
+
+                case WAITING -> {
+                    if (opponent != null && opponent.isDead()) {
+
+                        /* Return to the fixed point */
+                        if (state == ATTACKING) {
+
+                            /* Change the state to walking back to the point after the fight */
+                            state = State.WALKING_TO_FIXED_POINT_AFTER_ATTACK;
+                        } else if (state == DEFENDING) {
+
+                            /* Change the state to walking back to the point after the fight */
+                            state = State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE;
+                        }
+
+                        returnToFixedPoint();
+                    } else if (opponent != null && opponent.isReadyToFight()) {
+
+                        // Somehow needed to prevent always getting defenders to make first hit
+                        random.nextBoolean();
+
+                        if (random.nextBoolean()) {
+                            fightState = FightState.HITTING;
+
+                            opponent.setBeingHit();
+
+                            countdown = TIME_FOR_HIT;
+
+                            map.reportWorkerStartedAction(this, WorkerAction.HIT);
+                        }
+                    }
+                }
+
+                case HITTING, JUMPING_BACK, STANDING_ASIDE -> {
+                    if (countdown == 0) {
+                        fightState = FightState.WAITING;
+                    } else {
+                        countdown -= 1;
+                    }
+                }
+
+                case DYING -> {
+                    if (countdown == 0) {
+
+                        /* Remove the military from the map (i.e. "die") */
+                        map.removeWorker(this);
+
+                        /* Remove this military from the list of the building's defenders */
+                        if (state == DEFENDING) {
+                            defendedBuilding.removeDefender(this);
+                        } else if (state == ATTACKING) {
+                            buildingToAttack.removeAttacker(this);
+                        }
+
+                        /* Remember that this military is dead */
+                        state = State.DEAD;
+
+                        setDead();
+                    } else {
+                        countdown -= 1;
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     protected void onIdle() {
-
-        if (state == DEFENDING || state == ATTACKING) {
-
-            /* Hit the opponent if the military is involved in a fight */
-            opponent.hit();
-        } else if (state == WAITING_FOR_DEFENDING_OPPONENT) {
-
+        if (state == WAITING_FOR_DEFENDING_OPPONENT) {
             if (buildingToAttack.getPlayer().equals(getPlayer())) {
-
                 if (buildingToAttack.needsMilitaryManning()) {
 
                     /* Enter the building if it has already been taken over and needs additional manning */
@@ -363,11 +441,12 @@ public class Military extends Worker {
                 returnAfterAttackIsOver();
             }
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE) {
-
             if (defendedBuilding.getAttackers().isEmpty()) {
 
                 /* Go home or to storage if there are no more attackers */
                 returnAfterAttackIsOver();
+
+                defendedBuilding.removeDefender(this);
             } else if (getHome().equals(defendedBuilding)) {
 
                 /* Stay by the flag if the military is defending its own building and the attack isn't over */
@@ -452,78 +531,26 @@ public class Military extends Worker {
         }
     }
 
-    private void won() {
-
-        /* Return to the fixed point */
-        if (state == ATTACKING) {
-
-            /* Change the state to walking back to the point after the fight */
-            state = State.WALKING_TO_FIXED_POINT_AFTER_ATTACK;
-        } else if (state == DEFENDING) {
-
-            /* Change the state to walking back to the point after the fight */
-            state = State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE;
-        }
-
-        returnToFixedPoint();
-    }
-
-    private void lost() {
-
-        /* Remove the military from the map (i.e. "die") */
-        map.removeWorker(this);
-
-        /* Remove this military from the list of the building's defenders */
-        if (state == DEFENDING) {
-            defendedBuilding.removeDefender(this);
-        } else if (state == ATTACKING) {
-            buildingToAttack.removeAttacker(this);
-        }
-
-        /* Remember that this military is dead */
-        state = State.DEAD;
-    }
-
     public boolean isFighting() {
         return state == DEFENDING || state == ATTACKING;
     }
 
     private int getHealthForRank(Rank rank) {
-        switch (rank) {
-        case PRIVATE_RANK:
-            return PRIVATE_HEALTH;
-            case PRIVATE_FIRST_CLASS_RANK:
-            return PRIVATE_FIRST_CLASS_HEALTH;
-        case SERGEANT_RANK:
-            return SERGEANT_HEALTH;
-        case OFFICER_RANK:
-            return OFFICER_HEALTH;
-        case GENERAL_RANK:
-            return GENERAL_HEALTH;
-        default:
-            return 0;
-        }
-    }
-
-    private void hit() {
-
-        /* Decrease health */
-        health--;
-
-        /* Handle "death" and notify the winner */
-        if (health == 0) {
-
-            lost();
-            opponent.won();
-        }
+        return switch (rank) {
+            case PRIVATE_RANK -> PRIVATE_HEALTH;
+            case PRIVATE_FIRST_CLASS_RANK -> PRIVATE_FIRST_CLASS_HEALTH;
+            case SERGEANT_RANK -> SERGEANT_HEALTH;
+            case OFFICER_RANK -> OFFICER_HEALTH;
+            case GENERAL_RANK -> GENERAL_HEALTH;
+            default -> 0;
+        };
     }
 
     void defendBuilding(Building building) {
-
         defendedBuilding = building;
 
         /* Handle the attacker at the flag if this is the defender's own building */
-        if (defendedBuilding.equals(getHome())) {
+        if (defendedBuilding.equals(getHome()) || getPosition().equals(defendedBuilding.getPosition())) {
 
             /* Get the opponent */
             opponent = defendedBuilding.getPrimaryAttacker();
@@ -532,7 +559,7 @@ public class Military extends Worker {
             state = WALKING_TO_FIGHT_TO_DEFEND;
 
             /* Walk to the flag */
-            setOffroadTarget(getHome().getFlag().getPosition());
+            setOffroadTarget(defendedBuilding.getFlag().getPosition());
 
         } else {
 
@@ -587,9 +614,39 @@ public class Military extends Worker {
         /* Start the fight when the military is in the right position */
         if (state == State.WALKING_APART_TO_DEFEND) {
             state = DEFENDING;
+
+            fightState = FightState.WAITING;
         } else if (state == WALKING_APART_TO_ATTACK) {
             state = ATTACKING;
+
+            map.reportWorkerStartedAction(this, WorkerAction.ATTACK);
+
+            fightState = FightState.WAITING;
         }
+    }
+
+    private void setBeingHit() {
+        int next = Math.abs(random.nextInt() % 3);
+
+        fightState = switch (next) {
+            case 0 -> FightState.GETTING_HIT;
+            case 1 -> FightState.JUMPING_BACK;
+            case 2 -> FightState.STANDING_ASIDE;
+            default -> throw new InvalidGameLogicException("Failed to set a reasonable fight state!");
+        };
+
+        map.reportWorkerStartedAction(this, switch (fightState) {
+            case GETTING_HIT -> WorkerAction.GET_HIT;
+            case JUMPING_BACK -> WorkerAction.JUMP_BACK;
+            case STANDING_ASIDE -> WorkerAction.STAND_ASIDE;
+            default -> throw new InvalidGameLogicException("Found unexpected fight state");
+        });
+
+        countdown = TIME_FOR_HIT;
+    }
+
+    private boolean isReadyToFight() {
+        return (state == ATTACKING || state == DEFENDING) && fightState == FightState.WAITING;
     }
 
     private void prepareForFight(Military military) {
@@ -612,7 +669,7 @@ public class Military extends Worker {
     private void returnAfterAttackIsOver() {
 
         /* Return home if there is a need for a military at home */
-        if (getHome().needsMilitaryManning()  && getHome().getPlayer().equals(getPlayer())) {
+        if (getHome().needsMilitaryManning() && getHome().getPlayer().equals(getPlayer())) {
 
             /* Promise to return home */
             getHome().promiseMilitary(this);
@@ -634,5 +691,37 @@ public class Military extends Worker {
     @Override
     public boolean isSoldier() {
         return true;
+    }
+
+    public boolean isAttacking() {
+        return state == ATTACKING;
+    }
+
+    public boolean isDefending() {
+        return state == DEFENDING;
+    }
+
+    public boolean isJumpingBack() {
+        return fightState == FightState.JUMPING_BACK;
+    }
+
+    public boolean isStandingAside() {
+        return fightState == FightState.STANDING_ASIDE;
+    }
+
+    public boolean isGettingHit() {
+        return fightState == FightState.GETTING_HIT;
+    }
+
+    public boolean isHitting() {
+        return fightState == FightState.HITTING;
+    }
+
+    public boolean isDying() {
+        return fightState == FightState.DYING;
+    }
+
+    public int getHealth() {
+        return health;
     }
 }

@@ -1426,7 +1426,7 @@ public class SettlersAPI {
         }
 
         /* Create instances outside the synchronized block when possible */
-        JSONObject jsonView = utils.playerViewToJson(playerId, map, player);
+        JSONObject jsonView = utils.playerViewToJson(playerId, map, player, gameResource);
 
         return Response.status(200).entity(jsonView.toJSONString()).build();
     }

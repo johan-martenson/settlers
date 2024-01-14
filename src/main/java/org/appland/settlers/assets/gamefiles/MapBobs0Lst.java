@@ -3,14 +3,15 @@ package org.appland.settlers.assets.gamefiles;
 public class MapBobs0Lst {
     public static final String FILENAME = "DATA/MAPBOBS0.LST";
 
+    public static final int PILE_OF_STONES = 294;
     public static final int MINI_BROWN_MUSHROOM = 283;
     public static final int BROWN_MUSHROOM = 329;
     public static final int MINI_STONE_WITH_GRASS = 330;
     public static final int SMALL_STONE_WITH_GRASS = 331;
     public static final int SOME_SMALL_STONES = 332;
     public static final int SOME_SMALLER_STONES = 333;
-    public static final int SPARSE_BUSH = 335;
     public static final int FEW_SMALL_STONES = 334;
+    public static final int SPARSE_BUSH = 335;
     public static final int SOME_WATER = 336;
     public static final int LITTLE_GRASS = 337;
     public static final int SNOWMAN = 338;

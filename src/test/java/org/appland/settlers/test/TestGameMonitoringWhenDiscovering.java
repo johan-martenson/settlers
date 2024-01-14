@@ -32,8 +32,7 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.SCOUT;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
@@ -1353,6 +1352,10 @@ public class TestGameMonitoringWhenDiscovering {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Clear the soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -1411,17 +1414,15 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         /* Verify that the soldiers are fighting */
-        assertTrue(barracks1.isUnderAttack());
+        Utils.waitForFightToStart(map, attacker, defender);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the general beats the private */
-        Utils.waitForWorkerToDisappear(defender, map);
+        /* Verify that an event is sent when the general beats the private */
+        Utils.waitForSoldierToWinFight(attacker, map);
 
-        assertFalse(map.getWorkers().contains(defender));
-        assertTrue(map.getWorkers().contains(attacker));
         assertFalse(attacker.isFighting());
         assertNotNull(monitor.getLastEvent());
 

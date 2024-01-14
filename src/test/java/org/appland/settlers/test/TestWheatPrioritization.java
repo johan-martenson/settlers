@@ -1239,7 +1239,7 @@ public class TestWheatPrioritization {
                 Utils.deliverMaxCargos(donkeyFarm0, WATER);
             }
 
-            if (pigFarm0.getAmount(WATER) < 0) {
+            if (pigFarm0.getAmount(WATER) < 6) {
                 Utils.deliverMaxCargos(pigFarm0, WATER);
             }
 
@@ -1508,12 +1508,12 @@ public class TestWheatPrioritization {
         assertTrue(headquarter0.getAmount(DONKEY_BREEDER) > 0);
 
         /* Connect the farm with the headquarters */
-        map.placeAutoSelectedRoad(player0, farm.getFlag(), fortress.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), fortress.getFlag());
 
         /* Connect the wheat consumers with the farm */
         Road road1 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), farm.getFlag());
-        Road road3 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), farm.getFlag());
-        Road road4 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), farm.getFlag());
+        Road road2 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), farm.getFlag());
+        Road road3 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), farm.getFlag());
 
         /* Wait for the buildings to get constructed and occupied */
         Utils.waitForBuildingsToBeConstructed(farm, donkeyFarm0, pigFarm0, brewery);
@@ -1529,11 +1529,6 @@ public class TestWheatPrioritization {
         /* Make sure the headquarters has no wheat */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 0);
 
-        /* Attach the wheat consumers to the headquarters */
-        map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
-        map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
-        map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter0.getFlag());
-
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -1547,7 +1542,7 @@ public class TestWheatPrioritization {
                 Utils.deliverMaxCargos(donkeyFarm0, WATER);
             }
 
-            if (pigFarm0.getAmount(WATER) < 0) {
+            if (pigFarm0.getAmount(WATER) < 6) {
                 Utils.deliverMaxCargos(pigFarm0, WATER);
             }
 
@@ -1566,22 +1561,40 @@ public class TestWheatPrioritization {
 
             Cargo cargo = farm.getFlag().getStackedCargo().getFirst();
 
+            assertNotNull(cargo);
+
             /* Stop production */
             farm.stopProduction();
 
             /* Wait for the storage worker to pick up a wheat cargo */
+            assertTrue(pigFarm0.needsMaterial(WHEAT));
+            assertTrue(brewery.needsMaterial(WHEAT));
+            assertTrue(donkeyFarm0.needsMaterial(WHEAT));
+
+            assertTrue(road1.getCourier().isIdle());
+            assertTrue(road2.getCourier().isIdle());
+            assertTrue(road3.getCourier().isIdle());
+            assertTrue(farm.getFlag().getStackedCargo().contains(cargo));
+
             Worker carrier = Utils.fastForwardUntilOneOfWorkersCarriesCargo(
                     map,
-                    farm.getFlag().getStackedCargo().getFirst(),
+                    cargo,
                     road1.getCourier(),
+                    road2.getCourier(),
                     road3.getCourier(),
-                    road4.getCourier());
+                    road1.getDonkey(),
+                    road2.getDonkey(),
+                    road3.getDonkey());
 
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WHEAT);
 
-
             /* Wait for the wheat to reach the consumer */
             Building target = cargo.getTarget();
+
+            assertNotEquals(target, headquarter0);
+            assertNotEquals(target, fortress);
+
+            wheatAllocation.put(target, wheatAllocation.getOrDefault(target, 0) + 1);
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
@@ -1659,7 +1672,7 @@ public class TestWheatPrioritization {
         assertTrue(headquarter0.getAmount(DONKEY_BREEDER) > 0);
 
         /* Connect the farm with the headquarters */
-        map.placeAutoSelectedRoad(player0, farm.getFlag(), fortress.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), fortress.getFlag());
 
         /* Connect the wheat consumers with the farm */
         Road road1 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), farm.getFlag());

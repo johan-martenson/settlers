@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class WorkerImageCollection {
     private final Map<CompassDirection, List<Bitmap>> commonBodyAndHeadImages;
     private final Map<WorkerAction, List<Bitmap>> commonActions;
     private final Map<WorkerAction, Map<CompassDirection, List<Bitmap>>> commonActionsWithDirection;
+    private final Map<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> nationSpecificActionsWithDirection;
 
     public WorkerImageCollection(String name) {
         this.name = name;
@@ -50,6 +52,7 @@ public class WorkerImageCollection {
         commonBodyAndHeadImages = new EnumMap<>(CompassDirection.class);
         commonActions = new EnumMap<>(WorkerAction.class);
         commonActionsWithDirection = new EnumMap<>(WorkerAction.class);
+        nationSpecificActionsWithDirection = new EnumMap<>(Nation.class);
     }
 
     public void addNationSpecificFullImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {
@@ -287,6 +290,45 @@ public class WorkerImageCollection {
             }
         }
 
+        // Write actions that are specific per nation and per direction (if any)
+        if (!nationSpecificActionsWithDirection.isEmpty()) {
+            for (Map.Entry<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> entry : nationSpecificActionsWithDirection.entrySet()) {
+                var nation = entry.getKey();
+                var actionToDirection = entry.getValue();
+
+                JSONObject jsonNation;
+
+                if (jsonNationSpecific.containsKey(nation.name().toUpperCase())) {
+                    jsonNation = (JSONObject) jsonNationSpecific.get(nation.name().toUpperCase());
+                } else {
+                    jsonNation = new JSONObject();
+
+                    jsonNationSpecific.put(nation.name().toUpperCase(), jsonNation);
+                }
+
+                for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> actionEntry : actionToDirection.entrySet()) {
+                    var action = actionEntry.getKey();
+                    var directionToImages = actionEntry.getValue();
+
+                    JSONObject jsonAction = new JSONObject();
+
+                    jsonNation.put(action.name().toUpperCase(), jsonAction);
+
+                    for (Map.Entry<CompassDirection, List<Bitmap>> directionEntry : directionToImages.entrySet()) {
+                        var direction = directionEntry.getKey();
+                        var images = directionEntry.getValue();
+
+                        NormalizedImageList normalizedImageList = new NormalizedImageList(images);
+                        List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+
+                        JSONObject jsonImageSeries = imageBoard.placeImageSeriesBottom(normalizedImages);
+
+                        jsonAction.put(direction.name().toUpperCase(), jsonImageSeries);
+                    }
+                }
+            }
+        }
+
         // Write the image atlas to disk
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-" + name.toLowerCase() + ".png");
 
@@ -423,5 +465,21 @@ public class WorkerImageCollection {
         }
 
         commonActionsWithDirection.get(action).put(direction, images);
+    }
+
+    public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection direction, WorkerAction workerAction, List<Bitmap> images) {
+        if (!nationSpecificActionsWithDirection.containsKey(nation)) {
+            nationSpecificActionsWithDirection.put(nation, new HashMap<>());
+        }
+
+        var actionToDirection = nationSpecificActionsWithDirection.get(nation);
+
+        if (!actionToDirection.containsKey(workerAction)) {
+            actionToDirection.put(workerAction, new HashMap<>());
+        }
+
+        var directionToImages = actionToDirection.get(workerAction);
+
+        directionToImages.put(direction, images);
     }
 }

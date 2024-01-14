@@ -15,6 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -34,14 +35,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.SCOUT;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
-import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
@@ -61,16 +55,16 @@ public class TestStorehouse {
     /*
     TODO:
       - material can be pushed out:
-          - push cargo from headquarter to storehouse DONE
-          - push worker from headquarter to storehouse DONE
-          - push cargo from headquarter without any place to store - headquarter flag fills up DONE
+          - push cargo from headquartersto storehouse DONE
+          - push worker from headquartersto storehouse DONE
+          - push cargo from headquarterswithout any place to store - headquartersflag fills up DONE
           - push out follows priority order DONE
       - material can be blocked:
           - deliveries go to another storehouse DONE
           - test for each type of house/worker: (DONE)
             - flags fill up and then deliveries stop if there is nowhere to put them
-            - push worker from headquarter without any place to store - worker goes away and dies
-            - push worker from headquarter without blocking - worker goes out and in again
+            - push worker from headquarterswithout any place to store - worker goes away and dies
+            - push worker from headquarterswithout blocking - worker goes out and in again
             - when house is burned and storing of worker is blocked, worker goes to other storehouse
             - when house is burned, storing of worker is blocked, and there is no other place to store - worker walks away and dies
       - push out and block at the same time - material and worker
@@ -85,7 +79,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -127,7 +121,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -168,7 +162,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -209,7 +203,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -254,7 +248,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -275,7 +269,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -301,7 +295,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -309,13 +303,13 @@ public class TestStorehouse {
         Point point3 = new Point(7, 9);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
-        /* Connect the storage with the headquarter */
+        /* Connect the storage with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse);
 
-        /* Run game logic once to let the headquarter assign a storage worker to the storage */
+        /* Run game logic once to let the headquartersassign a storage worker to the storage */
         map.stepTime();
 
         Worker storageWorker = null;
@@ -345,7 +339,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -353,13 +347,13 @@ public class TestStorehouse {
         Point point3 = new Point(7, 9);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
-        /* Connect the storage with the headquarter */
+        /* Connect the storage with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse);
 
-        /* Run game logic once to let the headquarter assign a storage worker to the storage */
+        /* Run game logic once to let the headquartersassign a storage worker to the storage */
         map.stepTime();
 
         Worker storageWorker = null;
@@ -389,7 +383,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -419,7 +413,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -473,7 +467,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -529,7 +523,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -590,7 +584,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -612,7 +606,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
@@ -620,7 +614,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
-        /* Verify that the storage worker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -633,7 +627,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -676,7 +670,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -725,7 +719,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -777,7 +771,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -817,7 +811,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -863,7 +857,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -912,7 +906,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -920,7 +914,7 @@ public class TestStorehouse {
         Point point26 = new Point(8, 8);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
-        /* Connect the storage with the headquarter */
+        /* Connect the storage with the headquarters*/
         map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the storage */
@@ -937,7 +931,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
@@ -962,7 +956,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -970,7 +964,7 @@ public class TestStorehouse {
         Point point26 = new Point(8, 8);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
-        /* Connect the storage with the headquarter */
+        /* Connect the storage with the headquarters*/
         map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the storage */
@@ -1007,7 +1001,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1035,7 +1029,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1063,7 +1057,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1071,7 +1065,7 @@ public class TestStorehouse {
         Point point1 = new Point(10, 6);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storage and the headquarter */
+        /* Connect the storage and the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
 
         /* Finish the storage */
@@ -1099,7 +1093,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1107,7 +1101,7 @@ public class TestStorehouse {
         Point point1 = new Point(10, 6);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storage and the headquarter */
+        /* Connect the storage and the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
 
         /* Finish the storage */
@@ -1137,7 +1131,7 @@ public class TestStorehouse {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1148,10 +1142,10 @@ public class TestStorehouse {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Connect the storage with the headquarter */
+        /* Connect the storage with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
 
-        /* Wait for storage worker to get assigned and leave the headquarter */
+        /* Wait for storage worker to get assigned and leave the headquarters*/
         List<StorageWorker> workers = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
 
         assertNotNull(workers);
@@ -1180,15 +1174,15 @@ public class TestStorehouse {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters*/
         Point point0 = new Point(7, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters*/
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters*/
         Point point1 = new Point(37, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1235,17 +1229,22 @@ public class TestStorehouse {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters*/
         Point point0 = new Point(13, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters*/
         Point point1 = new Point(45, 17);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters*/
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+
+        /* Clear the inventories of soldiers */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter2, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 5);
@@ -1257,7 +1256,7 @@ public class TestStorehouse {
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0);
 
-        /* Connect the fortress with the headquarter */
+        /* Connect the fortress with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Occupy the road */
@@ -1273,7 +1272,7 @@ public class TestStorehouse {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
 
         /* Occupy the road */
@@ -1282,8 +1281,20 @@ public class TestStorehouse {
         /* Capture the barracks for player 0 */
         player0.attack(barracks0, 2);
 
+        /* Wait for the attackers to come out */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+
+        Military mainAttacker = Utils.getMainAttacker(barracks0, attackers);
+
+        /* Wait for the attacker to reach the flag of the barracks */
+        assertEquals(mainAttacker.getTarget(), barracks0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mainAttacker, barracks0.getFlag().getPosition());
+
         /* Wait for player 0 to take over the barracks */
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 10000; i++) {
+
+            System.out.println(attackers);
 
             if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedMilitary() > 0) {
                 break;
@@ -1295,7 +1306,7 @@ public class TestStorehouse {
         assertEquals(barracks0.getPlayer(), player0);
         assertTrue(barracks0.getNumberOfHostedMilitary() > 0);
 
-        /* Connect the captured barracks with the headquarter */
+        /* Connect the captured barracks with the headquarters */
         Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
 
         /* Occupy the road */
@@ -1308,13 +1319,13 @@ public class TestStorehouse {
         /* Place road */
         Road road3 = map.placeAutoSelectedRoad(player0, flag0, barracks0.getFlag());
 
-        /* Verify that player 1's headquarter is closer to the road */
+        /* Verify that player 1's headquartersis closer to the road */
         for (Point point : road3.getWayPoints()) {
 
             assertTrue(point.distance(headquarter1.getPosition()) < point.distance(headquarter0.getPosition()));
         }
 
-        /* Verify that the barracks gets populated from the right headquarter only */
+        /* Verify that the barracks gets populated from the right headquartersonly */
         int player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0).size();
         int player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1).size();
 
@@ -1343,7 +1354,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1358,7 +1369,7 @@ public class TestStorehouse {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1393,7 +1404,7 @@ public class TestStorehouse {
 
         assertEquals(storageWorker.getPosition(), flag0.getPosition());
 
-        /* Verify that the storage worker returns to the headquarter when it reaches the flag */
+        /* Verify that the storage worker returns to the headquarterswhen it reaches the flag */
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
@@ -1408,7 +1419,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1423,7 +1434,7 @@ public class TestStorehouse {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1476,7 +1487,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1491,7 +1502,7 @@ public class TestStorehouse {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Connect headquarter and first flag */
+        /* Connect headquartersand first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -1540,7 +1551,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1569,7 +1580,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), storehouse1.getPosition());
 
@@ -1577,7 +1588,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storehouse1.getPosition());
 
-        /* Verify that the storage worker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarters*/
         assertEquals(storehouse1.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1590,7 +1601,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1622,7 +1633,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
@@ -1630,7 +1641,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
-        /* Verify that the storage worker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1643,7 +1654,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1678,7 +1689,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
@@ -1686,7 +1697,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
-        /* Verify that the storage worker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1699,7 +1710,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1725,7 +1736,7 @@ public class TestStorehouse {
 
         storehouse0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters*/
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
 
@@ -1733,7 +1744,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
-        /* Verify that the storage worker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarters*/
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 
@@ -1746,7 +1757,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1754,7 +1765,7 @@ public class TestStorehouse {
         Point point26 = new Point(17, 17);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point26);
 
-        /* Place road to connect the headquarter and the storage */
+        /* Place road to connect the headquartersand the storage */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storehouse0.getFlag());
 
         /* Finish construction of the storage */
@@ -1770,7 +1781,7 @@ public class TestStorehouse {
         storehouse0.tearDown();
 
         /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
+           headquartersinstead of entering
         */
         assertEquals(worker.getTarget(), storehouse0.getPosition());
 
@@ -1790,7 +1801,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1817,7 +1828,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1841,7 +1852,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1874,7 +1885,7 @@ public class TestStorehouse {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1903,11 +1914,11 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -1915,7 +1926,7 @@ public class TestStorehouse {
         Point point1 = new Point(16, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         /* Wait for the storehouse to get constructed and assigned a worker */
@@ -1970,11 +1981,11 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -1982,10 +1993,10 @@ public class TestStorehouse {
         Point point1 = new Point(16, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2062,7 +2073,7 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2070,10 +2081,10 @@ public class TestStorehouse {
         Point point1 = new Point(16, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2081,7 +2092,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBeConstructed(storehouse);
         Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, FISH, 10);
 
         headquarter.pushOutAll(FISH);
@@ -2112,7 +2123,7 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2120,10 +2131,10 @@ public class TestStorehouse {
         Point point1 = new Point(16, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2131,7 +2142,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBeConstructed(storehouse);
         Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, SCOUT, 10);
 
         headquarter.pushOutAll(SCOUT);
@@ -2172,7 +2183,7 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2180,10 +2191,10 @@ public class TestStorehouse {
         Point point1 = new Point(16, 6);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
@@ -2191,7 +2202,7 @@ public class TestStorehouse {
         Utils.waitForBuildingToBeConstructed(storehouse);
         Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
 
-        /* Push out fish from the headquarter */
+        /* Push out fish from the headquarters*/
         Utils.adjustInventoryTo(headquarter, FISH, 10);
         Utils.adjustInventoryTo(headquarter, COIN, 10);
 
@@ -2225,7 +2236,7 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2237,17 +2248,17 @@ public class TestStorehouse {
         Point point2 = new Point(9, 7);
         Well well = map.placeBuilding(new Well(player0), point2);
 
-        /* Make sure there is enough construction material in the headquarter */
+        /* Make sure there is enough construction material in the headquarters*/
         Utils.adjustInventoryTo(headquarter, PLANK, 50);
         Utils.adjustInventoryTo(headquarter, STONE, 50);
 
-        /* Connect the storehouse with the headquarter */
+        /* Connect the storehouse with the headquarters*/
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
 
         /* Wait for the storehouse to get constructed */
         Utils.waitForBuildingToBeConstructed(storehouse);
 
-        /* Connect the well with the headquarter */
+        /* Connect the well with the headquarters*/
         Road road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
 
         /* Wait for the well to get constructed */
@@ -2270,7 +2281,7 @@ public class TestStorehouse {
             /* Wait for the well worker to produce a water cargo */
             Cargo cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
 
-            /* Wait for the courier for the road between the well and the headquarter to pick up the water cargo */
+            /* Wait for the courier for the road between the well and the headquartersto pick up the water cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
 
             assertEquals(road1.getCourier().getTarget(), headquarter.getFlag().getPosition());
@@ -2303,7 +2314,7 @@ public class TestStorehouse {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters*/
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 

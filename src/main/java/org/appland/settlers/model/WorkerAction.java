@@ -22,9 +22,9 @@ public enum WorkerAction {
     CHEW_GUM,
     SIT_DOWN,
     ATTACK,
-    DEFEND,
+    JUMP_BACK,
     DIE,
     GET_HIT,
     JUMP_SKIP_ROPE,
-    TOUCH_NOSE
+    AVOID_HIT, FLINCH, STAND_ASIDE, HIT, TOUCH_NOSE
 }

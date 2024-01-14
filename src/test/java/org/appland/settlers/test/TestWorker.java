@@ -27,12 +27,10 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -49,7 +47,7 @@ public class TestWorker {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -79,7 +77,7 @@ public class TestWorker {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -91,7 +89,7 @@ public class TestWorker {
         Point point4 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point4);
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
@@ -100,7 +98,7 @@ public class TestWorker {
         Point point5 = new Point(12, 4);
         Road road1 = map.placeRoad(player0, point4, point5, well.getFlag().getPosition());
 
-        /* Place a courier at the headquarter */
+        /* Place a courier at the headquarters */
         Courier courier = new Courier(player0, map);
 
         map.placeWorker(courier, headquarter);
@@ -232,13 +230,17 @@ public class TestWorker {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(31, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear the soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
 
         /* Place barracks for player 0 */
         Point point2 = new Point(17, 5);
@@ -253,8 +255,8 @@ public class TestWorker {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         assertFalse(player0.getLandInPoints().contains(barracks1.getPosition()));
         assertFalse(player0.getLandInPoints().contains(barracks1.getFlag().getPosition()));
@@ -325,8 +327,7 @@ public class TestWorker {
             int newAttackersDistance = attacker.getPercentageOfDistanceTraveled();
             int newDefendersDistance = defender.getPercentageOfDistanceTraveled();
 
-            assertTrue(newAttackersDistance > attackersDistance);
-            assertTrue(newDefendersDistance > defendersDistance);
+            assertTrue(newAttackersDistance > attackersDistance || newDefendersDistance > defendersDistance);
 
             attackersDistance = newAttackersDistance;
             defendersDistance = newDefendersDistance;
@@ -335,11 +336,10 @@ public class TestWorker {
                 break;
             }
 
-            assertTrue(attackersDistance < 50);
-            assertTrue(defendersDistance < 50);
+            assertTrue(attackersDistance < 50 || defendersDistance < 50);
 
-            assertFalse(attacker.isFighting());
-            assertFalse(defender.isFighting());
+            assertFalse(attacker.getPercentageOfDistanceTraveled() < 50 && attacker.isFighting());
+            assertFalse(defender.getPercentageOfDistanceTraveled() < 50 && defender.isFighting());
 
             map.stepTime();
         }
@@ -347,15 +347,14 @@ public class TestWorker {
         assertEquals(attackersDistance, 50);
         assertEquals(defendersDistance, 50);
 
-        /* Verify that the soldiers fight */
-        assertTrue(attacker.isFighting());
-        assertTrue(defender.isFighting());
+        /* Wait for the attacker to win the fight */
+        Utils.waitForFightToStart(map, attacker, defender);
 
         /* Wait for the fight to end */
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 2000; i++) {
 
-            /* Break when one of the soldiers is gone */
-            if (!map.getWorkers().contains(attacker) || !map.getWorkers().contains(defender)) {
+            /* Break when one of the soldiers is dying */
+            if (defender.isDying()) {
                 break;
             }
 
@@ -366,43 +365,34 @@ public class TestWorker {
             map.stepTime();
         }
 
-        assertTrue(!map.getWorkers().contains(attacker) || !map.getWorkers().contains(defender));
+        assertTrue(defender.isDying());
 
-        /* Get the winner */
-        Military winner;
-
-        if (!map.getWorkers().contains(attacker)) {
-            winner = defender;
-        } else {
-            winner = attacker;
-        }
-
-        /* Verify that the winner isn't fighting when it's walking back */
-        assertFalse(winner.isFighting());
+        /* Verify that the attacker isn't fighting when it's walking back */
+        Utils.waitForSoldierToWinFight(attacker, map);
 
         /* Verify that the winner walks back to the flag */
-        assertEquals(winner.getTarget(), barracks1.getFlag().getPosition());
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-        int distance = winner.getPercentageOfDistanceTraveled();
+        int distance = attacker.getPercentageOfDistanceTraveled();
 
         for (int i = 0; i < 10; i++) {
 
             map.stepTime();
 
-            if (winner.isExactlyAtPoint()) {
+            if (attacker.isExactlyAtPoint()) {
                 break;
             }
 
-            assertEquals(winner.getNextPoint(), barracks1.getFlag().getPosition());
-            assertEquals(winner.getLastPoint(), barracks1.getFlag().getPosition().left());
+            assertEquals(attacker.getNextPoint(), barracks1.getFlag().getPosition());
+            assertEquals(attacker.getLastPoint(), barracks1.getFlag().getPosition().left());
 
-            int newDistance = winner.getPercentageOfDistanceTraveled();
+            int newDistance = attacker.getPercentageOfDistanceTraveled();
 
             assertTrue(newDistance > distance);
 
             distance = newDistance;
         }
 
-        assertEquals(winner.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
     }
 }

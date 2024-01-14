@@ -1246,7 +1246,7 @@ class Utils {
         JSONArray jsonNewStones = new JSONArray();
 
         for (Stone stone : newStones) {
-            jsonNewStones.add(pointToJson(stone.getPosition()));
+            jsonNewStones.add(stoneToJson(stone));
         }
 
         return jsonNewStones;
@@ -1617,7 +1617,7 @@ class Utils {
         return jsonWildAnimal;
     }
 
-    public JSONObject playerViewToJson(String playerId, GameMap map, Player player) throws InvalidUserActionException {
+    public JSONObject playerViewToJson(String playerId, GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
         JSONObject jsonView = new JSONObject();
 
         JSONArray  jsonHouses                = new JSONArray();
@@ -1650,6 +1650,8 @@ class Utils {
         jsonView.put("deadTrees", jsonDeadTrees);
         jsonView.put("decorations", jsonDecorations);
 
+        /* Put the game status */
+        jsonView.put("gameState", gameResource.status.name().toUpperCase());
 
         /* Protect access to the map to avoid interference */
         synchronized (map) {

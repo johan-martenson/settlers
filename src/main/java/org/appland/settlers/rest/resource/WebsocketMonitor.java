@@ -91,11 +91,18 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 game.status = GameStatus.PAUSED;
 
+                // Tell all subscribed players that the game is paused
                 JSONObject jsonResponse = new JSONObject();
 
                 jsonResponse.put("gameState", "PAUSED");
 
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                game.getGameMap().getPlayers().forEach(player1 -> {
+                    var playerSession = playerToSession.get(player1);
+
+                    if (playerSession != null) {
+                        playerSession.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                    }
+                });
             }
             break;
 
@@ -361,9 +368,11 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 synchronized (map) {
                     String playerId = (String) jsonBody.get("playerId");
 
+                    GameResource gameResource = (GameResource) session.getUserProperties().get("GAME");
+
                     JSONObject jsonFullSync = new JSONObject();
 
-                    jsonFullSync.put("playerView", utils.playerViewToJson(playerId, map, player));
+                    jsonFullSync.put("playerView", utils.playerViewToJson(playerId, map, player, gameResource));
 
                     System.out.println("Replying with full sync message");
 

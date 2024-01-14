@@ -456,9 +456,17 @@ public class Courier extends Worker {
     @Override
     public String toString() {
         if (isExactlyAtPoint()) {
-            return "Courier for " + assignedRoad + " at " + getPosition();
+            if (getCargo() == null) {
+                return "Courier for " + assignedRoad + " at " + getPosition();
+            } else {
+                return "Courier for " + assignedRoad + " at " + getPosition() + " carrying " + getCargo().getMaterial();
+            }
         } else {
-            return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint();
+            if (getCargo() == null) {
+                return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint();
+            } else {
+                return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint() + " carrying " + getCargo().getMaterial();
+            }
         }
     }
 

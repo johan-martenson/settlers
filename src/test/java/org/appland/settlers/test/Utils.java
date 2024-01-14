@@ -141,6 +141,25 @@ public class Utils {
         }
     }
 
+    public static void waitForSoldierToWinFight(Military soldier, GameMap map) throws InvalidUserActionException {
+        assertTrue(soldier.isFighting());
+
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(soldier.isDying());
+            assertFalse(soldier.isDead());
+
+            if (!soldier.isFighting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(soldier.isFighting());
+        assertFalse(soldier.isDying());
+        assertFalse(soldier.isDead());
+    }
+
     public static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws InvalidUserActionException {
         assertNotNull(target);
         assertNotNull(worker);
@@ -914,9 +933,7 @@ public class Utils {
     }
 
     static void waitForCropToGetHarvested(GameMap map, Crop crop) throws InvalidUserActionException {
-
-        for (int i = 0; i < 1000; i++) {
-
+        for (int i = 0; i < 10000; i++) {
             if (crop.getGrowthState() == HARVESTED) {
                 break;
             }
@@ -2667,10 +2684,17 @@ public class Utils {
     }
 
     public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker... workers) throws InvalidUserActionException {
-        Worker workerWithCargo = null;
+/*        return fastForwardUntilOneOfWorkersCarriesCargo(map, cargo, workers);
+    }
+        public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker[] workers) throws InvalidUserActionException {
+  */      Worker workerWithCargo = null;
 
         for (int j = 0; j < 20000; j++) {
             for (Worker worker : workers) {
+                if (worker == null) {
+                    continue;
+                }
+
                 if (Objects.equals(worker.getCargo(), cargo)) {
                     workerWithCargo = worker;
 
@@ -2690,6 +2714,174 @@ public class Utils {
         assertEquals(workerWithCargo.getCargo(), cargo);
 
         return workerWithCargo;
+    }
+
+    public static void waitForOneOfSoldiersToAttack(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isAttacking)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isAttacking));
+    }
+
+    public static void waitForOneOfSoldiersToHit(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isHitting)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isHitting));
+    }
+
+    public static void waitForOneOfSoldiersToJumpBack(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isJumpingBack)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isJumpingBack));
+    }
+
+    public static void waitForOneOfSoldiersToGetHit(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isGettingHit)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isGettingHit));
+    }
+
+    public static void waitForOneOfSoldiersToStandAside(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 10000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isStandingAside)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isStandingAside));
+    }
+
+    public static void waitForFightToEnd(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(soldier -> !soldier.isFighting())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(Arrays.stream(soldiers).anyMatch(soldier -> !soldier.isFighting()));
+    }
+
+    public static Military waitForSoldierToBeDying(GameMap map, Military... soldiers) throws InvalidUserActionException {
+        Military dyingSoldier = null;
+
+        for (int i = 0; i < 2000; i++) {
+            if (Arrays.stream(soldiers).anyMatch(Military::isDying)) {
+                dyingSoldier = Arrays.stream(soldiers).filter(Military::isDying).findFirst().get();
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(dyingSoldier);
+
+        return dyingSoldier;
+    }
+
+    public static void waitForSoldierToBeDying(Military soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (soldier.isDying()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(soldier.isDying());
+    }
+
+    public static void waitForWorkerToDie(GameMap map, Worker worker) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (worker.isDead()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isDead());
+    }
+
+    public static void waitForWorkerToHaveTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            if (Objects.equals(worker.getTarget(), point)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(worker.getTarget(), point);
+    }
+
+    public static Military waitForSoldierNotDyingOutsideBuilding(Player player) throws InvalidUserActionException {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 1000; i++) {
+            if (map.getWorkers().stream()
+                    .anyMatch(soldier -> soldier.isSoldier() &&
+                            soldier.getPlayer().equals(player) &&
+                            !((Military)soldier).isDying() &&
+                            !soldier.isInsideBuilding())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.getWorkers().stream()
+                .anyMatch(soldier -> soldier.isSoldier() &&
+                        soldier.getPlayer().equals(player) &&
+                        !((Military)soldier).isDying() &&
+                        !soldier.isInsideBuilding()));
+
+        return (Military) map.getWorkers().stream()
+                .filter(soldier -> soldier.isSoldier() &&
+                        soldier.getPlayer().equals(player) &&
+                        !((Military)soldier).isDying() &&
+                        !soldier.isInsideBuilding())
+                .findFirst()
+                .get();
+    }
+
+    public static void waitForSoldierToBeCloseToDying(Military soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (soldier.getHealth() < 10) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(soldier.getHealth() < 10);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
