@@ -26,5 +26,7 @@ public enum WorkerAction {
     DIE,
     GET_HIT,
     JUMP_SKIP_ROPE,
-    AVOID_HIT, FLINCH, STAND_ASIDE, HIT, TOUCH_NOSE
+    STAND_ASIDE,
+    HIT,
+    TOUCH_NOSE
 }

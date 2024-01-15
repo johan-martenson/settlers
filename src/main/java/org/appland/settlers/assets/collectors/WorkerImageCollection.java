@@ -292,6 +292,10 @@ public class WorkerImageCollection {
 
         // Write actions that are specific per nation and per direction (if any)
         if (!nationSpecificActionsWithDirection.isEmpty()) {
+            JSONObject jsonNationSpecificActions = new JSONObject();
+
+            jsonNationSpecific.put("actions", jsonNationSpecificActions);
+
             for (Map.Entry<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> entry : nationSpecificActionsWithDirection.entrySet()) {
                 var nation = entry.getKey();
                 var actionToDirection = entry.getValue();
@@ -303,7 +307,7 @@ public class WorkerImageCollection {
                 } else {
                     jsonNation = new JSONObject();
 
-                    jsonNationSpecific.put(nation.name().toUpperCase(), jsonNation);
+                    jsonNationSpecificActions.put(nation.name().toUpperCase(), jsonNation);
                 }
 
                 for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> actionEntry : actionToDirection.entrySet()) {
