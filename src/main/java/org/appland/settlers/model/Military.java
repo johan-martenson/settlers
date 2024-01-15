@@ -148,6 +148,8 @@ public class Military extends Worker {
                         if (health <= 0) {
                             fightState = FightState.DYING;
 
+                            map.reportWorkerStartedAction(this, WorkerAction.DIE);
+
                             countdown = TIME_TO_DIE;
                         } else {
                             fightState = FightState.WAITING;
