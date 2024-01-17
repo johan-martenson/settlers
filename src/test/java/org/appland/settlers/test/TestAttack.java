@@ -58,6 +58,8 @@ public class TestAttack {
      * Todo:
      *  - Test attack using only soldiers from the headquarters
      *  - Test attackers waiting can't stand on buildings
+     *  - Test close soldiers that can't reach the enemy building
+     *  - Test soldiers that are close but have to walk further to attack
      */
 
     @Test

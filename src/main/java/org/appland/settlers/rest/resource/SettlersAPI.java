@@ -1109,6 +1109,7 @@ public class SettlersAPI {
             String attackingPlayerId = (String) jsonAttackInformation.get("attackingPlayerId");
             Player attackingPlayer = (Player) idManager.getObject(attackingPlayerId);
             int attackers = ((Long)jsonAttackInformation.get("attackers")).intValue();
+            AttackStrength attackStrength = AttackStrength.valueOf((String)jsonAttackInformation.get("attackType"));
 
             System.out.println("Attacking");
             System.out.println(jsonAttackInformation.toJSONString());
@@ -1118,7 +1119,7 @@ public class SettlersAPI {
 
             if (!building.getPlayer().equals(attackingPlayer)) {
                 synchronized (player.getMap()) {
-                    attackingPlayer.attack(building, attackers, AttackStrength.STRONG);
+                    attackingPlayer.attack(building, attackers, attackStrength);
                 }
 
                 jsonResponse.put("message", "Attacking building");
