@@ -2,6 +2,7 @@ package org.appland.settlers.rest.resource;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.BuildingCapturedMessage;
 import org.appland.settlers.model.BuildingLostMessage;
@@ -1117,7 +1118,7 @@ public class SettlersAPI {
 
             if (!building.getPlayer().equals(attackingPlayer)) {
                 synchronized (player.getMap()) {
-                    attackingPlayer.attack(building, attackers);
+                    attackingPlayer.attack(building, attackers, AttackStrength.STRONG);
                 }
 
                 jsonResponse.put("message", "Attacking building");

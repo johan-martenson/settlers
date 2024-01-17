@@ -2,6 +2,7 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.policy.InitialState;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,9 @@ public class Headquarter extends Storehouse {
 
         List<Military> hostedSoldiers = getHostedMilitary();
 
-        Long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == Military.Rank.PRIVATE_RANK).count();
+        long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == Military.Rank.PRIVATE_RANK).count();
 
-        boolean lackReservedSoldiers = this.reservedSoldiers.getOrDefault(Military.Rank.PRIVATE_RANK, 0) > amountHostedPrivates.intValue();
+        boolean lackReservedSoldiers = this.reservedSoldiers.getOrDefault(Military.Rank.PRIVATE_RANK, 0) > (int) amountHostedPrivates;
 
         if (lackReservedSoldiers && getAmount(PRIVATE) > 0) {
             deployMilitary(retrieveSoldierFromInventory(PRIVATE));
@@ -190,6 +191,39 @@ public class Headquarter extends Storehouse {
                 inventory.getOrDefault(SERGEANT, 0) +
                 inventory.getOrDefault(OFFICER, 0) +
                 inventory.getOrDefault(GENERAL, 0);
+    }
+
+    @Override
+    public List<Military> getHostedMilitary() {
+        List<Military> hostedMilitary = new ArrayList<>();
+
+        for (Military.Rank rank : Military.Rank.values()) {
+            for (int i = 0; i < inventory.getOrDefault(rank.toMaterial(), 0); i++) {
+                var soldier = new Military(getPlayer(), rank, getMap());
+
+                soldier.setPosition(getPosition());
+                soldier.setHome(this);
+
+                hostedMilitary.add(soldier);
+            }
+        }
+
+        return hostedMilitary;
+    }
+
+    @Override
+    Military retrieveHostedSoldier(Military soldier) {
+        var amount = inventory.getOrDefault(soldier.getRank().toMaterial(), 0);
+
+        inventory.put(soldier.getRank().toMaterial(), amount - 1);
+
+        soldier.setHome(this);
+
+        getMap().placeWorker(soldier, this);
+
+        soldier.setPosition(getPosition());
+
+        return soldier;
     }
 
     @Override

@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1727,4 +1728,68 @@ public class GameUtils {
             return road != null;
         }
     }
+
+    private static int rankToInt(Military.Rank rank) {
+        return switch (rank) {
+            case PRIVATE_RANK -> 0;
+            case PRIVATE_FIRST_CLASS_RANK -> 1;
+            case SERGEANT_RANK -> 2;
+            case OFFICER_RANK -> 3;
+            case GENERAL_RANK -> 4;
+        };
+    }
+
+    public static Comparator<? super Military> strengthSorter = (soldier0, soldier1) -> {
+        var rank0 = rankToInt(soldier0.getRank());
+        var rank1 = rankToInt(soldier1.getRank());
+
+        if (rank0 < rank1) {
+            return -1;
+        } else if (rank0 > rank1) {
+            return 1;
+        }
+
+        return 0;
+    };
+
+    public static Comparator<SoldierAndDistance> strongerAndShorterDistanceSorter = (soldierAndDistance0, soldierAndDistance1) -> {
+        var rank0 = rankToInt(soldierAndDistance0.soldier.getRank());
+        var rank1 = rankToInt(soldierAndDistance1.soldier.getRank());
+
+        if (rank0 > rank1) {
+            return -1;
+        } else if (rank0 < rank1) {
+            return 1;
+        }
+
+        if (soldierAndDistance0.distance < soldierAndDistance1.distance) {
+            return -1;
+        } else if (soldierAndDistance0.distance > soldierAndDistance1.distance) {
+            return 1;
+        }
+
+        return 0;
+    };
+
+
+    public static Comparator<SoldierAndDistance> weakerAndShorterDistanceSorter = (soldierAndDistance0, soldierAndDistance1) -> {
+        var rank0 = rankToInt(soldierAndDistance0.soldier.getRank());
+        var rank1 = rankToInt(soldierAndDistance1.soldier.getRank());
+
+        if (rank0 < rank1) {
+            return -1;
+        } else if (rank0 > rank1) {
+            return 1;
+        }
+
+        if (soldierAndDistance0.distance < soldierAndDistance1.distance) {
+            return -1;
+        } else if (soldierAndDistance0.distance > soldierAndDistance1.distance) {
+            return 1;
+        }
+
+        return 0;
+    };
+
+    public record SoldierAndDistance(Military soldier, int distance) { }
 }

@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -574,7 +575,7 @@ public class TestMisc {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -755,7 +756,7 @@ public class TestMisc {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1017,7 +1018,7 @@ public class TestMisc {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Go forward a bit to time it so that the woodcutter is still on the map when the soldier takes over the building */
         Utils.fastForward(30, map);

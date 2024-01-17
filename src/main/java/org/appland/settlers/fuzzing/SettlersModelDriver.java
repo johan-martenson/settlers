@@ -3,6 +3,7 @@ package org.appland.settlers.fuzzing;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Brewery;
@@ -480,7 +481,7 @@ public class SettlersModelDriver {
 
         testCaseGenerator.recordAttack(player, building, attackers);
 
-        player.attack(building, attackers);
+        player.attack(building, attackers, AttackStrength.STRONG);
     }
 
     private static void callGeologistAtFlagByIndex(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException {
@@ -759,7 +760,7 @@ public class SettlersModelDriver {
 
         testCaseGenerator.recordAttack(attacker, building, attackers);
 
-        attacker.attack(building, attackers);
+        attacker.attack(building, attackers, AttackStrength.STRONG);
     }
 
     private static void changeFoodAllocation(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException {

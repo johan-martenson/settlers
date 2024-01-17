@@ -844,6 +844,12 @@ public class Building implements EndPoint {
         return mb.attackRadius();
     }
 
+    Military retrieveHostedSoldier(Military soldier) {
+        hostedMilitary.remove(soldier);
+
+        return soldier;
+    }
+
     Military retrieveHostedSoldier() {
         return hostedMilitary.remove(0);
     }

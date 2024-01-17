@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.CropType;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Building;
@@ -1380,7 +1381,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();

@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
@@ -1351,7 +1352,7 @@ public class TestMonitoringGameMessages {
         /* Verify that a message is sent to player 1 when it's attacked */
         assertTrue(player1.getMessages().size() >= 2);
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         map.stepTime();
 
@@ -1429,7 +1430,7 @@ public class TestMonitoringGameMessages {
         /* Verify that a message is sent to player 1 when it's attacked */
         assertTrue(player1.getMessages().size() >= 2);
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         map.stepTime();
 
@@ -1504,7 +1505,7 @@ public class TestMonitoringGameMessages {
         //assertEquals(player1.getMessages().size(), 2);
         assertTrue(player1.getMessages().size() >= 2);
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         map.stepTime();
 
@@ -1566,7 +1567,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1684,7 +1685,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1811,7 +1812,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();

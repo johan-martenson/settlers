@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -56,6 +57,7 @@ public class TestAttack {
     /**
      * Todo:
      *  - Test attack using only soldiers from the headquarters
+     *  - Test attackers waiting can't stand on buildings
      */
 
     @Test
@@ -396,7 +398,7 @@ public class TestAttack {
         assertTrue(barracks1.isOccupied());
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
     }
 
     @Test
@@ -441,7 +443,7 @@ public class TestAttack {
         assertFalse(player0.canAttack(barracks0));
 
         try {
-            player0.attack(barracks0, 1);
+            player0.attack(barracks0, 1, AttackStrength.STRONG);
 
             fail();
         } catch (Exception e) {}
@@ -493,7 +495,7 @@ public class TestAttack {
         assertFalse(player0.canAttack(woodcutter0));
 
         try {
-            player0.attack(woodcutter0, 1);
+            player0.attack(woodcutter0, 1, AttackStrength.STRONG);
 
             fail();
         } catch (Exception e) {}
@@ -559,7 +561,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Verify that a military leaves the barracks before the attack when initiated */
         map.stepTime();
@@ -615,7 +617,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -679,7 +681,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -750,7 +752,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -828,7 +830,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -881,6 +883,10 @@ public class TestAttack {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -905,7 +911,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -937,12 +943,16 @@ public class TestAttack {
         Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
 
         assertEquals(defender.getPosition(), attacker.getPosition());
+        assertEquals(defender.getRank(), PRIVATE_RANK);
+        assertEquals(attacker.getRank(), GENERAL_RANK);
 
         /* Verify that the soldiers are fighting */
         assertTrue(barracks1.isUnderAttack());
 
         /* Verify that the general beats the private */
-        Utils.waitForWorkerToDisappear(defender, map);
+        Utils.waitForFightToStart(map, attacker, defender);
+
+        Utils.waitForSoldierToWinFight(attacker, map);
 
         assertFalse(map.getWorkers().contains(defender));
         assertTrue(map.getWorkers().contains(attacker));
@@ -1000,7 +1010,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1100,7 +1110,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1207,7 +1217,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1317,7 +1327,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1418,7 +1428,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1521,7 +1531,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1629,7 +1639,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1738,7 +1748,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(fortress0));
 
-        player0.attack(fortress0, 1);
+        player0.attack(fortress0, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1855,7 +1865,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(fortress0));
 
-        player0.attack(fortress0, 1);
+        player0.attack(fortress0, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1970,7 +1980,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(fortress0));
 
-        player0.attack(fortress0, 1);
+        player0.attack(fortress0, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -2085,7 +2095,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(fortress0));
 
-        player0.attack(fortress0, 1);
+        player0.attack(fortress0, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -2197,7 +2207,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 2);
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         /* Verify that two soldiers leave the guard house */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
@@ -2261,7 +2271,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 2);
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the guard house */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
@@ -2334,7 +2344,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 2);
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the guard house */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
@@ -2473,7 +2483,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(headquarter1));
 
-        player0.attack(headquarter1, 3);
+        player0.attack(headquarter1, 3, AttackStrength.STRONG);
 
         /* Wait for three soldiers to leave the watch tower */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0);
@@ -2583,7 +2593,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 3);
+        player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the watch tower */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0);
@@ -2725,7 +2735,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 3);
+        player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the guard house */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0);
@@ -2867,7 +2877,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 3);
+        player0.attack(barracks1, 3, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the watch tower */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0);
@@ -2965,7 +2975,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -3094,7 +3104,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -3214,7 +3224,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 2);
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -3327,7 +3337,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 8);
+        player0.attack(barracks1, 8, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -3467,7 +3477,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -3588,7 +3598,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 2);
+        player0.attack(barracks1, 2, AttackStrength.STRONG);
 
         /* Wait for two soldiers to leave the guard house */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
@@ -3734,7 +3744,7 @@ public class TestAttack {
         /* Capture the barracks for player 0 */
         assertTrue(player0.canAttack(barracks0));
 
-        player0.attack(barracks0, 2);
+        player0.attack(barracks0, 2, AttackStrength.STRONG);
 
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 2000; i++) {
@@ -3796,7 +3806,7 @@ public class TestAttack {
         /* Capture the player 1's headquarter */
         assertTrue(player0.canAttack(headquarter1));
 
-        player0.attack(headquarter1, 8);
+        player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         /* Get attackers */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0);
@@ -3883,7 +3893,7 @@ public class TestAttack {
         /* Capture the player 1's headquarter */
         assertTrue(player0.canAttack(headquarter1));
 
-        player0.attack(headquarter1, 8);
+        player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         /* Get attackers */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0);
@@ -3967,7 +3977,7 @@ public class TestAttack {
         /* Capture the player 1's headquarter */
         assertTrue(player0.canAttack(headquarter1));
 
-        player0.attack(headquarter1, 8);
+        player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         /* Get attackers */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0);
@@ -4073,7 +4083,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -4201,7 +4211,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -4339,7 +4349,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -4479,7 +4489,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 16);
+        player0.attack(barracks1, 16, AttackStrength.STRONG);
 
         /* Verify that 16 attackers leave */
         Set<Worker> soldiersOutside = new HashSet<>();
@@ -4580,7 +4590,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -4688,7 +4698,7 @@ public class TestAttack {
         /* Order an attack */
         assertTrue(player0.canAttack(guardHouse0));
 
-        player0.attack(guardHouse0, 1);
+        player0.attack(guardHouse0, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -4808,7 +4818,7 @@ public class TestAttack {
         /* Capture the player 1's headquarter */
         assertTrue(player0.canAttack(headquarter1));
 
-        player0.attack(headquarter1, 8);
+        player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
         /* Get attackers */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0);
@@ -4825,5 +4835,199 @@ public class TestAttack {
         assertEquals(defender.getTarget(), headquarter1.getFlag().getPosition());
 
         Utils.waitForFightToStart(map, firstAttacker, defender);
+    }
+
+    @Test
+    public void testMilitaryAttackWithStrongAttackers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        /* Verify that the strong soldier comes out to attack */
+        map.stepTime();
+
+        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
+
+        assertEquals(militaryOutside.size(), 1);
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
+        assertEquals(militaryOutside.getFirst().getRank(), GENERAL_RANK);
+    }
+
+    @Test
+    public void testMilitaryAttackWithWeakAttackers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.WEAK);
+
+        /* Verify that the strong soldier comes out to attack */
+        map.stepTime();
+
+        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
+
+        assertEquals(militaryOutside.size(), 1);
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
+        assertEquals(militaryOutside.getFirst().getRank(), PRIVATE_RANK);
+    }
+
+    @Test
+    public void testClosestAttackerIsPicked() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.WEAK);
+
+        /* Verify that the close soldier comes out to attack */
+        map.stepTime();
+
+        List<Military> soldiersOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
+
+        assertEquals(soldiersOutside.size(), 1);
+
+        var soldierOutside = soldiersOutside.getFirst();
+
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
+        assertEquals(headquarter0.getNumberOfHostedMilitary(), 2);
+        assertEquals(soldierOutside.getRank(), PRIVATE_RANK);
+        assertEquals(soldierOutside.getPosition(), barracks0.getPosition());
     }
 }

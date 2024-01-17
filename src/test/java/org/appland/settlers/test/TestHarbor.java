@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -1502,7 +1503,7 @@ public class TestHarbor {
         Utils.occupyRoad(road1, map);
 
         /* Capture the barracks for player 0 */
-        player0.attack(barracks0, 2);
+        player0.attack(barracks0, 2, AttackStrength.STRONG);
 
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 2000; i++) {

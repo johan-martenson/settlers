@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -101,7 +102,7 @@ public class TestWinning {
         /* Order an attack */
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
 
-        player0.attack(headquarter1, 1);
+        player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();

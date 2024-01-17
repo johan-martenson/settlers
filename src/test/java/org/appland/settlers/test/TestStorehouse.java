@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -1279,7 +1280,7 @@ public class TestStorehouse {
         Utils.occupyRoad(road1, map);
 
         /* Capture the barracks for player 0 */
-        player0.attack(barracks0, 2);
+        player0.attack(barracks0, 2, AttackStrength.STRONG);
 
         /* Wait for the attackers to come out */
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);

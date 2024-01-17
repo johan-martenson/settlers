@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
@@ -266,7 +267,7 @@ public class TestWorker {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();

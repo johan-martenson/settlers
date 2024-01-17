@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
@@ -86,7 +87,7 @@ public class TestFighting {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -274,7 +275,7 @@ public class TestFighting {
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Do continuous attacking until both the attacker and the defender has initiated the fight with a hit */
         for (int i = 0; i < 200; i++) {
@@ -368,7 +369,7 @@ public class TestFighting {
                 /* Order a new attack */
                 assertTrue(player0.canAttack(barracks1));
 
-                player0.attack(barracks1, 1);
+                player0.attack(barracks1, 1, AttackStrength.STRONG);
 
                 map.stepTime();
             } else {

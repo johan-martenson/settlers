@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.computer;
 
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -80,7 +81,7 @@ public class AttackPlayer implements ComputerPlayer {
             buildingUnderAttack = buildingToAttack;
 
             /* Attack the identified building */
-            player.attack(buildingToAttack, player.getAvailableAttackersForBuilding(buildingToAttack));
+            player.attack(buildingToAttack, player.getAvailableAttackersForBuilding(buildingToAttack), AttackStrength.STRONG);
             System.out.println(" - Attacking " + buildingToAttack + ", owned by " + buildingToAttack.getPlayer().getName());
         } else if (state == State.WAITING_FOR_ATTACK_TO_START) {
 

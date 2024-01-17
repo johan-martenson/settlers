@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BombardedByCatapultMessage;
@@ -608,7 +609,7 @@ public class TestMessages {
         /* Verify that a message is sent to player 1 when it's attacked */
         int amountMessagesBefore = player1.getMessages().size();
 
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         assertEquals(player1.getMessages().size(), amountMessagesBefore + 1);
         assertEquals(player1.getMessages().get(player1.getMessages().size() - 1).getMessageType(), UNDER_ATTACK);
@@ -666,7 +667,7 @@ public class TestMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
-        player0.attack(barracks1, 1);
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1324,7 +1325,7 @@ public class TestMessages {
         /* Order an attack */
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
 
-        player0.attack(headquarter1, 1);
+        player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1405,7 +1406,7 @@ public class TestMessages {
         /* Order an attack */
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
 
-        player0.attack(headquarter1, 1);
+        player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();
@@ -1498,7 +1499,7 @@ public class TestMessages {
         /* Order an attack */
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
 
-        player0.attack(headquarter1, 1);
+        player0.attack(headquarter1, 1, AttackStrength.STRONG);
 
         /* Find the military that was chosen to attack */
         map.stepTime();

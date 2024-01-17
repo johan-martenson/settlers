@@ -294,7 +294,7 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building buildingToAttack, int nrAttackers) throws InvalidUserActionException {
+    public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
 
         /* Can only attack military buildings */
         if (!buildingToAttack.isMilitaryBuilding()) {
@@ -321,69 +321,83 @@ public class Player {
             eligibleBuildings.add(building);
         }
 
-        /* Retrieve soldiers from the buildings */
-        int allocated = 0;
-
-        Set<Point> reservedSpots = new HashSet<>();
-        Point center             = buildingToAttack.getFlag().getPosition();
+        /* Collect all eligible soldiers */
+        List<Military> availableAttackers = new ArrayList<>();
 
         for (Building building : eligibleBuildings) {
-
-            if (allocated == nrAttackers) {
-                break;
-            }
-
             if (building.getNumberOfHostedMilitary() < 2) {
                 continue;
             }
 
-            boolean foundSpot;
+            var availableAttackersFromBuilding = new ArrayList<>(building.getHostedMilitary());
 
-            while (building.getNumberOfHostedMilitary() > 1) {
-                if (allocated == nrAttackers) {
-                    break;
-                }
+            availableAttackersFromBuilding.sort(GameUtils.strengthSorter);
 
-                /* Retrieve a military from the building */
-                Military military = building.retrieveHostedSoldier();
+            /* Leave one soldier so it can guard the military building */
+            if (strength == AttackStrength.STRONG) {
+                availableAttackersFromBuilding.removeFirst();
+            } else {
+                availableAttackersFromBuilding.removeLast();
+            }
 
-                /* Make the military move to close to the building to attack */
-                foundSpot = false;
+            availableAttackers.addAll(availableAttackersFromBuilding);
+        }
 
-                if (!reservedSpots.contains(center)) {
-                    military.attack(buildingToAttack, center);
+        /* Sort primarily by strength and secondarily by distance */
+        List<GameUtils.SoldierAndDistance> availableAttackersWithDistance = new ArrayList<>(availableAttackers
+                .stream()
+                .map(soldier -> new GameUtils.SoldierAndDistance(
+                        soldier,
+                        GameUtils.getDistanceInGameSteps(soldier.getPosition(), buildingToAttack.getPosition())))
+                .toList());
 
-                    reservedSpots.add(center);
-                } else {
-                    for (int radius = 0; radius < 20; radius++) {
-                        for (Point point : map.getPointsWithinRadius(center, radius)) {
+        if (strength == AttackStrength.STRONG) {
+            availableAttackersWithDistance.sort(GameUtils.strongerAndShorterDistanceSorter);
+        } else {
+            availableAttackersWithDistance.sort(GameUtils.weakerAndShorterDistanceSorter);
+        }
 
-                            if (reservedSpots.contains(point)) {
-                                continue;
-                            }
+        /* Run the attack with the most suitable soldiers */
+        Set<Point> reservedSpots = new HashSet<>();
+        Point center             = buildingToAttack.getFlag().getPosition();
 
-                            if (map.findWayOffroad(building.getPosition(), point, null) == null) {
-                                continue;
-                            }
+        availableAttackersWithDistance.stream().limit(nrAttackers).forEach(soldierAndDistance -> {
+            var soldier = soldierAndDistance.soldier();
 
-                            military.attack(buildingToAttack, point);
+            soldier.getHome().retrieveHostedSoldier(soldier);
 
-                            reservedSpots.add(point);
+            if (!reservedSpots.contains(center)) {
+                soldier.attack(buildingToAttack, center);
 
-                            foundSpot = true;
+                reservedSpots.add(center);
+            } else {
+                var foundSpot = false;
 
-                            break;
+                for (int radius = 0; radius < 20; radius++) {
+                    for (Point point : map.getPointsWithinRadius(center, radius)) {
+                        if (reservedSpots.contains(point)) {
+                            continue;
                         }
 
-                        if (foundSpot) {
-                            break;
+                        if (map.findWayOffroad(soldier.getHome().getPosition(), point, null) == null) {
+                            continue;
                         }
+
+                        soldier.attack(buildingToAttack, point);
+
+                        reservedSpots.add(point);
+
+                        foundSpot = true;
+
+                        break;
+                    }
+
+                    if (foundSpot) {
+                        break;
                     }
                 }
-
-                allocated++;
             }
-        }
+        });
 
         buildingToAttack.getPlayer().reportUnderAttack(buildingToAttack);
     }

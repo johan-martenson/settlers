@@ -7,6 +7,7 @@ package org.appland.settlers.computer.test;
 
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.computer.ExpandLandPlayer;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
@@ -543,7 +544,7 @@ public class TestExpandLandPlayer {
         assertNotNull(barracksToAttack);
 
         /* Let player 1 capture the barracks */
-        player1.attack(barracksToAttack, 1);
+        player1.attack(barracksToAttack, 1, AttackStrength.STRONG);
 
         /* Wait for player 1 to capture the barracks */
         Utils.waitForBuildingToGetCapturedByPlayer(barracksToAttack, player1);
