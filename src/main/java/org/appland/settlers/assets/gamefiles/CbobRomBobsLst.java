@@ -80,4 +80,5 @@ public class CbobRomBobsLst {
     public static final int GENERAL_AVOIDING_HIT_WEST = 871;
     public static final int GENERAL_FLINCH_HIT_WEST = 879;
     public static final int GENERAL_GETTING_HIT_WEST = 887;
+    public static final int SOLDIER_DYING = 903;
 }

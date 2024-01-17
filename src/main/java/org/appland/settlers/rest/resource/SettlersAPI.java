@@ -1103,19 +1103,21 @@ public class SettlersAPI {
 
         if (jsonHouseModification.containsKey("attacked")) {
 
-            System.out.println("Attacking");
-
-            System.out.println("Player is " + player);
-            System.out.println("Player of building is " + building.getPlayer());
-
             JSONObject jsonAttackInformation = (JSONObject) jsonHouseModification.get("attacked");
 
             String attackingPlayerId = (String) jsonAttackInformation.get("attackingPlayerId");
             Player attackingPlayer = (Player) idManager.getObject(attackingPlayerId);
+            int attackers = ((Long)jsonAttackInformation.get("attackers")).intValue();
+
+            System.out.println("Attacking");
+            System.out.println(jsonAttackInformation.toJSONString());
+
+            System.out.println("Player is " + player);
+            System.out.println("Player of building is " + building.getPlayer());
 
             if (!building.getPlayer().equals(attackingPlayer)) {
                 synchronized (player.getMap()) {
-                    attackingPlayer.attack(building, 1);
+                    attackingPlayer.attack(building, attackers);
                 }
 
                 jsonResponse.put("message", "Attacking building");

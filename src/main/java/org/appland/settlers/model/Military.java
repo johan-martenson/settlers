@@ -621,8 +621,6 @@ public class Military extends Worker {
         } else if (state == WALKING_APART_TO_ATTACK) {
             state = ATTACKING;
 
-            map.reportWorkerStartedAction(this, WorkerAction.ATTACK);
-
             fightState = FightState.WAITING;
         }
     }

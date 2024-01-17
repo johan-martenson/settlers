@@ -565,7 +565,7 @@ public class Extractor {
                 bob
         );
 
-        woodcutterImageCollector.addWorkAnimation(WorkerAction.CUTTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.CUTTING, 8));
+        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.CUTTING, 8));
 
         // Add roman military attacking
         privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_ATTACKING_EAST, 8));
@@ -615,6 +615,12 @@ public class Extractor {
         generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_EAST, 8));
         generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_WEST, 8));
 
+        privateWorkerImageCollector.addAnimation(DIE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        privateFirstClassWorkerImageCollector.addAnimation(DIE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        sergeantWorkerImageCollector.addAnimation(DIE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        officerWorkerImageCollector.addAnimation(DIE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        generalWorkerImageCollector.addAnimation(DIE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+
         carpenterImageCollector.readCargoImagesFromBob(
                 PLANK,
                 JobsBob.CARPENTER_BOB.getBodyType(),
@@ -622,7 +628,7 @@ public class Extractor {
                 bob
         );
 
-        carpenterImageCollector.addWorkAnimation(WorkerAction.SAWING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SAWING, 6));
+        carpenterImageCollector.addAnimation(WorkerAction.SAWING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SAWING, 6));
 
         stonemasonImageCollector.readCargoImagesFromBob(
                 STONE,
@@ -631,16 +637,16 @@ public class Extractor {
                 bob
         );
 
-        stonemasonImageCollector.addWorkAnimation(WorkerAction.HACKING_STONE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE, 8));
+        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE, 8));
 
-        foresterWorkerImageCollector.addWorkAnimation(WorkerAction.PLANTING_TREE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING, 36));
+        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING, 36));
 
-        planerWorkerImageCollector.addWorkAnimation(WorkerAction.DIGGING_AND_STOMPING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING, 26));
+        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING, 26));
 
-        geologistWorkerImageCollector.addWorkAnimation(WorkerAction.INVESTIGATING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING, 16));
+        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING, 16));
 
-        builderWorkerImageCollector.addWorkAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW, 8));
-        builderWorkerImageCollector.addWorkAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION, 4));
+        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW, 8));
+        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION, 4));
 
         minterImageCollector.readCargoImagesFromBob(
                 COIN,
@@ -790,8 +796,8 @@ public class Extractor {
                 bob
         );
 
-        farmerImageCollector.addWorkAnimation(WorkerAction.PLANTING_WHEAT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOWING, 8));
-        farmerImageCollector.addWorkAnimation(WorkerAction.HARVESTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HARVESTING, 8));
+        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SOWING, 8));
+        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HARVESTING, 8));
 
         pigBreederImageCollector.readCargoImagesFromBob(
                 PIG,
@@ -814,11 +820,11 @@ public class Extractor {
                 bob
         );
 
-        bakerImageCollector.addWorkAnimation(WorkerAction.BAKING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.BAKING, 8));
+        bakerImageCollector.addAnimation(WorkerAction.BAKING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.BAKING, 8));
 
         // TODO: Handle brewer and/or well worker
 
-        brewerWorkerImageCollector.addWorkAnimation(WorkerAction.DRINKING_BEER, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER, 8));
+        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER, 8));
 
         // TODO: Handle metalworker carrying "shift gear". Assume it's tongs
 
@@ -909,8 +915,8 @@ public class Extractor {
                 bob
         );
 
-        hunterWorkerImageCollector.addWorkAnimation(WorkerAction.SHOOTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HUNTING, 13));
-        hunterWorkerImageCollector.addWorkAnimation(WorkerAction.PICKING_UP_MEAT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT, 12));
+        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.HUNTING, 13));
+        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT, 12));
 
         shipwrightWorkerImageCollector.readCargoImagesFromBob(
                 BOAT,
@@ -994,11 +1000,11 @@ public class Extractor {
         fatCarrierWithCargo.addShadowImages(NORTH_EAST, getImagesFromGameResource(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
 
         // Add animations for when the couriers are bored
-        fatCarrier.addWorkAnimation(CHEW_GUM, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM, 8));
-        fatCarrier.addWorkAnimation(SIT_DOWN, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN, 5));
-        thinCarrier.addWorkAnimation(READ_NEWSPAPER, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER, 7));
-        thinCarrier.addWorkAnimation(TOUCH_NOSE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE, 5));
-        thinCarrier.addWorkAnimation(JUMP_SKIP_ROPE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE, 7));
+        fatCarrier.addAnimation(CHEW_GUM, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM, 8));
+        fatCarrier.addAnimation(SIT_DOWN, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN, 5));
+        thinCarrier.addAnimation(READ_NEWSPAPER, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER, 7));
+        thinCarrier.addAnimation(TOUCH_NOSE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE, 5));
+        thinCarrier.addAnimation(JUMP_SKIP_ROPE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE, 7));
 
         // Write the image atlases to files
         thinCarrier.writeImageAtlas(toDir + "/", defaultPalette);

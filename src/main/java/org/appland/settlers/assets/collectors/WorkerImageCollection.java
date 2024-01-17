@@ -459,7 +459,7 @@ public class WorkerImageCollection {
         }
     }
 
-    public void addWorkAnimation(WorkerAction action, List<Bitmap> images) {
+    public void addAnimation(WorkerAction action, List<Bitmap> images) {
         commonActions.put(action, images);
     }
 

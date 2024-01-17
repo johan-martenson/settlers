@@ -3182,7 +3182,6 @@ public class TestCourier {
         assertTrue(courier.isIdle());
     }
 
-
     /**
      * TODO:
      *  X 1. not chewing gum while carrying,
