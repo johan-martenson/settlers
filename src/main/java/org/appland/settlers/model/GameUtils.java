@@ -1792,4 +1792,33 @@ public class GameUtils {
     };
 
     public record SoldierAndDistance(Military soldier, int distance) { }
+
+    public static List<Military.Rank> strengthToRank(int strength) {
+        List<Integer> populationPreferenceOrder = new ArrayList<>();
+
+        populationPreferenceOrder.add(strength);
+
+        for (int i = 1; i < Math.max(10 - strength, strength); i++) {
+            if (strength + i < 11) {
+                populationPreferenceOrder.add(strength + i);
+            }
+
+            if (strength - i > -1) {
+                populationPreferenceOrder.add(strength - i);
+            }
+        }
+
+        /* Go through the list in order of preference and add the rank */
+        List<Military.Rank> ranks = new ArrayList<>();
+
+        for (int preferred : populationPreferenceOrder) {
+            Military.Rank rank = Military.Rank.intToRank(preferred);
+
+            if (ranks.isEmpty() || ranks.getLast() != rank) {
+                ranks.add(rank);
+            }
+        }
+
+        return ranks;
+    }
 }

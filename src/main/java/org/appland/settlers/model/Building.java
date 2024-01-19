@@ -652,7 +652,7 @@ public class Building implements EndPoint {
     private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
 
-        /* Check the if the required amount is available for each required material */
+        /* Check if the required amount is available for each required material */
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
             Material material = entry.getKey();
 
@@ -851,7 +851,17 @@ public class Building implements EndPoint {
     }
 
     Military retrieveHostedSoldier() {
-        return hostedMilitary.remove(0);
+        for (Military.Rank rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
+            Optional<Military> maybeSoldier = hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+
+            if (maybeSoldier.isPresent()) {
+                hostedMilitary.remove(maybeSoldier.get());
+
+                return maybeSoldier.get();
+            }
+        }
+
+        throw new InvalidGameLogicException("Can't retrieve soldier");
     }
 
     Military retrieveHostedSoldierWithRank(Rank rank) {
@@ -896,6 +906,50 @@ public class Building implements EndPoint {
 
         if (!waitingAttackers.contains(attacker)) {
             waitingAttackers.add(attacker);
+        }
+
+        /* Try to get remote defenders if the building can't defend itself */
+        if (getNumberOfHostedMilitary() == 0 && defenders.isEmpty()) {
+
+            /* Find potential defenders */
+            List<Military> potentialDefenders = new ArrayList<>();
+
+            player.getBuildings()
+                    .stream()
+                    .filter(Building::isReady)
+                    .filter(Building::isMilitaryBuilding)
+                    .filter(building -> building.getAttackRadius() >= GameUtils.getDistanceInGameSteps(position, building.getPosition()))
+                    .forEach(building -> potentialDefenders.addAll(building.getHostedMilitary()));
+
+            /* Sort by rank, then distance to this building which is under attack */
+            potentialDefenders.sort((soldier0, soldier1) -> {
+                if (soldier0.getRank() == soldier1.getRank()) {
+                    var dist0 = GameUtils.getDistanceInGameSteps(soldier0.getHome().getPosition(), getPosition());
+                    var dist1 = GameUtils.getDistanceInGameSteps(soldier1.getHome().getPosition(), getPosition());
+
+                    if (dist0 == dist1) {
+                        return 0;
+                    }
+
+                    var diff = dist0 - dist1;
+
+                    return diff / Math.abs(diff);
+                } else {
+                    var prefRankList = GameUtils.strengthToRank(player.getDefenseStrength());
+
+                    var rankDist0 = prefRankList.indexOf(soldier0.getRank());
+                    var rankDist1 = prefRankList.indexOf(soldier1.getRank());
+
+                    var diff = rankDist0 - rankDist1;
+
+                    return diff / Math.abs(diff);
+                }
+            });
+
+            /* Pick defender(s) to come and help defending */
+            if (!potentialDefenders.isEmpty()) {
+                potentialDefenders.getFirst().defendBuilding(this);
+            }
         }
     }
 

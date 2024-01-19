@@ -1411,7 +1411,7 @@ public class TestMisc {
     }
 
     @Test
-    public void testPushOutOfficer() throws InvalidUserActionException {
+    public void testPushOutOfficerWithNoOtherStorageAvailable() throws InvalidUserActionException {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", BLUE);
@@ -1423,7 +1423,7 @@ public class TestMisc {
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
-        /* Put a officer into the headquarter */
+        /* Put an officer into the headquarters */
         Utils.adjustInventoryTo(headquarter, OFFICER, 1);
 
         /* Push out officer */
@@ -1433,6 +1433,8 @@ public class TestMisc {
         Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), OFFICER_RANK);
+
+        /* Verify that the officer goes to the flag of the headquarters and then back again */
     }
 
     @Test

@@ -2730,9 +2730,9 @@ public class GameMap {
         return height;
     }
 
-    void placeWorkerFromStepTime(Donkey donkey, Building home) {
-        donkey.setPosition(home.getPosition());
-        workersToAdd.add(donkey);
+    void placeWorkerFromStepTime(Worker worker, Building home) {
+        worker.setPosition(home.getPosition());
+        workersToAdd.add(worker);
     }
 
     void discoverPointsWithinRadius(Player player, Point center, int radius) {

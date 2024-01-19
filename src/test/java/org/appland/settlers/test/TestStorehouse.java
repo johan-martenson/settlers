@@ -1294,9 +1294,6 @@ public class TestStorehouse {
 
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 10000; i++) {
-
-            System.out.println(attackers);
-
             if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedMilitary() > 0) {
                 break;
             }

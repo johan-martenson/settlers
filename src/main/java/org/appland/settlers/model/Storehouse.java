@@ -88,7 +88,6 @@ public class Storehouse extends Building {
         /* Send pushed out workers */
         if (!sentOutWorker) {
             for (Material material : materialToPushOut) {
-
                 if (getAmount(material) <= 0) {
                     continue;
                 }
@@ -685,34 +684,14 @@ public class Storehouse extends Building {
 
     public Military retrieveSoldierToPopulateBuilding() {
 
-        /* Make a list of integers, where each integer corresponds to a rank, in the order of preference when populating
-        * military buildings */
-        List<Integer> populationPreferenceOrder = new ArrayList<>();
-
-        int pref = getPlayer().getStrengthOfSoldiersPopulatingBuildings();
-
-        populationPreferenceOrder.add(pref);
-
-        for (int i = 1; i < Math.max(10 - pref, pref); i++) {
-            if (pref + i < 11) {
-                populationPreferenceOrder.add(pref + i);
-            }
-
-            if (pref - i > -1) {
-                populationPreferenceOrder.add(pref - i);
-            }
-        }
-
         /* Go through the list in order of preference and try to retrieve a soldier */
-        for (int preferred : populationPreferenceOrder) {
-            Military.Rank preferredRank = Military.Rank.intToRank(preferred);
-
-            Material preferredSoldierType = preferredRank.toMaterial();
+        for (Military.Rank rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
+            Material preferredSoldierType = rank.toMaterial();
 
             if (hasAtLeastOne(preferredSoldierType)) {
                 retrieveOneFromInventory(preferredSoldierType);
 
-                Military military = new Military(getPlayer(), preferredRank, getMap());
+                Military military = new Military(getPlayer(), rank, getMap());
                 military.setPosition(getFlag().getPosition());
 
                 return military;

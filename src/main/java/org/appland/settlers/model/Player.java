@@ -89,7 +89,10 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> wheatAllocation;
     private final Map<Class<? extends Building>, Integer> waterAllocation;
     private final Map<Class<? extends Building>, Integer> ironBarAllocation;
+
     private int strengthWhenPopulatingMilitaryBuildings;
+    private int defenseStrength;
+    private int defenseFromSurroundingBuildings;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -155,6 +158,7 @@ public class Player {
 
         /* Set default military settings */
         strengthWhenPopulatingMilitaryBuildings = 5;
+        defenseStrength = 5;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -1694,5 +1698,21 @@ public class Player {
 
     public int getStrengthOfSoldiersPopulatingBuildings() {
         return strengthWhenPopulatingMilitaryBuildings;
+    }
+
+    public int getDefenseStrength() {
+        return defenseStrength;
+    }
+
+    public void setDefenseStrength(int defenseStrength) {
+        this.defenseStrength = defenseStrength;
+    }
+
+    public void setDefenseFromSurroundingBuildings(int strength) {
+        defenseFromSurroundingBuildings = strength;
+    }
+
+    public int getDefenseFromSurroundingBuildings() {
+        return defenseFromSurroundingBuildings;
     }
 }

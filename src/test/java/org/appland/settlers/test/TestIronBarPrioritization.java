@@ -322,8 +322,6 @@ public class TestIronBarPrioritization {
             }
         }
 
-        System.out.println();
-
         assertEquals(ironBarAllocation.keySet().size(), 2);
         assertEquals((int)ironBarAllocation.get(armory0), 4);
         assertEquals((int)ironBarAllocation.get(metalworks0), 8);

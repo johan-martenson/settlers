@@ -42,6 +42,16 @@ class Utils {
         return jsonDecoration;
     }
 
+    public static JSONObject messageJsonToReplyJson(JSONObject jsonBody) {
+        JSONObject jsonResponse = new JSONObject();
+
+        long requestId = (Long) jsonBody.get("requestId");
+
+        jsonResponse.put("requestId", requestId);
+
+        return jsonResponse;
+    }
+
     JSONArray gamesToJson(List<GameMap> games, GameResource gameResource) {
         JSONArray jsonGames = new JSONArray();
 

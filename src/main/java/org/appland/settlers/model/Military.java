@@ -68,6 +68,16 @@ public class Military extends Worker {
                 case GENERAL_RANK -> GENERAL;
             };
         }
+
+        public int toInt() {
+            return switch (this) {
+                case PRIVATE_RANK -> 0;
+                case PRIVATE_FIRST_CLASS_RANK -> 1;
+                case SERGEANT_RANK -> 2;
+                case OFFICER_RANK -> 3;
+                case GENERAL_RANK -> 4;
+            };
+        }
     }
 
     protected enum State {
@@ -354,6 +364,9 @@ public class Military extends Worker {
             /* Main attacker */
             if (getPosition().equals(buildingToAttack.getFlag().getPosition())) {
 
+                /* Tell the building there is an attacker to give it a chance to get remote defenders */
+                buildingToAttack.registerAttacker(this);
+
                 /* Take over the building directly if it can not protect itself */
                 if (buildingToAttack.isDefenseLess()) {
 
@@ -555,7 +568,6 @@ public class Military extends Worker {
             case SERGEANT_RANK -> SERGEANT_HEALTH;
             case OFFICER_RANK -> OFFICER_HEALTH;
             case GENERAL_RANK -> GENERAL_HEALTH;
-            default -> 0;
         };
     }
 
@@ -573,7 +585,6 @@ public class Military extends Worker {
 
             /* Walk to the flag */
             setOffroadTarget(defendedBuilding.getFlag().getPosition());
-
         } else {
 
             /* Register in the building's defense */
@@ -581,6 +592,8 @@ public class Military extends Worker {
 
             /* Fight an attacker if there are attackers waiting for opponents */
             if (!building.getWaitingAttackers().isEmpty()) {
+
+                getHome().retrieveHostedSoldier(this);
 
                 /* Get a waiting attacker */
                 opponent = building.pickWaitingAttacker();

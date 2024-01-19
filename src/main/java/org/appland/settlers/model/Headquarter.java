@@ -219,7 +219,7 @@ public class Headquarter extends Storehouse {
 
         soldier.setHome(this);
 
-        getMap().placeWorker(soldier, this);
+        getMap().placeWorkerFromStepTime(soldier, this);
 
         soldier.setPosition(getPosition());
 

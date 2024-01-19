@@ -585,6 +585,7 @@ public class Utils {
 
     public static Military waitForMilitaryOutsideBuilding(Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
+
         for (int i = 0; i < 1000; i++) {
             Military military = findMilitaryOutsideBuilding(player);
 
@@ -3018,8 +3019,6 @@ public class Utils {
                 Point point = entry.getKey();
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
-                    System.out.println(point);
-
                     assertFalse(availableBuildingsOnMap.containsKey(point));
                     assertNull(map.isAvailableHousePoint(player0, point));
                 }

@@ -325,10 +325,8 @@ public class TestFighting {
             assertTrue(defender.isFighting());
 
             if (attacker.isHitting()) {
-                System.out.println("ATTACKER HIT FIRST");
                 attackerHasMadeFirstHit = true;
             } else if (defender.isHitting()) {
-                System.out.println("DEFENDER HIT FIRST");
                 defenderHasMadeFirstHit = true;
             }
 
