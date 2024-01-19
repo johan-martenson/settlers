@@ -217,7 +217,7 @@ public class TestInventory {
         assertEquals(storehouse.getAmount(GENERAL), 0);
 
         try {
-            storehouse.retrieveAnyMilitary();
+            storehouse.retrieveSoldierToPopulateBuilding();
 
             fail();
         } catch (Exception e) {}
@@ -228,19 +228,19 @@ public class TestInventory {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertTrue(storehouse.isInStock(PRIVATE));
 
-        Military military = storehouse.retrieveAnyMilitary();
+        Military military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
 
         storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertTrue(storehouse.isInStock(SERGEANT));
 
-        military = storehouse.retrieveAnyMilitary();
+        military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
 
         storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
         assertTrue(storehouse.isInStock(GENERAL));
 
-        military = storehouse.retrieveAnyMilitary();
+        military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
     }
 

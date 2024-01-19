@@ -21,6 +21,8 @@ import static org.appland.settlers.model.Material.*;
 @Walker(speed = 10)
 public class StorageWorker extends Worker {
 
+    // TODO: rename to StorehouseWorker
+
     private static final int RESTING_TIME = 19;
 
     private final Countdown countdown;
@@ -28,11 +30,11 @@ public class StorageWorker extends Worker {
     private final Map<Class<? extends Building>, Integer> assignedCoal;
     private final Map<Class<? extends Building>, Integer> assignedWheat;
     private final Map<Class<? extends Building>, Integer> assignedWater;
+    private final Map<Class<? extends Building>, Integer> assignedIronBars;
 
     private State state;
     private Storehouse ownStorehouse;
     private Cargo cargoToReturn;
-    private final Map<Class<? extends Building>, Integer> assignedIronBars;
 
     private enum State {
         WALKING_TO_TARGET,

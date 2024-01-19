@@ -86,6 +86,30 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING: {
+                JSONObject jsonResponse = new JSONObject();
+
+                long requestId = (Long) jsonBody.get("requestId");
+
+                jsonResponse.put("requestId", requestId);
+
+                synchronized (map) {
+                    jsonResponse.put("strength", player.getStrengthOfSoldiersPopulatingBuildings());
+                }
+
+                playerToSession.get(player).getAsyncRemote().sendText(jsonResponse.toJSONString());
+            }
+            break;
+
+            case SET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING: {
+                int strength = ((Long) jsonBody.get("strength")).intValue();
+
+                synchronized (map) {
+                    player.setStrengthOfSoldiersPopulatingBuildings(strength);
+                }
+            }
+            break;
+
             case PAUSE_GAME: {
                 GameResource game = (GameResource) session.getUserProperties().get("GAME");
 

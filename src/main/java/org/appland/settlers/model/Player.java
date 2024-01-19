@@ -89,6 +89,7 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> wheatAllocation;
     private final Map<Class<? extends Building>, Integer> waterAllocation;
     private final Map<Class<? extends Building>, Integer> ironBarAllocation;
+    private int strengthWhenPopulatingMilitaryBuildings;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -151,6 +152,9 @@ public class Player {
 
         /* The tree conservation program is enabled by default */
         treeConservationProgramEnabled = true;
+
+        /* Set default military settings */
+        strengthWhenPopulatingMilitaryBuildings = 5;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -1682,5 +1686,13 @@ public class Player {
 
     public int getIronBarQuota(Class<? extends Building> buildingClass) {
         return ironBarAllocation.get(buildingClass);
+    }
+
+    public void setStrengthOfSoldiersPopulatingBuildings(int strength) {
+        strengthWhenPopulatingMilitaryBuildings = strength;
+    }
+
+    public int getStrengthOfSoldiersPopulatingBuildings() {
+        return strengthWhenPopulatingMilitaryBuildings;
     }
 }

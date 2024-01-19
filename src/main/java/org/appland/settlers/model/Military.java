@@ -34,6 +34,17 @@ public class Military extends Worker {
         PRIVATE_FIRST_CLASS_RANK,
         GENERAL_RANK;
 
+        public static Rank intToRank(int soldierInt) {
+            return switch (soldierInt) {
+                case 0, 1 -> PRIVATE_RANK;
+                case 2, 3 -> PRIVATE_FIRST_CLASS_RANK;
+                case 4, 5, 6 -> SERGEANT_RANK;
+                case 7, 8 -> OFFICER_RANK;
+                case 9, 10 -> GENERAL_RANK;
+                default -> throw new InvalidGameLogicException("Can't translate" + soldierInt + " to rank");
+            };
+        }
+
         public String getSimpleName() {
             if (this == PRIVATE_RANK) {
                 return "Private";

@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 public class Storehouse extends Building {
 
     private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
+
     private final Countdown draftCountdown;
     private final Map<Material, Material> workerToToolMap;
     private final Set<Material> materialToPushOut;
@@ -336,7 +337,7 @@ public class Storehouse extends Building {
                     continue;
                 }
 
-                Military military = retrieveAnyMilitary();
+                Military military = retrieveSoldierToPopulateBuilding();
 
                 getMap().placeWorker(military, this);
                 military.setTargetBuilding(building);
@@ -682,31 +683,43 @@ public class Storehouse extends Building {
         return courier;
     }
 
-    public Military retrieveAnyMilitary() {
-        Military military;
+    public Military retrieveSoldierToPopulateBuilding() {
 
-        if (hasAtLeastOne(PRIVATE)) {
-            retrieveOneFromInventory(PRIVATE);
-            military = new Military(getPlayer(), PRIVATE_RANK, getMap());
-        } else if (hasAtLeastOne(PRIVATE_FIRST_CLASS)) {
-            retrieveOneFromInventory(PRIVATE_FIRST_CLASS);
-            military = new Military(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
-        } else if (hasAtLeastOne(SERGEANT)) {
-            retrieveOneFromInventory(SERGEANT);
-            military = new Military(getPlayer(), SERGEANT_RANK, getMap());
-        } else if (hasAtLeastOne(OFFICER)) {
-            retrieveOneFromInventory(OFFICER);
-            military = new Military(getPlayer(), OFFICER_RANK, getMap());
-        } else if (hasAtLeastOne(GENERAL)) {
-            retrieveOneFromInventory(GENERAL);
-            military = new Military(getPlayer(), GENERAL_RANK, getMap());
-        } else {
-            throw new InvalidGameLogicException("No soldiers available");
+        /* Make a list of integers, where each integer corresponds to a rank, in the order of preference when populating
+        * military buildings */
+        List<Integer> populationPreferenceOrder = new ArrayList<>();
+
+        int pref = getPlayer().getStrengthOfSoldiersPopulatingBuildings();
+
+        populationPreferenceOrder.add(pref);
+
+        for (int i = 1; i < Math.max(10 - pref, pref); i++) {
+            if (pref + i < 11) {
+                populationPreferenceOrder.add(pref + i);
+            }
+
+            if (pref - i > -1) {
+                populationPreferenceOrder.add(pref - i);
+            }
         }
 
-        military.setPosition(getFlag().getPosition());
+        /* Go through the list in order of preference and try to retrieve a soldier */
+        for (int preferred : populationPreferenceOrder) {
+            Military.Rank preferredRank = Military.Rank.intToRank(preferred);
 
-        return military;
+            Material preferredSoldierType = preferredRank.toMaterial();
+
+            if (hasAtLeastOne(preferredSoldierType)) {
+                retrieveOneFromInventory(preferredSoldierType);
+
+                Military military = new Military(getPlayer(), preferredRank, getMap());
+                military.setPosition(getFlag().getPosition());
+
+                return military;
+            }
+        }
+
+        throw new InvalidGameLogicException("Can't retrieve soldier!");
     }
 
     private boolean hasAtLeastOne(Material material) {
