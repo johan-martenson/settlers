@@ -555,6 +555,7 @@ public class Building implements EndPoint {
 
         /* Clear up after the attack */
         attackers.clear();
+        waitingAttackers.clear();
         defenders.clear();
         ownDefender = null;
 
@@ -918,37 +919,22 @@ public class Building implements EndPoint {
                     .stream()
                     .filter(Building::isReady)
                     .filter(Building::isMilitaryBuilding)
+                    .filter(building -> building.getHostedMilitary().size() > 1)
                     .filter(building -> building.getAttackRadius() >= GameUtils.getDistanceInGameSteps(position, building.getPosition()))
-                    .forEach(building -> potentialDefenders.addAll(building.getHostedMilitary()));
+                    .forEach(building -> {
+                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedMilitary(), player.getDefenseStrength());
 
-            /* Sort by rank, then distance to this building which is under attack */
-            potentialDefenders.sort((soldier0, soldier1) -> {
-                if (soldier0.getRank() == soldier1.getRank()) {
-                    var dist0 = GameUtils.getDistanceInGameSteps(soldier0.getHome().getPosition(), getPosition());
-                    var dist1 = GameUtils.getDistanceInGameSteps(soldier1.getHome().getPosition(), getPosition());
+                        potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
+                    });
 
-                    if (dist0 == dist1) {
-                        return 0;
-                    }
-
-                    var diff = dist0 - dist1;
-
-                    return diff / Math.abs(diff);
-                } else {
-                    var prefRankList = GameUtils.strengthToRank(player.getDefenseStrength());
-
-                    var rankDist0 = prefRankList.indexOf(soldier0.getRank());
-                    var rankDist1 = prefRankList.indexOf(soldier1.getRank());
-
-                    var diff = rankDist0 - rankDist1;
-
-                    return diff / Math.abs(diff);
-                }
-            });
+            /* Sort by rank, then distance to this building, which is under attack */
+            GameUtils.sortSoldiersByPreferredRankAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
 
             /* Pick defender(s) to come and help defending */
             if (!potentialDefenders.isEmpty()) {
-                potentialDefenders.getFirst().defendBuilding(this);
+                var nrDefendersToPick = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
+
+                potentialDefenders.subList(0, nrDefendersToPick).forEach(soldier -> soldier.defendBuilding(this));
             }
         }
     }
@@ -967,7 +953,7 @@ public class Building implements EndPoint {
     }
 
     Military pickWaitingAttacker() {
-        return attackers.remove(0);
+        return waitingAttackers.remove(0);
     }
 
     List<Military> getAttackers() {

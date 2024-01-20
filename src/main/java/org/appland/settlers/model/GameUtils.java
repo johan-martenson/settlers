@@ -30,6 +30,53 @@ import static org.appland.settlers.model.Material.*;
  */
 public class GameUtils {
 
+    public static List<Military> sortSoldiersByPreferredRank(List<Military> soldiers, int strength) {
+        var sortedSoldiers = new ArrayList<>(soldiers);
+
+        sortedSoldiers.sort((soldier0, soldier1) -> {
+            var prefRankList = GameUtils.strengthToRank(strength);
+
+            var rankDist0 = prefRankList.indexOf(soldier0.getRank());
+            var rankDist1 = prefRankList.indexOf(soldier1.getRank());
+
+            if (rankDist0 == rankDist1) {
+                return 0;
+            } else  {
+                var diff = rankDist0 - rankDist1;
+
+                return diff / Math.abs(diff);
+            }
+        });
+
+        return sortedSoldiers;
+    }
+
+    public static void sortSoldiersByPreferredRankAndDistance(List<Military> soldiers, int strength, Point position) {
+        soldiers.sort((soldier0, soldier1) -> {
+            if (soldier0.getRank() == soldier1.getRank()) {
+                var dist0 = GameUtils.getDistanceInGameSteps(soldier0.getHome().getPosition(), position);
+                var dist1 = GameUtils.getDistanceInGameSteps(soldier1.getHome().getPosition(), position);
+
+                if (dist0 == dist1) {
+                    return 0;
+                }
+
+                var diff = dist0 - dist1;
+
+                return diff / Math.abs(diff);
+            } else {
+                var prefRankList = GameUtils.strengthToRank(strength);
+
+                var rankDist0 = prefRankList.indexOf(soldier0.getRank());
+                var rankDist1 = prefRankList.indexOf(soldier1.getRank());
+
+                var diff = rankDist0 - rankDist1;
+
+                return diff / Math.abs(diff);
+            }
+        });
+    }
+
     public enum AllocationType {
         WHEAT_ALLOCATION,
         COAL_ALLOCATION,

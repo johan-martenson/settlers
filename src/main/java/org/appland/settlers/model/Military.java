@@ -93,11 +93,12 @@ public class Military extends Worker {
         DEFENDING,
         ATTACKING,
         WALKING_HOME_AFTER_FIGHT,
-        STANDBY_WAITING_DEFEND,
+        WAITING_TO_DEFEND,
         WALKING_APART_TO_DEFEND,
         WALKING_APART_TO_ATTACK,
         WALKING_TO_FIXED_POINT_AFTER_ATTACK,
         WALKING_TO_FIXED_POINT_AFTER_DEFENSE,
+        WALKING_TO_DEFEND,
         DEAD
     }
 
@@ -281,7 +282,7 @@ public class Military extends Worker {
                 setOffroadTarget(buildingToAttack.getFlag().getPosition());
             }
 
-        } else if (state == STANDBY_WAITING_DEFEND) {
+        } else if (state == WAITING_TO_DEFEND) {
 
             /* Go home if there are no more attackers */
             if (defendedBuilding.getAttackers().isEmpty()) {
@@ -476,12 +477,12 @@ public class Military extends Worker {
             } else if (getHome().equals(defendedBuilding)) {
 
                 /* Stay by the flag if the military is defending its own building and the attack isn't over */
-                state = STANDBY_WAITING_DEFEND;
+                state = WAITING_TO_DEFEND;
 
             } else if (defendedBuilding.getWaitingAttackers().isEmpty()) {
 
                 /* All attackers are busy so stand by and wait to see if there is a need to defend again */
-                state = STANDBY_WAITING_DEFEND;
+                state = WAITING_TO_DEFEND;
 
             } else {
 
@@ -493,6 +494,8 @@ public class Military extends Worker {
 
                 setOffroadTarget(opponent.getPosition());
             }
+        } else if (state == WALKING_TO_DEFEND) {
+            state = WAITING_TO_DEFEND;
         }
     }
 
@@ -602,10 +605,17 @@ public class Military extends Worker {
                 state = WALKING_TO_FIGHT_TO_DEFEND;
 
                 setOffroadTarget(opponent.getPosition());
+
+            /* Walk to a point close to the building and wait for an attacker to fight */
             } else {
 
                 /* Just wait for an attacker to become free */
-                state = STANDBY_WAITING_DEFEND;
+                state = WALKING_TO_DEFEND;
+
+                /* Find point to stay at and wait for an attacker to fight */
+                Point point = building.getPosition().right();
+
+                setOffroadTarget(point, getHome().getFlag().getPosition());
             }
         }
     }
