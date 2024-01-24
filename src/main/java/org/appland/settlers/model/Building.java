@@ -5,8 +5,18 @@ import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -37,10 +47,7 @@ public class Building implements EndPoint {
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
-
-    public int getHostedSoldiersWithRank(Rank rank) {
-        return ((Long) hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).count()).intValue();
-    }
+    private final Set<Military>          waitingDefenders;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
@@ -71,9 +78,10 @@ public class Building implements EndPoint {
         upgradeCountdown      = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
-        waitingAttackers      = new LinkedList<>();
         attackers             = new LinkedList<>();
         defenders             = new LinkedList<>();
+        waitingDefenders      = new HashSet<>();
+        waitingAttackers      = new LinkedList<>();
         flag                  = new Flag(null);
         worker                = null;
         promisedWorker        = null;
@@ -460,13 +468,12 @@ public class Building implements EndPoint {
                     ownDefender = retrieveHostedSoldier();
 
                     /* Tell the defender to handle the attacker at the flag */
-                    ownDefender.defendBuilding(this);
+                    ownDefender.defendOwnBuilding(this);
                 }
             }
         }
 
         if (state == State.UNDER_CONSTRUCTION) {
-
             if (countdown.hasReachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     consumeConstructionMaterial();
@@ -852,7 +859,7 @@ public class Building implements EndPoint {
     }
 
     Military retrieveHostedSoldier() {
-        for (Military.Rank rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
+        for (Rank rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
             Optional<Military> maybeSoldier = hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
             if (maybeSoldier.isPresent()) {
@@ -903,39 +910,6 @@ public class Building implements EndPoint {
         /* Register the attacker */
         if (!attackers.contains(attacker)) {
             attackers.add(attacker);
-        }
-
-        if (!waitingAttackers.contains(attacker)) {
-            waitingAttackers.add(attacker);
-        }
-
-        /* Try to get remote defenders if the building can't defend itself */
-        if (getNumberOfHostedMilitary() == 0 && defenders.isEmpty()) {
-
-            /* Find potential defenders */
-            List<Military> potentialDefenders = new ArrayList<>();
-
-            player.getBuildings()
-                    .stream()
-                    .filter(Building::isReady)
-                    .filter(Building::isMilitaryBuilding)
-                    .filter(building -> building.getHostedMilitary().size() > 1)
-                    .filter(building -> building.getAttackRadius() >= GameUtils.getDistanceInGameSteps(position, building.getPosition()))
-                    .forEach(building -> {
-                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedMilitary(), player.getDefenseStrength());
-
-                        potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
-                    });
-
-            /* Sort by rank, then distance to this building, which is under attack */
-            GameUtils.sortSoldiersByPreferredRankAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
-
-            /* Pick defender(s) to come and help defending */
-            if (!potentialDefenders.isEmpty()) {
-                var nrDefendersToPick = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
-
-                potentialDefenders.subList(0, nrDefendersToPick).forEach(soldier -> soldier.defendBuilding(this));
-            }
         }
     }
 
@@ -988,7 +962,7 @@ public class Building implements EndPoint {
     }
 
     boolean isDefenseLess() {
-        if (getNumberOfHostedMilitary() == 0 && getRemoteDefenders().isEmpty() && ownDefender == null) {
+        if (getNumberOfHostedMilitary() == 0 && defenders.isEmpty() && ownDefender == null) {
             return true;
         }
 
@@ -1386,5 +1360,66 @@ public class Building implements EndPoint {
 
     void onStepTime() {
         // Empty - available for subclasses to implement
+    }
+
+    public int getHostedSoldiersWithRank(Rank rank) {
+        return ((Long) hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).count()).intValue();
+    }
+
+    public void removeWaitingAttacker(Military soldier) {
+        waitingAttackers.remove(soldier);
+    }
+
+    public void removeWaitingDefender(Military defender) {
+        waitingDefenders.remove(defender);
+    }
+
+    public void registerWaitingAttacker(Military attacker) {
+        waitingAttackers.add(attacker);
+
+        /* Send out a local defender if there is none (and if possible) */
+        if (!getHostedMilitary().isEmpty() && ownDefender == null) {
+            var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedMilitary(), player.getDefenseStrength());
+
+            this.ownDefender = sortedHostedSoldiers.getFirst();
+
+            retrieveHostedSoldier(ownDefender);
+
+            ownDefender.defendOwnBuilding(this);
+        }
+
+        /* Try to get remote defenders */
+        if (defenders.size() <= 1) {
+
+            /* Find potential defenders */
+            List<Military> potentialDefenders = new ArrayList<>();
+
+            player.getBuildings()
+                    .stream()
+                    .filter(building -> !building.equals(this))
+                    .filter(Building::isReady)
+                    .filter(Building::isMilitaryBuilding)
+                    .filter(building -> building.getHostedMilitary().size() > 1)
+                    .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
+                    .forEach(building -> {
+                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedMilitary(), player.getDefenseStrength());
+
+                        potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
+                    });
+
+            /* Sort by rank, then distance to this building */
+            GameUtils.sortSoldiersByPreferredRankAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
+
+            /* Pick defender(s) to come and help defending */
+            if (!potentialDefenders.isEmpty()) {
+                var nrDefendersToPick = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
+
+                potentialDefenders.subList(0, nrDefendersToPick).forEach(soldier -> soldier.defendOtherBuilding(this));
+            }
+        }
+    }
+
+    public List<Military> getDefenders() {
+        return defenders;
     }
 }

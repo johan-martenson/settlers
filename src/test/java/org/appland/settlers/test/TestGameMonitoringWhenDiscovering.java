@@ -1370,8 +1370,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
@@ -1394,7 +1393,6 @@ public class TestGameMonitoringWhenDiscovering {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 

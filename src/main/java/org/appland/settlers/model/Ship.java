@@ -100,7 +100,7 @@ public class Ship extends Worker {
                     /* Sort by distance to the ship - closest first */
                     .map(harbor -> new GameUtils.BuildingAndData<>(
                             harbor,
-                            GameUtils.getDistanceInGameSteps(position, harbor.getPosition())))
+                            GameUtils.distanceInGameSteps(position, harbor.getPosition())))
                     .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::getData))
                     .map(GameUtils.BuildingAndData::getBuilding)
                     .collect(Collectors.toUnmodifiableList());

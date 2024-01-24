@@ -159,6 +159,7 @@ public class Player {
         /* Set default military settings */
         strengthWhenPopulatingMilitaryBuildings = 5;
         defenseStrength = 5;
+        defenseFromSurroundingBuildings = 5;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -356,7 +357,7 @@ public class Player {
                 .stream()
                 .map(soldier -> new GameUtils.SoldierAndDistance(
                         soldier,
-                        GameUtils.getDistanceInGameSteps(soldier.getPosition(), buildingToAttack.getPosition())))
+                        GameUtils.distanceInGameSteps(soldier.getPosition(), buildingToAttack.getPosition())))
                 .toList());
 
         if (strength == AttackStrength.STRONG) {
@@ -366,45 +367,12 @@ public class Player {
         }
 
         /* Run the attack with the most suitable soldiers */
-        Set<Point> reservedSpots = new HashSet<>();
-        Point center             = buildingToAttack.getFlag().getPosition();
-
         availableAttackersWithDistance.stream().limit(nrAttackers).forEach(soldierAndDistance -> {
             var soldier = soldierAndDistance.soldier();
 
             soldier.getHome().retrieveHostedSoldier(soldier);
 
-            if (!reservedSpots.contains(center)) {
-                soldier.attack(buildingToAttack, center);
-
-                reservedSpots.add(center);
-            } else {
-                var foundSpot = false;
-
-                for (int radius = 0; radius < 20; radius++) {
-                    for (Point point : map.getPointsWithinRadius(center, radius)) {
-                        if (reservedSpots.contains(point)) {
-                            continue;
-                        }
-
-                        if (map.findWayOffroad(soldier.getHome().getPosition(), point, null) == null) {
-                            continue;
-                        }
-
-                        soldier.attack(buildingToAttack, point);
-
-                        reservedSpots.add(point);
-
-                        foundSpot = true;
-
-                        break;
-                    }
-
-                    if (foundSpot) {
-                        break;
-                    }
-                }
-            }
+            soldier.attack(buildingToAttack);
         });
 
         buildingToAttack.getPlayer().reportUnderAttack(buildingToAttack);

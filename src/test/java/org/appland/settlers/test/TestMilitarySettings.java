@@ -438,7 +438,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
-        assertFalse(fortress.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
 
@@ -525,7 +524,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
-        assertFalse(fortress.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
 
@@ -612,7 +610,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
-        assertFalse(fortress.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
 
@@ -699,7 +696,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
-        assertFalse(fortress.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
 
@@ -786,7 +782,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), fortress.getFlag().getPosition());
-        assertFalse(fortress.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, fortress.getFlag().getPosition());
 
@@ -894,7 +889,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
@@ -1000,7 +994,7 @@ public class TestMilitarySettings {
         /* Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
+
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
@@ -1107,7 +1101,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
@@ -1213,7 +1206,6 @@ public class TestMilitarySettings {
         /* Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
@@ -1266,8 +1258,7 @@ public class TestMilitarySettings {
         Utils.constructHouse(fortress);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         /* Populate player 1's fortress with each type of soldier */
         assertTrue(fortress.isReady());
@@ -1320,19 +1311,41 @@ public class TestMilitarySettings {
         /* Verify that a military leaves from a surrounding building to defend when the attacker reaches the flag */
         assertEquals(fortress.getNumberOfHostedMilitary(), 5);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
-        assertFalse(barracks1.isUnderAttack());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that a soldier of the right type goes out to defend */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        List<Military> defenders = Utils.findSoldiersOutsideBuilding(player1);
 
-        assertEquals(fortress.getNumberOfHostedMilitary(), 4);
-        assertEquals(defender.getHome(), fortress);
-        assertNotNull(defender);
-        assertEquals(defender.getRank(), GENERAL_RANK);
+        assertTrue(defenders.stream().anyMatch(anySoldier -> anySoldier.getRank() == GENERAL_RANK));
+    }
+
+
+    // Test amount of defenders from surrounding buildings
+
+    @Test
+    public void testDefaultAmountDefendersFromSurroundingBuildings() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify the default amount of defenders from surrounding buildings */
+        assertEquals(player0.getDefenseFromSurroundingBuildings(), 5);
     }
 
     @Test
@@ -1699,25 +1712,15 @@ public class TestMilitarySettings {
         var fortress = map.placeBuilding(new Fortress(player1), point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0);
-        Utils.constructHouse(fortress);
+        Utils.constructHouses(barracks0, fortress);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         /* Populate player 1's fortress */
         assertTrue(fortress.isReady());
 
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
 
         /* Place barracks for player 1 */
         Point point4 = new Point(17, 11);
@@ -1885,7 +1888,6 @@ public class TestMilitarySettings {
         assertEquals(Utils.findSoldiersOutsideBuilding(player1).size(), 8);
     }
 
-    // Test amount of defenders from surrounding buildings
 
     // Test amount of soldiers not being available for attacking
 

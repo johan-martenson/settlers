@@ -116,9 +116,11 @@ public class TestWinning {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
 
+        map.stepTime();
+
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
-        /* Verify that the headquarter is destroyed and the first player won the game */
+        /* Verify that the headquarters is destroyed and the first player won the game */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());

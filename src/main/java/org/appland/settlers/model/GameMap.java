@@ -3929,4 +3929,8 @@ public class GameMap {
 
         removedDecorations.add(point);
     }
+
+    public boolean isSurroundedByNonWalkableTerrain(Point point) {
+        return getSurroundingTiles(point).stream().noneMatch(DetailedVegetation::canWalkOn);
+    }
 }

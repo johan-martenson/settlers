@@ -99,4 +99,8 @@ public enum DetailedVegetation {
     );
 
     static final Set<DetailedVegetation> DEAD_TREE_NOT_ALLOWED = EnumSet.of(SNOW, WATER, WATER_2, BUILDABLE_WATER, MAGENTA);
+
+    public boolean canWalkOn() {
+        return CAN_WALK_ON.contains(this);
+    }
 }

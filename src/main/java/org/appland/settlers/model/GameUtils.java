@@ -54,8 +54,8 @@ public class GameUtils {
     public static void sortSoldiersByPreferredRankAndDistance(List<Military> soldiers, int strength, Point position) {
         soldiers.sort((soldier0, soldier1) -> {
             if (soldier0.getRank() == soldier1.getRank()) {
-                var dist0 = GameUtils.getDistanceInGameSteps(soldier0.getHome().getPosition(), position);
-                var dist1 = GameUtils.getDistanceInGameSteps(soldier1.getHome().getPosition(), position);
+                var dist0 = GameUtils.distanceInGameSteps(soldier0.getHome().getPosition(), position);
+                var dist1 = GameUtils.distanceInGameSteps(soldier1.getHome().getPosition(), position);
 
                 if (dist0 == dist1) {
                     return 0;
@@ -684,7 +684,7 @@ public class GameUtils {
                 continue;
             }
 
-            int candidateDistance = getDistanceInGameSteps(position, point);
+            int candidateDistance = distanceInGameSteps(position, point);
 
             /* Filter points that are not closer than the current best pick */
             if (candidateDistance >= distanceToClosestWater){
@@ -736,7 +736,7 @@ public class GameUtils {
                 continue;
             }
 
-            int candidateDistance = getDistanceInGameSteps(position, building.getPosition());
+            int candidateDistance = distanceInGameSteps(position, building.getPosition());
 
             /* Filter buildings that are further away than the current candidate */
             if (candidateDistance >= distanceToClosestHarbor) {
@@ -825,7 +825,7 @@ public class GameUtils {
         PriorityQueue<PointAndCost> toEvaluatePriorityQueue = new PriorityQueue<>();
 
         /* Define starting parameters */
-        bestCaseCost = getDistanceInGameSteps(start, goal);
+        bestCaseCost = distanceInGameSteps(start, goal);
         costToGetToPoint.put(start, 0);
 
         PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
@@ -882,7 +882,7 @@ public class GameUtils {
                     costToGetToPoint.put(neighbor, newCostToGetToPoint);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + getDistanceInGameSteps(neighbor, goal);
+                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
 
                     /* Add the neighbor to the evaluation list */
                     PointAndCost neighborPointAndEstimatedCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
@@ -1024,7 +1024,7 @@ public class GameUtils {
         }
 
         /* Define starting parameters */
-        bestCaseCost = getDistanceInGameSteps(start, goal);
+        bestCaseCost = distanceInGameSteps(start, goal);
         costToGetToPoint.put(start, 0);
 
         PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
@@ -1091,7 +1091,7 @@ public class GameUtils {
                     costToGetToPoint.put(neighbor, newCostToGetToPoint);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + getDistanceInGameSteps(neighbor, goal);
+                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
 
                     /* Add the neighbor to the evaluation list */
                     PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
@@ -1120,7 +1120,7 @@ public class GameUtils {
         PriorityQueue<PointAndCost> toEvaluatePriorityQueue = new PriorityQueue<>();
 
         /* Define starting parameters */
-        bestCaseCost = getDistanceInGameSteps(start, goal);
+        bestCaseCost = distanceInGameSteps(start, goal);
         costToGetToPoint.put(start, 0);
 
         PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
@@ -1161,7 +1161,7 @@ public class GameUtils {
                     costToGetToPoint.put(neighbor, newCostToGetToPoint);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + getDistanceInGameSteps(neighbor, goal);
+                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
 
                     /* Add the neighbor to the evaluation list */
                     PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
@@ -1333,7 +1333,7 @@ public class GameUtils {
         Point start = startEndPoint.getPosition();
         Point goal = goalEndPoint.getPosition();
 
-        bestCaseCost = getDistanceInGameSteps(start, goal);
+        bestCaseCost = distanceInGameSteps(start, goal);
         costToGetToPoint.put(start, 0);
 
         PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
@@ -1380,7 +1380,7 @@ public class GameUtils {
                     costToGetToPoint.put(neighbor, newCostToGetToPoint);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + getDistanceInGameSteps(neighbor, goal);
+                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
 
                     /* Add the neighbor to the evaluation list */
                     PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
@@ -1457,7 +1457,7 @@ public class GameUtils {
                 }
 
                 /* Filter buildings that cannot be closer than the current */
-                int bestCaseDistance = getDistanceInGameSteps(point, building.getFlag().getPosition()) + 1;
+                int bestCaseDistance = distanceInGameSteps(point, building.getFlag().getPosition()) + 1;
 
                 if (bestCaseDistance > distance) {
                     continue;
@@ -1512,7 +1512,7 @@ public class GameUtils {
             }
 
             /* Filter buildings that cannot be closer than the current */
-            int bestCaseDistance = getDistanceInGameSteps(point, building.getFlag().getPosition()) + 1;
+            int bestCaseDistance = distanceInGameSteps(point, building.getFlag().getPosition()) + 1;
 
             if (bestCaseDistance > distance) {
                 continue;
@@ -1711,7 +1711,7 @@ public class GameUtils {
         return reachable;
     }
 
-    public static int getDistanceInGameSteps(Point start, Point end) {
+    public static int distanceInGameSteps(Point start, Point end) {
         int distanceX = abs(start.x - end.x);
         int distanceY = abs(start.y - end.y);
 

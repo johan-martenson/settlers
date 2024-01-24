@@ -119,21 +119,10 @@ public class Utils {
 
         assertNotNull(map);
         assertFalse(workers.isEmpty());
-
-        for (Worker worker : workers) {
-            assertTrue(worker.isTraveling());
-        }
+        assertTrue(workers.stream().allMatch(Worker::isTraveling));
 
         for (int i = 0; i < 1000; i++) {
-            boolean allDone = true;
-
-            for (Worker worker : workers) {
-                if (!worker.isArrived()) {
-                    allDone = false;
-                }
-            }
-
-            if (allDone) {
+            if (workers.stream().allMatch(Worker::isArrived)) {
                 break;
             }
 
@@ -692,7 +681,6 @@ public class Utils {
     }
 
     static Military getMainAttacker(Building building, Collection<Military> attackers) throws InvalidUserActionException {
-
         GameMap map = building.getMap();
         Military firstAttacker = null;
 
@@ -1921,7 +1909,7 @@ public class Utils {
         GameMap map = buildings[0].getMap();
 
         /* Place builders */
-        Builder aBuilder = null;
+        List<Worker> builders = new ArrayList<>();
         for (Building building : buildings) {
             Player player = building.getPlayer();
 
@@ -1931,12 +1919,13 @@ public class Utils {
             building.promiseBuilder(builder);
             builder.setTargetBuilding(building);
 
-            aBuilder = builder;
+            builders.add(builder);
         }
 
         /* Make the builders reach the buildings */
-        fastForwardUntilWorkerReachesPoint(map, aBuilder, aBuilder.getTarget());
+        fastForwardUntilWorkersReachTarget(map, builders);
 
+        /* Wait for the buildings to get constructed */
         for (Building building : buildings) {
             assertTrue(building.isUnderConstruction());
 
@@ -1966,27 +1955,14 @@ public class Utils {
         }
 
         for (int i = 0; i < 500; i++) {
-
-            boolean allReady = true;
-
-            for (Building building : buildings) {
-                if (!building.isReady()) {
-                    allReady = false;
-
-                    break;
-                }
-            }
-
-            if (allReady) {
+            if (Arrays.stream(buildings).allMatch(Building::isReady)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        for (Building building : buildings) {
-            assertTrue(building.isReady());
-        }
+        assertTrue(Arrays.stream(buildings).allMatch(Building::isReady));
     }
 
     public static void waitForWorkerToBeExactlyOnPoint(Worker worker, GameMap map) throws InvalidUserActionException {
@@ -2883,6 +2859,36 @@ public class Utils {
         }
 
         assertTrue(soldier.getHealth() < 10);
+    }
+
+    public static void waitForSoldiersToReachTargets(GameMap map, List<Military> soldiers) throws InvalidUserActionException {
+        assertNotNull(map);
+        assertFalse(soldiers.isEmpty());
+        assertTrue(soldiers.stream().allMatch(Worker::isTraveling));
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (soldiers.stream().allMatch(Worker::isArrived)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+    }
+
+    public static List<Military> findSoldiersOutsideWithHome(Player player, Building building) {
+        List<Military> soldiers = building.getMap().getWorkers()
+                .stream()
+                .filter(worker -> worker.getPlayer().equals(player))
+                .filter(worker -> Objects.equals(worker.getHome(), building))
+                .filter(worker -> !worker.isInsideBuilding())
+                .filter(Worker::isSoldier)
+                .map(worker -> (Military) worker)
+                .collect(Collectors.toList());
+
+        soldiers.forEach(soldier -> assertEquals(soldier.getHome(), building));
+
+        return soldiers;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

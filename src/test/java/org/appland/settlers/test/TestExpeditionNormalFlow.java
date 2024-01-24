@@ -183,11 +183,11 @@ public class TestExpeditionNormalFlow {
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, ship.getTarget());
 
         /* Verify that the ship waits close to the shipyard */
-        assertTrue(GameUtils.getDistanceInGameSteps(shipyard.getPosition(), harbor.getPosition()) > 8);
+        assertTrue(GameUtils.distanceInGameSteps(shipyard.getPosition(), harbor.getPosition()) > 8);
 
         for (int i = 0; i < 200; i++) {
 
-            assertTrue(GameUtils.getDistanceInGameSteps(ship.getPosition(), shipyard.getPosition()) < 8);
+            assertTrue(GameUtils.distanceInGameSteps(ship.getPosition(), shipyard.getPosition()) < 8);
 
             map.stepTime();
         }

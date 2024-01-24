@@ -932,7 +932,7 @@ public class TestShipyard {
 
         assertNotNull(point4);
         assertNotEquals(point4, point3);
-        assertTrue(GameUtils.getDistanceInGameSteps(point4, shipyard.getPosition()) < 6);
+        assertTrue(GameUtils.distanceInGameSteps(point4, shipyard.getPosition()) < 6);
         assertTrue(GameUtils.isAll(map.getSurroundingTiles(point4), DetailedVegetation.WATER));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, point4);

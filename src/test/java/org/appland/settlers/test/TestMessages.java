@@ -1339,6 +1339,8 @@ public class TestMessages {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
 
+        map.stepTime();
+
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
         /* Verify that the headquarters is destroyed and the first player won the game */
@@ -1419,6 +1421,8 @@ public class TestMessages {
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        map.stepTime();
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
@@ -1512,6 +1516,8 @@ public class TestMessages {
         assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        map.stepTime();
 
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 

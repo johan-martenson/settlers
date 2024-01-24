@@ -589,6 +589,8 @@ public class TestMisc {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
+        map.stepTime();
+
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that evacuation is disabled when the attacker takes over the building */
@@ -769,6 +771,8 @@ public class TestMisc {
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        map.stepTime();
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 

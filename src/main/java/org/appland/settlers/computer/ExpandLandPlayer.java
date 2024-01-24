@@ -403,7 +403,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                     int distanceToClosestFlag = Integer.MAX_VALUE;
 
                     for (Flag flag : flagsReachableFromHeadquarter) {
-                        int candidateDistanceToClosestFlag = GameUtils.getDistanceInGameSteps(pointDownRight, flag.getPosition());
+                        int candidateDistanceToClosestFlag = GameUtils.distanceInGameSteps(pointDownRight, flag.getPosition());
 
                         if (candidateDistanceToClosestFlag < distanceToClosestFlag) {
                             distanceToClosestFlag = candidateDistanceToClosestFlag;

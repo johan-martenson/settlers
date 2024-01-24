@@ -1910,6 +1910,10 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Remove all soldiers from the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -1923,8 +1927,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
@@ -2002,6 +2005,10 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Remove all soldiers from the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -2015,8 +2022,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
@@ -2799,6 +2805,10 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Remove all soldiers from the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -2812,8 +2822,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
@@ -2847,6 +2856,14 @@ public class TestGameMonitoringOfWorkerActions {
         Military defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
+
+        System.out.println(
+                map.getWorkers().stream()
+                        .filter(worker -> worker.getPlayer().equals(player1))
+                        .filter(Worker::isSoldier)
+                        .filter(worker -> !worker.isInsideBuilding()).toList()
+        );
+
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());
 
@@ -2891,6 +2908,10 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Remove all soldiers from the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -2904,8 +2925,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
@@ -2997,6 +3017,10 @@ public class TestGameMonitoringOfWorkerActions {
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Remove all soldiers from the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place barracks for player 0 */
         Point point2 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
@@ -3010,8 +3034,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());

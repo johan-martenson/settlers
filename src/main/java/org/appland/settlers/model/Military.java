@@ -1,6 +1,9 @@
 package org.appland.settlers.model;
 
+import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Military.Rank.*;
@@ -108,12 +111,12 @@ public class Military extends Worker {
     private static final int OFFICER_HEALTH  = 670;
     private static final int GENERAL_HEALTH  = 2020;
 
-    private Building  buildingToAttack;
-    private Military  opponent;
-    private Rank      rank;
-    private State     state;
-    private int       health;
-    private Building  defendedBuilding;
+    private Military   opponent;
+    private Rank       rank;
+    private State      state;
+    private int        health;
+    private Building   buildingToAttack;
+    private Building   buildingToDefend;
     private FightState fightState;
 
     public Military(Player player, Rank rank, GameMap map) {
@@ -229,7 +232,7 @@ public class Military extends Worker {
 
                         /* Remove this military from the list of the building's defenders */
                         if (state == DEFENDING) {
-                            defendedBuilding.removeDefender(this);
+                            buildingToDefend.removeDefender(this);
                         } else if (state == ATTACKING) {
                             buildingToAttack.removeAttacker(this);
                         }
@@ -281,20 +284,19 @@ public class Military extends Worker {
 
                 setOffroadTarget(buildingToAttack.getFlag().getPosition());
             }
-
         } else if (state == WAITING_TO_DEFEND) {
 
             /* Go home if there are no more attackers */
-            if (defendedBuilding.getAttackers().isEmpty()) {
+            if (buildingToDefend.getAttackers().isEmpty()) {
 
                 /* Return home or to storage */
                 returnAfterAttackIsOver();
 
             /* Look for an attacker at the flag if this is the soldiers own building */
-            } else if (getHome().equals(defendedBuilding)) {
+            } else if (getHome().equals(buildingToDefend)) {
 
                 /* Get the attacker at the flag */
-                Military attackerAtFlag = defendedBuilding.getPrimaryAttacker();
+                Military attackerAtFlag = buildingToDefend.getPrimaryAttacker();
 
                 /* Keep waiting if there is no primary attacker */
                 if (attackerAtFlag == null) {
@@ -314,6 +316,9 @@ public class Military extends Worker {
                 /* Tell the attacker to take position for the fight */
                 opponent.prepareForFight(this);
 
+                /* Tell the attacked building that this defender is not waiting anymore */
+                buildingToDefend.removeWaitingDefender(this);
+
                 /* Walk apart from the attacker before starting the fight */
                 state = State.WALKING_APART_TO_DEFEND;
 
@@ -321,10 +326,10 @@ public class Military extends Worker {
                 walkHalfWayOffroadTo(getPosition().right());
 
             /* Fight the next attacker if this is a remote defender and there are attackers waiting */
-            } else if (!defendedBuilding.getWaitingAttackers().isEmpty()) {
+            } else if (!buildingToDefend.getWaitingAttackers().isEmpty()) {
 
                 /* Pick the next waiting attacker */
-                opponent = defendedBuilding.pickWaitingAttacker();
+                opponent = buildingToDefend.pickWaitingAttacker();
 
                 /* Notify the attacker so it doesn't move */
                 opponent.reserveForFight();
@@ -365,8 +370,7 @@ public class Military extends Worker {
             /* Main attacker */
             if (getPosition().equals(buildingToAttack.getFlag().getPosition())) {
 
-                /* Tell the building there is an attacker to give it a chance to get remote defenders */
-                buildingToAttack.registerAttacker(this);
+                buildingToAttack.registerWaitingAttacker(this);
 
                 /* Take over the building directly if it can not protect itself */
                 if (buildingToAttack.isDefenseLess()) {
@@ -379,18 +383,11 @@ public class Military extends Worker {
                 /* Notify the building about the attacker and start waiting for an opponent */
                 } else {
 
-                    /* Register as an attacker and start waiting for an opponent */
-                    buildingToAttack.registerAttacker(this);
-
                     state = WAITING_FOR_DEFENDING_OPPONENT;
                 }
 
             /* Not main attacker */
             } else {
-
-                /* Register as an attacker and start waiting for an opponent */
-                buildingToAttack.registerAttacker(this);
-
                 state = WAITING_FOR_DEFENDING_OPPONENT;
             }
 
@@ -447,7 +444,6 @@ public class Military extends Worker {
 
             state = DEPLOYED;
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_ATTACK) {
-
             if (buildingToAttack.isReady()) {
 
                 /* Take over the building if it's unprotected */
@@ -456,10 +452,6 @@ public class Military extends Worker {
 
                     setOffroadTarget(buildingToAttack.getPosition());
                 } else {
-
-                    /* Notify the building about this attacker if it can still be defended */
-                    buildingToAttack.registerAttacker(this);
-
                     state = WAITING_FOR_DEFENDING_OPPONENT;
                 }
             } else {
@@ -468,18 +460,18 @@ public class Military extends Worker {
                 returnAfterAttackIsOver();
             }
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE) {
-            if (defendedBuilding.getAttackers().isEmpty()) {
+            if (buildingToDefend.getAttackers().isEmpty()) {
 
                 /* Go home or to storage if there are no more attackers */
                 returnAfterAttackIsOver();
 
-                defendedBuilding.removeDefender(this);
-            } else if (getHome().equals(defendedBuilding)) {
+                buildingToDefend.removeDefender(this);
+            } else if (getHome().equals(buildingToDefend)) {
 
                 /* Stay by the flag if the military is defending its own building and the attack isn't over */
                 state = WAITING_TO_DEFEND;
 
-            } else if (defendedBuilding.getWaitingAttackers().isEmpty()) {
+            } else if (buildingToDefend.getWaitingAttackers().isEmpty()) {
 
                 /* All attackers are busy so stand by and wait to see if there is a need to defend again */
                 state = WAITING_TO_DEFEND;
@@ -487,7 +479,7 @@ public class Military extends Worker {
             } else {
 
                 /* Fight the next waiting attacker */
-                opponent = defendedBuilding.pickWaitingAttacker();
+                opponent = buildingToDefend.pickWaitingAttacker();
 
                 /* Walk to fight the opponent */
                 state = WALKING_TO_FIGHT_TO_DEFEND;
@@ -543,7 +535,7 @@ public class Military extends Worker {
         }
     }
 
-    void attack(Building building, Point meetingPoint) {
+    void attack(Building building) {
 
         /* Save the building to attack */
         buildingToAttack = building;
@@ -551,11 +543,63 @@ public class Military extends Worker {
         /* Set state to walking to attack */
         state = WALKING_TO_ATTACK;
 
+        /* Tell the building that we are an attacker */
+        building.registerAttacker(this);
+
+        /* Walk close to the fighting and wait for a defender to be free */
+        state = WALKING_TO_ATTACK;
+
+        Set<Point> taken = buildingToAttack.getAttackers().stream()
+                .filter(worker -> worker.player == player)
+                .filter(worker -> !Objects.equals(worker, this))
+                .filter(Worker::isSoldier)
+                .filter(soldier -> !soldier.isInsideBuilding())
+                .map(soldier -> {
+                    if (soldier.isTraveling()) {
+                        return soldier.getTarget();
+                    } else {
+                        return soldier.getPosition();
+                    }
+                })
+                .collect(Collectors.toSet());
+
+        var candidates = GameUtils.getHexagonAreaAroundPoint(
+                        buildingToAttack.getFlag().getPosition(),
+                        6,
+                        map).stream()
+                .filter(point -> !taken.contains(point))
+                .filter(point -> !map.isBuildingAtPoint(point))
+                .filter(point -> !map.isStoneAtPoint(point))
+                .filter(point -> map.getDetailedVegetationUpLeft(point).canWalkOn() || map.getDetailedVegetationDownLeft(point).canWalkOn())
+                .filter(point -> map.getDetailedVegetationUpRight(point).canWalkOn() || map.getDetailedVegetationDownRight(point).canWalkOn())
+                .filter(point -> map.findWayOffroad(
+                        getPosition(),
+                        point,
+                        null
+                ) != null)
+                .sorted(
+                        (point0, point1) -> {
+                            var dist0 = GameUtils.distanceInGameSteps(point0, buildingToAttack.getFlag().getPosition());
+                            var dist1 = GameUtils.distanceInGameSteps(point1, buildingToAttack.getFlag().getPosition());
+
+                            if (dist0 == dist1) {
+                                return 0;
+                            }
+
+                            var diff = dist0 - dist1;
+
+                            return diff / Math.abs(diff);
+                        }
+                )
+                .toList();
+
+        Point point = candidates.getFirst();
+
         /* Walk to the attacked building */
-        setOffroadTarget(meetingPoint);
+        setOffroadTarget(point, getHome().getFlag().getPosition());
 
         /* Become the primary attacker if the meeting point is the building's flag */
-        if (buildingToAttack.getFlag().getPosition().equals(meetingPoint)) {
+        if (buildingToAttack.getFlag().getPosition().equals(point)) {
             buildingToAttack.setPrimaryAttacker(this);
         }
     }
@@ -574,73 +618,167 @@ public class Military extends Worker {
         };
     }
 
-    void defendBuilding(Building building) {
-        defendedBuilding = building;
+    void defendOwnBuilding(Building building) {
+        buildingToDefend = building;
 
-        /* Handle the attacker at the flag if this is the defender's own building */
-        if (defendedBuilding.equals(getHome()) || getPosition().equals(defendedBuilding.getPosition())) {
+        /* Register in the building's defense */
+        building.registerDefender(this);
 
-            /* Get the opponent */
-            opponent = defendedBuilding.getPrimaryAttacker();
+        building.retrieveHostedSoldier(this);
+
+        /* Get the opponent */
+        opponent = buildingToDefend.getPrimaryAttacker();
+
+        buildingToDefend.removeWaitingAttacker(opponent);
+
+        /* Fight the attacker */
+        state = WALKING_TO_FIGHT_TO_DEFEND;
+
+        /* Walk to the flag */
+        setOffroadTarget(buildingToDefend.getFlag().getPosition());
+    }
+
+    void defendOtherBuilding(Building building) {
+        buildingToDefend = building;
+
+        /* Register in the building's defense */
+        building.registerDefender(this);
+
+        getHome().retrieveHostedSoldier(this);
+
+        /* Fight an attacker if there are attackers waiting for opponents */
+        if (!building.getWaitingAttackers().isEmpty()) {
+
+            /* Get a waiting attacker */
+            opponent = building.pickWaitingAttacker();
+            building.removeWaitingAttacker(opponent);
 
             /* Fight the attacker */
             state = WALKING_TO_FIGHT_TO_DEFEND;
 
-            /* Walk to the flag */
-            setOffroadTarget(defendedBuilding.getFlag().getPosition());
-        } else {
-
-            /* Register in the building's defense */
-            building.registerDefender(this);
-
-            /* Fight an attacker if there are attackers waiting for opponents */
-            if (!building.getWaitingAttackers().isEmpty()) {
-
-                getHome().retrieveHostedSoldier(this);
-
-                /* Get a waiting attacker */
-                opponent = building.pickWaitingAttacker();
-
-                /* Fight the attacker */
-                state = WALKING_TO_FIGHT_TO_DEFEND;
-
-                setOffroadTarget(opponent.getPosition());
+            setOffroadTarget(opponent.getPosition());
 
             /* Walk to a point close to the building and wait for an attacker to fight */
-            } else {
+        } else {
 
-                /* Just wait for an attacker to become free */
-                state = WALKING_TO_DEFEND;
+            /* Walk close to the fighting and wait for an attacker to be free */
+            state = WALKING_TO_DEFEND;
 
-                /* Find point to stay at and wait for an attacker to fight */
-                Point point = building.getPosition().right();
+            Set<Point> taken = buildingToDefend.getDefenders().stream()
+                            .filter(worker -> worker.player == player)
+                            .filter(Worker::isSoldier)
+                            .filter(soldier -> !soldier.isInsideBuilding())
+                            .map(soldier -> {
+                                if (soldier.isTraveling()) {
+                                    return soldier.getTarget();
+                                } else {
+                                    return soldier.getPosition();
+                                }
+                            })
+                            .collect(Collectors.toSet());
 
-                setOffroadTarget(point, getHome().getFlag().getPosition());
-            }
+                var candidates = GameUtils.getHexagonAreaAroundPoint(
+                                buildingToDefend.getFlag().getPosition(),
+                                6,
+                                map).stream()
+                        .filter(point -> !taken.contains(point))
+                        .filter(point -> !map.isBuildingAtPoint(point))
+                        .filter(point -> !map.isStoneAtPoint(point))
+                        .filter(point -> map.getDetailedVegetationUpLeft(point).canWalkOn() || map.getDetailedVegetationDownLeft(point).canWalkOn())
+                        .filter(point -> map.getDetailedVegetationUpRight(point).canWalkOn() || map.getDetailedVegetationDownRight(point).canWalkOn())
+                        .filter(point -> map.findWayOffroad(
+                                getPosition(),
+                                point,
+                                null
+                        ) != null)
+                        .sorted(
+                                (point0, point1) -> {
+                                    var dist0 = GameUtils.distanceInGameSteps(point0, buildingToDefend.getFlag().getPosition());
+                                    var dist1 = GameUtils.distanceInGameSteps(point1, buildingToDefend.getFlag().getPosition());
+
+                                    if (dist0 == dist1) {
+                                        return 0;
+                                    }
+
+                                    var diff = dist0 - dist1;
+
+                                    return diff / Math.abs(diff);
+                                }
+                        )
+                        .toList();
+
+            Point point = candidates.getFirst();
+
+            setOffroadTarget(point, getHome().getFlag().getPosition());
         }
     }
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        if (state == WALKING_TO_TARGET) {
+        switch (state) {
+            case WALKING_TO_TARGET -> {
 
-            /* Return to the storage if the target building changed owner */
-            if (!getTargetBuilding().getPlayer().equals(getPlayer())) {
+                /* Return to the storage if the target building changed owner */
+                if (!getTargetBuilding().getPlayer().equals(getPlayer())) {
 
-                /* Set state to returning to storage */
-                state = RETURNING_TO_STORAGE;
+                    /* Set state to returning to storage */
+                    state = RETURNING_TO_STORAGE;
 
-                returnToStorage();
+                    returnToStorage();
 
-            /* Return to the storage if the target building is destroyed */
-            } else if (!getTargetBuilding().isReady()) {
+                    /* Return to the storage if the target building is destroyed */
+                } else if (!getTargetBuilding().isReady()) {
 
-                /* Set state to returning to storage */
-                state = RETURNING_TO_STORAGE;
+                    /* Set state to returning to storage */
+                    state = RETURNING_TO_STORAGE;
 
-                returnToStorage();
+                    returnToStorage();
+                }
             }
+            case WALKING_TO_DEFEND -> {
+
+                if (!getPosition().equals(getTarget())) {
+                    Set<Point> occupiedPositions = map.getWorkers().stream()
+                            .filter(worker -> worker.player == player)
+                            .filter(Worker::isSoldier)
+                            .map(soldier -> (Military) soldier)
+                            .filter(soldier -> !soldier.isTraveling() || soldier.isFighting())
+                            .filter(soldier -> !soldier.isInsideBuilding())
+                            .map(Worker::getPosition)
+                            .collect(Collectors.toSet());
+
+                    if (occupiedPositions.contains(getTarget())) {
+                        var candidates = GameUtils.getHexagonAreaAroundPoint(
+                                        buildingToDefend.getFlag().getPosition(),
+                                        6,
+                                        map).stream()
+                                .filter(point -> !occupiedPositions.contains(point))
+                                .filter(point -> !map.isBuildingAtPoint(point))
+                                .sorted(
+                                        (point0, point1) -> {
+                                            var dist0 = GameUtils.distanceInGameSteps(point0, buildingToDefend.getFlag().getPosition());
+                                            var dist1 = GameUtils.distanceInGameSteps(point1, buildingToDefend.getFlag().getPosition());
+
+                                            if (dist0 == dist1) {
+                                                return 0;
+                                            }
+
+                                            var diff = dist0 - dist1;
+
+                                            return diff / Math.abs(diff);
+                                        }
+                                )
+                                .toList();
+
+                        Point point = candidates.getFirst();
+
+                        setOffroadTarget(point);
+                    }
+                }
+
+            }
+            default -> { }
         }
     }
 
@@ -684,6 +822,13 @@ public class Military extends Worker {
     }
 
     private void prepareForFight(Military military) {
+
+        /* Tell the building that this soldier is not waiting anymore as the fight is starting */
+        if (state == ATTACKING || state == WAITING_FOR_DEFENDING_OPPONENT) {
+            buildingToAttack.removeWaitingAttacker(this);
+        } else {
+            buildingToDefend.removeWaitingDefender(this);
+        }
 
         /* Remember the opponent */
         opponent = military;
