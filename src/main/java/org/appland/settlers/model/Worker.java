@@ -181,7 +181,6 @@ public abstract class Worker {
             walkCountdown.step();
 
             if (walkCountdown.hasReachedZero()) {
-
                 state = State.WALKING_AND_EXACTLY_AT_POINT;
 
                 /* Update the worker's position */

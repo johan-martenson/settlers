@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Military.Rank.*;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
@@ -30,9 +31,9 @@ public class Headquarter extends Storehouse {
 
         List<Military> hostedSoldiers = getHostedMilitary();
 
-        long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == Military.Rank.PRIVATE_RANK).count();
+        long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == PRIVATE_RANK).count();
 
-        boolean lackReservedSoldiers = this.reservedSoldiers.getOrDefault(Military.Rank.PRIVATE_RANK, 0) > (int) amountHostedPrivates;
+        boolean lackReservedSoldiers = this.reservedSoldiers.getOrDefault(PRIVATE_RANK, 0) > (int) amountHostedPrivates;
 
         if (lackReservedSoldiers && getAmount(PRIVATE) > 0) {
             deployMilitary(retrieveSoldierFromInventory(PRIVATE));
@@ -187,10 +188,15 @@ public class Headquarter extends Storehouse {
     @Override
     public int getNumberOfHostedMilitary() {
         return inventory.getOrDefault(PRIVATE, 0) +
+                reservedSoldiers.getOrDefault(PRIVATE_RANK, 0) +
                 inventory.getOrDefault(PRIVATE_FIRST_CLASS, 0) +
+                reservedSoldiers.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0) +
                 inventory.getOrDefault(SERGEANT, 0) +
+                reservedSoldiers.getOrDefault(SERGEANT_RANK, 0) +
                 inventory.getOrDefault(OFFICER, 0) +
-                inventory.getOrDefault(GENERAL, 0);
+                reservedSoldiers.getOrDefault(OFFICER_RANK, 0) +
+                inventory.getOrDefault(GENERAL, 0) +
+                reservedSoldiers.getOrDefault(GENERAL_RANK, 0);
     }
 
     @Override
@@ -220,8 +226,6 @@ public class Headquarter extends Storehouse {
         soldier.setHome(this);
 
         getMap().placeWorkerFromStepTime(soldier, this);
-
-        soldier.setPosition(getPosition());
 
         return soldier;
     }

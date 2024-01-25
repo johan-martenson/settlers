@@ -19,6 +19,7 @@ public class Military extends Worker {
     private static final Random random = new Random(1);
     private static final int TIME_FOR_HIT = 10;
     private static final int TIME_TO_DIE = 10;
+
     private int countdown;
 
     enum FightState {
@@ -342,7 +343,6 @@ public class Military extends Worker {
 
     @Override
     protected void onArrival() throws InvalidUserActionException {
-
         if (state == WALKING_TO_TARGET) {
 
             /* Get the building at the position */
@@ -493,7 +493,6 @@ public class Military extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-
         if (state == WALKING_TO_TARGET             ||
             state == WALKING_TO_TAKE_OVER_BUILDING ||
             state == WALKING_HOME_AFTER_FIGHT      ||
@@ -519,20 +518,13 @@ public class Military extends Worker {
 
     private Material rankToMaterial(Rank rank) {
 
-        switch (rank) {
-        case PRIVATE_RANK:
-            return PRIVATE;
-        case PRIVATE_FIRST_CLASS_RANK:
-            return PRIVATE_FIRST_CLASS;
-        case SERGEANT_RANK:
-            return SERGEANT;
-        case OFFICER_RANK:
-            return OFFICER;
-        case GENERAL_RANK:
-            return GENERAL;
-        default:
-            return null;
-        }
+        return switch (rank) {
+            case PRIVATE_RANK -> PRIVATE;
+            case PRIVATE_FIRST_CLASS_RANK -> PRIVATE_FIRST_CLASS;
+            case SERGEANT_RANK -> SERGEANT;
+            case OFFICER_RANK -> OFFICER;
+            case GENERAL_RANK -> GENERAL;
+        };
     }
 
     void attack(Building building) {
@@ -623,8 +615,6 @@ public class Military extends Worker {
 
         /* Register in the building's defense */
         building.registerDefender(this);
-
-        building.retrieveHostedSoldier(this);
 
         /* Get the opponent */
         opponent = buildingToDefend.getPrimaryAttacker();
@@ -776,7 +766,6 @@ public class Military extends Worker {
                         setOffroadTarget(point);
                     }
                 }
-
             }
             default -> { }
         }

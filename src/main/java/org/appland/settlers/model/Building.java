@@ -40,7 +40,7 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> requiredGoodsForProduction;
     private final List<Military>         attackers;
     private final List<Military>         waitingAttackers;
-    private final List<Military>         defenders;
+    private final Set<Military>          defenders;
     private final Countdown              countdown;
     private final Countdown              upgradeCountdown;
     private final Map<Material, Integer> promisedDeliveries;
@@ -79,7 +79,7 @@ public class Building implements EndPoint {
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
         attackers             = new LinkedList<>();
-        defenders             = new LinkedList<>();
+        defenders             = new HashSet<>();
         waitingDefenders      = new HashSet<>();
         waitingAttackers      = new LinkedList<>();
         flag                  = new Flag(null);
@@ -888,16 +888,11 @@ public class Building implements EndPoint {
         return enablePromotions;
     }
 
-    private List<Military> getRemoteDefenders() {
-        return defenders;
-    }
-
     void registerDefender(Military defender) {
         defenders.add(defender);
     }
 
     void removeDefender(Military defender) {
-
         if (defender.equals(ownDefender)) {
             ownDefender = null;
         }
@@ -1419,7 +1414,7 @@ public class Building implements EndPoint {
         }
     }
 
-    public List<Military> getDefenders() {
+    public Set<Military> getDefenders() {
         return defenders;
     }
 }
