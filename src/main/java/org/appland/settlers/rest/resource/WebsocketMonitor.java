@@ -630,7 +630,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         /* Subscribe to changes */
         Player player = (Player) idManager.getObject(playerId);
 
-        if (player == null && idManager.getObject(gameId) == null) {
+        if (player == null || idManager.getObject(gameId) == null) {
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "The player or game doesn't exist"));
         } else {
 

@@ -238,7 +238,7 @@ public class MapFile {
                 continue;
             }
 
-            if (point == null || mapFilePointToGamePointMap == null || mapFilePointToGamePointMap.get(point) == null) {
+            if (point == null || mapFilePointToGamePointMap.get(point) == null) {
                 System.out.println(point);
                 System.out.println(startingPositions);
                 System.out.println(mapFilePointToGamePointMap);

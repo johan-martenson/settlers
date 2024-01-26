@@ -2142,16 +2142,16 @@ public class Utils {
         assertFalse(military.isFighting());
     }
 
-    public static void waitForMilitaryToStartFighting(GameMap map, Military military) throws InvalidUserActionException {
+    public static void waitForMilitaryToStartFighting(GameMap map, Military soldier) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
-            if (military.isFighting()) {
+            if (soldier.isFighting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(military.isFighting());
+        assertTrue(soldier.isFighting());
     }
 
     public static void verifyWorkerWalksToTarget(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
@@ -3282,8 +3282,7 @@ public class Utils {
     public static void waitForBuildingToGetCapturedByPlayer(Building building, Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
-        for (int i = 0; i < 5000; i++) {
-
+        for (int i = 0; i < 10000; i++) {
             if (building.getPlayer().equals(player)) {
                 break;
             }

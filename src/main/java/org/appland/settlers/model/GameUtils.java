@@ -260,6 +260,7 @@ public class GameUtils {
             this.cost = cost;
         }
 
+        // TODO: align with implementation of equals to make them consistent!
         @Override
         public int compareTo(Object o) {
             if (o == null) {
@@ -799,6 +800,7 @@ public class GameUtils {
             this.estimatedFullCostThroughPoint = estimatedFullCostThroughPoint;
         }
 
+        // TODO: align with implementation of equals to make them consistent!
         @Override
         public int compareTo(PointAndCost pointAndCost) {
             if (estimatedFullCostThroughPoint < pointAndCost.estimatedFullCostThroughPoint) {

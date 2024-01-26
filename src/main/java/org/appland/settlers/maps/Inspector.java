@@ -758,7 +758,7 @@ public class Inspector {
         Player player = null;
 
         for (Player p : map.getPlayers()) {
-            if (player.getLandInPoints().contains(infoPoint)) {
+            if (p.getLandInPoints().contains(infoPoint)) {
                 player = p;
 
                 break;

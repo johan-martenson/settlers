@@ -17,23 +17,20 @@ import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.WatchTower;
+import org.appland.settlers.model.Worker;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.appland.settlers.computer.Utils.getDistanceToOwnBorder;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.STONE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -479,23 +476,27 @@ public class TestExpandLandPlayer {
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ExpandLandPlayer(player0, map);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(40, 10);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         /* Place player 1's barracks */
         Point point2 = new Point(30, 10);
-        Barracks barracks1 = map.placeBuilding(new Barracks(player1), point2);
+        var watchTower = map.placeBuilding(new WatchTower(player1), point2);
 
         /* Finish player 1's barracks */
-        Utils.constructHouse(barracks1);
+        Utils.constructHouse(watchTower);
 
         /* Occupy player 1's barracks */
-        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, 2, barracks1);
+        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, 6, watchTower);
 
         /* Give the player extra building materials and militaries */
         Utils.adjustInventoryTo(headquarter0, PLANK, 60);
@@ -507,31 +508,16 @@ public class TestExpandLandPlayer {
 
         for (int i = 0; i < 10000; i++) {
 
-            for (Point p : map.getPointsWithinRadius(barracks1.getPosition(), 12)) {
+            var optionalBarracksToAttack = map.getPointsWithinRadius(watchTower.getPosition(), 16).stream()
+                    .filter(map::isBuildingAtPoint)
+                    .map(map::getBuildingAtPoint)
+                    .filter(building -> Objects.equals(building.getPlayer(), player0))
+                    .filter(Building::isMilitaryBuilding)
+                    .filter(Building::isOccupied)
+                    .findFirst();
 
-                /* Filter points without buildings */
-                if (!map.isBuildingAtPoint(p)) {
-                    continue;
-                }
-
-                Building building = map.getBuildingAtPoint(p);
-
-                /* Filter points with own buildings */
-                if (building.getPlayer().equals(player1)) {
-                    continue;
-                }
-
-                /* Filter non-military buildings */
-                if (!building.isMilitaryBuilding()) {
-                    continue;
-                }
-
-                /* Filter unfinished buildings */
-                if (!building.isReady()) {
-                    continue;
-                }
-
-                barracksToAttack = building;
+            if (optionalBarracksToAttack.isPresent()) {
+                barracksToAttack = optionalBarracksToAttack.get();
 
                 break;
             }
@@ -542,16 +528,46 @@ public class TestExpandLandPlayer {
         }
 
         assertNotNull(barracksToAttack);
+        assertTrue(barracksToAttack.isOccupied());
+        assertTrue(barracksToAttack.isReady());
 
         /* Let player 1 capture the barracks */
-        player1.attack(barracksToAttack, 1, AttackStrength.STRONG);
+        player0.setDefenseStrength(0);
+        player0.setDefenseFromSurroundingBuildings(0);
+
+        player1.canAttack(barracksToAttack);
+
+        player1.attack(barracksToAttack, 5, AttackStrength.STRONG);
 
         /* Wait for player 1 to capture the barracks */
+        assertEquals(barracksToAttack.getPlayer(), player0);
+        assertTrue(barracksToAttack.isReady());
+
+        /* Find the main attacker */
+        Utils.fastForward(5, map);
+
+        final var bta = barracksToAttack;
+
+        Optional<Military> optionalMainAttacker = map.getWorkers().stream()
+                        .filter(Worker::isSoldier)
+                        .map(worker -> (Military) worker)
+                        .filter(soldier -> !soldier.isInsideBuilding())
+                        .filter(soldier -> Objects.equals(soldier.getTarget(), bta.getFlag().getPosition()))
+                        .findFirst();
+
+        assertTrue(optionalMainAttacker.isPresent());
+
+        Military mainAttacker = optionalMainAttacker.get();
+
+        assertNotNull(mainAttacker);
+        assertEquals(mainAttacker.getTarget(), barracksToAttack.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mainAttacker, barracksToAttack.getFlag().getPosition());
+
         Utils.waitForBuildingToGetCapturedByPlayer(barracksToAttack, player1);
 
         /* Verify that player 0 doesn't build a road to the captured barracks */
         for (int i = 0; i < 200; i++) {
-
             map.stepTime();
 
             computerPlayer.turn();

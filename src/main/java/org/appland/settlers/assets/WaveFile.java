@@ -6,6 +6,7 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class WaveFile implements Sound {
     private static final int BITS_PER_BYTE = 8;
@@ -129,7 +130,7 @@ public class WaveFile implements Sound {
         int position = start * (int)bytesPerSec;
         byte[] clipData = new byte[duration * (int)bytesPerSec];
 
-        System.out.println(waveData);
+        System.out.println(Arrays.toString(waveData));
         System.out.println(waveData.length);
         System.out.println(waveData.length / samplesPerSec);
 
