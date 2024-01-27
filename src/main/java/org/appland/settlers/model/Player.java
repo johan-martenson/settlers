@@ -295,8 +295,8 @@ public class Player {
                 continue;
             }
 
-            if (building.canAttack(buildingToAttack) && building.getNumberOfHostedMilitary() > 1) {
-                availableAttackers += building.getNumberOfHostedMilitary() - 1;
+            if (building.canAttack(buildingToAttack) && building.getNumberOfHostedSoldiers() > 1) {
+                availableAttackers += building.getNumberOfHostedSoldiers() - 1;
             }
         }
 
@@ -331,14 +331,14 @@ public class Player {
         }
 
         /* Collect all eligible soldiers */
-        List<Military> availableAttackers = new ArrayList<>();
+        List<Soldier> availableAttackers = new ArrayList<>();
 
         for (Building building : eligibleBuildings) {
-            if (building.getNumberOfHostedMilitary() < 2) {
+            if (building.getNumberOfHostedSoldiers() < 2) {
                 continue;
             }
 
-            var availableAttackersFromBuilding = new ArrayList<>(building.getHostedMilitary());
+            var availableAttackersFromBuilding = new ArrayList<>(building.getHostedSoldiers());
 
             availableAttackersFromBuilding.sort(GameUtils.strengthSorter);
 
@@ -1496,7 +1496,7 @@ public class Player {
         }
 
         /* Does this soldier affect the number of available attackers in another building? */
-        if (building.isMilitaryBuilding() && building.getHostedMilitary().size() > 1) {
+        if (building.isMilitaryBuilding() && building.getHostedSoldiers().size() > 1) {
 
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
@@ -1571,7 +1571,7 @@ public class Player {
     public void reportSoldierLeftBuilding(Building building) {
 
         /* Does this soldier affect the number of available attackers in another building? */
-        if (building.isMilitaryBuilding() && !building.getHostedMilitary().isEmpty()) {
+        if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
 
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
@@ -1598,7 +1598,7 @@ public class Player {
     public void reportBuildingTornDown(Building building) {
 
         /* Does this soldier affect the number of available attackers in another building? */
-        if (building.isMilitaryBuilding() && !building.getHostedMilitary().isEmpty()) {
+        if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
 
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {

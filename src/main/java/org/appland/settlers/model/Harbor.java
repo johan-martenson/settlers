@@ -10,7 +10,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Size.MEDIUM;
 
-@MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
+@MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Harbor extends Storehouse {

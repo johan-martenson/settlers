@@ -486,9 +486,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 0);
 
         /* Adjust resources in the headquarters */
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
@@ -515,7 +515,7 @@ public class TestHeadquarter {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
 
         /* Verify that no private soldier is kept as reserve */
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 0);
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
     }
 
@@ -533,7 +533,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -541,10 +541,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -567,7 +567,7 @@ public class TestHeadquarter {
         /* Verify that the new private soldier is kept as reserve */
         Utils.fastForward(110, map);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
     }
 
@@ -585,7 +585,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -593,10 +593,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -612,14 +612,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as reserve */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
     }
 
@@ -637,7 +637,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -645,10 +645,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -664,14 +664,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as reserve */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
     }
 
@@ -689,7 +689,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -697,10 +697,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -716,14 +716,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as reserve */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 1);
         assertEquals(headquarter0.getAmount(SERGEANT), 0);
     }
 
@@ -741,7 +741,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -749,10 +749,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -768,14 +768,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as reserve */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 1);
         assertEquals(headquarter0.getAmount(OFFICER), 0);
     }
 
@@ -793,7 +793,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -801,10 +801,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -820,7 +820,7 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
 
         barracks0.tearDown();
 
@@ -829,7 +829,7 @@ public class TestHeadquarter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 1);
         assertEquals(headquarter0.getAmount(GENERAL), 0);
     }
 
@@ -847,7 +847,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -855,10 +855,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 0);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -874,14 +874,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as inventory */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
         assertEquals(headquarter0.getAmount(PRIVATE), 1);
     }
 
@@ -899,7 +899,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -907,10 +907,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -926,14 +926,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as inventory */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 1);
     }
 
@@ -951,7 +951,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -959,10 +959,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 0);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -978,14 +978,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.SERGEANT_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as inventory */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 0);
         assertEquals(headquarter0.getAmount(SERGEANT), 1);
     }
 
@@ -1003,7 +1003,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -1011,10 +1011,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 0);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1030,14 +1030,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.OFFICER_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as inventory */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 0);
         assertEquals(headquarter0.getAmount(OFFICER), 1);
     }
 
@@ -1055,7 +1055,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 1);
@@ -1063,10 +1063,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         /* Set reserved privates to zero */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 0);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1082,14 +1082,14 @@ public class TestHeadquarter {
         Utils.constructHouse(barracks0);
 
         /* Place private in the barracks, burn it down, so it walks to the headquarters */
-        Military soldier = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
+        Soldier soldier = Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, barracks0);
 
         barracks0.tearDown();
 
         /* Verify that the new private soldier is kept as inventory */
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 0);
         assertEquals(headquarter0.getAmount(GENERAL), 1);
     }
 
@@ -1107,9 +1107,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1117,10 +1117,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
 
         /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
         assertEquals(headquarter0.getAmount(PRIVATE), 2);
     }
 
@@ -1138,9 +1138,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1148,10 +1148,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 5);
 
         /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 2);
     }
 
@@ -1169,9 +1169,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1179,10 +1179,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 5);
 
         /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.SERGEANT_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.SERGEANT_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.SERGEANT_RANK), 3);
         assertEquals(headquarter0.getAmount(SERGEANT), 2);
     }
 
@@ -1200,9 +1200,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1210,10 +1210,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, OFFICER, 5);
 
         /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.OFFICER_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.OFFICER_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.OFFICER_RANK), 3);
         assertEquals(headquarter0.getAmount(OFFICER), 2);
     }
 
@@ -1231,9 +1231,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1241,10 +1241,10 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, GENERAL, 5);
 
         /* Verify that increasing the reserved amount moves the soldier from inventory to hosted */
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.GENERAL_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.GENERAL_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.GENERAL_RANK), 3);
         assertEquals(headquarter0.getAmount(GENERAL), 2);
     }
 
@@ -1262,9 +1262,9 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
         Utils.adjustInventoryTo(headquarter0, SWORD, 0);
@@ -1272,17 +1272,17 @@ public class TestHeadquarter {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 5);
 
         /* Reserve four soldiers */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 4);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 4);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 4);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 4);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 4);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 4);
         assertEquals(headquarter0.getAmount(PRIVATE), 1);
 
         /* Verify that decreasing the reserved amount moves the soldier from hosted to inventory */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 2);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 2);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 2);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 2);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 2);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 2);
         assertEquals(headquarter0.getAmount(PRIVATE), 3);
     }
 }

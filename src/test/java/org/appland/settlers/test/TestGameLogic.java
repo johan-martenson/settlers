@@ -8,7 +8,7 @@ import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -279,16 +279,16 @@ public class TestGameLogic {
         Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.needsMilitaryManning());
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
 
-        Military military = null;
+        Soldier military = null;
 
         for (Worker worker : map.getWorkers()) {
             if (worker.isSoldier()) {
-                military = (Military) worker;
+                military = (Soldier) worker;
 
                 break;
             }
@@ -308,14 +308,14 @@ public class TestGameLogic {
         assertFalse(military.isTraveling());
 
         /* Make traveling workers that have arrived enter their building or road */
-        List<Military> soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
+        List<Soldier> soldiersOutside = Utils.findSoldiersOutsideBuilding(player0);
 
         assertEquals(soldiersOutside.size(), 1);
 
         Utils.fastForwardUntilWorkersReachTarget(map, soldiersOutside.get(0));
 
         assertFalse(barracks0.needsMilitaryManning());
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);
 
         /* Assign new workers to unoccupied buildings again. There is building
          * or road that requires a worker so this should have no effect

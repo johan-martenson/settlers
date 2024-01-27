@@ -31,7 +31,7 @@ import java.util.List;
 
 import static java.awt.Color.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.test.Utils.constructHouse;

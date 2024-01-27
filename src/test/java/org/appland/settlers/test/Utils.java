@@ -21,7 +21,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
@@ -59,7 +59,7 @@ import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
@@ -130,7 +130,7 @@ public class Utils {
         }
     }
 
-    public static void waitForSoldierToWinFight(Military soldier, GameMap map) throws InvalidUserActionException {
+    public static void waitForSoldierToWinFight(Soldier soldier, GameMap map) throws InvalidUserActionException {
         assertTrue(soldier.isFighting());
 
         for (int i = 0; i < 2000; i++) {
@@ -445,7 +445,7 @@ public class Utils {
         boolean populated = false;
 
         for (int i = 0; i < 1000; i++) {
-            if (building.getNumberOfHostedMilitary() == nr) {
+            if (building.getNumberOfHostedSoldiers() == nr) {
                 populated = true;
 
                 break;
@@ -455,7 +455,7 @@ public class Utils {
         }
 
         assertTrue(populated);
-        assertEquals(building.getNumberOfHostedMilitary(), nr);
+        assertEquals(building.getNumberOfHostedSoldiers(), nr);
     }
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
@@ -512,48 +512,48 @@ public class Utils {
         }
     }
 
-    public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building) {
+    public static void occupyMilitaryBuilding(Soldier.Rank rank, int amount, Building building) {
         assertTrue(building.isReady());
         for (int i = 0; i < amount; i++) {
             occupyMilitaryBuilding(rank, building);
         }
     }
 
-    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) {
+    public static Soldier occupyMilitaryBuilding(Soldier.Rank rank, Building building) {
         GameMap map = building.getMap();
         Player player = building.getPlayer();
 
-        Military military = new Military(player, rank, map);
+        Soldier military = new Soldier(player, rank, map);
 
         map.placeWorker(military, building);
 
-        building.promiseMilitary(military);
+        building.promiseSoldier(military);
 
         military.enterBuilding(building);
 
         return military;
     }
 
-    public static Military findMilitaryOutsideBuilding(Player player) {
+    public static Soldier findMilitaryOutsideBuilding(Player player) {
         GameMap map = player.getMap();
 
-        Military soldier = null;
+        Soldier soldier = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                soldier = (Military)worker;
+            if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                soldier = (Soldier)worker;
             }
         }
 
         return soldier;
     }
 
-    public static List<Military> findSoldiersOutsideBuilding(Player player) {
+    public static List<Soldier> findSoldiersOutsideBuilding(Player player) {
         GameMap map = player.getMap();
-        List<Military> result = new LinkedList<>();
+        List<Soldier> result = new LinkedList<>();
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                result.add((Military)worker);
+            if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                result.add((Soldier)worker);
             }
         }
 
@@ -572,11 +572,11 @@ public class Utils {
         assertFalse(map.getWorkers().contains(worker));
     }
 
-    public static Military waitForMilitaryOutsideBuilding(Player player) throws InvalidUserActionException {
+    public static Soldier waitForMilitaryOutsideBuilding(Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
-            Military military = findMilitaryOutsideBuilding(player);
+            Soldier military = findMilitaryOutsideBuilding(player);
 
             if (military != null) {
                 assertEquals(military.getPlayer(), player);
@@ -666,7 +666,7 @@ public class Utils {
         assertFalse(map.getBuildings().contains(building));
     }
 
-    static void waitForFightToStart(GameMap map, Military attacker, Military defender) throws InvalidUserActionException {
+    static void waitForFightToStart(GameMap map, Soldier attacker, Soldier defender) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
             if (attacker.isFighting() && defender.isFighting()) {
@@ -680,11 +680,11 @@ public class Utils {
         assertTrue(attacker.isFighting());
     }
 
-    static Military getMainAttacker(Building building, Collection<Military> attackers) throws InvalidUserActionException {
+    static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {
         GameMap map = building.getMap();
-        Military firstAttacker = null;
+        Soldier firstAttacker = null;
 
-        for (Military military : attackers) {
+        for (Soldier military : attackers) {
             if (military.getTarget().equals(building.getFlag().getPosition())) {
                 firstAttacker = military;
 
@@ -2130,19 +2130,19 @@ public class Utils {
         }
     }
 
-    public static void waitForMilitaryToStopFighting(GameMap map, Military military) throws InvalidUserActionException {
+    public static void waitForMilitaryToStopFighting(GameMap map, Soldier soldier) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
-            if (!military.isFighting()) {
+            if (!soldier.isFighting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertFalse(military.isFighting());
+        assertFalse(soldier.isFighting());
     }
 
-    public static void waitForMilitaryToStartFighting(GameMap map, Military soldier) throws InvalidUserActionException {
+    public static void waitForMilitaryToStartFighting(GameMap map, Soldier soldier) throws InvalidUserActionException {
         for (int i = 0; i < 2000; i++) {
             if (soldier.isFighting()) {
                 break;
@@ -2693,67 +2693,67 @@ public class Utils {
         return workerWithCargo;
     }
 
-    public static void waitForOneOfSoldiersToAttack(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForOneOfSoldiersToAttack(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isAttacking)) {
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isAttacking)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isAttacking));
+        assertTrue(Arrays.stream(soldiers).anyMatch(Soldier::isAttacking));
     }
 
-    public static void waitForOneOfSoldiersToHit(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForOneOfSoldiersToHit(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isHitting)) {
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isHitting)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isHitting));
+        assertTrue(Arrays.stream(soldiers).anyMatch(Soldier::isHitting));
     }
 
-    public static void waitForOneOfSoldiersToJumpBack(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForOneOfSoldiersToJumpBack(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isJumpingBack)) {
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isJumpingBack)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isJumpingBack));
+        assertTrue(Arrays.stream(soldiers).anyMatch(Soldier::isJumpingBack));
     }
 
-    public static void waitForOneOfSoldiersToGetHit(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForOneOfSoldiersToGetHit(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isGettingHit)) {
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isGettingHit)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isGettingHit));
+        assertTrue(Arrays.stream(soldiers).anyMatch(Soldier::isGettingHit));
     }
 
-    public static void waitForOneOfSoldiersToStandAside(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForOneOfSoldiersToStandAside(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isStandingAside)) {
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isStandingAside)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(Arrays.stream(soldiers).anyMatch(Military::isStandingAside));
+        assertTrue(Arrays.stream(soldiers).anyMatch(Soldier::isStandingAside));
     }
 
-    public static void waitForFightToEnd(GameMap map, Military... soldiers) throws InvalidUserActionException {
+    public static void waitForFightToEnd(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (Arrays.stream(soldiers).anyMatch(soldier -> !soldier.isFighting())) {
                 break;
@@ -2765,12 +2765,12 @@ public class Utils {
         assertTrue(Arrays.stream(soldiers).anyMatch(soldier -> !soldier.isFighting()));
     }
 
-    public static Military waitForSoldierToBeDying(GameMap map, Military... soldiers) throws InvalidUserActionException {
-        Military dyingSoldier = null;
+    public static Soldier waitForSoldierToBeDying(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
+        Soldier dyingSoldier = null;
 
         for (int i = 0; i < 2000; i++) {
-            if (Arrays.stream(soldiers).anyMatch(Military::isDying)) {
-                dyingSoldier = Arrays.stream(soldiers).filter(Military::isDying).findFirst().get();
+            if (Arrays.stream(soldiers).anyMatch(Soldier::isDying)) {
+                dyingSoldier = Arrays.stream(soldiers).filter(Soldier::isDying).findFirst().get();
 
                 break;
             }
@@ -2783,7 +2783,7 @@ public class Utils {
         return dyingSoldier;
     }
 
-    public static void waitForSoldierToBeDying(Military soldier, GameMap map) throws InvalidUserActionException {
+    public static void waitForSoldierToBeDying(Soldier soldier, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (soldier.isDying()) {
                 break;
@@ -2819,14 +2819,14 @@ public class Utils {
         assertEquals(worker.getTarget(), point);
     }
 
-    public static Military waitForSoldierNotDyingOutsideBuilding(Player player) throws InvalidUserActionException {
+    public static Soldier waitForSoldierNotDyingOutsideBuilding(Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (map.getWorkers().stream()
                     .anyMatch(soldier -> soldier.isSoldier() &&
                             soldier.getPlayer().equals(player) &&
-                            !((Military)soldier).isDying() &&
+                            !((Soldier)soldier).isDying() &&
                             !soldier.isInsideBuilding())) {
                 break;
             }
@@ -2837,19 +2837,19 @@ public class Utils {
         assertTrue(map.getWorkers().stream()
                 .anyMatch(soldier -> soldier.isSoldier() &&
                         soldier.getPlayer().equals(player) &&
-                        !((Military)soldier).isDying() &&
+                        !((Soldier)soldier).isDying() &&
                         !soldier.isInsideBuilding()));
 
-        return (Military) map.getWorkers().stream()
+        return (Soldier) map.getWorkers().stream()
                 .filter(soldier -> soldier.isSoldier() &&
                         soldier.getPlayer().equals(player) &&
-                        !((Military)soldier).isDying() &&
+                        !((Soldier)soldier).isDying() &&
                         !soldier.isInsideBuilding())
                 .findFirst()
                 .get();
     }
 
-    public static void waitForSoldierToBeCloseToDying(Military soldier, GameMap map) throws InvalidUserActionException {
+    public static void waitForSoldierToBeCloseToDying(Soldier soldier, GameMap map) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (soldier.getHealth() < 10) {
                 break;
@@ -2861,7 +2861,7 @@ public class Utils {
         assertTrue(soldier.getHealth() < 10);
     }
 
-    public static void waitForSoldiersToReachTargets(GameMap map, List<Military> soldiers) throws InvalidUserActionException {
+    public static void waitForSoldiersToReachTargets(GameMap map, List<Soldier> soldiers) throws InvalidUserActionException {
         assertNotNull(map);
         assertFalse(soldiers.isEmpty());
         assertTrue(soldiers.stream().allMatch(Worker::isTraveling));
@@ -2876,14 +2876,14 @@ public class Utils {
         }
     }
 
-    public static List<Military> findSoldiersOutsideWithHome(Player player, Building building) {
-        List<Military> soldiers = building.getMap().getWorkers()
+    public static List<Soldier> findSoldiersOutsideWithHome(Player player, Building building) {
+        List<Soldier> soldiers = building.getMap().getWorkers()
                 .stream()
                 .filter(worker -> worker.getPlayer().equals(player))
                 .filter(worker -> Objects.equals(worker.getHome(), building))
                 .filter(worker -> !worker.isInsideBuilding())
                 .filter(Worker::isSoldier)
-                .map(worker -> (Military) worker)
+                .map(worker -> (Soldier) worker)
                 .collect(Collectors.toList());
 
         soldiers.forEach(soldier -> assertEquals(soldier.getHome(), building));

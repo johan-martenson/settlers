@@ -13,7 +13,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -496,7 +496,7 @@ public class TestExpandLandPlayer {
         Utils.constructHouse(watchTower);
 
         /* Occupy player 1's barracks */
-        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, 6, watchTower);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, 6, watchTower);
 
         /* Give the player extra building materials and militaries */
         Utils.adjustInventoryTo(headquarter0, PLANK, 60);
@@ -548,16 +548,16 @@ public class TestExpandLandPlayer {
 
         final var bta = barracksToAttack;
 
-        Optional<Military> optionalMainAttacker = map.getWorkers().stream()
+        Optional<Soldier> optionalMainAttacker = map.getWorkers().stream()
                         .filter(Worker::isSoldier)
-                        .map(worker -> (Military) worker)
+                        .map(worker -> (Soldier) worker)
                         .filter(soldier -> !soldier.isInsideBuilding())
                         .filter(soldier -> Objects.equals(soldier.getTarget(), bta.getFlag().getPosition()))
                         .findFirst();
 
         assertTrue(optionalMainAttacker.isPresent());
 
-        Military mainAttacker = optionalMainAttacker.get();
+        Soldier mainAttacker = optionalMainAttacker.get();
 
         assertNotNull(mainAttacker);
         assertEquals(mainAttacker.getTarget(), barracksToAttack.getFlag().getPosition());
@@ -658,7 +658,7 @@ public class TestExpandLandPlayer {
             /* Wait for the barracks to be occupied */
             Utils.waitForBuildingToGetOccupied(computerPlayer, barracks);
 
-            assertTrue(barracks.getNumberOfHostedMilitary() > 0);
+            assertTrue(barracks.getNumberOfHostedSoldiers() > 0);
 
             /* Check how close the barracks is to the enemy's border */
             if (Utils.distanceToKnownBorder(barracks, player1) < 8) {
@@ -734,7 +734,7 @@ public class TestExpandLandPlayer {
             /* Wait for the barracks to be occupied */
             Utils.waitForBuildingToGetOccupied(computerPlayer, barracks);
 
-            assertTrue(barracks.getNumberOfHostedMilitary() > 0);
+            assertTrue(barracks.getNumberOfHostedSoldiers() > 0);
         }
 
         map.stepTime();

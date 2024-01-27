@@ -14,7 +14,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -398,11 +398,11 @@ public class TestGameMonitoringOfBuilding {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Set the reserved soldiers for the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
         /* Adjust resources in the headquarters */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
@@ -412,10 +412,10 @@ public class TestGameMonitoringOfBuilding {
         player0.monitorGameView(monitor);
 
         /* No house updated event is sent when the reserve limit is raised the first time */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 1);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 1);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
@@ -428,10 +428,10 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that a house updated event is sent when the reserve limit is raised the second time */
         GameChangesList lastGameChangesList = monitor.getLastEvent();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
         assertEquals(headquarter0.getAmount(PRIVATE), 7);
 
         map.stepTime();
@@ -454,10 +454,10 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that no house updated event is sent when the third plank gets to the farm */
         lastGameChangesList = monitor.getLastEvent();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 5);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 5);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 5);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
@@ -482,21 +482,21 @@ public class TestGameMonitoringOfBuilding {
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
         /* Set the reserved soldiers for the headquarters */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 10);
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.SERGEANT_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.OFFICER_RANK, 0);
-        headquarter0.setReservedSoldiers(Military.Rank.GENERAL_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 10);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, 0);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, 0);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         /* No house updated event is sent when the reserve limit is raised the first time */
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 5);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 5);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 5);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
@@ -509,10 +509,10 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that a house updated event is sent when the reserve limit is raised the second time */
         GameChangesList lastGameChangesList = monitor.getLastEvent();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
         assertEquals(headquarter0.getAmount(PRIVATE), 7);
 
         map.stepTime();
@@ -535,10 +535,10 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that no house updated event is sent when the third plank gets to the farm */
         lastGameChangesList = monitor.getLastEvent();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 1);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
 
-        assertEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 1);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Military.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
@@ -570,7 +570,7 @@ public class TestGameMonitoringOfBuilding {
         /* Let one soldier enter the building to make it occupied */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Military military0 = Utils.waitForWorkerOutsideBuilding(Military.class, player0);
+        Soldier military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
@@ -1102,7 +1102,7 @@ public class TestGameMonitoringOfBuilding {
         /* Let one soldier enter the building to make it occupied */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Military military0 = Utils.waitForWorkerOutsideBuilding(Military.class, player0);
+        Soldier military0 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military0, watchTower.getPosition());
 
@@ -1115,7 +1115,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Military military1 = Utils.waitForWorkerOutsideBuilding(Military.class, player0);
+        Soldier military1 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military1, watchTower.getPosition());
 
@@ -1131,7 +1131,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Military military2 = Utils.waitForWorkerOutsideBuilding(Military.class, player0);
+        Soldier military2 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military2, watchTower.getPosition());
 
@@ -1155,7 +1155,7 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Military military3 = Utils.waitForWorkerOutsideBuilding(Military.class, player0);
+        Soldier military3 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military3, watchTower.getPosition());
 
@@ -1398,9 +1398,9 @@ public class TestGameMonitoringOfBuilding {
         player0.monitorGameView(monitor);
 
         /* Verify that changing reserved soldiers does not cause an event to be sent */
-        assertNotEquals(headquarter0.getReservedSoldiers(Military.Rank.PRIVATE_RANK), 1);
+        assertNotEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 1);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
 
         map.stepTime();
 
@@ -1414,7 +1414,7 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that changing reserved soldiers now causes an event to be sent */
         monitor.clearEvents();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 2);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 2);
 
         map.stepTime();
 
@@ -1433,7 +1433,7 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that changing reserved soldiers doesn't cause an event to be sent */
         monitor.clearEvents();
 
-        headquarter0.setReservedSoldiers(Military.Rank.PRIVATE_RANK, 3);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
         map.stepTime();
 
@@ -1573,7 +1573,7 @@ public class TestGameMonitoringOfBuilding {
 
         watchTower.evacuate();
 
-        Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+        Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         map.stepTime();
 
@@ -1644,7 +1644,7 @@ public class TestGameMonitoringOfBuilding {
 
         watchTower.tearDown();
 
-        Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+        Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
         map.stepTime();
 

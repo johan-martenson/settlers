@@ -39,7 +39,7 @@ import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -277,8 +277,8 @@ public class TestForesterHut {
         Utils.waitForBuildingToBeConstructed(foresterHut0);
 
         assertFalse(foresterHut0.isMilitaryBuilding());
-        assertEquals(foresterHut0.getNumberOfHostedMilitary(), 0);
-        assertEquals(foresterHut0.getMaxHostedMilitary(), 0);
+        assertEquals(foresterHut0.getNumberOfHostedSoldiers(), 0);
+        assertEquals(foresterHut0.getMaxHostedSoldiers(), 0);
     }
 
     @Test

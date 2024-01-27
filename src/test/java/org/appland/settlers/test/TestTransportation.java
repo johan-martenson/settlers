@@ -15,7 +15,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidGameLogicException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -35,7 +35,7 @@ import java.util.Set;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -693,14 +693,14 @@ public class TestTransportation {
         Utils.constructHouse(barracks0);
 
         /* Add a private to the headquarter */
-        Military military = new Military(player0, PRIVATE_RANK, map);
+        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
         headquarter.depositWorker(military);
 
         /* Check that the barracks needs a military */
         assertTrue(barracks0.isMilitaryBuilding());
 
-        int hostedMilitary = barracks0.getNumberOfHostedMilitary();
-        int maxHostedMilitary = barracks0.getMaxHostedMilitary();
+        int hostedMilitary = barracks0.getNumberOfHostedSoldiers();
+        int maxHostedMilitary = barracks0.getMaxHostedSoldiers();
 
         assertEquals(hostedMilitary, 0);
         assertEquals(maxHostedMilitary, 2);
@@ -722,7 +722,7 @@ public class TestTransportation {
         assertTrue(military.isArrived());
 
         /* Verify that the military entered the barracks */
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 1);
     }
 
     @Test

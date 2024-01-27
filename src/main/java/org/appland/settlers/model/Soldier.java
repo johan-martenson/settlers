@@ -6,15 +6,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.*;
-import static org.appland.settlers.model.Military.State.*;
+import static org.appland.settlers.model.Soldier.Rank.*;
+import static org.appland.settlers.model.Soldier.State.*;
 
 /**
  * @author johan
  *
  */
 @Walker(speed = 10)
-public class Military extends Worker {
+public class Soldier extends Worker {
 
     private static final Random random = new Random(1);
     private static final int TIME_FOR_HIT = 10;
@@ -112,7 +112,7 @@ public class Military extends Worker {
     private static final int OFFICER_HEALTH  = 670;
     private static final int GENERAL_HEALTH  = 2020;
 
-    private Military   opponent;
+    private Soldier opponent;
     private Rank       rank;
     private State      state;
     private int        health;
@@ -120,7 +120,7 @@ public class Military extends Worker {
     private Building   buildingToDefend;
     private FightState fightState;
 
-    public Military(Player player, Rank rank, GameMap map) {
+    public Soldier(Player player, Rank rank, GameMap map) {
         super(player, map);
 
         this.rank = rank;
@@ -257,7 +257,7 @@ public class Military extends Worker {
                 if (buildingToAttack.needsMilitaryManning()) {
 
                     /* Enter the building if it has already been taken over and needs additional manning */
-                    buildingToAttack.promiseMilitary(this);
+                    buildingToAttack.promiseSoldier(this);
 
                     state = WALKING_TO_TAKE_OVER_BUILDING;
 
@@ -297,7 +297,7 @@ public class Military extends Worker {
             } else if (getHome().equals(buildingToDefend)) {
 
                 /* Get the attacker at the flag */
-                Military attackerAtFlag = buildingToDefend.getPrimaryAttacker();
+                Soldier attackerAtFlag = buildingToDefend.getPrimaryAttacker();
 
                 /* Keep waiting if there is no primary attacker */
                 if (attackerAtFlag == null) {
@@ -497,7 +497,7 @@ public class Military extends Worker {
             state == WALKING_TO_TAKE_OVER_BUILDING ||
             state == WALKING_HOME_AFTER_FIGHT      ||
             state == DEPLOYED) {
-            building.deployMilitary(this);
+            building.deploySoldier(this);
         }
     }
 
@@ -732,7 +732,7 @@ public class Military extends Worker {
                     Set<Point> occupiedPositions = map.getWorkers().stream()
                             .filter(worker -> worker.player == player)
                             .filter(Worker::isSoldier)
-                            .map(soldier -> (Military) soldier)
+                            .map(soldier -> (Soldier) soldier)
                             .filter(soldier -> !soldier.isTraveling() || soldier.isFighting())
                             .filter(soldier -> !soldier.isInsideBuilding())
                             .map(Worker::getPosition)
@@ -810,7 +810,7 @@ public class Military extends Worker {
         return (state == ATTACKING || state == DEFENDING) && fightState == FightState.WAITING;
     }
 
-    private void prepareForFight(Military military) {
+    private void prepareForFight(Soldier military) {
 
         /* Tell the building that this soldier is not waiting anymore as the fight is starting */
         if (state == ATTACKING || state == WAITING_FOR_DEFENDING_OPPONENT) {
@@ -840,7 +840,7 @@ public class Military extends Worker {
         if (getHome().needsMilitaryManning() && getHome().getPlayer().equals(getPlayer())) {
 
             /* Promise to return home */
-            getHome().promiseMilitary(this);
+            getHome().promiseSoldier(this);
 
             /* Change state to walking home */
             state = WALKING_HOME_AFTER_FIGHT;

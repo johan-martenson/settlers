@@ -30,7 +30,7 @@ import static org.appland.settlers.model.Material.*;
  */
 public class GameUtils {
 
-    public static List<Military> sortSoldiersByPreferredRank(List<Military> soldiers, int strength) {
+    public static List<Soldier> sortSoldiersByPreferredRank(List<Soldier> soldiers, int strength) {
         var sortedSoldiers = new ArrayList<>(soldiers);
 
         sortedSoldiers.sort((soldier0, soldier1) -> {
@@ -51,7 +51,7 @@ public class GameUtils {
         return sortedSoldiers;
     }
 
-    public static void sortSoldiersByPreferredRankAndDistance(List<Military> soldiers, int strength, Point position) {
+    public static void sortSoldiersByPreferredRankAndDistance(List<Soldier> soldiers, int strength, Point position) {
         soldiers.sort((soldier0, soldier1) -> {
             if (soldier0.getRank() == soldier1.getRank()) {
                 var dist0 = GameUtils.distanceInGameSteps(soldier0.getHome().getPosition(), position);
@@ -529,19 +529,19 @@ public class GameUtils {
         }
 
         /* Move the soldiers to the new building */
-        int currentMilitary = fromBuilding.getNumberOfHostedMilitary();
+        int currentMilitary = fromBuilding.getNumberOfHostedSoldiers();
 
         for (int i = 0; i < currentMilitary; i++) {
 
             /* Move one military from the old to the new building */
-            Military military = fromBuilding.retrieveHostedSoldier();
+            Soldier military = fromBuilding.retrieveHostedSoldier();
 
-            upgraded.promiseMilitary(military);
+            upgraded.promiseSoldier(military);
             military.enterBuilding(upgraded);
         }
 
         /* Make sure the border is updated only once */
-        if (upgraded.getNumberOfHostedMilitary() == 0) {
+        if (upgraded.getNumberOfHostedSoldiers() == 0) {
             fromBuilding.getMap().updateBorder(fromBuilding, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
         }
 
@@ -1778,7 +1778,7 @@ public class GameUtils {
         }
     }
 
-    private static int rankToInt(Military.Rank rank) {
+    private static int rankToInt(Soldier.Rank rank) {
         return switch (rank) {
             case PRIVATE_RANK -> 0;
             case PRIVATE_FIRST_CLASS_RANK -> 1;
@@ -1788,7 +1788,7 @@ public class GameUtils {
         };
     }
 
-    public static Comparator<? super Military> strengthSorter = (soldier0, soldier1) -> {
+    public static Comparator<? super Soldier> strengthSorter = (soldier0, soldier1) -> {
         var rank0 = rankToInt(soldier0.getRank());
         var rank1 = rankToInt(soldier1.getRank());
 
@@ -1840,9 +1840,9 @@ public class GameUtils {
         return 0;
     };
 
-    public record SoldierAndDistance(Military soldier, int distance) { }
+    public record SoldierAndDistance(Soldier soldier, int distance) { }
 
-    public static List<Military.Rank> strengthToRank(int strength) {
+    public static List<Soldier.Rank> strengthToRank(int strength) {
         List<Integer> populationPreferenceOrder = new ArrayList<>();
 
         populationPreferenceOrder.add(strength);
@@ -1858,10 +1858,10 @@ public class GameUtils {
         }
 
         /* Go through the list in order of preference and add the rank */
-        List<Military.Rank> ranks = new ArrayList<>();
+        List<Soldier.Rank> ranks = new ArrayList<>();
 
         for (int preferred : populationPreferenceOrder) {
-            Military.Rank rank = Military.Rank.intToRank(preferred);
+            Soldier.Rank rank = Soldier.Rank.intToRank(preferred);
 
             if (ranks.isEmpty() || ranks.getLast() != rank) {
                 ranks.add(rank);

@@ -384,12 +384,12 @@ class Utils {
         if (building.isMilitaryBuilding() && building.isReady()) {
             JSONArray jsonSoldiers = new JSONArray();
 
-            for (Military military : building.getHostedMilitary()) {
+            for (Soldier military : building.getHostedSoldiers()) {
                 jsonSoldiers.add(military.getRank().name().toUpperCase());
             }
 
             jsonHouse.put("soldiers", jsonSoldiers);
-            jsonHouse.put("maxSoldiers", building.getMaxHostedMilitary());
+            jsonHouse.put("maxSoldiers", building.getMaxHostedSoldiers());
             jsonHouse.put("evacuated", building.isEvacuated());
             jsonHouse.put("promotionsEnabled", building.isPromotionEnabled());
 
@@ -403,7 +403,7 @@ class Utils {
 
             jsonHouse.put("reserved", jsonReserved);
 
-            Arrays.stream(Military.Rank.values()).iterator().forEachRemaining(
+            Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
                     rank -> jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank))
             );
         }
@@ -612,7 +612,7 @@ class Utils {
         return jsonWorker;
     }
 
-    private String rankToTypeString(Military soldier) {
+    private String rankToTypeString(Soldier soldier) {
         String nameAndRank = soldier.getRank().name().toLowerCase();
 
         int underscorePosition = nameAndRank.indexOf("_");
@@ -1567,7 +1567,7 @@ class Utils {
     private String workerTypeToJson(Worker worker) {
 
         if (worker.isSoldier()) {
-            Military soldier = (Military) worker;
+            Soldier soldier = (Soldier) worker;
 
             return rankToTypeString(soldier);
         } else {

@@ -10,7 +10,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storehouse;
@@ -32,9 +32,9 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -174,21 +174,21 @@ public class TestInventory {
     public void testDepositRetrieveMilitary() {
 
         assertNoMilitaryInInventory(storehouse);
-        storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
+        storehouse.depositWorker(new Soldier(null, PRIVATE_RANK, null));
         assertEquals(storehouse.getAmount(PRIVATE), 1);
         assertTrue(storehouse.isInStock(PRIVATE));
         storehouse.retrieveSoldierFromInventory(PRIVATE);
         assertNoMilitaryInInventory(storehouse);
         assertFalse(storehouse.isInStock(PRIVATE));
 
-        storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
+        storehouse.depositWorker(new Soldier(null, GENERAL_RANK, null));
         assertEquals(storehouse.getAmount(GENERAL), 1);
         assertTrue(storehouse.isInStock(GENERAL));
         storehouse.retrieveSoldierFromInventory(GENERAL);
         assertNoMilitaryInInventory(storehouse);
         assertFalse(storehouse.isInStock(GENERAL));
 
-        storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
+        storehouse.depositWorker(new Soldier(null, SERGEANT_RANK, null));
         assertEquals(storehouse.getAmount(SERGEANT), 1);
         assertTrue(storehouse.isInStock(SERGEANT));
         storehouse.retrieveSoldierFromInventory(SERGEANT);
@@ -225,19 +225,19 @@ public class TestInventory {
 
     @Test
     public void testRetrieveAnyMilitary() {
-        storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
+        storehouse.depositWorker(new Soldier(null, PRIVATE_RANK, null));
         assertTrue(storehouse.isInStock(PRIVATE));
 
-        Military military = storehouse.retrieveSoldierToPopulateBuilding();
+        Soldier military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
 
-        storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
+        storehouse.depositWorker(new Soldier(null, SERGEANT_RANK, null));
         assertTrue(storehouse.isInStock(SERGEANT));
 
         military = storehouse.retrieveSoldierToPopulateBuilding();
         assertNotNull(military);
 
-        storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
+        storehouse.depositWorker(new Soldier(null, GENERAL_RANK, null));
         assertTrue(storehouse.isInStock(GENERAL));
 
         military = storehouse.retrieveSoldierToPopulateBuilding();
@@ -279,17 +279,17 @@ public class TestInventory {
 
     @Test
     public void testDepositAndRetrieveMilitaryOfEachKind() {
-        storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
+        storehouse.depositWorker(new Soldier(null, PRIVATE_RANK, null));
         assertEquals(storehouse.getAmount(PRIVATE), 1);
         storehouse.retrieveSoldierFromInventory(PRIVATE);
         assertEquals(storehouse.getAmount(PRIVATE), 0);
 
-        storehouse.depositWorker(new Military(null, SERGEANT_RANK, null));
+        storehouse.depositWorker(new Soldier(null, SERGEANT_RANK, null));
         assertEquals(storehouse.getAmount(SERGEANT), 1);
         storehouse.retrieveSoldierFromInventory(SERGEANT);
         assertEquals(storehouse.getAmount(SERGEANT), 0);
 
-        storehouse.depositWorker(new Military(null, GENERAL_RANK, null));
+        storehouse.depositWorker(new Soldier(null, GENERAL_RANK, null));
         assertEquals(storehouse.getAmount(GENERAL), 1);
         storehouse.retrieveSoldierFromInventory(GENERAL);
         assertEquals(storehouse.getAmount(GENERAL), 0);

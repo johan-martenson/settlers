@@ -30,7 +30,7 @@ import java.util.List;
 
 import static java.awt.Color.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -263,8 +263,8 @@ public class TestHunterHut {
         Utils.waitForBuildingToBeConstructed(hunterHut);
 
         assertFalse(hunterHut.isMilitaryBuilding());
-        assertEquals(hunterHut.getNumberOfHostedMilitary(), 0);
-        assertEquals(hunterHut.getMaxHostedMilitary(), 0);
+        assertEquals(hunterHut.getNumberOfHostedSoldiers(), 0);
+        assertEquals(hunterHut.getMaxHostedSoldiers(), 0);
     }
 
     @Test

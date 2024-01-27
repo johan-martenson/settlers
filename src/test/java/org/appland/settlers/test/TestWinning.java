@@ -10,7 +10,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -107,7 +107,7 @@ public class TestWinning {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -121,7 +121,7 @@ public class TestWinning {
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
         /* Verify that the headquarters is destroyed and the first player won the game */
-        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getNumberOfHostedSoldiers(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
         assertNull(map.getWinner());

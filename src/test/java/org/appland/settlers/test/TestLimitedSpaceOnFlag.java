@@ -8,7 +8,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -759,7 +759,7 @@ public class TestLimitedSpaceOnFlag {
         Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, fortress0);
 
         /* Place sawmill connected directly to the flag */
         Mill mill = map.placeBuilding(new Mill(player0), flag0.getPosition().upLeft());

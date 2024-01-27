@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.Military.Rank;
+import org.appland.settlers.model.Soldier.Rank;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
 
@@ -38,16 +38,16 @@ public class Building implements EndPoint {
     private final int                    maxHostedSoldiers;
     private final int                    defenceRadius;
     private final Map<Material, Integer> requiredGoodsForProduction;
-    private final List<Military>         attackers;
-    private final List<Military>         waitingAttackers;
-    private final Set<Military>          defenders;
+    private final List<Soldier>         attackers;
+    private final List<Soldier>         waitingAttackers;
+    private final Set<Soldier>          defenders;
     private final Countdown              countdown;
     private final Countdown              upgradeCountdown;
     private final Map<Material, Integer> promisedDeliveries;
-    private final List<Military>         hostedMilitary;
-    private final List<Military>         promisedMilitary;
+    private final List<Soldier> hostedSoldiers;
+    private final List<Soldier> promisedSoldier;
     private final Map<Material, Integer> receivedMaterial;
-    private final Set<Military>          waitingDefenders;
+    private final Set<Soldier>          waitingDefenders;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
@@ -66,8 +66,8 @@ public class Building implements EndPoint {
     private boolean  evacuated;
     private boolean  productionEnabled;
     private boolean  upgrading;
-    private Military ownDefender;
-    private Military primaryAttacker;
+    private Soldier ownDefender;
+    private Soldier primaryAttacker;
     private boolean  outOfResources;
     private Builder  builder;
 
@@ -76,8 +76,8 @@ public class Building implements EndPoint {
         promisedDeliveries    = new EnumMap<>(Material.class);
         countdown             = new Countdown();
         upgradeCountdown      = new Countdown();
-        hostedMilitary        = new ArrayList<>();
-        promisedMilitary      = new ArrayList<>();
+        hostedSoldiers = new ArrayList<>();
+        promisedSoldier = new ArrayList<>();
         attackers             = new LinkedList<>();
         defenders             = new HashSet<>();
         waitingDefenders      = new HashSet<>();
@@ -121,7 +121,7 @@ public class Building implements EndPoint {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
         if (militaryBuilding != null) {
-            maxHostedSoldiers = militaryBuilding.maxHostedMilitary();
+            maxHostedSoldiers = militaryBuilding.maxHostedSoldiers();
             defenceRadius = militaryBuilding.defenceRadius();
         } else  {
             maxHostedSoldiers = 0;
@@ -204,16 +204,16 @@ public class Building implements EndPoint {
         return false;
     }
 
-    public int getMaxHostedMilitary() {
+    public int getMaxHostedSoldiers() {
         return maxHostedSoldiers;
     }
 
-    public int getNumberOfHostedMilitary() {
-        return hostedMilitary.size();
+    public int getNumberOfHostedSoldiers() {
+        return hostedSoldiers.size();
     }
 
-    public List<Military> getHostedMilitary() {
-        return hostedMilitary;
+    public List<Soldier> getHostedSoldiers() {
+        return hostedSoldiers;
     }
 
     public boolean needsWorker() {
@@ -238,8 +238,8 @@ public class Building implements EndPoint {
         return requiresWorker.workerType();
     }
 
-    public void promiseMilitary(Military military) {
-        promisedMilitary.add(military);
+    public void promiseSoldier(Soldier military) {
+        promisedSoldier.add(military);
     }
 
     public void promiseWorker(Worker worker) {
@@ -263,9 +263,9 @@ public class Building implements EndPoint {
 
         /* The building may need military manning if construction is finished */
         if (isReady()) {
-            int promised = promisedMilitary.size();
-            int actual = hostedMilitary.size();
-            int maxHost = getMaxHostedMilitary();
+            int promised = promisedSoldier.size();
+            int actual = hostedSoldiers.size();
+            int maxHost = getMaxHostedSoldiers();
 
             return maxHost > promised + actual;
         }
@@ -273,8 +273,8 @@ public class Building implements EndPoint {
         return false;
     }
 
-    public int getPromisedMilitary() {
-        return promisedMilitary.size();
+    public int getPromisedSoldier() {
+        return promisedSoldier.size();
     }
 
     public void assignWorker(Worker worker) {
@@ -299,18 +299,18 @@ public class Building implements EndPoint {
         onBuildingOccupied();
     }
 
-    boolean spaceAvailableToHostSoldier(Military soldier) {
-        return hostedMilitary.size() < getMaxHostedMilitary();
+    boolean spaceAvailableToHostSoldier(Soldier soldier) {
+        return hostedSoldiers.size() < getMaxHostedSoldiers();
     }
 
-    void deployMilitary(Military military) {
+    void deploySoldier(Soldier soldier) {
 
         if (!isReady()) {
             throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
         }
 
-        if (!spaceAvailableToHostSoldier(military)) {
-            throw new InvalidGameLogicException("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " soldiers");
+        if (!spaceAvailableToHostSoldier(soldier)) {
+            throw new InvalidGameLogicException("Can not host military, " + this + " already hosting " + hostedSoldiers.size() + " soldiers");
         }
 
         State previousState = state;
@@ -324,11 +324,11 @@ public class Building implements EndPoint {
         }
 
         if (!isEvacuated()) {
-            hostedMilitary.add(military);
-            promisedMilitary.remove(military);
+            hostedSoldiers.add(soldier);
+            promisedSoldier.remove(soldier);
         } else {
-            promisedMilitary.remove(military);
-            military.returnToStorage();
+            promisedSoldier.remove(soldier);
+            soldier.returnToStorage();
         }
 
         getPlayer().reportSoldierEnteredBuilding(this);
@@ -459,7 +459,7 @@ public class Building implements EndPoint {
         if (isUnderAttack()) {
 
             /* There is nothing to do if the building has no hosted soldiers */
-            if (getNumberOfHostedMilitary() > 0) {
+            if (getNumberOfHostedSoldiers() > 0) {
 
                 /* Send out a defender to the flag if needed */
                 if (isAttackerAtFlag() && ownDefender == null) {
@@ -589,7 +589,7 @@ public class Building implements EndPoint {
         }
 
         /* Send home deployed soldiers */
-        for (Military military : hostedMilitary) {
+        for (Soldier military : hostedSoldiers) {
             military.returnToStorage();
         }
 
@@ -678,7 +678,6 @@ public class Building implements EndPoint {
     }
 
     private boolean canAcceptGoods() {
-
         if (!requiredGoodsForProduction.isEmpty()) {
             return true;
         }
@@ -733,14 +732,14 @@ public class Building implements EndPoint {
     }
 
     private void doPromotion() {
-        Collection<Military> promoted = new LinkedList<>();
+        Collection<Soldier> promoted = new LinkedList<>();
 
         for (Rank rank : Rank.values()) {
             if (rank == GENERAL_RANK) {
                 continue;
             }
 
-            for (Military military : hostedMilitary) {
+            for (Soldier military : hostedSoldiers) {
                 if (promoted.contains(military)) {
                     continue;
                 }
@@ -761,7 +760,7 @@ public class Building implements EndPoint {
     }
 
     private boolean hostsPromotableSoldiers() {
-        for (Military military : hostedMilitary) {
+        for (Soldier military : hostedSoldiers) {
             if (military.getRank() != GENERAL_RANK) {
                 return true;
             }
@@ -783,13 +782,13 @@ public class Building implements EndPoint {
     }
 
     public void evacuate() {
-        for (Military military : hostedMilitary) {
+        for (Soldier military : hostedSoldiers) {
             military.returnToStorage();
 
             player.reportSoldierLeftBuilding(this);
         }
 
-        hostedMilitary.clear();
+        hostedSoldiers.clear();
 
         evacuated = true;
 
@@ -852,18 +851,18 @@ public class Building implements EndPoint {
         return mb.attackRadius();
     }
 
-    Military retrieveHostedSoldier(Military soldier) {
-        hostedMilitary.remove(soldier);
+    Soldier retrieveHostedSoldier(Soldier soldier) {
+        hostedSoldiers.remove(soldier);
 
         return soldier;
     }
 
-    Military retrieveHostedSoldier() {
+    Soldier retrieveHostedSoldier() {
         for (Rank rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
-            Optional<Military> maybeSoldier = hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+            Optional<Soldier> maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
             if (maybeSoldier.isPresent()) {
-                hostedMilitary.remove(maybeSoldier.get());
+                hostedSoldiers.remove(maybeSoldier.get());
 
                 return maybeSoldier.get();
             }
@@ -872,10 +871,10 @@ public class Building implements EndPoint {
         throw new InvalidGameLogicException("Can't retrieve soldier");
     }
 
-    Military retrieveHostedSoldierWithRank(Rank rank) {
-        Optional<Military> optionalMilitary = hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
+    Soldier retrieveHostedSoldierWithRank(Rank rank) {
+        Optional<Soldier> optionalMilitary = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
-        hostedMilitary.remove(optionalMilitary.get());
+        hostedSoldiers.remove(optionalMilitary.get());
 
         return optionalMilitary.get();
     }
@@ -888,11 +887,11 @@ public class Building implements EndPoint {
         return enablePromotions;
     }
 
-    void registerDefender(Military defender) {
+    void registerDefender(Soldier defender) {
         defenders.add(defender);
     }
 
-    void removeDefender(Military defender) {
+    void removeDefender(Soldier defender) {
         if (defender.equals(ownDefender)) {
             ownDefender = null;
         }
@@ -900,7 +899,7 @@ public class Building implements EndPoint {
         defenders.remove(defender);
     }
 
-    void registerAttacker(Military attacker) {
+    void registerAttacker(Soldier attacker) {
 
         /* Register the attacker */
         if (!attackers.contains(attacker)) {
@@ -908,7 +907,7 @@ public class Building implements EndPoint {
         }
     }
 
-    void removeAttacker(Military attacker) {
+    void removeAttacker(Soldier attacker) {
         waitingAttackers.remove(attacker);
         attackers.remove(attacker);
 
@@ -917,15 +916,15 @@ public class Building implements EndPoint {
         }
     }
 
-    List<Military> getWaitingAttackers() {
+    List<Soldier> getWaitingAttackers() {
         return waitingAttackers;
     }
 
-    Military pickWaitingAttacker() {
+    Soldier pickWaitingAttacker() {
         return waitingAttackers.remove(0);
     }
 
-    List<Military> getAttackers() {
+    List<Soldier> getAttackers() {
         return attackers;
     }
 
@@ -948,16 +947,16 @@ public class Building implements EndPoint {
         return true;
     }
 
-    Military getPrimaryAttacker() {
+    Soldier getPrimaryAttacker() {
         return primaryAttacker;
     }
 
-    void setPrimaryAttacker(Military attacker) {
+    void setPrimaryAttacker(Soldier attacker) {
         primaryAttacker = attacker;
     }
 
     boolean isDefenseLess() {
-        if (getNumberOfHostedMilitary() == 0 && defenders.isEmpty() && ownDefender == null) {
+        if (getNumberOfHostedSoldiers() == 0 && defenders.isEmpty() && ownDefender == null) {
             return true;
         }
 
@@ -970,7 +969,7 @@ public class Building implements EndPoint {
         setPlayer(player);
 
         /* Reset the number of promised soldiers */
-        promisedMilitary.clear();
+        promisedSoldier.clear();
 
         /* Remove traces of the attack */
         attackers.clear();
@@ -1004,7 +1003,6 @@ public class Building implements EndPoint {
      * @return the total need for the material
      */
     public int getCanHoldAmount(Material material) {
-
         switch (state) {
             case PLANNED:
             case UNDER_CONSTRUCTION:
@@ -1012,7 +1010,6 @@ public class Building implements EndPoint {
 
             case UNOCCUPIED:
             case OCCUPIED:
-
                 if (isMilitaryBuilding()) {
                     if (material == COIN) {
                         return getCanStoreAmountCoins();
@@ -1090,8 +1087,8 @@ public class Building implements EndPoint {
 
         getPlayer().reportHitByCatapult(catapult, this);
 
-        if (getNumberOfHostedMilitary() > 0) {
-            hostedMilitary.remove(0);
+        if (getNumberOfHostedSoldiers() > 0) {
+            hostedSoldiers.remove(0);
         } else {
             tearDown();
         }
@@ -1358,23 +1355,23 @@ public class Building implements EndPoint {
     }
 
     public int getHostedSoldiersWithRank(Rank rank) {
-        return ((Long) hostedMilitary.stream().filter(soldier -> soldier.getRank() == rank).count()).intValue();
+        return ((Long) hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).count()).intValue();
     }
 
-    public void removeWaitingAttacker(Military soldier) {
+    public void removeWaitingAttacker(Soldier soldier) {
         waitingAttackers.remove(soldier);
     }
 
-    public void removeWaitingDefender(Military defender) {
+    public void removeWaitingDefender(Soldier defender) {
         waitingDefenders.remove(defender);
     }
 
-    public void registerWaitingAttacker(Military attacker) {
+    public void registerWaitingAttacker(Soldier attacker) {
         waitingAttackers.add(attacker);
 
         /* Send out a local defender if there is none (and if possible) */
-        if (!getHostedMilitary().isEmpty() && ownDefender == null) {
-            var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedMilitary(), player.getDefenseStrength());
+        if (!getHostedSoldiers().isEmpty() && ownDefender == null) {
+            var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedSoldiers(), player.getDefenseStrength());
 
             this.ownDefender = sortedHostedSoldiers.getFirst();
 
@@ -1387,17 +1384,17 @@ public class Building implements EndPoint {
         if (defenders.size() <= 1) {
 
             /* Find potential defenders */
-            List<Military> potentialDefenders = new ArrayList<>();
+            List<Soldier> potentialDefenders = new ArrayList<>();
 
             player.getBuildings()
                     .stream()
                     .filter(building -> !building.equals(this))
                     .filter(Building::isReady)
                     .filter(Building::isMilitaryBuilding)
-                    .filter(building -> building.getHostedMilitary().size() > 1)
+                    .filter(building -> building.getHostedSoldiers().size() > 1)
                     .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
                     .forEach(building -> {
-                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedMilitary(), player.getDefenseStrength());
+                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedSoldiers(), player.getDefenseStrength());
 
                         potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
                     });
@@ -1414,7 +1411,7 @@ public class Building implements EndPoint {
         }
     }
 
-    public Set<Military> getDefenders() {
+    public Set<Soldier> getDefenders() {
         return defenders;
     }
 }

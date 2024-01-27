@@ -23,7 +23,7 @@ import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.GeologistFindMessage;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Message;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.MilitaryBuildingReadyMessage;
@@ -64,8 +64,8 @@ import static org.appland.settlers.model.Message.MessageType.STORE_HOUSE_IS_READ
 import static org.appland.settlers.model.Message.MessageType.TREE_CONSERVATION_PROGRAM_ACTIVATED;
 import static org.appland.settlers.model.Message.MessageType.TREE_CONSERVATION_PROGRAM_DEACTIVATED;
 import static org.appland.settlers.model.Message.MessageType.UNDER_ATTACK;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
@@ -198,12 +198,12 @@ public class TestMessages {
 
         map.stepTime();
 
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Military military = null;
+        Soldier military = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military) {
-                military = (Military)worker;
+            if (worker instanceof Soldier) {
+                military = (Soldier)worker;
             }
         }
 
@@ -598,7 +598,7 @@ public class TestMessages {
         /* Verify that no soldiers leave the barracks before the attack is initiated */
         for (int i = 0; i < 100; i++) {
             for (Worker worker : map.getWorkers()) {
-                if (worker instanceof Military) {
+                if (worker instanceof Soldier) {
                     assertTrue(worker.isInsideBuilding());
                 }
             }
@@ -672,22 +672,22 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
         /* Wait for the attacker to reach the barracks */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to come out from the barracks */
-        Military defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+        Soldier defender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
         /* Wait for the general to beat the private */
         Utils.waitForFightToStart(map, attacker, defender);
@@ -1185,12 +1185,12 @@ public class TestMessages {
 
         map.stepTime();
 
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Military military = null;
+        Soldier military = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military) {
-                military = (Military)worker;
+            if (worker instanceof Soldier) {
+                military = (Soldier)worker;
             }
         }
 
@@ -1247,12 +1247,12 @@ public class TestMessages {
 
         map.stepTime();
 
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Military military = null;
+        Soldier military = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military) {
-                military = (Military)worker;
+            if (worker instanceof Soldier) {
+                military = (Soldier)worker;
             }
         }
 
@@ -1330,7 +1330,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -1344,7 +1344,7 @@ public class TestMessages {
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
         /* Verify that the headquarters is destroyed and the first player won the game */
-        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getNumberOfHostedSoldiers(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
         assertNull(map.getWinner());
@@ -1413,7 +1413,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -1427,7 +1427,7 @@ public class TestMessages {
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
         /* Verify that the headquarters is destroyed and the first player won the game */
-        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getNumberOfHostedSoldiers(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
         assertNull(map.getWinner());
@@ -1508,7 +1508,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -1522,7 +1522,7 @@ public class TestMessages {
         assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
 
         /* Verify that the headquarters is destroyed and the first player won the game */
-        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getNumberOfHostedSoldiers(), 0);
         assertEquals(headquarter1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), headquarter1.getPosition());
         assertNull(map.getWinner());
@@ -1620,12 +1620,12 @@ public class TestMessages {
             Utils.waitForProjectileToReachTarget(projectile, map);
 
             /* Check if the projectile hit the barracks */
-            if (barracks0.getNumberOfHostedMilitary() == 0) {
+            if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 break;
             }
         }
 
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         int numberOfBombardedByCatapultMessages = 0;
         BombardedByCatapultMessage bombardedByCatapultMessage = null;
@@ -1702,12 +1702,12 @@ public class TestMessages {
             Utils.waitForProjectileToReachTarget(projectile, map);
 
             /* Check if the projectile hit the barracks */
-            if (barracks0.getNumberOfHostedMilitary() == 0) {
+            if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 break;
             }
         }
 
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks0.getNumberOfHostedSoldiers(), 0);
 
         int numberOfBombardedByCatapultMessages = 0;
         BombardedByCatapultMessage bombardedByCatapultMessage = null;

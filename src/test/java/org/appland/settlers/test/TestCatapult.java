@@ -34,7 +34,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -594,7 +594,7 @@ public class TestCatapult {
         for (int i = 0; i < 100; i++) {
 
             /* Occupy the barracks if needed */
-            if (barracks0.getNumberOfHostedMilitary() == 0) {
+            if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
                 assertFalse(player1.getLandInPoints().contains(point3));
@@ -608,13 +608,13 @@ public class TestCatapult {
 
             Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
-            int hostedBefore = barracks0.getNumberOfHostedMilitary();
+            int hostedBefore = barracks0.getNumberOfHostedSoldiers();
 
             /* Wait for the projectile to reach its target */
             Utils.waitForProjectileToReachTarget(projectile, map);
 
             /* Check if the projectile hit */
-            if (barracks0.getNumberOfHostedMilitary() < hostedBefore) {
+            if (barracks0.getNumberOfHostedSoldiers() < hostedBefore) {
                 hits++;
             }
         }

@@ -14,7 +14,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -36,7 +36,7 @@ import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.DetailedVegetation.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.*;
+import static org.appland.settlers.model.Soldier.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestMisc {
@@ -267,7 +267,7 @@ public class TestMisc {
         assertFalse(player0.getDiscoveredLand().contains(point04));
         assertFalse(player0.getDiscoveredLand().contains(point05));
 
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
 
@@ -562,7 +562,7 @@ public class TestMisc {
 
         barracks1.evacuate();
 
-        Military military = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player1);
 
         assertEquals(military.getTarget(), headquarter1.getPosition());
 
@@ -570,7 +570,7 @@ public class TestMisc {
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
 
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
@@ -580,7 +580,7 @@ public class TestMisc {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -594,7 +594,7 @@ public class TestMisc {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that evacuation is disabled when the attacker takes over the building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
         assertEquals(barracks1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), barracks1.getPosition());
         assertTrue(barracks1.isReady());
@@ -604,10 +604,10 @@ public class TestMisc {
 
         assertFalse(barracks1.isEvacuated());
         assertEquals(barracks1.getPlayer(), player0);
-        assertTrue(barracks1.getHostedMilitary().contains(attacker));
+        assertTrue(barracks1.getHostedSoldiers().contains(attacker));
         assertTrue(attacker.isInsideBuilding());
         assertEquals(barracks1.getPlayer(), player0);
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
     }
 
     @Test
@@ -650,14 +650,14 @@ public class TestMisc {
 
         fortress0.tearDown();
 
-        List<Military> soldiers = Utils.waitForWorkersOutsideBuilding(Military.class, 5, player);
+        List<Soldier> soldiers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 5, player);
 
         boolean stillOnMap;
         for (int i = 0; i < 5000; i++) {
 
             stillOnMap = false;
 
-            for (Military soldier : soldiers) {
+            for (Soldier soldier : soldiers) {
                 if (map.getWorkers().contains(soldier)) {
                     stillOnMap = true;
 
@@ -672,7 +672,7 @@ public class TestMisc {
             map.stepTime();
         }
 
-        for (Military soldier : soldiers) {
+        for (Soldier soldier : soldiers) {
             assertFalse(map.getWorkers().contains(soldier));
         }
 
@@ -745,7 +745,7 @@ public class TestMisc {
 
         barracks1.evacuate();
 
-        Military military = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player1);
 
         assertEquals(military.getTarget(), headquarter1.getPosition());
 
@@ -753,7 +753,7 @@ public class TestMisc {
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
 
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
@@ -763,7 +763,7 @@ public class TestMisc {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -781,7 +781,7 @@ public class TestMisc {
 
         assertTrue(map.getRoads().contains(road0));
         assertTrue(map.getRoads().contains(road2));
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
         assertEquals(barracks1.getPlayer(), player1);
         assertEquals(attacker.getTarget(), barracks1.getPosition());
         assertTrue(barracks1.isReady());
@@ -1028,22 +1028,22 @@ public class TestMisc {
         Utils.fastForward(30, map);
 
         /* Find the military that was chosen to attack */
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
         /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1359,7 +1359,7 @@ public class TestMisc {
         headquarter.pushOutAll(PRIVATE);
 
         /* Verify that couriers can be pushed out */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), PRIVATE_RANK);
     }
@@ -1384,7 +1384,7 @@ public class TestMisc {
         headquarter.pushOutAll(PRIVATE_FIRST_CLASS);
 
         /* Verify that private first class can be pushed out */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), PRIVATE_FIRST_CLASS_RANK);
     }
@@ -1409,7 +1409,7 @@ public class TestMisc {
         headquarter.pushOutAll(SERGEANT);
 
         /* Verify that sergeant can be pushed out */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), SERGEANT_RANK);
     }
@@ -1434,7 +1434,7 @@ public class TestMisc {
         headquarter.pushOutAll(OFFICER);
 
         /* Verify that officer can be pushed out */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), OFFICER_RANK);
 
@@ -1461,7 +1461,7 @@ public class TestMisc {
         headquarter.pushOutAll(GENERAL);
 
         /* Verify that general can be pushed out */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertEquals(military.getRank(), GENERAL_RANK);
     }

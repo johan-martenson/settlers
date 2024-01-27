@@ -40,7 +40,7 @@ import static java.awt.Color.*;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.DetailedVegetation.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.appland.settlers.test.Utils.occupyBuilding;
 import static org.junit.Assert.*;
@@ -296,8 +296,8 @@ public class TestFishery {
         Utils.waitForBuildingToBeConstructed(fishery);
 
         assertFalse(fishery.isMilitaryBuilding());
-        assertEquals(fishery.getNumberOfHostedMilitary(), 0);
-        assertEquals(fishery.getMaxHostedMilitary(), 0);
+        assertEquals(fishery.getNumberOfHostedSoldiers(), 0);
+        assertEquals(fishery.getMaxHostedSoldiers(), 0);
     }
 
     @Test

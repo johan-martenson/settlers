@@ -103,18 +103,18 @@ To make one soldier, you need a sword, a shield and a keg of beer in a warehouse
 
 Soldiers go up in rank according to the supply of gold coins, and this affects their strength.
 
-Use the military settings to send troops towards the frontiers rather than the middle of your territory 
+Use the soldier settings to send troops towards the frontiers rather than the middle of your territory
 (unless you have a good reason for not doing so).
 
-Attack enemy military buildings which protect production buildings - if you take it, he will lose all of the 
+Attack enemy soldier buildings which protect production buildings - if you take it, he will lose all of the
 buildings within it’s radius.  Even if it is taken back, he will have to rebuild.
 
-Catapults are often more useful than soldiers and military buildings - crucially, destruction of an enemy 
+Catapults are often more useful than soldiers and soldier buildings - crucially, destruction of an enemy
 building by catapult is not seen as an act of war.  Each catapult attack consumes 1 stone and, if successful, 
 reduces the garrison of a building by 1 soldier until the building is destroyed.  Change the transport 
 priorities if you need the catapults to fire quicker.
 
-You can affect the use of gold by selecting the “no gold” icon in military buildings which are away from 
+You can affect the use of gold by selecting the “no gold” icon in soldier buildings which are away from
 the conflict zone.
 
 Seafaring

@@ -26,7 +26,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronSmelter;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.MilitaryBuildingReadyMessage;
@@ -243,11 +243,11 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Military.Rank.PRIVATE_RANK);
+        assertEquals(military.getRank(), Soldier.Rank.PRIVATE_RANK);
 
         /* Verify that the toString() method is correct */
         assertEquals(military.toString(), "Private soldier (10, 10)");
@@ -291,11 +291,11 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Military.Rank.PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(military.getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
 
         /* Verify that the toString() method is correct */
         assertEquals(military.toString(), "Private first class soldier (10, 10)");
@@ -339,11 +339,11 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Military.Rank.SERGEANT_RANK);
+        assertEquals(military.getRank(), Soldier.Rank.SERGEANT_RANK);
 
         /* Verify that the toString() method is correct */
         assertEquals(military.toString(), "Sergeant soldier (10, 10)");
@@ -387,11 +387,11 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Military.Rank.OFFICER_RANK);
+        assertEquals(military.getRank(), Soldier.Rank.OFFICER_RANK);
 
         /* Verify that the toString() method is correct */
         assertEquals(military.toString(), "Officer soldier (10, 10)");
@@ -435,11 +435,11 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
-        assertEquals(military.getRank(), Military.Rank.GENERAL_RANK);
+        assertEquals(military.getRank(), Soldier.Rank.GENERAL_RANK);
 
         /* Verify that the toString() method is correct */
         assertEquals(military.toString(), "General soldier (10, 10)");

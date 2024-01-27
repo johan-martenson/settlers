@@ -6,7 +6,7 @@ Select in Harbor between
  - Expedition
  - Exploration Expedition
 
-Harbor is a military building:
+Harbor is a soldier building:
  - Range: 
 
 Build one ship:

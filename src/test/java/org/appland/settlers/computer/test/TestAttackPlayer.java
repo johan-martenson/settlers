@@ -10,7 +10,7 @@ import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.test.Utils;
@@ -92,7 +92,7 @@ public class TestAttackPlayer {
         Barracks barracks1 = Utils.placeAndOccupyBarracks(player1, point3);
 
         /* Add an extra soldier to the attacking player's barracks */
-        Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.PRIVATE_RANK, barracks0);
 
         /* Verify that the player attacks the other player */
         assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 1);
@@ -101,7 +101,7 @@ public class TestAttackPlayer {
 
             computerPlayer.turn();
 
-            List<Military> militariesOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
+            List<Soldier> militariesOutside = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
             if (militariesOutside.size() == 1) {
                 break;
@@ -110,11 +110,11 @@ public class TestAttackPlayer {
             map.stepTime();
         }
 
-        List<Military> militaries = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
+        List<Soldier> militaries = Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0);
 
         assertEquals(militaries.size(), 1);
 
-        Military attacker = militaries.get(0);
+        Soldier attacker = militaries.get(0);
 
         assertTrue(attacker.getTarget().distance(barracks1.getPosition()) < 3);
     }

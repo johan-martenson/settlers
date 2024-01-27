@@ -16,7 +16,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -34,10 +34,10 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_FIRST_CLASS_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -217,12 +217,12 @@ public class TestWatchTower {
         /* Verify that a military is sent from the headquarter */
         map.stepTime();
 
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Military military = null;
+        Soldier military = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military) {
-                military = (Military)worker;
+            if (worker instanceof Soldier) {
+                military = (Soldier)worker;
             }
         }
 
@@ -295,12 +295,12 @@ public class TestWatchTower {
 
         map.stepTime();
 
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Soldier.class);
 
-        Military military = null;
+        Soldier military = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Military) {
-                military = (Military)worker;
+            if (worker instanceof Soldier) {
+                military = (Soldier)worker;
             }
         }
 
@@ -370,7 +370,7 @@ public class TestWatchTower {
         /* Verify that the watch tower can't hold soldiers before it's finished */
         assertFalse(watchTower0.needsMilitaryManning());
 
-        Military military = new Military(player0, PRIVATE_RANK, map);
+        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, watchTower0);
 
@@ -409,7 +409,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Verify that the watch tower does not need another military */
-        Military military = new Military(player0, PRIVATE_RANK, map);
+        Soldier military = new Soldier(player0, PRIVATE_RANK, map);
 
         map.placeWorker(military, watchTower0);
 
@@ -531,7 +531,7 @@ public class TestWatchTower {
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Verify that the private is promoted at the right time */
         for (int i = 0; i < 100; i++) {
@@ -567,8 +567,8 @@ public class TestWatchTower {
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
-        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
@@ -605,7 +605,7 @@ public class TestWatchTower {
         Utils.fastForward(200, map);
 
         /* Occupy the watch tower with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Verify that it still takes the same time for the private to get promoted */
         Utils.fastForward(99, map);
@@ -642,7 +642,7 @@ public class TestWatchTower {
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(watchTower0.getAmount(COIN), 1);
@@ -678,8 +678,8 @@ public class TestWatchTower {
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
-        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, watchTower0);
+        Soldier military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, watchTower0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(watchTower0.getAmount(COIN), 2);
@@ -714,8 +714,8 @@ public class TestWatchTower {
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
-        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
+        Soldier military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
+        Soldier military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0);
 
         /* Verify that coin is not consumed */
         assertEquals(watchTower0.getAmount(COIN), 1);
@@ -777,7 +777,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Occupy the watch tower */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Evacuate the watch tower and verify that the military leaves the watch tower */
         assertTrue(military.isInsideBuilding());
@@ -787,7 +787,7 @@ public class TestWatchTower {
         map.stepTime();
 
         assertFalse(military.isInsideBuilding());
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 0);
     }
 
     @Test
@@ -814,7 +814,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Occupy the watch tower */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Evacuate the watch tower */
         assertTrue(military.isInsideBuilding());
@@ -856,7 +856,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Occupy the watch tower */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Evacuate the watch tower */
         assertTrue(military.isInsideBuilding());
@@ -905,7 +905,7 @@ public class TestWatchTower {
 
         /* Verify that no soldiers are assigned to the watch tower */
         for (int i = 0; i < 200; i++) {
-            assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+            assertEquals(watchTower0.getNumberOfHostedSoldiers(), 0);
             map.stepTime();
         }
     }
@@ -931,7 +931,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Occupy the watch tower */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Evacuate the watch tower */
         assertTrue(military.isInsideBuilding());
@@ -983,12 +983,12 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Destroy the watch tower */
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 1);
 
         watchTower0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1056,12 +1056,12 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Destroy the watch tower */
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 1);
 
         watchTower0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1248,7 +1248,7 @@ public class TestWatchTower {
         WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the list of hosted soldiers is empty */
-        assertEquals(0, watchTower0.getHostedMilitary().size());
+        assertEquals(0, watchTower0.getHostedSoldiers().size());
     }
 
     @Test
@@ -1272,7 +1272,7 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Verify that the list of hosted soldiers is empty */
-        assertEquals(0, watchTower0.getHostedMilitary().size());
+        assertEquals(0, watchTower0.getHostedSoldiers().size());
     }
 
     @Test
@@ -1299,8 +1299,8 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
 
         /* Verify that the list of hosted soldiers increased empty */
-        assertEquals(1, watchTower0.getHostedMilitary().size());
-        assertEquals(watchTower0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
+        assertEquals(1, watchTower0.getHostedSoldiers().size());
+        assertEquals(watchTower0.getHostedSoldiers().get(0).getRank(), PRIVATE_RANK);
     }
 
     @Test
@@ -1327,7 +1327,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, watchTower0);
 
         /* Verify that the rank for the hosted military is correct */
-        assertEquals(watchTower0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);
+        assertEquals(watchTower0.getHostedSoldiers().get(0).getRank(), SERGEANT_RANK);
     }
 
     @Test
@@ -1883,7 +1883,7 @@ public class TestWatchTower {
         Building fortress0 = map.getBuildingAtPoint(watchTower0.getPosition());
 
         assertTrue(fortress0.isOccupied());
-        assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
+        assertEquals(fortress0.getNumberOfHostedSoldiers(), 1);
     }
 
     @Test
@@ -2320,14 +2320,14 @@ public class TestWatchTower {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         /* Occupy the watch tower */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+        Soldier military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Verify that the military comes out immediately */
 
         map.stepTime();
 
         assertFalse(military.isInsideBuilding());
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 0);
     }
 
     @Test
@@ -2436,14 +2436,14 @@ public class TestWatchTower {
 
         for (int i = 0; i < 1000; i++) {
 
-            if (watchTower0.getNumberOfHostedMilitary() == 0) {
+            if (watchTower0.getNumberOfHostedSoldiers() == 0) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 0);
 
         /* Upgrade the watch tower */
         watchTower0.upgrade();
@@ -2563,7 +2563,7 @@ public class TestWatchTower {
         /* Fill the watch tower with soldiers */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 6, watchTower0);
 
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 6);
 
         /* Make sure there are enough soldiers in the headquarter */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
@@ -2576,13 +2576,13 @@ public class TestWatchTower {
         Utils.deliverCargos(watchTower0, STONE, 2);
 
         /* Wait for the upgrade to happen */
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 6);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 6);
 
         Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
 
-        assertEquals(fortress0.getNumberOfHostedMilitary(), 6);
+        assertEquals(fortress0.getNumberOfHostedSoldiers(), 6);
         assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
-        assertEquals(fortress0.getMaxHostedMilitary(), 9);
+        assertEquals(fortress0.getMaxHostedSoldiers(), 9);
 
         /* Verify that only three soldiers are sent out to occupy the building */
 
@@ -2591,7 +2591,7 @@ public class TestWatchTower {
 
         /* Verify that no more soldiers are sent out */
         assertFalse(fortress0.needsMilitaryManning());
-        assertEquals(fortress0.getNumberOfHostedMilitary(), 9);
+        assertEquals(fortress0.getNumberOfHostedSoldiers(), 9);
 
         for (int i = 0; i < 2000; i++) {
 
@@ -2629,14 +2629,14 @@ public class TestWatchTower {
         /* Wait for the watch tower to get occupied */
         for (int i = 0; i < 1000; i++) {
 
-            if (watchTower0.getNumberOfHostedMilitary() == 2) {
+            if (watchTower0.getNumberOfHostedSoldiers() == 2) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(watchTower0.getNumberOfHostedMilitary(), 2);
+        assertEquals(watchTower0.getNumberOfHostedSoldiers(), 2);
 
         /* Upgrade the watch tower */
         watchTower0.upgrade();
@@ -2656,18 +2656,18 @@ public class TestWatchTower {
         Building fortress0 = Utils.waitForBuildingToGetUpgraded(watchTower0);
 
         assertEquals(map.getBuildingAtPoint(watchTower0.getPosition()), fortress0);
-        assertEquals(fortress0.getMaxHostedMilitary(), 9);
+        assertEquals(fortress0.getMaxHostedSoldiers(), 9);
 
         /* Verify that the building gets fully occupied */
         for (int i = 0; i < 500; i++) {
 
-            if (fortress0.getNumberOfHostedMilitary() == 9) {
+            if (fortress0.getNumberOfHostedSoldiers() == 9) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(fortress0.getNumberOfHostedMilitary(), 9);
+        assertEquals(fortress0.getNumberOfHostedSoldiers(), 9);
     }
 }

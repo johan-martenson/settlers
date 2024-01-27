@@ -16,7 +16,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -37,8 +37,8 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -1283,9 +1283,9 @@ public class TestStorehouse {
         player0.attack(barracks0, 2, AttackStrength.STRONG);
 
         /* Wait for the attackers to come out */
-        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0);
+        List<Soldier> attackers = Utils.waitForWorkersOutsideBuilding(Soldier.class, 2, player0);
 
-        Military mainAttacker = Utils.getMainAttacker(barracks0, attackers);
+        Soldier mainAttacker = Utils.getMainAttacker(barracks0, attackers);
 
         /* Wait for the attacker to reach the flag of the barracks */
         assertEquals(mainAttacker.getTarget(), barracks0.getFlag().getPosition());
@@ -1294,7 +1294,7 @@ public class TestStorehouse {
 
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 10000; i++) {
-            if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedMilitary() > 0) {
+            if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedSoldiers() > 0) {
                 break;
             }
 
@@ -1302,7 +1302,7 @@ public class TestStorehouse {
         }
 
         assertEquals(barracks0.getPlayer(), player0);
-        assertTrue(barracks0.getNumberOfHostedMilitary() > 0);
+        assertTrue(barracks0.getNumberOfHostedSoldiers() > 0);
 
         /* Connect the captured barracks with the headquarters */
         Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());

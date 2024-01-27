@@ -5,13 +5,13 @@ LARGER CHANGES
 
 * Add the missing "needs planing" state for house construction and add planer
 
-* Add ability to configure military parameters
+* Add ability to configure soldier parameters
 
 * Improve available construction compared to map information through analytical regression
 
 * Correct the production times for buildings
 
-* Change so that military buildings cannot be placed too close together / only close to the border
+* Change so that soldier buildings cannot be placed too close together / only close to the border
 
 * Add small boats
 
@@ -25,7 +25,7 @@ LARGER CHANGES
 SMALLER CHANGES
 ===============
 
-* Test each military type goes back to headquarter (one missing)
+* Test each soldier type goes back to headquarter (one missing)
 
 
 RE-FACTOR
@@ -45,7 +45,7 @@ TEST
 
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers 
 
-*  Test that all deployed soldiers in a military building return to the storehouse if it's torn down
+*  Test that all deployed soldiers in a soldier building return to the storehouse if it's torn down
 
 *  Add tests for available buildings close to the border
 
@@ -55,11 +55,11 @@ TEST
 
 *  Test for the exact time of a fight
 
-*  Test that the number of soldiers in a building goes down when a military has been retrieved
+*  Test that the number of soldiers in a building goes down when a soldier has been retrieved
 
 *  Test that the closest building with available soldiers is used in attacking
 
-*  Test get attack radius for each military building
+*  Test get attack radius for each soldier building
 
 *  Add Utils.ageRoad() and update tests in donkey to use it before assigning donkeys
 
@@ -107,6 +107,6 @@ TEST
 TO IMPLEMENT
 ============
 
-*  Adjust attack radius in military buildings
+*  Adjust attack radius in soldier buildings
 
 *  Make sure all tests for stopped production have more material than necessary

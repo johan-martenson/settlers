@@ -20,7 +20,7 @@ import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -47,8 +47,8 @@ import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
 import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
 import static org.appland.settlers.test.Utils.constructHouse;
@@ -1942,23 +1942,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2037,23 +2037,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2156,23 +2156,23 @@ public class TestGameMonitoringOfWorkerActions {
             /* Find the military that was chosen to attack */
             map.stepTime();
 
-            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+            Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
             assertNotNull(attacker);
             assertEquals(attacker.getPlayer(), player0);
             assertFalse(attacker.isFighting());
 
             /* Wait for the military to reach the attacked building */
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
             /* Wait for a defender to come out */
-            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+            Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
             assertNotNull(defender);
             assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2185,7 +2185,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             /* Find out if a soldier stands aside during the fight */
-            Military soldierJumpingBack = null;
+            Soldier soldierJumpingBack = null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isJumpingBack()) {
@@ -2240,7 +2240,7 @@ public class TestGameMonitoringOfWorkerActions {
             if (defender.isDying()) {
 
                 /* Wait for another soldier to come out and beat the attacker */
-                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+                Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
                 /* Wait for the fight to start */
                 Utils.waitForFightToStart(map, attacker, otherDefender);
@@ -2322,23 +2322,23 @@ public class TestGameMonitoringOfWorkerActions {
             /* Find the military that was chosen to attack */
             map.stepTime();
 
-            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+            Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
             assertNotNull(attacker);
             assertEquals(attacker.getPlayer(), player0);
             assertFalse(attacker.isFighting());
 
             /* Wait for the military to reach the attacked building */
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
             /* Wait for a defender to come out */
-            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+            Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
             assertNotNull(defender);
             assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2351,7 +2351,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             /* Find out if a soldier stands aside during the fight */
-            Military soldierJumpingBack = null;
+            Soldier soldierJumpingBack = null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isJumpingBack()) {
@@ -2406,7 +2406,7 @@ public class TestGameMonitoringOfWorkerActions {
             if (defender.isDying()) {
 
                 /* Wait for another soldier to come out and beat the attacker */
-                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+                Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
                 /* Wait for the fight to start */
                 Utils.waitForFightToStart(map, attacker, otherDefender);
@@ -2503,7 +2503,7 @@ public class TestGameMonitoringOfWorkerActions {
             /* Find the military that was chosen to attack */
             map.stepTime();
 
-            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+            Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
             assertNotNull(attacker);
             assertEquals(attacker.getPlayer(), player0);
@@ -2517,7 +2517,7 @@ public class TestGameMonitoringOfWorkerActions {
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
             /* Wait for a defender to come out */
-            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+            Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
             assertNotNull(defender);
             assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2527,7 +2527,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             /* Find out if a soldier stands aside during the fight */
-            Military soldierStandingAside = null;
+            Soldier soldierStandingAside = null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isStandingAside()) {
@@ -2585,7 +2585,7 @@ public class TestGameMonitoringOfWorkerActions {
                 Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
 
                 /* Wait for another soldier to come out and beat the attacker */
-                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+                Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
                 /* Wait for the fight to start */
                 Utils.waitForFightToStart(map, attacker, otherDefender);
@@ -2667,23 +2667,23 @@ public class TestGameMonitoringOfWorkerActions {
             /* Find the military that was chosen to attack */
             map.stepTime();
 
-            Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+            Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
             assertNotNull(attacker);
             assertEquals(attacker.getPlayer(), player0);
             assertFalse(attacker.isFighting());
 
             /* Wait for the military to reach the attacked building */
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-            assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
             /* Wait for a defender to come out */
-            Military defender = Utils.findMilitaryOutsideBuilding(player1);
+            Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
             assertNotNull(defender);
             assertEquals(defender.getTarget(), attacker.getPosition());
@@ -2696,7 +2696,7 @@ public class TestGameMonitoringOfWorkerActions {
             Utils.waitForFightToStart(map, attacker, defender);
 
             /* Find out if a soldier stands aside during the fight */
-            Military soldierStandingAside = null;
+            Soldier soldierStandingAside = null;
 
             for (int j = 0; j < 10000; j++) {
                 if (attacker.isStandingAside()) {
@@ -2751,7 +2751,7 @@ public class TestGameMonitoringOfWorkerActions {
             if (defender.isDying()) {
 
                 /* Wait for another soldier to come out and beat the attacker */
-                Military otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
+                Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
                 /* Wait for the fight to start */
                 Utils.waitForFightToStart(map, attacker, otherDefender);
@@ -2837,23 +2837,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
 
@@ -2940,23 +2940,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -3049,23 +3049,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -3145,23 +3145,23 @@ public class TestGameMonitoringOfWorkerActions {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());

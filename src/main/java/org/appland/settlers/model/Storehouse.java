@@ -3,7 +3,7 @@ package org.appland.settlers.model;
 import java.util.*;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Military.Rank.*;
+import static org.appland.settlers.model.Soldier.Rank.*;
 import static org.appland.settlers.model.Size.MEDIUM;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
@@ -336,11 +336,11 @@ public class Storehouse extends Building {
                     continue;
                 }
 
-                Military military = retrieveSoldierToPopulateBuilding();
+                Soldier military = retrieveSoldierToPopulateBuilding();
 
                 getMap().placeWorker(military, this);
                 military.setTargetBuilding(building);
-                building.promiseMilitary(military);
+                building.promiseSoldier(military);
 
                 return true;
             } else {
@@ -456,7 +456,7 @@ public class Storehouse extends Building {
 
     public void depositWorker(Worker worker) {
         if (worker.isSoldier()) { // FIXME: deposit for soldier does not seem to work for some ranks
-            Military military = (Military) worker;
+            Soldier military = (Soldier) worker;
             Material material;
 
             switch (military.getRank()) {
@@ -621,19 +621,19 @@ public class Storehouse extends Building {
             worker = new Courier(getPlayer(), getMap());
             break;
         case PRIVATE:
-            worker = new Military(getPlayer(), PRIVATE_RANK, getMap());
+            worker = new Soldier(getPlayer(), PRIVATE_RANK, getMap());
             break;
         case PRIVATE_FIRST_CLASS:
-            worker = new Military(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
+            worker = new Soldier(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
             break;
         case SERGEANT:
-            worker = new Military(getPlayer(), SERGEANT_RANK, getMap());
+            worker = new Soldier(getPlayer(), SERGEANT_RANK, getMap());
             break;
         case OFFICER:
-            worker = new Military(getPlayer(), OFFICER_RANK, getMap());
+            worker = new Soldier(getPlayer(), OFFICER_RANK, getMap());
             break;
         case GENERAL:
-            worker = new Military(getPlayer(), GENERAL_RANK, getMap());
+            worker = new Soldier(getPlayer(), GENERAL_RANK, getMap());
             break;
         case BUILDER:
             worker = new Builder(getPlayer(), getMap());
@@ -652,20 +652,20 @@ public class Storehouse extends Building {
         return worker;
     }
 
-    public Military retrieveSoldierFromInventory(Military.Rank rank) {
+    public Soldier retrieveSoldierFromInventory(Soldier.Rank rank) {
         return retrieveSoldierFromInventory(rank.toMaterial());
     }
 
-    public Military retrieveSoldierFromInventory(Material material) {
+    public Soldier retrieveSoldierFromInventory(Material material) {
         if (!hasAtLeastOne(material)) {
             throw new InvalidGameLogicException("Can't retrieve military " + material);
         }
 
         retrieveOneFromInventory(material);
 
-        Military.Rank rank = material.toRank();
+        Soldier.Rank rank = material.toRank();
 
-        Military military = new Military(getPlayer(), rank, getMap());
+        Soldier military = new Soldier(getPlayer(), rank, getMap());
 
         military.setPosition(getFlag().getPosition());
 
@@ -682,16 +682,16 @@ public class Storehouse extends Building {
         return courier;
     }
 
-    public Military retrieveSoldierToPopulateBuilding() {
+    public Soldier retrieveSoldierToPopulateBuilding() {
 
         /* Go through the list in order of preference and try to retrieve a soldier */
-        for (Military.Rank rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
+        for (Soldier.Rank rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
             Material preferredSoldierType = rank.toMaterial();
 
             if (hasAtLeastOne(preferredSoldierType)) {
                 retrieveOneFromInventory(preferredSoldierType);
 
-                Military military = new Military(getPlayer(), rank, getMap());
+                Soldier military = new Soldier(getPlayer(), rank, getMap());
                 military.setPosition(getFlag().getPosition());
 
                 return military;

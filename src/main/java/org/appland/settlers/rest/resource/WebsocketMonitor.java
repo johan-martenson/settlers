@@ -17,7 +17,7 @@ import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Message;
 import org.appland.settlers.model.Metalworks;
-import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.PigFarm;
@@ -367,7 +367,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     if (optionalHeadquarter.isPresent()) {
                         Headquarter headquarter = (Headquarter) optionalHeadquarter.get();
 
-                        Arrays.stream(Military.Rank.values()).iterator().forEachRemaining(
+                        Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
                                 rank -> {
                                     if (jsonBody.containsKey(rank.name().toUpperCase())) {
                                         Long amountLong = (Long) jsonBody.get(rank.name().toUpperCase());

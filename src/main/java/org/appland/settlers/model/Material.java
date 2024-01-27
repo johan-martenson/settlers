@@ -200,13 +200,13 @@ public enum Material {
         return SOLDIERS.contains(this);
     }
 
-    public Military.Rank toRank() {
+    public Soldier.Rank toRank() {
         return switch (this) {
-            case PRIVATE -> Military.Rank.PRIVATE_RANK;
-            case PRIVATE_FIRST_CLASS -> Military.Rank.PRIVATE_FIRST_CLASS_RANK;
-            case SERGEANT -> Military.Rank.SERGEANT_RANK;
-            case OFFICER -> Military.Rank.OFFICER_RANK;
-            case GENERAL -> Military.Rank.GENERAL_RANK;
+            case PRIVATE -> Soldier.Rank.PRIVATE_RANK;
+            case PRIVATE_FIRST_CLASS -> Soldier.Rank.PRIVATE_FIRST_CLASS_RANK;
+            case SERGEANT -> Soldier.Rank.SERGEANT_RANK;
+            case OFFICER -> Soldier.Rank.OFFICER_RANK;
+            case GENERAL -> Soldier.Rank.GENERAL_RANK;
             default -> throw new InvalidGameLogicException("Can't translate " + this + " to rank");
         };
     }

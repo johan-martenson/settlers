@@ -61,9 +61,9 @@ I imagine this won't be mindblowingly new to veterans, but I was not able to fin
 Appendix A: Interior Academy-Fortress trick (1 General trained per 1 Gold coin)
 To maximise the efficiency of a gold coin, build a fortress near your HQ/storehouse. The Fortress should contain 1 soldier of rank 4, 1 of rank 3, 1 of rank 2, and the rest should be Privates. Stop gold flow to all buildings except that one fortress. Every gold coin sent to this fortress will cause 4 promotions, one of which will be a General. Every time you get a General, lower the interior setting by 1 to send him home, and increase it by 1 again to have a Private replace him. This way you can keep spending 1 gold coin to get 1 General, indefinitely.
 
-To avoid unnecessarily sending soldiers to other interior military buildings, you can cut them all off from the road network. Alternatively, only build Barracks (2 soldiers max) and set the interior soldier count to 8 out of 9, so that all barracks only receive 1 of 2 soldiers but the Fortress gets 8 of 9.
+To avoid unnecessarily sending soldiers to other interior soldier buildings, you can cut them all off from the road network. Alternatively, only build Barracks (2 soldiers max) and set the interior soldier count to 8 out of 9, so that all barracks only receive 1 of 2 soldiers but the Fortress gets 8 of 9.
 
-The Fortress is ideal as an academy because of its rapid training time and large soldier capacity. Rapid training lets you pause the training often to deal with other military matters, without falling behind. A soldier capacity of 9 means the 0-9 interior setting controls precisely how many soldiers are inside.
+The Fortress is ideal as an academy because of its rapid training time and large soldier capacity. Rapid training lets you pause the training often to deal with other soldier matters, without falling behind. A soldier capacity of 9 means the 0-9 interior setting controls precisely how many soldiers are inside.
 
 Appendix B: Details of the test of the farm:
 Because times of farmer actions vary due to distances to fields and due to waiting for crop growth, I started with a fresh farm with no fields, and I measured the whole cycle involving planting 5 fields, waiting till they grow, and harvesting them.

@@ -147,15 +147,15 @@ public class TestRoads {
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), pointX);
 
         Utils.constructHouse(fortress0);
-        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress0);
 
         Fortress fortress1 = map.placeBuilding(new Fortress(player0), pointY);
         Utils.constructHouse(fortress1);
-        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, fortress1);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress1);
 
         Fortress fortress2 = map.placeBuilding(new Fortress(player0), pointZ);
         Utils.constructHouse(fortress2);
-        Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, fortress2);
+        Utils.occupyMilitaryBuilding(Soldier.Rank.GENERAL_RANK, fortress2);
 
         /* Create the list of points for the roads */
         Point[] points = {

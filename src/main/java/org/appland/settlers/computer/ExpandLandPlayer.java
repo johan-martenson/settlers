@@ -163,7 +163,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 state = State.READY_FOR_CONSTRUCTION;
 
             /* Disable promotions directly when the barracks is ready */
-            } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedMilitary() == 0) {
+            } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedSoldiers() == 0) {
 
                 /* Disable promotions if the barracks is not close to the enemy */
                 if (unfinishedBarracks.isPromotionEnabled() &&
@@ -184,7 +184,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 duration.after("Disable promotions and do upgrades");
 
             /* Check if construction is done and the building is occupied */
-            } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedMilitary() > 0) {
+            } else if (unfinishedBarracks.isReady() && unfinishedBarracks.getNumberOfHostedSoldiers() > 0) {
 
                 /* Save the barracks */
                 placedBarracks.add(unfinishedBarracks);
@@ -591,7 +591,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
             }
 
             /* Check if the building is fully occupied */
-            if (building.getNumberOfHostedMilitary() < building.getMaxHostedMilitary()) {
+            if (building.getNumberOfHostedSoldiers() < building.getMaxHostedSoldiers()) {
                 return false;
             }
         }
