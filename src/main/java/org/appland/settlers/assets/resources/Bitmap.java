@@ -1,23 +1,36 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
+
+import org.appland.settlers.assets.Area;
+import org.appland.settlers.assets.RGBColor;
+import org.appland.settlers.assets.TextureFormat;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ComponentColorModel;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class Bitmap {
-    protected int bytesPerPixel;
     protected final int height;
     protected final int width;
     private final TextureFormat format;
 
+    protected int bytesPerPixel;
     protected byte[] imageData; // uint 8
 
     private Palette palette;
     private boolean debug = false;
+
     int nx;
     int ny;
 
@@ -313,7 +326,7 @@ public class Bitmap {
         }
     }
 
-    Area getVisibleArea() {
+    public Area getVisibleArea() {
 
         int firstVisibleY;
         int firstVisibleX;
@@ -399,7 +412,7 @@ public class Bitmap {
         return new Area(firstVisibleX, firstVisibleY, visibleWidth, visibleHeight);
     }
 
-    Point getOrigin() {
+    public Point getOrigin() {
         Area visibleArea = getVisibleArea();
 
         int originX = this.nx - visibleArea.x;
@@ -408,7 +421,7 @@ public class Bitmap {
         return new Point(originX, originY);
     }
 
-    private boolean isTransparent(int x, int y) {
+    public boolean isTransparent(int x, int y) {
         byte alpha = getAlphaAsByte(x, y);
 
         return alpha == 0;
@@ -453,5 +466,23 @@ public class Bitmap {
 
     public void setBytesPerPixel(short bytesPerPixel) {
         this.bytesPerPixel = bytesPerPixel;
+    }
+
+    public interface PixelAction {
+        void apply(int x, int y, byte red, byte green, byte blue);
+    }
+
+    public void forEachPixel(PixelAction fun) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                fun.apply(
+                        x,
+                        y,
+                        getRedAsByte(x, y),
+                        getGreenAsByte(x, y),
+                        getBlueAsByte(x, y)
+                );
+            }
+        }
     }
 }

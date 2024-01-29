@@ -35,6 +35,12 @@ import org.appland.settlers.assets.gamefiles.SoundLst;
 import org.appland.settlers.assets.gamefiles.Tex5Lbm;
 import org.appland.settlers.assets.gamefiles.Tex7Lbm;
 import org.appland.settlers.assets.gamefiles.VikZLst;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Bob;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.resources.WaveFile;
+import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.FlagType;
@@ -580,12 +586,27 @@ public class Extractor {
         generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.GENERAL_ATTACKING_WEST, 8));
 
         // Add roman military getting hit
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_AVOIDING_HIT_EAST, 8));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_AVOIDING_HIT_WEST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FLINCH_HIT_EAST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FLINCH_HIT_WEST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_GETTING_HIT_EAST, 7));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_GETTING_HIT_WEST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST, 8));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST, 6));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_EAST, 6));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_WEST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_EAST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_WEST, 7));
+
+        List<Bitmap> privateGetsHitWest = new ArrayList<>();
+
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+        privateGetsHitWest.add(ImageTransformer.makeSilhouette(
+                getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST)));
+        privateGetsHitWest.add(ImageTransformer.makeSilhouette(
+                getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST)));
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+        privateGetsHitWest.add(getImageFromResourceLocation(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST));
+
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, privateGetsHitWest);
 
         privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST, 8));
         privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesFromGameResource(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST, 8));
@@ -1046,8 +1067,8 @@ public class Extractor {
         LBMGameResource greenlandGameResource = (LBMGameResource) assetManager.loadLBMFile(fromDir + "/" + Tex5Lbm.FILENAME, defaultPalette);
         LBMGameResource winterGameResource = (LBMGameResource) assetManager.loadLBMFile(fromDir + "/" + Tex7Lbm.FILENAME, defaultPalette);
 
-        Bitmap greenlandTextureBitmap = greenlandGameResource.getLbmFile().getBitmap();
-        Bitmap winterTextureBitmap = winterGameResource.getLbmFile().getBitmap();
+        Bitmap greenlandTextureBitmap = greenlandGameResource.getLbmFile();
+        Bitmap winterTextureBitmap = winterGameResource.getLbmFile();
 
         greenlandTextureBitmap.writeToFile(greenlandDir + "/greenland-texture.png");
         winterTextureBitmap.writeToFile(winterDir + "/winter-texture.png");

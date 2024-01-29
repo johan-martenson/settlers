@@ -5,12 +5,12 @@ import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.GameResourceType;
 import org.appland.settlers.assets.AssetManager;
 import org.appland.settlers.assets.InvalidFormatException;
-import org.appland.settlers.assets.MidiFile;
-import org.appland.settlers.assets.MidiTrack;
-import org.appland.settlers.assets.WaveFile;
+import org.appland.settlers.assets.resources.MidiFile;
+import org.appland.settlers.assets.resources.MidiTrack;
+import org.appland.settlers.assets.resources.WaveFile;
 import org.appland.settlers.assets.WaveGameResource;
-import org.appland.settlers.assets.XMidiFile;
-import org.appland.settlers.assets.XMidiTrack;
+import org.appland.settlers.assets.resources.XMidiFile;
+import org.appland.settlers.assets.resources.XMidiTrack;
 import org.junit.Test;
 
 import java.io.IOException;

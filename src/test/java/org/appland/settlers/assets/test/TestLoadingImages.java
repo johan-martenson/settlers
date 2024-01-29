@@ -1,6 +1,14 @@
 package org.appland.settlers.assets.test;
 
 import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.BitmapFile;
+import org.appland.settlers.assets.resources.BitmapRLE;
+import org.appland.settlers.assets.resources.BitmapRaw;
+import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PaletteAnim;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -133,14 +141,12 @@ public class TestLoadingImages {
 
         LBMFile lbmFile = lbmGameResource.getLbmFile();
 
-        assertNotNull(lbmFile.getBitmap());
+        assertNotNull(lbmFile);
 
-        Bitmap bitmap = lbmFile.getBitmap();
-
-        assertEquals(bitmap.getWidth(), 94);
-        assertEquals(bitmap.getHeight(), 63);
-        assertEquals(bitmap.getBytesPerPixel(), 4);
-        assertEquals(bitmap.getFormat(), TextureFormat.BGRA);
+        assertEquals(lbmFile.getWidth(), 94);
+        assertEquals(lbmFile.getHeight(), 63);
+        assertEquals(lbmFile.getBytesPerPixel(), 4);
+        assertEquals(lbmFile.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());
         assertNotNull(lbmFile.getPaletteAnimList());
@@ -241,14 +247,10 @@ public class TestLoadingImages {
 
         LBMFile lbmFile = lbmGameResource.getLbmFile();
 
-        assertNotNull(lbmFile.getBitmap());
-
-        Bitmap bitmap = lbmFile.getBitmap();
-
-        assertEquals(bitmap.getWidth(), 256);
-        assertEquals(bitmap.getHeight(), 256);
-        assertEquals(bitmap.getBytesPerPixel(), 4);
-        assertEquals(bitmap.getFormat(), TextureFormat.BGRA);
+        assertEquals(lbmFile.getWidth(), 256);
+        assertEquals(lbmFile.getHeight(), 256);
+        assertEquals(lbmFile.getBytesPerPixel(), 4);
+        assertEquals(lbmFile.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());
         assertNotNull(lbmFile.getPaletteAnimList());

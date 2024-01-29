@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Bitmap;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;

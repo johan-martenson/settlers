@@ -1,26 +1,15 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
+
+import org.appland.settlers.assets.TextureFormat;
 
 import java.util.List;
 
-public class LBMFile {
-    private final Bitmap bitmap;
+public class LBMFile extends Bitmap {
     private List<PaletteAnim> paletteAnimList;
     private long length;
 
-    public LBMFile(Bitmap bitmap) {
-        this.bitmap = bitmap;
-    }
-
-    public void setPalette(Palette palette) {
-        this.bitmap.setPalette(palette);
-    }
-
-    public Bitmap getBitmap() {
-        return bitmap;
-    }
-
-    public Palette getPalette() {
-        return bitmap.getPalette();
+    public LBMFile(int width, int height, Palette defaultPalette, TextureFormat wantedTextureFormat) {
+        super(width, height, defaultPalette, wantedTextureFormat);
     }
 
     public void setAnimPalettes(List<PaletteAnim> paletteAnimList) {

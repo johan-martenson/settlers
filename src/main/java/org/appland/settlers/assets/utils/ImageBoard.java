@@ -1,5 +1,8 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.utils;
 
+import org.appland.settlers.assets.TextureFormat;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Palette;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
@@ -54,8 +57,8 @@ public class ImageBoard {
         int height = 0;
 
         for (ImageOnBoard imageOnBoard : images.values()) {
-            width = Math.max(width, imageOnBoard.x + imageOnBoard.image.width);
-            height = Math.max(height, imageOnBoard.y + imageOnBoard.image.height);
+            width = Math.max(width, imageOnBoard.x + imageOnBoard.image.getWidth());
+            height = Math.max(height, imageOnBoard.y + imageOnBoard.image.getHeight());
         }
 
         for (ImageSeries oneImageSeries : imageSeries.values()) {
@@ -118,10 +121,10 @@ public class ImageBoard {
 
         jsonImageLocation.put("x", imageOnBoard.x);
         jsonImageLocation.put("y", imageOnBoard.y);
-        jsonImageLocation.put("width", image.width);
-        jsonImageLocation.put("height", image.height);
-        jsonImageLocation.put("offsetX", image.nx);
-        jsonImageLocation.put("offsetY", image.ny);
+        jsonImageLocation.put("width", image.getWidth());
+        jsonImageLocation.put("height", image.getHeight());
+        jsonImageLocation.put("offsetX", image.getNx());
+        jsonImageLocation.put("offsetY", image.getNy());
 
         return jsonImageLocation;
     }
@@ -188,11 +191,11 @@ public class ImageBoard {
 
             Bitmap image = images.get(0);
 
-            this.width = image.width;
-            this.height = image.height;
+            this.width = image.getWidth();
+            this.height = image.getHeight();
 
-            this.offsetX = image.nx;
-            this.offsetY = image.ny;
+            this.offsetX = image.getNx();
+            this.offsetY = image.getNy();
         }
     }
 
@@ -205,7 +208,7 @@ public class ImageBoard {
         int currentWidth = 0;
 
         for (ImageOnBoard imageOnBoard : images.values()) {
-            currentWidth = Math.max(currentWidth, imageOnBoard.image.width + imageOnBoard.x);
+            currentWidth = Math.max(currentWidth, imageOnBoard.image.getWidth() + imageOnBoard.x);
         }
 
         for (ImageSeries oneImageSeries : imageSeries.values()) {
@@ -224,7 +227,7 @@ public class ImageBoard {
         int currentHeight = 0;
 
         for (ImageOnBoard imageOnBoard : images.values()) {
-            currentHeight = Math.max(currentHeight, imageOnBoard.image.height + imageOnBoard.y);
+            currentHeight = Math.max(currentHeight, imageOnBoard.image.getHeight() + imageOnBoard.y);
         }
 
         for (ImageSeries oneImageSeries : imageSeries.values()) {

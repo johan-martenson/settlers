@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Bitmap;
+
 public class ImageWithShadow {
     public final Bitmap image;
     public final Bitmap shadowImage;

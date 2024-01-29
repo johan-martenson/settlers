@@ -1,4 +1,4 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
 
 public class Timbre {
     final short patch; // uint 8

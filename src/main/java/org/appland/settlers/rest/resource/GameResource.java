@@ -22,6 +22,7 @@ public class GameResource {
     private final Utils utils;
     private final Map<Player, ComputerPlayer> computerPlayers;
     private boolean othersCanJoin;
+    private GameSpeed gameSpeed;
 
     GameResource(Utils utils) {
         players = new ArrayList<>();
@@ -34,6 +35,8 @@ public class GameResource {
         status = GameStatus.NOT_STARTED;
 
         othersCanJoin = true;
+
+        gameSpeed = GameSpeed.NORMAL;
     }
 
     void setPlayers(List<Player> players) {
@@ -132,5 +135,13 @@ public class GameResource {
 
     public boolean isPaused() {
         return status == GameStatus.PAUSED;
+    }
+
+    public void setGameSpeed(GameSpeed gameSpeed) {
+        this.gameSpeed = gameSpeed;
+    }
+
+    public GameSpeed getGameSpeed() {
+        return gameSpeed;
     }
 }

@@ -1,5 +1,6 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
 
+import org.appland.settlers.assets.Sound;
 import org.appland.settlers.utils.DataOutputStreamLittleEndian;
 
 import java.io.BufferedOutputStream;

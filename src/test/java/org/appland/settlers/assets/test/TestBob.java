@@ -1,6 +1,9 @@
 package org.appland.settlers.assets.test;
 
 import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.resources.Bob;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.junit.Test;
 
 import java.io.IOException;

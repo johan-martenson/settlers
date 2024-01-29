@@ -1,14 +1,14 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.Bitmap;
-import org.appland.settlers.assets.Bob;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.BodyType;
 import org.appland.settlers.assets.CompassDirection;
-import org.appland.settlers.assets.ImageBoard;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.NormalizedImageList;
-import org.appland.settlers.assets.Palette;
-import org.appland.settlers.assets.PlayerBitmap;
+import org.appland.settlers.assets.utils.NormalizedImageList;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.WorkerAction;
@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.assets.BodyType.FAT;
-import static org.appland.settlers.assets.ImageBoard.LayoutDirection.COLUMN;
-import static org.appland.settlers.assets.ImageBoard.LayoutDirection.ROW;
+import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.COLUMN;
+import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 
 public class WorkerImageCollection {
     private final String name;

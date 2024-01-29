@@ -1,5 +1,7 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
 
+import org.appland.settlers.assets.InvalidFormatException;
+import org.appland.settlers.assets.RGBColor;
 import org.appland.settlers.utils.StreamReader;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
 
 import org.appland.settlers.utils.StreamReader;
 

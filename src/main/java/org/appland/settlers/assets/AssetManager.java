@@ -1,5 +1,19 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.BitmapFile;
+import org.appland.settlers.assets.resources.BitmapRLE;
+import org.appland.settlers.assets.resources.BitmapRaw;
+import org.appland.settlers.assets.resources.Bob;
+import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.MidiFile;
+import org.appland.settlers.assets.resources.MidiTrack;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PaletteAnim;
+import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.resources.WaveFile;
+import org.appland.settlers.assets.resources.XMidiFile;
+import org.appland.settlers.assets.resources.XMidiTrack;
 import org.appland.settlers.utils.ByteArrayReader;
 import org.appland.settlers.utils.ByteReader;
 import org.appland.settlers.utils.StreamReader;
@@ -1631,7 +1645,7 @@ public class AssetManager {
         short mask = 0;
         boolean headerRead = false;
 
-        Bitmap bitmap = null;
+        LBMFile lbmFile = null;
         Palette palette = null;
 
         /* Read sections of the file until it's done */
@@ -1676,7 +1690,8 @@ public class AssetManager {
                     throw new InvalidFormatException("Compression must not be greater than 1. Is " + compression);
                 }
 
-                bitmap = new Bitmap(width, height, defaultPalette, wantedTextureFormat);
+                //bitmap = new Bitmap(width, height, defaultPalette, wantedTextureFormat);
+                lbmFile = new LBMFile(width, height, defaultPalette, wantedTextureFormat);
 
                 headerRead = true;
             } else if (chunkId.equals("CRNG")) {
@@ -1715,7 +1730,7 @@ public class AssetManager {
                         for (int x = 0; x < width; x++) {
                             short color = streamReader.getUint8();
 
-                            bitmap.setPixelByColorIndex(x, y, color);
+                            lbmFile.setPixelByColorIndex(x, y, color);
                         }
                     }
                 } else {
@@ -1739,7 +1754,7 @@ public class AssetManager {
 
                                 chunkLength = chunkLength - 1;
 
-                                bitmap.setPixelByColorIndex(x++, y, color);
+                                lbmFile.setPixelByColorIndex(x++, y, color);
 
                                 if (x >= width) {
                                     y = y + 1;
@@ -1754,7 +1769,7 @@ public class AssetManager {
                             chunkLength = chunkLength - 1;
 
                             for (int j = 0; j < count; j++) {
-                                bitmap.setPixelByColorIndex(x++, y, color);
+                                lbmFile.setPixelByColorIndex(x++, y, color);
 
                                 if (x >= width) {
                                     y = y + 1;
@@ -1768,8 +1783,6 @@ public class AssetManager {
                 streamReader.skip((int)chunkLength);
             }
         }
-
-        LBMFile lbmFile = new LBMFile(bitmap);
 
         lbmFile.setAnimPalettes(paletteAnimList);
         lbmFile.setLength(length);

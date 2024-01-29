@@ -1,4 +1,8 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
+
+import org.appland.settlers.assets.ColorBlock;
+import org.appland.settlers.assets.TextureFormat;
+import org.appland.settlers.assets.Unsigned;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

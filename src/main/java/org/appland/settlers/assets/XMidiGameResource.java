@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.XMidiTrack;
+
 import java.util.List;
 
 import static org.appland.settlers.assets.GameResourceType.XMIDI_SOUND;

@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.BitmapRaw;
+
 public class BitmapRawResource implements GameResource {
     private final BitmapRaw bitmap;
 

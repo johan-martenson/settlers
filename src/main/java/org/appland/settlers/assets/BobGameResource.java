@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Bob;
+
 public class BobGameResource implements GameResource {
     private final Bob bob;
 

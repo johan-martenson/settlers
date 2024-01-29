@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Palette;
+
 import static org.appland.settlers.assets.GameResourceType.PALETTE_RESOURCE;
 
 public class PaletteResource implements GameResource {

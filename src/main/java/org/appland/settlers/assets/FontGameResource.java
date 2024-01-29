@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.PlayerBitmap;
+
 import java.util.Map;
 
 public class FontGameResource implements GameResource {

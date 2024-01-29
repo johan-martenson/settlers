@@ -1,4 +1,6 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
+
+import org.appland.settlers.assets.TextureFormat;
 
 public class BitmapFile extends Bitmap {
 
@@ -19,71 +21,48 @@ public class BitmapFile extends Bitmap {
         super(width, height, palette, format);
     }
 
-    public BitmapFile setFileSize(long fileSize) {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
-
-        return this;
     }
 
-    public BitmapFile setReserved(long reserved) {
+    public void setReserved(long reserved) {
         this.reserved = reserved;
-
-        return this;
     }
 
-    public BitmapFile setPixelOffset(long pixelOffset) {
+    public void setPixelOffset(long pixelOffset) {
         this.pixelOffset = pixelOffset;
-
-        return this;
     }
 
-    public BitmapFile setHeaderSize(long headerSize) {
+    public void setHeaderSize(long headerSize) {
         this.headerSize = headerSize;
-
-        return this;
     }
 
-    public BitmapFile setPlanes(short planes) {
+    public void setPlanes(short planes) {
         this.planes = planes;
-
-        return this;
     }
 
-
-    public BitmapFile setCompression(long compression) {
+    public void setCompression(long compression) {
         this.compression = compression;
-
-        return this;
     }
 
-    public BitmapFile setSize(long size) {
+    public void setSize(long size) {
         this.size = size;
-
-        return this;
     }
 
-    public BitmapFile setXPixelsPerM(int xPixelsPerM) {
+    public void setXPixelsPerM(int xPixelsPerM) {
         this.xPixelsPerM = xPixelsPerM;
-
-        return this;
     }
 
-    public BitmapFile setYPixelsPerM(int yPixelsPerM) {
+    public void setYPixelsPerM(int yPixelsPerM) {
         this.yPixelsPerM = yPixelsPerM;
-
-        return this;
     }
 
-    public BitmapFile setColorUsed(int colorUsed) {
+    public void setColorUsed(int colorUsed) {
         this.colorUsed = colorUsed;
-
-        return this;
     }
 
-    public BitmapFile setColorImp(int clrimp) {
+    public void setColorImp(int clrimp) {
         this.clrimp = clrimp;
-
-        return this;
     }
 
     public long getFileSize() {

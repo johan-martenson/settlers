@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.WaveFile;
+
 import static java.lang.String.format;
 import static org.appland.settlers.assets.GameResourceType.WAVE_SOUND;
 

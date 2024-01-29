@@ -1,6 +1,9 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.json.simple.JSONObject;
 
 import java.awt.Point;

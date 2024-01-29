@@ -7,6 +7,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.rest.resource.GameResource;
+import org.appland.settlers.rest.resource.GameSpeed;
 import org.appland.settlers.utils.CumulativeDuration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class GameTicker {
 
+    private static final int MIN_GAME_TICK_LENGTH = 100;
     private static final int COMPUTER_PLAYER_FREQUENCY = 100;
     private static final String FULL_TICK_TIME = "GameTicker.tick.total";
 
@@ -69,8 +71,15 @@ public class GameTicker {
             }
 
             for (GameResource game : games) {
-
                 if (game.isPaused()) {
+                    continue;
+                }
+
+                if (game.getGameSpeed() == GameSpeed.NORMAL && counter % 2 != 0) {
+                    continue;
+                }
+
+                if (game.getGameSpeed() == GameSpeed.SLOW && counter % 4 != 0) {
                     continue;
                 }
 
@@ -79,7 +88,6 @@ public class GameTicker {
                 Collection<ComputerPlayer> computerPlayers = game.getComputerPlayers();
 
                 synchronized (map) {
-
                     try {
                         map.stepTime();
                     } catch (Throwable e) {
@@ -180,7 +188,7 @@ public class GameTicker {
                 counter = counter + 1;
             }
         },
-        200,200, TimeUnit.MILLISECONDS);
+        MIN_GAME_TICK_LENGTH,MIN_GAME_TICK_LENGTH, TimeUnit.MILLISECONDS);
     }
 
     public void startGame(GameResource gameResource) {

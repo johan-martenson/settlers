@@ -50,11 +50,11 @@ public class CbobRomBobsLst {
     public static final int SERGEANT_ATTACKING_WEST = 420;
     public static final int OFFICER_ATTACKING_WEST = 428;
     public static final int GENERAL_ATTACKING_WEST = 436;
-    public static final int PRIVATE_AVOIDING_HIT_EAST = 670;
+    public static final int PRIVATE_SHIELD_UP_EAST = 670;
     public static final int PRIVATE_FIRST_CLASS_GETTING_HIT_EAST = 705;
     public static final int SERGEANT_GETTING_HIT_EAST = 728;
-    public static final int PRIVATE_GETTING_HIT_EAST = 684;
-    public static final int PRIVATE_FLINCH_HIT_EAST = 678;
+    public static final int PRIVATE_JUMP_BACK_EAST = 684;
+    public static final int PRIVATE_STAND_ASIDE_EAST = 678;
     public static final int PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST = 691;
     public static final int PRIVATE_FIRST_CLASS_FLINCH_HIT_EAST = 699;
     public static final int SERGEANT_AVOIDING_HIT_EAST = 712;
@@ -65,9 +65,9 @@ public class CbobRomBobsLst {
     public static final int GENERAL_AVOIDING_HIT_EAST = 760;
     public static final int GENERAL_FLINCH_HIT_EAST = 768;
     public static final int GENERAL_GETTING_HIT_EAST = 776;
-    public static final int PRIVATE_AVOIDING_HIT_WEST = 784;
-    public static final int PRIVATE_FLINCH_HIT_WEST = 790;
-    public static final int PRIVATE_GETTING_HIT_WEST = 796;
+    public static final int PRIVATE_SHIELD_UP_WEST = 784;
+    public static final int PRIVATE_STAND_ASIDE_WEST = 790;
+    public static final int PRIVATE_JUMP_BACK_WEST = 796;
     public static final int PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST = 803;
     public static final int PRIVATE_FIRST_CLASS_FLINCH_HIT_WEST = 811;
     public static final int PRIVATE_FIRST_CLASS_GETTING_HIT_WEST = 817;

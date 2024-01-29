@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.BitmapRLE;
+
 public class BitmapRLEResource implements GameResource {
     private final BitmapRLE bitmap;
 

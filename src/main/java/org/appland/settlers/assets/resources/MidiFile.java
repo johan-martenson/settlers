@@ -1,4 +1,6 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.assets.resources;
+
+import org.appland.settlers.assets.Sound;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,10 +4,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 public class Area {
-    final int x;
-    final int y;
-    final int width;
-    final int height;
+    public final int x;
+    public final int y;
+    public final int width;
+    public final int height;
 
     public Area(int x, int y, int width, int height) {
         this.x = x;

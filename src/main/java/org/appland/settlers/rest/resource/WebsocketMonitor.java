@@ -86,6 +86,31 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case SET_GAME_SPEED: {
+                GameSpeed gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
+
+                GameResource game = (GameResource) session.getUserProperties().get("GAME");
+
+                game.setGameSpeed(gameSpeed);
+
+                JSONObject jsonNewTick = new JSONObject();
+
+                int tick = switch (gameSpeed) {
+                    case FAST -> 100;
+                    case NORMAL -> 200;
+                    case SLOW -> 400;
+                };
+
+                jsonNewTick.put("tick", tick);
+
+                game.getPlayers().forEach(receiver -> {
+                    if (playerToSession.containsKey(receiver)) {
+                        sendToPlayer(jsonNewTick, receiver);
+                    }
+                });
+            }
+            break;
+
             case GET_DEFENSE_FROM_SURROUNDING_BUILDINGS: {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 

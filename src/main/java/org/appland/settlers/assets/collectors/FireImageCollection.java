@@ -1,10 +1,11 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.Bitmap;
+import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.FireSize;
-import org.appland.settlers.assets.ImageBoard;
-import org.appland.settlers.assets.NormalizedImageList;
-import org.appland.settlers.assets.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageTransformer;
+import org.appland.settlers.assets.utils.NormalizedImageList;
+import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.Size;
 import org.json.simple.JSONObject;
 
@@ -17,7 +18,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.assets.ImageBoard.LayoutDirection.ROW;
+import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 
 public class FireImageCollection {
     private final Map<FireSize, List<Bitmap>> fireMap;
@@ -45,7 +46,6 @@ public class FireImageCollection {
 
         Point cursor = new Point(0, 0);
         for (FireSize fireSize : FireSize.values()) {
-
             cursor.x = 0;
 
             JSONObject jsonFireSize = new JSONObject();

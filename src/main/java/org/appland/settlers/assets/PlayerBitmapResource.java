@@ -1,5 +1,7 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.PlayerBitmap;
+
 import static org.appland.settlers.assets.GameResourceType.PLAYER_BITMAP_RESOURCE;
 
 public class PlayerBitmapResource implements GameResource {

@@ -1,5 +1,13 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.BitmapRLE;
+import org.appland.settlers.assets.resources.BitmapRaw;
+import org.appland.settlers.assets.resources.Bob;
+import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.resources.WaveFile;
 import org.appland.settlers.utils.ByteArrayReader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -419,9 +427,7 @@ public class Reader {
                         LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
                         LBMFile lbmFile = lbmGameResource.getLbmFile();
 
-                        Bitmap lbmBitmap = lbmFile.getBitmap();
-
-                        lbmBitmap.writeToFile(outFile);
+                        lbmFile.writeToFile(outFile);
 
                         break;
 
