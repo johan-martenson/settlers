@@ -2,6 +2,7 @@ package org.appland.settlers.assets.utils;
 
 import org.appland.settlers.assets.resources.Bitmap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageTransformer {
@@ -17,9 +18,7 @@ public class ImageTransformer {
 
         bitmap.forEachPixel((x, y, red, green, blue) -> {
             if (!bitmap.isTransparent(x, y)) {
-                silhouette.setPixelValue(x, y, (byte)0xF, (byte)0xF, (byte)0xF, (byte)0xF);
-            } else {
-                silhouette.setPixelValue(x, y, (byte)0x0, (byte)0x0, (byte)0x0, (byte)0x0);
+                silhouette.setPixelValue(x, y, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF);
             }
         });
 
@@ -30,5 +29,22 @@ public class ImageTransformer {
         NormalizedImageList normalizedImageList = new NormalizedImageList(images);
 
         return normalizedImageList.getNormalizedImages();
+    }
+
+    public static List<Bitmap> makeGetHitAnimation(Bitmap image) {
+        Bitmap whiteSilhouette = makeSilhouette(image);
+
+        List<Bitmap> getHitAnimation = new ArrayList<>();
+
+        getHitAnimation.add(image);
+        getHitAnimation.add(image);
+        getHitAnimation.add(image);
+        getHitAnimation.add(whiteSilhouette);
+        getHitAnimation.add(whiteSilhouette);
+        getHitAnimation.add(whiteSilhouette);
+        getHitAnimation.add(image);
+        getHitAnimation.add(image);
+
+        return getHitAnimation;
     }
 }
