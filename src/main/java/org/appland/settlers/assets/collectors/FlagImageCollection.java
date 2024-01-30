@@ -46,8 +46,8 @@ public class FlagImageCollection {
         JSONObject jsonImageAtlas = new JSONObject();
 
         Arrays.stream(Nation.values()).forEach(nation -> {
-
             JSONObject jsonNationInfo = new JSONObject();
+
             jsonImageAtlas.put(nation.name().toUpperCase(), jsonNationInfo);
 
             Arrays.stream(FlagType.values()).forEach(flagType -> {
@@ -67,6 +67,7 @@ public class FlagImageCollection {
             });
         });
 
+        // Write the image for the image atlas
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-flags.png");
 
         // Write a JSON file that specifies where each image is in pixels

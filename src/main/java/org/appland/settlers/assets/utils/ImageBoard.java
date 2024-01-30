@@ -158,10 +158,10 @@ public class ImageBoard {
         return jsonImages;
     }
 
-    public void placeImageBottom(Bitmap image) {
+    public JSONObject placeImageBottom(Bitmap image) {
         int currentMaxY = this.getCurrentHeight();
 
-        placeImage(image, 0, currentMaxY);
+        return placeImage(image, 0, currentMaxY);
     }
 
     public JSONObject placeImageSeriesBottom(List<Bitmap> images) {
