@@ -20,12 +20,25 @@ public class ImageBoard {
         imageSeries = new HashMap<>();
     }
 
-    public void placeImage(Bitmap image, Point point) {
-        images.put(image, new ImageOnBoard(image, point.x, point.y));
+    public JSONObject placeImage(Bitmap image, Point point) {
+        return placeImage(image, point.x, point.y);
     }
 
-    public void placeImage(Bitmap image, int x, int y) {
+    public JSONObject placeImage(Bitmap image, int x, int y) {
         images.put(image, new ImageOnBoard(image, x, y));
+
+        ImageOnBoard imageOnBoard = images.get(image);
+
+        JSONObject jsonImageLocation = new JSONObject();
+
+        jsonImageLocation.put("x", imageOnBoard.x);
+        jsonImageLocation.put("y", imageOnBoard.y);
+        jsonImageLocation.put("width", image.getWidth());
+        jsonImageLocation.put("height", image.getHeight());
+        jsonImageLocation.put("offsetX", image.getNx());
+        jsonImageLocation.put("offsetY", image.getNy());
+
+        return jsonImageLocation;
     }
 
     public JSONObject placeImageSeries(List<Bitmap> images, Point position, LayoutDirection layoutDirection) {

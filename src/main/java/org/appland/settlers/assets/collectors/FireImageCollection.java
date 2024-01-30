@@ -1,11 +1,10 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.FireSize;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
-import org.appland.settlers.assets.utils.NormalizedImageList;
-import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.Size;
 import org.json.simple.JSONObject;
 
@@ -14,11 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 
 public class FireImageCollection {
     private final Map<FireSize, List<Bitmap>> fireMap;
@@ -44,51 +42,36 @@ public class FireImageCollection {
         jsonImageAtlas.put("fires", jsonFireAnimations);
         jsonImageAtlas.put("burntDown", jsonBurntDownImages);
 
-        Point cursor = new Point(0, 0);
-        for (FireSize fireSize : FireSize.values()) {
-            cursor.x = 0;
+        Arrays.stream(FireSize.values())
+                .forEach(fireSize -> {
+                    JSONObject jsonFireSize = new JSONObject();
 
-            JSONObject jsonFireSize = new JSONObject();
+                    jsonFireAnimations.put(fireSize.name().toUpperCase(), jsonFireSize);
 
-            jsonFireAnimations.put(fireSize.name().toUpperCase(), jsonFireSize);
+                    // Fire images
+                    jsonFireSize.put("image",
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(fireMap.get(fireSize))));
 
-            // Fire images
-            List<Bitmap> images = this.fireMap.get(fireSize);
-            NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-            List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+                    // Fire shadow images
+                    if (fireShadowMap.containsKey(fireSize)) {
+                        jsonFireSize.put("image",
+                                imageBoard.placeImageSeriesBottom(
+                                        ImageTransformer.normalizeImageSeries(fireShadowMap.get(fireSize))));
+                    }
+                });
 
-            imageBoard.placeImageSeries(normalizedImages, cursor, ROW);
-
-            jsonFireSize.put("image", imageBoard.imageSeriesLocationToJson(normalizedImages));
-
-            cursor.x = cursor.x + normalizedImageList.size() * normalizedImageList.getImageWidth();
-
-            // Fire shadow images
-            if (fireShadowMap.containsKey(fireSize)) {
-                List<Bitmap> shadowImages = this.fireShadowMap.get(fireSize);
-                NormalizedImageList normalizedShadowImageList = new NormalizedImageList(shadowImages);
-                List<Bitmap> normalizedShadowImages = normalizedShadowImageList.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedShadowImages, cursor, ROW);
-
-                jsonFireSize.put("shadowImage", imageBoard.imageSeriesLocationToJson(normalizedShadowImages));
-            }
-
-            cursor.y = cursor.y + normalizedImageList.getImageHeight();
-        }
-
-        cursor.x = 0;
+        Point cursor = new Point(0, imageBoard.getCurrentHeight());
         for (Map.Entry<Size, Bitmap> entry : burntDownMap.entrySet()) {
             Size size = entry.getKey();
             Bitmap image = entry.getValue();
 
-            imageBoard.placeImage(image, cursor);
+            jsonBurntDownImages.put(
+                    size.name().toUpperCase(),
+                    imageBoard.placeImage(image, cursor)
+            );
 
-            JSONObject jsonBurntDownImage = imageBoard.imageLocationToJson(image);
-
-            jsonBurntDownImages.put(size.name().toUpperCase(), jsonBurntDownImage);
-
-            cursor.x = cursor.x + image.getWidth();
+            cursor.x += image.getWidth();
         }
 
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-fire.png");
