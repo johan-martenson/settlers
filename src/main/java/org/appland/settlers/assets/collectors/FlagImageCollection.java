@@ -1,19 +1,19 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.utils.NormalizedImageList;
+import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.FlagType;
 import org.json.simple.JSONObject;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -45,51 +45,27 @@ public class FlagImageCollection {
 
         JSONObject jsonImageAtlas = new JSONObject();
 
-        Point cursor = new Point(0, 0);
-        for (Nation nation : Nation.values()) {
+        Arrays.stream(Nation.values()).forEach(nation -> {
 
             JSONObject jsonNationInfo = new JSONObject();
-
             jsonImageAtlas.put(nation.name().toUpperCase(), jsonNationInfo);
 
-            cursor.x = 0;
-
-            // Add each flag type for the nation
-            for (FlagType flagType : FlagType.values()) {
-
+            Arrays.stream(FlagType.values()).forEach(flagType -> {
                 JSONObject jsonFlagType = new JSONObject();
 
                 jsonNationInfo.put(flagType.name().toUpperCase(), jsonFlagType);
 
-                // Flag image
-                List<Bitmap> images = this.flagMap.get(nation).get(flagType);
-                NormalizedImageList normalizedFlagImageList = new NormalizedImageList(images);
-                List<Bitmap> normalizedFlagImages = normalizedFlagImageList.getNormalizedImages();
+                jsonFlagType.put(
+                        "images",
+                        imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(flagMap.get(nation).get(flagType))));
 
-                imageBoard.placeImageSeries(normalizedFlagImages, cursor, ImageBoard.LayoutDirection.ROW);
-
-
-                JSONObject jsonFlagInfo = imageBoard.imageSeriesLocationToJson(normalizedFlagImages);
-
-                jsonFlagType.put("images", jsonFlagInfo);
-
-                cursor.x = cursor.x + normalizedFlagImageList.size() * normalizedFlagImageList.getImageWidth();
-
-                // Flag shadow image
-                List<Bitmap> normalFlagShadowImages = this.flagShadowMap.get(nation).get(flagType);
-                NormalizedImageList normalizedFlagShadowImageList = new NormalizedImageList(normalFlagShadowImages);
-                List<Bitmap> normalizedFlagShadowImages = normalizedFlagShadowImageList.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedFlagShadowImages, cursor, ImageBoard.LayoutDirection.ROW);
-
-                JSONObject jsonFlagShadowInfo = imageBoard.imageSeriesLocationToJson(normalizedFlagShadowImages);
-
-                jsonFlagType.put("shadows", jsonFlagShadowInfo);
-
-                cursor.x = 0;
-                cursor.y = cursor.y + Math.max(normalizedFlagImageList.getImageHeight(), normalizedFlagShadowImageList.getImageHeight());
-            }
-        }
+                jsonFlagType.put(
+                        "shadows",
+                        imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(flagShadowMap.get(nation).get(flagType))));
+            });
+        });
 
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-flags.png");
 
