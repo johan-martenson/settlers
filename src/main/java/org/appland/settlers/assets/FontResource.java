@@ -4,10 +4,10 @@ import org.appland.settlers.assets.resources.PlayerBitmap;
 
 import java.util.Map;
 
-public class FontGameResource implements GameResource {
+public class FontResource extends GameResource {
     private final Map<String, PlayerBitmap> letterMap;
 
-    public FontGameResource(Map<String, PlayerBitmap> letterMap) {
+    public FontResource(Map<String, PlayerBitmap> letterMap) {
         this.letterMap = letterMap;
     }
 

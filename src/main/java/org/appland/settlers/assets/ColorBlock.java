@@ -11,7 +11,7 @@ public class ColorBlock {
     public int size;
     public byte[] pixels;
 
-    static ColorBlock readColorBlockFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
+    public static ColorBlock readColorBlockFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
         ColorBlock colorBlock = new ColorBlock();
 
         colorBlock.id = streamReader.getUint16();

@@ -16,6 +16,10 @@ import org.appland.settlers.assets.collectors.StonesImageCollection;
 import org.appland.settlers.assets.collectors.TreeImageCollection;
 import org.appland.settlers.assets.collectors.UIElementsImageCollection;
 import org.appland.settlers.assets.collectors.WorkerImageCollection;
+import org.appland.settlers.assets.decoders.BobDecoder;
+import org.appland.settlers.assets.decoders.LbmDecoder;
+import org.appland.settlers.assets.decoders.LstDecoder;
+import org.appland.settlers.assets.decoders.PaletteDecoder;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
@@ -116,7 +120,6 @@ public class Extractor {
     @Option(name = "--to-dir", usage = "Directory to extract assets into")
     static String toDir;
 
-    private final AssetManager assetManager;
     private Palette defaultPalette;
 
     public static void main(String[] args) throws IOException, InvalidHeaderException, InvalidFormatException, UnknownResourceTypeException, CmdLineException {
@@ -150,6 +153,8 @@ public class Extractor {
         extractor.populateAudio(fromDir, toDir);
     }
 
+    // TODO: extract icons from IO.DAT
+
     private void populateAudio(String fromDir, String toDir) throws IOException, InvalidFormatException, UnknownResourceTypeException {
 
         // Write the music atlas
@@ -173,9 +178,7 @@ public class Extractor {
         System.out.println("ACTION: place the music files in audio/song[0-9].mp3");
 
         // Extract each individual sound
-        assetManager.debug = true;
-
-        List<GameResource> gameResources = assetManager.loadLstFile(fromDir + "/" + SoundLst.FILENAME, defaultPalette);
+        List<GameResource> gameResources = LstDecoder.loadLstFile(fromDir + "/" + SoundLst.FILENAME, defaultPalette);
 
         // Save each wave file, so we can try to figure out when they are used
         for (int i = 0; i < gameResources.size(); i++) {
@@ -249,7 +252,7 @@ public class Extractor {
     }
 
     private void populateShips(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidFormatException {
-        List<GameResource> bootBobsLst = assetManager.loadLstFile(fromDir + "/" + BootBobsLst.FILENAME, defaultPalette);
+        List<GameResource> bootBobsLst = LstDecoder.loadLstFile(fromDir + "/" + BootBobsLst.FILENAME, defaultPalette);
 
         ShipImageCollection shipImageCollection = new ShipImageCollection();
 
@@ -306,10 +309,10 @@ public class Extractor {
     }
 
     private void populateBorders(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidFormatException {
-        List<GameResource> mbobAfrBobsLst = assetManager.loadLstFile(fromDir + "/" + MbobAfrBobsLst.FILENAME, defaultPalette);
-        List<GameResource> mbobJapBobsLst = assetManager.loadLstFile(fromDir + "/" + MbobJapBobsLst.FILENAME, defaultPalette);
-        List<GameResource> mbobRomBobsLst = assetManager.loadLstFile(fromDir + "/" + MbobRomBobsLst.FILENAME, defaultPalette);
-        List<GameResource> mbobVikBobsLst = assetManager.loadLstFile(fromDir + "/" + MbobVikBobsLst.FILENAME, defaultPalette);
+        List<GameResource> mbobAfrBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MbobAfrBobsLst.FILENAME, defaultPalette);
+        List<GameResource> mbobJapBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MbobJapBobsLst.FILENAME, defaultPalette);
+        List<GameResource> mbobRomBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MbobRomBobsLst.FILENAME, defaultPalette);
+        List<GameResource> mbobVikBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MbobVikBobsLst.FILENAME, defaultPalette);
 
         BorderImageCollector borderImageCollector = new BorderImageCollector();
 
@@ -330,10 +333,10 @@ public class Extractor {
 
     private void populateFlags(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
-        List<GameResource> afrZLst = assetManager.loadLstFile(fromDir + "/" + AfrZLst.FILENAME, defaultPalette);
-        List<GameResource> japZLst = assetManager.loadLstFile(fromDir + "/" + JapZLst.FILENAME, defaultPalette);
-        List<GameResource> romZLst = assetManager.loadLstFile(fromDir + "/" + RomZLst.FILENAME, defaultPalette);
-        List<GameResource> vikZLst = assetManager.loadLstFile(fromDir + "/" + VikZLst.FILENAME, defaultPalette);
+        List<GameResource> afrZLst = LstDecoder.loadLstFile(fromDir + "/" + AfrZLst.FILENAME, defaultPalette);
+        List<GameResource> japZLst = LstDecoder.loadLstFile(fromDir + "/" + JapZLst.FILENAME, defaultPalette);
+        List<GameResource> romZLst = LstDecoder.loadLstFile(fromDir + "/" + RomZLst.FILENAME, defaultPalette);
+        List<GameResource> vikZLst = LstDecoder.loadLstFile(fromDir + "/" + VikZLst.FILENAME, defaultPalette);
 
         FlagImageCollection flagImageCollection = new FlagImageCollection();
 
@@ -384,19 +387,19 @@ public class Extractor {
     private void populateWorkers(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load worker image parts */
-        List<GameResource> jobsBobList = assetManager.loadLstFile(fromDir + "/" + JobsBob.FILENAME, defaultPalette);
-        List<GameResource> map0ZLst = assetManager.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
-        List<GameResource> cbobRomBobsLst = assetManager.loadLstFile(fromDir + "/" + CbobRomBobsLst.FILENAME, defaultPalette);
+        List<GameResource> jobsBobList = LstDecoder.loadLstFile(fromDir + "/" + JobsBob.FILENAME, defaultPalette);
+        List<GameResource> map0ZLst = LstDecoder.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
+        List<GameResource> cbobRomBobsLst = LstDecoder.loadLstFile(fromDir + "/" + CbobRomBobsLst.FILENAME, defaultPalette);
 
         if (jobsBobList.size() != 1) {
             throw new RuntimeException("Wrong size of game resources in bob file. Must be 1, but was: " + jobsBobList.size());
         }
 
-        if (! (jobsBobList.get(0) instanceof BobGameResource)) {
+        if (! (jobsBobList.get(0) instanceof BobResource)) {
             throw new RuntimeException("Element must be Bob game resource. Was: " + jobsBobList.get(0).getClass().getName());
         }
 
-        BobGameResource jobsBobGameResource = (BobGameResource) jobsBobList.get(0);
+        BobResource jobsBobResource = (BobResource) jobsBobList.get(0);
 
         /* Construct the worker details map */
         Map<JobType, WorkerDetails> workerDetailsMap = new EnumMap<>(JobType.class);
@@ -445,7 +448,7 @@ public class Extractor {
         workerDetailsMap.put(JobType.CHAR_BURNER, new WorkerDetails(false, JobsBob.CHAR_BURNER_BOB_ID));
 
         /* Composite the worker images and animations */
-        Map<JobType, RenderedWorker> renderedWorkers = assetManager.renderWorkerImages(jobsBobGameResource.getBob(), workerDetailsMap);
+        Map<JobType, RenderedWorker> renderedWorkers = BobDecoder.renderWorkerImages(jobsBobResource.getBob(), workerDetailsMap);
         Map<JobType, WorkerImageCollection> workerImageCollectors = new EnumMap<>(JobType.class);
 
         for (JobType jobType : JobType.values()) {
@@ -562,7 +565,7 @@ public class Extractor {
         WorkerImageCollection officerWorkerImageCollector = workerImageCollectors.get(JobType.OFFICER);
         WorkerImageCollection generalWorkerImageCollector = workerImageCollectors.get(JobType.GENERAL);
 
-        Bob bob = ((BobGameResource) jobsBobList.getFirst()).getBob();
+        Bob bob = ((BobResource) jobsBobList.getFirst()).getBob();
 
         woodcutterImageCollector.readCargoImagesFromBob(
                 WOOD,
@@ -962,8 +965,8 @@ public class Extractor {
         }
 
         // Extract couriers
-        Bob jobsBob = jobsBobGameResource.getBob();
-        Bob carrierBob = assetManager.loadBobFile(fromDir + "/" + CarrierBob.FILENAME, defaultPalette);
+        Bob jobsBob = jobsBobResource.getBob();
+        Bob carrierBob = BobDecoder.loadBobFile(fromDir + "/" + CarrierBob.FILENAME, defaultPalette);
 
         WorkerImageCollection thinCarrier = new WorkerImageCollection("thin-carrier-no-cargo");
         WorkerImageCollection fatCarrier = new WorkerImageCollection("fat-carrier-no-cargo");
@@ -1046,9 +1049,9 @@ public class Extractor {
     private void populateNatureAndUIElements(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load from the map asset file */
-        List<GameResource> mapBobsLst = assetManager.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
-        List<GameResource> mapBobs0Lst = assetManager.loadLstFile(fromDir + "/" + MapBobs0Lst.FILENAME, defaultPalette);
-        List<GameResource> map0ZLst = assetManager.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
+        List<GameResource> mapBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
+        List<GameResource> mapBobs0Lst = LstDecoder.loadLstFile(fromDir + "/" + MapBobs0Lst.FILENAME, defaultPalette);
+        List<GameResource> map0ZLst = LstDecoder.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
 
         /* Create the out directories */
         String uiDir = toDir + "/" + UI_ELEMENTS_DIRECTORY;
@@ -1067,8 +1070,8 @@ public class Extractor {
         Utils.createDirectory(winterDir);
 
         /* Extract the terrains */
-        LBMGameResource greenlandGameResource = (LBMGameResource) assetManager.loadLBMFile(fromDir + "/" + Tex5Lbm.FILENAME, defaultPalette);
-        LBMGameResource winterGameResource = (LBMGameResource) assetManager.loadLBMFile(fromDir + "/" + Tex7Lbm.FILENAME, defaultPalette);
+        LBMGameResource greenlandGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(fromDir + "/" + Tex5Lbm.FILENAME, defaultPalette);
+        LBMGameResource winterGameResource = (LBMGameResource) LbmDecoder.loadLBMFile(fromDir + "/" + Tex7Lbm.FILENAME, defaultPalette);
 
         Bitmap greenlandTextureBitmap = greenlandGameResource.getLbmFile();
         Bitmap winterTextureBitmap = winterGameResource.getLbmFile();
@@ -1806,11 +1809,7 @@ public class Extractor {
     }
 
     private void loadDefaultPalette() throws IOException {
-        defaultPalette = assetManager.loadPaletteFromFile(DEFAULT_PALETTE);
-    }
-
-    Extractor() {
-        assetManager = new AssetManager();
+        defaultPalette = PaletteDecoder.loadPaletteFromFile(DEFAULT_PALETTE);
     }
 
     /**
@@ -1824,7 +1823,7 @@ public class Extractor {
     private void populateRomanBuildings(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 
         /* Load from the roman asset file */
-        List<GameResource> romYLst = assetManager.loadLstFile(fromDir + "/" + RomYLst.FILENAME, defaultPalette);
+        List<GameResource> romYLst = LstDecoder.loadLstFile(fromDir + "/" + RomYLst.FILENAME, defaultPalette);
 
         /* Create the roman buildings directory */
         Utils.createDirectory(toDir + "/" + ROMAN_BUILDINGS_DIRECTORY);
@@ -1916,7 +1915,7 @@ public class Extractor {
             Nation nation = entry.getKey();
             String filename = fromDir + "/" + entry.getValue();
 
-            List<GameResource> nationResourceList = assetManager.loadLstFile(filename, defaultPalette);
+            List<GameResource> nationResourceList = LstDecoder.loadLstFile(filename, defaultPalette);
 
             buildingsImageCollection.addBuildingForNation(nation, "Headquarter", getImageAt(nationResourceList, RomYLst.HEADQUARTER));
             buildingsImageCollection.addBuildingShadowForNation(nation, "Headquarter", getImageAt(nationResourceList, RomYLst.HEADQUARTER_SHADOW));

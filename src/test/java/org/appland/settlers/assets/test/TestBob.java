@@ -1,6 +1,8 @@
 package org.appland.settlers.assets.test;
 
 import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.decoders.LstDecoder;
+import org.appland.settlers.assets.decoders.PaletteDecoder;
 import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
@@ -17,15 +19,14 @@ public class TestBob {
     private static final String TEST_PALETTE = "src/test/resources/pal5.act";
     private static final String TEST_BOB_FILE = "src/test/resources/CARRIER.BOB";
     @Test
-    public void testLoadBob() throws IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
+    public void testLoadBob() throws IOException, UnknownResourceTypeException, InvalidFormatException {
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        List<GameResource> gameResourceList = assetManager.loadLstFile(TEST_BOB_FILE, palette);
+        List<GameResource> gameResourceList = LstDecoder.loadLstFile(TEST_BOB_FILE, palette);
 
         assertEquals(gameResourceList.size(), 1);
 
-        Bob bob = ((BobGameResource)gameResourceList.get(0)).getBob();
+        Bob bob = ((BobResource)gameResourceList.getFirst()).getBob();
 
         assertEquals(bob.getNumberOverlayImages(), 602);
         assertEquals(bob.getNumberLinks(), 3264);
@@ -37,7 +38,7 @@ public class TestBob {
             assertTrue(bitmap.getHeight() > 0);
         }
 
-        PlayerBitmap playerBitmap = bob.getAllBitmaps().get(0);
+        PlayerBitmap playerBitmap = bob.getAllBitmaps().getFirst();
 
         assertEquals(playerBitmap.getNy(), 12);
         assertEquals(playerBitmap.getHeight(), 13);

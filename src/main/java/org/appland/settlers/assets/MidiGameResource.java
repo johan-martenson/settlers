@@ -4,7 +4,7 @@ import org.appland.settlers.assets.resources.MidiFile;
 
 import static org.appland.settlers.assets.GameResourceType.MIDI_SOUND;
 
-public class MidiGameResource implements GameResource {
+public class MidiGameResource extends GameResource {
     private final MidiFile midiFile;
 
     public MidiGameResource(MidiFile midiFile) {

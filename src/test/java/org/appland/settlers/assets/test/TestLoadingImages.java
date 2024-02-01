@@ -1,6 +1,12 @@
 package org.appland.settlers.assets.test;
 
 import org.appland.settlers.assets.*;
+import org.appland.settlers.assets.decoders.BbmDecoder;
+import org.appland.settlers.assets.decoders.BitmapDecoder;
+import org.appland.settlers.assets.decoders.DatDecoder;
+import org.appland.settlers.assets.decoders.LbmDecoder;
+import org.appland.settlers.assets.decoders.LstDecoder;
+import org.appland.settlers.assets.decoders.PaletteDecoder;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.BitmapFile;
 import org.appland.settlers.assets.resources.BitmapRLE;
@@ -14,6 +20,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -36,11 +43,7 @@ public class TestLoadingImages {
     public void loadPalBmpFile() throws IOException, InvalidFormatException {
         Palette palette = createFakePalette();
 
-        AssetManager assetManager = new AssetManager();
-
-        assetManager.setWantedTextureFormat(TextureFormat.BGRA);
-
-        BitmapFile bitmap = assetManager.loadBitmapFile(TEST_BITMAP_PAL, palette);
+        BitmapFile bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_PAL, palette, Optional.empty());
 
         assertEquals(bitmap.getWidth(), 94);
         assertEquals(bitmap.getHeight(), 63);
@@ -60,11 +63,9 @@ public class TestLoadingImages {
 
     @Test
     public void loadLogoFile() throws InvalidFormatException, IOException {
-        AssetManager assetManager = new AssetManager();
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        BitmapFile bitmap = assetManager.loadBitmapFile(TEST_BITMAP_LOGO, palette);
+        BitmapFile bitmap = BitmapDecoder.loadBitmapFile(TEST_BITMAP_LOGO, palette, Optional.empty());
 
         assertNotNull(bitmap);
         assertEquals(bitmap.getWidth(), 50);
@@ -99,8 +100,7 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadPalette() throws IOException {
-        AssetManager assetManager = new AssetManager();
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
         assertNotNull(palette);
         assertEquals(palette.getName(), "pal5.act(0)");
@@ -110,8 +110,7 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBbmPalette() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-        List<GameResource> gameResourceList = assetManager.loadBbmFile(TEST_BITMAP_PAL_BBM);
+        List<GameResource> gameResourceList = BbmDecoder.loadBbmFile(TEST_BITMAP_PAL_BBM);
 
         assertEquals(gameResourceList.size(), 2);
 
@@ -131,11 +130,9 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadBitmapLbm() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        GameResource gameResource = assetManager.loadLBMFile(TEST_BITMAP_LBM, palette);
+        GameResource gameResource = LbmDecoder.loadLBMFile(TEST_BITMAP_LBM, palette);
 
         LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
 
@@ -157,12 +154,10 @@ public class TestLoadingImages {
     }
 
     @Test
-    public void testLoadBitmapShadow() throws IOException, InvalidHeaderException, UnknownResourceTypeException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
+    public void testLoadBitmapShadow() throws IOException, UnknownResourceTypeException, InvalidFormatException {
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        List<GameResource> gameResources = assetManager.loadLstFile(TEST_BITMAP_SHADOW, palette);
+        List<GameResource> gameResources = LstDecoder.loadLstFile(TEST_BITMAP_SHADOW, palette);
 
         assertEquals(gameResources.size(), 1);
 
@@ -175,12 +170,10 @@ public class TestLoadingImages {
     }
 
     @Test
-    public void testLoadPlayerBitmap() throws IOException, InvalidHeaderException, UnknownResourceTypeException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
+    public void testLoadPlayerBitmap() throws IOException, UnknownResourceTypeException, InvalidFormatException {
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        List<GameResource> gameResources = assetManager.loadLstFile(TEST_PLAYER_BITMAP, palette);
+        List<GameResource> gameResources = LstDecoder.loadLstFile(TEST_PLAYER_BITMAP, palette);
 
         assertEquals(gameResources.size(), 1);
 
@@ -193,11 +186,9 @@ public class TestLoadingImages {
     }
 
     @Test
-    public void testLoadBitmapRLE() throws IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-        List<GameResource> resources = assetManager.loadLstFile(TEST_BITMAP_RLE, palette);
+    public void testLoadBitmapRLE() throws IOException, UnknownResourceTypeException, InvalidFormatException {
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        List<GameResource> resources = LstDecoder.loadLstFile(TEST_BITMAP_RLE, palette);
 
         assertEquals(resources.size(), 1);
 
@@ -213,11 +204,9 @@ public class TestLoadingImages {
     }
 
     @Test
-    public void testLoadBitmapRaw() throws IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-        List<GameResource> resources = assetManager.loadLstFile(TEST_BITMAP_RAW, palette);
+    public void testLoadBitmapRaw() throws IOException, UnknownResourceTypeException, InvalidFormatException {
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
+        List<GameResource> resources = LstDecoder.loadLstFile(TEST_BITMAP_RAW, palette);
 
         assertEquals(resources.size(), 1);
 
@@ -235,11 +224,9 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadLbmTex() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        GameResource gameResource = assetManager.loadLBMFile(TEST_TEX_LBM, palette);
+        GameResource gameResource = LbmDecoder.loadLBMFile(TEST_TEX_LBM, palette);
 
         assertNotNull(gameResource);
 
@@ -262,19 +249,17 @@ public class TestLoadingImages {
 
     @Test
     public void testLoadDatIdx() throws IOException, UnknownResourceTypeException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
+        Palette palette = PaletteDecoder.loadPaletteFromFile(TEST_PALETTE);
 
-        Palette palette = assetManager.loadPaletteFromFile(TEST_PALETTE);
-
-        List<GameResource> gameResourceList = assetManager.loadDatFile(TEST_DAT, palette);
+        List<GameResource> gameResourceList = DatDecoder.loadDatFile(TEST_DAT, palette);
 
         assertEquals(gameResourceList.size(), 1);
 
-        GameResource gameResource = gameResourceList.get(0);
+        GameResource gameResource = gameResourceList.getFirst();
 
-        FontGameResource fontGameResource = (FontGameResource) gameResource;
+        FontResource fontResource = (FontResource) gameResource;
 
-        Map<String, PlayerBitmap> letterMap = fontGameResource.getLetterMap();
+        Map<String, PlayerBitmap> letterMap = fontResource.getLetterMap();
 
         assertEquals(letterMap.size(), 123);
         assertTrue(letterMap.containsKey("U+8e"));

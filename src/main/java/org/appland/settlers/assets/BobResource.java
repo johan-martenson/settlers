@@ -2,10 +2,10 @@ package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.resources.Bob;
 
-public class BobGameResource implements GameResource {
+public class BobResource extends GameResource {
     private final Bob bob;
 
-    public BobGameResource(Bob bob) {
+    public BobResource(Bob bob) {
         this.bob = bob;
     }
 

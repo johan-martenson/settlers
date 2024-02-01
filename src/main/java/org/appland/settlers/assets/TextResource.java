@@ -4,7 +4,7 @@ import java.util.List;
 
 import static org.appland.settlers.assets.GameResourceType.TEXT_RESOURCE;
 
-public class TextResource implements GameResource {
+public class TextResource extends GameResource {
     private final List<String> strings;
 
     public TextResource(List<String> strings) {

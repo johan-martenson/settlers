@@ -3,12 +3,13 @@ package org.appland.settlers.assets.test;
 import junit.framework.TestCase;
 import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.GameResourceType;
-import org.appland.settlers.assets.AssetManager;
 import org.appland.settlers.assets.InvalidFormatException;
+import org.appland.settlers.assets.WaveGameResource;
+import org.appland.settlers.assets.decoders.MidiDecoder;
+import org.appland.settlers.assets.decoders.WaveDecoder;
 import org.appland.settlers.assets.resources.MidiFile;
 import org.appland.settlers.assets.resources.MidiTrack;
 import org.appland.settlers.assets.resources.WaveFile;
-import org.appland.settlers.assets.WaveGameResource;
 import org.appland.settlers.assets.resources.XMidiFile;
 import org.appland.settlers.assets.resources.XMidiTrack;
 import org.junit.Test;
@@ -29,9 +30,7 @@ public class TestSound {
 
     @Test
     public void testStereoWave() throws InvalidFormatException, IOException {
-        AssetManager assetManager = new AssetManager();
-
-        GameResource gameResource = assetManager.loadSoundWaveFile(TEST_STEREO_WAVE_FILE);
+        GameResource gameResource = WaveDecoder.loadSoundWaveFile(TEST_STEREO_WAVE_FILE);
 
         TestCase.assertEquals(gameResource.getType(), GameResourceType.WAVE_SOUND);
 
@@ -55,9 +54,7 @@ public class TestSound {
 
     @Test
     public void testMonoWave() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-
-        GameResource gameResource = assetManager.loadSoundWaveFile(TEST_MONO_WAVE_FILE);
+        GameResource gameResource = WaveDecoder.loadSoundWaveFile(TEST_MONO_WAVE_FILE);
 
         assertEquals(gameResource.getType(), GameResourceType.WAVE_SOUND);
 
@@ -81,9 +78,7 @@ public class TestSound {
 
     @Test
     public void testMidi() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-
-        MidiFile midiFile = assetManager.loadSoundMidiFile(TEST_MIDI_FILE);
+        MidiFile midiFile = MidiDecoder.loadSoundMidiFile(TEST_MIDI_FILE);
 
         assertNotNull(midiFile);
         assertEquals(midiFile.getHeaderSize(), 6);
@@ -99,9 +94,7 @@ public class TestSound {
 
     @Test
     public void testXMidi() throws IOException, InvalidFormatException {
-        AssetManager assetManager = new AssetManager();
-
-        XMidiFile xMidiFile = assetManager.loadSoundXMidiFile(TEST_XMIDI_FILE);
+        XMidiFile xMidiFile = MidiDecoder.loadSoundXMidiFile(TEST_XMIDI_FILE);
 
         assertNotNull(xMidiFile);
         assertEquals(xMidiFile.getHeaderSize(), 14);

@@ -4,7 +4,7 @@ import org.appland.settlers.assets.resources.PlayerBitmap;
 
 import static org.appland.settlers.assets.GameResourceType.PLAYER_BITMAP_RESOURCE;
 
-public class PlayerBitmapResource implements GameResource {
+public class PlayerBitmapResource extends GameResource {
     private final PlayerBitmap playerBitmap;
 
     public PlayerBitmapResource(PlayerBitmap playerBitmap) {

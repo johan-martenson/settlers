@@ -4,7 +4,7 @@ import org.appland.settlers.assets.resources.Palette;
 
 import static org.appland.settlers.assets.GameResourceType.PALETTE_RESOURCE;
 
-public class PaletteResource implements GameResource {
+public class PaletteResource extends GameResource {
     private final Palette palette;
 
     public PaletteResource(Palette palette) {

@@ -213,7 +213,23 @@ public class StreamReader implements ByteReader {
             isEof = true;
         }
 
-        String string = new String(bytes, StandardCharsets.US_ASCII);
+        int nullTerminatorAt = -1;
+
+        for (int j = 0; j < bytes.length; j++) {
+            if (bytes[j] == 0) {
+                nullTerminatorAt = j;
+
+                break;
+            }
+        }
+
+        String string;
+
+        if (nullTerminatorAt != -1) {
+            string = new String(bytes, 0, nullTerminatorAt, StandardCharsets.US_ASCII);
+        } else {
+            string = new String(bytes, StandardCharsets.US_ASCII);
+        }
 
         offset = offset + i;
 

@@ -2,7 +2,7 @@ package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.resources.LBMFile;
 
-public class LBMGameResource implements GameResource {
+public class LBMGameResource extends GameResource {
     private final LBMFile lbmFile;
 
     public LBMGameResource(LBMFile lbmFile) {

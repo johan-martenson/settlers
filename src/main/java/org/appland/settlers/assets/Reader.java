@@ -1,5 +1,11 @@
 package org.appland.settlers.assets;
 
+import org.appland.settlers.assets.decoders.BbmDecoder;
+import org.appland.settlers.assets.decoders.DatDecoder;
+import org.appland.settlers.assets.decoders.LbmDecoder;
+import org.appland.settlers.assets.decoders.LstDecoder;
+import org.appland.settlers.assets.decoders.PaletteDecoder;
+import org.appland.settlers.assets.decoders.TextDecoder;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.BitmapRLE;
 import org.appland.settlers.assets.resources.BitmapRaw;
@@ -8,6 +14,7 @@ import org.appland.settlers.assets.resources.LBMFile;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.resources.WaveFile;
+import org.appland.settlers.assets.utils.SoundLoader;
 import org.appland.settlers.utils.ByteArrayReader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -17,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -66,7 +73,8 @@ public class Reader {
             gameResourceMap.put(assetFilename, reader.loadFile(assetFilename));
 
             System.out.println("Read file " + assetFilename);
-            System.out.println(gameResourceMap);
+            //System.out.println(gameResourceMap);
+            System.out.println("Loaded " + gameResourceMap.size() + " resources");
         }
 
         /* Read the directory */
@@ -98,9 +106,7 @@ public class Reader {
         List<Path> paths = Files.find(Paths.get(assetDir),
                 Integer.MAX_VALUE,
                 (path, basicFileAttributes) -> path.toFile().getName().matches(".*." + type)
-        ).collect(Collectors.toList());
-
-        AssetManager assetManager = new AssetManager();
+        ).toList();
 
         for (Path path : paths) {
 
@@ -114,7 +120,7 @@ public class Reader {
                 case "LST":
                 case "BOB":
                     try {
-                        List<GameResource> gameResourcesToAdd = assetManager.loadLstFile(filename, palette);
+                        List<GameResource> gameResourcesToAdd = LstDecoder.loadLstFile(filename, palette);
 
                         gameResourceMap.put(filename, gameResourcesToAdd);
                     } catch (Throwable t) {
@@ -125,7 +131,7 @@ public class Reader {
 
                 case "LBM":
                     try {
-                        GameResource gameResource = assetManager.loadLBMFile(filename, palette);
+                        GameResource gameResource = LbmDecoder.loadLBMFile(filename, palette);
 
                         List<GameResource> gameResourcesLbmList = new ArrayList<>();
 
@@ -146,7 +152,7 @@ public class Reader {
 
                         byte[] bytes = Files.newInputStream(Paths.get(filename)).readAllBytes();
 
-                        GameResource gameResource = assetManager.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
+                        GameResource gameResource = SoundLoader.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
 
                         System.out.println(gameResource);
 
@@ -165,7 +171,7 @@ public class Reader {
 
                 case "BBM":
 
-                    List<GameResource> gameResourceList = assetManager.loadBbmFile(filename);
+                    List<GameResource> gameResourceList = BbmDecoder.loadBbmFile(filename);
 
                     gameResourceMap.put(filename, gameResourceList);
 
@@ -174,7 +180,7 @@ public class Reader {
                 case "GER":
                 case "ENG":
 
-                    List<String> strings = assetManager.loadTextFile(filename);
+                    List<String> strings = TextDecoder.loadTextFile(filename);
 
                     List<GameResource> stringResourceList = new ArrayList<>();
 
@@ -288,9 +294,9 @@ public class Reader {
                         break;
 
                     case BOB_RESOURCE:
-                        BobGameResource bobGameResource = (BobGameResource) gameResource;
+                        BobResource bobResource = (BobResource) gameResource;
 
-                        Bob bob = bobGameResource.getBob();
+                        Bob bob = bobResource.getBob();
                         System.out.println();
                         System.out.println(" + Bob");
                         System.out.println("    - Number of body images: " + bob.getNumberBodyImages());
@@ -300,9 +306,9 @@ public class Reader {
 
                     case FONT_RESOURCE:
 
-                        FontGameResource fontGameResource = (FontGameResource) gameResource;
+                        FontResource fontResource = (FontResource) gameResource;
 
-                        Map<String, PlayerBitmap> letterMap = fontGameResource.getLetterMap();
+                        Map<String, PlayerBitmap> letterMap = fontResource.getLetterMap();
 
                         System.out.println();
                         System.out.println(" + Font");
@@ -332,8 +338,6 @@ public class Reader {
 
     private static void writeToDirectory(Map<String, List<GameResource>> gameResourceMap, String dirToWrite) throws IOException {
 
-        System.out.println(gameResourceMap);
-
         for (Map.Entry<String, List<GameResource>> entry : gameResourceMap.entrySet()) {
             String inputFilename = entry.getKey();
             List<GameResource> gameResourceList = entry.getValue();
@@ -345,13 +349,23 @@ public class Reader {
 
             for (GameResource gameResource : gameResourceList) {
 
-                String outFile = format("%s/%s-%d.png", dirToWrite, filenameWithoutPath, i);
+                String outFile;
+
+                if (gameResource.isNameSet()) {
+                    String rawString = gameResource.getName();
+                    byte[] bytes = rawString.strip().getBytes(StandardCharsets.UTF_8);
+
+                    String utf8EncodedString = new String(bytes, StandardCharsets.UTF_8);
+                    outFile = format("%s/%s-%s-%d.png", dirToWrite, filenameWithoutPath, utf8EncodedString, i);
+                } else {
+                    outFile = format("%s/%s-%d.png", dirToWrite, filenameWithoutPath, i);
+                }
+
                 String outSoundFile = format("%s/%s-%d.wav", dirToWrite, filenameWithoutPath, i);
 
                 i = i + 1;
 
                 switch (gameResource.getType()) {
-
                     case BITMAP_RAW:
                         BitmapRawResource bitmapRawResource = (BitmapRawResource) gameResource;
                         BitmapRaw bitmapRaw = bitmapRawResource.getBitmap();
@@ -371,7 +385,6 @@ public class Reader {
                         break;
 
                     case PALETTE_RESOURCE:
-
                         PaletteResource paletteResource = (PaletteResource) gameResource;
                         Bitmap paletteBitmap = createBitmapFromPalette(paletteResource.getPalette());
 
@@ -394,8 +407,8 @@ public class Reader {
                         break;
 
                     case BOB_RESOURCE:
-                        BobGameResource bobGameResource = (BobGameResource) gameResource;
-                        Bob bob = bobGameResource.getBob();
+                        BobResource bobResource = (BobResource) gameResource;
+                        Bob bob = bobResource.getBob();
 
                         int j = 0;
 
@@ -432,8 +445,7 @@ public class Reader {
                         break;
 
                     case FONT_RESOURCE:
-
-                        FontGameResource fontResource = (FontGameResource) gameResource;
+                        FontResource fontResource = (FontResource) gameResource;
                         Bitmap fontBitmap = createBitmapFromLetterMap(fontResource.getLetterMap());
 
                         fontBitmap.writeToFile(outFile);
@@ -441,7 +453,6 @@ public class Reader {
                         break;
 
                     case TEXT_RESOURCE:
-
                         TextResource textResource = (TextResource) gameResource;
 
                         String outTextFile = dirToWrite + "/" + "-" + filenameWithoutPath + "-" + i + ".txt";
@@ -451,7 +462,7 @@ public class Reader {
                         break;
 
                     default:
-                        throw new RuntimeException("Can't write this type to file. " + gameResource.getType());
+                        System.out.println("Can't write this type to file: " + gameResource.getType());
                 }
             }
         }
@@ -531,9 +542,7 @@ public class Reader {
     }
 
     private void loadDefaultPalette() throws IOException {
-        AssetManager assetManager = new AssetManager();
-
-        this.palette = assetManager.loadPaletteFromFile(DEFAULT_PALETTE);
+        this.palette = PaletteDecoder.loadPaletteFromFile(DEFAULT_PALETTE);
     }
 
     private List<GameResource> loadFile(String assetFilename) throws IOException, UnknownResourceTypeException, InvalidFormatException {
@@ -548,20 +557,18 @@ public class Reader {
         System.out.println("Asset filename: " + filenameWithoutPath);
         System.out.println("File type: " + fileSuffix);
 
-        AssetManager assetManager = new AssetManager();
-
         if (fileSuffix.equals("LST") || fileSuffix.equals("BOB")) {
 
-            return assetManager.loadLstFile(assetFilename, palette);
+            return LstDecoder.loadLstFile(assetFilename, palette);
         } else if (fileSuffix.equals("LBM")) {
             List<GameResource> result = new ArrayList<>();
 
-            result.add(assetManager.loadLBMFile(assetFilename, palette));
+            result.add(LbmDecoder.loadLBMFile(assetFilename, palette));
 
             return result;
         } else if (fileSuffix.equals("DAT")) {
-
-            try {
+            return DatDecoder.loadDatFile(assetFilename, palette);
+/*            try {
                 System.out.println("Loading as sound stream");
 
                 DatLoader datLoader = new DatLoader();
@@ -573,7 +580,7 @@ public class Reader {
             } catch (Throwable t) {
                 System.out.println("Failed to load " + assetFilename);
                 t.printStackTrace();
-            }
+            }*/
         }
 
         return null;

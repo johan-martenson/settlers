@@ -30,12 +30,10 @@ public class BitmapRLE extends Bitmap {
 
         // Read the image data
         if (length != 0) {
-
             int position = height * 2;
 
             for (int y = 0; y < height; ++y) {
                 int x = 0;
-
 
                 if (debug) {
                     System.out.println("   + x: " + x);

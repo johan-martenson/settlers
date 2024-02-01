@@ -6,7 +6,7 @@ import java.util.List;
 
 import static org.appland.settlers.assets.GameResourceType.XMIDI_SOUND;
 
-public class XMidiGameResource implements GameResource {
+public class XMidiGameResource extends GameResource {
     private final List<XMidiTrack> xMidiTracks;
 
     public XMidiGameResource(List<XMidiTrack> xMidiTracks) {
