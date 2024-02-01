@@ -982,6 +982,10 @@ class Utils {
             jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.getNewStones()));
         }
 
+        if (!gameChangesList.getChangedStones().isEmpty()) {
+            jsonMonitoringEvents.put("changedStones", newStonesToJson(gameChangesList.getChangedStones()));
+        }
+
         gameChangesList.getUpgradedBuildings().forEach(newAndOldBuilding -> {
             // Move the id to the new building
             idManager.updateObject(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
@@ -1252,7 +1256,7 @@ class Utils {
         return jsonWildAnimals;
     }
 
-    private JSONArray newStonesToJson(List<Stone> newStones) {
+    private JSONArray newStonesToJson(Collection<Stone> newStones) {
         JSONArray jsonNewStones = new JSONArray();
 
         for (Stone stone : newStones) {

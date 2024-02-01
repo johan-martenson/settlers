@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.StoneAmount;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Builder;
@@ -2611,6 +2612,141 @@ public class TestGameMonitoring {
             }
         }
     }
+
+
+
+    @Test
+    public void testMonitoringEventWhenStoneChangesSize() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point2 = new Point(10, 4);
+        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+
+        /* Construct the quarry */
+        Utils.constructHouse(quarry);
+
+        /* Connect the quarry to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+
+        /* Place stone */
+        Point point1 = new Point(12, 4);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 6);
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+
+        /* Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none) */
+        assertEquals(stone0.getStoneAmount(), StoneAmount.FULL);
+
+        StoneAmount stoneAmount = stone0.getStoneAmount();
+        for (int i = 0; i < 5000; i++) {
+            if (stoneAmount != stone0.getStoneAmount()) {
+                stoneAmount = stone0.getStoneAmount();
+
+                assertTrue(monitor.getLastEvent().getChangedStones().contains(stone0));
+
+                monitor.clearEvents();
+            }
+
+            if (stone0.getStoneAmount() == StoneAmount.MINI) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(stone0.getStoneAmount(), StoneAmount.MINI);
+
+        /* Verify that an event is sent when the stone is removed but it's not a stone-changed event */
+        monitor.clearEvents();
+
+        for (int i = 0; i < 5000; i++) {
+            if (!map.isStoneAtPoint(stone0.getPosition())) {
+                break;
+            }
+
+            assertEquals(stone0.getStoneAmount(), StoneAmount.MINI);
+
+            map.stepTime();
+        }
+
+        assertTrue(monitor.getLastEvent().getRemovedStones().contains(stone0));
+        monitor.getEvents()
+                .forEach(gameChangesList -> assertFalse(gameChangesList.getChangedStones().contains(stone0)));
+    }
+
+    @Test
+    public void testMonitoringEventWhenStoneChangesSizeIsSentOnlyOnce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point2 = new Point(10, 4);
+        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+
+        /* Construct the quarry */
+        Utils.constructHouse(quarry);
+
+        /* Connect the quarry to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+
+        /* Place stone */
+        Point point1 = new Point(12, 4);
+        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 6);
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+
+        /* Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none) */
+        assertEquals(stone0.getStoneAmount(), StoneAmount.FULL);
+
+        StoneAmount stoneAmount = stone0.getStoneAmount();
+        for (int i = 0; i < 5000; i++) {
+            if (stoneAmount != stone0.getStoneAmount()) {
+                stoneAmount = stone0.getStoneAmount();
+
+                assertTrue(monitor.getLastEvent().getChangedStones().contains(stone0));
+
+                monitor.clearEvents();
+
+                Utils.fastForward(30, map);
+
+                assertFalse(monitor.getLastEvent() != null && monitor.getLastEvent().getChangedStones().contains(stone0));
+            }
+
+            if (stone0.getStoneAmount() == StoneAmount.MINI) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(stone0.getStoneAmount(), StoneAmount.MINI);
+    }
+
+
 
     @Test
     public void testMonitoringEventWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {

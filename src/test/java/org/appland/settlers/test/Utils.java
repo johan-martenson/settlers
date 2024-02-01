@@ -3147,7 +3147,8 @@ public class Utils {
                 new ArrayList<>(gameChangesList.getRemovedDecorations()),
                 new HashMap<>(gameChangesList.getNewDecorations()),
                 new ArrayList<>(gameChangesList.getUpgradedBuildings()),
-                new ArrayList<>(gameChangesList.getRemovedMessages()));
+                new ArrayList<>(gameChangesList.getRemovedMessages()),
+                new ArrayList<>(gameChangesList.getChangedStones()));
 
         return copy;
     }

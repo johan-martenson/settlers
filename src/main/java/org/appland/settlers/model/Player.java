@@ -93,6 +93,7 @@ public class Player {
     private int strengthWhenPopulatingMilitaryBuildings;
     private int defenseStrength;
     private int defenseFromSurroundingBuildings;
+    private final Set<Stone> changedStones;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -203,6 +204,7 @@ public class Player {
         newDecorations = new HashMap<>();
         upgradedBuildings = new ArrayList<>();
         removedMessages = new HashSet<>();
+        changedStones = new HashSet<>();
 
         /* Set default production of all tools */
         for (Material tool : Material.TOOLS) {
@@ -1047,7 +1049,8 @@ public class Player {
                 new ArrayList<>(removedDecorations),
                 newDecorations,
                 new ArrayList<>(upgradedBuildings),
-                new ArrayList<>(removedMessages));
+                new ArrayList<>(removedMessages),
+                new ArrayList<>(changedStones));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1094,6 +1097,7 @@ public class Player {
         newDecorations.clear();
         upgradedBuildings.clear();
         removedMessages.clear();
+        changedStones.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1682,5 +1686,9 @@ public class Player {
 
     public int getDefenseFromSurroundingBuildings() {
         return defenseFromSurroundingBuildings;
+    }
+
+    public void reportChangedStone(Stone stone) {
+        changedStones.add(stone);
     }
 }
