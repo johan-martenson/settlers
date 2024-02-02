@@ -851,12 +851,12 @@ public class GameUtils {
 
                 /* Re-construct the path taken */
                 while (previousPoint != start) {
-                    path.add(0, previousPoint);
+                    path.addFirst(previousPoint);
 
                     previousPoint = cameFrom.get(previousPoint);
                 }
 
-                path.add(0, start);
+                path.addFirst(start);
 
                 return path;
             }

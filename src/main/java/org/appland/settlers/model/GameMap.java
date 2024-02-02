@@ -53,6 +53,8 @@ public class GameMap {
         }
     };
 
+
+
     private final List<Worker>         workers;
     private final int                  height;
     private final int                  width;
@@ -1886,9 +1888,9 @@ public class GameMap {
             MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
 
             /* Filter points with stones */
-            /*if (mapPointAdjacent.isStone()) {
+            if (mapPointAdjacent.isStone()) {
                 continue;
-            }*/
+            }
 
             /* Buildings can only be reached from their flags */
             if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(from)) {
@@ -2246,7 +2248,7 @@ public class GameMap {
         }
 
         /* Join the steps */
-        path2.remove(0);
+        path2.removeFirst();
 
         path1.addAll(path2);
 
@@ -2263,6 +2265,130 @@ public class GameMap {
      */
     public List<Point> findWayOffroad(Point start, Point goal, Set<Point> avoid) {
         return findShortestPath(start, goal, avoid, OFFROAD_CONNECTIONS_PROVIDER);
+    }
+
+    public List<Point> findWayOffroad(Point start, Point via, Point goal, Set<Point> avoid, OffroadOption offroadOption) {
+        var offroadConnectionsWithOptions = new ConnectionsProvider() {
+
+            @Override
+            public Iterable<Point> getPossibleConnections(Point start, Point end) {
+                List<Point>  possibleAdjacentOffRoadConnections = new ArrayList<>();
+
+                MapPoint mapPoint = getMapPoint(start);
+
+                /* Houses can only be left via the driveway so handle this case separately */
+                if (mapPoint.isBuilding()) {
+                    possibleAdjacentOffRoadConnections.add(start.downRight());
+
+                    return possibleAdjacentOffRoadConnections;
+                }
+
+                /* Find out which adjacent points are possible off-road connections */
+                Point[] adjacentPoints  = start.getAdjacentPointsExceptAboveAndBelow();
+
+                DetailedVegetation detailedVegetationUpLeft = getDetailedVegetationUpLeft(start);
+                DetailedVegetation detailedVegetationAbove = getDetailedVegetationAbove(start);
+                DetailedVegetation detailedVegetationUpRight = getDetailedVegetationUpRight(start);
+                DetailedVegetation detailedVegetationDownRight = getDetailedVegetationDownRight(start);
+                DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(start);
+                DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(start);
+
+                boolean cannotWalkOnTileUpLeft    = !CAN_WALK_ON.contains(detailedVegetationUpLeft);
+                boolean cannotWalkOnTileDownLeft  = !CAN_WALK_ON.contains(detailedVegetationDownLeft);
+                boolean cannotWalkOnTileUpRight   = !CAN_WALK_ON.contains(detailedVegetationUpRight);
+                boolean cannotWalkOnTileDownRight = !CAN_WALK_ON.contains(detailedVegetationDownRight);
+                boolean cannotWalkOnTileAbove     = !CAN_WALK_ON.contains(detailedVegetationAbove);
+                boolean cannotWalkOnTileBelow     = !CAN_WALK_ON.contains(detailedVegetationBelow);
+
+                for (Point adjacentPoint : adjacentPoints) {
+
+                    /* Filter points outside the map */
+                    if (!isWithinMap(adjacentPoint)) {
+                        continue;
+                    }
+
+                    MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
+
+                    /* Filter points with stones */
+                    if (mapPointAdjacent.isStone()) {
+                        if (offroadOption != OffroadOption.CAN_END_ON_STONE || !adjacentPoint.equals(end)) {
+                            continue;
+                        }
+                    }
+
+                    /* Buildings can only be reached from their flags */
+                    if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(start)) {
+                        continue;
+                    }
+
+                    /* Filter points separated by vegetation that can't be walked on */
+
+                    if (adjacentPoint.isLeftOf(start) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
+                        continue;
+                    }
+
+                    if (adjacentPoint.isUpLeftOf(start) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
+                        continue;
+                    }
+
+                    if (adjacentPoint.isUpRightOf(start) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
+                        continue;
+                    }
+
+                    if (adjacentPoint.isRightOf(start) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
+                        continue;
+                    }
+
+                    if (adjacentPoint.isDownRightOf(start) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
+                        continue;
+                    }
+
+                    if (adjacentPoint.isDownLeftOf(start) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
+                        continue;
+                    }
+
+                    /* Add the point to the list if it passed the filters */
+                    possibleAdjacentOffRoadConnections.add(adjacentPoint);
+                }
+
+                return possibleAdjacentOffRoadConnections;
+            }
+
+            @Override
+            public int realDistance(Point currentPoint, Point neighbor) {
+                return GameUtils.distanceInGameSteps(currentPoint, neighbor);
+            }
+        };
+
+        List<Point> step0 = new ArrayList<>();
+
+        if (via != null) {
+            step0 = findShortestPath(start, via, avoid, offroadConnectionsWithOptions);
+        }
+
+        if (step0 == null) {
+            return null;
+        }
+
+        List<Point> step1;
+
+        if (via != null) {
+            step1 = findShortestPath(via, goal, avoid, offroadConnectionsWithOptions);
+        } else {
+            step1 = findShortestPath(start, goal, avoid, offroadConnectionsWithOptions);
+        }
+
+        if (step1 == null) {
+            return null;
+        }
+
+        if (!step0.isEmpty()) {
+            step1.removeFirst();
+        }
+
+        step0.addAll(step1);
+
+        return step0;
     }
 
     /**

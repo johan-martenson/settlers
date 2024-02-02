@@ -420,12 +420,20 @@ public abstract class Worker {
         return carriedCargo;
     }
 
+    void setOffroadTarget(Point point, OffroadOption offroadOption) {
+        setOffroadTarget(point, null, offroadOption);
+    }
+
     void setOffroadTarget(Point point) {
-        setOffroadTarget(point, null);
+        setOffroadTarget(point, null, null);
+    }
+
+    void setOffroadTarget(Point point, Point via) {
+        setOffroadTarget(point, via, null);
     }
 
     // FIXME: HOTSPOT - allocations
-    void setOffroadTarget(Point point, Point via) {
+    void setOffroadTarget(Point point, Point via, OffroadOption offroadOption) {
         boolean wasInside = false;
 
         target = point;
@@ -442,28 +450,20 @@ public abstract class Worker {
             if (wasInside && !target.equals(home.getFlag().getPosition())) {
 
                 // Get from the flag to the target
-                if (via != null) {
-                    path = map.findWayOffroad(home.getFlag().getPosition(), point, via, null);
-                } else {
-                    path = map.findWayOffroad(home.getFlag().getPosition(), point, null);
-                }
+                path = map.findWayOffroad(home.getFlag().getPosition(), via, point, null, offroadOption);
 
                 // Add the initial step of going from the home to the flag
-                path.add(0, home.getPosition());
+                path.addFirst(home.getPosition());
             } else {
-                if (via != null) {
-                    path = map.findWayOffroad(getPosition(), point, via, null);
-                } else {
-                    path = map.findWayOffroad(getPosition(), point, null);
-                }
+                path = map.findWayOffroad(getPosition(), via, point, null, offroadOption);
             }
 
             // Remove the current position so the path only contains the steps to take
-            path.remove(0);
+            path.removeFirst();
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
-            direction = GameUtils.getDirection(position, path.get(0));
+            direction = GameUtils.getDirection(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -630,10 +630,10 @@ public abstract class Worker {
         // Empty method for subclasses to override if needed
     }
 
-    void walkHalfWayOffroadTo(Point point) {
+    void walkHalfWayOffroadTo(Point point, OffroadOption offroadOption) {
 
         /* Walk halfway to the given target */
-        setOffroadTarget(point);
+        setOffroadTarget(point, OffroadOption.CAN_END_ON_STONE);
 
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }

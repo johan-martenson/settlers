@@ -20,6 +20,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
@@ -429,6 +430,66 @@ public class TestWoodcutter {
         assertFalse(wcWorker.isTraveling());
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
+    }
+
+    @Test
+    public void testWoodcutterDoesntWalkThroughStoneToReachTree() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place and grow tree */
+        Point point2 = new Point(17, 3);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place stones */
+        var point3 = new Point(15, 3);
+        var point4 = new Point(14, 4);
+        var point5 = new Point(14, 2);
+        var stone0 = map.placeStone(point3, StoneType.STONE_1, 6);
+        var stone1 = map.placeStone(point4, StoneType.STONE_1, 6);
+        var stone2 = map.placeStone(point5, StoneType.STONE_1, 6);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(woodcutter);
+
+        /* Manually place forester */
+        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
+
+        /* Wait for the woodcutter to leave the hut */
+        Utils.waitForWorkerToBeOutside(woodcutterWorker, map);
+
+        /* Verify that the woodcutter worker goes to the tree without passing through the stones */
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getTarget(), tree.getPosition());
+
+        for (int i = 0; i < 200; i++) {
+            assertNotEquals(woodcutterWorker.getPosition(), point3);
+            assertNotEquals(woodcutterWorker.getPosition(), point4);
+            assertNotEquals(woodcutterWorker.getPosition(), point5);
+
+            if (woodcutterWorker.isExactlyAtPoint() && woodcutterWorker.getPosition().equals(tree.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(woodcutterWorker.isExactlyAtPoint());
+        assertEquals(woodcutterWorker.getPosition(), tree.getPosition());
     }
 
     @Test

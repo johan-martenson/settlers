@@ -28,7 +28,6 @@ public class Stonemason extends Worker {
     private Point stoneTarget;
 
     private enum State {
-
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         GOING_OUT_TO_GET_STONE,
@@ -85,7 +84,8 @@ public class Stonemason extends Worker {
                     }
 
                     /* Is the stone reachable? */
-                    List<Point> path = map.findWayOffroad(getHome().getPosition(), point, null);
+                    List<Point> path = map.findWayOffroad(getHome().getPosition(), null, point, null, OffroadOption.CAN_END_ON_STONE);
+
                     if (path == null) {
                         continue;
                     }
@@ -114,7 +114,7 @@ public class Stonemason extends Worker {
                     return;
                 }
 
-                setOffroadTarget(stoneTarget);
+                setOffroadTarget(stoneTarget, OffroadOption.CAN_END_ON_STONE);
 
                 state = State.GOING_OUT_TO_GET_STONE;
             } else {

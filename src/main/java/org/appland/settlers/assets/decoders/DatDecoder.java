@@ -46,12 +46,19 @@ public class DatDecoder {
         String idxFilename = baseFile + ".IDX";
 
         // Load only from the DAT file if the IDX file is missing
-        if (!Files.exists(Paths.get(datFilename)) || !Files.exists(Paths.get(idxFilename))) {
+        if (!Files.exists(Paths.get(idxFilename))) {
             StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
             short datBobtype = datReader.getInt16();
 
             // Load as wave data without header
             if (datBobtype == 20294) {
+
+                // Chunks x n
+                // Chunk (integers are big endian)
+                //  - Type ID
+                //  - i32 data size
+                //  - data
+
                 // TODO: add decoding of song (?), e.g. "SNG_0010.DAT"
                 return new ArrayList<>();
             } else if (datBobtype == 21111) {

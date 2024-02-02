@@ -324,7 +324,7 @@ public class Soldier extends Worker {
                 state = State.WALKING_APART_TO_DEFEND;
 
                 /* Walk half a point away */
-                walkHalfWayOffroadTo(getPosition().right());
+                walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
 
             /* Fight the next attacker if this is a remote defender and there are attackers waiting */
             } else if (!buildingToDefend.getWaitingAttackers().isEmpty()) {
@@ -437,7 +437,7 @@ public class Soldier extends Worker {
             state = State.WALKING_APART_TO_DEFEND;
 
             /* Walk half a point away */
-            walkHalfWayOffroadTo(getPosition().right());
+            walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
 
         } else if (state == WALKING_HOME_AFTER_FIGHT) {
             enterBuilding(getHome());
@@ -823,7 +823,7 @@ public class Soldier extends Worker {
         opponent = military;
 
         /* Walk halfway to the next point to not stand on top of the defender */
-        walkHalfWayOffroadTo(getPosition().left());
+        walkHalfWayOffroadTo(getPosition().left(), OffroadOption.CAN_END_ON_STONE);
 
         state = WALKING_APART_TO_ATTACK;
     }

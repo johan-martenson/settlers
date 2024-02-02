@@ -17,7 +17,7 @@ import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 public class WoodcutterWorker extends Worker {
     private static final int TIME_TO_REST     = 99;
     private static final int TIME_TO_CUT_TREE = 49;
-    private static final int RANGE            = 7;
+    private static final int RANGE            = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
@@ -60,7 +60,9 @@ public class WoodcutterWorker extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_PLACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_PLACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public WoodcutterWorker(Player player, GameMap map) {

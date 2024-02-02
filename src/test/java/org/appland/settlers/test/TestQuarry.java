@@ -578,7 +578,7 @@ public class TestQuarry {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place stone */
-        Point point2 = new Point(14, 6);
+        Point point2 = new Point(14, 8);
         Stone stone = map.placeStone(point2, STONE_1, 10);
 
         /* Remove all stone from the headquarters */
@@ -606,7 +606,7 @@ public class TestQuarry {
         /* Wait for the courier on the road between the guard house and the quarry hut to have a stone cargo */
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
-        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -2666,13 +2666,13 @@ public class TestQuarry {
         Point point2 = new Point(18, 6);
         Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the quarry */
+        /* Place road to connect the headquarters with the quarry */
         Road road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 

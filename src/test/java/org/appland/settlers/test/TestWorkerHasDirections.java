@@ -20,16 +20,15 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestWorkerHasDirections {
 
@@ -363,10 +362,16 @@ public class TestWorkerHasDirections {
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Put stones on the map and leave only one point where the forester can plant a tree */
-        Point point2 = new Point(14, 6);
+        Set<Point> pathPointSet = new HashSet<>();
+
+        var point2 = point1.downRight();
+        var point3 = point2.downLeft().downLeft();
+
+        pathPointSet.add(point2.downLeft());
+        pathPointSet.add(point3);
 
         for (Point point : Utils.getAllPointsOnMap(map)) {
-            if (point.equals(point2)) {
+            if (pathPointSet.contains(point)) {
                 continue;
             }
 
@@ -404,9 +409,9 @@ public class TestWorkerHasDirections {
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
         assertEquals(forester.getTarget(), foresterHut.getPosition());
-        assertEquals(forester.getPosition(), point2);
+        assertTrue(pathPointSet.contains(forester.getPosition()));
         assertTrue(forester.isTraveling());
-        assertEquals(forester.getDirection(), Direction.DOWN_LEFT);
+        assertEquals(forester.getDirection(), Direction.UP_RIGHT);
     }
 
     @Test
