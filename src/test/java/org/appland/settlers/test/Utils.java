@@ -1539,7 +1539,6 @@ public class Utils {
                 minY = point.y;
                 pointAtMinY = point;
             }
-
         }
 
         System.out.println(" -- Right: " + maxX + " " + pointAtMaxX);
@@ -2904,7 +2903,6 @@ public class Utils {
         // FIXME: HOTSPOT
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
-
             GameChangesList copiedGameChangesList = Utils.copyGameChangesList(gameChangesList);
 
             gameChanges.add(copiedGameChangesList);
@@ -2916,7 +2914,6 @@ public class Utils {
             List<Point> availableMinesOnMap = map.getAvailableMinePoints(player);
 
             for (Point point : gameChangesList.getChangedAvailableConstruction()) {
-
                 AvailableConstruction.PossibleBuildings possibleBuilding = NO_BUILDING_POSSIBLE;
                 AvailableConstruction.PossibleFlag possibleFlag = NO_FLAG_POSSIBLE;
 
@@ -3112,7 +3109,8 @@ public class Utils {
     }
 
     private static GameChangesList copyGameChangesList(GameChangesList gameChangesList) {
-        GameChangesList copy = new GameChangesList(gameChangesList.getTime(),
+
+        return new GameChangesList(gameChangesList.getTime(),
                 new ArrayList<>(gameChangesList.getWorkersWithNewTargets()),
                 new ArrayList<>(gameChangesList.getNewFlags()),
                 new ArrayList<>(gameChangesList.getRemovedFlags()),
@@ -3149,8 +3147,6 @@ public class Utils {
                 new ArrayList<>(gameChangesList.getUpgradedBuildings()),
                 new ArrayList<>(gameChangesList.getRemovedMessages()),
                 new ArrayList<>(gameChangesList.getChangedStones()));
-
-        return copy;
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {

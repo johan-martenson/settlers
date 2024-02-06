@@ -61,7 +61,7 @@ public class Player {
     private final List<Crop> newCrops;
     private final List<Crop> removedCrops;
     private final Set<Point> newDiscoveredLand;
-    private final List<Point> newBorder;
+    private final List<Point> addedBorder;
     private final List<Point> removedBorder;
     private final List<Stone> newStones;
     private final Set<Point> borderPoints;
@@ -180,7 +180,7 @@ public class Player {
         newCrops = new ArrayList<>();
         removedCrops = new ArrayList<>();
         newDiscoveredLand = new HashSet<>();
-        newBorder = new ArrayList<>();
+        addedBorder = new ArrayList<>();
         removedBorder = new ArrayList<>();
         changedBorders = new ArrayList<>();
         newStones = new ArrayList<>();
@@ -386,66 +386,62 @@ public class Player {
 
     void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
 
-        /* Report the new border and the removed border */
-        Set<Point> fullNewBorderCalc = new HashSet<>();
-        Set<Point> fullOldBorderCalc = new HashSet<>(borderPoints);
+        /* Remember how the owned land & border was before the update */
+        Set<Point> oldOwnedLand = new HashSet<>(ownedLand);
+        Set<Point> oldBorder = new HashSet<>(borderPoints);
+
+        /* Figure out the new land & border */
+        Set<Point> newBorder = new HashSet<>();
+        Set<Point> newOwnedLand = new HashSet<>();
 
         for (Land land : updatedLands) {
-            for (List<Point> border : land.getBorders()) {
-                fullNewBorderCalc.addAll(border);
-            }
+            land.getBorders().forEach(newBorder::addAll);
+            newOwnedLand.addAll(land.getPointsInLand());
         }
 
-        Set<Point> newBorderCalc = new HashSet<>(fullNewBorderCalc);
-        newBorderCalc.removeAll(fullOldBorderCalc);
+        /* Figure out the border & land that has been added & removed */
+        Set<Point> addedBorder = new HashSet<>(newBorder);
+        Set<Point> addedOwnedLand = new HashSet<>(newOwnedLand);
+        Set<Point> removedBorder = new HashSet<>(oldBorder);
+        Set<Point> removedOwnedLand = new HashSet<>(oldOwnedLand);
 
-        Set<Point> removedBorderCalc = new HashSet<>(fullOldBorderCalc);
-        removedBorderCalc.removeAll(fullNewBorderCalc);
+        addedBorder.removeAll(oldBorder);
+        addedOwnedLand.removeAll(oldOwnedLand);
 
-        newBorder.addAll(newBorderCalc);
-        removedBorder.addAll(removedBorderCalc);
+        removedBorder.removeAll(newBorder);
+        removedOwnedLand.removeAll(newOwnedLand);
+
+        this.addedBorder.clear();
+        this.removedBorder.clear();
+
+        this.addedBorder.addAll(addedBorder);
+        this.removedBorder.addAll(removedBorder);
 
         /* Update full list of owned land and the list of borders */
-        Set<Point> updatedOwnedLand = new HashSet<>();
+        this.borderPoints.clear();
+        this.ownedLand.clear();
 
-        borderPoints.clear();
+        this.borderPoints.addAll(newBorder);
+        this.ownedLand.addAll(newOwnedLand);
 
-        for (Land land : updatedLands) {
-            updatedOwnedLand.addAll(land.getPointsInLand());
-
-            for (Collection<Point> borderForLand : land.getBorders()) {
-                borderPoints.addAll(borderForLand);
-            }
-        }
-
-        if (!updatedLands.isEmpty()) {
+        if (!addedOwnedLand.isEmpty()) {
 
             /* Update field of view */
             updateDiscoveredLand();
         }
 
-        /* Calculate and remember the new owned land */
-        Set<Point> calcNewOwnedLand = new HashSet<>(updatedOwnedLand);
-        calcNewOwnedLand.removeAll(ownedLand);
-
-        Set<Point> calcNewLostLand = new HashSet<>(ownedLand);
-        calcNewLostLand.removeAll(updatedOwnedLand);
-
         /* Report lost land */
-        if (!calcNewLostLand.isEmpty() && cause == BorderChangeCause.MILITARY_BUILDING_OCCUPIED) {
+        if (!removedOwnedLand.isEmpty() && cause == BorderChangeCause.MILITARY_BUILDING_OCCUPIED) {
             reportThisBuildingHasCausedLostLand(building);
         }
 
-        /* Make the updated land the current */
-        ownedLand.clear();
-        ownedLand.addAll(updatedOwnedLand);
-
+        /* Monitor the added/lost land */
         if (hasMonitor()) {
-            newOwnedLand.clear();
-            newOwnedLand.addAll(calcNewOwnedLand);
+            this.newOwnedLand.clear();
+            this.newOwnedLand.addAll(addedOwnedLand);
 
-            newLostLand.clear();
-            newLostLand.addAll(calcNewLostLand);
+            this.newLostLand.clear();
+            this.newLostLand.addAll(removedOwnedLand);
         }
     }
 
@@ -799,12 +795,12 @@ public class Player {
             changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
             removedTrees.isEmpty() && removedStones.isEmpty() && newSigns.isEmpty() &&
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
-            newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
+            newDiscoveredLand.isEmpty() && addedBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
             finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
-            removedDecorations.isEmpty() && newDecorations.isEmpty() &&upgradedBuildings.isEmpty()) {
+            removedDecorations.isEmpty() && newDecorations.isEmpty() && upgradedBuildings.isEmpty()) {
             return;
         }
 
@@ -980,6 +976,7 @@ public class Player {
             changedAvailableConstruction.addAll(road.getWayPoints());
         }
 
+        // TODO: also consider points up-left. Previously they couldn't have houses because of the flag being blocked
         for (Road road : removedRoads) {
             changedAvailableConstruction.addAll(road.getWayPoints());
         }
@@ -1000,12 +997,15 @@ public class Player {
         }
 
         /* Add changed available construction if the border has been extended */
-        if (!newBorder.isEmpty()) {
+        if (!addedBorder.isEmpty()) {
+
+            // Report changed available construction because of the border change
             changedAvailableConstruction.addAll(newOwnedLand);
             changedAvailableConstruction.addAll(newLostLand);
 
-            removedBorder.forEach(newBorderPoint -> {
-                var pointUpLeft = newBorderPoint.upLeft();
+            // It's now possible to build on point up-left from previous border points as the flag now has space.
+            removedBorder.forEach(removedBorderPoint -> {
+                var pointUpLeft = removedBorderPoint.upLeft();
 
                 if (!newOwnedLand.contains(pointUpLeft)) {
                     changedAvailableConstruction.add(pointUpLeft);
@@ -1075,7 +1075,7 @@ public class Player {
         newCrops.clear();
         removedCrops.clear();
         newDiscoveredLand.clear();
-        newBorder.clear();
+        addedBorder.clear();
         removedBorder.clear();
         changedAvailableConstruction.clear();
         newOwnedLand.clear();
@@ -1294,11 +1294,11 @@ public class Player {
     }
 
     public BorderChange getBorderChange() {
-        if (newBorder.isEmpty() && removedBorder.isEmpty()) {
+        if (addedBorder.isEmpty() && removedBorder.isEmpty()) {
             return null;
         }
 
-        return new BorderChange(this, newBorder, removedBorder);
+        return new BorderChange(this, addedBorder, removedBorder);
     }
 
     void manageTreeConservationProgram() {

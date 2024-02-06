@@ -55,7 +55,7 @@ public class FireImageCollection {
 
                     // Fire shadow images
                     if (fireShadowMap.containsKey(fireSize)) {
-                        jsonFireSize.put("image",
+                        jsonFireSize.put("shadowImage",
                                 imageBoard.placeImageSeriesBottom(
                                         ImageTransformer.normalizeImageSeries(fireShadowMap.get(fireSize))));
                     }

@@ -5118,11 +5118,13 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        /* Connect the barracks to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        /* Wait for the barracks to get constructed and populated */
         Utils.waitForBuildingToBeConstructed(barracks0);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
         map.stepTime();
 
@@ -5130,10 +5132,11 @@ public class TestGameMonitoring {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that three events are sent when a house is placed - for the house, the road, and the flag */
         assertEquals(monitor.getEvents().size(), 0);
 
         /* Verify that an event is sent when the barracks is upgraded */
+        Set<Point> oldBorder = new HashSet<>(player0.getBorderPoints());
+
         barracks0.upgrade();
 
         Utils.waitForUpgradeToFinish(barracks0);
@@ -5143,13 +5146,29 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getUpgradedBuildings().size(), 1);
         assertEquals(gameChanges.getUpgradedBuildings().iterator().next().newBuilding, map.getBuildingAtPoint(point1));
+        assertEquals(gameChanges.getChangedBorders().size(), 1);
 
-        assertEquals(gameChanges.getNewFlags().size(), 0);
-        assertEquals(gameChanges.getNewRoads().size(), 0);
-        assertEquals(gameChanges.getNewBuildings().size(), 0);
-        assertEquals(gameChanges.getRemovedFlags().size(), 0);
-        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
-        assertEquals(gameChanges.getRemovedRoads().size(), 0);
+        Set<Point> newBorder = new HashSet<>(player0.getBorderPoints());
+
+        Set<Point> addedBorder = new HashSet<>(newBorder);
+        addedBorder.removeAll(oldBorder);
+
+        Set<Point> removedBorder = new HashSet<>(oldBorder);
+        removedBorder.removeAll(newBorder);
+
+        BorderChange borderChange = gameChanges.getChangedBorders().getFirst();
+
+        removedBorder.forEach(point -> {
+            assertFalse(newBorder.contains(point));
+            assertTrue(oldBorder.contains(point));
+            assertTrue(borderChange.getRemovedBorder().contains(point));
+        });
+        addedBorder.forEach(point -> {
+            assertTrue(newBorder.contains(point));
+            assertFalse(oldBorder.contains(point));
+            assertTrue(borderChange.getNewBorder().contains(point));
+        });
+        assertEquals(borderChange.getPlayer(), player0);
     }
 
     @Test
@@ -5375,7 +5394,7 @@ public class TestGameMonitoring {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getPromotedRoads().size(), 1);
-        assertEquals(gameChangesList.getPromotedRoads().get(0), road0);
+        assertEquals(gameChangesList.getPromotedRoads().getFirst(), road0);
 
         /* Verify that the road promotion is only reported once */
         Utils.fastForward(20, map);

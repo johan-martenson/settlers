@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class GameTicker {
 
     private static final int MIN_GAME_TICK_LENGTH = 100;
-    private static final int COMPUTER_PLAYER_FREQUENCY = 100;
+    private static final int COMPUTER_PLAYER_FREQUENCY = 20;
     private static final String FULL_TICK_TIME = "GameTicker.tick.total";
 
     private final ScheduledExecutorService scheduler;

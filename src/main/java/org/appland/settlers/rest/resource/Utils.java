@@ -978,6 +978,10 @@ class Utils {
 
         Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.getChangedBuildings());
 
+        if (!gameChangesList.getPromotedRoads().isEmpty()) {
+            jsonMonitoringEvents.put("changedRoads", roadsToJson(gameChangesList.getPromotedRoads()));
+        }
+
         if (!gameChangesList.getNewStones().isEmpty()) {
             jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.getNewStones()));
         }
@@ -1023,7 +1027,7 @@ class Utils {
         }
 
         if (!gameChangesList.getNewRoads().isEmpty()) {
-            jsonMonitoringEvents.put("newRoads", newRoadsToJson(gameChangesList.getNewRoads()));
+            jsonMonitoringEvents.put("newRoads", roadsToJson(gameChangesList.getNewRoads()));
         }
 
         if (!gameChangesList.getNewTrees().isEmpty()) {
@@ -1502,14 +1506,14 @@ class Utils {
         return jsonIdArray;
     }
 
-    private JSONArray newRoadsToJson(List<Road> newRoads) {
-        JSONArray jsonNewRoads = new JSONArray();
+    private JSONArray roadsToJson(List<Road> newRoads) {
+        JSONArray jsonRoads = new JSONArray();
 
         for (Road road : newRoads) {
-            jsonNewRoads.add(roadToJson(road));
+            jsonRoads.add(roadToJson(road));
         }
 
-        return jsonNewRoads;
+        return jsonRoads;
     }
 
     private JSONArray flagsToJson(Collection<Flag> flags) {

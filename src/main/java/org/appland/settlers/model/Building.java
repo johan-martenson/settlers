@@ -505,7 +505,7 @@ public class Building implements EndPoint {
             } else {
                 countdown.step();
             }
-        } else if (isOccupied()) {
+        } else if (state == State.OCCUPIED) {
             if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
                 if (countdown.hasReachedZero()) {
                     doPromotion();
@@ -513,7 +513,7 @@ public class Building implements EndPoint {
                     countdown.step();
                 }
             }
-        } else if (isDestroyed()) {
+        } else if (state == State.DESTROYED) {
             if (countdown.hasReachedZero()) {
                 map.removeBuilding(this);
 
@@ -527,7 +527,6 @@ public class Building implements EndPoint {
         if (isUpgrading()) {
 
             if (upgradeCountdown.hasReachedZero()) {
-
                 if (isMaterialForUpgradeAvailable()) {
 
                     /* Replace the current building from the map */

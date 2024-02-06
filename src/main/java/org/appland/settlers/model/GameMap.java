@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -564,8 +565,15 @@ public class GameMap {
 
         /* Add worker events to the players if any */
         List<BorderChange> borderChanges = null;
-        for (Player player : players) {
 
+        if (isBorderUpdated) {
+            borderChanges = players.stream()
+                    .map(Player::getBorderChange)
+                    .filter(Objects::nonNull)
+                    .toList();
+        }
+
+        for (Player player : players) {
             if (!player.hasMonitor()) {
                 continue;
             }
@@ -575,10 +583,6 @@ public class GameMap {
                     player.reportChangedStone(stone);
                 }
             });
-
-            if (isBorderUpdated && borderChanges == null) {
-                borderChanges = collectBorderChangesFromEachPlayer();
-            }
 
             if (isBorderUpdated) {
                 player.reportChangedBorders(borderChanges);
@@ -791,20 +795,6 @@ public class GameMap {
         /* Collect variables accumulated during stepTime and reset their collection */
 
         collectEachStepTimeGroup.collectionPeriodDone();
-    }
-
-    private List<BorderChange> collectBorderChangesFromEachPlayer() {
-        List<BorderChange> borderChanges;
-        borderChanges = new ArrayList<>();
-
-        for (Player player : players) {
-            BorderChange borderChange = player.getBorderChange();
-
-            if (borderChange != null) {
-                borderChanges.add(borderChange);
-            }
-        }
-        return borderChanges;
     }
 
     /**
@@ -1034,7 +1024,6 @@ public class GameMap {
 
         /* This iterates over a set and the order may be non-deterministic */
         for (Entry<Point, Building> pair : claims.entrySet()) {
-
             Point    root     = pair.getKey();
             Building building = pair.getValue();
 
@@ -1059,7 +1048,7 @@ public class GameMap {
 
             /* Investigate each un-broken landmass */
             while (!toInvestigate.isEmpty()) {
-                Point point = toInvestigate.get(0);
+                Point point = toInvestigate.getFirst();
 
                 /* Go through the adjacent points */
                 for (Point p : point.getAdjacentPointsExceptAboveAndBelow()) {
