@@ -992,6 +992,10 @@ class Utils {
 
         gameChangesList.getUpgradedBuildings().forEach(newAndOldBuilding -> {
             // Move the id to the new building
+            System.out.println("Old building: " + newAndOldBuilding.oldBuilding);
+            System.out.println("Id: " + idManager.getId(newAndOldBuilding.oldBuilding));
+            System.out.println("New building: " + newAndOldBuilding.newBuilding);
+
             idManager.updateObject(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
 
             // Tell the frontend that the house has changed

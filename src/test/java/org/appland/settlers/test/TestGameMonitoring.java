@@ -5146,6 +5146,7 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getUpgradedBuildings().size(), 1);
         assertEquals(gameChanges.getUpgradedBuildings().iterator().next().newBuilding, map.getBuildingAtPoint(point1));
+        assertEquals(gameChanges.getUpgradedBuildings().iterator().next().oldBuilding, barracks0);
         assertEquals(gameChanges.getChangedBorders().size(), 1);
 
         Set<Point> newBorder = new HashSet<>(player0.getBorderPoints());

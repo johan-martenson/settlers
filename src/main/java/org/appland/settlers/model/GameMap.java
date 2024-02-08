@@ -249,7 +249,6 @@ public class GameMap {
     private void constructDefaultTiles() {
 
         for (int y = 0; y <= height; y++) {
-
             int xStart = 0;
             int xEnd   = width;
 
@@ -346,11 +345,9 @@ public class GameMap {
 
         roads.remove(road);
 
-        for (Point point : road.getWayPoints()) {
-            MapPoint mapPoint = getMapPoint(point);
-
-            mapPoint.removeConnectingRoad(road);
-        }
+        road.getWayPoints().stream()
+                .map(this::getMapPoint)
+                .forEach(mapPoint -> mapPoint.removeConnectingRoad(road));
 
         /* Report that the road is removed */
         removedRoads.add(road);
@@ -1122,44 +1119,23 @@ public class GameMap {
         }
 
         /* Destroy buildings now outside their player's borders */
-        for (Building building : buildings) {
+        buildings.stream()
+                .filter(building -> !building.isBurningDown())
+                .filter(building -> !building.isDestroyed())
+                .filter(building -> !(building.isMilitaryBuilding() && building.isOccupied()))
+                .filter(building -> !building.isHarbor() || !((Harbor) building).isOwnSettlement())
+                .filter(building -> !building.getPlayer().isWithinBorder(building.getPosition()))
+                .filter(building -> !building.getPlayer().isWithinBorder(building.getFlag().getPosition()))
+                .forEach(building -> {
+                    try {
+                        building.tearDown();
+                    } catch (InvalidUserActionException e) {
+                        InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
+                        invalidGameLogicException.initCause(e);
 
-            /* Filter buildings that are already burning down */
-            if (building.isBurningDown()) {
-                continue;
-            }
-
-            /* Filter buildings that are already destroyed */
-            if (building.isDestroyed()) {
-                continue;
-            }
-
-            /* Filter military buildings that are occupied - they should remain */
-            if (building.isMilitaryBuilding() && building.isOccupied()) {
-                continue;
-            }
-
-            /* Filter harbors that support their own settlement and are not destroyed */
-            if (building.isHarbor() && ((Harbor)building).isOwnSettlement() &&
-                !building.isBurningDown() && !building.isDestroyed()) {
-                continue;
-            }
-
-            Player player = building.getPlayer();
-
-            if (player.isWithinBorder(building.getPosition()) && player.isWithinBorder(building.getFlag().getPosition())) {
-                continue;
-            }
-
-            try {
-                building.tearDown();
-            } catch (InvalidUserActionException e) {
-                InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
-                invalidGameLogicException.initCause(e);
-
-                throw invalidGameLogicException;
-            }
-        }
+                        throw invalidGameLogicException;
+                    }
+                });
 
         /* Remove flags now outside the borders */
         List<Flag> flagsToRemove = new LinkedList<>();
@@ -1180,39 +1156,11 @@ public class GameMap {
         /* Remove any roads now outside the borders */
         Set<Road> roadsToRemove = new HashSet<>();
 
-        for (Road road : roads) {
-
-            /* Only remove each road once */
-            if (roadsToRemove.contains(road)) {
-                continue;
-            }
-
-            Player player = road.getPlayer();
-
-            for (Point point : road.getWayPoints()) {
-
-                /* Filter points within the border */
-                if (player.isWithinBorder(point)) {
-                    continue;
-                }
-
-                /* Keep the driveways for military buildings */
-                if (road.getWayPoints().size() == 2) {
-
-                    /* Check if the connected building is military */
-                    MapPoint mapPointStart = getMapPoint(road.getStart());
-                    MapPoint mapPointEnd = getMapPoint(road.getEnd());
-
-                    // FIXME: this should end up also not removing roads to unfinished/unoccupied military buildings. Test and fix.
-                    if (mapPointStart.isMilitaryBuilding() || mapPointEnd.isMilitaryBuilding()) {
-                        continue;
-                    }
-                }
-
-                /* Remember to remove the road */
-                roadsToRemove.add(road);
-            }
-        }
+        roads.stream()
+                .filter(road -> road.getWayPoints().stream().anyMatch(point -> !road.getPlayer().isWithinBorder(point)))
+                .filter(road -> road.getWayPoints().size() != 2 ||
+                        (!getMapPoint(road.getStart()).isMilitaryBuilding() && !getMapPoint(road.getEnd()).isMilitaryBuilding()))
+                .forEach(roadsToRemove::add);
 
         /* Remove the roads */
         for (Road road : roadsToRemove) {
@@ -1275,8 +1223,8 @@ public class GameMap {
             }
         }
 
-        Point start = wayPoints.get(0);
-        Point end   = wayPoints.get(wayPoints.size() - 1);
+        Point start = wayPoints.getFirst();
+        Point end   = wayPoints.getLast();
 
         MapPoint mapPointStart = getMapPoint(start);
         MapPoint mapPointEnd = getMapPoint(end);
@@ -1668,8 +1616,8 @@ public class GameMap {
         /* This iterates over a set and the order may be non-deterministic */
         for (Point point : player.getLandInPoints()) {
             if (!isAvailableFlagPoint(player, point)) {
-                    continue;
-                }
+                continue;
+            }
 
             points.add(point);
         }
@@ -1860,63 +1808,27 @@ public class GameMap {
         DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(from);
         DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(from);
 
-        boolean cannotWalkOnTileUpLeft    = !CAN_WALK_ON.contains(detailedVegetationUpLeft);
-        boolean cannotWalkOnTileDownLeft  = !CAN_WALK_ON.contains(detailedVegetationDownLeft);
-        boolean cannotWalkOnTileUpRight   = !CAN_WALK_ON.contains(detailedVegetationUpRight);
-        boolean cannotWalkOnTileDownRight = !CAN_WALK_ON.contains(detailedVegetationDownRight);
-        boolean cannotWalkOnTileAbove     = !CAN_WALK_ON.contains(detailedVegetationAbove);
-        boolean cannotWalkOnTileBelow     = !CAN_WALK_ON.contains(detailedVegetationBelow);
+        boolean canWalkOnTileUpLeft    = CAN_WALK_ON.contains(detailedVegetationUpLeft);
+        boolean canWalkOnTileDownLeft  = CAN_WALK_ON.contains(detailedVegetationDownLeft);
+        boolean canWalkOnTileUpRight   = CAN_WALK_ON.contains(detailedVegetationUpRight);
+        boolean canWalkOnTileDownRight = CAN_WALK_ON.contains(detailedVegetationDownRight);
+        boolean canWalkOnTileAbove     = CAN_WALK_ON.contains(detailedVegetationAbove);
+        boolean canWalkOnTileBelow     = CAN_WALK_ON.contains(detailedVegetationBelow);
 
-        for (Point adjacentPoint : adjacentPoints) {
+        return Arrays.stream(adjacentPoints)
+                .filter(this::isWithinMap)
+                .filter(point -> !point.isLeftOf(from) || canWalkOnTileUpLeft || canWalkOnTileDownLeft)
+                .filter(point -> !point.isUpLeftOf(from) || canWalkOnTileUpLeft || canWalkOnTileAbove)
+                .filter(point -> !point.isUpRightOf(from) || canWalkOnTileUpRight || canWalkOnTileAbove)
+                .filter(point -> !point.isRightOf(from) || canWalkOnTileUpRight || canWalkOnTileDownRight)
+                .filter(point -> !point.isDownRightOf(from) || canWalkOnTileDownRight || canWalkOnTileBelow)
+                .filter(point -> !point.isDownLeftOf(from) || canWalkOnTileDownLeft || canWalkOnTileBelow)
+                .filter(point -> {
+                    var mapPointAdjacent = getMapPoint(point);
 
-            /* Filter points outside the map */
-            if (!isWithinMap(adjacentPoint)) {
-                continue;
-            }
-
-            MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
-
-            /* Filter points with stones */
-            if (mapPointAdjacent.isStone()) {
-                continue;
-            }
-
-            /* Buildings can only be reached from their flags */
-            if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(from)) {
-                continue;
-            }
-
-            /* Filter points separated by vegetation that can't be walked on */
-
-            if (adjacentPoint.isLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
-                continue;
-            }
-
-            if (adjacentPoint.isUpLeftOf(from) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
-                continue;
-            }
-
-            if (adjacentPoint.isUpRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
-                continue;
-            }
-
-            if (adjacentPoint.isRightOf(from) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
-                continue;
-            }
-
-            if (adjacentPoint.isDownRightOf(from) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
-                continue;
-            }
-
-            if (adjacentPoint.isDownLeftOf(from) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
-                continue;
-            }
-
-            /* Add the point to the list if it passed the filters */
-            possibleAdjacentOffRoadConnections.add(adjacentPoint);
-        }
-
-        return possibleAdjacentOffRoadConnections;
+                    return !mapPointAdjacent.isStone() && (!mapPointAdjacent.isBuilding() || point.isUpLeftOf(from));
+                })
+                .toList();
     }
 
     /**
