@@ -115,7 +115,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                 }
             }
 
-            pointsToInvestigate.removeAll(noLongerValid);
+            noLongerValid.forEach(pointsToInvestigate::remove);
 
             if (pointsToInvestigate.isEmpty()) {
                 System.out.println(" - Has investigated all available spots");
@@ -234,7 +234,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
             concludedPoints.addAll(newlyInvestigatedPoints);
 
-            pointsToInvestigate.removeAll(newlyInvestigatedPoints);
+            newlyInvestigatedPoints.forEach(pointsToInvestigate::remove);
 
             if (calledGeologist.getTarget().equals(headquarter.getPosition())) {
                 state = State.LOOKING_FOR_MINERALS;
@@ -311,24 +311,13 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
         if (map.isAvailableMinePoint(controlledPlayer, p)) {
 
-            Building mine = null;
-
-            switch (type) {
-            case GOLD:
-                mine = map.placeBuilding(new GoldMine(controlledPlayer), p);
-                break;
-            case IRON:
-                mine = map.placeBuilding(new IronMine(controlledPlayer), p);
-                break;
-            case COAL:
-                mine = map.placeBuilding(new CoalMine(controlledPlayer), p);
-                break;
-            case STONE:
-                mine = map.placeBuilding(new GraniteMine(controlledPlayer), p);
-                break;
-            default:
-                throw new Exception("Cannot create mine to get " + type);
-            }
+            Building mine = switch (type) {
+                case GOLD -> map.placeBuilding(new GoldMine(controlledPlayer), p);
+                case IRON -> map.placeBuilding(new IronMine(controlledPlayer), p);
+                case COAL -> map.placeBuilding(new CoalMine(controlledPlayer), p);
+                case STONE -> map.placeBuilding(new GraniteMine(controlledPlayer), p);
+                default -> throw new Exception("Cannot create mine to get " + type);
+            };
 
             if (activeMines.get(type) == 0) {
                 Road road = Utils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);

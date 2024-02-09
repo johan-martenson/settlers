@@ -103,7 +103,7 @@ public class Ship extends Worker {
                             GameUtils.distanceInGameSteps(position, harbor.getPosition())))
                     .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::getData))
                     .map(GameUtils.BuildingAndData::getBuilding)
-                    .collect(Collectors.toUnmodifiableList());
+                    .toList();
 
             /* Start sailing to the nearest point that can be reached (if any) */
             for (Harbor harbor : harborsWithTasksForShipSortedByDistance) {

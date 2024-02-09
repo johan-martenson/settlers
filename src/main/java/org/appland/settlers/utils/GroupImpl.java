@@ -54,8 +54,7 @@ class GroupImpl implements Group {
         for (String variableName : variables) {
             Variable variable = stats.getVariable(variableName);
 
-            if (variable instanceof PeriodicCounterVariableImpl) {
-                PeriodicCounterVariableImpl periodicCounterVariable = (PeriodicCounterVariableImpl) variable;
+            if (variable instanceof PeriodicCounterVariableImpl periodicCounterVariable) {
 
                 periodicCounterVariable.collectionPeriodDone();
             }

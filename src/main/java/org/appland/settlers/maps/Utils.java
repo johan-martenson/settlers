@@ -61,18 +61,13 @@ class Utils {
     }
 
     static Material resourceTypeToMaterial(ResourceType mineralType) {
-        switch (mineralType) {
-            case COAL:
-                return Material.COAL;
-            case IRON_ORE:
-                return Material.IRON;
-            case GOLD:
-                return Material.GOLD;
-            case GRANITE:
-                return Material.STONE;
-            default:
-                return null;
-        }
+        return switch (mineralType) {
+            case COAL -> Material.COAL;
+            case IRON_ORE -> Material.IRON;
+            case GOLD -> Material.GOLD;
+            case GRANITE -> Material.STONE;
+            default -> null;
+        };
     }
 
     public static boolean isEven(int number) {
@@ -80,8 +75,8 @@ class Utils {
     }
 
     public static String shortAsHex(short s) {
-        Short sh = s;
-        String intHexString = Integer.toHexString(sh.intValue());
+        short sh = s;
+        String intHexString = Integer.toHexString((int) sh);
         String shortHexString = intHexString.substring(4);
 
         return shortHexString;

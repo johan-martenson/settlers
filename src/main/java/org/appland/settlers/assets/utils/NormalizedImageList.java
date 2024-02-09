@@ -47,7 +47,7 @@ public class NormalizedImageList {
         this.normalizedImages = new ArrayList<>();
 
         for (Bitmap originalImage : originalImages) {
-            Bitmap normalizedImage = new Bitmap(width, height, originalImages.get(0).getPalette(), TextureFormat.BGRA);
+            Bitmap normalizedImage = new Bitmap(width, height, originalImages.getFirst().getPalette(), TextureFormat.BGRA);
 
             Point copyTo = new Point(0, 0);
             Point copyFrom = new Point(0, 0);

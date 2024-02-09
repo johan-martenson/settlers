@@ -197,8 +197,7 @@ public class GameTicker {
         GameMap map = gameResource.getGameMap();
 
         for (Building building : map.getBuildings()) {
-            if (building instanceof Headquarter) {
-                Headquarter headquarter = (Headquarter) building;
+            if (building instanceof Headquarter headquarter) {
 
                 headquarter.depositWorker(new Scout(headquarter.getPlayer(), map));
                 headquarter.depositWorker(new Scout(headquarter.getPlayer(), map));

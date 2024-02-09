@@ -47,58 +47,33 @@ public enum Texture {                 // Build road   Build    Crops     Mine   
 
         int i = textureUint8 & 0x3F;
 
-        switch (i) {
-            case 0:
-                return SAVANNAH;
-            case 1:
-                return MOUNTAIN_1;
-            case 2:
-                return SNOW;
-            case 3:
-                return SWAMP;
-            case 4:
-                return DESERT_1;
-            case 5:
-                return WATER;
-            case 6:
-                return BUILDABLE_WATER;
-            case 7:
-                return DESERT_2;
-            case 8:
-                return MEADOW_1;
-            case 9:
-                return MEADOW_2;
-            case 10:
-                return MEADOW_3;
-            case 11:
-                return MOUNTAIN_2;
-            case 12:
-                return MOUNTAIN_3;
-            case 13:
-                return MOUNTAIN_4;
-            case 14:
-                return STEPPE;
-            case 15:
-                return FLOWER_MEADOW;
-            case 16:
-                return LAVA;
-            case 17:
-                return MAGENTA;
-            case 18:
-                return MOUNTAIN_MEADOW;
-            case 19:
-                return WATER_2;
-            case 20:
-                return LAVA_2;
-            case 21:
-                return LAVA_3;
-            case 22:
-                return LAVA_4;
-            case 23:
-                return BUILDABLE_MOUNTAIN;
-            default:
-                return null;
-        }
+        return switch (i) {
+            case 0 -> SAVANNAH;
+            case 1 -> MOUNTAIN_1;
+            case 2 -> SNOW;
+            case 3 -> SWAMP;
+            case 4 -> DESERT_1;
+            case 5 -> WATER;
+            case 6 -> BUILDABLE_WATER;
+            case 7 -> DESERT_2;
+            case 8 -> MEADOW_1;
+            case 9 -> MEADOW_2;
+            case 10 -> MEADOW_3;
+            case 11 -> MOUNTAIN_2;
+            case 12 -> MOUNTAIN_3;
+            case 13 -> MOUNTAIN_4;
+            case 14 -> STEPPE;
+            case 15 -> FLOWER_MEADOW;
+            case 16 -> LAVA;
+            case 17 -> MAGENTA;
+            case 18 -> MOUNTAIN_MEADOW;
+            case 19 -> WATER_2;
+            case 20 -> LAVA_2;
+            case 21 -> LAVA_3;
+            case 22 -> LAVA_4;
+            case 23 -> BUILDABLE_MOUNTAIN;
+            default -> null;
+        };
     }
 
     public static boolean isWater(Texture texture) {

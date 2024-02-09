@@ -1049,12 +1049,12 @@ public class GameUtils {
 
                 /* Re-construct the path taken */
                 while (previousPoint != start) {
-                    path.add(0, previousPoint);
+                    path.addFirst(previousPoint);
 
                     previousPoint = cameFrom.get(previousPoint);
                 }
 
-                path.add(0, start);
+                path.addFirst(start);
 
                 return path;
             }
@@ -1248,23 +1248,23 @@ public class GameUtils {
 
                     List<Point> roadPoints = road.getWayPoints();
 
-                    if (roadPoints.get(0).equals(currentPoint)) {
+                    if (roadPoints.getFirst().equals(currentPoint)) {
 
                         for (int i = 0; i < numberWayPoints - 1; i++) {
-                            path.add(0, roadPoints.get(i));
+                            path.addFirst(roadPoints.get(i));
                         }
 
-                        currentPoint = roadPoints.get(roadPoints.size() - 1);
+                        currentPoint = roadPoints.getLast();
                     } else {
                         for (int i = numberWayPoints - 1; i > 0; i--) {
-                            path.add(0, roadPoints.get(i));
+                            path.addFirst(roadPoints.get(i));
                         }
 
-                        currentPoint = roadPoints.get(0);
+                        currentPoint = roadPoints.getFirst();
                     }
                 }
 
-                path.add(0, currentPoint);
+                path.addFirst(currentPoint);
 
                 return path;
             }
@@ -1633,7 +1633,7 @@ public class GameUtils {
 
         while (!toEvaluate.isEmpty()) {
 
-            point = toEvaluate.get(0);
+            point = toEvaluate.getFirst();
             toEvaluate.remove(point);
 
             MapPoint mapPoint = map.getMapPoint(point);
@@ -1682,7 +1682,7 @@ public class GameUtils {
 
         while (!toEvaluate.isEmpty()) {
 
-            point = toEvaluate.get(0);
+            point = toEvaluate.getFirst();
             toEvaluate.remove(point);
 
             MapPoint mapPoint = map.getMapPoint(point);

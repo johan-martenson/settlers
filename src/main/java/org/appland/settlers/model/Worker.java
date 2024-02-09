@@ -163,7 +163,7 @@ public abstract class Worker {
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
             /* Keep track of what direction the worker is walking in */
-            Point next = path.get(0);
+            Point next = path.getFirst();
 
             if (position.x == next.x && position.y == next.y) {
                 throw new RuntimeException("They are the same! I am " + this);
@@ -184,8 +184,8 @@ public abstract class Worker {
                 state = State.WALKING_AND_EXACTLY_AT_POINT;
 
                 /* Update the worker's position */
-                position = path.get(0);
-                path.remove(0);
+                position = path.getFirst();
+                path.removeFirst();
 
                 /* Update the cargo's position */
                 updateCargoPosition();
@@ -270,8 +270,7 @@ public abstract class Worker {
     private void handleArrival() {
 
         /* Just enter the storage and do nothing more */
-        if (targetBuilding != null && targetBuilding instanceof Storehouse && targetBuilding.isOccupied()) {
-            Storehouse storehouse = (Storehouse) targetBuilding;
+        if (targetBuilding != null && targetBuilding instanceof Storehouse storehouse && targetBuilding.isOccupied()) {
 
             storehouse.depositWorker(this);
 
@@ -378,7 +377,7 @@ public abstract class Worker {
             return null;
         }
 
-        return path.get(0);
+        return path.getFirst();
     }
 
     public int getPercentageOfDistanceTraveled() {
@@ -471,7 +470,7 @@ public abstract class Worker {
     }
 
     protected void setOffroadTargetWithPath(List<Point> pathToWalk) {
-        target = pathToWalk.get(pathToWalk.size() - 1);
+        target = pathToWalk.getLast();
         path = pathToWalk;
 
         if (position.equals(target)) {
@@ -480,11 +479,11 @@ public abstract class Worker {
             handleArrival();
         } else {
 
-            if (!path.get(0).equals(position)) {
+            if (!path.getFirst().equals(position)) {
                 throw new RuntimeException("The path must start with the current position");
             }
 
-            path.remove(0);
+            path.removeFirst();
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
@@ -494,14 +493,14 @@ public abstract class Worker {
     }
 
     void setTargetWithPath(List<Point> pathToWalk) {
-        target = pathToWalk.get(pathToWalk.size() - 1);
+        target = pathToWalk.getLast();
         path = new ArrayList<>(pathToWalk);
 
-        if (!path.get(0).equals(position)) {
+        if (!path.getFirst().equals(position)) {
             throw new RuntimeException("The path must start with the current position");
         }
 
-        path.remove(0);
+        path.removeFirst();
 
         if (position.equals(target)) {
             state = State.IDLE_OUTSIDE;
@@ -510,7 +509,7 @@ public abstract class Worker {
         } else {
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
-            direction = GameUtils.getDirectionBetweenPoints(position, path.get(0));
+            direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
@@ -551,11 +550,11 @@ public abstract class Worker {
             }
 
             /* Remove the current point from the path */
-            path.remove(0);
+            path.removeFirst();
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
-            direction = GameUtils.getDirectionBetweenPoints(position, path.get(0));
+            direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);

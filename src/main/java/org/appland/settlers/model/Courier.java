@@ -370,8 +370,8 @@ public class Courier extends Worker {
         Building cargoTargetBuilding = getCargo().getTarget();
 
         /* If at the point before the flag */
-        if (!plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.get(0))) {
-            Point nextPoint = plannedPath.get(0);
+        if (!plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst())) {
+            Point nextPoint = plannedPath.getFirst();
             MapPoint mapPointNext = map.getMapPoint(nextPoint);
 
             Flag flag = mapPointNext.getFlag();
@@ -524,7 +524,7 @@ public class Courier extends Worker {
             List<Point> roadPoints = assignedRoad.getWayPoints();
             List<Point> toWalk = new ArrayList<>(roadPoints);
 
-            if (!roadPoints.get(0).equals(getPosition())) {
+            if (!roadPoints.getFirst().equals(getPosition())) {
                 Collections.reverse(toWalk);
             }
 
@@ -534,7 +534,7 @@ public class Courier extends Worker {
         } else {
             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-            if (assignedRoad.getWayPoints().get(0).equals(getPosition())) {
+            if (assignedRoad.getWayPoints().getFirst().equals(getPosition())) {
                 setTargetWithPath(assignedRoad.getWayPoints());
             } else {
                 List<Point> toWalk = new LinkedList<>(assignedRoad.getWayPoints());

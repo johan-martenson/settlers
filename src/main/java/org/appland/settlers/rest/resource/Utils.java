@@ -599,8 +599,7 @@ class Utils {
             jsonWorker.put("percentageTraveled", 0);
         }
 
-        if (worker instanceof Courier) {
-            Courier courier = (Courier) worker;
+        if (worker instanceof Courier courier) {
 
             jsonWorker.put("bodyType", courier.getBodyType().name().toUpperCase());
         }
@@ -789,7 +788,7 @@ class Utils {
 
         for (Player player : map.getPlayers()) {
 
-            Headquarter headquarter = (Headquarter)player.getBuildings().get(0);
+            Headquarter headquarter = (Headquarter)player.getBuildings().getFirst();
 
             if (resources == ResourceLevel.LOW) {
 
@@ -1185,8 +1184,7 @@ class Utils {
         JSONArray jsonWorkers = new JSONArray();
 
         workers.forEach(worker -> {
-            if (worker instanceof Ship) {
-                Ship ship = (Ship) worker;
+            if (worker instanceof Ship ship) {
 
                 jsonWorkers.add(shipToJson(ship));
             }
@@ -1252,11 +1250,9 @@ class Utils {
         JSONArray jsonWildAnimals = new JSONArray();
 
         for (Worker worker : workersWithNewTargets) {
-            if (! (worker instanceof WildAnimal)) {
+            if (! (worker instanceof WildAnimal wildAnimal)) {
                 continue;
             }
-
-            WildAnimal wildAnimal = (WildAnimal) worker;
 
             jsonWildAnimals.add(wildAnimalToJson(wildAnimal));
         }
@@ -1560,8 +1556,7 @@ class Utils {
 
             jsonWorkerWithNewTarget.put("direction", worker.getDirection().name().toUpperCase());
 
-            if (worker instanceof Courier) {
-                Courier courier = (Courier) worker;
+            if (worker instanceof Courier courier) {
 
                 jsonWorkerWithNewTarget.put("bodyType", courier.getBodyType().name().toUpperCase());
             }

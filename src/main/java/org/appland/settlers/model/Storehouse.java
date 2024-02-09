@@ -123,11 +123,9 @@ public class Storehouse extends Building {
                     }
 
                     /* Filter buildings that are not storehouses */
-                    if (! (building instanceof Storehouse)) {
+                    if (! (building instanceof Storehouse storehouse)) {
                         continue;
                     }
-
-                    Storehouse storehouse = (Storehouse) building;
 
                     /* Filter storehouses that are not ready */
                     if (!storehouse.isReady()) {
@@ -457,21 +455,12 @@ public class Storehouse extends Building {
     public void depositWorker(Worker worker) {
         if (worker.isSoldier()) { // FIXME: deposit for soldier does not seem to work for some ranks
             Soldier military = (Soldier) worker;
-            Material material;
-
-            switch (military.getRank()) {
-            case PRIVATE_RANK:
-                material = PRIVATE;
-                break;
-            case SERGEANT_RANK:
-                material = SERGEANT;
-                break;
-            case GENERAL_RANK:
-                material = GENERAL;
-                break;
-            default:
-                throw new InvalidGameLogicException("Can't handle military with rank " + military.getRank());
-            }
+            Material material = switch (military.getRank()) {
+                case PRIVATE_RANK -> PRIVATE;
+                case SERGEANT_RANK -> SERGEANT;
+                case GENERAL_RANK -> GENERAL;
+                default -> throw new InvalidGameLogicException("Can't handle military with rank " + military.getRank());
+            };
 
             storeOneInInventory(material);
         } else if (worker instanceof Forester) {
@@ -544,106 +533,41 @@ public class Storehouse extends Building {
             }
         }
 
-        switch (workerType) {
-        case FORESTER:
-            worker = new Forester(getPlayer(), getMap());
-            break;
-        case WOODCUTTER_WORKER:
-            worker = new WoodcutterWorker(getPlayer(), getMap());
-            break;
-        case STONEMASON:
-            worker = new Stonemason(getPlayer(), getMap());
-            break;
-        case FARMER:
-            worker = new Farmer(getPlayer(), getMap());
-            break;
-        case SAWMILL_WORKER:
-            worker = new SawmillWorker(getPlayer(), getMap());
-            break;
-        case WELL_WORKER:
-            worker = new WellWorker(getPlayer(), getMap());
-            break;
-        case MILLER:
-            worker = new Miller(getPlayer(), getMap());
-            break;
-        case BAKER:
-            worker = new Baker(getPlayer(), getMap());
-            break;
-        case STORAGE_WORKER:
-            worker = new StorageWorker(getPlayer(), getMap());
-            break;
-        case FISHERMAN:
-            worker = new Fisherman(getPlayer(), getMap());
-            break;
-        case MINER:
-            worker = new Miner(getPlayer(), getMap());
-            break;
-        case IRON_FOUNDER:
-            worker = new IronFounder(getPlayer(), getMap());
-            break;
-        case BREWER:
-            worker = new Brewer(getPlayer(), getMap());
-            break;
-        case MINTER:
-            worker = new Minter(getPlayer(), getMap());
-            break;
-        case ARMORER:
-            worker = new Armorer(getPlayer(), getMap());
-            break;
-        case PIG_BREEDER:
-            worker = new PigBreeder(getPlayer(), getMap());
-            break;
-        case BUTCHER:
-            worker = new Butcher(getPlayer(), getMap());
-            break;
-        case GEOLOGIST:
-            worker = new Geologist(getPlayer(), getMap());
-            break;
-        case DONKEY_BREEDER:
-            worker = new DonkeyBreeder(getPlayer(), getMap());
-            break;
-        case SCOUT:
-            worker = new Scout(getPlayer(), getMap());
-            break;
-        case CATAPULT_WORKER:
-            worker = new CatapultWorker(getPlayer(), getMap());
-            break;
-        case HUNTER:
-            worker = new Hunter(getPlayer(), getMap());
-            break;
-        case METALWORKER:
-            worker = new Metalworker(getPlayer(), getMap());
-            break;
-        case DONKEY:
-            worker = new Donkey(getPlayer(), getMap());
-            break;
-        case COURIER:
-            worker = new Courier(getPlayer(), getMap());
-            break;
-        case PRIVATE:
-            worker = new Soldier(getPlayer(), PRIVATE_RANK, getMap());
-            break;
-        case PRIVATE_FIRST_CLASS:
-            worker = new Soldier(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
-            break;
-        case SERGEANT:
-            worker = new Soldier(getPlayer(), SERGEANT_RANK, getMap());
-            break;
-        case OFFICER:
-            worker = new Soldier(getPlayer(), OFFICER_RANK, getMap());
-            break;
-        case GENERAL:
-            worker = new Soldier(getPlayer(), GENERAL_RANK, getMap());
-            break;
-        case BUILDER:
-            worker = new Builder(getPlayer(), getMap());
-            break;
-        case SHIPWRIGHT:
-            worker = new Shipwright(getPlayer(), getMap());
-            break;
-        default:
-            throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
-        }
+        worker = switch (workerType) {
+            case FORESTER -> new Forester(getPlayer(), getMap());
+            case WOODCUTTER_WORKER -> new WoodcutterWorker(getPlayer(), getMap());
+            case STONEMASON -> new Stonemason(getPlayer(), getMap());
+            case FARMER -> new Farmer(getPlayer(), getMap());
+            case SAWMILL_WORKER -> new SawmillWorker(getPlayer(), getMap());
+            case WELL_WORKER -> new WellWorker(getPlayer(), getMap());
+            case MILLER -> new Miller(getPlayer(), getMap());
+            case BAKER -> new Baker(getPlayer(), getMap());
+            case STORAGE_WORKER -> new StorageWorker(getPlayer(), getMap());
+            case FISHERMAN -> new Fisherman(getPlayer(), getMap());
+            case MINER -> new Miner(getPlayer(), getMap());
+            case IRON_FOUNDER -> new IronFounder(getPlayer(), getMap());
+            case BREWER -> new Brewer(getPlayer(), getMap());
+            case MINTER -> new Minter(getPlayer(), getMap());
+            case ARMORER -> new Armorer(getPlayer(), getMap());
+            case PIG_BREEDER -> new PigBreeder(getPlayer(), getMap());
+            case BUTCHER -> new Butcher(getPlayer(), getMap());
+            case GEOLOGIST -> new Geologist(getPlayer(), getMap());
+            case DONKEY_BREEDER -> new DonkeyBreeder(getPlayer(), getMap());
+            case SCOUT -> new Scout(getPlayer(), getMap());
+            case CATAPULT_WORKER -> new CatapultWorker(getPlayer(), getMap());
+            case HUNTER -> new Hunter(getPlayer(), getMap());
+            case METALWORKER -> new Metalworker(getPlayer(), getMap());
+            case DONKEY -> new Donkey(getPlayer(), getMap());
+            case COURIER -> new Courier(getPlayer(), getMap());
+            case PRIVATE -> new Soldier(getPlayer(), PRIVATE_RANK, getMap());
+            case PRIVATE_FIRST_CLASS -> new Soldier(getPlayer(), PRIVATE_FIRST_CLASS_RANK, getMap());
+            case SERGEANT -> new Soldier(getPlayer(), SERGEANT_RANK, getMap());
+            case OFFICER -> new Soldier(getPlayer(), OFFICER_RANK, getMap());
+            case GENERAL -> new Soldier(getPlayer(), GENERAL_RANK, getMap());
+            case BUILDER -> new Builder(getPlayer(), getMap());
+            case SHIPWRIGHT -> new Shipwright(getPlayer(), getMap());
+            default -> throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
+        };
 
         worker.setPosition(getFlag().getPosition());
 

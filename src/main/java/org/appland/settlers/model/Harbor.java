@@ -329,11 +329,9 @@ public class Harbor extends Storehouse {
                 continue;
             }
 
-            if (!(building instanceof Harbor )) {
+            if (!(building instanceof Harbor otherHarbor)) {
                 continue;
             }
-
-            Harbor otherHarbor = (Harbor) building;
 
             if (this.equals(otherHarbor)) {
                 continue;

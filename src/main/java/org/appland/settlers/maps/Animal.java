@@ -43,29 +43,18 @@ public enum Animal {
     }
 
     static Animal animalFromInt(short i) {
-        switch (i) {
-            case 0:
-                return NO_ANIMAL;
-            case 1:
-                return RABBIT;
-            case 2:
-                return FOX;
-            case 3:
-                return STAG;
-            case 4:
-                return DEER;
-            case 5:
-                return DUCK;
-            case 6:
-                return SHEEP;
-            case 7:
-                return DEER_2;
-            case 8:
-                return DUCK_2;
-            case 9:
-                return PACK_DONKEY;
-            default:
-                return NO_ANIMAL;
-        }
+        return switch (i) {
+            case 0 -> NO_ANIMAL;
+            case 1 -> RABBIT;
+            case 2 -> FOX;
+            case 3 -> STAG;
+            case 4 -> DEER;
+            case 5 -> DUCK;
+            case 6 -> SHEEP;
+            case 7 -> DEER_2;
+            case 8 -> DUCK_2;
+            case 9 -> PACK_DONKEY;
+            default -> NO_ANIMAL;
+        };
     }
 }

@@ -58,7 +58,7 @@ public class Reader {
 
     private Palette palette;
 
-    public static void main(String[] args) throws CmdLineException, IOException, UnknownResourceTypeException, InvalidHeaderException, InvalidFormatException {
+    public static void main(String[] args) throws CmdLineException, IOException, UnknownResourceTypeException, InvalidFormatException {
         Reader reader = new Reader();
         CmdLineParser parser = new CmdLineParser(reader);
 
@@ -557,17 +557,20 @@ public class Reader {
         System.out.println("Asset filename: " + filenameWithoutPath);
         System.out.println("File type: " + fileSuffix);
 
-        if (fileSuffix.equals("LST") || fileSuffix.equals("BOB")) {
+        switch (fileSuffix) {
+            case "LST", "BOB" -> {
 
-            return LstDecoder.loadLstFile(assetFilename, palette);
-        } else if (fileSuffix.equals("LBM")) {
-            List<GameResource> result = new ArrayList<>();
+                return LstDecoder.loadLstFile(assetFilename, palette);
+            }
+            case "LBM" -> {
+                List<GameResource> result = new ArrayList<>();
 
-            result.add(LbmDecoder.loadLBMFile(assetFilename, palette));
+                result.add(LbmDecoder.loadLBMFile(assetFilename, palette));
 
-            return result;
-        } else if (fileSuffix.equals("DAT")) {
-            return DatDecoder.loadDatFile(assetFilename, palette);
+                return result;
+            }
+            case "DAT" -> {
+                return DatDecoder.loadDatFile(assetFilename, palette);
 /*            try {
                 System.out.println("Loading as sound stream");
 
@@ -581,6 +584,7 @@ public class Reader {
                 System.out.println("Failed to load " + assetFilename);
                 t.printStackTrace();
             }*/
+            }
         }
 
         return null;

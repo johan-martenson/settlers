@@ -301,7 +301,7 @@ public class Inspector {
                 Integer.MAX_VALUE,
                 (path, basicFileAttributes) -> path.toFile().getName().matches(".*.SWD") ||
                         path.toFile().getName().matches(".*.WLD")
-        ).collect(Collectors.toList());
+        ).toList();
 
         /* Print information for points surrounding points of the selected type */
         for (Path path : paths) {
@@ -908,17 +908,17 @@ public class Inspector {
         System.out.println();
 
         /* Use the first player to compare building points for */
-        Player player = map.getPlayers().get(0);
+        Player player = map.getPlayers().getFirst();
 
         if (debug) {
-            System.out.println("Starting point for player from MapFile: " + new Point(mapFile.getGamePointStartingPoints().get(0)));
-            System.out.println("Starting point for player from GameMap: " + map.getStartingPoints().get(0));
+            System.out.println("Starting point for player from MapFile: " + new Point(mapFile.getGamePointStartingPoints().getFirst()));
+            System.out.println("Starting point for player from GameMap: " + map.getStartingPoints().getFirst());
         }
 
         /* Place a headquarters for the player to get the game to calculate available buildings points within the
         * border
         * */
-        map.placeBuilding(new Headquarter(player), map.getStartingPoints().get(0));
+        map.placeBuilding(new Headquarter(player), map.getStartingPoints().getFirst());
 
         /* Compare the available building points calculated in the game with the corresponding points in the MapFile */
         Map<Point, Size> availablePoints = map.getAvailableHousePoints(player);

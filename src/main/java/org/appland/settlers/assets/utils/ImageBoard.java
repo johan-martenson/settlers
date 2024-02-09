@@ -202,7 +202,7 @@ public class ImageBoard {
             this.x = x;
             this.y = y;
 
-            Bitmap image = images.get(0);
+            Bitmap image = images.getFirst();
 
             this.width = image.getWidth();
             this.height = image.getHeight();

@@ -142,7 +142,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
         }
 
         /* Return any point from the available ones */
-        return spots.get(0);
+        return spots.getFirst();
     }
 
     private Point findSpotForSawmill(Headquarter headquarter) {
@@ -156,7 +156,7 @@ public class PlankProductionPlayer implements ComputerPlayer {
         }
 
         /* Return any point from the available ones */
-        return spots.get(0);
+        return spots.getFirst();
     }
 
     @Override

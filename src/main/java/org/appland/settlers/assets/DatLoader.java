@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import static java.lang.String.format;
 import static java.nio.ByteOrder.BIG_ENDIAN;
 
 public class DatLoader {

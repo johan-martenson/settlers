@@ -22,15 +22,11 @@ public enum MassType {
 
     public static MassType massTypeFromInt(int type) {
 
-        switch (type) {
-            case 0:
-                return MassType.UNUSED;
-            case 1:
-                return MassType.LAND;
-            case 2:
-                return MassType.WATER;
-            default:
-                return null;
-        }
+        return switch (type) {
+            case 0 -> MassType.UNUSED;
+            case 1 -> MassType.LAND;
+            case 2 -> MassType.WATER;
+            default -> null;
+        };
     }
 }

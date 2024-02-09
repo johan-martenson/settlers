@@ -30,33 +30,20 @@ public enum PlayerFace {
     }
 
     static PlayerFace playerFaceFromShort(short s) {
-        switch(s) {
-            case 0:
-                return PlayerFace.ROMAN_OCTAVIANUS;
-            case 1:
-                return PlayerFace.ROMAN_JULIUS;
-            case 2:
-                return PlayerFace.BRUTUS;
-            case 3:
-                return PlayerFace.VIKING_ERIK;
-            case 4:
-                return PlayerFace.VIKING_KNUT;
-            case 5:
-                return PlayerFace.VIKING_OLOF;
-            case 6:
-                return PlayerFace.JAPANESE_YAMAUCHI;
-            case 7:
-                return PlayerFace.JAPANESE_TSUNAMI;
-            case 8:
-                return PlayerFace.JAPANESE_HAKIRAWASHI;
-            case 9:
-                return PlayerFace.NUBIAN_SHAKA;
-            case 10:
-                return PlayerFace.NUBIAN_TODO;
-            case 11:
-                return PlayerFace.NUBIAN_MNGA_TSCHA;
-            default:
-                return null;
-        }
+        return switch (s) {
+            case 0 -> PlayerFace.ROMAN_OCTAVIANUS;
+            case 1 -> PlayerFace.ROMAN_JULIUS;
+            case 2 -> PlayerFace.BRUTUS;
+            case 3 -> PlayerFace.VIKING_ERIK;
+            case 4 -> PlayerFace.VIKING_KNUT;
+            case 5 -> PlayerFace.VIKING_OLOF;
+            case 6 -> PlayerFace.JAPANESE_YAMAUCHI;
+            case 7 -> PlayerFace.JAPANESE_TSUNAMI;
+            case 8 -> PlayerFace.JAPANESE_HAKIRAWASHI;
+            case 9 -> PlayerFace.NUBIAN_SHAKA;
+            case 10 -> PlayerFace.NUBIAN_TODO;
+            case 11 -> PlayerFace.NUBIAN_MNGA_TSCHA;
+            default -> null;
+        };
     }
 }

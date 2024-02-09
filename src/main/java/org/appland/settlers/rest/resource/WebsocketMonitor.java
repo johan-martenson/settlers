@@ -548,7 +548,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     try {
                         Flag flag = map.placeFlag(player, flagPoint);
 
-                        Point lastPointInRoad = roadPoints.get(roadPoints.size() - 1);
+                        Point lastPointInRoad = roadPoints.getLast();
 
                         if (flagPoint.distance(lastPointInRoad) > 2) {
                             List<Point> additionalRoad = map.findAutoSelectedRoad(
@@ -559,7 +559,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                             );
 
                             // Remove the first point in the extended list because it overlaps with the given road points
-                            additionalRoad.remove(0);
+                            additionalRoad.removeFirst();
 
                             roadPoints.addAll(additionalRoad);
                         }

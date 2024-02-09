@@ -181,26 +181,21 @@ public class Utils {
     }
 
     public static Bitmap getBitmapFromGameResource(GameResource gameResource) {
-        switch (gameResource.getType()) {
-            case BITMAP_RESOURCE:
-                BitmapResource bitmapResource = (BitmapResource)gameResource;
-
-                return bitmapResource.getBitmap();
-
-            case BITMAP_RLE:
+        return switch (gameResource.getType()) {
+            case BITMAP_RESOURCE -> {
+                BitmapResource bitmapResource = (BitmapResource) gameResource;
+                yield bitmapResource.getBitmap();
+            }
+            case BITMAP_RLE -> {
                 BitmapRLEResource bitmapRLEResource = (BitmapRLEResource) gameResource;
-
-                return bitmapRLEResource.getBitmap();
-
-            case PLAYER_BITMAP_RESOURCE:
+                yield bitmapRLEResource.getBitmap();
+            }
+            case PLAYER_BITMAP_RESOURCE -> {
                 PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
-
-                return playerBitmapResource.getBitmap();
-
-            default:
-                throw new RuntimeException("Cannot get bitmap for: " + gameResource.getType());
-
-        }
+                yield playerBitmapResource.getBitmap();
+            }
+            default -> throw new RuntimeException("Cannot get bitmap for: " + gameResource.getType());
+        };
     }
 
     public static int max(int... numbers) {

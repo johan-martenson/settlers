@@ -20,25 +20,16 @@ public enum PlayerType {
     COMPOSITE_PLAYER;
 
     public static PlayerType playerTypeFromString(String computerPlayerName) {
-        switch (computerPlayerName) {
-            case "building":
-                return BUILDING;
-            case "expansion":
-                return EXPANDING;
-            case "attacking":
-                return ATTACKING;
-            case "minerals":
-                return MINERALS;
-            case "food":
-                return FOOD_PRODUCER;
-            case "coins":
-                return COIN_PRODUCER;
-            case "military":
-                return MILITARY_PRODUCER;
-            case "composite":
-                return COMPOSITE_PLAYER;
-            default:
-                return null;
-        }
+        return switch (computerPlayerName) {
+            case "building" -> BUILDING;
+            case "expansion" -> EXPANDING;
+            case "attacking" -> ATTACKING;
+            case "minerals" -> MINERALS;
+            case "food" -> FOOD_PRODUCER;
+            case "coins" -> COIN_PRODUCER;
+            case "military" -> MILITARY_PRODUCER;
+            case "composite" -> COMPOSITE_PLAYER;
+            default -> null;
+        };
     }
 }

@@ -69,7 +69,7 @@ class DeploymentListener implements ServletContextListener {
         try {
             MapFile loadedMapFile = mapLoader.loadMapFromFile(mapFile.toString());
 
-            mapFiles.add(0, loadedMapFile);
+            mapFiles.addFirst(loadedMapFile);
 
             servletContextEvent.getServletContext().setAttribute(SettlersAPI.MAP_FILE_LIST, mapFiles);
         } catch (Exception e) {

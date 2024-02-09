@@ -105,7 +105,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             }
 
             /* Place the quarry */
-            quarry = map.placeBuilding(new Quarry(player), points.get(0));
+            quarry = map.placeBuilding(new Quarry(player), points.getFirst());
             System.out.println(" - Built quarry at " + quarry.getPosition());
 
             /* Connect the quarry to the headquarter */

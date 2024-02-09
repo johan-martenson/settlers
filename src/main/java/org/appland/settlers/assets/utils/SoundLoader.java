@@ -66,18 +66,11 @@ public class SoundLoader {
                 long length = streamReader.getUint32();
                 String subHeader = streamReader.getUint8ArrayAsString(4);
 
-                switch (subHeader) {
-                    case "XMID":
-                    case "XDIR":
-                        soundType = XMIDI;
-
-                        break;
-
-                    case "WAVE":
-                        soundType = WAVE;
-
-                        break;
-                }
+                soundType = switch (subHeader) {
+                    case "XMID", "XDIR" -> XMIDI;
+                    case "WAVE" -> WAVE;
+                    default -> soundType;
+                };
 
                 break;
 

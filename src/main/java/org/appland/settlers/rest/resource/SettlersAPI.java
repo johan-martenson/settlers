@@ -559,7 +559,7 @@ public class SettlersAPI {
         }
 
         if (gameResource.isStarted()) {
-            GameMap map = (GameMap) gameResource.getGameMap();
+            GameMap map = gameResource.getGameMap();
 
             if (!map.getPlayers().contains(player)) {
                 JSONObject message = new JSONObject();

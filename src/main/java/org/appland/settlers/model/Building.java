@@ -644,16 +644,12 @@ public class Building implements EndPoint {
     private int getConstructionCountdown() {
         HouseSize sizeAnnotation = getClass().getAnnotation(HouseSize.class);
 
-        switch (sizeAnnotation.size()) {
-        case SMALL:
-            return TIME_TO_BUILD_SMALL_HOUSE;
-        case MEDIUM:
-            return TIME_TO_BUILD_MEDIUM_HOUSE;
-        case LARGE:
-            return TIME_TO_BUILD_LARGE_HOUSE;
-        default:
-            return 0;
-        }
+        return switch (sizeAnnotation.size()) {
+            case SMALL -> TIME_TO_BUILD_SMALL_HOUSE;
+            case MEDIUM -> TIME_TO_BUILD_MEDIUM_HOUSE;
+            case LARGE -> TIME_TO_BUILD_LARGE_HOUSE;
+            default -> 0;
+        };
     }
 
     private boolean isMaterialForConstructionAvailable() {
@@ -920,7 +916,7 @@ public class Building implements EndPoint {
     }
 
     Soldier pickWaitingAttacker() {
-        return waitingAttackers.remove(0);
+        return waitingAttackers.removeFirst();
     }
 
     List<Soldier> getAttackers() {
@@ -1087,7 +1083,7 @@ public class Building implements EndPoint {
         getPlayer().reportHitByCatapult(catapult, this);
 
         if (getNumberOfHostedSoldiers() > 0) {
-            hostedSoldiers.remove(0);
+            hostedSoldiers.removeFirst();
         } else {
             tearDown();
         }
@@ -1169,14 +1165,11 @@ public class Building implements EndPoint {
         }
 
         /* Only planks and stones are used for upgrades */
-        switch (material) {
-            case PLANK:
-                return upgrade.planks();
-            case STONE:
-                return upgrade.stones();
-            default:
-                return 0;
-        }
+        return switch (material) {
+            case PLANK -> upgrade.planks();
+            case STONE -> upgrade.stones();
+            default -> 0;
+        };
     }
 
     public boolean isUpgradable() {

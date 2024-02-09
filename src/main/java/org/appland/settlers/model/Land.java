@@ -64,22 +64,22 @@ public class Land {
                 lessClosePoint = null;
 
                 for (Point p : borderPoints) {
-                    if (p.distance(collectingBorder.get(0)) < 1.5) {
+                    if (p.distance(collectingBorder.getFirst()) < 1.5) {
                         closePoint = p;
                         break;
                     }
 
-                    if (p.distance(collectingBorder.get(0)) < 2.1) {
+                    if (p.distance(collectingBorder.getFirst()) < 2.1) {
                         lessClosePoint = p;
                     }
                 }
 
                 if (closePoint != null) {
-                    collectingBorder.add(0, closePoint);
+                    collectingBorder.addFirst(closePoint);
 
                     borderPoints.remove(closePoint);
                 } else if (lessClosePoint != null) {
-                    collectingBorder.add(0, lessClosePoint);
+                    collectingBorder.addFirst(lessClosePoint);
 
                     borderPoints.remove(lessClosePoint);
                 } else {

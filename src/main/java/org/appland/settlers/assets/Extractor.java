@@ -122,7 +122,7 @@ public class Extractor {
 
     private Palette defaultPalette;
 
-    public static void main(String[] args) throws IOException, InvalidHeaderException, InvalidFormatException, UnknownResourceTypeException, CmdLineException {
+    public static void main(String[] args) throws IOException, InvalidFormatException, UnknownResourceTypeException, CmdLineException {
 
         Extractor extractor = new Extractor();
 
@@ -395,11 +395,9 @@ public class Extractor {
             throw new RuntimeException("Wrong size of game resources in bob file. Must be 1, but was: " + jobsBobList.size());
         }
 
-        if (! (jobsBobList.get(0) instanceof BobResource)) {
-            throw new RuntimeException("Element must be Bob game resource. Was: " + jobsBobList.get(0).getClass().getName());
+        if (! (jobsBobList.getFirst() instanceof BobResource jobsBobResource)) {
+            throw new RuntimeException("Element must be Bob game resource. Was: " + jobsBobList.getFirst().getClass().getName());
         }
-
-        BobResource jobsBobResource = (BobResource) jobsBobList.get(0);
 
         /* Construct the worker details map */
         Map<JobType, WorkerDetails> workerDetailsMap = new EnumMap<>(JobType.class);

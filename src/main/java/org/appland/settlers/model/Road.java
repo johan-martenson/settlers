@@ -32,8 +32,8 @@ public class Road {
 
         steps = Collections.unmodifiableList(wayPoints);
 
-        Point pointStart = steps.get(0);
-        Point pointEnd = steps.get(steps.size() - 1);
+        Point pointStart = steps.getFirst();
+        Point pointEnd = steps.getLast();
 
         MapPoint mapPointStart = map.getMapPoint(pointStart);
         MapPoint mapPointEnd = map.getMapPoint(pointEnd);

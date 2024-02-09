@@ -116,6 +116,6 @@ public class Duration {
     }
 
     public long getFullDuration() {
-        return timestamps.get(timestamps.size() - 1).timestamp - timestampAtStart;
+        return timestamps.getLast().timestamp - timestampAtStart;
     }
 }

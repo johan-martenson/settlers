@@ -1352,7 +1352,7 @@ public class GameMap {
         List<Point> path1 = findWayWithExistingRoads(start, via);
         List<Point> path2 = findWayWithExistingRoads(via, end);
 
-        path2.remove(0);
+        path2.removeFirst();
 
         path1.addAll(path2);
 

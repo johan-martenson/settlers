@@ -2,7 +2,6 @@ package org.appland.settlers.utils;
 
 import org.appland.settlers.maps.ByteArray;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
