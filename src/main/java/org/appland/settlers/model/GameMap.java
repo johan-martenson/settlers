@@ -1248,20 +1248,14 @@ public class GameMap {
         }
 
         /* Verify that all points are possible as road */
-        for (Point point : wayPoints) {
-            if (point.equals(start)) {
-                continue;
-            }
+        var maybeInvalidPoint = wayPoints.stream()
+                .filter(point -> !Objects.equals(point, start))
+                .filter(point -> !Objects.equals(point, end) || !isPossibleAsEndPointInRoad(player, point))
+                .filter(point -> !isPossibleAsAnyPointInRoad(player, point))
+                .findFirst();
 
-            if (point.equals(end) && isPossibleAsEndPointInRoad(player, point)) {
-                continue;
-            }
-
-            if (isPossibleAsAnyPointInRoad(player, point)) {
-                continue;
-            }
-
-            throw new InvalidUserActionException(point + " in road is invalid");
+        if (maybeInvalidPoint.isPresent()) {
+            throw new InvalidUserActionException(maybeInvalidPoint.get() + " in road is invalid");
         }
 
         return doPlaceRoad(player, wayPoints);
@@ -2175,10 +2169,10 @@ public class GameMap {
             public Iterable<Point> getPossibleConnections(Point start, Point end) {
                 List<Point>  possibleAdjacentOffRoadConnections = new ArrayList<>();
 
-                MapPoint mapPoint = getMapPoint(start);
+                MapPoint mapPointStart = getMapPoint(start);
 
                 /* Houses can only be left via the driveway so handle this case separately */
-                if (mapPoint.isBuilding()) {
+                if (mapPointStart.isBuilding()) {
                     possibleAdjacentOffRoadConnections.add(start.downRight());
 
                     return possibleAdjacentOffRoadConnections;
@@ -2194,65 +2188,26 @@ public class GameMap {
                 DetailedVegetation detailedVegetationBelow = getDetailedVegetationBelow(start);
                 DetailedVegetation detailedVegetationDownLeft = getDetailedVegetationDownLeft(start);
 
-                boolean cannotWalkOnTileUpLeft    = !CAN_WALK_ON.contains(detailedVegetationUpLeft);
-                boolean cannotWalkOnTileDownLeft  = !CAN_WALK_ON.contains(detailedVegetationDownLeft);
-                boolean cannotWalkOnTileUpRight   = !CAN_WALK_ON.contains(detailedVegetationUpRight);
-                boolean cannotWalkOnTileDownRight = !CAN_WALK_ON.contains(detailedVegetationDownRight);
-                boolean cannotWalkOnTileAbove     = !CAN_WALK_ON.contains(detailedVegetationAbove);
-                boolean cannotWalkOnTileBelow     = !CAN_WALK_ON.contains(detailedVegetationBelow);
+                boolean canWalkOnTileUpLeft    = CAN_WALK_ON.contains(detailedVegetationUpLeft);
+                boolean canWalkOnTileDownLeft  = CAN_WALK_ON.contains(detailedVegetationDownLeft);
+                boolean canWalkOnTileUpRight   = CAN_WALK_ON.contains(detailedVegetationUpRight);
+                boolean canWalkOnTileDownRight = CAN_WALK_ON.contains(detailedVegetationDownRight);
+                boolean canWalkOnTileAbove     = CAN_WALK_ON.contains(detailedVegetationAbove);
+                boolean canWalkOnTileBelow     = CAN_WALK_ON.contains(detailedVegetationBelow);
 
-                for (Point adjacentPoint : adjacentPoints) {
-
-                    /* Filter points outside the map */
-                    if (!isWithinMap(adjacentPoint)) {
-                        continue;
-                    }
-
-                    MapPoint mapPointAdjacent = getMapPoint(adjacentPoint);
-
-                    /* Filter points with stones */
-                    if (mapPointAdjacent.isStone()) {
-                        if (offroadOption != OffroadOption.CAN_END_ON_STONE || !adjacentPoint.equals(end)) {
-                            continue;
-                        }
-                    }
-
-                    /* Buildings can only be reached from their flags */
-                    if (mapPointAdjacent.isBuilding() && !adjacentPoint.downRight().equals(start)) {
-                        continue;
-                    }
-
-                    /* Filter points separated by vegetation that can't be walked on */
-
-                    if (adjacentPoint.isLeftOf(start) && cannotWalkOnTileUpLeft && cannotWalkOnTileDownLeft) {
-                        continue;
-                    }
-
-                    if (adjacentPoint.isUpLeftOf(start) && cannotWalkOnTileUpLeft && cannotWalkOnTileAbove) {
-                        continue;
-                    }
-
-                    if (adjacentPoint.isUpRightOf(start) && cannotWalkOnTileUpRight && cannotWalkOnTileAbove) {
-                        continue;
-                    }
-
-                    if (adjacentPoint.isRightOf(start) && cannotWalkOnTileUpRight && cannotWalkOnTileDownRight) {
-                        continue;
-                    }
-
-                    if (adjacentPoint.isDownRightOf(start) && cannotWalkOnTileDownRight && cannotWalkOnTileBelow) {
-                        continue;
-                    }
-
-                    if (adjacentPoint.isDownLeftOf(start) && cannotWalkOnTileDownLeft && cannotWalkOnTileBelow) {
-                        continue;
-                    }
-
-                    /* Add the point to the list if it passed the filters */
-                    possibleAdjacentOffRoadConnections.add(adjacentPoint);
-                }
-
-                return possibleAdjacentOffRoadConnections;
+                return Arrays.stream(adjacentPoints)
+                        .filter(GameMap.this::isWithinMap)
+                        .filter(adjacentPoint -> !adjacentPoint.isLeftOf(start) || canWalkOnTileUpLeft || canWalkOnTileDownLeft)
+                        .filter(adjacentPoint -> !adjacentPoint.isUpLeftOf(start) || canWalkOnTileUpLeft || canWalkOnTileAbove)
+                        .filter(adjacentPoint -> !adjacentPoint.isUpRightOf(start) || canWalkOnTileUpRight || canWalkOnTileAbove)
+                        .filter(adjacentPoint -> !adjacentPoint.isRightOf(start) || canWalkOnTileUpRight || canWalkOnTileDownRight)
+                        .filter(adjacentPoint -> !adjacentPoint.isDownRightOf(start) || canWalkOnTileDownRight || canWalkOnTileBelow)
+                        .filter(adjacentPoint -> !adjacentPoint.isDownLeftOf(start) || canWalkOnTileDownLeft || canWalkOnTileBelow)
+                        .map(GameMap.this::getMapPoint)
+                        .filter(mapPoint -> !mapPoint.isStone() || (offroadOption == OffroadOption.CAN_END_ON_STONE && Objects.equals(mapPoint.getPoint(), end)))
+                        .filter(mapPoint -> !mapPoint.isBuilding() || Objects.equals(mapPoint.getPoint().downRight(), start))
+                        .map(MapPoint::getPoint)
+                        .toList();
             }
 
             @Override
@@ -3288,29 +3243,13 @@ public class GameMap {
         Point point = getClosestPoint(x, y);
 
         /* Go through the full map and look for a suitable point */
-        for (Point p : getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR)) {
-
-            MapPoint mapPoint = getMapPoint(p);
-
-            /* Filter buildings */
-            if (mapPoint.isBuilding()) {
-                continue;
-            }
-
-            /* Filter stones */
-            if (mapPoint.isStone()) {
-                continue;
-            }
-
-            /* Filter terrain the animal can't walk on */
-            if (WildAnimal.cannotWalkOnAny(getSurroundingTiles(p))) {
-                continue;
-            }
-
-            return p;
-        }
-
-        return null;
+        return getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR).stream()
+                .filter(p -> !WildAnimal.cannotWalkOnAny(getSurroundingTiles(p)))
+                .map(this::getMapPoint)
+                .filter(mapPoint -> !mapPoint.isBuilding())
+                .filter(mapPoint -> !mapPoint.isStone())
+                .map(MapPoint::getPoint)
+                .findFirst().orElse(null);
     }
 
     void removeWildAnimalWithinStepTime(WildAnimal animal) {

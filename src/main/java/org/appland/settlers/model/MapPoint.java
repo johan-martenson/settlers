@@ -350,4 +350,8 @@ public class MapPoint {
     public DecorationType getDecoration() {
         return decoration;
     }
+
+    public Point getPoint() {
+        return point;
+    }
 }
