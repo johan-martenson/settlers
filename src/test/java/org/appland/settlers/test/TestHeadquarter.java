@@ -533,6 +533,8 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
@@ -545,6 +547,7 @@ public class TestHeadquarter {
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiers().size(), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -569,6 +572,7 @@ public class TestHeadquarter {
 
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
+        assertEquals(headquarter0.getHostedSoldiers().size(), 1);
     }
 
     @Test
@@ -585,6 +589,8 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Adjust resources in the headquarters */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 0);
 
         Utils.adjustInventoryTo(headquarter0, BEER, 0);
@@ -597,6 +603,7 @@ public class TestHeadquarter {
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiers().size(), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -620,6 +627,7 @@ public class TestHeadquarter {
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiers().size(), 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
     }
 
@@ -649,6 +657,7 @@ public class TestHeadquarter {
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 3);
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 0);
+        assertEquals(headquarter0.getHostedSoldiers().stream().filter(soldier -> soldier.getRank() == Soldier.Rank.PRIVATE_FIRST_CLASS_RANK).count(), 0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -672,6 +681,7 @@ public class TestHeadquarter {
         Utils.fastForwardUntilWorkerReachesPoint(map, soldier, headquarter0.getPosition());
 
         assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK), 1);
+        assertEquals(headquarter0.getHostedSoldiers().stream().filter(s -> s.getRank() == Soldier.Rank.PRIVATE_FIRST_CLASS_RANK).count(), 1);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
     }
 
