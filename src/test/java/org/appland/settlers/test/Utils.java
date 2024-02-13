@@ -1690,7 +1690,7 @@ public class Utils {
     public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidUserActionException {
         GameMap map = buildings[0].getMap();
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 50_000; i++) {
             boolean allDone = true;
 
             for (Building building : buildings) {
@@ -2675,10 +2675,7 @@ public class Utils {
     }
 
     public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker... workers) throws InvalidUserActionException {
-/*        return fastForwardUntilOneOfWorkersCarriesCargo(map, cargo, workers);
-    }
-        public static Worker fastForwardUntilOneOfWorkersCarriesCargo(GameMap map, Cargo cargo, Worker[] workers) throws InvalidUserActionException {
-  */      Worker workerWithCargo = null;
+        Worker workerWithCargo = null;
 
         for (int j = 0; j < 20000; j++) {
             for (Worker worker : workers) {
@@ -2923,6 +2920,89 @@ public class Utils {
         assertEquals(headquarter0.getReservedSoldiers(SERGEANT_RANK), sergeants);
         assertEquals(headquarter0.getReservedSoldiers(OFFICER_RANK), officers);
         assertEquals(headquarter0.getReservedSoldiers(GENERAL_RANK), generals);
+    }
+
+    public static void printPlayerLand(Player player, Collection<Point> points) {
+        Map<Point, String> places = new HashMap<>();
+
+        GameMap map = player.getMap();
+
+        map.getBuildings().stream()
+                .filter(building -> Objects.equals(building.getPlayer(), player))
+                .forEach(building -> places.put(building.getPosition(), building.getClass().getSimpleName().substring(0, 1)));
+
+        player.getBorderPoints()
+                .forEach(point -> places.put(point, "o"));
+
+        map.getFlags().stream()
+                .filter(flag -> Objects.equals(flag.getPlayer(), player))
+                .forEach(flag -> places.put(flag.getPosition(), "F"));
+
+        if (points != null) {
+            points.forEach(point -> places.put(point, "+"));
+        }
+
+        for (Road road : map.getRoads()) {
+            if (!Objects.equals(road.getPlayer(), player)) {
+                continue;
+            }
+
+            if (road.getLength() == 2) {
+                continue;
+            }
+
+            Point previous = null;
+            for (Point point : road.getWayPoints()) {
+                if (Objects.equals(point, road.getStart()) || Objects.equals(point, road.getEnd())) {
+                    previous = point;
+
+                    continue;
+                }
+
+                if (!places.containsKey(point)) {
+                    if (previous.y == point.y) {
+                        places.put(point, "_");
+                    } else if (previous.isDownLeftOf(point) || previous.isUpRightOf(point)) {
+                        places.put(point, "/");
+                    } else if (previous.isDownRightOf(point) || previous.isUpLeftOf(point)) {
+                        places.put(point, "\\");
+                    } else {
+                        places.put(point, "r");
+                    }
+                }
+
+                previous = point;
+            }
+        }
+
+        int minX = 500;
+        int maxX = 0;
+        int minY = 500;
+        int maxY = 0;
+
+        for (var point : places.keySet()) {
+            minX = Math.min(minX, point.x);
+            maxX = Math.max(maxX, point.x);
+
+            minY = Math.min(minY, point.y);
+            maxY = Math.max(maxY, point.y);
+        }
+
+        for (int y = maxY; y >= minY; y--) {
+            for (int x = minX; x <= maxX; x++) {
+                if ((x + y) % 2 != 0) {
+                    System.out.print(" ");
+
+                    continue;
+                }
+
+                var dot = places.getOrDefault(new Point(x, y), ".");
+
+                System.out.print(dot);
+            }
+
+            System.out.println();
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

@@ -95,6 +95,8 @@ public class Player {
     private int defenseStrength;
     private int defenseFromSurroundingBuildings;
     private int amountWhenPopulatingCloseToBorder;
+    private int amountWhenPopulatingAwayFromToBorder;
+    private int amountWhenPopulatingFarFromBorder;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -163,6 +165,8 @@ public class Player {
         defenseStrength = 5;
         defenseFromSurroundingBuildings = 5;
         amountWhenPopulatingCloseToBorder = 10;
+        amountWhenPopulatingAwayFromToBorder = 10;
+        amountWhenPopulatingFarFromBorder = 10;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -1735,5 +1739,21 @@ public class Player {
 
     public void setAmountOfSoldiersWhenPopulatingCloseToBorder(int amount) {
         amountWhenPopulatingCloseToBorder = amount;
+    }
+
+    public int getAmountOfSoldiersWhenPopulatingAwayFromBorder() {
+        return amountWhenPopulatingAwayFromToBorder;
+    }
+
+    public int getAmountOfSoldiersWhenPopulatingFarFromBorder() {
+        return amountWhenPopulatingFarFromBorder;
+    }
+
+    public void setAmountOfSoldiersWhenPopulatingAwayFromBorder(int amount) {
+        amountWhenPopulatingAwayFromToBorder = amount;
+    }
+
+    public void setAmountOfSoldiersWhenPopulatingFarFromBorder(int amount) {
+        amountWhenPopulatingFarFromBorder = amount;
     }
 }

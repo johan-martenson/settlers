@@ -1423,8 +1423,18 @@ public class Building implements EndPoint {
     }
 
     private int getWantedAmountHostedSoldiers() {
+        int distanceToBorder = player.getBorderPoints().stream().mapToInt(point -> GameUtils.distanceInGameSteps(position, point)).min().getAsInt();
+
+        int populationSetting = player.getAmountOfSoldiersWhenPopulatingFarFromBorder();
+
+        if (distanceToBorder <= getDefenceRadius()) {
+            populationSetting = player.getAmountOfSoldiersWhenPopulatingCloseToBorder();
+        } else if (distanceToBorder < getDefenceRadius() * 2) {
+            populationSetting = player.getAmountOfSoldiersWhenPopulatingAwayFromBorder();
+        }
+
         return 1 + ((Long)
                 (Math.round((getMaxHostedSoldiers() - 1) *
-                        player.getAmountOfSoldiersWhenPopulatingCloseToBorder() / 10.0))).intValue();
+                        populationSetting / 10.0))).intValue();
     }
 }

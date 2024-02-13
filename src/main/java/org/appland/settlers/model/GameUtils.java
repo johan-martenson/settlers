@@ -352,6 +352,7 @@ public class GameUtils {
     public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {
         Set<Point> hexagonBorder = new HashSet<>();
 
+        // Draw the diagonal left-hand lines
         int upperY = point.y;
         int lowerY = point.y;
         for (int x = point.x - (radius * 2); x < point.x - radius; x++) {
@@ -362,9 +363,10 @@ public class GameUtils {
             lowerY--;
         }
 
+        // Draw the diagonal right-hand lines
         upperY = point.y + radius;
         lowerY = point.y - radius;
-        for (int x = point.x + radius; x < point.x + (radius * 2); x++) {
+        for (int x = point.x + radius; x <= point.x + (radius * 2); x++) {
             hexagonBorder.add(new Point(x, upperY));
             hexagonBorder.add(new Point(x, lowerY));
 
@@ -372,6 +374,7 @@ public class GameUtils {
             lowerY++;
         }
 
+        // Draw the top and bottom lines
         for (int x = point.x - radius; x < point.x + radius; x += 2) {
             hexagonBorder.add(new Point(x, point.y + radius));
             hexagonBorder.add(new Point(x, point.y - radius));
