@@ -21,7 +21,6 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
@@ -30,6 +29,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Ship;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.Soldier;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Stonemason;
@@ -59,8 +59,8 @@ import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.model.Soldier.Rank.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
@@ -128,6 +128,21 @@ public class Utils {
 
             map.stepTime();
         }
+    }
+
+    public static void waitForSoldierToBeFighting(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            assertFalse(soldier.isDying());
+            assertFalse(soldier.isDead());
+
+            if (soldier.isFighting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(soldier.isFighting());
     }
 
     public static void waitForSoldierToWinFight(Soldier soldier, GameMap map) throws InvalidUserActionException {
@@ -2888,6 +2903,26 @@ public class Utils {
         soldiers.forEach(soldier -> assertEquals(soldier.getHome(), building));
 
         return soldiers;
+    }
+
+    public static void setReservedSoldiers(
+            Headquarter headquarter0,
+            int privates,
+            int privates_first_class,
+            int sergeants,
+            int officers,
+            int generals) {
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, privates);
+        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_FIRST_CLASS_RANK, privates_first_class);
+        headquarter0.setReservedSoldiers(Soldier.Rank.SERGEANT_RANK, sergeants);
+        headquarter0.setReservedSoldiers(Soldier.Rank.OFFICER_RANK, officers);
+        headquarter0.setReservedSoldiers(Soldier.Rank.GENERAL_RANK, generals);
+
+        assertEquals(headquarter0.getReservedSoldiers(PRIVATE_RANK), privates);
+        assertEquals(headquarter0.getReservedSoldiers(PRIVATE_FIRST_CLASS_RANK), privates_first_class);
+        assertEquals(headquarter0.getReservedSoldiers(SERGEANT_RANK), sergeants);
+        assertEquals(headquarter0.getReservedSoldiers(OFFICER_RANK), officers);
+        assertEquals(headquarter0.getReservedSoldiers(GENERAL_RANK), generals);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

@@ -49,8 +49,7 @@ public class Storehouse extends Building {
         materialBlockedForDelivery = EnumSet.noneOf(Material.class);
     }
 
-    /* This method updates the inventory as a side effect, without any locking */
-    private void draftMilitary() {
+    void draftMilitary() {
         int swords  = inventory.getOrDefault(SWORD, 0);
         int shields = inventory.getOrDefault(SHIELD, 0);
         int beer    = inventory.getOrDefault(BEER, 0);

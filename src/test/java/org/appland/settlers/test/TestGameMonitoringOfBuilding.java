@@ -415,7 +415,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
@@ -431,7 +432,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 3);
         assertEquals(headquarter0.getAmount(PRIVATE), 7);
 
         map.stepTime();
@@ -457,7 +459,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 5);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 5);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
@@ -496,7 +499,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 5);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 5);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 5);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 5);
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
@@ -512,7 +516,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 3);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 3);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 3);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 3);
         assertEquals(headquarter0.getAmount(PRIVATE), 7);
 
         map.stepTime();
@@ -538,7 +543,8 @@ public class TestGameMonitoringOfBuilding {
         headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
 
         assertEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
-        assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
+        //assertEquals(headquarter0.getHostedSoldiersWithRank(Soldier.Rank.PRIVATE_RANK), 1);
+        assertEquals(headquarter0.getActualReservedSoldiers().get(Soldier.Rank.PRIVATE_RANK), (Integer) 1);
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {

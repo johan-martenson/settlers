@@ -265,9 +265,9 @@ public class Building implements EndPoint {
         if (isReady()) {
             int promised = promisedSoldier.size();
             int actual = hostedSoldiers.size();
-            int maxHost = getMaxHostedSoldiers();
+            int wanted = getWantedAmountHostedSoldiers();
 
-            return maxHost > promised + actual;
+            return wanted > promised + actual;
         }
 
         return false;
@@ -506,6 +506,20 @@ public class Building implements EndPoint {
                 countdown.step();
             }
         } else if (state == State.OCCUPIED) {
+
+            // Send out soldiers if there are too many compared to the settings
+            if (isMilitaryBuilding() &&
+                    !isHeadquarter() &&
+                    getHostedSoldiers().size() > getWantedAmountHostedSoldiers()) {
+                var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
+                var soldier = sortedHostedSoldiers.getLast();
+
+                hostedSoldiers.remove(soldier);
+
+                soldier.returnToStorage();
+            }
+
+            // Handle promotions
             if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
                 if (countdown.hasReachedZero()) {
                     doPromotion();
@@ -832,9 +846,7 @@ public class Building implements EndPoint {
         if (isMilitaryBuilding()) {
             double distance = getPosition().distance(buildingToAttack.getPosition());
 
-            if (distance < getAttackRadius()) {
-                return true;
-            }
+            return distance < getAttackRadius();
         }
 
         return false;
@@ -1383,7 +1395,10 @@ public class Building implements EndPoint {
                     .filter(building -> !building.equals(this))
                     .filter(Building::isReady)
                     .filter(Building::isMilitaryBuilding)
-                    .filter(building -> building.getHostedSoldiers().size() > 1)
+                    .filter(building ->
+                            (building instanceof Headquarter headquarter &&
+                                    headquarter.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)) ||
+                            building.getHostedSoldiers().size() > 1)
                     .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
                     .forEach(building -> {
                         var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedSoldiers(), player.getDefenseStrength());
@@ -1405,5 +1420,11 @@ public class Building implements EndPoint {
 
     public Set<Soldier> getDefenders() {
         return defenders;
+    }
+
+    private int getWantedAmountHostedSoldiers() {
+        return 1 + ((Long)
+                (Math.round((getMaxHostedSoldiers() - 1) *
+                        player.getAmountOfSoldiersWhenPopulatingCloseToBorder() / 10.0))).intValue();
     }
 }

@@ -58,7 +58,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -98,7 +98,7 @@ public class TestMisc {
 
         assertTrue(map.getWorkers().size() >= 2);
 
-        /* Verify that the courier goes back to the headquarter */
+        /* Verify that the courier goes back to the headquarters */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
@@ -118,7 +118,7 @@ public class TestMisc {
             players.add(player);
             GameMap map = new GameMap(players, 500, 250);
 
-            /* Place headquarter */
+            /* Place headquarters */
             Point point0 = new Point(429, 201);
             Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -179,7 +179,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Verify that it's not possible to place a headquarter on the edge of the screen */
+        /* Verify that it's not possible to place a headquarters on the edge of the screen */
         Point point0 = new Point(0, 2);
 
         try {
@@ -218,7 +218,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(429, 201);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -242,7 +242,7 @@ public class TestMisc {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point01 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point01);
 
@@ -290,7 +290,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -311,7 +311,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -344,7 +344,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -368,7 +368,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -384,7 +384,7 @@ public class TestMisc {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter to the headquarter */
+        /* Connect the woodcutter to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Wait for the woodcutter to get constructed */
@@ -425,7 +425,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -435,7 +435,7 @@ public class TestMisc {
         Point point1 = new Point(10, 10);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter to the headquarter */
+        /* Connect the woodcutter to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Wait for the woodcutter to get constructed and populated */
@@ -488,11 +488,11 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -533,11 +533,11 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -619,7 +619,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
@@ -627,10 +627,10 @@ public class TestMisc {
         Point point1 = new Point(20, 16);
         Fortress fortress0 = map.placeBuilding(new Fortress(player), point1);
 
-        /* Connect the fortress with the headquarter */
+        /* Connect the fortress with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player, fortress0.getFlag(), headquarter0.getFlag());
 
-        /* Ensure that there is one soldier of each rank in the headquarter */
+        /* Ensure that there is one soldier of each rank in the headquarters */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
         Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 1);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 1);
@@ -641,7 +641,7 @@ public class TestMisc {
         Utils.waitForBuildingToBeConstructed(fortress0);
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0, 5);
 
-        /* Verify that when the fortress is burned down, all of the soldiers go back and get stored properly */
+        /* Verify that when the fortress is burned down, all soldiers go back and get stored properly */
         assertEquals(headquarter0.getAmount(PRIVATE), 0);
         assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
         assertEquals(headquarter0.getAmount(SERGEANT), 0);
@@ -699,11 +699,11 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -730,7 +730,7 @@ public class TestMisc {
         /* Construct the new barracks */
         Utils.constructHouse(barracks2);
 
-        /* Remove all soldiers from the headquarter */
+        /* Remove all soldiers from the headquarters */
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
@@ -813,7 +813,7 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -824,7 +824,7 @@ public class TestMisc {
         /* Assign builder */
         Utils.assignBuilder(woodcutter);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Wait for a courier to come to the road */
@@ -869,7 +869,7 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -877,7 +877,7 @@ public class TestMisc {
         Point point1 = new Point(15, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Wait for a courier to come to the road */
@@ -925,7 +925,7 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -937,7 +937,7 @@ public class TestMisc {
         Point point2 = new Point(14, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the flag with the woodcutter */
@@ -987,11 +987,11 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(37, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1099,7 +1099,7 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1111,7 +1111,7 @@ public class TestMisc {
         Point point2 = new Point(17, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Place road to connect the headquarter with the flag */
+        /* Place road to connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         /* Place road to connect the flag with the woodcutter */
@@ -1137,7 +1137,7 @@ public class TestMisc {
         /* Remove the flag so the cargo disappears and the promise to deliver it is broken */
         map.removeFlag(flag0);
 
-        /* Place a new road to connect the headquarter directly with the woodcutter */
+        /* Place a new road to connect the headquarters directly with the woodcutter */
         Road road2 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Verify that the woodcutter gets all deliveries it needs and gets constructed */
@@ -1159,7 +1159,7 @@ public class TestMisc {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1171,7 +1171,7 @@ public class TestMisc {
         Point point2 = new Point(17, 5);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Place road to connect the headquarter with the flag */
+        /* Place road to connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         /* Place road to connect the flag with the woodcutter */
@@ -1196,7 +1196,7 @@ public class TestMisc {
         /* Remove the flag so the cargo disappears and the promise to deliver it is broken */
         map.removeFlag(flag0);
 
-        /* Place a new road to connect the headquarter directly with the woodcutter */
+        /* Place a new road to connect the headquarters directly with the woodcutter */
         Road road2 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Verify that the woodcutter gets all deliveries it needs and gets constructed */
@@ -1214,7 +1214,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        /* Verify that it's not possible to place a headquarter so that it's flag will be on the border */
+        /* Verify that it's not possible to place a headquarters so that it's flag will be on the border */
         Point point0 = new Point(7, 7);
         try {
             map.placeBuilding(new Headquarter(player0), point0);
@@ -1233,7 +1233,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        /* Verify that it's not possible to place a headquarter so that it's flag will be on the border */
+        /* Verify that it's not possible to place a headquarters so that it's flag will be on the border */
         Point point0 = new Point(7, 3);
         try {
             map.placeBuilding(new Headquarter(player0), point0);
@@ -1272,7 +1272,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1280,7 +1280,7 @@ public class TestMisc {
         Point point1 = new Point(13, 9);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter.getFlag());
 
         /* Wait for the woodcutter to get constructed */
@@ -1307,7 +1307,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
@@ -1329,7 +1329,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
@@ -1351,7 +1351,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
@@ -1373,11 +1373,11 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
-        /* Put a private first class into the headquarter */
+        /* Put a private first class into the headquarters */
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 1);
 
         /* Push out private first class */
@@ -1398,11 +1398,11 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
-        /* Put a sergeant into the headquarter */
+        /* Put a sergeant into the headquarters */
         Utils.adjustInventoryTo(headquarter, SERGEANT, 1);
 
         /* Push out sergeant */
@@ -1423,7 +1423,7 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
@@ -1450,11 +1450,11 @@ public class TestMisc {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(68, 68);
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
-        /* Put a general into the headquarter */
+        /* Put a general into the headquarters */
         Utils.adjustInventoryTo(headquarter, GENERAL, 1);
 
         /* Push out general */
@@ -1529,7 +1529,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), STEPPE);
         map.setDetailedVegetationAbove(point0.upLeft(), STEPPE);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1599,7 +1599,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
         map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1669,7 +1669,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), MEADOW_3);
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_2);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1739,7 +1739,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), DESERT_1);
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_1);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1811,7 +1811,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
         map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1883,7 +1883,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), WATER);
         map.setDetailedVegetationAbove(point0.upLeft(), WATER);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
@@ -1955,7 +1955,7 @@ public class TestMisc {
         map.setDetailedVegetationUpLeft(point0.upLeft(), SWAMP);
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_3);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));

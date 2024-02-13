@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.*;
 
 /**
  * @author johan
@@ -89,11 +89,12 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> wheatAllocation;
     private final Map<Class<? extends Building>, Integer> waterAllocation;
     private final Map<Class<? extends Building>, Integer> ironBarAllocation;
+    private final Set<Stone> changedStones;
 
     private int strengthWhenPopulatingMilitaryBuildings;
     private int defenseStrength;
     private int defenseFromSurroundingBuildings;
-    private final Set<Stone> changedStones;
+    private int amountWhenPopulatingCloseToBorder;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -161,6 +162,7 @@ public class Player {
         strengthWhenPopulatingMilitaryBuildings = 5;
         defenseStrength = 5;
         defenseFromSurroundingBuildings = 5;
+        amountWhenPopulatingCloseToBorder = 10;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -297,8 +299,16 @@ public class Player {
                 continue;
             }
 
-            if (building.canAttack(buildingToAttack) && building.getNumberOfHostedSoldiers() > 1) {
-                availableAttackers += building.getNumberOfHostedSoldiers() - 1;
+            if (building.canAttack(buildingToAttack)) {
+                if (building instanceof Headquarter headquarter) {
+                    availableAttackers += headquarter.getAmount(PRIVATE) +
+                            headquarter.getAmount(PRIVATE_FIRST_CLASS) +
+                            headquarter.getAmount(SERGEANT) +
+                            headquarter.getAmount(OFFICER) +
+                            headquarter.getAmount(GENERAL);
+                } else {
+                    availableAttackers += Math.max(building.getNumberOfHostedSoldiers() - 1, 0);
+                }
             }
         }
 
@@ -340,9 +350,32 @@ public class Player {
                 continue;
             }
 
-            var availableAttackersFromBuilding = new ArrayList<>(building.getHostedSoldiers());
+            var availableAttackersFromBuilding = new ArrayList<Soldier>();
 
-            availableAttackersFromBuilding.sort(GameUtils.strengthSorter);
+            if (building instanceof Headquarter headquarter) {
+                var attackStrengthInt = switch (strength) {
+                    case STRONG -> 10;
+                    case WEAK -> 0;
+                };
+
+                GameUtils.strengthToRank(attackStrengthInt).forEach(rank -> {
+                    for (int i = 0; i < headquarter.getAmount(rank.toMaterial()); i++) {
+                        Soldier attacker = new Soldier(this, rank, map);
+
+                        attacker.setHome(headquarter);
+                        attacker.setPosition(headquarter.getPosition());
+
+                        availableAttackersFromBuilding.add(attacker);
+                    }
+                });
+            } else {
+                availableAttackersFromBuilding.addAll(building.getHostedSoldiers());
+                availableAttackersFromBuilding.sort(GameUtils.strengthSorter);
+            }
+
+            if (availableAttackersFromBuilding.isEmpty()) {
+                continue;
+            }
 
             /* Leave one soldier so it can guard the military building */
             if (strength == AttackStrength.STRONG) {
@@ -352,6 +385,11 @@ public class Player {
             }
 
             availableAttackers.addAll(availableAttackersFromBuilding);
+        }
+
+        /* It's not possible to attack if there are no available attackers */
+        if (availableAttackers.isEmpty()) {
+            throw new InvalidUserActionException("Player '" + this + "' can't attack building '" + buildingToAttack + "'");
         }
 
         /* Sort primarily by strength and secondarily by distance */
@@ -1690,5 +1728,12 @@ public class Player {
 
     public void reportChangedStone(Stone stone) {
         changedStones.add(stone);
+    }
+    public int getAmountOfSoldiersWhenPopulatingCloseToBorder() {
+        return amountWhenPopulatingCloseToBorder;
+    }
+
+    public void setAmountOfSoldiersWhenPopulatingCloseToBorder(int amount) {
+        amountWhenPopulatingCloseToBorder = amount;
     }
 }

@@ -576,7 +576,7 @@ public class TestMessages {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarters */
-        Point point1 = new Point(45, 13);
+        Point point1 = new Point(41, 13);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place barracks for player 0 */
@@ -584,7 +584,7 @@ public class TestMessages {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 13);
+        Point point3 = new Point(25, 13);
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         /* Finish construction */
@@ -593,6 +593,7 @@ public class TestMessages {
 
         /* Populate player barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Verify that no soldiers leave the barracks before the attack is initiated */
@@ -609,13 +610,15 @@ public class TestMessages {
         /* Verify that a message is sent to player 1 when it's attacked */
         int amountMessagesBefore = player1.getMessages().size();
 
+        assertNotEquals(player0.getAvailableAttackersForBuilding(barracks1), 0);
+
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
         assertEquals(player1.getMessages().size(), amountMessagesBefore + 1);
-        assertEquals(player1.getMessages().get(player1.getMessages().size() - 1).getMessageType(), UNDER_ATTACK);
-        assertTrue(player1.getMessages().get(player1.getMessages().size() - 1) instanceof UnderAttackMessage);
+        assertEquals(player1.getMessages().getLast().getMessageType(), UNDER_ATTACK);
+        assertTrue(player1.getMessages().getLast() instanceof UnderAttackMessage);
 
-        UnderAttackMessage message = (UnderAttackMessage) player1.getMessages().get(player1.getMessages().size() - 1);
+        UnderAttackMessage message = (UnderAttackMessage) player1.getMessages().getLast();
 
         assertEquals(message.getBuilding(), barracks1);
     }
