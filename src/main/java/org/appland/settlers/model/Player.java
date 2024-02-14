@@ -254,16 +254,12 @@ public class Player {
     private void updateDiscoveredLand() {
         for (Building building : buildings) {
             if (building.isMilitaryBuilding() && building.isOccupied()) {
-
                 Collection<Point> landDiscoveredByBuilding = building.getDiscoveredLand();
 
                 /* Remember the points that are newly discovered */
                 if (!gameViewMonitors.isEmpty()) {
-                    for (Point point : landDiscoveredByBuilding) {
-                        if (!discoveredLand.contains(point)) {
-                            newDiscoveredLand.add(point);
-                        }
-                    }
+                    newDiscoveredLand.addAll(landDiscoveredByBuilding);
+                    newDiscoveredLand.removeAll(discoveredLand);
                 }
 
                 discoveredLand.addAll(landDiscoveredByBuilding);
