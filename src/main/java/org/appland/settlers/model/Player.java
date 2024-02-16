@@ -283,8 +283,6 @@ public class Player {
     }
 
     public int getAvailableAttackersForBuilding(Building buildingToAttack) throws InvalidUserActionException {
-        int availableAttackers = 0;
-
         if (!buildingToAttack.isMilitaryBuilding()) {
             throw new InvalidUserActionException("Cannot get available attackers for non-military building");
         }
@@ -294,25 +292,21 @@ public class Player {
         }
 
         /* Count soldiers in military buildings that can reach the building */
-        for (Building building : getBuildings()) {
-            if (!building.isMilitaryBuilding()) {
-                continue;
-            }
-
-            if (building.canAttack(buildingToAttack)) {
-                if (building instanceof Headquarter headquarter) {
-                    availableAttackers += headquarter.getAmount(PRIVATE) +
-                            headquarter.getAmount(PRIVATE_FIRST_CLASS) +
-                            headquarter.getAmount(SERGEANT) +
-                            headquarter.getAmount(OFFICER) +
-                            headquarter.getAmount(GENERAL);
-                } else {
-                    availableAttackers += Math.max(building.getNumberOfHostedSoldiers() - 1, 0);
-                }
-            }
-        }
-
-        return availableAttackers;
+        return getBuildings().stream()
+                .filter(Building::isMilitaryBuilding)
+                .filter(building -> building.canAttack(buildingToAttack))
+                .mapToInt(building -> {
+                    if (building instanceof Headquarter headquarter) {
+                        return headquarter.getAmount(PRIVATE) +
+                                headquarter.getAmount(PRIVATE_FIRST_CLASS) +
+                                headquarter.getAmount(SERGEANT) +
+                                headquarter.getAmount(OFFICER) +
+                                headquarter.getAmount(GENERAL);
+                    } else {
+                        return Math.max(building.getNumberOfHostedSoldiers() - 1, 0);
+                    }
+                })
+                .sum();
     }
 
     public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
