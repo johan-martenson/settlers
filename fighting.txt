@@ -1,0 +1,4 @@
+Thoughts from Tomas:
+ - Generals have 7 health, Officers 6, sergeants 5, etc.
+ - Generals have highest probability of making a hit, then decreasing by rank
+ - Damage caused is the same across ranks
