@@ -22,6 +22,20 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.8</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <targetClasses>
+                        <param>org.appland.settlers.model.Soldier*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>org.appland.settlers.test*</param>
+                    </targetTests>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
