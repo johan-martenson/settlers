@@ -2648,7 +2648,7 @@ public class TestGameMonitoringOfWorkerActions {
         /* Populate player 1's barracks */
         assertTrue(barracks1.isReady());
 
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks1);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2657,7 +2657,7 @@ public class TestGameMonitoringOfWorkerActions {
         /* Keep attacking until a soldier stands aside during a fight */
         boolean standAsideFound = false;
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 50; i++) {
 
             /* Order an attack */
             assertTrue(player0.canAttack(barracks1));
@@ -2674,13 +2674,13 @@ public class TestGameMonitoringOfWorkerActions {
             assertFalse(attacker.isFighting());
 
             /* Wait for the military to reach the attacked building */
-            assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
             assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-            assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
+            assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
 
             /* Wait for a defender to come out */
             Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
@@ -2688,25 +2688,41 @@ public class TestGameMonitoringOfWorkerActions {
             assertNotNull(defender);
             assertEquals(defender.getTarget(), attacker.getPosition());
             assertFalse(defender.isFighting());
-
-            /* Add a new soldier to the attacked barracks */
-            Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+            assertFalse(attacker.isFighting());
+            assertNotEquals(defender, attacker);
 
             /* Wait for the fight to start */
             Utils.waitForFightToStart(map, attacker, defender);
 
             /* Find out if a soldier stands aside during the fight */
+            for (int j = 0; j < 2000; j++) {
+                if (!attacker.isStandingAside() && !defender.isStandingAside()) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            assertFalse(defender.isStandingAside());
+            assertFalse(attacker.isStandingAside());
+
             Soldier soldierStandingAside = null;
 
-            for (int j = 0; j < 10000; j++) {
+            monitor.clearEvents();
+
+            for (int j = 0; j < 20000; j++) {
                 if (attacker.isStandingAside()) {
                     soldierStandingAside = attacker;
+
+                    assertFalse(defender.isStandingAside());
 
                     break;
                 }
 
                 if (defender.isStandingAside()) {
                     soldierStandingAside = defender;
+
+                    assertFalse(attacker.isStandingAside());
 
                     break;
                 }
@@ -2715,18 +2731,25 @@ public class TestGameMonitoringOfWorkerActions {
                     break;
                 }
 
+                assertEquals(Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.STAND_ASIDE, monitor), 0);
+                assertEquals(Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.STAND_ASIDE, monitor), 0);
+
                 map.stepTime();
             }
 
             /* If a soldier stood aside, verify that an event was sent correctly */
             if (soldierStandingAside != null) {
-
                 standAsideFound = true;
+
+                assertTrue(player0.getDiscoveredLand().contains(attacker.getPosition()));
+                assertTrue(player0.getDiscoveredLand().contains(defender.getPosition()));
 
                 /* Verify that an event was sent when one of the soldiers jumped back */
                 int standAsideCount = Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.STAND_ASIDE, monitor);
                 standAsideCount += Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.STAND_ASIDE, monitor);
 
+                assertTrue(Utils.countMonitoredWorkerActionForWorker(attacker, WorkerAction.STAND_ASIDE, monitor) <= 1);
+                assertTrue(Utils.countMonitoredWorkerActionForWorker(defender, WorkerAction.STAND_ASIDE, monitor) <= 1);
                 assertEquals(standAsideCount, 1);
 
                 break;
@@ -2750,6 +2773,9 @@ public class TestGameMonitoringOfWorkerActions {
             /* Handle the case where the defender died */
             if (defender.isDying()) {
 
+                /* Add a new soldier to the attacked barracks */
+                Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1);
+
                 /* Wait for another soldier to come out and beat the attacker */
                 Soldier otherDefender = Utils.waitForSoldierNotDyingOutsideBuilding(player1);
 
@@ -2761,6 +2787,8 @@ public class TestGameMonitoringOfWorkerActions {
 
                 /* Wait for the defender to go back to the barracks */
                 Utils.fastForwardUntilWorkerReachesPoint(map, otherDefender, barracks1.getPosition());
+
+                assertEquals(barracks1.getNumberOfHostedSoldiers(), 2);
             }
         }
 
@@ -2856,13 +2884,6 @@ public class TestGameMonitoringOfWorkerActions {
         Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
-
-        System.out.println(
-                map.getWorkers().stream()
-                        .filter(worker -> worker.getPlayer().equals(player1))
-                        .filter(Worker::isSoldier)
-                        .filter(worker -> !worker.isInsideBuilding()).toList()
-        );
 
         assertEquals(defender.getTarget(), attacker.getPosition());
         assertFalse(defender.isFighting());

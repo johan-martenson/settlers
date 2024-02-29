@@ -25,17 +25,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static java.awt.Color.BLACK;
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GRAY;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.PINK;
-import static java.awt.Color.RED;
-import static java.awt.Color.WHITE;
-import static java.awt.Color.YELLOW;
+import static java.awt.Color.*;
 import static java.lang.String.format;
 
 public class Inspector {
@@ -604,11 +597,7 @@ public class Inspector {
 
                 index++;
 
-                if (character == null) {
-                    sb.append(" ");
-                } else {
-                    sb.append(character);
-                }
+                sb.append(Objects.requireNonNullElse(character, " "));
             }
         }
 

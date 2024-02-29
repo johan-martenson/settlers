@@ -75,10 +75,8 @@ class Utils {
     }
 
     public static String shortAsHex(short s) {
-        short sh = s;
-        String intHexString = Integer.toHexString((int) sh);
-        String shortHexString = intHexString.substring(4);
+        String intHexString = Integer.toHexString(s);
 
-        return shortHexString;
+        return intHexString.substring(4);
     }
 }

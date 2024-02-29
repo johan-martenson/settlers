@@ -47,7 +47,6 @@ public class Cargo {
                         road.registerUsage();
                     }
                 } else {
-
                     Road road = map.getRoadAtPoint(position);
 
                     if (road != null) {

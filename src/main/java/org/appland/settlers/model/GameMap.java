@@ -47,11 +47,6 @@ public class GameMap {
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
             return getPossibleAdjacentOffRoadConnections(start);
         }
-
-        @Override
-        public int realDistance(Point currentPoint, Point neighbor) {
-            return 1;
-        }
     };
 
 
@@ -283,11 +278,6 @@ public class GameMap {
             @Override
             public Iterable<Point> getPossibleConnections(Point point, Point goal) {
                 return getPossibleAdjacentRoadConnections(player, point, goal);
-            }
-
-            @Override
-            public int realDistance(Point currentPoint, Point neighbor) {
-                return 1;
             }
         });
     }
@@ -2209,11 +2199,6 @@ public class GameMap {
                         .map(MapPoint::getPoint)
                         .toList();
             }
-
-            @Override
-            public int realDistance(Point currentPoint, Point neighbor) {
-                return GameUtils.distanceInGameSteps(currentPoint, neighbor);
-            }
         };
 
         List<Point> step0 = new ArrayList<>();
@@ -2905,6 +2890,14 @@ public class GameMap {
             return null;
         }
 
+        /* Can only place a small building if the point down-right is tree
+         *  - No need to check that mapPointDownRight exists. This is checked earlier.
+         * TODO: test that it's not possible to place a any house up-left from a tree
+         *  */
+        if (mapPointDownRight.isTree()) {
+            return null;
+        }
+
         if (mapPointDownLeft != null && mapPointDownLeft.isBuilding()) {
             return null;
         }
@@ -2971,13 +2964,6 @@ public class GameMap {
         }
 
         if (mapPointDownLeft != null && mapPointDownLeft.isTree()) {
-            return SMALL;
-        }
-
-        /* Can only place a small building if the point down-right is tree
-        *  - No need to check that mapPointDownRight exists. This is checked earlier.
-        *  */
-        if (mapPointDownRight.isTree()) {
             return SMALL;
         }
 
@@ -3856,11 +3842,6 @@ public class GameMap {
                 }
 
                 return possibleConnections;
-            }
-
-            @Override
-            public int realDistance(Point currentPoint, Point neighbor) {
-                return 1;
             }
         });
     }

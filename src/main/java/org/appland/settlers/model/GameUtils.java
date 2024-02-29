@@ -789,8 +789,6 @@ public class GameUtils {
 
     interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
-
-        int realDistance(Point currentPoint, Point neighbor);
     }
 
     static class PointAndCost implements Comparable<PointAndCost> {
@@ -873,7 +871,7 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + connectionProvider.realDistance(currentPoint.point, neighbor);
+                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + GameUtils.distanceInGameSteps(currentPoint.point, neighbor);
 
                 /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
                 int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
@@ -946,15 +944,9 @@ public class GameUtils {
 
             return mapPoint.getConnectedNeighbors();
         }
-
-        @Override
-        public int realDistance(Point currentPoint, Point neighbor) {
-            return 1;
-        }
     }
 
     public static class ConnectedFlagsAndBuildingsProvider implements ConnectionsProvider {
-
         private final Map<Point, MapPoint> pointToGameObject;
 
         public ConnectedFlagsAndBuildingsProvider(Map<Point, MapPoint> pointToGameObject) {
@@ -968,7 +960,6 @@ public class GameUtils {
             return mapPoint.getConnectedFlagsAndBuildings();
         }
 
-        @Override
         public int realDistance(Point currentPoint, Point neighbor) {
 
             MapPoint mapPoint = pointToGameObject.get(currentPoint);

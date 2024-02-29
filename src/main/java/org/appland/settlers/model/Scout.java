@@ -11,6 +11,7 @@ import org.appland.settlers.utils.Stats;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -329,7 +330,7 @@ public class Scout extends Worker {
         }
 
         /* 3. Sort by how closely they match the existing direction */
-        pointsAndScores.sort((pointEntityAndScore, t1) -> Double.compare(pointEntityAndScore.score, t1.score));
+        pointsAndScores.sort(Comparator.comparingDouble(pointEntityAndScore -> pointEntityAndScore.score));
 
         /* 4. Go through the points and select which one to pick */
         for (int i = 0; i < pointsAndScores.size(); i++) {
