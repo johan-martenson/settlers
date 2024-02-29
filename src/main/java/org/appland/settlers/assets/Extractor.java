@@ -193,62 +193,56 @@ public class Extractor {
         }
 
         // Write sounds
-        Map<Integer, String> sounds = new HashMap<>();
+        Map<String, Integer> sounds = new HashMap<>();
 
-        sounds.put(SoundLst.FIRE, toDir + "/audio/fire.wave");
-        sounds.put(SoundLst.FIGHTING_HIT_0, toDir + "/audio/fighting-hit-0.wave");
-        sounds.put(SoundLst.FIGHTING_UNKNOWN, toDir + "/audio/fighting-unknown.wave");
-        sounds.put(SoundLst.FIGHTING_SOLDIER_DIED, toDir + "/audio/fighting-soldier-died.wave");
-        sounds.put(SoundLst.FIGHTING_HIT_1, toDir + "/audio/fighting-hit-1.wave");
-        sounds.put(SoundLst.SAWMILL_WORKER_0, toDir + "/audio/woodcutter-0.wave");
-        sounds.put(SoundLst.SAWMILL_WORKER_1, toDir + "/audio/woodcutter-1.wave");
-        sounds.put(SoundLst.PIG_BREEDER_0, toDir + "/audio/pig-breeder-0.wave");
-        sounds.put(SoundLst.PIG_BREEDER_1, toDir + "/audio/pig-breeder-1.wave");
-        sounds.put(SoundLst.SHIPWRIGHT_0, toDir + "/audio/shipwright-0.wave");
-        sounds.put(SoundLst.SHIPWRIGHT_1, toDir + "/audio/shipwright-1.wave");
-        sounds.put(SoundLst.FORESTER_0, toDir + "/audio/forester-0.wave");
-        sounds.put(SoundLst.FORESTER_1, toDir + "/audio/forester-1.wave");
-        sounds.put(SoundLst.IRON_FOUNDER_AND_BREWER, toDir + "/audio/iron-founder-and-brewer.wave");
-        sounds.put(SoundLst.FARMER, toDir + "/audio/farmer.wave");
-        sounds.put(SoundLst.MINER, toDir + "/audio/miner.wave");
-        sounds.put(SoundLst.GEOLOGIST_DIGGING_0, toDir + "/audio/geologist-digging-0.wave");
-        sounds.put(SoundLst.GEOLOGIST_DIGGING_1, toDir + "/audio/geologist-digging-1.wave");
+        sounds.put(toDir + "/audio/fire.wave", SoundLst.FIRE);
+        sounds.put(toDir + "/audio/fighting-hit-0.wave", SoundLst.FIGHTING_HIT_0);
+        sounds.put(toDir + "/audio/fighting-unknown.wave", SoundLst.FIGHTING_UNKNOWN);
+        sounds.put(toDir + "/audio/fighting-soldier-died.wave", SoundLst.FIGHTING_SOLDIER_DIED);
+        sounds.put(toDir + "/audio/fighting-hit-1.wave", SoundLst.FIGHTING_HIT_1);
+        sounds.put(toDir + "/audio/woodcutter-0.wave", SoundLst.SAWMILL_WORKER_0);
+        sounds.put(toDir + "/audio/woodcutter-1.wave", SoundLst.SAWMILL_WORKER_1);
+        sounds.put(toDir + "/audio/pig-breeder-0.wave", SoundLst.PIG_BREEDER_0);
+        sounds.put(toDir + "/audio/pig-breeder-1.wave", SoundLst.PIG_BREEDER_1);
+        sounds.put(toDir + "/audio/shipwright-0.wave", SoundLst.SHIPWRIGHT_0);
+        sounds.put(toDir + "/audio/shipwright-1.wave", SoundLst.SHIPWRIGHT_1);
+        sounds.put(toDir + "/audio/forester-0.wave", SoundLst.FORESTER_0);
+        sounds.put(toDir + "/audio/forester-1.wave", SoundLst.FORESTER_1);
+        sounds.put(toDir + "/audio/iron-founder-and-brewer.wave", SoundLst.IRON_FOUNDER_AND_BREWER);
+        sounds.put(toDir + "/audio/farmer.wave", SoundLst.FARMER);
+        sounds.put(toDir + "/audio/miner.wave", SoundLst.MINER);
+        sounds.put(toDir + "/audio/geologist-digging-0.wave", SoundLst.GEOLOGIST_DIGGING_0);
+        sounds.put(toDir + "/audio/geologist-digging-1.wave", SoundLst.GEOLOGIST_DIGGING_1);
 
         // TODO: brewer is at 51 which maps where?
 
-        sounds.put(SoundLst.BUILDER_KNEELING_HAMMERING, toDir + "/audio/builder-kneeling-hammering.wave");
-        sounds.put(SoundLst.BUILDER_STANDING_HAMMERING, toDir + "/audio/builder-standing-hammering.wave");
-        sounds.put(SoundLst.STONEMASON_HACKING, toDir + "/audio/stonemason-hacking.wave");
-        sounds.put(SoundLst.MILLER, toDir + "/audio/miller.wave");
-        sounds.put(SoundLst.BUTCHER, toDir + "/audio/butcher.wave");
-        sounds.put(SoundLst.FISHERMAN, toDir + "/audio/fisherman.wave");
-        sounds.put(SoundLst.PLANER_0, toDir + "/audio/planer-0.wave");
-        sounds.put(SoundLst.PLANER_1, toDir + "/audio/planer-1.wave");
-        sounds.put(SoundLst.WOODCUTTER_CUTTING, toDir + "/audio/woodcutter-cutting.wave");
-        sounds.put(SoundLst.FALLING_TREE, toDir + "/audio/falling-tree.wave");
-        sounds.put(SoundLst.BAKER, toDir + "/audio/baker-baking.wave");
-        sounds.put(SoundLst.HUNTER, toDir + "/audio/hunter.wave");
-        sounds.put(SoundLst.METALWORKER_0, toDir + "/audio/metalworker-0.wave");
-        sounds.put(SoundLst.METALWORKER_1, toDir + "/audio/metalworker-1.wave");
-        sounds.put(SoundLst.METALWORKER_2, toDir + "/audio/metalworker-2.wave");
-        sounds.put(SoundLst.ARMORER, toDir + "/audio/armorer.wave");
-        sounds.put(SoundLst.COURIER_WITH_BOAT, toDir + "/audio/courier-with-boat.wave");
-        sounds.put(SoundLst.WELL_WORKER, toDir + "/audio/well-worker.wave");
+        sounds.put(toDir + "/audio/builder-kneeling-hammering.wave", SoundLst.BUILDER_KNEELING_HAMMERING);
+        sounds.put(toDir + "/audio/builder-standing-hammering.wave", SoundLst.BUILDER_STANDING_HAMMERING);
+        sounds.put(toDir + "/audio/stonemason-hacking.wave", SoundLst.STONEMASON_HACKING);
+        sounds.put(toDir + "/audio/miller.wave", SoundLst.MILLER);
+        sounds.put(toDir + "/audio/butcher.wave", SoundLst.BUTCHER);
+        sounds.put(toDir + "/audio/fisherman.wave", SoundLst.FISHERMAN);
+        sounds.put(toDir + "/audio/planer-0.wave", SoundLst.PLANER_0);
+        sounds.put(toDir + "/audio/planer-1.wave", SoundLst.PLANER_1);
+        sounds.put(toDir + "/audio/woodcutter-cutting.wave", SoundLst.WOODCUTTER_CUTTING);
+        sounds.put(toDir + "/audio/falling-tree.wave", SoundLst.FALLING_TREE);
+        sounds.put(toDir + "/audio/baker-baking.wave", SoundLst.BAKER);
+        sounds.put(toDir + "/audio/hunter.wave", SoundLst.HUNTER);
+        sounds.put(toDir + "/audio/metalworker-0.wave", SoundLst.METALWORKER_0);
+        sounds.put(toDir + "/audio/metalworker-1.wave", SoundLst.METALWORKER_1);
+        sounds.put(toDir + "/audio/metalworker-2.wave", SoundLst.METALWORKER_2);
+        sounds.put(toDir + "/audio/armorer.wave", SoundLst.ARMORER);
+        sounds.put(toDir + "/audio/courier-with-boat.wave", SoundLst.COURIER_WITH_BOAT);
+        sounds.put(toDir + "/audio/well-worker.wave", SoundLst.WELL_WORKER);
 
-        sounds.put(SoundLst.DUCK_QUACK, toDir + "/audio/duck-quack.wave");
-        sounds.put(SoundLst.GEOLOGIST_FOUND_ORE, toDir + "/audio/geologist-finding.wave");
-        sounds.put(SoundLst.MILITARY_BUILDING_OCCUPIED, toDir + "/audio/new-message.wave");
-        sounds.put(SoundLst.NEW_MESSAGE, toDir + "/audio/new-message.wave");
+        sounds.put(toDir + "/audio/duck-quack.wave", SoundLst.DUCK_QUACK);
+        sounds.put(toDir + "/audio/geologist-finding.wave", SoundLst.GEOLOGIST_FOUND_ORE);
+        sounds.put(toDir + "/audio/new-message.wave", SoundLst.MILITARY_BUILDING_OCCUPIED);
+        sounds.put(toDir + "/audio/new-message.wave", SoundLst.NEW_MESSAGE);
 
         // TODO: add additional sounds
         // TODO: verify that the offset remains correct. Brewer has sound 51?
-
-        for (Entry<Integer, String> entry : sounds.entrySet()) {
-            int index = entry.getKey();
-            String path = entry.getValue();
-
-            ((WaveGameResource) gameResources.get(index)).getWaveFile().writeToFile(path);
-        }
+        sounds.forEach((path, value) -> ((WaveGameResource) gameResources.get(value)).getWaveFile().writeToFile(path));
     }
 
     private void populateShips(String fromDir, String toDir) throws UnknownResourceTypeException, IOException, InvalidFormatException {
