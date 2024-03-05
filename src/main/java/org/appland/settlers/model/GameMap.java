@@ -387,7 +387,6 @@ public class GameMap {
 
         projectilesToRemove.clear();
         workersToRemove.clear();
-        workersToAdd.clear();
         signsToRemove.clear();
         buildingsToRemove.clear();
         animalsToRemove.clear();
@@ -482,6 +481,8 @@ public class GameMap {
 
         /* Add workers that were placed during the round */
         workers.addAll(workersToAdd);
+
+        workersToAdd.clear();
 
         /* Remove crops that were removed during this round */
         crops.removeAll(cropsToRemove);

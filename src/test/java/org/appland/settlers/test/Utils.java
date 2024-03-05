@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -549,13 +550,15 @@ public class Utils {
         return military;
     }
 
-    public static Soldier findMilitaryOutsideBuilding(Player player) {
+    public static Soldier findSoldierOutsideBuilding(Player player) {
         GameMap map = player.getMap();
 
         Soldier soldier = null;
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                soldier = (Soldier)worker;
+            if (worker instanceof Soldier soldier1 && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                soldier = soldier1;
+
+                break;
             }
         }
 
@@ -587,11 +590,11 @@ public class Utils {
         assertFalse(map.getWorkers().contains(worker));
     }
 
-    public static Soldier waitForMilitaryOutsideBuilding(Player player) throws InvalidUserActionException {
+    public static Soldier waitForSoldierOutsideBuilding(Player player) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
-            Soldier military = findMilitaryOutsideBuilding(player);
+            Soldier military = findSoldierOutsideBuilding(player);
 
             if (military != null) {
                 assertEquals(military.getPlayer(), player);
@@ -2765,7 +2768,7 @@ public class Utils {
     }
 
     public static void waitForFightToEnd(GameMap map, Soldier... soldiers) throws InvalidUserActionException {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10_000; i++) {
             if (Arrays.stream(soldiers).anyMatch(soldier -> !soldier.isFighting())) {
                 break;
             }
@@ -2878,13 +2881,14 @@ public class Utils {
         assertTrue(soldiers.stream().allMatch(Worker::isTraveling));
 
         for (int i = 0; i < 1000; i++) {
-
-            if (soldiers.stream().allMatch(Worker::isArrived)) {
+            if (soldiers.stream().allMatch(soldier -> !soldier.isTraveling() || soldier.isFighting())) {
                 break;
             }
 
             map.stepTime();
         }
+
+        soldiers.forEach(soldier -> assertTrue(!soldier.isTraveling() || soldier.isFighting()));
     }
 
     public static List<Soldier> findSoldiersOutsideWithHome(Player player, Building building) {
@@ -3003,6 +3007,75 @@ public class Utils {
 
             System.out.println();
         }
+    }
+
+    public static void setNoReservedSoldiers(Headquarter headquarter) {
+        Arrays.stream(Soldier.Rank.values()).forEach(rank -> headquarter.setReservedSoldiers(rank, 0));
+
+        Arrays.stream(Soldier.Rank.values()).forEach(rank -> assertEquals(headquarter.getReservedSoldiers(rank), 0));
+    }
+
+    public static void waitFor(Function<Void, Boolean> f, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (f.apply(null)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(f.apply(null));
+
+    }
+
+    public static void waitForSoldierToGetHit(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 1000; i++) {
+            if (soldier.isGettingHit()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(soldier.isGettingHit());
+    }
+
+    public static void waitForSoldierToStopGettingHit(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        waitFor((Void v) -> !soldier.isGettingHit(), map);
+    }
+
+    public static void waitForSoldierToHit(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        waitFor((Void v) -> soldier.isHitting(), map);
+    }
+
+    public static void waitForSoldierToStopHitting(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        waitFor((Void v) -> !soldier.isHitting(), map);
+    }
+
+    public static void waitForSoldierToHitOrBeDying(Soldier soldier, GameMap map) throws InvalidUserActionException {
+        waitFor((Void v) -> soldier.isHitting() || soldier.isDying(), map);
+    }
+
+    public static List<Soldier> waitForAliveSoldiersOutsideBuilding(Player player, int amount) {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 200; i++) {
+            List<Soldier> result = map.getWorkers().stream()
+                    .filter(Worker::isSoldier)
+                    .map(worker -> (Soldier) worker)
+                    .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                    .filter(soldier -> !soldier.isInsideBuilding())
+                    .filter(soldier -> !soldier.isDead())
+                    .toList();
+
+            if (result.size() >= amount) {
+                return result;
+            }
+        }
+
+        fail();
+
+        return null;
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

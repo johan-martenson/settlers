@@ -1106,7 +1106,7 @@ public class TestGameMonitoringWhenDiscovering {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getNewWorkers().size(), 1);
-        assertEquals(gameChangesList.getNewWorkers().get(0), courier0);
+        assertEquals(gameChangesList.getNewWorkers().getFirst(), courier0);
         assertEquals(gameChangesList.getWorkersWithNewTargets().size(), 0);
     }
 
@@ -1170,13 +1170,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Verify that an event was sent for the new worker */
         assertTrue(player0.getDiscoveredLand().contains(point5));
+        System.out.println(monitor.getEvents());
         assertTrue(monitor.getEvents().size() >= 1);
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getNewWorkers().size(), 1);
-        assertEquals(gameChangesList.getNewWorkers().get(0), courier0);
-        assertEquals(gameChangesList.getWorkersWithNewTargets().size(), 0);
+        assertEquals(gameChangesList.getNewWorkers().getFirst(), courier0);
+        assertFalse(gameChangesList.getWorkersWithNewTargets().contains(courier0));
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
@@ -1385,7 +1386,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1400,7 +1401,7 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Get the defender */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
 

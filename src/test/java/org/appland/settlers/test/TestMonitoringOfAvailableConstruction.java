@@ -2395,7 +2395,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        Worker military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Worker military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
 
@@ -2466,7 +2466,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        Worker military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Worker military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
 
@@ -2537,7 +2537,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        Worker military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Worker military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
 
@@ -2609,7 +2609,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         map.stepTime();
 
-        Worker military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Worker military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
 

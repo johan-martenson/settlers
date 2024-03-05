@@ -330,12 +330,7 @@ public abstract class Worker {
     }
 
     public boolean isArrived() {
-
-        if (state == State.IDLE_INSIDE || state == State.IDLE_OUTSIDE) {
-            return true;
-        }
-
-        return false;
+        return state == State.IDLE_INSIDE || state == State.IDLE_OUTSIDE;
     }
 
     public boolean isTraveling() {
@@ -529,7 +524,6 @@ public abstract class Worker {
     }
 
     void setTarget(Point point, Point via) {
-
         target = point;
 
         if (position.equals(point)) {

@@ -272,7 +272,7 @@ public class TestWorker {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -289,7 +289,7 @@ public class TestWorker {
         assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         Point fightingPoint = attacker.getPosition();
 

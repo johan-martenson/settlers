@@ -22,6 +22,10 @@ public class Soldier extends Worker {
 
     private int countdown;
 
+    public Soldier getOpponent() {
+        return opponent;
+    }
+
     enum FightState {
         HITTING,
         GETTING_HIT,
@@ -106,13 +110,13 @@ public class Soldier extends Worker {
         DEAD
     }
 
-    private static final int PRIVATE_HEALTH  = 20;
-    private static final int PRIVATE_FIRST_CLASS_HEALTH = 70;
-    private static final int SERGEANT_HEALTH = 220;
-    private static final int OFFICER_HEALTH  = 670;
-    private static final int GENERAL_HEALTH  = 2020;
+    private static final int PRIVATE_HEALTH  = 3;
+    private static final int PRIVATE_FIRST_CLASS_HEALTH = 4;
+    private static final int SERGEANT_HEALTH = 5;
+    private static final int OFFICER_HEALTH  = 6;
+    private static final int GENERAL_HEALTH  = 7;
 
-    private Soldier opponent;
+    private Soldier    opponent;
     private Rank       rank;
     private State      state;
     private int        health;
@@ -169,9 +173,9 @@ public class Soldier extends Worker {
             switch (fightState) {
                 case GETTING_HIT -> {
                     if (countdown == 0) {
-                        health -= 5; // Todo: fix so that damage depends on rank of the opponent
+                        health -= 1;
 
-                        if (health <= 0) {
+                        if (health == 0) {
                             fightState = FightState.DYING;
 
                             map.reportWorkerStartedAction(this, WorkerAction.DIE);
@@ -186,7 +190,8 @@ public class Soldier extends Worker {
                 }
 
                 case WAITING -> {
-                    if (opponent != null && opponent.isDead()) {
+                    if (opponent.isDead()) {
+                        opponent = null;
 
                         /* Return to the fixed point */
                         if (state == ATTACKING) {
@@ -309,6 +314,11 @@ public class Soldier extends Worker {
                     return;
                 }
 
+                /* Keep waiting if the primary attacker is not waiting for a new fight */
+                if (attackerAtFlag.isReservedForFight() || attackerAtFlag.isFighting()) {
+                    return;
+                }
+
                 /* Fight the attacker */
 
                 /* Remember the opponent */
@@ -339,6 +349,10 @@ public class Soldier extends Worker {
                 setOffroadTarget(opponent.getPosition());
             }
         }
+    }
+
+    private boolean isReservedForFight() {
+        return state == RESERVED_BY_DEFENDING_OPPONENT;
     }
 
     @Override
@@ -726,47 +740,6 @@ public class Soldier extends Worker {
                     returnToStorage();
                 }
             }
-            case WALKING_TO_DEFEND -> {
-
-                if (!getPosition().equals(getTarget())) {
-                    Set<Point> occupiedPositions = map.getWorkers().stream()
-                            .filter(worker -> worker.player == player)
-                            .filter(Worker::isSoldier)
-                            .map(soldier -> (Soldier) soldier)
-                            .filter(soldier -> !soldier.isTraveling() || soldier.isFighting())
-                            .filter(soldier -> !soldier.isInsideBuilding())
-                            .map(Worker::getPosition)
-                            .collect(Collectors.toSet());
-
-                    if (occupiedPositions.contains(getTarget())) {
-                        var candidates = GameUtils.getHexagonAreaAroundPoint(
-                                        buildingToDefend.getFlag().getPosition(),
-                                        6,
-                                        map).stream()
-                                .filter(point -> !occupiedPositions.contains(point))
-                                .filter(point -> !map.isBuildingAtPoint(point))
-                                .sorted(
-                                        (point0, point1) -> {
-                                            var dist0 = GameUtils.distanceInGameSteps(point0, buildingToDefend.getFlag().getPosition());
-                                            var dist1 = GameUtils.distanceInGameSteps(point1, buildingToDefend.getFlag().getPosition());
-
-                                            if (dist0 == dist1) {
-                                                return 0;
-                                            }
-
-                                            var diff = dist0 - dist1;
-
-                                            return diff / Math.abs(diff);
-                                        }
-                                )
-                                .toList();
-
-                        Point point = candidates.getFirst();
-
-                        setOffroadTarget(point);
-                    }
-                }
-            }
             default -> { }
         }
     }
@@ -787,14 +760,27 @@ public class Soldier extends Worker {
     }
 
     private void setBeingHit() {
-        int next = Math.abs(random.nextInt() % 3);
-
-        fightState = switch (next) {
-            case 0 -> FightState.GETTING_HIT;
-            case 1 -> FightState.JUMPING_BACK;
-            case 2 -> FightState.STANDING_ASIDE;
-            default -> throw new InvalidGameLogicException("Failed to set a reasonable fight state!");
+        int likelihoodToHit = switch (opponent.getRank()) {
+            case GENERAL_RANK -> 5;
+            case OFFICER_RANK -> 4;
+            case SERGEANT_RANK -> 3;
+            case PRIVATE_FIRST_CLASS_RANK -> 2;
+            case PRIVATE_RANK -> 1;
         };
+
+        int maybeHit = random.nextInt(10); // 0-9 almost uniformly distributed
+
+        if (maybeHit < likelihoodToHit) {
+            fightState = FightState.GETTING_HIT;
+        } else {
+            int next = random.nextInt(2);
+
+            fightState = switch (next) {
+                case 0 -> FightState.JUMPING_BACK;
+                case 1 -> FightState.STANDING_ASIDE;
+                default -> throw new InvalidGameLogicException("Failed to set a reasonable fight state!");
+            };
+        }
 
         map.reportWorkerStartedAction(this, switch (fightState) {
             case GETTING_HIT -> WorkerAction.GET_HIT;
@@ -810,17 +796,17 @@ public class Soldier extends Worker {
         return (state == ATTACKING || state == DEFENDING) && fightState == FightState.WAITING;
     }
 
-    private void prepareForFight(Soldier military) {
+    private void prepareForFight(Soldier soldier) {
 
         /* Tell the building that this soldier is not waiting anymore as the fight is starting */
         if (state == ATTACKING || state == WAITING_FOR_DEFENDING_OPPONENT) {
             buildingToAttack.removeWaitingAttacker(this);
-        } else {
+        } else if (state == DEFENDING || state == WAITING_TO_DEFEND) {
             buildingToDefend.removeWaitingDefender(this);
         }
 
         /* Remember the opponent */
-        opponent = military;
+        opponent = soldier;
 
         /* Walk halfway to the next point to not stand on top of the defender */
         walkHalfWayOffroadTo(getPosition().left(), OffroadOption.CAN_END_ON_STONE);

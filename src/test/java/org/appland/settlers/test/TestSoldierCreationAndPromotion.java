@@ -249,7 +249,7 @@ public class TestSoldierCreationAndPromotion {
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Wait for a military to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getPlayer(), player0);
@@ -722,7 +722,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Verify that the private walking to the barracks is really a soldier */
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(soldier.isSoldier());
     }
@@ -759,7 +759,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Verify that the private first class walking to the barracks is really a soldier */
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), PRIVATE_FIRST_CLASS_RANK);
         assertTrue(soldier.isSoldier());
@@ -797,7 +797,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Verify that the sergeant walking to the barracks is really a soldier */
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), SERGEANT_RANK);
         assertTrue(soldier.isSoldier());
@@ -835,7 +835,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Verify that the officer walking to the barracks is really a soldier */
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), OFFICER_RANK);
         assertTrue(soldier.isSoldier());
@@ -873,7 +873,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Verify that the general walking to the barracks is really a soldier */
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertEquals(soldier.getRank(), GENERAL_RANK);
         assertTrue(soldier.isSoldier());

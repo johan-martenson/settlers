@@ -675,7 +675,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1333,7 +1333,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -1416,7 +1416,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
 
@@ -1511,7 +1511,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
 

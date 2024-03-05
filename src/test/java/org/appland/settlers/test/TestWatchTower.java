@@ -988,7 +988,7 @@ public class TestWatchTower {
         watchTower0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1061,7 +1061,7 @@ public class TestWatchTower {
         watchTower0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -2595,7 +2595,7 @@ public class TestWatchTower {
 
         for (int i = 0; i < 2000; i++) {
 
-            assertNull(Utils.findMilitaryOutsideBuilding(player0));
+            assertNull(Utils.findSoldierOutsideBuilding(player0));
 
             map.stepTime();
         }

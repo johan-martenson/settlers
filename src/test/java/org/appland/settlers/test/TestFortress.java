@@ -999,7 +999,7 @@ public class TestFortress {
         fortress0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1044,7 +1044,7 @@ public class TestFortress {
         fortress0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());

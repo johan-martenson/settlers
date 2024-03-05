@@ -430,7 +430,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -445,7 +445,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
 
         /* Verify that a soldier of the right type goes out to defend */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getRank(), PRIVATE_RANK);
@@ -516,7 +516,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -531,7 +531,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
 
         /* Verify that a soldier of the right type goes out to defend */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getRank(), PRIVATE_FIRST_CLASS_RANK);
@@ -602,7 +602,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -617,7 +617,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
 
         /* Verify that a soldier of the right type goes out to defend */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getRank(), SERGEANT_RANK);
@@ -688,7 +688,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -703,7 +703,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
 
         /* Verify that a soldier of the right type goes out to defend */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getRank(), OFFICER_RANK);
@@ -774,7 +774,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -789,7 +789,7 @@ public class TestMilitarySettings {
         assertEquals(fortress.getNumberOfHostedSoldiers(), 4);
 
         /* Verify that a soldier of the right type goes out to defend */
-        Soldier defender = Utils.findMilitaryOutsideBuilding(player1);
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getRank(), GENERAL_RANK);
@@ -861,7 +861,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -881,7 +881,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -966,7 +966,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -986,7 +986,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1073,7 +1073,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1093,7 +1093,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1178,7 +1178,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1198,7 +1198,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1283,7 +1283,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1303,7 +1303,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1418,7 +1418,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1437,7 +1437,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1521,7 +1521,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1540,7 +1540,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1635,7 +1635,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1654,7 +1654,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1736,7 +1736,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1755,7 +1755,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1847,7 +1847,7 @@ public class TestMilitarySettings {
         /* Evacuate the barracks and wait for the soldier to go back to the headquarters */
         barracks1.evacuate();
 
-        Soldier soldier = Utils.waitForMilitaryOutsideBuilding(player1);
+        Soldier soldier = Utils.waitForSoldierOutsideBuilding(player1);
 
         assertEquals(soldier.getTarget(), headquarter1.getPosition());
 
@@ -1866,7 +1866,7 @@ public class TestMilitarySettings {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Soldier attacker = Utils.findMilitaryOutsideBuilding(player0);
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);

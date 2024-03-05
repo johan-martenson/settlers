@@ -243,7 +243,7 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
@@ -291,7 +291,7 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
@@ -339,7 +339,7 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
@@ -387,7 +387,7 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
@@ -435,7 +435,7 @@ public class TestToString {
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         /* Wait for a soldier to start walking to the barracks */
-        Soldier military = Utils.waitForMilitaryOutsideBuilding(player0);
+        Soldier military = Utils.waitForSoldierOutsideBuilding(player0);
 
         assertTrue(military.isExactlyAtPoint());
         assertNotNull(military);
