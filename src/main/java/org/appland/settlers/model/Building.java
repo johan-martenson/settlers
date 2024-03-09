@@ -66,8 +66,8 @@ public class Building implements EndPoint {
     private boolean  evacuated;
     private boolean  productionEnabled;
     private boolean  upgrading;
-    private Soldier ownDefender;
-    private Soldier primaryAttacker;
+    private Soldier  ownDefender;
+    private Soldier  primaryAttacker;
     private boolean  outOfResources;
     private Builder  builder;
 

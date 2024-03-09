@@ -19,6 +19,7 @@ public class Soldier extends Worker {
     private static final Random random = new Random(1);
     private static final int TIME_FOR_HIT = 10;
     private static final int TIME_TO_DIE = 10;
+    public int id = random.nextInt();
 
     private int countdown;
 
@@ -310,7 +311,7 @@ public class Soldier extends Worker {
                 }
 
                 /* Keep waiting if the primary attacker is not at the flag */
-                if (!attackerAtFlag.getPosition().equals(getHome().getFlag().getPosition())) {
+                if (!attackerAtFlag.getPosition().equals(getHome().getFlag().getPosition()) || attackerAtFlag.isTraveling()) {
                     return;
                 }
 
@@ -342,11 +343,25 @@ public class Soldier extends Worker {
                 /* Pick the next waiting attacker */
                 opponent = buildingToDefend.pickWaitingAttacker();
 
+                state = WALKING_TO_FIGHT_TO_DEFEND;
+
                 /* Notify the attacker so it doesn't move */
                 opponent.reserveForFight();
 
                 /* Walk to the attacker */
                 setOffroadTarget(opponent.getPosition());
+            }
+        } else if (state == WALKING_TO_FIGHT_TO_DEFEND) {
+            if (!opponent.isTraveling()) {
+
+                /* Tell the attacker that the fight is about to start */
+                opponent.prepareForFight(this);
+
+                /* Walk apart from the attacker before starting the fight */
+                state = State.WALKING_APART_TO_DEFEND;
+
+                /* Walk half a point away */
+                walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
             }
         }
     }
@@ -380,11 +395,10 @@ public class Soldier extends Worker {
 
             state = IN_STORAGE;
         } else if (state == WALKING_TO_ATTACK) {
+            buildingToAttack.registerWaitingAttacker(this);
 
             /* Main attacker */
             if (getPosition().equals(buildingToAttack.getFlag().getPosition())) {
-
-                buildingToAttack.registerWaitingAttacker(this);
 
                 /* Take over the building directly if it can not protect itself */
                 if (buildingToAttack.isDefenseLess()) {
@@ -396,7 +410,6 @@ public class Soldier extends Worker {
 
                 /* Notify the building about the attacker and start waiting for an opponent */
                 } else {
-
                     state = WAITING_FOR_DEFENDING_OPPONENT;
                 }
 
@@ -407,7 +420,6 @@ public class Soldier extends Worker {
 
         /* Capture the building */
         } else if (state == WALKING_TO_TAKE_OVER_BUILDING) {
-
             if (buildingToAttack.isReady()) {
 
                 Player previousOwner = buildingToAttack.getPlayer();
@@ -442,17 +454,6 @@ public class Soldier extends Worker {
                 /* Return home or to storage */
                 returnAfterAttackIsOver();
             }
-        } else if (state == WALKING_TO_FIGHT_TO_DEFEND) {
-
-            /* Tell the attacker that the fight is about to start */
-            opponent.prepareForFight(this);
-
-            /* Walk apart from the attacker before starting the fight */
-            state = State.WALKING_APART_TO_DEFEND;
-
-            /* Walk half a point away */
-            walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
-
         } else if (state == WALKING_HOME_AFTER_FIGHT) {
             enterBuilding(getHome());
 
@@ -467,6 +468,8 @@ public class Soldier extends Worker {
                     setOffroadTarget(buildingToAttack.getPosition());
                 } else {
                     state = WAITING_FOR_DEFENDING_OPPONENT;
+
+                    buildingToAttack.registerWaitingAttacker(this);
                 }
             } else {
 
@@ -545,6 +548,8 @@ public class Soldier extends Worker {
 
         /* Save the building to attack */
         buildingToAttack = building;
+
+        //getHome().retrieveHostedSoldier(this);
 
         /* Set state to walking to attack */
         state = WALKING_TO_ATTACK;

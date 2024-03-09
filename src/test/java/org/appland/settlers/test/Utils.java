@@ -702,9 +702,9 @@ public class Utils {
         GameMap map = building.getMap();
         Soldier firstAttacker = null;
 
-        for (Soldier military : attackers) {
-            if (military.getTarget().equals(building.getFlag().getPosition())) {
-                firstAttacker = military;
+        for (Soldier attacker : attackers) {
+            if (attacker.getTarget().equals(building.getFlag().getPosition())) {
+                firstAttacker = attacker;
 
                 break;
             }
@@ -713,6 +713,7 @@ public class Utils {
         }
 
         assertNotNull(firstAttacker);
+        assertEquals(firstAttacker.getTarget(), building.getFlag().getPosition());
 
         return firstAttacker;
     }
@@ -3056,7 +3057,7 @@ public class Utils {
         waitFor((Void v) -> soldier.isHitting() || soldier.isDying(), map);
     }
 
-    public static List<Soldier> waitForAliveSoldiersOutsideBuilding(Player player, int amount) {
+    public static List<Soldier> waitForAliveSoldiersOutsideBuilding(Player player, int amount) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 200; i++) {
@@ -3071,6 +3072,8 @@ public class Utils {
             if (result.size() >= amount) {
                 return result;
             }
+
+            map.stepTime();
         }
 
         fail();

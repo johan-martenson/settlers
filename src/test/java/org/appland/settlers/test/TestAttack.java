@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -2629,17 +2630,18 @@ public class TestAttack {
         assertFalse(defender.isDying());
         assertNotNull(defender);
 
-        /* Wait for the fight to end */
-        for (Soldier attacker : attackers) {
-            if (attacker.equals(firstAttacker)) {
-                continue;
-            }
+        /* Verify that other attackers don't walk to the attacked barracks' flag */
+        attackers.stream()
+                .filter(attacker -> !Objects.equals(attacker, firstAttacker))
+                .forEach(attacker -> assertNotEquals(attacker.getPosition(), barracks1.getFlag().getPosition()));
 
-            assertNotEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        }
+        /* Wait for the fight to start */
+        assertEquals(defender.getTarget(), firstAttacker.getPosition());
+        assertFalse(defender.isTraveling());
 
         Utils.waitForFightToStart(map, firstAttacker, defender);
 
+        /* Wait for the fight to end */
         Utils.waitForSoldierToWinFight(firstAttacker, map);
 
         /* Wait for the attacker to go back to the fixed point */
@@ -3389,11 +3391,6 @@ public class TestAttack {
 
         assertNotNull(defender);
 
-        /* Verify that the defender goes to the flag */
-        assertEquals(defender.getTarget(), barracks1.getFlag().getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getFlag().getPosition());
-
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, fightingAttacker, defender);
 
@@ -3406,7 +3403,6 @@ public class TestAttack {
         Map<Soldier, Point> positions = new HashMap<>();
 
         for (int i = 0; i < 1000; i++) {
-
             if (defender.isDying()) {
                 break;
             }
@@ -3416,16 +3412,20 @@ public class TestAttack {
             assertTrue(fightingAttacker.isFighting());
 
             /* Verify that the other attackers are not fighting */
-            for (Soldier military : attackers) {
-                if (military.equals(fightingAttacker)) {
+            for (Soldier attacker : attackers) {
+                if (attacker.equals(fightingAttacker)) {
                     continue;
                 }
 
-                if (!positions.containsKey(military) && !military.isTraveling()) {
-                    positions.put(military, military.getPosition());
+                if (attacker.isTraveling()) {
+                    continue;
+                }
+
+                if (!positions.containsKey(attacker)) {
+                    positions.put(attacker, attacker.getPosition());
                 } else {
-                    assertFalse(military.isFighting());
-                    assertEquals(military.getPosition(), positions.get(military));
+                    assertFalse(attacker.isFighting());
+                    assertEquals(attacker.getPosition(), positions.get(attacker));
                 }
             }
 
@@ -4834,6 +4834,7 @@ public class TestAttack {
 
         /* Capture the player 1's headquarters */
         assertTrue(player0.canAttack(headquarter1));
+        assertEquals(headquarter1.getAmount(PRIVATE), 1);
 
         player0.attack(headquarter1, 8, AttackStrength.STRONG);
 
@@ -4843,9 +4844,11 @@ public class TestAttack {
         /* Get the main attacker */
         Soldier firstAttacker = Utils.getMainAttacker(headquarter1, attackers);
 
-        /* Verify that the defender comes out and starts to fight */
-        assertEquals(headquarter1.getAmount(PRIVATE), 1);
+        assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
 
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, headquarter1.getFlag().getPosition());
+
+        /* Verify that the defender comes out and starts to fight */
         Soldier defender = Utils.waitForWorkerOutsideBuilding(Soldier.class, player1);
 
         assertEquals(firstAttacker.getPosition(), headquarter1.getFlag().getPosition());
@@ -5992,8 +5995,8 @@ public class TestAttack {
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Clear soldiers from the inventories */
-        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
-        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+        Utils.removeAllSoldiersFromStorage(headquarter1);
 
         /* Give the first headquarters private defenders */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 2);
@@ -6044,7 +6047,13 @@ public class TestAttack {
         Soldier defender0 = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(defender0);
-        assertEquals(defender0.getTarget(), headquarter0.getFlag().getPosition());
+
+        if (defender0.isTraveling()) {
+            assertEquals(defender0.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, defender0, headquarter0.getFlag().getPosition());
+        }
+
         assertEquals(Utils.findSoldiersOutsideBuilding(player0).size(), 1);
         assertEquals(headquarter0.getNumberOfHostedSoldiers(), 1);
 
@@ -6191,5 +6200,110 @@ public class TestAttack {
         assertEquals(defender.getPosition(), headquarter0.getFlag().getPosition());
 
         Utils.waitForFightToStart(map, mainAttacker1, defender);
+    }
+
+
+    @Test
+    public void testManyAttackersAndManyDefenders() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(20, 12);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Ensure both headquarters have generals */
+        Utils.setNoReservedSoldiers(headquarter0);
+        Utils.setNoReservedSoldiers(headquarter1);
+
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+        Utils.removeAllSoldiersFromStorage(headquarter1);
+
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 10);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 10);
+
+        /* Place fortress for player 1 */
+        Point point2 = new Point(29, 11);
+        var fortress = map.placeBuilding(new Fortress(player1), point2);
+
+        /*  Connect the fortress with the headquarters and wait for it to get populated and occupied */
+        var road0 = map.placeAutoSelectedRoad(player1, fortress.getFlag(), headquarter1.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(fortress);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(fortress, 9);
+
+        /* Configure high amounts of defenders */
+        player1.setDefenseStrength(10);
+        player1.setDefenseFromSurroundingBuildings(10);
+
+        /* Player 0 attacks player 1 */
+        assertTrue(player0.canAttack(headquarter1));
+
+        player0.attack(headquarter1, 9, AttackStrength.STRONG);
+
+        /*
+        During the attack, verify that:
+         - Defenders and attackers can't both be waiting with no one walking to them
+         - Only one soldier can wait in one place
+         - Each soldier can only fight one other soldier
+         - If a soldier is fighting another soldier, this should be reflexive
+         */
+        List<Soldier> attackers = Utils.waitForAliveSoldiersOutsideBuilding(player0, 9);
+        List<Soldier> defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
+
+        assertEquals(attackers.size(), 9);
+        assertEquals(defenders.size(), 9);
+
+        for (int i = 0; i < 200_000; i++) {
+            if (attackers.stream().allMatch(Worker::isDead) || defenders.stream().allMatch(Worker::isDead)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        var allAttackersDead = attackers.stream().allMatch(Worker::isDead);
+        var allDefendersDead = defenders.stream().allMatch(Worker::isDead);
+
+        assertTrue(allAttackersDead || allDefendersDead);
+        assertFalse(allAttackersDead && allDefendersDead);
+
+        /* Verify that the surviving soldiers go into houses again */
+        if (allAttackersDead) {
+            for (int i = 0; i < 2000; i++) {
+                if (defenders.stream().allMatch(Worker::isInsideBuilding)) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            assertTrue(defenders.stream().filter(defender -> !defender.isDead()).allMatch(Worker::isInsideBuilding));
+        } else {
+            for (int i = 0; i < 2000; i++) {
+                if (attackers.stream().allMatch(Worker::isInsideBuilding)) {
+                    break;
+                }
+
+                map.stepTime();
+            }
+
+            assertTrue(attackers.stream().filter(attacker -> !attacker.isDead()).allMatch(Worker::isInsideBuilding));
+        }
     }
 }

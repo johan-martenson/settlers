@@ -72,7 +72,7 @@ public class GameMap {
     private final MapPoint[]           pointToGameObject;
     private final List<Tree>           trees;
     private final List<Stone>          stones;
-    private final List<Worker>         workersToAdd;
+    final List<Worker>         workersToAdd;
     private final List<Player>         players;
     private final Random               random;
     private final List<Point>          startingPoints;
@@ -382,7 +382,6 @@ public class GameMap {
      * @throws InvalidUserActionException Reports any invalid user actions encountered while updating the game
      */
     public void stepTime() throws InvalidUserActionException {
-
         Duration duration = new Duration("GameMap.stepTime");
 
         projectilesToRemove.clear();
@@ -481,7 +480,6 @@ public class GameMap {
 
         /* Add workers that were placed during the round */
         workers.addAll(workersToAdd);
-
         workersToAdd.clear();
 
         /* Remove crops that were removed during this round */
