@@ -97,6 +97,7 @@ public class Player {
     private int amountWhenPopulatingCloseToBorder;
     private int amountWhenPopulatingAwayFromToBorder;
     private int amountWhenPopulatingFarFromBorder;
+    private int amountSoldiersAvailableForAttack;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -167,6 +168,7 @@ public class Player {
         amountWhenPopulatingCloseToBorder = 10;
         amountWhenPopulatingAwayFromToBorder = 10;
         amountWhenPopulatingFarFromBorder = 10;
+        amountSoldiersAvailableForAttack = 10;
 
         /* Prepare for monitors of the game */
         workersWithNewTargets = new ArrayList<>();
@@ -292,7 +294,7 @@ public class Player {
         }
 
         /* Count soldiers in military buildings that can reach the building */
-        return getBuildings().stream()
+        var totalAmount = getBuildings().stream()
                 .filter(Building::isMilitaryBuilding)
                 .filter(building -> building.canAttack(buildingToAttack))
                 .mapToInt(building -> {
@@ -307,6 +309,8 @@ public class Player {
                     }
                 })
                 .sum();
+
+        return (int)((amountSoldiersAvailableForAttack / 10.0) * totalAmount);
     }
 
     public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
@@ -381,13 +385,15 @@ public class Player {
             availableAttackers.addAll(availableAttackersFromBuilding);
         }
 
+        var limitedAttackers = availableAttackers.subList(0, (int)((amountSoldiersAvailableForAttack / 10.0) * availableAttackers.size()));
+
         /* It's not possible to attack if there are no available attackers */
-        if (availableAttackers.isEmpty()) {
+        if (limitedAttackers.isEmpty()) {
             throw new InvalidUserActionException("Player '" + this + "' can't attack building '" + buildingToAttack + "'");
         }
 
         /* Sort primarily by strength and secondarily by distance */
-        List<GameUtils.SoldierAndDistance> availableAttackersWithDistance = new ArrayList<>(availableAttackers
+        List<GameUtils.SoldierAndDistance> availableAttackersWithDistance = new ArrayList<>(limitedAttackers
                 .stream()
                 .map(soldier -> new GameUtils.SoldierAndDistance(
                         soldier,
@@ -1696,7 +1702,11 @@ public class Player {
         return ironBarAllocation.get(buildingClass);
     }
 
-    public void setStrengthOfSoldiersPopulatingBuildings(int strength) {
+    public void setStrengthOfSoldiersPopulatingBuildings(int strength) throws InvalidUserActionException {
+        if (strength < 0 || strength > 10) {
+            throw new InvalidUserActionException("Can't set strength of soldiers when populating buildings to: " + strength);
+        }
+
         strengthWhenPopulatingMilitaryBuildings = strength;
     }
 
@@ -1708,11 +1718,19 @@ public class Player {
         return defenseStrength;
     }
 
-    public void setDefenseStrength(int defenseStrength) {
+    public void setDefenseStrength(int defenseStrength) throws InvalidUserActionException {
+        if (defenseStrength < 0 || defenseStrength > 10) {
+            throw new InvalidUserActionException("Can't set the defense strength to: " + defenseStrength);
+        }
+
         this.defenseStrength = defenseStrength;
     }
 
-    public void setDefenseFromSurroundingBuildings(int strength) {
+    public void setDefenseFromSurroundingBuildings(int strength) throws InvalidUserActionException {
+        if (strength < 0 || strength > 10) {
+            throw new InvalidUserActionException("Can't set strength of defense from surrounding buildings to: " + strength);
+        }
+
         defenseFromSurroundingBuildings = strength;
     }
 
@@ -1727,7 +1745,11 @@ public class Player {
         return amountWhenPopulatingCloseToBorder;
     }
 
-    public void setAmountOfSoldiersWhenPopulatingCloseToBorder(int amount) {
+    public void setAmountOfSoldiersWhenPopulatingCloseToBorder(int amount) throws InvalidUserActionException {
+        if (amount < 0 || amount > 10) {
+            throw new InvalidUserActionException("Can't set amount of soldiers when populating close to border to: " + amount);
+        }
+
         amountWhenPopulatingCloseToBorder = amount;
     }
 
@@ -1739,11 +1761,31 @@ public class Player {
         return amountWhenPopulatingFarFromBorder;
     }
 
-    public void setAmountOfSoldiersWhenPopulatingAwayFromBorder(int amount) {
+    public void setAmountOfSoldiersWhenPopulatingAwayFromBorder(int amount) throws InvalidUserActionException {
+        if (amount < 0 || amount > 10) {
+            throw new InvalidUserActionException("Can't set amount of soldiers when populating closer to border to: " + amount);
+        }
+
         amountWhenPopulatingAwayFromToBorder = amount;
     }
 
-    public void setAmountOfSoldiersWhenPopulatingFarFromBorder(int amount) {
+    public void setAmountOfSoldiersWhenPopulatingFarFromBorder(int amount) throws InvalidUserActionException {
+        if (amount < 0 || amount > 10) {
+            throw new InvalidUserActionException("Can't set amount of soldiers when populating far from border to: " + amount);
+        }
+
         amountWhenPopulatingFarFromBorder = amount;
+    }
+
+    public int getAmountOfSoldiersAvailableForAttack() {
+        return amountSoldiersAvailableForAttack;
+    }
+
+    public void setAmountOfSoldiersAvailableForAttack(int amount) throws InvalidUserActionException {
+        if (amount < 0 || amount > 10) {
+            throw new InvalidUserActionException("Can't set amount of soldiers to include in attacks to: " + amount);
+        }
+
+        amountSoldiersAvailableForAttack = amount;
     }
 }

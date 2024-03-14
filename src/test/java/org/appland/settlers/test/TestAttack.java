@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
@@ -6274,6 +6275,82 @@ public class TestAttack {
                 break;
             }
 
+            /* Verify that there is always an attacker at the attacked building's flag */
+            var isAttackerAtFlag = attackers.stream()
+                    .filter(attacker -> !attacker.isDead())
+                    .filter(attacker -> Objects.equals(attacker.getPosition(), headquarter1.getFlag().getPosition()))
+                    .count() == 1;
+
+            var attackersGoingToFlag = attackers.stream()
+                    .filter(attacker -> !attacker.isDead())
+                    .filter(attacker -> attacker.isTraveling() && Objects.equals(attacker.getTarget(), headquarter1.getFlag().getPosition()))
+                    .count();
+
+            var allAttackersFighting = attackers.stream()
+                    .filter(attacker -> !attacker.isDead())
+                    .allMatch(Soldier::isFighting);
+
+            System.out.println(isAttackerAtFlag);
+            System.out.println(attackersGoingToFlag);
+
+            //assertTrue(isAttackerAtFlag || attackersGoingToFlag == 1 || allAttackersFighting);
+            //assertFalse(isAttackerAtFlag && attackersGoingToFlag == 1);
+
+            // TODO: add test for attackers going to fight at flag and defender staying there, and going back when no one comes to fight
+
+            /* Verify that there can't be both attackers and defenders waiting at the same time */
+            var attackersWaiting = attackers.stream()
+                    .filter(attacker -> !attacker.isDead())
+                    .filter(attacker -> !attacker.isFighting())
+                    .filter(attacker -> !attacker.isWalkingApartToFight())
+                    .filter(attacker -> !attacker.isWalkingBackToFixedPointAfterFight())
+                    .filter(attacker -> !attacker.isTraveling())
+                    .filter(attacker -> defenders.stream().noneMatch(defender -> Objects.equals(defender.getTarget(), attacker.getPosition())))
+                    .count();
+
+            var defendersWaiting = defenders.stream()
+                    .filter(defender -> !defender.isDead())
+                    .filter(defender -> !defender.isFighting())
+                    .filter(defender -> !defender.isWalkingApartToFight())
+                    .filter(defender -> !defender.isWalkingBackToFixedPointAfterFight())
+                    .filter(defender -> !defender.isTraveling())
+                    .filter(defender -> attackers.stream().noneMatch(attacker -> Objects.equals(attacker.getTarget(), defender.getPosition())))
+                    .count();
+
+            //assertFalse(attackersWaiting > 0 && defendersWaiting > 0);
+
+            /* Verify that soldiers are not doing any fighting actions while they are not fighting */
+            Stream.concat(attackers.stream(), defenders.stream())
+                    .filter(soldier -> !soldier.isFighting() || soldier.isDead())
+                    .forEach(soldier -> {
+                        assertFalse(soldier.isHitting());
+                        assertFalse(soldier.isGettingHit());
+                        assertFalse(soldier.isStandingAside());
+                        assertFalse(soldier.isJumpingBack());
+                    });
+
+            /* Verify that all soldiers have the right opponents when fighting */
+            Stream.concat(attackers.stream(), defenders.stream())
+                    .filter(Soldier::isFighting)
+                    .forEach(soldier -> assertEquals(soldier, soldier.getOpponent().getOpponent()));
+
+            /* Verify that no soldiers are added twice to the map */
+            assertEquals(map.getWorkers().size(), new HashSet<>(map.getWorkers()).size());
+
+            /* Verify that no dead soldiers are "workers" in the map */
+            assertTrue(map.getWorkers().stream().noneMatch(Worker::isDead));
+
+            /* Verify that no soldiers wait on the same point */
+            var soldierPositions = Stream.concat(attackers.stream(), defenders.stream())
+                    .filter(soldier -> !soldier.isDead())
+                    .filter(soldier -> !soldier.isTraveling())
+                    .filter(soldier -> !soldier.isFighting())
+                    .filter(soldier -> soldier.getOpponent() == null || !Objects.equals(soldier.getPosition(), soldier.getOpponent().getPosition()))
+                    .map(Soldier::getPosition)
+                    .toList();
+
+            assertEquals(soldierPositions.size(), new HashSet<>(soldierPositions).size());
+
             map.stepTime();
         }
 
@@ -6285,6 +6362,9 @@ public class TestAttack {
 
         /* Verify that the surviving soldiers go into houses again */
         if (allAttackersDead) {
+            assertEquals(headquarter1.getPlayer(), player1);
+            assertTrue(headquarter1.isReady());
+
             for (int i = 0; i < 2000; i++) {
                 if (defenders.stream().allMatch(Worker::isInsideBuilding)) {
                     break;
@@ -6295,6 +6375,8 @@ public class TestAttack {
 
             assertTrue(defenders.stream().filter(defender -> !defender.isDead()).allMatch(Worker::isInsideBuilding));
         } else {
+            assertTrue(allDefendersDead);
+
             for (int i = 0; i < 2000; i++) {
                 if (attackers.stream().allMatch(Worker::isInsideBuilding)) {
                     break;
@@ -6304,6 +6386,7 @@ public class TestAttack {
             }
 
             assertTrue(attackers.stream().filter(attacker -> !attacker.isDead()).allMatch(Worker::isInsideBuilding));
+            assertFalse(headquarter1.isReady());
         }
     }
 }

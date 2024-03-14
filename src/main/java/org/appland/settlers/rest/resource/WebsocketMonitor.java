@@ -87,6 +87,17 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
         switch (command) {
 
+            case GET_SOLDIERS_AVAILABLE_FOR_ATTACK: {
+                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
+
+                synchronized (map) {
+                    jsonResponse.put("amount", player.getAmountOfSoldiersAvailableForAttack());
+                }
+
+                sendToPlayer(jsonResponse, player);
+            }
+            break;
+
             case GET_POPULATE_MILITARY_FAR_FROM_BORDER: {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 
@@ -120,28 +131,40 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             break;
 
-            case SET_MILITARY_POPULATION_CLOSE_TO_BORDER: {
-                synchronized (map) {
-                    var amount = ((Long) jsonBody.get("population")).intValue();
+            case SET_SOLDIERS_AVAILABLE_FOR_ATTACK: {
+                System.out.println(jsonBody);
+                System.out.println(jsonBody.keySet());
+                System.out.println(jsonBody.get("amount"));
+                var amount = ((Long) jsonBody.get("amount")).intValue();
 
+                synchronized (map) {
+                    player.setAmountOfSoldiersAvailableForAttack(amount);
+                }
+            }
+            break;
+
+            case SET_MILITARY_POPULATION_CLOSE_TO_BORDER: {
+                var amount = ((Long) jsonBody.get("population")).intValue();
+
+                synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingCloseToBorder(amount);
                 }
             }
             break;
 
             case SET_MILITARY_POPULATION_CLOSER_TO_BORDER: {
-                synchronized (map) {
-                    var amount = ((Long) jsonBody.get("population")).intValue();
+                var amount = ((Long) jsonBody.get("population")).intValue();
 
+                synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingAwayFromBorder(amount);
                 }
             }
             break;
 
             case SET_MILITARY_POPULATION_FAR_FROM_BORDER: {
-                synchronized (map) {
-                    var amount = ((Long) jsonBody.get("population")).intValue();
+                var amount = ((Long) jsonBody.get("population")).intValue();
 
+                synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingFarFromBorder(amount);
                 }
             }

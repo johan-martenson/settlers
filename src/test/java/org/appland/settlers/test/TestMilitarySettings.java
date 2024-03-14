@@ -28,6 +28,107 @@ public class TestMilitarySettings {
     // Test strength of soldiers when populating new military buildings. Also existing military buildings
 
     @Test
+    public void testCannotSetOutOfBoundsValues() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to set too low values */
+        try {
+            player0.setStrengthOfSoldiersPopulatingBuildings(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setDefenseStrength(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setDefenseFromSurroundingBuildings(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersAvailableForAttack(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(-1);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+
+        /* Verify that it's not possible to set too high values */
+        try {
+            player0.setStrengthOfSoldiersPopulatingBuildings(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setDefenseStrength(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setDefenseFromSurroundingBuildings(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersAvailableForAttack(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingFarFromBorder(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingAwayFromBorder(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        try {
+            player0.setAmountOfSoldiersWhenPopulatingCloseToBorder(11);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+    }
+
+    @Test
     public void tesDefaultStrengthWhenPopulatingMilitaryBuildings() throws InvalidUserActionException {
 
         /* Starting new game */
@@ -1896,4 +1997,214 @@ public class TestMilitarySettings {
     // High/low population of military buildings closer to the border
 
     // High/low population of military buildings close to the border
+
+    @Test
+    public void testDefaultAmountAvailableAttackers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify the default amount of available attackers */
+        assertEquals(player0.getAmountOfSoldiersAvailableForAttack(), 10);
+    }
+
+    @Test
+    public void testAmountAttackersFromFortressWhenSetToMinimum() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Set amount soldiers available for attack to minimum for player 1 */
+        player1.setAmountOfSoldiersAvailableForAttack(0);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place fortress for player 1 */
+        Point point3 = new Point(23, 15);
+        var fortress = map.placeBuilding(new Fortress(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(fortress);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Populate player 1's fortress with each type of soldier */
+        assertTrue(fortress.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
+
+        /* Order an attack */
+        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 0);
+        assertFalse(player1.canAttack(barracks0));
+
+        try {
+            player1.attack(barracks0, 10, AttackStrength.STRONG);
+
+            fail();
+        } catch (InvalidUserActionException e) { }
+
+        /* Verify that no attackers come out */
+        Utils.verifyNoWorkersOutsideBuildings(Soldier.class, player1);
+    }
+
+    @Test
+    public void testAmountAttackersFromFortressWhenSetToMedium() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Set amount soldiers available for attack to medium for player 1 */
+        player1.setAmountOfSoldiersAvailableForAttack(5);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place fortress for player 1 */
+        Point point3 = new Point(23, 15);
+        var fortress = map.placeBuilding(new Fortress(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(fortress);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Populate player 1's fortress with each type of soldier */
+        assertTrue(fortress.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
+
+        /* Order an attack */
+        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 4);
+        assertTrue(player1.canAttack(barracks0));
+
+        player1.attack(barracks0, 4, AttackStrength.STRONG);
+
+        /* Verify that no attackers come out */
+        Utils.verifyWorkersOutsideBuildings(Soldier.class, 4, player1);
+    }
+
+    @Test
+    public void testAmountAttackersFromFortressWhenSetToHigh() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Set amount soldiers available for attack to medium for player 1 */
+        player1.setAmountOfSoldiersAvailableForAttack(10);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place fortress for player 1 */
+        Point point3 = new Point(23, 15);
+        var fortress = map.placeBuilding(new Fortress(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(fortress);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Populate player 1's fortress with each type of soldier */
+        assertTrue(fortress.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
+
+        /* Order an attack */
+        assertEquals(player1.getAvailableAttackersForBuilding(barracks0), 8);
+        assertTrue(player1.canAttack(barracks0));
+
+        player1.attack(barracks0, 8, AttackStrength.STRONG);
+
+        /* Verify that no attackers come out */
+        Utils.verifyWorkersOutsideBuildings(Soldier.class, 8, player1);
+    }
 }

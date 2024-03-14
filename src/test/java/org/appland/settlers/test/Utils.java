@@ -3081,6 +3081,40 @@ public class Utils {
         return null;
     }
 
+    public static <T extends Worker> void verifyNoWorkersOutsideBuildings(Class<T> soldierClass, Player player) throws InvalidUserActionException {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+            map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
+                    .filter(worker -> Objects.equals(player, worker.getPlayer()))
+                    .filter(worker -> !worker.isInsideBuilding()).forEach(System.out::println);
+
+            assertTrue(map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
+                    .filter(worker -> Objects.equals(player, worker.getPlayer()))
+                    .allMatch(Worker::isInsideBuilding));
+
+            map.stepTime();
+        }
+    }
+
+    public static <T extends Worker> void verifyWorkersOutsideBuildings(Class<T> soldierClass, int amount, Player player) throws InvalidUserActionException {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+            if (map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
+                    .filter(worker -> Objects.equals(player, worker.getPlayer()))
+                    .filter(worker -> !worker.isInsideBuilding()).count() == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
+                .filter(worker -> Objects.equals(player, worker.getPlayer()))
+                .filter(worker -> !worker.isInsideBuilding()).count(), amount);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

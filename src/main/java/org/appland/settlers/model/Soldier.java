@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Soldier.Rank.*;
@@ -560,8 +561,10 @@ public class Soldier extends Worker {
         /* Walk close to the fighting and wait for a defender to be free */
         state = WALKING_TO_ATTACK;
 
-        Set<Point> taken = buildingToAttack.getAttackers().stream()
-                .filter(worker -> worker.player == player)
+        Set<Point> taken = Stream.concat(
+                        buildingToAttack.getAttackers().stream(),
+                        buildingToAttack.getDefenders().stream()
+                )
                 .filter(worker -> !Objects.equals(worker, this))
                 .filter(Worker::isSoldier)
                 .filter(soldier -> !soldier.isInsideBuilding())
@@ -673,18 +676,19 @@ public class Soldier extends Worker {
             /* Walk close to the fighting and wait for an attacker to be free */
             state = WALKING_TO_DEFEND;
 
-            Set<Point> taken = buildingToDefend.getDefenders().stream()
-                            .filter(worker -> worker.player == player)
-                            .filter(Worker::isSoldier)
-                            .filter(soldier -> !soldier.isInsideBuilding())
-                            .map(soldier -> {
-                                if (soldier.isTraveling()) {
-                                    return soldier.getTarget();
-                                } else {
-                                    return soldier.getPosition();
-                                }
-                            })
-                            .collect(Collectors.toSet());
+            Set<Point> taken = Stream.concat(
+                            buildingToDefend.getDefenders().stream(),
+                            buildingToDefend.getAttackers().stream())
+                    .filter(Worker::isSoldier)
+                    .filter(soldier -> !soldier.isInsideBuilding())
+                    .map(soldier -> {
+                        if (soldier.isTraveling()) {
+                            return soldier.getTarget();
+                        } else {
+                            return soldier.getPosition();
+                        }
+                    })
+                    .collect(Collectors.toSet());
 
                 var candidates = GameUtils.getHexagonAreaAroundPoint(
                                 buildingToDefend.getFlag().getPosition(),
@@ -882,5 +886,13 @@ public class Soldier extends Worker {
 
     public int getHealth() {
         return health;
+    }
+
+    public boolean isWalkingApartToFight() {
+        return state == WALKING_APART_TO_DEFEND || state == WALKING_APART_TO_ATTACK;
+    }
+
+    public boolean isWalkingBackToFixedPointAfterFight() {
+        return state == WALKING_TO_FIXED_POINT_AFTER_ATTACK || state == WALKING_TO_FIXED_POINT_AFTER_DEFENSE;
     }
 }

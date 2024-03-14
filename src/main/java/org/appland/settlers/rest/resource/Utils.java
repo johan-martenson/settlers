@@ -400,12 +400,16 @@ class Utils {
 
         if (building instanceof Headquarter headquarter) {
             JSONObject jsonReserved = new JSONObject();
+            JSONObject jsonInReserve = new JSONObject();
 
             jsonHouse.put("reserved", jsonReserved);
+            jsonHouse.put("inReserve", jsonInReserve);
 
             Arrays.stream(Soldier.Rank.values()).iterator().forEachRemaining(
-                    rank -> jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank))
-            );
+                    rank -> {
+                        jsonReserved.put(rank.name().toUpperCase(), headquarter.getReservedSoldiers(rank));
+                        jsonInReserve.put(rank.name().toUpperCase(), headquarter.getActualReservedSoldiers().get(rank));
+                    });
         }
 
         if (!building.getPlayer().equals(player) && building.isMilitaryBuilding() && building.isOccupied()) {
