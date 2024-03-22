@@ -1,5 +1,8 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
@@ -10,45 +13,28 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.DecorationType.BROWN_MUSHROOM;
-import static org.appland.settlers.model.DecorationType.BUSH;
-import static org.appland.settlers.model.DecorationType.CATTAIL;
-import static org.appland.settlers.model.DecorationType.DEAD_TREE;
-import static org.appland.settlers.model.DecorationType.DEAD_TREE_LYING_DOWN;
-import static org.appland.settlers.model.DecorationType.FEW_SMALL_STONES;
-import static org.appland.settlers.model.DecorationType.FLOWERS;
-import static org.appland.settlers.model.DecorationType.GRASS_1;
-import static org.appland.settlers.model.DecorationType.GRASS_2;
-import static org.appland.settlers.model.DecorationType.LARGE_BUSH;
-import static org.appland.settlers.model.DecorationType.LITTLE_GRASS;
-import static org.appland.settlers.model.DecorationType.MINI_BROWN_MUSHROOM;
-import static org.appland.settlers.model.DecorationType.MINI_BUSH;
-import static org.appland.settlers.model.DecorationType.MINI_STONE;
-import static org.appland.settlers.model.DecorationType.MINI_STONE_WITH_GRASS;
-import static org.appland.settlers.model.DecorationType.SMALL_BUSH;
-import static org.appland.settlers.model.DecorationType.SMALL_SKELETON;
-import static org.appland.settlers.model.DecorationType.SMALL_STONE;
-import static org.appland.settlers.model.DecorationType.SMALL_STONE_WITH_GRASS;
-import static org.appland.settlers.model.DecorationType.SOME_SMALLER_STONES;
-import static org.appland.settlers.model.DecorationType.SOME_SMALL_STONES;
-import static org.appland.settlers.model.DecorationType.SOME_WATER;
-import static org.appland.settlers.model.DecorationType.SPARSE_BUSH;
+import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.DecorationType.*;
 import static org.appland.settlers.model.DecorationType.STONE;
-import static org.appland.settlers.model.DecorationType.TOADSTOOL;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Size.LARGE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.StoneType.STONE_1;
+import static org.junit.Assert.*;
 
 public class TestDecorations {
 
@@ -58,7 +44,7 @@ public class TestDecorations {
             MINI_STONE,
             SMALL_STONE,
             STONE,
-            SMALL_SKELETON,
+            ANIMAL_SKELETON_2,
             FLOWERS,
             LARGE_BUSH,
             CATTAIL,
@@ -298,4 +284,142 @@ public class TestDecorations {
             assertFalse(map.isDecoratedAtPoint(point3));
         }
     }
+
+    @Test
+    public void testSkeletonAppearsWhenSoldierDies() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Clear soldiers from the inventories */
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(23, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Finish construction */
+        Utils.constructHouses(barracks0, barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
+
+        /* Populate player 1's barracks */
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
+
+        /* Get the defender */
+        Soldier defender = Utils.findSoldierOutsideBuilding(player1);
+
+        assertNotNull(defender);
+
+        /* Wait for the fight to start */
+        Utils.waitForFightToStart(map, attacker, defender);
+
+        /* Wait for the fight to end and the defender to be dying */
+        Utils.waitForSoldierToBeDying(defender, map);
+
+        /* Verify that a skeleton is placed when the defender dies */
+        assertFalse(map.isDecoratedAtPoint(defender.getPosition()));
+        assertNotEquals(map.getDecorations().get(defender.getPosition()), DecorationType.ANIMAL_SKELETON_1);
+        assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), ANIMAL_SKELETON_1);
+
+        Utils.waitForWorkerToDie(map, defender);
+
+        assertFalse(map.getWorkers().contains(defender));
+        assertTrue(map.isDecoratedAtPoint(defender.getPosition()));
+        assertEquals(map.getDecorations().get(defender.getPosition()), DecorationType.ANIMAL_SKELETON_1);
+        assertEquals(map.getDecorationAtPoint(defender.getPosition()), ANIMAL_SKELETON_1);
+    }
+
+    @Test
+    public void testStoneDecorationIsPlacedWhenStoneRunsOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 15, 15);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place stone */
+        Point point1 = new Point(5, 5);
+        Stone stone0 = map.placeStone(point1, STONE_1, 7);
+
+        /* Remove all but one pats of the stone */
+        for (int i = 0; i < 6; i++) {
+            stone0.removeOnePart();
+
+            map.stepTime();
+
+            assertTrue(map.isStoneAtPoint(point1));
+        }
+
+        /* Verify that a stone decoration is placed when the stone runs out */
+        assertFalse(map.isDecoratedAtPoint(stone0.getPosition()));
+        assertNotEquals(map.getDecorations().get(stone0.getPosition()), FEW_SMALL_STONES);
+        assertNotEquals(map.getDecorationAtPoint(stone0.getPosition()), ANIMAL_SKELETON_1);
+
+        stone0.removeOnePart();
+
+        assertEquals(stone0.getAmount(), 0);
+
+        map.stepTime();
+
+        assertFalse(map.isStoneAtPoint(point1));
+        assertFalse(map.isDecoratedAtPoint(stone0.getPosition()));
+        assertNotEquals(map.getDecorations().get(stone0.getPosition()), DecorationType.ANIMAL_SKELETON_1);
+        assertNotEquals(map.getDecorationAtPoint(stone0.getPosition()), ANIMAL_SKELETON_1);
+    }
+
 }
+

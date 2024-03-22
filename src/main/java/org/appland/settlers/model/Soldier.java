@@ -194,6 +194,7 @@ public class Soldier extends Worker {
                 case WAITING -> {
                     if (opponent.isDead()) {
                         opponent = null;
+                        fightState = null;
 
                         /* Return to the fixed point */
                         if (state == ATTACKING) {
@@ -247,6 +248,8 @@ public class Soldier extends Worker {
 
                         /* Remember that this military is dead */
                         state = State.DEAD;
+
+                        fightState = null;
 
                         setDead();
                     } else {

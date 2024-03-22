@@ -700,6 +700,8 @@ public abstract class Worker {
 
     protected void setDead() {
         dead = true;
+
+        map.placeDecoration(position, DecorationType.ANIMAL_SKELETON_1);
     }
 
     void goToStorehouse(Storehouse storehouse) {

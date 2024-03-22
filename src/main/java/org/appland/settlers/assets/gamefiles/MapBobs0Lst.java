@@ -17,8 +17,8 @@ public class MapBobs0Lst {
     public static final int SNOWMAN = 338;
     public static final int PORTAL = 339;
     public static final int SHINING_PORTAL = 340;
-    public static final int PORTAL_SHADOW = 397;
-    public static final int SHINING_PORTAL_SHADOW = 398;
+    public static final int PORTAL_SHADOW = 394;
+    public static final int SHINING_PORTAL_SHADOW = 395;
     public static final int MINI_BROWN_MUSHROOM_SHADOW = 341; // 283 + 58
     public static final int BROWN_MUSHROOM_SHADOW = 387;
     public static final int DONKEY_EAST_ANIMATION = 785;
@@ -41,4 +41,8 @@ public class MapBobs0Lst {
     public static final int SNOWMAN_SHADOW = 396;
 
     public static final int DONKEY_BREEDER_ICON = 1012;
+    public static final int HUMAN_SKELETON_1 = 327;
+    public static final int HUMAN_SKELETON_1_SHADOW = 382;
+    public static final int HUMAN_SKELETON_2 = 328;
+    public static final int HUMAN_SKELETON_2_SHADOW = 383;
 }

@@ -520,8 +520,8 @@ public class MapBobsLst {
     public static final int DECORATIVE_MINI_STONE_SHADOW = 330;
     public static final int DECORATIVE_MINI_STONES_SHADOW = 331;
     public static final int DECORATIVE_STONE_SHADOW = 332;
-    public static final int DECORATIVE_SKELETON_SHADOW = 335;
-    public static final int DECORATIVE_MINI_SKELETON_SHADOW = 336;
+    public static final int DECORATIVE_ANIMAL_SKELETON_1_SHADOW = 335;
+    public static final int DECORATIVE_ANIMAL_SKELETON_2_SHADOW = 336;
     public static final int DECORATIVE_FLOWERS_SHADOW = 337;
     public static final int DECORATIVE_LARGE_BUSH_SHADOW = 338;
     public static final int DECORATIVE_LARGER_STONES_SHADOW = 339;
@@ -541,8 +541,8 @@ public class MapBobsLst {
     public static final int DECORATIVE_STONE = 286;
     public static final int DECORATIVE_FALLEN_TREE = 287;
     public static final int DECORATIVE_STANDING_DEAD_TREE = 288;
-    public static final int DECORATIVE_SKELETON = 289;
-    public static final int DECORATIVE_MINI_SKELETON = 290;
+    public static final int DECORATIVE_ANIMAL_SKELETON_1 = 289;
+    public static final int DECORATIVE_ANIMAL_SKELETON_2 = 290;
     public static final int DECORATIVE_FLOWERS = 291;
     public static final int DECORATIVE_LARGE_BUSH = 292;
     public static final int DECORATIVE_LARGER_STONES = 293;

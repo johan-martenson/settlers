@@ -1666,14 +1666,14 @@ public class Extractor {
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_STANDING_DEAD_TREE_SHADOW)
                 );
         decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SKELETON,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SKELETON),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SKELETON_SHADOW)
+                DecorationType.ANIMAL_SKELETON_1,
+                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_1),
+                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_1_SHADOW)
         );
         decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SMALL_SKELETON,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_SKELETON),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_SKELETON_SHADOW)
+                DecorationType.ANIMAL_SKELETON_2,
+                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_2),
+                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_2_SHADOW)
         );
         decorativeImageCollection.addDecorationImageWithShadow(
                 DecorationType.FLOWERS,
@@ -1734,6 +1734,18 @@ public class Extractor {
                 DecorationType.MINI_GRASS,
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_GRASS),
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_GRASS_SHADOW)
+        );
+
+        decorativeImageCollection.addDecorationImageWithShadow(
+                DecorationType.HUMAN_SKELETON_1,
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1),
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1_SHADOW)
+        );
+
+        decorativeImageCollection.addDecorationImageWithShadow(
+                DecorationType.HUMAN_SKELETON_2,
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2),
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2_SHADOW)
         );
 
         decorativeImageCollection.addDecorationImageWithShadow(

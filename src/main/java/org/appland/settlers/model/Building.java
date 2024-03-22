@@ -493,6 +493,10 @@ public class Building implements EndPoint {
                 }
             } else {
                 countdown.step();
+
+                if (countdown.getCount() % 10 == 0) {
+                    player.reportChangedBuilding(this);
+                }
             }
         } else if (state == State.BURNING) {
             if (countdown.hasReachedZero()) {

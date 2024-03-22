@@ -385,6 +385,52 @@ public class TestGameMonitoringOfBuilding {
     }
 
     @Test
+    public void testMonitoringEventWhenConstructionProgresses() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point2 = new Point(9, 5);
+        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that events are sent when enough progress has been made (but not otherwise) */
+        int trackedProgress = 0;
+
+        for (int i = 0; i < 5000; i++) {
+            if (farm0.getConstructionProgress() == 100) {
+                break;
+            }
+
+            if (farm0.getConstructionProgress() != trackedProgress) {
+                trackedProgress = farm0.getConstructionProgress();
+
+                if (farm0.getConstructionProgress() % 10 == 0) {
+                    assertTrue(monitor.getLastEvent().getChangedBuildings().contains(farm0));
+
+                    monitor.clearEvents();
+                }
+            }
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testMonitoringEventWhenReservedLimitIsRaisedAndSoldierInInventoryBecomesHosted() throws Exception {
 
         /* Starting new game */
