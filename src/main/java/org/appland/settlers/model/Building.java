@@ -1,6 +1,9 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.model.Soldier.Rank;
+import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Soldier.Rank;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
@@ -19,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
 
@@ -58,7 +61,7 @@ public class Building implements EndPoint {
     private GameMap  map;
     private Player   player;
     private State    state;
-    private Worker   worker;
+    private Worker worker;
     private Worker   promisedWorker;
     private Point    position;
     private Flag     flag;
@@ -166,7 +169,7 @@ public class Building implements EndPoint {
         return receivedMaterial.getOrDefault(material, 0);
     }
 
-    void consumeOne(Material material) {
+    public void consumeOne(Material material) {
         int amount = getAmount(material);
 
         receivedMaterial.put(material, amount - 1);
@@ -303,7 +306,7 @@ public class Building implements EndPoint {
         return hostedSoldiers.size() < getMaxHostedSoldiers();
     }
 
-    void deploySoldier(Soldier soldier) {
+    public void deploySoldier(Soldier soldier) {
 
         if (!isReady()) {
             throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
@@ -862,7 +865,7 @@ public class Building implements EndPoint {
         return mb.attackRadius();
     }
 
-    Soldier retrieveHostedSoldier(Soldier soldier) {
+    public Soldier retrieveHostedSoldier(Soldier soldier) {
         hostedSoldiers.remove(soldier);
 
         return soldier;
@@ -898,11 +901,11 @@ public class Building implements EndPoint {
         return enablePromotions;
     }
 
-    void registerDefender(Soldier defender) {
+    public void registerDefender(Soldier defender) {
         defenders.add(defender);
     }
 
-    void removeDefender(Soldier defender) {
+    public void removeDefender(Soldier defender) {
         if (defender.equals(ownDefender)) {
             ownDefender = null;
         }
@@ -910,7 +913,7 @@ public class Building implements EndPoint {
         defenders.remove(defender);
     }
 
-    void registerAttacker(Soldier attacker) {
+    public void registerAttacker(Soldier attacker) {
 
         /* Register the attacker */
         if (!attackers.contains(attacker)) {
@@ -918,7 +921,7 @@ public class Building implements EndPoint {
         }
     }
 
-    void removeAttacker(Soldier attacker) {
+    public void removeAttacker(Soldier attacker) {
         waitingAttackers.remove(attacker);
         attackers.remove(attacker);
 
@@ -927,15 +930,15 @@ public class Building implements EndPoint {
         }
     }
 
-    List<Soldier> getWaitingAttackers() {
+    public List<Soldier> getWaitingAttackers() {
         return waitingAttackers;
     }
 
-    Soldier pickWaitingAttacker() {
+    public Soldier pickWaitingAttacker() {
         return waitingAttackers.removeFirst();
     }
 
-    List<Soldier> getAttackers() {
+    public List<Soldier> getAttackers() {
         return attackers;
     }
 
@@ -958,15 +961,15 @@ public class Building implements EndPoint {
         return true;
     }
 
-    Soldier getPrimaryAttacker() {
+    public Soldier getPrimaryAttacker() {
         return primaryAttacker;
     }
 
-    void setPrimaryAttacker(Soldier attacker) {
+    public void setPrimaryAttacker(Soldier attacker) {
         primaryAttacker = attacker;
     }
 
-    boolean isDefenseLess() {
+    public boolean isDefenseLess() {
         if (getNumberOfHostedSoldiers() == 0 && defenders.isEmpty() && ownDefender == null) {
             return true;
         }
@@ -974,7 +977,7 @@ public class Building implements EndPoint {
         return false;
     }
 
-    void capture(Player player) throws InvalidUserActionException {
+    public void capture(Player player) throws InvalidUserActionException {
 
         /* Change the ownership of the building */
         setPlayer(player);
@@ -991,7 +994,7 @@ public class Building implements EndPoint {
         evacuated = false;
     }
 
-    void cancelPromisedDelivery(Cargo cargo) {
+    public void cancelPromisedDelivery(Cargo cargo) {
         int amount = promisedDeliveries.getOrDefault(cargo.getMaterial(), 0);
 
         promisedDeliveries.put(cargo.getMaterial(), amount - 1);
@@ -1105,7 +1108,7 @@ public class Building implements EndPoint {
         }
     }
 
-    void reportNoMoreNaturalResources() {
+    public void reportNoMoreNaturalResources() {
         outOfResources = true;
     }
 
@@ -1334,7 +1337,7 @@ public class Building implements EndPoint {
         this.builder = builder;
     }
 
-    void startConstruction() {
+    public void startConstruction() {
         state = State.UNDER_CONSTRUCTION;
 
         countdown.countFrom(getConstructionCountdown());
@@ -1346,7 +1349,7 @@ public class Building implements EndPoint {
         return builder;
     }
 
-    void cancelPromisedBuilder(Builder builder) {
+    public void cancelPromisedBuilder(Builder builder) {
         this.builder = null;
     }
 

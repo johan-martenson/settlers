@@ -11,15 +11,15 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.HunterHut;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.WildAnimal;
+import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.WoodcutterWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
 
 import java.util.ArrayList;

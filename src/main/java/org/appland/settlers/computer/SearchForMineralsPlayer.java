@@ -10,7 +10,7 @@ import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Geologist;
+import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
@@ -20,7 +20,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 
 import java.util.EnumMap;
 import java.util.HashMap;

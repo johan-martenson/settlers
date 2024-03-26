@@ -1,10 +1,47 @@
 package org.appland.settlers.model;
 
-import java.util.*;
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Brewer;
+import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Butcher;
+import org.appland.settlers.model.actors.CatapultWorker;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Forester;
+import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.actors.Hunter;
+import org.appland.settlers.model.actors.IronFounder;
+import org.appland.settlers.model.actors.Metalworker;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Scout;
+import org.appland.settlers.model.actors.Shipwright;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.WellWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.actors.Worker;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.*;
 import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)

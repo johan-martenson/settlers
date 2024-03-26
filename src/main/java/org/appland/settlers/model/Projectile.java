@@ -21,7 +21,7 @@ public class Projectile {
     private final Countdown countdown;
     private final GameMap   map;
 
-    Projectile(Catapult source, Building targetBuilding, GameMap map) {
+    public Projectile(Catapult source, Building targetBuilding, GameMap map) {
         target = targetBuilding;
         this.source = source;
         this.map = map;

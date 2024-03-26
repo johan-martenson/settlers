@@ -9,7 +9,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Geologist;
+import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
@@ -20,7 +20,7 @@ import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

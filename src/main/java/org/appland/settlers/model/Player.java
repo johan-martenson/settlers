@@ -1,6 +1,9 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Worker;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -273,7 +276,7 @@ public class Player {
         return discoveredLand;
     }
 
-    void discover(Point point) {
+    public void discover(Point point) {
         if (!discoveredLand.contains(point)) {
             discoveredLand.add(point);
 
@@ -496,7 +499,7 @@ public class Player {
         return color;
     }
 
-    Storehouse getClosestStorage(Point position, Building avoid) {
+    public Storehouse getClosestStorage(Point position, Building avoid) {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 
@@ -602,7 +605,7 @@ public class Player {
         setTransportPriorityForMaterials();
     }
 
-    int getTransportPriority(Cargo cargo) {
+    public int getTransportPriority(Cargo cargo) {
         int i = 0;
 
         for (Material material : transportPriorities) {
@@ -620,7 +623,7 @@ public class Player {
         return transportCategoryPriorities;
     }
 
-    List<Material> getTransportPrioritiesForEachMaterial() {
+    public List<Material> getTransportPrioritiesForEachMaterial() {
         return transportPriorities;
     }
 
@@ -642,7 +645,7 @@ public class Player {
         return null;
     }
 
-    Storehouse getClosestStorageOffroad(Point position) {
+    public Storehouse getClosestStorageOffroad(Point position) {
         Building storage = null;
         double distance = Double.MAX_VALUE;
 
@@ -720,7 +723,7 @@ public class Player {
         }
     }
 
-    void reportNoMoreResourcesForBuilding(Building building) {
+    public void reportNoMoreResourcesForBuilding(Building building) {
         NoMoreResourcesMessage message = new NoMoreResourcesMessage(building);
 
         messages.add(message);
@@ -730,7 +733,7 @@ public class Player {
         }
     }
 
-    void reportGeologicalFinding(Point point, Material foundMaterial) {
+    public void reportGeologicalFinding(Point point, Material foundMaterial) {
         GeologistFindMessage message = new GeologistFindMessage(point, foundMaterial);
 
         messages.add(message);
@@ -740,7 +743,7 @@ public class Player {
         }
     }
 
-    void reportBuildingLost(Building building) {
+    public void reportBuildingLost(Building building) {
         BuildingLostMessage message = new BuildingLostMessage(building);
 
         messages.add(message);
@@ -750,7 +753,7 @@ public class Player {
         }
     }
 
-    void reportBuildingCaptured(Building building) {
+    public void reportBuildingCaptured(Building building) {
         BuildingCapturedMessage message = new BuildingCapturedMessage(building);
 
         messages.add(message);

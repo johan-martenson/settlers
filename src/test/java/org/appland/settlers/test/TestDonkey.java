@@ -7,8 +7,8 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Donkey;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
@@ -20,7 +20,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;

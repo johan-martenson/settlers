@@ -1,20 +1,20 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Brewer;
+import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.Brewery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DonkeyBreeder;
+import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.DonkeyFarm;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Bakery;
-import org.appland.settlers.model.Baker;
-import org.appland.settlers.model.PigBreeder;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

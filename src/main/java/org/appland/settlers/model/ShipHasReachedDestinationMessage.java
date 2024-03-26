@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Ship;
+
 public class ShipHasReachedDestinationMessage implements Message {
     private final Ship ship;
     private final Point position;

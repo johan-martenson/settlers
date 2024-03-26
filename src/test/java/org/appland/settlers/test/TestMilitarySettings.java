@@ -7,7 +7,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -20,7 +20,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestMilitarySettings {

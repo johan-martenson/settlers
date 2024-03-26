@@ -17,8 +17,8 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Soldier;
-import org.appland.settlers.model.StorageWorker;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.StorageWorker;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ import java.util.Set;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 import static org.junit.Assert.*;
 
 /**

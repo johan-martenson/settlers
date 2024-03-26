@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Soldier;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -129,7 +131,7 @@ public class GameUtils {
         private final Player player;
         private final Point position;
 
-        AllocationTracker(AllocationType allocationType, Player player, Point position) {
+        public AllocationTracker(AllocationType allocationType, Player player, Point position) {
             this.player = player;
             this.allocationType = allocationType;
             this.position = position;
@@ -227,7 +229,7 @@ public class GameUtils {
         return false;
     }
 
-    static Direction getDirectionBetweenPoints(Point from, Point to) {
+    public static Direction getDirectionBetweenPoints(Point from, Point to) {
         Direction direction = null;
 
         if (to.x == from.x + 2 && to.y == from.y) {
@@ -279,7 +281,7 @@ public class GameUtils {
         }
     }
 
-    static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
+    public static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
         PriorityQueue<ToSearchItem> toSearch = new PriorityQueue<>();
         Set<Point> searched = new HashSet<>();
 
@@ -1389,7 +1391,7 @@ public class GameUtils {
         return false;
     }
 
-    static Storehouse getClosestStorageOffroad(Player player, Point point) {
+    public static Storehouse getClosestStorageOffroad(Player player, Point point) {
         int distance = Integer.MAX_VALUE;
         Storehouse storehouse = null;
         GameMap map = player.getMap();
@@ -1749,9 +1751,9 @@ public class GameUtils {
         return angle;
     }
 
-    static class HouseOrRoad {
-        final Building building;
-        final Road road;
+    public static class HouseOrRoad {
+        public final Building building;
+        public final Road road;
 
         HouseOrRoad(Building building) {
             this.building = building;

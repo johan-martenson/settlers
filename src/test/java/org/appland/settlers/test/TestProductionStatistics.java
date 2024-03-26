@@ -12,7 +12,7 @@ import org.appland.settlers.model.StatisticsManager;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.WoodcutterWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
 
 import java.util.ArrayList;

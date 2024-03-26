@@ -13,10 +13,10 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Scout;
+import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

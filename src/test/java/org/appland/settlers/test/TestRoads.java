@@ -6,7 +6,29 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.CropType;
-import org.appland.settlers.model.*;
+import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.FlagType;
+import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneType;
+import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.TreeSize;
+import org.appland.settlers.model.Well;
+import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.WellWorker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,17 +36,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.WATER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 /**
  *

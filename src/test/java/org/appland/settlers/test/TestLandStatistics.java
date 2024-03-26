@@ -7,7 +7,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.LandDataPoint;
 import org.appland.settlers.model.LandStatistics;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.StatisticsManager;
@@ -20,8 +20,8 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 public class TestLandStatistics {

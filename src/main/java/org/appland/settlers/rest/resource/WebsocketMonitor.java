@@ -17,7 +17,7 @@ import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
 import org.appland.settlers.model.Message;
 import org.appland.settlers.model.Metalworks;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.PigFarm;

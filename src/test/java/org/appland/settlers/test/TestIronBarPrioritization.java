@@ -1,16 +1,16 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Armorer;
+import org.appland.settlers.model.actors.Armorer;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Metalworker;
+import org.appland.settlers.model.actors.Metalworker;
 import org.appland.settlers.model.Metalworks;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

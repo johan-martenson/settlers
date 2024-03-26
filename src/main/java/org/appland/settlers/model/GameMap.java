@@ -1,6 +1,10 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.assets.CropType;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.actors.WildAnimal;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
@@ -796,7 +800,7 @@ public class GameMap {
         return placeBuilding(house, point, MUST_PLACE_INSIDE_BORDER);
     }
 
-    <T extends Building> T placeBuilding(T house, Point point, BorderCheck borderCheck) throws InvalidUserActionException {
+    public <T extends Building> T placeBuilding(T house, Point point, BorderCheck borderCheck) throws InvalidUserActionException {
 
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
@@ -938,7 +942,7 @@ public class GameMap {
         return house;
     }
 
-    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) {
+    public void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) {
 
         /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building>    claims       = new HashMap<>();
@@ -1769,7 +1773,7 @@ public class GameMap {
     }
 
     // FIXME: HOTSPOT - allocations
-    Collection<Point> getPossibleAdjacentOffRoadConnections(Point from) {
+    public Collection<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         List<Point>  possibleAdjacentOffRoadConnections = new ArrayList<>();
 
         MapPoint mapPoint = getMapPoint(from);
@@ -2275,7 +2279,7 @@ public class GameMap {
         return trees;
     }
 
-    void removeTree(Point position) {
+    public void removeTree(Point position) {
         MapPoint mapPoint = getMapPoint(position);
 
         Tree tree = mapPoint.getTree();
@@ -2365,7 +2369,7 @@ public class GameMap {
         return mapPoint.getStone() != null;
     }
 
-    Cargo removePartOfStone(Point position) {
+    public Cargo removePartOfStone(Point position) {
         MapPoint mapPoint = getMapPoint(position);
 
         Stone stone = mapPoint.getStone();
@@ -2669,7 +2673,7 @@ public class GameMap {
         removedSigns.add(sign);
     }
 
-    void removeWorker(Worker worker) {
+    public void removeWorker(Worker worker) {
         workersToRemove.add(worker);
 
         /* Report that the worker was removed */
@@ -2707,12 +2711,12 @@ public class GameMap {
         return height;
     }
 
-    void placeWorkerFromStepTime(Worker worker, Building home) {
+    public void placeWorkerFromStepTime(Worker worker, Building home) {
         worker.setPosition(home.getPosition());
         workersToAdd.add(worker);
     }
 
-    void discoverPointsWithinRadius(Player player, Point center, int radius) {
+    public void discoverPointsWithinRadius(Player player, Point center, int radius) {
         for (Point point : getPointsWithinRadius(center, radius)) {
             player.discover(point);
         }
@@ -3143,7 +3147,7 @@ public class GameMap {
         return projectiles;
     }
 
-    void placeProjectile(Projectile projectile) {
+    public void placeProjectile(Projectile projectile) {
         projectiles.add(projectile);
     }
 
@@ -3237,7 +3241,7 @@ public class GameMap {
                 .findFirst().orElse(null);
     }
 
-    void removeWildAnimalWithinStepTime(WildAnimal animal) {
+    public void removeWildAnimalWithinStepTime(WildAnimal animal) {
         animalsToRemove.add(animal);
     }
 
@@ -3371,7 +3375,7 @@ public class GameMap {
         return time;
     }
 
-    void reportWorkerWithNewTarget(Worker worker) {
+    public void reportWorkerWithNewTarget(Worker worker) {
         workersWithNewTargets.add(worker);
     }
 
@@ -3399,7 +3403,7 @@ public class GameMap {
         removedBuildings.add(building);
     }
 
-    void reportWorkerEnteredBuilding(Worker worker) {
+    public void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
     }
 
@@ -3551,7 +3555,7 @@ public class GameMap {
         setDetailedVegetationDownLeft(point, vegetation);
     }
 
-    boolean isSurroundedBy(Point point, DetailedVegetation vegetation) {
+    public boolean isSurroundedBy(Point point, DetailedVegetation vegetation) {
 
         return getDetailedVegetationUpLeft(point)    == vegetation &&
                getDetailedVegetationAbove(point)     == vegetation &&
@@ -3784,7 +3788,7 @@ public class GameMap {
         possiblePlacesForHarbor.add(point);
     }
 
-    void reportShipReady(Ship ship) {
+    public void reportShipReady(Ship ship) {
         MapPoint mapPoint = getMapPoint(ship.getPosition());
 
         mapPoint.setShipDone();
@@ -3845,11 +3849,11 @@ public class GameMap {
         });
     }
 
-    void reportHarvestedCrop(Crop crop) {
+    public void reportHarvestedCrop(Crop crop) {
         harvestedCrops.add(crop);
     }
 
-    void reportShipWithNewTarget(Ship ship) {
+    public void reportShipWithNewTarget(Ship ship) {
         shipsWithNewTargets.add(ship);
     }
 

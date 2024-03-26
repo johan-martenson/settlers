@@ -1,6 +1,6 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Builder;
+import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -11,7 +11,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

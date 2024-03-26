@@ -27,7 +27,7 @@ import org.appland.settlers.model.StatisticsManager;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.UnderAttackMessage;
-import org.appland.settlers.model.WildAnimal;
+import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

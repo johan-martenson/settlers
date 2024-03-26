@@ -6,11 +6,11 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storehouse;
@@ -32,9 +32,9 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Soldier.Rank.SERGEANT_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

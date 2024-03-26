@@ -10,8 +10,8 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Ship;
-import org.appland.settlers.model.Shipwright;
+import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.Shipyard;
 import org.junit.Test;
 

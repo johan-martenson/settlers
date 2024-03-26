@@ -71,7 +71,7 @@ public class MapPoint {
         this.flag = flag;
     }
 
-    Flag getFlag() {
+    public Flag getFlag() {
         return flag;
     }
 
@@ -137,7 +137,7 @@ public class MapPoint {
         return !connectedNeighbors.isEmpty();
     }
 
-    Set<Road> getConnectedRoads() {
+    public Set<Road> getConnectedRoads() {
         return connectedRoads;
     }
 
@@ -153,7 +153,7 @@ public class MapPoint {
         return connectedFlagsAndBuildings;
     }
 
-    Building getBuilding() {
+    public Building getBuilding() {
         return building;
     }
 
@@ -177,15 +177,15 @@ public class MapPoint {
         return stone;
     }
 
-    boolean isBuilding() {
+    public boolean isBuilding() {
         return building != null;
     }
 
-    boolean isStone() {
+    public boolean isStone() {
         return stone != null;
     }
 
-    boolean isTree() {
+    public boolean isTree() {
         return tree != null;
     }
 
@@ -213,7 +213,7 @@ public class MapPoint {
         building = null;
     }
 
-    boolean isCrop() {
+    public boolean isCrop() {
         return crop != null;
     }
 
@@ -225,7 +225,7 @@ public class MapPoint {
         return height;
     }
 
-    boolean isSign() {
+    public boolean isSign() {
         return sign != null;
     }
 

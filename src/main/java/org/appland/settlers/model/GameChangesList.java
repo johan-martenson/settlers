@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.actors.Worker;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

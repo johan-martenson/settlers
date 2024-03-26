@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.policy.InitialState;
 
 import java.util.ArrayList;
@@ -9,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
@@ -143,7 +146,7 @@ public class Headquarter extends Storehouse {
     }
 
     @Override
-    void capture(Player player) throws InvalidUserActionException {
+    public void capture(Player player) throws InvalidUserActionException {
 
         /* Destroy the headquarters if it's captured */
         super.tearDown();
@@ -225,7 +228,7 @@ public class Headquarter extends Storehouse {
     }
 
     @Override
-    Soldier retrieveHostedSoldier(Soldier soldier) {
+    public Soldier retrieveHostedSoldier(Soldier soldier) {
         var amount = inventory.getOrDefault(soldier.getRank().toMaterial(), 0);
 
         inventory.put(soldier.getRank().toMaterial(), amount - 1);

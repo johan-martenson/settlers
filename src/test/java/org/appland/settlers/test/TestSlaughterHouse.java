@@ -7,10 +7,10 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Butcher;
+import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.CoalMine;
-import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -23,7 +23,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import java.util.List;
 
 import static java.awt.Color.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**
@@ -54,7 +54,7 @@ public class TestSlaughterHouse {
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place slaughter house */
+        /* Place slaughterhouse */
         Point point22 = new Point(6, 12);
         SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
 

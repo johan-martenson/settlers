@@ -8,7 +8,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.junit.Test;
 
 import java.util.ArrayList;

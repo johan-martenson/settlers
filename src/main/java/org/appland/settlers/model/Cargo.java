@@ -78,7 +78,7 @@ public class Cargo {
         return position;
     }
 
-    void promisePickUp() {
+    public void promisePickUp() {
         pickupPromised = true;
     }
 
@@ -86,11 +86,11 @@ public class Cargo {
         return pickupPromised;
     }
 
-    void cancelPromisedPickUp() {
+    public void cancelPromisedPickUp() {
         pickupPromised = false;
     }
 
-    void transportToReceivingBuilding(Function <Building, Boolean> func) {
+    public void transportToReceivingBuilding(Function<Building, Boolean> func) {
         Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, func);
 
         setTarget(receivingBuilding);
@@ -100,7 +100,7 @@ public class Cargo {
         }
     }
 
-    void transportToStorage() {
+    public void transportToStorage() {
         Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, material);
 
         if (storehouse0 != null) {

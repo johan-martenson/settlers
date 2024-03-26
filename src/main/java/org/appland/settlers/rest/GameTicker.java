@@ -5,7 +5,7 @@ import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Scout;
+import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.rest.resource.GameResource;
 import org.appland.settlers.rest.resource.GameSpeed;
 import org.appland.settlers.utils.CumulativeDuration;

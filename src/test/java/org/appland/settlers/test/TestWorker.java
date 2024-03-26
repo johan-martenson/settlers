@@ -9,16 +9,16 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.actors.SawmillWorker;
 import org.appland.settlers.model.Well;
 import org.junit.Test;
 
@@ -29,8 +29,8 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
 /**

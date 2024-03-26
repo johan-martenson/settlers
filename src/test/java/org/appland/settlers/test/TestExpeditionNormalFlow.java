@@ -1,6 +1,6 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Builder;
+import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Direction;
@@ -15,10 +15,10 @@ import org.appland.settlers.model.Message;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Ship;
+import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.ShipHasReachedDestinationMessage;
 import org.appland.settlers.model.ShipReadyForExpeditionMessage;
-import org.appland.settlers.model.Shipwright;
+import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.Shipyard;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;

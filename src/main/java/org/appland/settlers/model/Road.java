@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +19,7 @@ public class Road {
 
     private int     usage;
     private Courier courier;
-    private Donkey  donkey;
+    private Donkey donkey;
     private boolean needsCourier;
     private boolean isMainRoad;
     private GameMap map;
@@ -77,9 +80,8 @@ public class Road {
         return courier;
     }
 
-    void setCourier(Courier wr) {
+    public void setCourier(Courier wr) {
         if (wr instanceof Donkey) {
-
             if (donkey != null) {
                 throw new InvalidGameLogicException("Can't assign donkey, there is already a donkey assigned.");
             }
@@ -188,7 +190,7 @@ public class Road {
         return isMainRoad() && donkey == null && needsCourier;
     }
 
-    Point getOtherPoint(Point position) {
+    public Point getOtherPoint(Point position) {
         if (start.getPosition().equals(position)) {
             return end.getPosition();
         } else {

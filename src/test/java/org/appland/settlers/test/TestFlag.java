@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.FlagType;
 import org.appland.settlers.model.GameMap;

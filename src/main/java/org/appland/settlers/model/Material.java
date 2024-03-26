@@ -1,6 +1,14 @@
 package org.appland.settlers.model;
 
-import java.util.*;
+import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Worker;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public enum Material {
 
@@ -138,7 +146,7 @@ public enum Material {
 
     private static final List<Material> MINERALS = Arrays.asList(GOLD, IRON, COAL, STONE);
 
-    static final List<Material> TOOLS = Arrays.asList(
+    public static final List<Material> TOOLS = Arrays.asList(
             AXE,
             SHOVEL,
             PICK_AXE,
@@ -167,7 +175,7 @@ public enum Material {
         return transportableItems;
     }
 
-    static Iterable<Material> getMinerals() {
+    public static Iterable<Material> getMinerals() {
         return MINERALS;
     }
 

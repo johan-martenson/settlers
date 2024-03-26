@@ -5,8 +5,8 @@ import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Donkey;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameChangesList;
@@ -14,15 +14,15 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Scout;
+import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.DetailedVegetation.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 import static org.junit.Assert.*;
 
 public class TestMisc {

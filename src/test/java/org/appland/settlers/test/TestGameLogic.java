@@ -2,19 +2,19 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Soldier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;

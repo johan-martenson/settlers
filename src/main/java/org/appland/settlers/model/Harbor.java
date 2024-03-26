@@ -1,13 +1,19 @@
 package org.appland.settlers.model;
 
-import java.util.*;
+import org.appland.settlers.model.actors.Ship;
+import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.Worker;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.MEDIUM;
 
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
@@ -50,7 +56,7 @@ public class Harbor extends Storehouse {
         promisedShip = null;
     }
 
-    boolean hasTaskForShip() {
+    public boolean hasTaskForShip() {
         return needToShipMaterialToOtherHarbor ||
                 (expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION && promisedShip == null);
     }
@@ -188,7 +194,7 @@ public class Harbor extends Storehouse {
         return materialForNextExpedition;
     }
 
-    void addShipReadyForTask(Ship ship) {
+    public void addShipReadyForTask(Ship ship) {
 
         /* Start an expedition if needed */
         if (expeditionState == State.COLLECTED_MATERIAL_FOR_NEXT_EXPEDITION) {
@@ -248,7 +254,7 @@ public class Harbor extends Storehouse {
         }
     }
 
-    void setOwnSettlement() {
+    public void setOwnSettlement() {
         isOwnSettlement = true;
     }
 

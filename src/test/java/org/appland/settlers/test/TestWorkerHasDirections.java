@@ -1,12 +1,12 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Direction;
-import org.appland.settlers.model.Fisherman;
+import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -15,7 +15,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
