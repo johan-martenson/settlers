@@ -685,7 +685,6 @@ public class Utils {
     }
 
     static void waitForFightToStart(GameMap map, Soldier attacker, Soldier defender) throws InvalidUserActionException {
-
         for (int i = 0; i < 1000; i++) {
             if (attacker.isFighting() && defender.isFighting()) {
                 break;
@@ -696,6 +695,8 @@ public class Utils {
 
         assertTrue(defender.isFighting());
         assertTrue(attacker.isFighting());
+        assertEquals(defender.getOpponent(), attacker);
+        assertEquals(attacker.getOpponent(), defender);
     }
 
     static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {

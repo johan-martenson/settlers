@@ -2396,7 +2396,7 @@ public class TestAttack {
         if (attackers.get(0).equals(firstAttacker)) {
             waitingAttacker = attackers.get(1);
         } else {
-            waitingAttacker = attackers.get(0);
+            waitingAttacker = attackers.getFirst();
         }
 
         if (waitingAttacker.isTraveling()) {
@@ -2410,15 +2410,19 @@ public class TestAttack {
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, firstAttacker, defender);
 
+
+
         /* Make sure there are only two attackers */
         assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Soldier.class, player0).size(), 2);
 
         /* Wait for the fight to end and verify that the waiting attacker doesn't move */
-        Utils.waitForSoldierToWinFight(firstAttacker, map);
+        Utils.waitForSoldierToBeDying(defender, map);
 
         assertTrue(defender.isDying());
 
         /* Wait for the fighting attacker to go back to the flag */
+        Utils.waitForWorkerToHaveTarget(map, firstAttacker, barracks1.getFlag().getPosition());
+
         assertEquals(firstAttacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, firstAttacker.getTarget());
@@ -6346,6 +6350,7 @@ public class TestAttack {
                     .filter(soldier -> !soldier.isTraveling())
                     .filter(soldier -> !soldier.isFighting())
                     .filter(soldier -> soldier.getOpponent() == null || !Objects.equals(soldier.getPosition(), soldier.getOpponent().getPosition()))
+                    .peek(System.out::println)
                     .map(Soldier::getPosition)
                     .toList();
 

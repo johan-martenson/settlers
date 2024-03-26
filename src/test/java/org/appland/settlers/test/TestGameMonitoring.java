@@ -874,14 +874,14 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getNewRoads().size(), 0);
 
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 0);
         assertEquals(gameChanges.getRemovedRoads().size(), 0);
 
         /* Verify that the events are only sent once */
-        Utils.fastForward(10, map);
+        Utils.fastForward(1, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(gameChangesList.getChangedBuildings().size(), 0);

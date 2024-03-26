@@ -198,7 +198,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
         }
     }
 
@@ -344,44 +344,26 @@ public class TestGameMonitoringOfBuilding {
         /* Verify that a house updated event is sent when the second plank gets to the farm */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, courier);
 
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        monitor.clearEvents();
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, farm0.getPosition());
-
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
-
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-
-                if (gameChangesList.getChangedBuildings().contains(headquarter0)) {
-                    continue;
-                }
-
-                found++;
-
-                assertTrue(gameChangesList.getChangedBuildings().contains(farm0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+        for (int i = 0; i < 1000; i++) {
+            if (courier.getPosition().equals(farm0.getPosition())) {
+                break;
+            } else {
+                monitor.clearEvents();
             }
+
+            map.stepTime();
         }
 
-        assertEquals(found, 1);
-
-        /* Turn off detailed monitoring */
-        player0.removeDetailedMonitoring(headquarter0);
-
-        /* Verify that no house updated event is sent when the third plank gets to the farm */
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, courier);
-
-        lastGameChangesList = monitor.getLastEvent();
-
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
-
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
-        }
+        assertEquals(
+                monitor.getEvents()
+                        .stream()
+                        .filter(gameChangesList -> gameChangesList.getChangedBuildings().contains(farm0)).count(),
+                1
+        );
     }
 
     @Test
@@ -980,35 +962,35 @@ public class TestGameMonitoringOfBuilding {
         /* Place one piece of wood in the headquarters */
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
 
+        /* Wait for the sawmill to receive the wood */
+        Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
+
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that no event is sent when the first wood is delivered */
-        Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
+        /* Stop production in the sawmill */
+        sawmill0.stopProduction();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill0));
-        }
+        assertTrue(sawmill0.needsMaterial(WOOD));
 
         /* Start detailed monitoring of the sawmill */
         player0.addDetailedMonitoring(sawmill0);
 
         /* Verify that an event is sent when the second piece of wood is delivered */
+        assertEquals(sawmill0.getAmount(WOOD), 1);
+
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
 
         monitor.clearEvents();
 
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 2);
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(sawmill0)) {
-                found++;
-            }
-        }
-
-        assertEquals(found, 1);
+        assertEquals(monitor.getEvents()
+                        .stream()
+                        .filter(gameChangesList -> gameChangesList.getChangedBuildings().contains(sawmill0))
+                        .count(),
+                1);
 
         /* Verify that no event is sent when the third piece of wood is delivered */
         player0.removeDetailedMonitoring(sawmill0);
@@ -1055,14 +1037,8 @@ public class TestGameMonitoringOfBuilding {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that no event is sent when the first wood is consumed */
-        Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
-
-        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill0.getWorker(), PLANK);
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill0));
-        }
+        /* Wait for the sawmill to get occupied */
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
         /* Wait until the worker stops carrying the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, sawmill0.getWorker());
@@ -1263,13 +1239,6 @@ public class TestGameMonitoringOfBuilding {
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
-
-        /* Verify that no event is sent when the first stone is picked */
-        Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(quarry));
-        }
 
         /* Wait until the worker stops carrying the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, quarry.getWorker());

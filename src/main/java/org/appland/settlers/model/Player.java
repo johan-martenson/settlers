@@ -813,6 +813,8 @@ public class Player {
     }
 
     public void monitorGameView(PlayerGameViewMonitor monitor) {
+        changedBuildings.clear();
+
         gameViewMonitors.add(monitor);
     }
 
