@@ -352,7 +352,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the player as a map */
         Map<String, Object> jsonPlayer = given().contentType(ContentType.JSON).when()
@@ -380,7 +380,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the list of players */
-        List playerId = given().contentType(ContentType.JSON).when()
+        List<Object> playerId = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/players", gameId).then()
                 .statusCode(200)
                 .extract().jsonPath().getList("");
@@ -619,7 +619,7 @@ public class AppTest extends TestCase {
         assertNotEquals(mapId, "");
 
         /* Verify that the players are correct */
-        List startingPoints = given().contentType(ContentType.JSON).when()
+        List<Object> startingPoints = given().contentType(ContentType.JSON).when()
                 .get("/maps/{mapId}", mapId).then()
                 .statusCode(200)
 
@@ -1075,7 +1075,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarters */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1126,7 +1126,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarter */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1235,7 +1235,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarter */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1368,7 +1368,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarter */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1400,7 +1400,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarter */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1445,7 +1445,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Get the id of the player */
-        String playerId = getPlayerIds(gameId).get(0);
+        String playerId = getPlayerIds(gameId).getFirst();
 
         /* Get the location of the headquarter */
         Map<String, Object> headquarter = given().contentType(ContentType.JSON).when()
@@ -1462,7 +1462,7 @@ public class AppTest extends TestCase {
         findPossibleWayParameters.put("from", Utils.pointToMap(point0));
         findPossibleWayParameters.put("to", Utils.pointToMap(point1));
 
-        List points = given().contentType(ContentType.JSON).body(findPossibleWayParameters).when()
+        List<Object> points = given().contentType(ContentType.JSON).body(findPossibleWayParameters).when()
                 .post("/rpc/games/{gameId}/players/{playerId}/find-new-road", gameId, playerId).then()
                 .statusCode(200)
                 .body("roadIsPossible", equalTo(true))
@@ -1491,7 +1491,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Verify that it's possible to get material statistics for the game */
-        Map statistics = given().contentType(ContentType.JSON).when()
+        Map<Object, Object> statistics = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/statistics/production", gameId).then()
                 .statusCode(200)
                 .extract().jsonPath().getMap("");
@@ -1535,7 +1535,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Verify that it's possible to get material statistics for the game */
-        Map statistics = getProductionStatisticsForGame(gameId);
+        Map<Object, Object> statistics = getProductionStatisticsForGame(gameId);
 
         /* Verify that statistics for the required materials are available */
         List<Material> requiredMaterials = Arrays.asList(WOOD, PLANK, STONE, GOLD, SWORD, SHIELD, COIN);
@@ -1556,7 +1556,7 @@ public class AppTest extends TestCase {
         startGame(gameId);
 
         /* Verify that it's possible to get land statistics for the game */
-        Map landStatistics = given().contentType(ContentType.JSON).when()
+        Map<Object, Object> landStatistics = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/statistics/land", gameId).then()
                 .statusCode(200)
                 .extract().jsonPath().getMap("");
@@ -1585,10 +1585,10 @@ public class AppTest extends TestCase {
         List<Map> statisticsArray = (List<Map>) landStatistics.get("landStatistics");
 
         assertTrue(statisticsArray.size() >= 1);
-        assertTrue(statisticsArray.get(0).containsKey("time"));
-        assertTrue(statisticsArray.get(0).containsKey("values"));
+        assertTrue(statisticsArray.getFirst().containsKey("time"));
+        assertTrue(statisticsArray.getFirst().containsKey("values"));
 
-        List<Integer> values = (List<Integer>) statisticsArray.get(0).get("values");
+        List<Integer> values = (List<Integer>) statisticsArray.getFirst().get("values");
 
         assertEquals(values.size(), 1);
     }
@@ -1610,7 +1610,7 @@ public class AppTest extends TestCase {
 
         assertEquals(jsonPlayers.size(), 1);
 
-        Map jsonPlayer = jsonPlayers.get(0);
+        Map jsonPlayer = jsonPlayers.getFirst();
 
         assertTrue(jsonPlayer.containsKey("name"));
         assertTrue(jsonPlayer.containsKey("color"));
@@ -1620,7 +1620,7 @@ public class AppTest extends TestCase {
     }
 
     private Map getLandStatistics(String gameId) {
-        Map landStatistics = given().contentType(ContentType.JSON).when()
+        Map<Object, Object> landStatistics = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/statistics/land", gameId).then()
                 .statusCode(200)
                 .extract().jsonPath().getMap("");
@@ -1641,7 +1641,7 @@ public class AppTest extends TestCase {
     private List<String> getPlayerIds(String gameId) {
         List<String> playerIds = new ArrayList<>();
 
-        List players = given().contentType(ContentType.JSON).when()
+        List<Object> players = given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/players", gameId).then()
                 .statusCode(200)
                 .extract().jsonPath().getList("");

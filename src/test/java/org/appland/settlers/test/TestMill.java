@@ -622,7 +622,7 @@ public class TestMill {
 
         Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
 
-        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+        assertEquals(mill.getFlag().getStackedCargo().getFirst().getMaterial(), FLOUR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -680,7 +680,7 @@ public class TestMill {
 
         Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
 
-        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+        assertEquals(mill.getFlag().getStackedCargo().getFirst().getMaterial(), FLOUR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -694,7 +694,7 @@ public class TestMill {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(FLOUR));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(FLOUR));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -752,7 +752,7 @@ public class TestMill {
 
         Utils.waitForFlagToGetStackedCargo(map, mill.getFlag(), 1);
 
-        assertEquals(mill.getFlag().getStackedCargo().get(0).getMaterial(), FLOUR);
+        assertEquals(mill.getFlag().getStackedCargo().getFirst().getMaterial(), FLOUR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -888,7 +888,7 @@ public class TestMill {
         assertFalse(mill0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = mill0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = mill0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1287,7 +1287,7 @@ public class TestMill {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Miller worker = workers.get(0);
+        Miller worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1765,7 +1765,7 @@ public class TestMill {
         Utils.constructHouse(mill0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());

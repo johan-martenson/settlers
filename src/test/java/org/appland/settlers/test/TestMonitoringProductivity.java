@@ -132,7 +132,7 @@ public class TestMonitoringProductivity {
 
         assertTrue(armory.getProductivity() > 0);
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), armory);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), armory);
     }
 
     @Test
@@ -193,7 +193,7 @@ public class TestMonitoringProductivity {
 
         assertTrue(armory.getProductivity() > 0);
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), armory);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), armory);
 
         /* Verify that the changed house is only reported once */
         int productivity = armory.getProductivity();
@@ -267,7 +267,7 @@ public class TestMonitoringProductivity {
 
         assertTrue(bakery.getProductivity() > 0);
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), bakery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), bakery);
     }
 
     @Test
@@ -326,7 +326,7 @@ public class TestMonitoringProductivity {
 
         assertTrue(bakery.getProductivity() > 0);
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), bakery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), bakery);
 
         /* Verify that the changed house is only reported once */
         int productivity = bakery.getProductivity();
@@ -402,7 +402,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), brewery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), brewery);
     }
 
     @Test
@@ -462,7 +462,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), brewery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), brewery);
 
         /* Verify that the changed house is only reported once */
         int productivity = brewery.getProductivity();
@@ -537,7 +537,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), coalMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), coalMine);
     }
 
     @Test
@@ -597,7 +597,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), coalMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), coalMine);
 
         /* Verify that the changed house is only reported once */
         int productivity = coalMine.getProductivity();
@@ -672,7 +672,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), donkeyFarm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), donkeyFarm);
     }
 
     @Test
@@ -732,7 +732,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), donkeyFarm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), donkeyFarm);
 
         /* Verify that the changed house is only reported once */
         int productivity = donkeyFarm.getProductivity();
@@ -799,7 +799,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), farm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), farm);
     }
 
     @Test
@@ -851,7 +851,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), farm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), farm);
 
         /* Verify that the changed house is only reported once */
         int productivity = farm.getProductivity();
@@ -922,7 +922,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), fishery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), fishery);
     }
 
     @Test
@@ -978,7 +978,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), fishery);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), fishery);
 
         /* Verify that the changed house is only reported once */
         int productivity = fishery.getProductivity();
@@ -1053,7 +1053,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), goldMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), goldMine);
     }
 
     @Test
@@ -1113,7 +1113,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), goldMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), goldMine);
 
         /* Verify that the changed house is only reported once */
         int productivity = goldMine.getProductivity();
@@ -1188,7 +1188,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), graniteMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), graniteMine);
     }
 
     @Test
@@ -1248,7 +1248,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), graniteMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), graniteMine);
 
         /* Verify that the changed house is only reported once */
         int productivity = graniteMine.getProductivity();
@@ -1327,7 +1327,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), hunterHut0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), hunterHut0);
 
     }
 
@@ -1392,7 +1392,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), hunterHut0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), hunterHut0);
 
         /* Verify that the changed house is only reported once */
         int productivity = hunterHut0.getProductivity();
@@ -1467,7 +1467,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), ironMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), ironMine);
     }
 
     @Test
@@ -1527,7 +1527,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), ironMine);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), ironMine);
 
         /* Verify that the changed house is only reported once */
         int productivity = ironMine.getProductivity();
@@ -1603,7 +1603,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), ironSmelter);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), ironSmelter);
 
     }
 
@@ -1665,7 +1665,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), ironSmelter);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), ironSmelter);
 
         /* Verify that the changed house is only reported once */
         int productivity = ironSmelter.getProductivity();
@@ -1741,7 +1741,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), metalworks);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), metalworks);
     }
 
     @Test
@@ -1802,7 +1802,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), metalworks);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), metalworks);
 
         /* Verify that the changed house is only reported once */
         int productivity = metalworks.getProductivity();
@@ -1873,7 +1873,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), mill);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), mill);
     }
 
     @Test
@@ -1929,7 +1929,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), mill);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), mill);
 
         /* Verify that the changed house is only reported once */
         int productivity = mill.getProductivity();
@@ -2004,7 +2004,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), mint);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), mint);
     }
 
     @Test
@@ -2064,7 +2064,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), mint);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), mint);
 
         /* Verify that the changed house is only reported once */
         int productivity = mint.getProductivity();
@@ -2139,7 +2139,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), pigFarm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), pigFarm);
     }
 
     @Test
@@ -2199,7 +2199,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), pigFarm);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), pigFarm);
 
         /* Verify that the changed house is only reported once */
         int productivity = pigFarm.getProductivity();
@@ -2274,7 +2274,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), quarry0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), quarry0);
     }
 
     @Test
@@ -2334,7 +2334,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), quarry0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), quarry0);
 
         /* Verify that the changed house is only reported once */
         int productivity = quarry0.getProductivity();
@@ -2405,7 +2405,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), sawmill);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), sawmill);
     }
 
     @Test
@@ -2461,7 +2461,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), sawmill);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), sawmill);
 
         /* Verify that the changed house is only reported once */
         int productivity = sawmill.getProductivity();
@@ -2532,7 +2532,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), slaughterHouse);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), slaughterHouse);
     }
 
     @Test
@@ -2588,7 +2588,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), slaughterHouse);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), slaughterHouse);
 
         /* Verify that the changed house is only reported once */
         int productivity = slaughterHouse.getProductivity();
@@ -2655,7 +2655,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), well);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), well);
     }
 
     @Test
@@ -2707,7 +2707,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), well);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), well);
 
         /* Verify that the changed house is only reported once */
         int productivity = well.getProductivity();
@@ -2781,7 +2781,7 @@ public class TestMonitoringProductivity {
 
         assertTrue(woodcutter0.getProductivity() > 0);
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), woodcutter0);
     }
 
     @Test
@@ -2839,7 +2839,7 @@ public class TestMonitoringProductivity {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChangesList.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that the changed house is only reported once */
         int productivity = woodcutter0.getProductivity();

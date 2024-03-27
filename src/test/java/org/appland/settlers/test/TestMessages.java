@@ -133,10 +133,10 @@ public class TestMessages {
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
-        assertTrue(player0.getMessages().get(0) instanceof MilitaryBuildingReadyMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertTrue(player0.getMessages().getFirst() instanceof MilitaryBuildingReadyMessage);
 
-        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) player0.getMessages().get(0);
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), barracks0);
     }
@@ -211,7 +211,7 @@ public class TestMessages {
 
         /* Verify a message is sent when the barracks is populated */
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
@@ -275,10 +275,10 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), NO_MORE_RESOURCES);
+        assertTrue(player0.getMessages().getFirst() instanceof NoMoreResourcesMessage);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), quarry0);
     }
@@ -384,10 +384,10 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), NO_MORE_RESOURCES);
+        assertTrue(player0.getMessages().getFirst() instanceof NoMoreResourcesMessage);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), fishery);
     }
@@ -484,10 +484,10 @@ public class TestMessages {
         assertEquals(sign.getType(), GOLD);
         assertEquals(sign.getSize(), LARGE);
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), GEOLOGIST_FIND);
-        assertTrue(player0.getMessages().get(0) instanceof GeologistFindMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), GEOLOGIST_FIND);
+        assertTrue(player0.getMessages().getFirst() instanceof GeologistFindMessage);
 
-        GeologistFindMessage message = (GeologistFindMessage) player0.getMessages().get(0);
+        GeologistFindMessage message = (GeologistFindMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getPoint(), geologist.getPosition());
         assertEquals(message.getMaterial(), GOLD);
@@ -716,18 +716,18 @@ public class TestMessages {
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(player0.getMessages().size(), amountMessagesForPlayer0Before + 1);
-        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), BUILDING_CAPTURED);
-        assertTrue(player0.getMessages().get(player0.getMessages().size() - 1) instanceof BuildingCapturedMessage);
+        assertEquals(player0.getMessages().getLast().getMessageType(), BUILDING_CAPTURED);
+        assertTrue(player0.getMessages().getLast() instanceof BuildingCapturedMessage);
 
-        BuildingCapturedMessage buildingCapturedMessage = (BuildingCapturedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        BuildingCapturedMessage buildingCapturedMessage = (BuildingCapturedMessage) player0.getMessages().getLast();
 
         assertEquals(buildingCapturedMessage.getBuilding(), barracks1);
 
         assertTrue(player1.getMessages().size() >= amountMessagesForPlayer1Before);
-        assertEquals(player1.getMessages().get(player1.getMessages().size() - 1).getMessageType(), BUILDING_LOST);
-        assertTrue(player1.getMessages().get(player1.getMessages().size() - 1) instanceof BuildingLostMessage);
+        assertEquals(player1.getMessages().getLast().getMessageType(), BUILDING_LOST);
+        assertTrue(player1.getMessages().getLast() instanceof BuildingLostMessage);
 
-        BuildingLostMessage buildingLostMessage = (BuildingLostMessage) player1.getMessages().get(player1.getMessages().size() - 1);
+        BuildingLostMessage buildingLostMessage = (BuildingLostMessage) player1.getMessages().getLast();
 
         assertEquals(buildingLostMessage.getBuilding(), barracks1);
     }
@@ -806,10 +806,10 @@ public class TestMessages {
 
         /* Verify that a message is sent when the mine has run out of resources */
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), NO_MORE_RESOURCES);
+        assertTrue(player0.getMessages().getFirst() instanceof NoMoreResourcesMessage);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), mine);
 
@@ -891,10 +891,10 @@ public class TestMessages {
 
         /* Verify that a message is sent when the mine has run out of resources */
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), NO_MORE_RESOURCES);
+        assertTrue(player0.getMessages().getFirst() instanceof NoMoreResourcesMessage);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), mine);
 
@@ -952,10 +952,10 @@ public class TestMessages {
 
         /* Verify that a message was sent */
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), STORE_HOUSE_IS_READY);
-        assertTrue(player0.getMessages().get(0) instanceof StoreHouseIsReadyMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), STORE_HOUSE_IS_READY);
+        assertTrue(player0.getMessages().getFirst() instanceof StoreHouseIsReadyMessage);
 
-        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) player0.getMessages().get(0);
+        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) player0.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), storage0);
     }
@@ -993,10 +993,10 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
-        assertTrue(player0.getMessages().get(0) instanceof TreeConservationProgramActivatedMessage);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertTrue(player0.getMessages().getFirst() instanceof TreeConservationProgramActivatedMessage);
 
-        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) player0.getMessages().get(0);
+        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) player0.getMessages().getFirst();
     }
 
     @Test
@@ -1036,7 +1036,7 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         for (int i = 0; i < 200; i++) {
             assertEquals(player0.getMessages().size(), 1);
@@ -1078,7 +1078,7 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Put in more planks to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 50);
@@ -1130,7 +1130,7 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Put in more planks to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 50);
@@ -1207,9 +1207,9 @@ public class TestMessages {
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
-        assertEquals(player1.getMessages().get(0).getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
+        assertEquals(player1.getMessages().getFirst().getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
 
-        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
+        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), fortress0);
     }
@@ -1270,9 +1270,9 @@ public class TestMessages {
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
-        assertEquals(player1.getMessages().get(0).getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
+        assertEquals(player1.getMessages().getFirst().getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
 
-        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
+        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().getFirst();
 
         assertEquals(message.getBuilding(), fortress0);
 
@@ -1362,10 +1362,10 @@ public class TestMessages {
 
         assertEquals(map.getWinner(), player0);
         assertEquals(player1.getBuildings().size(), 1);
-        assertTrue(player1.getBuildings().get(0).isBurningDown());
-        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+        assertTrue(player1.getBuildings().getFirst().isBurningDown());
+        assertEquals(player0.getMessages().getLast().getMessageType(), GAME_ENDED);
 
-        GameEndedMessage message = (GameEndedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        GameEndedMessage message = (GameEndedMessage) player0.getMessages().getLast();
 
         assertEquals(message.getWinner(), player0);
     }
@@ -1445,10 +1445,10 @@ public class TestMessages {
 
         assertEquals(map.getWinner(), player0);
         assertEquals(player1.getBuildings().size(), 1);
-        assertTrue(player1.getBuildings().get(0).isBurningDown());
-        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+        assertTrue(player1.getBuildings().getFirst().isBurningDown());
+        assertEquals(player0.getMessages().getLast().getMessageType(), GAME_ENDED);
 
-        GameEndedMessage message = (GameEndedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        GameEndedMessage message = (GameEndedMessage) player0.getMessages().getLast();
 
         assertEquals(message.getWinner(), player0);
 
@@ -1540,8 +1540,8 @@ public class TestMessages {
 
         assertEquals(map.getWinner(), player0);
         assertEquals(player1.getBuildings().size(), 1);
-        assertTrue(player1.getBuildings().get(0).isBurningDown());
-        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+        assertTrue(player1.getBuildings().getFirst().isBurningDown());
+        assertEquals(player0.getMessages().getLast().getMessageType(), GAME_ENDED);
 
         GameEndedMessage messageForPlayer0 = null;
         GameEndedMessage messageForPlayer1 = null;

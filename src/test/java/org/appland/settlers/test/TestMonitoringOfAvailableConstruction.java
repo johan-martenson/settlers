@@ -2692,7 +2692,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
@@ -2717,7 +2717,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().get(0), stone0);
+        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
 
         assertNotEquals(gameChanges.getChangedAvailableConstruction().size() ,0);
 
@@ -2761,7 +2761,7 @@ public class TestMonitoringOfAvailableConstruction {
         assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
@@ -2780,7 +2780,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().get(0), stone0);
+        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
 
         assertNotEquals(gameChanges.getChangedAvailableConstruction().size() ,0);
 
@@ -2830,7 +2830,7 @@ public class TestMonitoringOfAvailableConstruction {
         Stone stone2 = map.placeStone(point4, Stone.StoneType.STONE_1, 7);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 

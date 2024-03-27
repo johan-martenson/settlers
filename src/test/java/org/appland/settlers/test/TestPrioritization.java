@@ -2309,14 +2309,14 @@ public class TestPrioritization {
         /* Put planks on top priority and verify that it appears only once */
         player0.setTransportPriority(0, TransportCategory.PLANK);
 
-        assertEquals(player0.getTransportPriorities().get(0), TransportCategory.PLANK);
+        assertEquals(player0.getTransportPriorities().getFirst(), TransportCategory.PLANK);
         assertNotEquals(player0.getTransportPriorities().get(10), TransportCategory.PLANK);
         assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
 
         /* Put planks on medium priority and verify that it appears only once */
         player0.setTransportPriority(10, TransportCategory.PLANK);
 
-        assertNotEquals(player0.getTransportPriorities().get(0), TransportCategory.PLANK);
+        assertNotEquals(player0.getTransportPriorities().getFirst(), TransportCategory.PLANK);
         assertEquals(player0.getTransportPriorities().get(10), TransportCategory.PLANK);
         assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorities(), TransportCategory.PLANK), 1);
     }

@@ -138,7 +138,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().get(0);
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
         assertEquals(message.getBuilding(), barracks0);
@@ -179,7 +179,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().get(0);
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
         assertEquals(message.getBuilding(), barracks0);
@@ -248,7 +248,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().get(0);
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
         assertEquals(message.getBuilding(), barracks0);
@@ -384,7 +384,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().get(0);
+        MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_OCCUPIED);
         assertEquals(message.getBuilding(), barracks0);
@@ -442,7 +442,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().get(0);
+        MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_OCCUPIED);
         assertEquals(message.getBuilding(), barracks0);
@@ -566,7 +566,7 @@ public class TestMonitoringGameMessages {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
 
@@ -629,7 +629,7 @@ public class TestMonitoringGameMessages {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
 
@@ -812,7 +812,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
         assertEquals(message.getBuilding(), fishery);
@@ -926,7 +926,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
         assertEquals(message.getBuilding(), fishery);
@@ -1121,7 +1121,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().get(0);
+        GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), GEOLOGIST_FIND);
         assertEquals(message.getPoint(), geologist.getPosition());
@@ -1199,7 +1199,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().get(0);
+        GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), GEOLOGIST_FIND);
         assertEquals(message.getPoint(), geologist.getPosition());
@@ -1359,7 +1359,7 @@ public class TestMonitoringGameMessages {
         GameChangesList gameChangesList = monitor.getLastEvent();
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().get(0);
+        UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
         assertEquals(message.getBuilding(), barracks1);
@@ -1438,7 +1438,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().get(0);
+        UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
         assertEquals(message.getBuilding(), barracks1);
@@ -1627,8 +1627,8 @@ public class TestMonitoringGameMessages {
         assertEquals(gameChangesListForPlayer0.getNewGameMessages().size(), 1);
         assertEquals(gameChangesListForPlayer1.getNewGameMessages().size(), 1);
 
-        BuildingCapturedMessage messageForPlayer0 = (BuildingCapturedMessage) gameChangesListForPlayer0.getNewGameMessages().get(0);
-        BuildingLostMessage messageForPlayer1 = (BuildingLostMessage) gameChangesListForPlayer1.getNewGameMessages().get(0);
+        BuildingCapturedMessage messageForPlayer0 = (BuildingCapturedMessage) gameChangesListForPlayer0.getNewGameMessages().getFirst();
+        BuildingLostMessage messageForPlayer1 = (BuildingLostMessage) gameChangesListForPlayer1.getNewGameMessages().getFirst();
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
@@ -1743,8 +1743,8 @@ public class TestMonitoringGameMessages {
         assertEquals(gameChangesListForPlayer0.getNewGameMessages().size(), 1);
         assertEquals(gameChangesListForPlayer1.getNewGameMessages().size(), 1);
 
-        BuildingCapturedMessage messageForPlayer0 = (BuildingCapturedMessage) gameChangesListForPlayer0.getNewGameMessages().get(0);
-        BuildingLostMessage messageForPlayer1 = (BuildingLostMessage) gameChangesListForPlayer1.getNewGameMessages().get(0);
+        BuildingCapturedMessage messageForPlayer0 = (BuildingCapturedMessage) gameChangesListForPlayer0.getNewGameMessages().getFirst();
+        BuildingLostMessage messageForPlayer1 = (BuildingLostMessage) gameChangesListForPlayer1.getNewGameMessages().getFirst();
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
@@ -1958,7 +1958,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
         assertEquals(message.getBuilding(), mine);
@@ -2046,7 +2046,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
+        NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
         assertEquals(message.getBuilding(), mine);
@@ -2196,7 +2196,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().get(0);
+        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), STORE_HOUSE_IS_READY);
         assertEquals(message.getBuilding(), storage0);
@@ -2255,7 +2255,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().get(0);
+        StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), STORE_HOUSE_IS_READY);
         assertEquals(message.getBuilding(), storage0);
@@ -2365,7 +2365,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().get(0);
+        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
     }
@@ -2412,7 +2412,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().get(0);
+        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
@@ -2502,7 +2502,7 @@ public class TestMonitoringGameMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2520,7 +2520,7 @@ public class TestMonitoringGameMessages {
         assertNotNull(gameChangesList.getNewGameMessages());
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().get(0);
+        TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_DEACTIVATED);
     }
@@ -2558,7 +2558,7 @@ public class TestMonitoringGameMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2574,7 +2574,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
-        TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().get(0);
+        TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_DEACTIVATED);
 
@@ -2619,7 +2619,7 @@ public class TestMonitoringGameMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Put in more planks to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 50);

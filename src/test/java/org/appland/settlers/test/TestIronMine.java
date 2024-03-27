@@ -557,7 +557,7 @@ public class TestIronMine {
 
         Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
 
-        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+        assertEquals(ironMine.getFlag().getStackedCargo().getFirst().getMaterial(), IRON);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -618,7 +618,7 @@ public class TestIronMine {
 
         Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
 
-        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+        assertEquals(ironMine.getFlag().getStackedCargo().getFirst().getMaterial(), IRON);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -632,7 +632,7 @@ public class TestIronMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(IRON));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(IRON));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -690,7 +690,7 @@ public class TestIronMine {
 
         Utils.waitForFlagToGetStackedCargo(map, ironMine.getFlag(), 1);
 
-        assertEquals(ironMine.getFlag().getStackedCargo().get(0).getMaterial(), IRON);
+        assertEquals(ironMine.getFlag().getStackedCargo().getFirst().getMaterial(), IRON);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1138,7 +1138,7 @@ public class TestIronMine {
         assertFalse(ironMine0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = ironMine0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = ironMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1469,7 +1469,7 @@ public class TestIronMine {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Miner worker = workers.get(0);
+        Miner worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1983,7 +1983,7 @@ public class TestIronMine {
         constructHouse(ironMine0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironMine0.getFlag().getPosition());

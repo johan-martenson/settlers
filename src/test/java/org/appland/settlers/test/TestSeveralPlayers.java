@@ -55,7 +55,7 @@ public class TestSeveralPlayers {
         assertEquals(map.getPlayers().size(), 1);
 
         /* Verify that the one player is correct */
-        assertEquals(map.getPlayers().get(0), players.get(0));
+        assertEquals(map.getPlayers().getFirst(), players.getFirst());
     }
 
     @Test

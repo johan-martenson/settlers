@@ -631,7 +631,7 @@ public class TestLookoutTower {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Scout worker = workers.get(0);
+        Scout worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1109,7 +1109,7 @@ public class TestLookoutTower {
         Utils.constructHouse(lookoutTower0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getFlag().getPosition());

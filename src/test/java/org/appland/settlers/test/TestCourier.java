@@ -472,7 +472,7 @@ public class TestCourier {
         assertNull(courier.getCargo());
         assertFalse(flag1.getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertEquals(flag1.getStackedCargo().get(0), cargo);
+        assertEquals(flag1.getStackedCargo().getFirst(), cargo);
 
         /* After delivering the cargo, the courier goes back to the idle spot */
         assertFalse(courier.isIdle());
@@ -568,7 +568,7 @@ public class TestCourier {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
 
-        assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
+        assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertEquals(courier.getCargo(), cargoForLeftWoodcutter);
         assertFalse(courier.isIdle());
 
@@ -654,7 +654,7 @@ public class TestCourier {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlag.getPosition());
 
-        assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
+        assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getTarget(), middlePoint);
@@ -1112,8 +1112,7 @@ public class TestCourier {
         }
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Courier) {
-                Courier courier = (Courier)worker;
+            if (worker instanceof Courier courier) {
 
                 assertFalse(courier.isTraveling());
                 assertFalse(courier.isWalkingToRoad());
@@ -1246,7 +1245,7 @@ public class TestCourier {
         assertEquals(couriers.size(), 1);
 
         /* Verify that the player is set correctly in the courier */
-        Courier courier = couriers.get(0);
+        Courier courier = couriers.getFirst();
 
         assertEquals(courier.getPlayer(), player0);
     }
@@ -3164,7 +3163,7 @@ public class TestCourier {
         map.stepTime();
 
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
-        assertEquals(headquarter0.getFlag().getStackedCargo().get(0).getTarget(), headquarter0);
+        assertEquals(headquarter0.getFlag().getStackedCargo().getFirst().getTarget(), headquarter0);
 
         /* Verify that the courier goes to the headquarters' flag, doesn't pick up anything,
            and goes back and becomes idle */

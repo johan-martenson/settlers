@@ -1153,7 +1153,7 @@ public class TestStorehouse {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        StorageWorker worker = workers.get(0);
+        StorageWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1770,7 +1770,7 @@ public class TestStorehouse {
         Utils.constructHouse(storehouse0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, storehouse0.getFlag().getPosition());
@@ -1960,7 +1960,7 @@ public class TestStorehouse {
         }
 
         /* Remove one of the cargos */
-        Cargo cargo = storehouse.getFlag().getStackedCargo().get(0);
+        Cargo cargo = storehouse.getFlag().getStackedCargo().getFirst();
         storehouse.getFlag().retrieveCargo(cargo);
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
@@ -2031,7 +2031,7 @@ public class TestStorehouse {
         }
 
         /* Remove a cargo from the flag */
-        Cargo cargo = storehouse.getFlag().getStackedCargo().get(0);
+        Cargo cargo = storehouse.getFlag().getStackedCargo().getFirst();
         storehouse.getFlag().retrieveCargo(cargo);
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
@@ -2149,7 +2149,7 @@ public class TestStorehouse {
         /* Verify that all the scout goes to the storehouse */
         assertEquals(storehouse.getAmount(SCOUT), 0);
 
-        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
+        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         assertEquals(scout.getPosition(), headquarter.getPosition());
         assertNull(headquarter.getWorker().getCargo());

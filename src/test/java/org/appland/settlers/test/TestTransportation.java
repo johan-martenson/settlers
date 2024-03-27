@@ -490,7 +490,7 @@ public class TestTransportation {
 
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Cargo cargo = quarry0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = quarry0.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
         assertEquals(cargo.getTarget(), storehouse);
@@ -571,7 +571,7 @@ public class TestTransportation {
         assertNull(mdlToEndCr.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(cargo));
         assertEquals(middleFlag.getStackedCargo().size(), 1);
-        assertEquals(middleFlag.getStackedCargo().get(0), cargo);
+        assertEquals(middleFlag.getStackedCargo().getFirst(), cargo);
         assertNull(hqToMdlCr.getCargo());
 
         /* Next courier detects the cargo and walks there */
@@ -865,7 +865,7 @@ public class TestTransportation {
 
         assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point2);
-        assertEquals(flag1.getStackedCargo().get(0), cargo);
+        assertEquals(flag1.getStackedCargo().getFirst(), cargo);
         assertFalse(flag1.getStackedCargo().isEmpty());
     }
 

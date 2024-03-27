@@ -114,7 +114,7 @@ public class TestAttackPlayer {
 
         assertEquals(militaries.size(), 1);
 
-        Soldier attacker = militaries.get(0);
+        Soldier attacker = militaries.getFirst();
 
         assertTrue(attacker.getTarget().distance(barracks1.getPosition()) < 3);
     }

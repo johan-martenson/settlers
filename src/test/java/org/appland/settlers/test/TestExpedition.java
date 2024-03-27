@@ -208,7 +208,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -326,7 +326,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -410,7 +410,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -519,7 +519,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -630,7 +630,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -735,7 +735,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -840,7 +840,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -945,7 +945,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1056,7 +1056,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1167,7 +1167,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1278,7 +1278,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1415,7 +1415,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1530,7 +1530,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1740,7 +1740,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1954,7 +1954,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -2122,7 +2122,7 @@ public class TestExpedition {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());

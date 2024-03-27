@@ -81,7 +81,7 @@ public class TestProductionStatistics {
         List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
-        assertEquals(0, dataPoints.get(0).getValues()[0]);
+        assertEquals(0, dataPoints.getFirst().getValues()[0]);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class TestProductionStatistics {
         List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
-        assertEquals(0, (int)dataPoints.get(0).getTime());
+        assertEquals(0, (int)dataPoints.getFirst().getTime());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class TestProductionStatistics {
         /* Verify that there are three values in the measurement point, one for each player */
         List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
-        assertEquals(dataPoints.get(0).getValues().length, 3);
+        assertEquals(dataPoints.getFirst().getValues().length, 3);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class TestProductionStatistics {
         List<ProductionDataPoint> dataPointsAtStart =  woodProductionDataSeriesAtStart.getProductionDataPoints();
 
         assertEquals(dataPointsAtStart.size(), 1);
-        assertEquals(dataPointsAtStart.get(0).getValues().length, 3);
+        assertEquals(dataPointsAtStart.getFirst().getValues().length, 3);
 
         /* Verify that there are are more values reported over time */
         Utils.fastForward(2000, map);
@@ -316,7 +316,7 @@ public class TestProductionStatistics {
         List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
-        assertEquals(dataPoints.get(0).getValues().length, 3);
+        assertEquals(dataPoints.getFirst().getValues().length, 3);
 
         /* Verify that no new values are collected for 499 game steps */
         for (int i = 0; i < 499; i++) {

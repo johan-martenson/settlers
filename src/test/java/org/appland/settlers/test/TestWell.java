@@ -446,7 +446,7 @@ public class TestWell {
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the water cargo has the right target */
-        assertEquals(well.getFlag().getStackedCargo().get(0).getTarget(), headquarter);
+        assertEquals(well.getFlag().getStackedCargo().getFirst().getTarget(), headquarter);
 
         /* Let the worker walk back to the well */
         assertEquals(worker.getTarget(), well.getPosition());
@@ -500,7 +500,7 @@ public class TestWell {
         /* Wait for the courier on the road between the bakery and the well hut to have a water cargo */
         Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
 
-        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+        assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -557,7 +557,7 @@ public class TestWell {
         /* Wait for the courier on the road between the store house and the well hut to have a stone cargo */
         Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
 
-        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+        assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -571,7 +571,7 @@ public class TestWell {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(WATER));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(WATER));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -626,7 +626,7 @@ public class TestWell {
         /* Wait for the flag on the road between the bakery and the well to have a water cargo */
         Utils.waitForFlagToGetStackedCargo(map, well.getFlag(), 1);
 
-        assertEquals(well.getFlag().getStackedCargo().get(0).getMaterial(), WATER);
+        assertEquals(well.getFlag().getStackedCargo().getFirst().getMaterial(), WATER);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -750,7 +750,7 @@ public class TestWell {
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = well0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = well0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1144,7 +1144,7 @@ public class TestWell {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        WellWorker worker = workers.get(0);
+        WellWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1628,7 +1628,7 @@ public class TestWell {
         Utils.constructHouse(well0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());

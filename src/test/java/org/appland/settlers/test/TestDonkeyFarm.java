@@ -1557,7 +1557,7 @@ public class TestDonkeyFarm {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        DonkeyBreeder worker = workers.get(0);
+        DonkeyBreeder worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -2035,7 +2035,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getFlag().getPosition());

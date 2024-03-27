@@ -729,7 +729,7 @@ public class Utils {
 
             if (!map.getProjectiles().isEmpty()) {
 
-                projectile = map.getProjectiles().get(0);
+                projectile = map.getProjectiles().getFirst();
 
                 break;
             }
@@ -767,7 +767,7 @@ public class Utils {
 
         assertFalse(map.getWildAnimals().isEmpty());
 
-        return map.getWildAnimals().get(0);
+        return map.getWildAnimals().getFirst();
     }
 
     static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidUserActionException {
@@ -1153,7 +1153,7 @@ public class Utils {
         for (int i = 0; i < 1000; i++) {
 
             if (flag.getStackedCargo().size() > 0) {
-                cargo = flag.getStackedCargo().get(0);
+                cargo = flag.getStackedCargo().getFirst();
 
                 break;
             }
@@ -2112,7 +2112,7 @@ public class Utils {
     }
 
     public static Cargo retrieveOneCargo(Flag flag) {
-        Cargo cargo = flag.getStackedCargo().get(0);
+        Cargo cargo = flag.getStackedCargo().getFirst();
 
         flag.retrieveCargo(cargo);
 
@@ -3183,7 +3183,7 @@ public class Utils {
                 return null;
             }
 
-            return gameChanges.get(gameChanges.size() - 1);
+            return gameChanges.getLast();
         }
 
         public List<GameChangesList> getEventsAfterEvent(GameChangesList gameChangesEvent) {

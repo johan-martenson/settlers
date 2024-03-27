@@ -536,7 +536,7 @@ public class TestBrewery {
 
         Utils.waitForFlagToGetStackedCargo(map, brewery.getFlag(), 1);
 
-        assertEquals(brewery.getFlag().getStackedCargo().get(0).getMaterial(), BEER);
+        assertEquals(brewery.getFlag().getStackedCargo().getFirst().getMaterial(), BEER);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -550,7 +550,7 @@ public class TestBrewery {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BEER));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(BEER));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -829,7 +829,7 @@ public class TestBrewery {
         assertFalse(brewery0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = brewery0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = brewery0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1140,7 +1140,7 @@ public class TestBrewery {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Brewer worker = workers.get(0);
+        Brewer worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1624,7 +1624,7 @@ public class TestBrewery {
         Utils.constructHouse(brewery0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());

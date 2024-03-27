@@ -821,7 +821,7 @@ public class TestHunterHut {
         /* Wait for the courier on the road between the coal mine and the hunter hut to have a meat cargo */
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
-        assertEquals(hunterHut.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -876,7 +876,7 @@ public class TestHunterHut {
         /* Wait for the courier on the road between the storehouse and the hunter hut to have a meat cargo */
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
-        assertEquals(hunterHut.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -890,7 +890,7 @@ public class TestHunterHut {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(MEAT));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(MEAT));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -945,7 +945,7 @@ public class TestHunterHut {
         /* Wait for the flag on the road between the gold mine and the hunter hut to have a meat cargo */
         Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 1);
 
-        assertEquals(hunterHut.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(hunterHut.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1223,7 +1223,7 @@ public class TestHunterHut {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Hunter worker = workers.get(0);
+        Hunter worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1701,7 +1701,7 @@ public class TestHunterHut {
         constructHouse(hunterHut0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getFlag().getPosition());

@@ -312,7 +312,7 @@ public class TestGameLogic {
 
         assertEquals(soldiersOutside.size(), 1);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, soldiersOutside.get(0));
+        Utils.fastForwardUntilWorkersReachTarget(map, soldiersOutside.getFirst());
 
         assertFalse(barracks0.needsMilitaryManning());
         assertEquals(barracks0.getNumberOfHostedSoldiers(), 2);

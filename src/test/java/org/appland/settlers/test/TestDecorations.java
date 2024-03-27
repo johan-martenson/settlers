@@ -29,7 +29,6 @@ import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.DecorationType.*;
 import static org.appland.settlers.model.DecorationType.STONE;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;

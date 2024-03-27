@@ -3269,7 +3269,7 @@ public class TestAttack {
         assertEquals(attackers.size(), 2);
 
         /* Wait for the attackers to walk to the attacked building */
-        Utils.fastForwardUntilWorkerReachesPoint(map, attackers.get(0), attackers.get(0).getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, attackers.getFirst(), attackers.getFirst().getTarget());
 
         /* Wait for defender to leave the attacked building */
         Soldier defender = Utils.findSoldierOutsideBuilding(player1);
@@ -3650,7 +3650,7 @@ public class TestAttack {
         if (attackers.get(0).equals(firstAttacker)) {
             waitingAttacker = attackers.get(1);
         } else {
-            waitingAttacker = attackers.get(0);
+            waitingAttacker = attackers.getFirst();
         }
 
         /* Make sure there are two attackers */
@@ -5852,7 +5852,7 @@ public class TestAttack {
             map.stepTime();
         }
 
-        Soldier defender1 = Utils.findSoldiersOutsideBuilding(player0).get(0);
+        Soldier defender1 = Utils.findSoldiersOutsideBuilding(player0).getFirst();
 
         assertEquals(defender1.getTarget(), barracks0.getFlag().getPosition());
 
@@ -6086,7 +6086,7 @@ public class TestAttack {
             map.stepTime();
         }
 
-        Soldier defender1 = Utils.findSoldiersOutsideBuilding(player0).get(0);
+        Soldier defender1 = Utils.findSoldiersOutsideBuilding(player0).getFirst();
 
         assertEquals(defender1.getTarget(), headquarter0.getFlag().getPosition());
 

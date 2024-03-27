@@ -547,7 +547,7 @@ public class TestMetalworks {
 
         Utils.waitForFlagToGetStackedCargo(map, metalworks.getFlag(), 1);
 
-        Material tool = metalworks.getFlag().getStackedCargo().get(0).getMaterial();
+        Material tool = metalworks.getFlag().getStackedCargo().getFirst().getMaterial();
 
         assertTrue(Material.isTool(tool));
 
@@ -565,7 +565,7 @@ public class TestMetalworks {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(tool));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(tool));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -1277,7 +1277,7 @@ public class TestMetalworks {
         assertFalse(metalworks0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = metalworks0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = metalworks0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1593,7 +1593,7 @@ public class TestMetalworks {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Metalworker worker = workers.get(0);
+        Metalworker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -2077,7 +2077,7 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Metalworker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, metalworks0.getFlag().getPosition());

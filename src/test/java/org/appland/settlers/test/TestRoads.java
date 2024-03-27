@@ -210,16 +210,16 @@ public class TestRoads {
         assertFalse(route.isEmpty());
 
         assertTrue(route.size() < 11);
-        assertEquals(route.get(0), points[0]);
-        assertEquals(route.get(route.size() - 1), target);
+        assertEquals(route.getFirst(), points[0]);
+        assertEquals(route.getLast(), target);
 
         Utils.assertNoStepDirectlyUpwards(route);
 
         route = map.findWayWithExistingRoads(target, points[0]);
 
         assertTrue(route.size() < 11);
-        assertEquals(route.get(0), target);
-        assertEquals(route.get(route.size() - 1), points[0]);
+        assertEquals(route.getFirst(), target);
+        assertEquals(route.getLast(), points[0]);
 
         Utils.assertNoStepDirectlyUpwards(route);
 
@@ -1290,7 +1290,7 @@ public class TestRoads {
                 endPoint);
 
         /* Wait for a courier to reach the first half of the road */
-        Courier courier = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0).get(0);
+        Courier courier = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0).getFirst();
 
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
@@ -1874,7 +1874,7 @@ public class TestRoads {
         List<Worker> workersAfter = new LinkedList<>(map.getWorkers());
         workersAfter.removeAll(workersBefore);
 
-        Worker worker = workersAfter.get(0);
+        Worker worker = workersAfter.getFirst();
 
         Utils.fastForwardUntilWorkersReachTarget(map, worker);
 

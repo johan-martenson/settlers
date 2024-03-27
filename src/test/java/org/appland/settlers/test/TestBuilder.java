@@ -150,7 +150,7 @@ public class TestBuilder {
 
         builders.remove(builder0);
 
-        Builder builder1 = builders.get(0);
+        Builder builder1 = builders.getFirst();
 
         assertEquals(builder1.getTarget(), woodcutter0.getPosition());
 

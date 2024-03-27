@@ -786,7 +786,7 @@ public class TestFishery {
         /* Wait for the courier on the road between the coal mine and the fishery hut to have a fish cargo */
         Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
 
-        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+        assertEquals(fishery.getFlag().getStackedCargo().getFirst().getMaterial(), FISH);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -845,7 +845,7 @@ public class TestFishery {
         /* Wait for the courier on the road between the storehouse and the fishery to have a fish cargo */
         Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
 
-        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+        assertEquals(fishery.getFlag().getStackedCargo().getFirst().getMaterial(), FISH);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -859,7 +859,7 @@ public class TestFishery {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(FISH));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(FISH));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -924,7 +924,7 @@ public class TestFishery {
         /* Wait for the flag on the road between the gold mine and the fishery to have a fish cargo */
         Utils.waitForFlagToGetStackedCargo(map, fishery.getFlag(), 1);
 
-        assertEquals(fishery.getFlag().getStackedCargo().get(0).getMaterial(), FISH);
+        assertEquals(fishery.getFlag().getStackedCargo().getFirst().getMaterial(), FISH);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1411,7 +1411,7 @@ public class TestFishery {
         assertFalse(fishery0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = fishery0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = fishery0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1730,7 +1730,7 @@ public class TestFishery {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Fisherman worker = workers.get(0);
+        Fisherman worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -2208,7 +2208,7 @@ public class TestFishery {
         constructHouse(fishery0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getFlag().getPosition());

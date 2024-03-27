@@ -555,7 +555,7 @@ public class TestGoldMine {
         /* Wait for the courier on the road between the mint and the gold mine hut to have a gold cargo */
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
-        assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
+        assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -619,7 +619,7 @@ public class TestGoldMine {
 
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
-        assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
+        assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -633,7 +633,7 @@ public class TestGoldMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(GOLD));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(GOLD));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -697,7 +697,7 @@ public class TestGoldMine {
 
         Utils.waitForFlagToGetStackedCargo(map, goldMine.getFlag(), 1);
 
-        assertEquals(goldMine.getFlag().getStackedCargo().get(0).getMaterial(), GOLD);
+        assertEquals(goldMine.getFlag().getStackedCargo().getFirst().getMaterial(), GOLD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1144,7 +1144,7 @@ public class TestGoldMine {
         assertFalse(goldMine0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = goldMine0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = goldMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1467,7 +1467,7 @@ public class TestGoldMine {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Miner worker = workers.get(0);
+        Miner worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1981,7 +1981,7 @@ public class TestGoldMine {
         constructHouse(goldMine0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, goldMine0.getFlag().getPosition());

@@ -166,7 +166,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -364,7 +364,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -420,7 +420,7 @@ public class TestExpeditionNormalFlow {
         /* Verify that a ship is ready for expedition game message is sent */
         assertTrue(player0.getMessages().size() > 1);
 
-        ShipReadyForExpeditionMessage message = (ShipReadyForExpeditionMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        ShipReadyForExpeditionMessage message = (ShipReadyForExpeditionMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), SHIP_READY_FOR_EXPEDITION);
         assertEquals(message.getShip(), ship);
@@ -519,7 +519,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -685,7 +685,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -859,7 +859,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1036,7 +1036,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1225,7 +1225,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1323,7 +1323,7 @@ public class TestExpeditionNormalFlow {
         /* Verify that a game message is sent */
         assertFalse(player0.getMessages().isEmpty());
 
-        ShipHasReachedDestinationMessage message = (ShipHasReachedDestinationMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        ShipHasReachedDestinationMessage message = (ShipHasReachedDestinationMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), Message.MessageType.SHIP_HAS_REACHED_DESTINATION);
         assertEquals(message.getShip(), ship);
@@ -1425,7 +1425,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1627,7 +1627,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -1750,7 +1750,7 @@ public class TestExpeditionNormalFlow {
         /* Verify that a game message is sent when the harbor is done */
         assertFalse(player0.getMessages().isEmpty());
 
-        HarborIsFinishedMessage message = (HarborIsFinishedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+        HarborIsFinishedMessage message = (HarborIsFinishedMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), Message.MessageType.HARBOR_IS_FINISHED_MESSAGE);
         assertEquals(message.getHarbor(), newHarbor);
@@ -1851,7 +1851,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -2049,7 +2049,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -2258,7 +2258,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -2492,7 +2492,7 @@ public class TestExpeditionNormalFlow {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());

@@ -561,7 +561,7 @@ public class TestGraniteMine {
         /* Wait for the courier on the road between the mint and the granite mine hut to have a stone cargo */
         Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
 
-        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -626,7 +626,7 @@ public class TestGraniteMine {
 
         Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
 
-        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -640,7 +640,7 @@ public class TestGraniteMine {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(STONE));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(STONE));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -695,7 +695,7 @@ public class TestGraniteMine {
 
         Utils.waitForFlagToGetStackedCargo(map, graniteMine.getFlag(), 1);
 
-        assertEquals(graniteMine.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(graniteMine.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1140,7 +1140,7 @@ public class TestGraniteMine {
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = graniteMine0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = graniteMine0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1461,7 +1461,7 @@ public class TestGraniteMine {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Miner worker = workers.get(0);
+        Miner worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1975,7 +1975,7 @@ public class TestGraniteMine {
         constructHouse(graniteMine0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getFlag().getPosition());

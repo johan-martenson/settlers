@@ -2818,7 +2818,7 @@ public class TestBarracks {
 
         /* Verify that the list of hosted soldiers increased empty */
         assertEquals(1, barracks0.getHostedSoldiers().size());
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), PRIVATE_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), PRIVATE_RANK);
     }
 
     @Test
@@ -2845,7 +2845,7 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, barracks0);
 
         /* Verify that the rank for the hosted military is correct */
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), SERGEANT_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), SERGEANT_RANK);
     }
 
     @Test

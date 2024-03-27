@@ -161,7 +161,7 @@ public class TestLoadingImages {
 
         assertEquals(gameResources.size(), 1);
 
-        BitmapResource playerBitmapResource = (BitmapResource) gameResources.get(0);
+        BitmapResource playerBitmapResource = (BitmapResource) gameResources.getFirst();
         Bitmap bitmap = playerBitmapResource.getBitmap();
 
         assertNotNull(bitmap);
@@ -177,7 +177,7 @@ public class TestLoadingImages {
 
         assertEquals(gameResources.size(), 1);
 
-        PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResources.get(0);
+        PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResources.getFirst();
         PlayerBitmap playerBitmap = playerBitmapResource.getBitmap();
 
         assertNotNull(playerBitmap);
@@ -192,7 +192,7 @@ public class TestLoadingImages {
 
         assertEquals(resources.size(), 1);
 
-        BitmapRLEResource bitmapRLEResource = (BitmapRLEResource) resources.get(0);
+        BitmapRLEResource bitmapRLEResource = (BitmapRLEResource) resources.getFirst();
 
         assertNotNull(bitmapRLEResource);
 
@@ -210,7 +210,7 @@ public class TestLoadingImages {
 
         assertEquals(resources.size(), 1);
 
-        BitmapRawResource bitmapRawResource = (BitmapRawResource) resources.get(0);
+        BitmapRawResource bitmapRawResource = (BitmapRawResource) resources.getFirst();
 
         assertNotNull(bitmapRawResource);
 

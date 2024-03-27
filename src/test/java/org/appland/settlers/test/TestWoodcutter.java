@@ -654,7 +654,7 @@ public class TestWoodcutter {
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().get(0);
+        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
 
@@ -722,7 +722,7 @@ public class TestWoodcutter {
         /* Wait for the courier on the road between the sawmill and the woodcutter hut to have a wood cargo */
         Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
 
-        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+        assertEquals(woodcutter.getFlag().getStackedCargo().getFirst().getMaterial(), WOOD);
 
         /* Wait for the courier to pick up the wood cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -782,7 +782,7 @@ public class TestWoodcutter {
         /* Wait for the courier on the road between the store house and the woodcutter hut to have a wood cargo */
         Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
 
-        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+        assertEquals(woodcutter.getFlag().getStackedCargo().getFirst().getMaterial(), WOOD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -796,7 +796,7 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(WOOD));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(WOOD));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -849,7 +849,7 @@ public class TestWoodcutter {
         /* Wait for the flag on the road between the sawmill and the woodcutter to have a tree cargo */
         Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 1);
 
-        assertEquals(woodcutter.getFlag().getStackedCargo().get(0).getMaterial(), WOOD);
+        assertEquals(woodcutter.getFlag().getStackedCargo().getFirst().getMaterial(), WOOD);
 
         /* Deliver wood to the sawmill so it only needs one more tree */
         Utils.deliverCargos(sawmill, WOOD, 5);
@@ -985,7 +985,7 @@ public class TestWoodcutter {
         assertNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().get(0);
+        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
     }
@@ -1234,7 +1234,7 @@ public class TestWoodcutter {
         /* Woodcutter enters building but does not store the cargo yet */
         assertTrue(wcWorker.isInsideBuilding());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
-        assertEquals(woodcutter.getPosition(), woodcutter.getPosition());
+        assertEquals(woodcutter.getPosition(), wcWorker.getPosition());
         assertNotNull(wcWorker.getCargo());
 
         /* Woodcutter leaves the building and puts the cargo on the building's flag */
@@ -1251,7 +1251,7 @@ public class TestWoodcutter {
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
 
-        Cargo cargo = woodcutter.getFlag().getStackedCargo().get(0);
+        Cargo cargo = woodcutter.getFlag().getStackedCargo().getFirst();
 
         assertEquals(cargo.getTarget(), headquarter);
 
@@ -1470,7 +1470,7 @@ public class TestWoodcutter {
         assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = woodcutter0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = woodcutter0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1893,7 +1893,7 @@ public class TestWoodcutter {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        WoodcutterWorker worker = workers.get(0);
+        WoodcutterWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -2432,7 +2432,7 @@ public class TestWoodcutter {
         constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getFlag().getPosition());

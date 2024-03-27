@@ -619,7 +619,7 @@ public class TestMint {
 
         Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
 
-        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+        assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -678,7 +678,7 @@ public class TestMint {
 
         Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
 
-        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+        assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -692,7 +692,7 @@ public class TestMint {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(COIN));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(COIN));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -745,7 +745,7 @@ public class TestMint {
 
         Utils.waitForFlagToGetStackedCargo(map, mint.getFlag(), 1);
 
-        assertEquals(mint.getFlag().getStackedCargo().get(0).getMaterial(), COIN);
+        assertEquals(mint.getFlag().getStackedCargo().getFirst().getMaterial(), COIN);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -972,7 +972,7 @@ public class TestMint {
         assertFalse(mint0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = mint0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = mint0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1384,7 +1384,7 @@ public class TestMint {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Minter worker = workers.get(0);
+        Minter worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1862,7 +1862,7 @@ public class TestMint {
         Utils.constructHouse(mint0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());

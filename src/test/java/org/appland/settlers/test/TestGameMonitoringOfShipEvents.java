@@ -97,7 +97,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that a game monitoring event was sent */
         boolean foundEvent = false;
@@ -180,7 +180,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that a game monitoring event was sent */
         boolean foundEvent = false;
@@ -195,7 +195,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -265,7 +265,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
@@ -360,7 +360,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
@@ -394,7 +394,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -500,7 +500,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -663,7 +663,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -729,7 +729,7 @@ public class TestGameMonitoringOfShipEvents {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 

@@ -567,7 +567,7 @@ public class TestDonkey {
         assertNull(donkey.getCargo());
         assertFalse(flag1.getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
-        assertEquals(flag1.getStackedCargo().get(0), cargo);
+        assertEquals(flag1.getStackedCargo().getFirst(), cargo);
 
         /* After delivering the cargo, the donkey goes back to the idle spot */
         assertFalse(donkey.isIdle());
@@ -661,7 +661,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, middleFlagPoint);
 
-        assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
+        assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertEquals(donkey.getCargo(), cargoForLeftWoodcutter);
         assertFalse(donkey.isIdle());
 
@@ -745,7 +745,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, middleFlag.getPosition());
 
-        assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
+        assertEquals(middleFlag.getStackedCargo().getFirst(), cargoForRightWoodcutter);
         assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
         assertEquals(donkey.getTarget(), middlePoint);
@@ -1113,8 +1113,7 @@ public class TestDonkey {
         }
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof Donkey) {
-                Donkey donkey = (Donkey)worker;
+            if (worker instanceof Donkey donkey) {
 
                 assertFalse(donkey.isTraveling());
                 assertFalse(donkey.isWalkingToRoad());

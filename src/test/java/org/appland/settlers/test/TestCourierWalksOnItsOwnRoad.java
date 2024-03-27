@@ -233,7 +233,7 @@ public class TestCourierWalksOnItsOwnRoad {
         Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 1);
 
         assertEquals(headquarter.getFlag().getStackedCargo().size(), 1);
-        assertEquals(headquarter.getFlag().getStackedCargo().get(0).getTarget(), woodcutter);
+        assertEquals(headquarter.getFlag().getStackedCargo().getFirst().getTarget(), woodcutter);
         assertEquals(woodcutter.getFlag().getStackedCargo().size(), 0);
 
         /* Fill up the woodcutter's flag to make it impossible to deliver cargo to it */

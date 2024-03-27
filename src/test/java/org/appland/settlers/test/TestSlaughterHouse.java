@@ -546,7 +546,7 @@ public class TestSlaughterHouse {
 
         Utils.waitForFlagToGetStackedCargo(map, slaughterHouse.getFlag(), 1);
 
-        assertEquals(slaughterHouse.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(slaughterHouse.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -606,7 +606,7 @@ public class TestSlaughterHouse {
 
         Utils.waitForFlagToGetStackedCargo(map, slaughterHouse.getFlag(), 1);
 
-        assertEquals(slaughterHouse.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(slaughterHouse.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -620,7 +620,7 @@ public class TestSlaughterHouse {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(MEAT));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(MEAT));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -681,7 +681,7 @@ public class TestSlaughterHouse {
 
         Utils.waitForFlagToGetStackedCargo(map, slaughterHouse.getFlag(), 1);
 
-        assertEquals(slaughterHouse.getFlag().getStackedCargo().get(0).getMaterial(), MEAT);
+        assertEquals(slaughterHouse.getFlag().getStackedCargo().getFirst().getMaterial(), MEAT);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -891,7 +891,7 @@ public class TestSlaughterHouse {
         assertFalse(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = slaughterHouse0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = slaughterHouse0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1294,7 +1294,7 @@ public class TestSlaughterHouse {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Butcher worker = workers.get(0);
+        Butcher worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1772,7 +1772,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
 
         /* Wait for a worker to start walking to the building */
-        Butcher worker = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0).get(0);
+        Butcher worker = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());

@@ -147,11 +147,11 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewFlags().size(), 1);
-        assertEquals(gameChanges.getNewFlags().get(0), flag0);
+        assertEquals(gameChanges.getNewFlags().getFirst(), flag0);
 
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
@@ -191,7 +191,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.getNewFlags().size(), 1);
 
@@ -279,7 +279,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 1);
-        assertEquals(gameChanges.getRemovedFlags().get(0), flag0);
+        assertEquals(gameChanges.getRemovedFlags().getFirst(), flag0);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
@@ -411,11 +411,11 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewRoads().size(), 1);
-        assertEquals(gameChanges.getNewRoads().get(0), road0);
+        assertEquals(gameChanges.getNewRoads().getFirst(), road0);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
@@ -462,7 +462,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewRoads().size(), 1);
@@ -555,7 +555,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
         assertEquals(gameChanges.getNewRoads().size(), 1);
 
         /* Remove the road and verify that an event is sent */
@@ -613,7 +613,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.getNewRoads().size(), 1);
 
@@ -717,14 +717,14 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewBuildings().size(), 1);
         assertEquals(gameChanges.getNewFlags().size(), 1);
         assertEquals(gameChanges.getNewRoads().size(), 1);
 
-        assertEquals(gameChanges.getNewBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getNewBuildings().getFirst(), woodcutter0);
 
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
@@ -762,7 +762,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewBuildings().size(), 1);
@@ -822,7 +822,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getNewRoads().size(), 0);
 
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 0);
@@ -964,13 +964,13 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
         assertEquals(gameChanges.getRemovedRoads().size(), 1);
-        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+        assertEquals(gameChanges.getRemovedRoads().getFirst(), road0);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
@@ -1017,11 +1017,11 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that no more changed building messages are sent before the building burns down */
         Utils.fastForward(30, map);
@@ -1064,13 +1064,13 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
-        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedBuildings().getFirst(), woodcutter0);
         assertEquals(gameChanges.getRemovedRoads().size(), 1);
-        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+        assertEquals(gameChanges.getRemovedRoads().getFirst(), road0);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
@@ -1113,13 +1113,13 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
-        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedBuildings().getFirst(), woodcutter0);
         assertEquals(gameChanges.getRemovedRoads().size(), 1);
-        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+        assertEquals(gameChanges.getRemovedRoads().getFirst(), road0);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
@@ -1171,7 +1171,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
     }
 
     @Test
@@ -1209,7 +1209,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
@@ -1343,7 +1343,7 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.getTime() > 0);
 
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         assertEquals(gameChanges.getRemovedRoads().size(), 0);
         assertEquals(gameChanges.getNewFlags().size(), 0);
@@ -1398,7 +1398,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that no more messages are sent before the house disappears */
         Utils.fastForward(10, map);
@@ -1498,7 +1498,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that an event is sent when the building disappears */
         assertTrue(woodcutter0.isDestroyed());
@@ -1512,7 +1512,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
-        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedBuildings().getFirst(), woodcutter0);
 
         assertEquals(gameChanges.getChangedBuildings().size(), 0);
         assertEquals(gameChanges.getRemovedRoads().size(), 0);
@@ -1567,7 +1567,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getChangedBuildings().size(), 1);
-        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getChangedBuildings().getFirst(), woodcutter0);
 
         /* Verify that an event is sent when the building disappears */
         assertTrue(woodcutter0.isDestroyed());
@@ -1581,7 +1581,7 @@ public class TestGameMonitoring {
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 1);
-        assertEquals(gameChanges.getRemovedBuildings().get(0), woodcutter0);
+        assertEquals(gameChanges.getRemovedBuildings().getFirst(), woodcutter0);
 
         /* Verify that no more message is sent */
         Utils.fastForward(100, map);
@@ -1677,12 +1677,12 @@ public class TestGameMonitoring {
         assertEquals(map.getWorkers().size(), 2);
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), road0.getCourier());
+        assertEquals(gameChanges.getWorkersWithNewTargets().getFirst(), road0.getCourier());
 
         assertEquals(gameChanges.getNewRoads().size(), 1);
 
@@ -1724,12 +1724,12 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), road0.getCourier());
+        assertEquals(gameChanges.getWorkersWithNewTargets().getFirst(), road0.getCourier());
         assertEquals(gameChanges.getNewRoads().size(), 1);
 
         GameChangesList lastEvent = monitor.getLastEvent();
@@ -1812,7 +1812,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.getTime() > 0);
@@ -1839,7 +1839,7 @@ public class TestGameMonitoring {
         gameChanges = monitor.getEvents().get(1);
 
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), courier0);
+        assertEquals(gameChanges.getWorkersWithNewTargets().getFirst(), courier0);
         assertEquals(gameChanges.getRemovedWorkers().size(), 0);
         assertEquals(courier0.getTarget(), headquarter0.getPosition());
 
@@ -1852,7 +1852,7 @@ public class TestGameMonitoring {
         gameChanges = monitor.getEvents().get(2);
 
         assertEquals(gameChanges.getRemovedWorkers().size(), 1);
-        assertEquals(gameChanges.getRemovedWorkers().get(0), courier0);
+        assertEquals(gameChanges.getRemovedWorkers().getFirst(), courier0);
 
         assertEquals(gameChanges.getNewRoads().size(), 0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 0);
@@ -1894,7 +1894,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.getTime() > 0);
@@ -1921,7 +1921,7 @@ public class TestGameMonitoring {
         gameChanges = monitor.getEvents().get(1);
 
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
-        assertEquals(gameChanges.getWorkersWithNewTargets().get(0), courier0);
+        assertEquals(gameChanges.getWorkersWithNewTargets().getFirst(), courier0);
         assertEquals(gameChanges.getRemovedWorkers().size(), 0);
         assertEquals(courier0.getTarget(), headquarter0.getPosition());
 
@@ -1934,7 +1934,7 @@ public class TestGameMonitoring {
         gameChanges = monitor.getEvents().get(2);
 
         assertEquals(gameChanges.getRemovedWorkers().size(), 1);
-        assertEquals(gameChanges.getRemovedWorkers().get(0), courier0);
+        assertEquals(gameChanges.getRemovedWorkers().getFirst(), courier0);
 
         /* Verify that no more messages are sent */
         Utils.fastForward(100, map);
@@ -2045,12 +2045,12 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.getNewFlags().size(), 1);
-        assertEquals(gameChanges.getNewFlags().get(0), flag2);
+        assertEquals(gameChanges.getNewFlags().getFirst(), flag2);
         assertEquals(gameChanges.getRemovedRoads().size(), 1);
-        assertEquals(gameChanges.getRemovedRoads().get(0), road0);
+        assertEquals(gameChanges.getRemovedRoads().getFirst(), road0);
         assertEquals(gameChanges.getNewRoads().size(), 2);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 2);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(courier0));
@@ -2183,7 +2183,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewTrees().size(), 1);
-        assertEquals(gameChanges.getNewTrees().get(0), map.getTreeAtPoint(point));
+        assertEquals(gameChanges.getNewTrees().getFirst(), map.getTreeAtPoint(point));
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         assertEquals(gameChanges.getNewFlags().size(), 0);
@@ -2327,7 +2327,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewTrees().size(), 1);
-        assertEquals(gameChanges.getNewTrees().get(0), map.getTreeAtPoint(point));
+        assertEquals(gameChanges.getNewTrees().getFirst(), map.getTreeAtPoint(point));
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         /* Verify that there is no more event sent before the forester plants a new tree */
@@ -2421,7 +2421,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedTrees().size(), 1);
-        assertEquals(gameChanges.getRemovedTrees().get(0), tree0);
+        assertEquals(gameChanges.getRemovedTrees().getFirst(), tree0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
     }
 
@@ -2594,7 +2594,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedTrees().size(), 1);
-        assertEquals(gameChanges.getRemovedTrees().get(0), tree0);
+        assertEquals(gameChanges.getRemovedTrees().getFirst(), tree0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         /* Verify that no more messages are sent before the worker gets home */
@@ -2783,7 +2783,7 @@ public class TestGameMonitoring {
         assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
@@ -2802,7 +2802,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().get(0), stone0);
+        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         assertEquals(gameChanges.getRemovedTrees().size(), 0);
@@ -2854,7 +2854,7 @@ public class TestGameMonitoring {
         assertEquals(stone0.getAmount(), 1);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
@@ -2873,7 +2873,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().get(0), stone0);
+        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         /* Verify that no more messages are sent before the stonemason is back in the quarry */
@@ -2931,7 +2931,7 @@ public class TestGameMonitoring {
         }
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
@@ -3019,7 +3019,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewSigns().size(), 1);
-        assertEquals(gameChanges.getNewSigns().get(0), map.getSignAtPoint(site));
+        assertEquals(gameChanges.getNewSigns().getFirst(), map.getSignAtPoint(site));
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         assertEquals(gameChanges.getRemovedStones().size(), 0);
@@ -3103,7 +3103,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewSigns().size(), 1);
-        assertEquals(gameChanges.getNewSigns().get(0), map.getSignAtPoint(site));
+        assertEquals(gameChanges.getNewSigns().getFirst(), map.getSignAtPoint(site));
         assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
 
         /* Verify that no more messages are sent before the geologist places a new sign */
@@ -3230,7 +3230,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedSigns().size(), 1);
-        assertEquals(gameChanges.getRemovedSigns().get(0), sign0);
+        assertEquals(gameChanges.getRemovedSigns().getFirst(), sign0);
 
         assertEquals(gameChanges.getNewSigns().size(), 0);
         assertEquals(gameChanges.getRemovedStones().size(), 0);
@@ -3282,7 +3282,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getRemovedSigns().size(), 1);
-        assertEquals(gameChanges.getRemovedSigns().get(0), sign0);
+        assertEquals(gameChanges.getRemovedSigns().getFirst(), sign0);
 
         /* Verify that no more events are sent */
         int amountEvents = monitor.getEvents().size();
@@ -3372,10 +3372,10 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.getRemovedSigns().size(), 1);
-        assertEquals(gameChanges.getRemovedSigns().get(0), sign0);
+        assertEquals(gameChanges.getRemovedSigns().getFirst(), sign0);
         assertEquals(gameChanges.getNewFlags().size(), 1);
         assertEquals(gameChanges.getNewRoads().size(), 1);
         assertEquals(gameChanges.getNewBuildings().size(), 1);
@@ -3420,10 +3420,10 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.getRemovedSigns().size(), 1);
-        assertEquals(gameChanges.getRemovedSigns().get(0), sign0);
+        assertEquals(gameChanges.getRemovedSigns().getFirst(), sign0);
 
         /* Verify that the event is not sent again */
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
@@ -3543,7 +3543,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewCrops().size(), 1);
-        assertEquals(gameChanges.getNewCrops().get(0), map.getCropAtPoint(point));
+        assertEquals(gameChanges.getNewCrops().getFirst(), map.getCropAtPoint(point));
         assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
 
@@ -3640,7 +3640,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getHarvestedCrops().size(), 1);
-        assertEquals(gameChanges.getHarvestedCrops().get(0), crop);
+        assertEquals(gameChanges.getHarvestedCrops().getFirst(), crop);
         assertEquals(gameChanges.getNewCrops().size(), 0);
         assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
@@ -3740,7 +3740,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getHarvestedCrops().size(), 1);
-        assertEquals(gameChanges.getHarvestedCrops().get(0), crop);
+        assertEquals(gameChanges.getHarvestedCrops().getFirst(), crop);
         assertEquals(gameChanges.getNewCrops().size(), 0);
         assertTrue(gameChanges.getWorkersWithNewTargets().size() >= 1);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
@@ -3840,7 +3840,7 @@ public class TestGameMonitoring {
         GameChangesList gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.getNewCrops().size(), 1);
-        assertEquals(gameChanges.getNewCrops().get(0), map.getCropAtPoint(point));
+        assertEquals(gameChanges.getNewCrops().getFirst(), map.getCropAtPoint(point));
         assertTrue(gameChanges.getWorkersWithNewTargets().size() > 0);
         assertTrue(gameChanges.getWorkersWithNewTargets().contains(farmer));
 
@@ -3995,10 +3995,10 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.getRemovedCrops().size(), 1);
-        assertEquals(gameChanges.getRemovedCrops().get(0), crop0);
+        assertEquals(gameChanges.getRemovedCrops().getFirst(), crop0);
 
         assertEquals(gameChanges.getNewCrops().size(), 0);
         assertEquals(gameChanges.getNewBuildings().size(), 0);
@@ -4079,10 +4079,10 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.getRemovedCrops().size(), 1);
-        assertEquals(gameChanges.getRemovedCrops().get(0), crop0);
+        assertEquals(gameChanges.getRemovedCrops().getFirst(), crop0);
 
         /* Verify that no more messages are sent */
         int amountEvents = monitor.getEvents().size();
@@ -4214,7 +4214,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertTrue(gameChanges.getNewDiscoveredLand().size() > 1);
 
@@ -4337,7 +4337,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertEquals(1, gameChanges.getChangedBorders().size());
 
@@ -4345,7 +4345,7 @@ public class TestGameMonitoring {
 
         assertEquals(borderChanges.size(), 1);
 
-        BorderChange borderChange = borderChanges.get(0);
+        BorderChange borderChange = borderChanges.getFirst();
 
         assertEquals(borderChange.getPlayer(), player0);
         assertEquals(borderChange.getNewBorder().size(), newBorder.size());
@@ -4419,7 +4419,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertTrue(gameChanges.getNewDiscoveredLand().size() > 1);
 
@@ -4518,7 +4518,7 @@ public class TestGameMonitoring {
         Utils.constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
+        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
@@ -4535,10 +4535,10 @@ public class TestGameMonitoring {
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.getRemovedWorkers().size(), 1);
-        assertEquals(gameChanges.getRemovedWorkers().get(0), woodcutterWorker);
+        assertEquals(gameChanges.getRemovedWorkers().getFirst(), woodcutterWorker);
 
         assertEquals(gameChanges.getRemovedCrops().size(), 0);
         assertEquals(gameChanges.getNewCrops().size(), 0);
@@ -4580,7 +4580,7 @@ public class TestGameMonitoring {
         Utils.constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
+        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
@@ -4597,10 +4597,10 @@ public class TestGameMonitoring {
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.getRemovedWorkers().size(), 1);
-        assertEquals(gameChanges.getRemovedWorkers().get(0), woodcutterWorker);
+        assertEquals(gameChanges.getRemovedWorkers().getFirst(), woodcutterWorker);
 
         /* Verify that the event is sent only once */
         GameChangesList lastGameChangesList = monitor.getLastEvent();
@@ -4644,7 +4644,7 @@ public class TestGameMonitoring {
         Utils.constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
+        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
@@ -5253,11 +5253,11 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().get(0);
+        GameChangesList gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewFlags().size(), 1);
-        assertEquals(gameChanges.getNewFlags().get(0), flag0);
+        assertEquals(gameChanges.getNewFlags().getFirst(), flag0);
     }
 
     @Test
@@ -5325,7 +5325,7 @@ public class TestGameMonitoring {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.getPromotedRoads().size(), 1);
-        assertEquals(gameChangesList.getPromotedRoads().get(0), road0);
+        assertEquals(gameChangesList.getPromotedRoads().getFirst(), road0);
     }
 
     @Test

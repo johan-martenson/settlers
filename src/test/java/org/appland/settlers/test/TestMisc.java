@@ -132,7 +132,7 @@ public class TestMisc {
             Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag(), flag0);
 
             /* Wait for a scout to appear */
-            Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).get(0);
+            Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).getFirst();
 
             /* Wait the scout to get to the flag */
             assertEquals(scout.getTarget(), flag0.getPosition());

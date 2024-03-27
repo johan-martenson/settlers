@@ -519,7 +519,7 @@ public class TestIronSmelter {
 
         Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
 
-        assertEquals(ironSmelter.getFlag().getStackedCargo().get(0).getMaterial(), IRON_BAR);
+        assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -577,7 +577,7 @@ public class TestIronSmelter {
 
         Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
 
-        assertEquals(ironSmelter.getFlag().getStackedCargo().get(0).getMaterial(), IRON_BAR);
+        assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -591,7 +591,7 @@ public class TestIronSmelter {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(IRON_BAR));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(IRON_BAR));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -648,7 +648,7 @@ public class TestIronSmelter {
 
         Utils.waitForFlagToGetStackedCargo(map, ironSmelter.getFlag(), 1);
 
-        assertEquals(ironSmelter.getFlag().getStackedCargo().get(0).getMaterial(), IRON_BAR);
+        assertEquals(ironSmelter.getFlag().getStackedCargo().getFirst().getMaterial(), IRON_BAR);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -941,7 +941,7 @@ public class TestIronSmelter {
         assertFalse(ironSmelter0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = ironSmelter0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = ironSmelter0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1343,7 +1343,7 @@ public class TestIronSmelter {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        IronFounder worker = workers.get(0);
+        IronFounder worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1821,7 +1821,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getFlag().getPosition());

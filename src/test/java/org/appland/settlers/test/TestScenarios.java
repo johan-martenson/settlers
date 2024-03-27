@@ -478,7 +478,7 @@ public class TestScenarios {
 
         assertTrue(roadConnections.contains(sawmill.getFlag().getPosition()));
 
-        chosenPointsForRoad.add(0,startFlag.getPosition());
+        chosenPointsForRoad.addFirst(startFlag.getPosition());
 	    chosenPointsForRoad.add(sawmill.getFlag().getPosition());
 
         map.placeRoad(player0, chosenPointsForRoad);

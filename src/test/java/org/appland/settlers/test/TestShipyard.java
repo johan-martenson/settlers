@@ -525,7 +525,7 @@ public class TestShipyard {
 
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertTrue(ship.isUnderConstruction());
@@ -659,7 +659,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -734,7 +734,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         for (int i = 0; i < 100; i++) {
             if (ship.isReady()) {
@@ -822,7 +822,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         for (int i = 0; i < 100; i++) {
             if (ship.isReady()) {
@@ -904,7 +904,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertTrue(ship.isUnderConstruction());
         assertFalse(ship.isReady());
@@ -997,7 +997,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that the ship is built close to the water */
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1154,7 +1154,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that the ship is built close to the water */
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1218,7 +1218,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that the ship is built close to the water */
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1282,7 +1282,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         /* Verify that the ship is built close to the water */
         assertTrue(Math.abs(ship.getPosition().x - point2.x) < 5);
@@ -1595,7 +1595,7 @@ public class TestShipyard {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Shipwright worker = workers.get(0);
+        Shipwright worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1724,7 +1724,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1804,7 +1804,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1877,7 +1877,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -1957,7 +1957,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
 
@@ -2032,7 +2032,7 @@ public class TestShipyard {
         assertTrue(shipwright.isHammering());
         assertEquals(map.getShips().size(), 1);
 
-        Ship ship = map.getShips().get(0);
+        Ship ship = map.getShips().getFirst();
 
         assertEquals(ship.getPosition(), shipwright.getPosition());
         assertEquals(ship.getPosition(), point);
@@ -2855,8 +2855,8 @@ public class TestShipyard {
 
         Utils.waitForFlagToGetStackedCargo(map, shipyard.getFlag(), 1);
 
-        assertEquals(shipyard.getFlag().getStackedCargo().get(0).getMaterial(), BOAT);
-        assertEquals(shipyard.getFlag().getStackedCargo().get(0).getTarget(), headquarter);
+        assertEquals(shipyard.getFlag().getStackedCargo().getFirst().getMaterial(), BOAT);
+        assertEquals(shipyard.getFlag().getStackedCargo().getFirst().getTarget(), headquarter);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -2870,7 +2870,7 @@ public class TestShipyard {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BOAT));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(BOAT));
         assertNull(road0.getCourier().getCargo());
     }
 

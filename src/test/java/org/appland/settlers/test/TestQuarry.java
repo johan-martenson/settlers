@@ -672,7 +672,7 @@ public class TestQuarry {
         /* Wait for the courier on the road between the storehouse and the quarry hut to have a stone cargo */
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
-        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -686,7 +686,7 @@ public class TestQuarry {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(STONE));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(STONE));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -740,7 +740,7 @@ public class TestQuarry {
         /* Wait for the flag on the road between the storehouse and the quarry to have a stone cargo */
         Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 1);
 
-        assertEquals(quarry.getFlag().getStackedCargo().get(0).getMaterial(), STONE);
+        assertEquals(quarry.getFlag().getStackedCargo().getFirst().getMaterial(), STONE);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -1029,7 +1029,7 @@ public class TestQuarry {
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = quarry0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = quarry0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1444,7 +1444,7 @@ public class TestQuarry {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Stonemason worker = workers.get(0);
+        Stonemason worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1924,7 +1924,7 @@ public class TestQuarry {
         constructHouse(quarry0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());

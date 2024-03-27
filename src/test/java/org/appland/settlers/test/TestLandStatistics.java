@@ -126,7 +126,7 @@ public class TestLandStatistics {
 
         assertNotNull(landDataPoints);
         assertEquals(landDataPoints.size(), 1);
-        assertEquals(landDataPoints.get(0).getValues().length, 2);
+        assertEquals(landDataPoints.getFirst().getValues().length, 2);
     }
 
 

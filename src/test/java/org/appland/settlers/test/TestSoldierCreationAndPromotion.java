@@ -287,7 +287,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), PRIVATE_FIRST_CLASS_RANK);
     }
 
     @Test
@@ -322,7 +322,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), SERGEANT_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), SERGEANT_RANK);
     }
 
     @Test
@@ -357,7 +357,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), OFFICER_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), OFFICER_RANK);
     }
 
     @Test
@@ -392,7 +392,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), GENERAL_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), GENERAL_RANK);
     }
 
     @Test
@@ -427,7 +427,7 @@ public class TestSoldierCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
-        assertEquals(barracks0.getHostedSoldiers().get(0).getRank(), GENERAL_RANK);
+        assertEquals(barracks0.getHostedSoldiers().getFirst().getRank(), GENERAL_RANK);
     }
 
     @Test

@@ -550,7 +550,7 @@ public class TestArmory {
 
         Utils.waitForFlagToGetStackedCargo(map, armory.getFlag(), 1);
 
-        var weapon = armory.getFlag().getStackedCargo().get(0).getMaterial();
+        var weapon = armory.getFlag().getStackedCargo().getFirst().getMaterial();
 
         assertTrue(weapon == SWORD || weapon == SHIELD);
 
@@ -566,7 +566,7 @@ public class TestArmory {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(weapon));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(weapon));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -823,7 +823,7 @@ public class TestArmory {
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = armory0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = armory0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1119,7 +1119,7 @@ public class TestArmory {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Armorer worker = workers.get(0);
+        Armorer worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1683,7 +1683,7 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());

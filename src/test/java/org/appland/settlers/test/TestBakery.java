@@ -559,7 +559,7 @@ public class TestBakery {
 
         Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
 
-        assertEquals(bakery.getFlag().getStackedCargo().get(0).getMaterial(), BREAD);
+        assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -617,7 +617,7 @@ public class TestBakery {
 
         Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
 
-        assertEquals(bakery.getFlag().getStackedCargo().get(0).getMaterial(), BREAD);
+        assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -631,7 +631,7 @@ public class TestBakery {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(BREAD));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(BREAD));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -692,7 +692,7 @@ public class TestBakery {
 
         Utils.waitForFlagToGetStackedCargo(map, bakery.getFlag(), 1);
 
-        assertEquals(bakery.getFlag().getStackedCargo().get(0).getMaterial(), BREAD);
+        assertEquals(bakery.getFlag().getStackedCargo().getFirst().getMaterial(), BREAD);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -914,7 +914,7 @@ public class TestBakery {
         assertFalse(bakery0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = bakery0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = bakery0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1220,7 +1220,7 @@ public class TestBakery {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        Baker worker = workers.get(0);
+        Baker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1698,7 +1698,7 @@ public class TestBakery {
         Utils.constructHouse(bakery0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getFlag().getPosition());

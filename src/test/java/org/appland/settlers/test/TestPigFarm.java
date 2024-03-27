@@ -602,7 +602,7 @@ public class TestPigFarm {
 
         Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
 
-        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+        assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -663,7 +663,7 @@ public class TestPigFarm {
 
         Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
 
-        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+        assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
@@ -677,7 +677,7 @@ public class TestPigFarm {
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getFlag().getPosition());
 
         assertEquals(storehouse.getFlag().getStackedCargo().size(), 1);
-        assertTrue(storehouse.getFlag().getStackedCargo().get(0).getMaterial().equals(PIG));
+        assertTrue(storehouse.getFlag().getStackedCargo().getFirst().getMaterial().equals(PIG));
         assertNull(road0.getCourier().getCargo());
     }
 
@@ -735,7 +735,7 @@ public class TestPigFarm {
 
         Utils.waitForFlagToGetStackedCargo(map, pigFarm.getFlag(), 1);
 
-        assertEquals(pigFarm.getFlag().getStackedCargo().get(0).getMaterial(), PIG);
+        assertEquals(pigFarm.getFlag().getStackedCargo().getFirst().getMaterial(), PIG);
         assertEquals(pigFarm.getAmount(WHEAT), 0);
         assertEquals(pigFarm.getAmount(WATER), 0);
 
@@ -932,7 +932,7 @@ public class TestPigFarm {
         assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
-        Cargo cargo = pigFarm0.getFlag().getStackedCargo().get(0);
+        Cargo cargo = pigFarm0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
@@ -1482,7 +1482,7 @@ public class TestPigFarm {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        PigBreeder worker = workers.get(0);
+        PigBreeder worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1960,7 +1960,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());

@@ -461,7 +461,7 @@ public class TestCatapult {
         /* Get the projectile */
         assertEquals(map.getProjectiles().size(), 1);
 
-        Projectile projectile = map.getProjectiles().get(0);
+        Projectile projectile = map.getProjectiles().getFirst();
 
         assertNotNull(projectile);
 
@@ -1039,7 +1039,7 @@ public class TestCatapult {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        CatapultWorker worker = workers.get(0);
+        CatapultWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1508,7 +1508,7 @@ public class TestCatapult {
         Utils.constructHouse(catapult0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, catapult0.getFlag().getPosition());

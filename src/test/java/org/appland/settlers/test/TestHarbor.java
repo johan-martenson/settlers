@@ -1360,7 +1360,7 @@ public class TestHarbor {
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        StorageWorker worker = workers.get(0);
+        StorageWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -2040,7 +2040,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, harbor0.getFlag().getPosition());
@@ -2265,7 +2265,7 @@ public class TestHarbor {
         }
 
         /* Remove one of the cargos */
-        Cargo cargo = harbor.getFlag().getStackedCargo().get(0);
+        Cargo cargo = harbor.getFlag().getStackedCargo().getFirst();
         harbor.getFlag().retrieveCargo(cargo);
 
         assertEquals(harbor.getFlag().getStackedCargo().size(), 7);
@@ -2343,7 +2343,7 @@ public class TestHarbor {
         }
 
         /* Remove a cargo from the flag */
-        Cargo cargo = harbor.getFlag().getStackedCargo().get(0);
+        Cargo cargo = harbor.getFlag().getStackedCargo().getFirst();
         harbor.getFlag().retrieveCargo(cargo);
 
         assertEquals(harbor.getFlag().getStackedCargo().size(), 7);
@@ -2475,7 +2475,7 @@ public class TestHarbor {
         /* Verify that all the scout goes to the harbor */
         assertEquals(harbor.getAmount(SCOUT), 0);
 
-        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
+        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).getFirst();
 
         assertEquals(scout.getPosition(), headquarter.getPosition());
         assertNull(headquarter.getWorker().getCargo());

@@ -251,7 +251,7 @@ public class TestWildAnimal {
         for (int i = 0; i < 1000; i++) {
 
             if (!map.getWildAnimals().isEmpty() &&
-                 map.getWildAnimals().get(0).getPosition().equals(point0)) {
+                 map.getWildAnimals().getFirst().getPosition().equals(point0)) {
                 break;
             }
 
@@ -261,7 +261,7 @@ public class TestWildAnimal {
         assertTrue(map.getWildAnimals().size() > 0);
 
         /* Verify that the wild animal stays in the spot because it has nowhere to go */
-        WildAnimal wildAnimal0 = map.getWildAnimals().get(0);
+        WildAnimal wildAnimal0 = map.getWildAnimals().getFirst();
 
         assertNotNull(wildAnimal0);
         assertEquals(wildAnimal0.getPosition(), point0);

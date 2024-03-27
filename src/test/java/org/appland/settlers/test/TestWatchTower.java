@@ -1300,7 +1300,7 @@ public class TestWatchTower {
 
         /* Verify that the list of hosted soldiers increased empty */
         assertEquals(1, watchTower0.getHostedSoldiers().size());
-        assertEquals(watchTower0.getHostedSoldiers().get(0).getRank(), PRIVATE_RANK);
+        assertEquals(watchTower0.getHostedSoldiers().getFirst().getRank(), PRIVATE_RANK);
     }
 
     @Test
@@ -1327,7 +1327,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, watchTower0);
 
         /* Verify that the rank for the hosted military is correct */
-        assertEquals(watchTower0.getHostedSoldiers().get(0).getRank(), SERGEANT_RANK);
+        assertEquals(watchTower0.getHostedSoldiers().getFirst().getRank(), SERGEANT_RANK);
     }
 
     @Test

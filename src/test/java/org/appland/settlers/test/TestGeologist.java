@@ -993,7 +993,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).getFirst();
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1059,7 +1059,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).getFirst();
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1126,7 +1126,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).getFirst();
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1486,7 +1486,7 @@ public class TestGeologist {
 
         assertEquals(geologists.size(), 1);
 
-        Geologist geologist = geologists.get(0);
+        Geologist geologist = geologists.getFirst();
 
         assertEquals(geologist.getPlayer(), player0);
     }
@@ -1902,7 +1902,7 @@ public class TestGeologist {
         flag.callGeologist();
 
         /* Wait for the geologist to come out */
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).getFirst();
 
         /* Wait for the geologist to reach the flag */
         assertEquals(geologist.getTarget(), flag.getPosition());

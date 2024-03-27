@@ -197,7 +197,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -386,7 +386,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -579,7 +579,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -744,7 +744,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -815,7 +815,7 @@ public class TestGameMonitoringOfWorkerActions {
         List<WorkerAction> fishermanActions = Utils.getMonitoredWorkerActionsForWorker(fisherman, monitor);
 
         assertEquals(fishermanActions.size(), 1);
-        assertEquals(fishermanActions.get(0), WorkerAction.LOWER_FISHING_ROD);
+        assertEquals(fishermanActions.getFirst(), WorkerAction.LOWER_FISHING_ROD);
 
         /* Let the fisherman lower the rod and verify no other event is sent */
         Utils.fastForward(15, map);
@@ -924,7 +924,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -1065,7 +1065,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -1248,7 +1248,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 
@@ -1433,7 +1433,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertTrue(foundEvent);
 
         /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getEvents().get(monitor.getEvents().size() - 1);
+        GameChangesList lastEvent = monitor.getEvents().getLast();
 
         Utils.fastForward(5, map);
 

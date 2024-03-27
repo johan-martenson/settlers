@@ -449,7 +449,7 @@ public class TestExpandLandPlayer {
 
         roads.remove(map.getRoad(barracks0.getPosition(), barracks0.getFlag().getPosition()));
 
-        map.removeRoad(roads.get(0));
+        map.removeRoad(roads.getFirst());
 
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(barracks0, headquarter));
 
