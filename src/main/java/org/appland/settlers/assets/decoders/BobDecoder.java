@@ -24,7 +24,7 @@ import java.util.Map;
 
 import static java.lang.String.format;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static org.appland.settlers.assets.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.FAT;
 
 public class BobDecoder {
     private static final long NUM_BODY_IMAGES = 2 * 6 * 8;
@@ -155,13 +155,10 @@ public class BobDecoder {
                 for (CompassDirection compassDirection : CompassDirection.values()) {
 
                     for (int animationStep = 0; animationStep < 8; animationStep++) {
-                        boolean fat;
-                        int id;
-
                         WorkerDetails workerDetails = workerDetailsMap.get(job);
 
-                        id = workerDetails.getBobId(nation);
-                        fat = workerDetails.getBodyType() == FAT;
+                        int id = workerDetails.getBobId(nation);
+                        boolean fat = workerDetails.getBodyType() == FAT;
 
                         StackedBitmaps bitmaps = new StackedBitmaps();
 

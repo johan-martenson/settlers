@@ -2,7 +2,7 @@ package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Bob;
-import org.appland.settlers.assets.BodyType;
+import org.appland.settlers.model.BodyType;
 import org.appland.settlers.assets.CompassDirection;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.assets.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.FAT;
 import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.COLUMN;
 import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 

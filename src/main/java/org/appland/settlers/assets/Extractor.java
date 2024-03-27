@@ -69,8 +69,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.appland.settlers.assets.BodyType.FAT;
-import static org.appland.settlers.assets.BodyType.THIN;
+import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.THIN;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.model.Material.*;

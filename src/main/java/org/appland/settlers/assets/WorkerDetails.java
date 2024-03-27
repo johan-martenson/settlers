@@ -1,7 +1,9 @@
 package org.appland.settlers.assets;
 
-import static org.appland.settlers.assets.BodyType.FAT;
-import static org.appland.settlers.assets.BodyType.THIN;
+import org.appland.settlers.model.BodyType;
+
+import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.BodyType.THIN;
 
 public class WorkerDetails {
     public static final int NUMBER_NATION_SPECIFIC_JOBS = 6;
