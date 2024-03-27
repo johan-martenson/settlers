@@ -1,5 +1,6 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.messages;
 
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Ship;
 
 public class ShipHasReachedDestinationMessage implements Message {

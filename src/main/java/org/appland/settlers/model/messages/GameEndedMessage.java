@@ -1,6 +1,8 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.messages;
 
-import static org.appland.settlers.model.Message.MessageType.GAME_ENDED;
+import org.appland.settlers.model.Player;
+
+import static org.appland.settlers.model.messages.Message.MessageType.GAME_ENDED;
 
 public class GameEndedMessage implements Message {
 

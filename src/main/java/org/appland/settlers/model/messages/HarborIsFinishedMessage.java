@@ -1,4 +1,4 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.messages;
 
 import org.appland.settlers.model.buildings.Harbor;
 

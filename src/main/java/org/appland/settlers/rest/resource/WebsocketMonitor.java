@@ -15,7 +15,7 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
-import org.appland.settlers.model.Message;
+import org.appland.settlers.model.messages.Message;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Mill;

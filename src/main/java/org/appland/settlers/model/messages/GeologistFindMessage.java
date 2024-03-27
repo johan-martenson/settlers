@@ -1,4 +1,7 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.messages;
+
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Point;
 
 public class GeologistFindMessage implements Message {
     private final Point point;

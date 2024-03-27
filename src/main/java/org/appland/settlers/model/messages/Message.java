@@ -1,4 +1,4 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.messages;
 
 public interface Message {
 
