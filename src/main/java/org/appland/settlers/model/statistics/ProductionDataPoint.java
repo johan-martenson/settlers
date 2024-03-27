@@ -1,10 +1,10 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.statistics;
 
-public class LandDataPoint {
-    private final long time;
+public class ProductionDataPoint {
     private final int[] measurement;
+    private final long time;
 
-    public LandDataPoint(final long time, final int[] measurement) {
+    public ProductionDataPoint(long time, int[] measurement) {
         this.time = time;
         this.measurement = measurement;
     }

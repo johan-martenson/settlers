@@ -1,4 +1,6 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.statistics;
+
+import org.appland.settlers.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;

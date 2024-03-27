@@ -5,12 +5,12 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.LandDataPoint;
-import org.appland.settlers.model.LandStatistics;
+import org.appland.settlers.model.statistics.LandDataPoint;
+import org.appland.settlers.model.statistics.LandStatistics;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.StatisticsManager;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.junit.Test;
 
 import java.util.ArrayList;

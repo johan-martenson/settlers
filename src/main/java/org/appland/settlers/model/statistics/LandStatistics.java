@@ -1,4 +1,4 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.statistics;
 
 import java.util.ArrayList;
 import java.util.List;

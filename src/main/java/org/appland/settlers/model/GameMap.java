@@ -7,6 +7,7 @@ import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;

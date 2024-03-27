@@ -1,4 +1,7 @@
-package org.appland.settlers.model;
+package org.appland.settlers.model.statistics;
+
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
 
 import java.util.Arrays;
 import java.util.EnumMap;
