@@ -43,13 +43,11 @@ import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.SlaughterHouse;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.messages.UnderAttackMessage;
 import org.junit.Test;
 
@@ -92,7 +90,7 @@ public class TestToString {
 
         /* Place stone */
         Point point0 = new Point(3, 3);
-        Stone stone0 = map.placeStone(point0, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 7);
 
         /* Verify that the toString() method is correct */
         assertEquals(stone0.toString(), "Stone (3, 3)");
@@ -111,7 +109,7 @@ public class TestToString {
 
         /* Place stone */
         Point point0 = new Point(3, 5);
-        Tree tree0 = map.placeTree(point0, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point0, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that the toString() method is correct */
         assertEquals(tree0.toString(), "Tree (3, 5)");

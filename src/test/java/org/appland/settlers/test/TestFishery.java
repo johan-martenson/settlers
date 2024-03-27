@@ -23,10 +23,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
@@ -1066,7 +1064,7 @@ public class TestFishery {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
 
         /* Manually place fisherman */
@@ -1128,11 +1126,11 @@ public class TestFishery {
 
         /* Place stone */
         Point point19 = new Point(12, 12);
-        Stone stone0 = map.placeStone(point19, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point19, Stone.StoneType.STONE_1, 7);
 
         /* Place stone */
         Point point20 = new Point(13, 11);
-        Stone stone1 = map.placeStone(point20, StoneType.STONE_1, 7);
+        Stone stone1 = map.placeStone(point20, Stone.StoneType.STONE_1, 7);
 
         /* Place headquarters */
         Point point21 = new Point(5, 5);

@@ -5,7 +5,6 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -28,22 +27,22 @@ public class TestStones {
 
         /* Place stone */
         Point point0 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point0, StoneType.STONE_1, 6);
+        Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
         Point point1 = new Point(7, 5);
-        Stone stone1 = map.placeStone(point1, StoneType.STONE_1, 5);
+        Stone stone1 = map.placeStone(point1, Stone.StoneType.STONE_1, 5);
 
         Point point2 = new Point(9, 5);
-        Stone stone2 = map.placeStone(point2, StoneType.STONE_1, 4);
+        Stone stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
 
         Point point3 = new Point(11, 5);
-        Stone stone3 = map.placeStone(point3, StoneType.STONE_1, 3);
+        Stone stone3 = map.placeStone(point3, Stone.StoneType.STONE_1, 3);
 
         Point point4 = new Point(13, 5);
-        Stone stone4 = map.placeStone(point4, StoneType.STONE_1, 2);
+        Stone stone4 = map.placeStone(point4, Stone.StoneType.STONE_1, 2);
 
         Point point5 = new Point(15, 5);
-        Stone stone5 = map.placeStone(point5, StoneType.STONE_1, 1);
+        Stone stone5 = map.placeStone(point5, Stone.StoneType.STONE_1, 1);
 
         /* Verify that the right stone amount is returned */
         assertEquals(stone0.getStoneAmount(), FULL);
@@ -65,16 +64,16 @@ public class TestStones {
 
         /* Place stones */
         Point point0 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point0, StoneType.STONE_1, 6);
+        Stone stone0 = map.placeStone(point0, Stone.StoneType.STONE_1, 6);
 
         Point point1 = new Point(7, 5);
-        Stone stone1 = map.placeStone(point1, StoneType.STONE_2, 6);
+        Stone stone1 = map.placeStone(point1, Stone.StoneType.STONE_2, 6);
 
         Point point2 = new Point(9, 5);
-        Stone stone2 = map.placeStone(point2, StoneType.STONE_1, 4);
+        Stone stone2 = map.placeStone(point2, Stone.StoneType.STONE_1, 4);
 
         Point point3 = new Point(11, 5);
-        Stone stone3 = map.placeStone(point3, StoneType.STONE_2, 4);
+        Stone stone3 = map.placeStone(point3, Stone.StoneType.STONE_2, 4);
 
         /* Verify that the right stone amount is returned */
         assertEquals(stone0.getStoneAmount(), stone1.getStoneAmount());

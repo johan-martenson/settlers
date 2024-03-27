@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
@@ -17,10 +18,8 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
@@ -846,40 +845,40 @@ public class TestForesterHut {
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
-        assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
+        assertEquals(tree.getSize(), Tree.TreeSize.NEWLY_PLANTED);
 
         for (int i = 0; i < 150; i++) {
 
             /* Allow one steps difference because the tree may get to run stepTime() when it gets added by the forester */
-            if (i == 149 && tree.getSize() == TreeSize.SMALL) {
+            if (i == 149 && tree.getSize() == Tree.TreeSize.SMALL) {
                 break;
             }
 
-            assertEquals(tree.getSize(), TreeSize.NEWLY_PLANTED);
+            assertEquals(tree.getSize(), Tree.TreeSize.NEWLY_PLANTED);
 
             map.stepTime();
         }
 
-        assertEquals(tree.getSize(), TreeSize.SMALL);
+        assertEquals(tree.getSize(), Tree.TreeSize.SMALL);
 
         for (int i = 0; i < 150; i++) {
-            assertEquals(tree.getSize(), TreeSize.SMALL);
+            assertEquals(tree.getSize(), Tree.TreeSize.SMALL);
 
             map.stepTime();
         }
 
-        assertEquals(tree.getSize(), TreeSize.MEDIUM);
+        assertEquals(tree.getSize(), Tree.TreeSize.MEDIUM);
 
         for (int i = 0; i < 150; i++) {
-            assertEquals(tree.getSize(), TreeSize.MEDIUM);
+            assertEquals(tree.getSize(), Tree.TreeSize.MEDIUM);
 
             map.stepTime();
         }
 
-        assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+        assertEquals(tree.getSize(), Tree.TreeSize.FULL_GROWN);
 
         for (int i = 0; i < 300; i++) {
-            assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+            assertEquals(tree.getSize(), Tree.TreeSize.FULL_GROWN);
 
             map.stepTime();
         }
@@ -1023,7 +1022,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
 
         assertTrue(forester.isInsideBuilding());
@@ -1082,7 +1081,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
 
         assertTrue(forester.isInsideBuilding());
@@ -1139,7 +1138,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
 
         assertTrue(forester.isInsideBuilding());
@@ -1187,7 +1186,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeStone(point, StoneType.STONE_1, 7);
+            map.placeStone(point, Stone.StoneType.STONE_1, 7);
         }
 
         assertTrue(forester.isInsideBuilding());
@@ -1251,7 +1250,7 @@ public class TestForesterHut {
                 continue;
             }
 
-            map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
 
         assertTrue(forester.isInsideBuilding());
@@ -2170,7 +2169,7 @@ public class TestForesterHut {
             }
 
             try {
-                map.placeTree(point4, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 

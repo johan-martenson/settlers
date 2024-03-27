@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Direction;
@@ -13,7 +14,6 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
@@ -379,7 +379,7 @@ public class TestWorkerHasDirections {
                 continue;
             }
 
-            map.placeStone(point, StoneType.STONE_1, 7);
+            map.placeStone(point, Stone.StoneType.STONE_1, 7);
         }
 
         /* Let the forester rest */

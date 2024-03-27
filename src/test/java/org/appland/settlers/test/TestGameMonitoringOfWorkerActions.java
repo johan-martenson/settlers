@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
@@ -19,9 +18,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
@@ -42,8 +39,8 @@ import java.util.List;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.*;
@@ -224,7 +221,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -314,7 +311,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
@@ -417,7 +414,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, StoneType.STONE_1, 7);
+        Stone stone = map.placeStone(point2, Stone.StoneType.STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -509,7 +506,7 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Place stone */
         Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, StoneType.STONE_1, 7);
+        Stone stone = map.placeStone(point2, Stone.StoneType.STONE_1, 7);
 
         /* Construct the quarry */
         constructHouse(quarry);
@@ -1095,7 +1092,7 @@ public class TestGameMonitoringOfWorkerActions {
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
+        Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
         /* Finish construction of the farm */
         Utils.constructHouse(farm);
@@ -1182,7 +1179,7 @@ public class TestGameMonitoringOfWorkerActions {
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
         /* Place crop */
-        Crop crop = map.placeCrop(point3.upRight().upRight(), CropType.TYPE_1);
+        Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
         /* Finish construction of the farm */
         Utils.constructHouse(farm);

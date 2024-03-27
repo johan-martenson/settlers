@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
@@ -14,9 +15,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -390,7 +389,7 @@ public class TestConstruction {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place tree on the mountain */
-        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that it's not possible to place a mine on the tree */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -420,7 +419,7 @@ public class TestConstruction {
         Utils.surroundPointWithMinableMountain(point1, map);
 
         /* Place a stone on the mountain */
-        map.placeStone(point1, StoneType.STONE_1, 10);
+        map.placeStone(point1, Stone.StoneType.STONE_1, 10);
 
         /* Verify that it's not possible to place a mine on the stone */
         assertFalse(map.isAvailableMinePoint(player0, point1));

@@ -119,4 +119,11 @@ public class Tree {
         CHERRY,
         FIR
     }
+
+    public enum TreeSize {
+        NEWLY_PLANTED,
+        SMALL,
+        MEDIUM,
+        FULL_GROWN
+    }
 }

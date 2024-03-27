@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Crop;
@@ -16,10 +15,8 @@ import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
@@ -261,7 +258,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -303,7 +300,7 @@ public class TestMonitoringOfAvailableConstruction {
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -336,7 +333,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -387,7 +384,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place tree */
         Point point1 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         map.stepTime();
 
@@ -2080,7 +2077,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         Point point1 = new Point(14, 10);
 
-        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
+        Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
         assertTrue(player0.getDiscoveredLand().contains(point1));
 
@@ -2125,7 +2122,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         Point point1 = new Point(14, 10);
 
-        Crop crop = map.placeCrop(point1, CropType.TYPE_1);
+        Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
         map.stepTime();
 
@@ -2683,7 +2680,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 6; i++) {
@@ -2752,7 +2749,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 6; i++) {
@@ -2828,9 +2825,9 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(12, 4);
         Point point3 = new Point(13, 3);
         Point point4 = new Point(11, 3);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
-        Stone stone1 = map.placeStone(point3, StoneType.STONE_1, 7);
-        Stone stone2 = map.placeStone(point4, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        Stone stone1 = map.placeStone(point3, Stone.StoneType.STONE_1, 7);
+        Stone stone2 = map.placeStone(point4, Stone.StoneType.STONE_1, 7);
 
         /* Let the stonemason remove the final part of the stone and verify that an event is sent */
         Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);

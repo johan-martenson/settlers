@@ -2,8 +2,8 @@ package org.appland.settlers.assets.gamefiles;
 
 import org.appland.settlers.assets.WorkerDetails;
 
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 
 
 /**

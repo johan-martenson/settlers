@@ -2,7 +2,6 @@ package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Bob;
-import org.appland.settlers.model.BodyType;
 import org.appland.settlers.assets.CompassDirection;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
@@ -12,6 +11,7 @@ import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.WorkerAction;
+import org.appland.settlers.model.actors.Courier;
 import org.json.simple.JSONObject;
 
 import java.awt.Point;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.COLUMN;
 import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 
@@ -345,7 +345,7 @@ public class WorkerImageCollection {
         commonShadowImages.put(compassDirection, images);
     }
 
-    public void readCargoImagesFromBob(Material material, BodyType bodyType, int bobId, Bob jobsBob) {
+    public void readCargoImagesFromBob(Material material, Courier.BodyType bodyType, int bobId, Bob jobsBob) {
         int fatOffset = 0;
 
         if (bodyType == FAT) {
@@ -369,7 +369,7 @@ public class WorkerImageCollection {
         }
     }
 
-    public void readHeadImagesWithoutCargoFromBob(BodyType bodyType, int bobId, Bob jobsBob) {
+    public void readHeadImagesWithoutCargoFromBob(Courier.BodyType bodyType, int bobId, Bob jobsBob) {
         int fatOffset = 0;
 
         if (bodyType == FAT) {
@@ -444,7 +444,7 @@ public class WorkerImageCollection {
         }
     }
 
-    public void readBodyImagesFromBob(BodyType bodyType, Bob carrierBob) {
+    public void readBodyImagesFromBob(Courier.BodyType bodyType, Bob carrierBob) {
         for (CompassDirection compassDirection : CompassDirection.values()) {
 
             List<Bitmap> bodyImagesForDirection = new ArrayList<>();

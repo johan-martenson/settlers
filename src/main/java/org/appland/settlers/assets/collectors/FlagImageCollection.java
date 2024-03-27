@@ -5,7 +5,7 @@ import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
-import org.appland.settlers.model.FlagType;
+import org.appland.settlers.model.Flag;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FlagImageCollection {
-    private final Map<Nation, Map<FlagType, List<Bitmap>>> flagMap;
-    private final Map<Nation, Map<FlagType, List<Bitmap>>> flagShadowMap;
+    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagMap;
+    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagShadowMap;
 
     public FlagImageCollection() {
         flagMap = new EnumMap<>(Nation.class);
@@ -28,10 +28,10 @@ public class FlagImageCollection {
 
         for (Nation nation : Nation.values()) {
 
-            flagMap.put(nation, new EnumMap<>(FlagType.class));
-            flagShadowMap.put(nation, new EnumMap<>(FlagType.class));
+            flagMap.put(nation, new EnumMap<>(Flag.FlagType.class));
+            flagShadowMap.put(nation, new EnumMap<>(Flag.FlagType.class));
 
-            for (FlagType flagType : FlagType.values()) {
+            for (Flag.FlagType flagType : Flag.FlagType.values()) {
                 flagMap.get(nation).put(flagType, new ArrayList<>());
                 flagShadowMap.get(nation).put(flagType, new ArrayList<>());
             }
@@ -50,7 +50,7 @@ public class FlagImageCollection {
 
             jsonImageAtlas.put(nation.name().toUpperCase(), jsonNationInfo);
 
-            Arrays.stream(FlagType.values()).forEach(flagType -> {
+            Arrays.stream(Flag.FlagType.values()).forEach(flagType -> {
                 JSONObject jsonFlagType = new JSONObject();
 
                 jsonNationInfo.put(flagType.name().toUpperCase(), jsonFlagType);
@@ -76,11 +76,11 @@ public class FlagImageCollection {
         Files.writeString(filePath, jsonImageAtlas.toJSONString());
     }
 
-    public void addImagesForFlag(Nation nation, FlagType flagType, List<Bitmap> images) {
+    public void addImagesForFlag(Nation nation, Flag.FlagType flagType, List<Bitmap> images) {
         this.flagMap.get(nation).get(flagType).addAll(images);
     }
 
-    public void addImagesForFlagShadow(Nation nation, FlagType flagType, List<Bitmap> images) {
+    public void addImagesForFlagShadow(Nation nation, Flag.FlagType flagType, List<Bitmap> images) {
         this.flagShadowMap.get(nation).get(flagType).addAll(images);
     }
 }

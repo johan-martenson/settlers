@@ -20,7 +20,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Ignore;
@@ -449,7 +448,7 @@ public class TestMisc {
 
         /* Place a tree that the woodcutter can cut down */
         Point point2 = new Point(14, 12);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();

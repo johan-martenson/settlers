@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.WildAnimal;
@@ -30,8 +29,8 @@ import java.util.Set;
 import static org.appland.settlers.model.BorderCheck.CAN_PLACE_OUTSIDE_BORDER;
 import static org.appland.settlers.model.BorderCheck.MUST_PLACE_INSIDE_BORDER;
 import static org.appland.settlers.model.DetailedVegetation.*;
-import static org.appland.settlers.model.FlagType.MAIN;
-import static org.appland.settlers.model.FlagType.MARINE;
+import static org.appland.settlers.model.Flag.FlagType.MAIN;
+import static org.appland.settlers.model.Flag.FlagType.MARINE;
 import static org.appland.settlers.model.GameUtils.*;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.*;
@@ -2246,7 +2245,7 @@ public class GameMap {
      * @return The placed tree
      * @throws InvalidUserActionException Thrown if the tree would be placed on a flag, road, or stone
      */
-    public Tree placeTree(Point point, Tree.TreeType treeType, TreeSize treeSize) throws InvalidUserActionException {
+    public Tree placeTree(Point point, Tree.TreeType treeType, Tree.TreeSize treeSize) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag()) {
@@ -2309,7 +2308,7 @@ public class GameMap {
      * @param amount
      * @return The placed stone
      */
-    public Stone placeStone(Point point, StoneType stoneType, int amount) {
+    public Stone placeStone(Point point, Stone.StoneType stoneType, int amount) {
         MapPoint mapPoint = getMapPoint(point);
 
         Stone stone = new Stone(point, stoneType, amount);
@@ -2329,7 +2328,7 @@ public class GameMap {
      * @return The placed crop
      * @throws InvalidUserActionException Throws exception if the crop cannot be placed
      */
-    public Crop placeCrop(Point point, CropType cropType) throws InvalidUserActionException {
+    public Crop placeCrop(Point point, Crop.CropType cropType) throws InvalidUserActionException {
         MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isUnHarvestedCrop()) {

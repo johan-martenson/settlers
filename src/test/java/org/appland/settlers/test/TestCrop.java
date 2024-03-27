@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.actors.Farmer;
@@ -55,7 +54,7 @@ public class TestCrop {
         Crop crop = map.getCropAtPoint(farmer.getPosition());
 
         /* Verify that the crop is of type 1 or type 2 */
-        assertTrue(crop.getType() == CropType.TYPE_1 || crop.getType() == CropType.TYPE_2);
+        assertTrue(crop.getType() == Crop.CropType.TYPE_1 || crop.getType() == Crop.CropType.TYPE_2);
     }
 
     @Test
@@ -86,7 +85,7 @@ public class TestCrop {
         assertTrue(farmer.isInsideBuilding());
 
         /* Wait for the farmer to plant 20 crops */
-        var crops = new HashMap<CropType, Integer>();
+        var crops = new HashMap<Crop.CropType, Integer>();
 
         for (int i = 0; i < 20; i++) {
             Utils.waitForFarmerToPlantCrop(map, farmer);
@@ -101,8 +100,8 @@ public class TestCrop {
         }
 
         /* Verify that the farmer planted both types of crops */
-        assertTrue(crops.getOrDefault(CropType.TYPE_1, 0) > 0);
-        assertTrue(crops.getOrDefault(CropType.TYPE_2, 0) > 0);
+        assertTrue(crops.getOrDefault(Crop.CropType.TYPE_1, 0) > 0);
+        assertTrue(crops.getOrDefault(Crop.CropType.TYPE_2, 0) > 0);
     }
 
     // TODO: test that the farmer plants a mix of type 1 and type 2

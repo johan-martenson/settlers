@@ -24,7 +24,7 @@ import java.util.Map;
 
 import static java.lang.String.format;
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
-import static org.appland.settlers.model.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 
 public class BobDecoder {
     private static final long NUM_BODY_IMAGES = 2 * 6 * 8;

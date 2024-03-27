@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.buildings.Building;
@@ -20,7 +21,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
@@ -1234,7 +1234,7 @@ public class TestGameMonitoringOfBuilding {
 
         /* Place stones close to the quarry */
         Point point2 = new Point(10, 6);
-        map.placeStone(point2, StoneType.STONE_1, 10);
+        map.placeStone(point2, Stone.StoneType.STONE_1, 10);
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();

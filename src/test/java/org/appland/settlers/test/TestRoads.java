@@ -5,12 +5,10 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.FlagType;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -19,10 +17,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Courier;
@@ -779,7 +775,7 @@ public class TestRoads {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(12, 8);
-        Stone stone0 = map.placeStone(point2, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point2, Stone.StoneType.STONE_1, 7);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -804,7 +800,7 @@ public class TestRoads {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(12, 8);
-        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -863,7 +859,7 @@ public class TestRoads {
 
         /* Place crop */
         Point point2 = new Point(12, 8);
-        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
+        Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -916,7 +912,7 @@ public class TestRoads {
 
         /* Place crop */
         Point point2 = new Point(12, 8);
-        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
+        Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -2710,6 +2706,6 @@ public class TestRoads {
 
         assertTrue(map.getRoad(flag0.getPosition(), flag2.getPosition()).isMainRoad());
         assertTrue(map.getRoad(flag2.getPosition(), flag1.getPosition()).isMainRoad());
-        assertEquals(flag2.getType(), FlagType.MAIN);
+        assertEquals(flag2.getType(), Flag.FlagType.MAIN);
     }
 }

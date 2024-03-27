@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
@@ -21,7 +22,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Woodcutter;
@@ -452,7 +452,7 @@ public class TestTransportation {
         Stonemason mason = new Stonemason(player0, map);
 
         /* Place a stone */
-        map.placeStone(quarry0.getFlag().getPosition().up().up(), StoneType.STONE_1, 7);
+        map.placeStone(quarry0.getFlag().getPosition().up().up(), Stone.StoneType.STONE_1, 7);
 
         worker.setPosition(start.getPosition());
 

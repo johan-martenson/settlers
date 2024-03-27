@@ -16,7 +16,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;
 
 import static org.appland.settlers.model.Material.WOOD;
@@ -52,7 +51,7 @@ public class WoodcutterWorker extends Worker {
                 continue;
             }
 
-            if (tree.getSize() != TreeSize.FULL_GROWN) {
+            if (tree.getSize() != Tree.TreeSize.FULL_GROWN) {
                 continue;
             }
 

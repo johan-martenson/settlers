@@ -4,7 +4,7 @@ import org.appland.settlers.assets.StoneAmount;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
-import org.appland.settlers.model.StoneType;
+import org.appland.settlers.model.Stone;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -15,24 +15,24 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class StonesImageCollection {
-    private final Map<StoneType, Map<StoneAmount, Bitmap>> stoneMap;
-    private final Map<StoneType, Map<StoneAmount, Bitmap>> stoneShadowMap;
+    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneMap;
+    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneShadowMap;
 
     public StonesImageCollection() {
-        stoneMap = new EnumMap<>(StoneType.class);
-        stoneShadowMap = new EnumMap<>(StoneType.class);
+        stoneMap = new EnumMap<>(Stone.StoneType.class);
+        stoneShadowMap = new EnumMap<>(Stone.StoneType.class);
 
-        for (StoneType type : StoneType.values()) {
+        for (Stone.StoneType type : Stone.StoneType.values()) {
             stoneMap.put(type, new EnumMap<>(StoneAmount.class));
             stoneShadowMap.put(type, new EnumMap<>(StoneAmount.class));
         }
     }
 
-    public void addImage(StoneType type, StoneAmount amount, Bitmap image) {
+    public void addImage(Stone.StoneType type, StoneAmount amount, Bitmap image) {
         stoneMap.get(type).put(amount, image);
     }
 
-    public void addShadowImage(StoneType type, StoneAmount amount, Bitmap image) {
+    public void addShadowImage(Stone.StoneType type, StoneAmount amount, Bitmap image) {
         stoneShadowMap.get(type).put(amount, image);
     }
 
@@ -44,7 +44,7 @@ public class StonesImageCollection {
         JSONObject jsonImageAtlas = new JSONObject();
 
         // Fill in the image atlas
-        Arrays.stream(StoneType.values()).forEach(stoneType -> {
+        Arrays.stream(Stone.StoneType.values()).forEach(stoneType -> {
             JSONObject jsonStoneType = new JSONObject();
 
             jsonImageAtlas.put(stoneType.name().toUpperCase(), jsonStoneType);

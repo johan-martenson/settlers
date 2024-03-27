@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
@@ -23,10 +22,8 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
@@ -199,12 +196,12 @@ public class Utils {
         for (int i = 0; i < 1000; i++) {
             map.stepTime();
 
-            if (tree.getSize() == TreeSize.FULL_GROWN) {
+            if (tree.getSize() == Tree.TreeSize.FULL_GROWN) {
                 break;
             }
         }
 
-        assertEquals(tree.getSize(), TreeSize.FULL_GROWN);
+        assertEquals(tree.getSize(), Tree.TreeSize.FULL_GROWN);
     }
 
     public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws InvalidUserActionException {
@@ -1056,7 +1053,7 @@ public class Utils {
 
         for (Point point: player.getLandInPoints()) {
             try {
-                player.getMap().placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                player.getMap().placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
     }
@@ -1068,7 +1065,7 @@ public class Utils {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
     }
@@ -1080,7 +1077,7 @@ public class Utils {
             }
 
             try {
-                map.placeStone(point, StoneType.STONE_1, 7);
+                map.placeStone(point, Stone.StoneType.STONE_1, 7);
             } catch (Exception e) {}
         }
     }
@@ -1092,7 +1089,7 @@ public class Utils {
             }
 
             try {
-                map.placeStone(point, StoneType.STONE_1, 7);
+                map.placeStone(point, Stone.StoneType.STONE_1, 7);
                 break;
             } catch (Exception e) {}
         }
@@ -3418,7 +3415,7 @@ public class Utils {
                     continue;
                 }
 
-                Crop crop = map.placeCrop(point, CropType.TYPE_1);
+                Crop crop = map.placeCrop(point, Crop.CropType.TYPE_1);
             }
         }
     }

@@ -26,10 +26,8 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
@@ -2360,7 +2358,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2448,7 +2446,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2524,7 +2522,7 @@ public class TestGameMonitoring {
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -2640,7 +2638,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 6);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
@@ -2712,7 +2710,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 6);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
@@ -2773,7 +2771,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 6; i++) {
@@ -2844,7 +2842,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 6; i++) {
@@ -2923,7 +2921,7 @@ public class TestGameMonitoring {
 
         /* Place stone */
         Point point3 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point3, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point3, Stone.StoneType.STONE_1, 7);
 
         /* Remove all except the last part of the stone */
         for (int i = 0; i < 9; i++) {

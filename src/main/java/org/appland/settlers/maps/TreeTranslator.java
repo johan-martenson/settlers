@@ -1,7 +1,6 @@
 package org.appland.settlers.maps;
 
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +8,7 @@ import java.util.Map;
 public class TreeTranslator {
 
     public static final Map<Integer, Tree.TreeType> DEFAULT_ID_TO_TREE_TYPE_MAP;
-    public static final Map<Integer, TreeSize> TREE_SIZE_MAP;
+    public static final Map<Integer, Tree.TreeSize> TREE_SIZE_MAP;
 
     static {
         DEFAULT_ID_TO_TREE_TYPE_MAP = new HashMap<>();
@@ -26,9 +25,9 @@ public class TreeTranslator {
 
         TREE_SIZE_MAP = new HashMap<>();
 
-        TREE_SIZE_MAP.put(0, TreeSize.NEWLY_PLANTED);
-        TREE_SIZE_MAP.put(1, TreeSize.SMALL);
-        TREE_SIZE_MAP.put(2, TreeSize.MEDIUM);
-        TREE_SIZE_MAP.put(3, TreeSize.FULL_GROWN);
+        TREE_SIZE_MAP.put(0, Tree.TreeSize.NEWLY_PLANTED);
+        TREE_SIZE_MAP.put(1, Tree.TreeSize.SMALL);
+        TREE_SIZE_MAP.put(2, Tree.TreeSize.MEDIUM);
+        TREE_SIZE_MAP.put(3, Tree.TreeSize.FULL_GROWN);
     }
 }

@@ -6,7 +6,7 @@ import org.appland.settlers.model.actors.Donkey;
 import java.util.Collections;
 import java.util.List;
 
-import static org.appland.settlers.model.FlagType.MAIN;
+import static org.appland.settlers.model.Flag.FlagType.MAIN;
 
 public class Road {
 

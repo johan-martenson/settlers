@@ -1,17 +1,17 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.model.BodyType;
+import org.appland.settlers.model.actors.Courier;
 
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 
 public class WorkerDetails {
     public static final int NUMBER_NATION_SPECIFIC_JOBS = 6;
 
     private final int id;
-    private final BodyType bodyType;
+    private final Courier.BodyType bodyType;
 
-    public WorkerDetails(BodyType bodyType, int id) {
+    public WorkerDetails(Courier.BodyType bodyType, int id) {
         this.bodyType = bodyType;
         this.id = id;
     }
@@ -60,7 +60,7 @@ public class WorkerDetails {
         return calcId;
     }
 
-    public BodyType getBodyType() {
+    public Courier.BodyType getBodyType() {
         return bodyType;
     }
 }

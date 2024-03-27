@@ -20,9 +20,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -273,7 +271,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(2, 2);
-        map.placeStone(point1, StoneType.STONE_1, 7);
+        map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -296,7 +294,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(2, 2);
-        map.placeStone(point1, StoneType.STONE_1, 7);
+        map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -319,7 +317,7 @@ public class TestPlacement {
 
         /* Plant a tree */
         Point point1 = new Point(2, 2);
-        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -342,7 +340,7 @@ public class TestPlacement {
 
         /* Plant a tree */
         Point point1 = new Point(2, 2);
-        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -1028,11 +1026,11 @@ public class TestPlacement {
 
         /* Place stone */
         Point point0 = new Point(3, 3);
-        map.placeStone(point0, StoneType.STONE_1, 7);
+        map.placeStone(point0, Stone.StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a tree on the stone */
         try {
-            map.placeTree(point0, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point0, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             fail();
         } catch (Exception e) {}
 
@@ -1056,7 +1054,7 @@ public class TestPlacement {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Verify that it's possible to place a tree on the mountain */
-        map.placeTree(point0, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point0, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         assertTrue(map.isTreeAtPoint(point0));
     }
@@ -1164,7 +1162,7 @@ public class TestPlacement {
 
         /* Place stone */
         Point point1 = new Point(3, 3);
-        map.placeStone(point1, StoneType.STONE_1, 7);
+        map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a flag on the stone */
         try {
@@ -1191,7 +1189,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(3, 3);
-        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that it's not possible to place a flag on the tree */
         try {
@@ -1217,7 +1215,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(3, 3);
-        map.placeTree(point1.downRight(), Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1.downRight(), Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that it's not possible to place a house on the tree */
         try {
@@ -1612,7 +1610,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(8, 8);
-        map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that there is no available space for a house on a tree */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -1664,7 +1662,7 @@ public class TestPlacement {
 
         /* Verify that it's not possible to place a tree on the woodcutter */
         try {
-            map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+            map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             fail();
         } catch (Exception e) {}
     }
@@ -2328,7 +2326,7 @@ public class TestPlacement {
 
         /* Place a stone */
         Point point1 = new Point(8, 8);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Verify that there are available flag points next to the mountain */
         List<Point> edgePoints = new LinkedList<>();
@@ -2469,7 +2467,7 @@ public class TestPlacement {
 
         /* Place stone */
         Point point1 = new Point(5, 5);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Verify that there are only available flags around the stone */
         assertTrue(map.isAvailableFlagPoint(player0, point1.left()));
@@ -2504,11 +2502,11 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(5, 5);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place tree */
         Point point2 = new Point(13, 5);
-        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree1 = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that the available buildings between the trees are small house, castle, small house */
         assertEquals(map.isAvailableHousePoint(player0, point1.right()), SMALL);
@@ -2533,7 +2531,7 @@ public class TestPlacement {
 
         /* Place tree */
         Point point1 = new Point(7, 15);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that only small houses are up right, down right, down left from the tree */
         assertEquals(map.isAvailableHousePoint(player0, point1.downRight()), SMALL);

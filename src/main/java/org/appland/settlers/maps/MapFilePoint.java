@@ -8,9 +8,9 @@ package org.appland.settlers.maps;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.StoneType;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
-import org.appland.settlers.model.TreeSize;
 
 import static org.appland.settlers.maps.Translator.DEFAULT_OBJECT_PROPERTY_TO_DECORATION_MAP;
 
@@ -43,9 +43,9 @@ class MapFilePoint {
     private Point gamePointPosition;
     private boolean isPossibleHarbor;
     private TreeType treeType;
-    private TreeSize treeSize;
+    private Tree.TreeSize treeSize;
     private DecorationType decorativeObject;
-    private StoneType stoneType;
+    private Stone.StoneType stoneType;
     private short stoneAmount;
     private java.awt.Point mapFilePosition;
 
@@ -143,10 +143,10 @@ class MapFilePoint {
 
                     break;
                 case GRANITE_OBJECT_TYPE:
-                    stoneType = StoneType.STONE_2;
+                    stoneType = Stone.StoneType.STONE_2;
 
                     if (variant == 0) {
-                        stoneType = StoneType.STONE_1;
+                        stoneType = Stone.StoneType.STONE_1;
                     }
 
                     stoneAmount = objectProperties;
@@ -210,7 +210,7 @@ class MapFilePoint {
         return stoneType != null;
     }
 
-    StoneType getStoneType() {
+    Stone.StoneType getStoneType() {
         return stoneType;
     }
 
@@ -266,7 +266,7 @@ class MapFilePoint {
         isPossibleHarbor = true;
     }
 
-    public TreeSize getTreeSize() {
+    public Tree.TreeSize getTreeSize() {
         return treeSize;
     }
 

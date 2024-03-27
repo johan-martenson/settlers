@@ -18,7 +18,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;
 
 import java.util.Collection;
@@ -168,7 +167,7 @@ public class Forester extends Worker {
                 if (spotIsClearForTree(getPosition())) {
                     Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(random.nextDouble() * Tree.PLANTABLE_TREES.length))];
 
-                    map.placeTree(getPosition(), treeType, TreeSize.NEWLY_PLANTED);
+                    map.placeTree(getPosition(), treeType, Tree.TreeSize.NEWLY_PLANTED);
                 }
 
                 state = State.GOING_BACK_TO_HOUSE;

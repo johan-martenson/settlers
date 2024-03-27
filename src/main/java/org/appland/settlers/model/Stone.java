@@ -60,4 +60,9 @@ public class Stone {
             default -> throw new InvalidGameLogicException("Invalid stone amount: " + amount);
         };
     }
+
+    public enum StoneType {
+        STONE_2,
+        STONE_1
+    }
 }

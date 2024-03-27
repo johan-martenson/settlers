@@ -3,7 +3,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.FlagType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.FlagType.MAIN;
-import static org.appland.settlers.model.FlagType.MARINE;
-import static org.appland.settlers.model.FlagType.NORMAL;
+import static org.appland.settlers.model.Flag.FlagType.MAIN;
+import static org.appland.settlers.model.Flag.FlagType.MARINE;
+import static org.appland.settlers.model.Flag.FlagType.NORMAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,10 +28,10 @@ public class TestFlag {
 
     @Test
     public void testFlagTypes() {
-        assertEquals(FlagType.values().length, 3);
+        assertEquals(Flag.FlagType.values().length, 3);
 
         assertEquals(NORMAL.name(), "NORMAL");
-        assertEquals(FlagType.MAIN.name(), "MAIN");
+        assertEquals(Flag.FlagType.MAIN.name(), "MAIN");
         assertEquals(MARINE.name(), "MARINE");
     }
 

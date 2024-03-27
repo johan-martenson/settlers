@@ -47,10 +47,9 @@ import org.appland.settlers.assets.resources.WaveFile;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.FlagType;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -69,14 +68,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
-import static org.appland.settlers.model.StoneType.STONE_1;
-import static org.appland.settlers.model.StoneType.STONE_2;
+import static org.appland.settlers.model.Stone.StoneType.STONE_1;
+import static org.appland.settlers.model.Stone.StoneType.STONE_2;
 import static org.appland.settlers.model.WorkerAction.*;
 
 public class Extractor {
@@ -335,44 +334,44 @@ public class Extractor {
         FlagImageCollection flagImageCollection = new FlagImageCollection();
 
         // Africans
-        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(AFRICANS, FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(AFRICANS, FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Japanese
-        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(JAPANESE, FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(JAPANESE, FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Romans
-        flagImageCollection.addImagesForFlag(ROMANS, FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(ROMANS, FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(ROMANS, FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(ROMANS, FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Vikings
-        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(VIKINGS, FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
-        flagImageCollection.addImagesForFlagShadow(VIKINGS, FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Write the image atlas to file
         flagImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
@@ -1200,29 +1199,29 @@ public class Extractor {
         /*  Extract the crops */
         CropImageCollection cropImageCollection = new CropImageCollection();
 
-        cropImageCollection.addImage(CropType.TYPE_1, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_NEWLY_PLANTED));
-        cropImageCollection.addImage(CropType.TYPE_1, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_LITTLE_GROWTH));
-        cropImageCollection.addImage(CropType.TYPE_1, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_MORE_GROWTH));
-        cropImageCollection.addImage(CropType.TYPE_1, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_FULLY_GROWN));
-        cropImageCollection.addImage(CropType.TYPE_1, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_JUST_HARVESTED));
+        cropImageCollection.addImage(Crop.CropType.TYPE_1, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_NEWLY_PLANTED));
+        cropImageCollection.addImage(Crop.CropType.TYPE_1, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_LITTLE_GROWTH));
+        cropImageCollection.addImage(Crop.CropType.TYPE_1, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_MORE_GROWTH));
+        cropImageCollection.addImage(Crop.CropType.TYPE_1, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_FULLY_GROWN));
+        cropImageCollection.addImage(Crop.CropType.TYPE_1, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_JUST_HARVESTED));
 
-        cropImageCollection.addImage(CropType.TYPE_2, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_NEWLY_PLANTED));
-        cropImageCollection.addImage(CropType.TYPE_2, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_LITTLE_GROWTH));
-        cropImageCollection.addImage(CropType.TYPE_2, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_MORE_GROWTH));
-        cropImageCollection.addImage(CropType.TYPE_2, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_FULLY_GROWN));
-        cropImageCollection.addImage(CropType.TYPE_2, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_JUST_HARVESTED));
+        cropImageCollection.addImage(Crop.CropType.TYPE_2, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_NEWLY_PLANTED));
+        cropImageCollection.addImage(Crop.CropType.TYPE_2, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_LITTLE_GROWTH));
+        cropImageCollection.addImage(Crop.CropType.TYPE_2, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_MORE_GROWTH));
+        cropImageCollection.addImage(Crop.CropType.TYPE_2, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_FULLY_GROWN));
+        cropImageCollection.addImage(Crop.CropType.TYPE_2, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_JUST_HARVESTED));
 
-        cropImageCollection.addShadowImage(CropType.TYPE_1, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_NEWLY_PLANTED_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_1, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_LITTLE_GROWTH_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_1, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_MORE_GROWTH_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_1, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_FULLY_GROWN_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_1, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_JUST_HARVESTED_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_1, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_NEWLY_PLANTED_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_1, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_LITTLE_GROWTH_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_1, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_MORE_GROWTH_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_1, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_FULLY_GROWN_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_1, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_1_JUST_HARVESTED_SHADOW));
 
-        cropImageCollection.addShadowImage(CropType.TYPE_2, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_NEWLY_PLANTED_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_2, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_LITTLE_GROWTH_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_2, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_MORE_GROWTH_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_2, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_FULLY_GROWN_SHADOW));
-        cropImageCollection.addShadowImage(CropType.TYPE_2, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_JUST_HARVESTED_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_2, Crop.GrowthState.JUST_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_NEWLY_PLANTED_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_2, Crop.GrowthState.SMALL, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_LITTLE_GROWTH_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_2, Crop.GrowthState.ALMOST_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_MORE_GROWTH_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_2, Crop.GrowthState.FULL_GROWN, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_FULLY_GROWN_SHADOW));
+        cropImageCollection.addShadowImage(Crop.CropType.TYPE_2, Crop.GrowthState.HARVESTED, getImageAt(mapBobsLst, MapBobsLst.CROP_TYPE_2_JUST_HARVESTED_SHADOW));
 
         cropImageCollection.writeImageAtlas(toDir, defaultPalette);
 
@@ -1347,13 +1346,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.CYPRESS, getImagesAt(mapBobsLst, MapBobsLst.CYPRESS_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.CYPRESS, getImagesAt(mapBobsLst, MapBobsLst.CYPRESS_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CYPRESS, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_SMALLEST));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_SMALL));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_MEDIUM));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_SMALLEST));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_SMALL));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CYPRESS, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CYPRESS_SHADOW_MEDIUM));
 
         /* Extract animation for tree type 2 in wind -- birch, for sure */
         treeImageCollection.addImagesForTree(Tree.TreeType.BIRCH, getImagesAt(mapBobsLst, MapBobsLst.BIRCH_TREE_ANIMATION, 8));
@@ -1362,13 +1361,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.BIRCH, getImagesAt(mapBobsLst, MapBobsLst.BIRCH_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.BIRCH, getImagesAt(mapBobsLst, MapBobsLst.BIRCH_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.BIRCH_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.BIRCH, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.BIRCH_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_SMALLEST));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_SMALL));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_MEDIUM));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_SMALLEST));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_SMALL));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.BIRCH, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.BIRCH_SHADOW_MEDIUM));
 
         /* Extract animation for tree type 3 in wind -- oak */
         treeImageCollection.addImagesForTree(Tree.TreeType.OAK, getImagesAt(mapBobsLst, MapBobsLst.OAK_TREE_ANIMATION, 8));
@@ -1377,13 +1376,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.OAK, getImagesAt(mapBobsLst, MapBobsLst.OAK_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.OAK, getImagesAt(mapBobsLst, MapBobsLst.OAK_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.OAK_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.OAK_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.OAK_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.OAK_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.OAK_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.OAK, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.OAK_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_SMALLEST));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_SMALL));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_MEDIUM));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_SMALLEST));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_SMALL));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.OAK, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.OAK_SHADOW_MEDIUM));
 
         /* Extract animation for tree type 4 in wind -- short palm */
         treeImageCollection.addImagesForTree(Tree.TreeType.PALM_1, getImagesAt(mapBobsLst, MapBobsLst.PALM_1_TREE_ANIMATION, 8));
@@ -1392,13 +1391,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.PALM_1, getImagesAt(mapBobsLst, MapBobsLst.PALM_1_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.PALM_1, getImagesAt(mapBobsLst, MapBobsLst.PALM_1_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_1_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_1, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_1_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_SMALLEST));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_SMALL));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_SMALLEST));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_SMALL));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_1, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_1_SHADOW_ALMOST_GROWN));
 
         /* Extract animation for tree type 5 in wind -- tall palm */
         treeImageCollection.addImagesForTree(Tree.TreeType.PALM_2, getImagesAt(mapBobsLst, MapBobsLst.PALM_2_TREE_ANIMATION, 8));
@@ -1407,13 +1406,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.PALM_2, getImagesAt(mapBobsLst, MapBobsLst.PALM_2_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.PALM_2, getImagesAt(mapBobsLst, MapBobsLst.PALM_2_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_2_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PALM_2, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_2_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_SMALLEST));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_SMALL));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_SMALLEST));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_SMALL));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PALM_2, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PALM_2_SHADOW_ALMOST_GROWN));
 
         /* Extract animation for tree type 6 in wind -- fat palm - pineapple */
         treeImageCollection.addImagesForTree(Tree.TreeType.PINE_APPLE, getImagesAt(mapBobsLst, MapBobsLst.PINE_APPLE_ANIMATION, 8));
@@ -1426,13 +1425,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.PINE, getImagesAt(mapBobsLst, MapBobsLst.PINE_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.PINE, getImagesAt(mapBobsLst, MapBobsLst.PINE_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PINE_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.PINE, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PINE_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALLEST_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALL_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PINE_ALMOST_GROWN_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALLEST_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.PINE_SMALL_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.PINE, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.PINE_ALMOST_GROWN_SHADOW));
 
         /* Extract animation for tree type 8 in wind -- cherry */
         treeImageCollection.addImagesForTree(Tree.TreeType.CHERRY, getImagesAt(mapBobsLst, MapBobsLst.CHERRY_TREE_ANIMATION, 8));
@@ -1441,13 +1440,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.CHERRY, getImagesAt(mapBobsLst, MapBobsLst.CHERRY_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.CHERRY, getImagesAt(mapBobsLst, MapBobsLst.CHERRY_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CHERRY_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.CHERRY, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CHERRY_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALLEST_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALL_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CHERRY_ALMOST_GROWN_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALLEST_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.CHERRY_SMALL_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.CHERRY, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.CHERRY_ALMOST_GROWN_SHADOW));
 
         /* Extract animation for tree type 9 in wind -- fir (?) */
         treeImageCollection.addImagesForTree(Tree.TreeType.FIR, getImagesAt(mapBobsLst, MapBobsLst.FIR_TREE_ANIMATION, 8));
@@ -1456,13 +1455,13 @@ public class Extractor {
         treeImageCollection.addImagesForTreeFalling(Tree.TreeType.FIR, getImagesAt(mapBobsLst, MapBobsLst.FIR_FALLING, 4));
         treeImageCollection.addImagesForTreeFallingShadow(Tree.TreeType.FIR, getImagesAt(mapBobsLst, MapBobsLst.FIR_FALLING_SHADOW, 4));
 
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALLEST));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALL));
-        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.FIR_ALMOST_GROWN));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALLEST));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALL));
+        treeImageCollection.addImageForGrowingTree(Tree.TreeType.FIR, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.FIR_ALMOST_GROWN));
 
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALLEST_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALL_SHADOW));
-        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.FIR_ALMOST_GROWN_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, Tree.TreeSize.NEWLY_PLANTED, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALLEST_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, Tree.TreeSize.SMALL, getImageAt(mapBobsLst, MapBobsLst.FIR_SMALL_SHADOW));
+        treeImageCollection.addImageForGrowingTreeShadow(Tree.TreeType.FIR, Tree.TreeSize.MEDIUM, getImageAt(mapBobsLst, MapBobsLst.FIR_ALMOST_GROWN_SHADOW));
 
         treeImageCollection.writeImageAtlas(natureDir, defaultPalette);
 

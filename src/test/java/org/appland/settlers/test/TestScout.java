@@ -7,6 +7,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -14,7 +15,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
@@ -1092,11 +1092,11 @@ public class TestScout {
         Point point5 = new Point(23, 7);
         Point point6 = new Point(23, 3);
 
-        map.placeStone(point2, StoneType.STONE_1, 7);
-        map.placeStone(point3, StoneType.STONE_1, 7);
-        map.placeStone(point4, StoneType.STONE_1, 7);
-        map.placeStone(point5, StoneType.STONE_1, 7);
-        map.placeStone(point6, StoneType.STONE_1, 7);
+        map.placeStone(point2, Stone.StoneType.STONE_1, 7);
+        map.placeStone(point3, Stone.StoneType.STONE_1, 7);
+        map.placeStone(point4, Stone.StoneType.STONE_1, 7);
+        map.placeStone(point5, Stone.StoneType.STONE_1, 7);
+        map.placeStone(point6, Stone.StoneType.STONE_1, 7);
 
         /* Call scout from the flag */
         flag.callScout();

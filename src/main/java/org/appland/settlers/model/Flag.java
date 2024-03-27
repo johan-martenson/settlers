@@ -172,4 +172,7 @@ public class Flag implements EndPoint {
         this.flagType = flagType;
     }
 
+    public enum FlagType {
+        NORMAL, MAIN, MARINE
+    }
 }

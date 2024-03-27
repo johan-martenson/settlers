@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.buildings.CoalMine;
@@ -17,7 +18,6 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
@@ -1904,7 +1904,7 @@ public class TestHunterHut {
                 continue;
             }
 
-            map.placeStone(point, StoneType.STONE_1, 7);
+            map.placeStone(point, Stone.StoneType.STONE_1, 7);
         }
 
         /* Verify that the productivity goes down when the hunter can't reach any wild animals */
@@ -1981,7 +1981,7 @@ public class TestHunterHut {
 
         /* Put a wild animal on the other side of the water */
         Point point8 = new Point(15, 9);
-        map.placeStone(point8, StoneType.STONE_1, 7);
+        map.placeStone(point8, Stone.StoneType.STONE_1, 7);
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);

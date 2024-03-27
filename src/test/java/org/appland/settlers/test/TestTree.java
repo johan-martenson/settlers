@@ -9,10 +9,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
@@ -98,7 +96,7 @@ public class TestTree {
 
         /* Place tree */
         Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0, TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that the tree has the default tree type */
         assertEquals(tree0.getTreeType(), TreeType.PINE);
@@ -115,7 +113,7 @@ public class TestTree {
 
         /* Place tree */
         Point point0 = new Point(10, 10);
-        Tree tree0 = map.placeTree(point0, TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point0, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that the tree type can be set */
         tree0.setTreeType(TreeType.BIRCH);
@@ -203,7 +201,7 @@ public class TestTree {
 
         /* Place stone */
         Point point1 = new Point(6, 12);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Verify that it's not possible to place a dead tree on a stone */
         assertEquals(map.getDeadTrees().size(), 0);
@@ -264,7 +262,7 @@ public class TestTree {
 
         /* Place tree */
         Point point1 = new Point(6, 12);
-        Tree tree0 = map.placeTree(point1, TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Verify that it's not possible to place a dead tree on a tree */
         assertEquals(map.getDeadTrees().size(), 0);

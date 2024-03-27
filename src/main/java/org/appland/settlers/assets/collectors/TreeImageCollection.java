@@ -5,7 +5,6 @@ import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.NormalizedImageList;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -20,11 +19,11 @@ import java.util.Map;
 public class TreeImageCollection {
     private final String name;
     private final Map<Tree.TreeType, List<Bitmap>> grownTreeMap;
-    private final Map<Tree.TreeType, Map<TreeSize, Bitmap>> growingTreeMap;
+    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeMap;
     private final Map<Tree.TreeType, List<Bitmap>> treeFalling;
     private final Map<Tree.TreeType, List<Bitmap>> grownTreeShadowMap;
     private final Map<Tree.TreeType, List<Bitmap>> treeFallingShadow;
-    private final Map<Tree.TreeType, Map<TreeSize, Bitmap>> growingTreeShadowMap;
+    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeShadowMap;
 
     public TreeImageCollection(String name) {
         this.name = name;
@@ -108,8 +107,8 @@ public class TreeImageCollection {
                 jsonGrowingTreeShadows.put(treeType.name().toUpperCase(), jsonGrowingTreeShadowType);
 
                 // Growing tree
-                for (Map.Entry<TreeSize, Bitmap> entry : growingTreeMap.get(treeType).entrySet()) {
-                    TreeSize treeSize = entry.getKey();
+                for (Map.Entry<Tree.TreeSize, Bitmap> entry : growingTreeMap.get(treeType).entrySet()) {
+                    Tree.TreeSize treeSize = entry.getKey();
                     Bitmap image = entry.getValue();
 
                     imageBoard.placeImage(image, x, y);
@@ -123,8 +122,8 @@ public class TreeImageCollection {
                 }
 
                 // Growing tree's shadow
-                for (Map.Entry<TreeSize, Bitmap> entry : growingTreeShadowMap.get(treeType).entrySet()) {
-                    TreeSize treeSize = entry.getKey();
+                for (Map.Entry<Tree.TreeSize, Bitmap> entry : growingTreeShadowMap.get(treeType).entrySet()) {
+                    Tree.TreeSize treeSize = entry.getKey();
                     Bitmap shadowImage = entry.getValue();
 
                     imageBoard.placeImage(shadowImage, x, y);
@@ -184,9 +183,9 @@ public class TreeImageCollection {
         this.grownTreeMap.get(treeType).addAll(imagesFromResourceLocations);
     }
 
-    public void addImageForGrowingTree(Tree.TreeType type, TreeSize treeSize, Bitmap image) {
+    public void addImageForGrowingTree(Tree.TreeType type, Tree.TreeSize treeSize, Bitmap image) {
         if (!growingTreeMap.containsKey(type)) {
-            growingTreeMap.put(type, new EnumMap<>(TreeSize.class));
+            growingTreeMap.put(type, new EnumMap<>(Tree.TreeSize.class));
         }
 
         growingTreeMap.get(type).put(treeSize, image);
@@ -204,9 +203,9 @@ public class TreeImageCollection {
         treeFallingShadow.put(type, images);
     }
 
-    public void addImageForGrowingTreeShadow(Tree.TreeType treeType, TreeSize treeSize, Bitmap image) {
+    public void addImageForGrowingTreeShadow(Tree.TreeType treeType, Tree.TreeSize treeSize, Bitmap image) {
         if (!growingTreeShadowMap.containsKey(treeType)) {
-            growingTreeShadowMap.put(treeType, new EnumMap<>(TreeSize.class));
+            growingTreeShadowMap.put(treeType, new EnumMap<>(Tree.TreeSize.class));
         }
 
         growingTreeShadowMap.get(treeType).put(treeSize, image);

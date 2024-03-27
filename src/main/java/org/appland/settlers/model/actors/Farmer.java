@@ -6,7 +6,6 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
@@ -138,10 +137,10 @@ public class Farmer extends Worker {
         } else if (state == PLANTING) {
             if (countdown.hasReachedZero()) {
 
-                var cropType = CropType.TYPE_1;
+                var cropType = Crop.CropType.TYPE_1;
 
                 if (random.nextInt(10) % 2 == 0) {
-                    cropType = CropType.TYPE_2;
+                    cropType = Crop.CropType.TYPE_2;
                 }
 
                 map.placeCrop(getPosition(), cropType);

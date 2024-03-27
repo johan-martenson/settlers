@@ -10,7 +10,6 @@ import org.appland.settlers.model.statistics.ProductionDataSeries;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
@@ -238,7 +237,7 @@ public class TestProductionStatistics {
 
         /* Place a tree close to the woodcutter */
         Point point05 = new Point(12, 4);
-        Tree tree01 = map.placeTree(point05, Tree.TreeType.PINE, TreeSize.NEWLY_PLANTED);
+        Tree tree01 = map.placeTree(point05, Tree.TreeType.PINE, Tree.TreeSize.NEWLY_PLANTED);
 
         /* Verify that a collected tree is part of the collected production statistics */
         int nrDataPoints = statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().size();

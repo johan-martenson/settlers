@@ -1,7 +1,6 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.model.Crop;
@@ -15,20 +14,20 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class CropImageCollection {
-    private final Map<CropType, Map<Crop.GrowthState, Bitmap>> cropMap;
-    private final Map<CropType, Map<Crop.GrowthState, Bitmap>> cropShadowMap;
+    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropMap;
+    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropShadowMap;
 
     public CropImageCollection() {
-        cropMap = new EnumMap<>(CropType.class);
-        cropShadowMap = new EnumMap<>(CropType.class);
+        cropMap = new EnumMap<>(Crop.CropType.class);
+        cropShadowMap = new EnumMap<>(Crop.CropType.class);
 
-        for (CropType type : CropType.values()) {
+        for (Crop.CropType type : Crop.CropType.values()) {
             cropMap.put(type, new EnumMap<>(Crop.GrowthState.class));
             cropShadowMap.put(type, new EnumMap<>(Crop.GrowthState.class));
         }
     }
 
-    public void addImage(CropType type, Crop.GrowthState growth, Bitmap image) {
+    public void addImage(Crop.CropType type, Crop.GrowthState growth, Bitmap image) {
         cropMap.get(type).put(growth, image);
     }
 
@@ -44,7 +43,7 @@ public class CropImageCollection {
         int maxHeightRow = 0;
 
         // Make two rows, one for each crop type
-        for (Map.Entry<CropType, Map<Crop.GrowthState, Bitmap>> entryForCropType : this.cropMap.entrySet()) {
+        for (Map.Entry<Crop.CropType, Map<Crop.GrowthState, Bitmap>> entryForCropType : this.cropMap.entrySet()) {
 
             JSONObject jsonCropType = new JSONObject();
 
@@ -95,7 +94,7 @@ public class CropImageCollection {
         Files.writeString(Paths.get(toDir, "image-atlas-crops.json"), jsonImageAtlas.toJSONString());
     }
 
-    public void addShadowImage(CropType cropType, Crop.GrowthState growthState, Bitmap image) {
+    public void addShadowImage(Crop.CropType cropType, Crop.GrowthState growthState, Bitmap image) {
         cropShadowMap.get(cropType).put(growthState, image);
     }
 }

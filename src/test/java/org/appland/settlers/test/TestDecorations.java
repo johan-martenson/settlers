@@ -33,7 +33,7 @@ import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.StoneType.STONE_1;
+import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.junit.Assert.*;
 
 public class TestDecorations {

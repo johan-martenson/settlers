@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.BodyType;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.Courier;
@@ -35,8 +34,8 @@ import java.util.Map;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANK;
@@ -1398,7 +1397,7 @@ public class TestCourier {
         Flag flag0 = map.placeFlag(player0, point1);
 
         /* Verify that couriers can be both fat and thin */
-        Map<BodyType, Integer> courierBodyTypes = new EnumMap<>(BodyType.class);
+        Map<Courier.BodyType, Integer> courierBodyTypes = new EnumMap<>(Courier.BodyType.class);
 
         for (int i = 0; i < 20; i++) {
 

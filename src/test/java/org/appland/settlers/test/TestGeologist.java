@@ -7,6 +7,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.actors.Geologist;
@@ -16,10 +17,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
@@ -280,7 +279,7 @@ public class TestGeologist {
         /* Fill surrounding area with trees */
         for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -333,7 +332,7 @@ public class TestGeologist {
         /* Fill surrounding area with stones */
         for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeStone(point, StoneType.STONE_1, 7);
+                map.placeStone(point, Stone.StoneType.STONE_1, 7);
             } catch (Exception e) {}
         }
 
@@ -984,7 +983,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -1050,7 +1049,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 
@@ -1117,7 +1116,7 @@ public class TestGeologist {
             }
 
             try {
-                map.placeTree(point, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+                map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
             } catch (Exception e) {}
         }
 

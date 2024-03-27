@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import org.appland.settlers.assets.CropType;
-
 import static org.appland.settlers.model.Crop.GrowthState.*;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -90,5 +88,9 @@ public class Crop {
 
     public CropType getType() {
         return type;
+    }
+
+    public enum CropType {
+        TYPE_2, TYPE_1
     }
 }

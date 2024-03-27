@@ -5,7 +5,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -697,7 +696,7 @@ public class MapLoader {
             /* Place trees */
             if (mapFilePoint.hasTree()) {
                 Tree.TreeType treeType = mapFilePoint.getTreeType();
-                TreeSize treeSize = mapFilePoint.getTreeSize();
+                Tree.TreeSize treeSize = mapFilePoint.getTreeSize();
 
                 gameMap.placeTree(point, treeType, treeSize);
             }

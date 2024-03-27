@@ -6,6 +6,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
@@ -19,7 +20,6 @@ import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
@@ -5369,7 +5369,7 @@ public class TestAttack {
 
         /* Place woodcutter */
         var point5 = point4.downRight().right();
-        var stone = map.placeStone(point5, StoneType.STONE_1, 10);
+        var stone = map.placeStone(point5, Stone.StoneType.STONE_1, 10);
 
         /* Set amount of defense from surrounding buildings for player 1 */
         player1.setDefenseFromSurroundingBuildings(10);
@@ -5623,7 +5623,7 @@ public class TestAttack {
 
         /* Place stone */
         var point5 = point2.downRight().right();
-        var stone = map.placeStone(point5, StoneType.STONE_1, 10);
+        var stone = map.placeStone(point5, Stone.StoneType.STONE_1, 10);
 
         /* Set amount of defense from surrounding buildings for player 1 */
         player1.setDefenseFromSurroundingBuildings(10);

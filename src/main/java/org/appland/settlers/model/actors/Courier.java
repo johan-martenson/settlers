@@ -1,6 +1,5 @@
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.BodyType;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
@@ -24,8 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static org.appland.settlers.model.BodyType.FAT;
-import static org.appland.settlers.model.BodyType.THIN;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.States.*;
 
@@ -700,5 +699,10 @@ public class Courier extends Worker {
         setTarget(building.getPosition());
 
         state = RETURNING_TO_STORAGE;
+    }
+
+    public enum BodyType {
+        THIN,
+        FAT
     }
 }

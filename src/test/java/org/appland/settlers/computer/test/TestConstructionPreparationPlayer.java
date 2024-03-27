@@ -16,7 +16,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
@@ -191,7 +190,7 @@ public class TestConstructionPreparationPlayer {
 
         /* Place stone */
         Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -226,7 +225,7 @@ public class TestConstructionPreparationPlayer {
 
         /* Place stone */
         Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -264,7 +263,7 @@ public class TestConstructionPreparationPlayer {
 
         /* Place stone */
         Point point1 = new Point(16, 10);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -344,7 +343,7 @@ public class TestConstructionPreparationPlayer {
 
         /* Place stone */
         Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);

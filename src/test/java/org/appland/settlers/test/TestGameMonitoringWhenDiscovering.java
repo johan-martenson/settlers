@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.assets.CropType;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.BorderChange;
@@ -20,9 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -70,7 +67,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -118,7 +115,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a tree to discover */
         Point point1 = new Point(33, 5);
-        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, TreeSize.FULL_GROWN);
+        Tree tree0 = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -171,7 +168,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a stone to discover */
         Point point1 = new Point(33, 5);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -219,7 +216,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a stone to discover */
         Point point1 = new Point(33, 5);
-        Stone stone0 = map.placeStone(point1, StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
         /* Place lookout tower */
         Point point2 = new Point(19, 5);
@@ -949,7 +946,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a crop for player 0 to discover */
         Point point2 = new Point(33, 5);
-        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
+        Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
         /* Place lookout tower */
         Point point3 = new Point(19, 5);
@@ -1003,7 +1000,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         /* Place a crop for player 0 to discover */
         Point point2 = new Point(33, 5);
-        Crop crop0 = map.placeCrop(point2, CropType.TYPE_1);
+        Crop crop0 = map.placeCrop(point2, Crop.CropType.TYPE_1);
 
         /* Place lookout tower */
         Point point3 = new Point(19, 5);
