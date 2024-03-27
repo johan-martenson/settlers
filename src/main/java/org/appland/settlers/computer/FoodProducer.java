@@ -1,17 +1,17 @@
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.Bakery;
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Farm;
-import org.appland.settlers.model.Fishery;
+import org.appland.settlers.model.buildings.Bakery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.HunterHut;
-import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.HunterHut;
+import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Well;
+import org.appland.settlers.model.buildings.Well;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,16 +5,16 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.CoalMine;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.actors.Geologist;
-import org.appland.settlers.model.GoldMine;
-import org.appland.settlers.model.GraniteMine;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.IronMine;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.GraniteMine;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

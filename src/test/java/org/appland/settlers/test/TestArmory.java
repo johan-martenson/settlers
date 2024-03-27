@@ -7,20 +7,20 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.actors.Armorer;
-import org.appland.settlers.model.Armory;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 

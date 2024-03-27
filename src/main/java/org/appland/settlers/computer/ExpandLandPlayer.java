@@ -1,11 +1,11 @@
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

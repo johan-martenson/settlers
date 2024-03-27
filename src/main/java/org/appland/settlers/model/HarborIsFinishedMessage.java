@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Harbor;
+
 public class HarborIsFinishedMessage implements Message {
 
     private final Harbor harbor;

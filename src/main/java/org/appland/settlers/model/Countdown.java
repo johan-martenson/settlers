@@ -32,7 +32,7 @@ public class Countdown {
         return count != -1;
     }
 
-    boolean isCounting() {
+    public boolean isCounting() {
         return count > 0;
     }
 

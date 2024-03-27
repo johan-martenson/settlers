@@ -4,6 +4,24 @@ import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
+import org.appland.settlers.model.buildings.Brewery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.DonkeyFarm;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.GraniteMine;
+import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.IronMine;
+import org.appland.settlers.model.buildings.IronSmelter;
+import org.appland.settlers.model.buildings.Metalworks;
+import org.appland.settlers.model.buildings.Mill;
+import org.appland.settlers.model.buildings.Mint;
+import org.appland.settlers.model.buildings.PigFarm;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -236,11 +254,11 @@ public class Player {
         return name;
     }
 
-    void removeBuilding(Building building) {
+    public void removeBuilding(Building building) {
         buildings.remove(building);
     }
 
-    void addBuilding(Building house) {
+    public void addBuilding(Building house) {
         buildings.add(house);
     }
 
@@ -703,7 +721,7 @@ public class Player {
         return messages;
     }
 
-    void reportMilitaryBuildingReady(Building building) {
+    public void reportMilitaryBuildingReady(Building building) {
         MilitaryBuildingReadyMessage message = new MilitaryBuildingReadyMessage(building);
 
         messages.add(message);
@@ -713,7 +731,7 @@ public class Player {
         }
     }
 
-    void reportMilitaryBuildingOccupied(Building building) {
+    public void reportMilitaryBuildingOccupied(Building building) {
         MilitaryBuildingOccupiedMessage message = new MilitaryBuildingOccupiedMessage(building);
 
         messages.add(message);
@@ -773,7 +791,7 @@ public class Player {
         }
     }
 
-    void reportStorageReady(Storehouse storehouse) {
+    public void reportStorageReady(Storehouse storehouse) {
         StoreHouseIsReadyMessage message = new StoreHouseIsReadyMessage(storehouse);
 
         messages.add(message);

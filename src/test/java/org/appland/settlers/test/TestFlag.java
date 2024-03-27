@@ -5,7 +5,7 @@ import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.FlagType;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

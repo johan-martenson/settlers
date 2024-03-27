@@ -1,10 +1,10 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GuardHouse;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.GuardHouse;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

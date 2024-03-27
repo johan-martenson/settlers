@@ -1,9 +1,9 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -13,7 +13,7 @@ import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Well;
+import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -2,15 +2,15 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Well;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.buildings.Well;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 

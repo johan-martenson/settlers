@@ -1,16 +1,16 @@
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.Armory;
-import org.appland.settlers.model.Brewery;
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Farm;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Brewery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.IronSmelter;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.IronSmelter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Well;
+import org.appland.settlers.model.buildings.Well;
 
 import java.util.ArrayList;
 import java.util.List;

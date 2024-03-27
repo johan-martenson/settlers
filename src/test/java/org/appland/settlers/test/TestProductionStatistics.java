@@ -2,7 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.ProductionDataPoint;
@@ -11,7 +11,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.StatisticsManager;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
 package org.appland.settlers.maps;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

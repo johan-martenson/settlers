@@ -1,6 +1,7 @@
 package org.appland.settlers.utils;
 
 import org.appland.settlers.model.*;
+import org.appland.settlers.model.buildings.Building;
 
 import java.util.List;
 

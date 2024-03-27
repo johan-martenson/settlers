@@ -7,6 +7,9 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.*;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;

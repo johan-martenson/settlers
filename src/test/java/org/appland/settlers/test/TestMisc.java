@@ -1,18 +1,18 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GuardHouse;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.GuardHouse;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
@@ -21,7 +21,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(429, 201);
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
         /* Place flag */
         Point point1 = new Point(434, 200);
@@ -70,7 +70,7 @@ public class TestMisc {
         Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag().getPosition(), point1);
 
         /* Place woodcutter by the flag */
-        Woodcutter woodcutter0 = map.placeBuilding(new org.appland.settlers.model.Woodcutter(player), flag0.getPosition().upLeft());
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player), flag0.getPosition().upLeft());
 
         /* Wait for the road to get an assigned courier */
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
@@ -120,7 +120,7 @@ public class TestMisc {
 
             /* Place headquarters */
             Point point0 = new Point(429, 201);
-            Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
             /* Place flag */
             Point point1 = new Point(434, 200);
@@ -183,7 +183,7 @@ public class TestMisc {
         Point point0 = new Point(0, 2);
 
         try {
-            Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+            Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
             fail();
         } catch (InvalidUserActionException e) {
@@ -220,7 +220,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(429, 201);
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
         /* Verify that placing a road without any points throws an invalid user action exception */
         try {
@@ -621,7 +621,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player), point0);
 
         /* Place fortress */
         Point point1 = new Point(20, 16);
@@ -1309,7 +1309,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Push out donkeys */
         headquarter.pushOutAll(DONKEY);
@@ -1331,7 +1331,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Push out courier */
         headquarter.pushOutAll(COURIER);
@@ -1353,7 +1353,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Push out private */
         headquarter.pushOutAll(PRIVATE);
@@ -1375,7 +1375,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a private first class into the headquarters */
         Utils.adjustInventoryTo(headquarter, PRIVATE_FIRST_CLASS, 1);
@@ -1400,7 +1400,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a sergeant into the headquarters */
         Utils.adjustInventoryTo(headquarter, SERGEANT, 1);
@@ -1425,7 +1425,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put an officer into the headquarters */
         Utils.adjustInventoryTo(headquarter, OFFICER, 1);
@@ -1452,7 +1452,7 @@ public class TestMisc {
 
         /* Place headquarters */
         Point point0 = new Point(68, 68);
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a general into the headquarters */
         Utils.adjustInventoryTo(headquarter, GENERAL, 1);
@@ -1530,7 +1530,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), STEPPE);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1600,7 +1600,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1670,7 +1670,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_2);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1740,7 +1740,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_1);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1812,7 +1812,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1884,7 +1884,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), WATER);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
@@ -1956,7 +1956,7 @@ public class TestMisc {
         map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_3);
 
         /* Place headquarters */
-        Headquarter headquarter = map.placeBuilding(new org.appland.settlers.model.Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));

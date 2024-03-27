@@ -1,9 +1,9 @@
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Mint;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;

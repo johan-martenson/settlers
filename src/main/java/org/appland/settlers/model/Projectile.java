@@ -5,6 +5,9 @@
  */
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+
 import java.util.Random;
 
 /**
@@ -16,8 +19,8 @@ public class Projectile {
     private static final int    SPEED     = 5;
     private static final Random RANDOM    = new Random(1);
 
-    private final Building  target;
-    private final Catapult  source;
+    private final Building target;
+    private final Catapult source;
     private final Countdown countdown;
     private final GameMap   map;
 

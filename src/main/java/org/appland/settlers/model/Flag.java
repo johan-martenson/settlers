@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -111,11 +113,11 @@ public class Flag implements EndPoint {
         geologistsCalled++;
     }
 
-    void geologistSent() {
+    public void geologistSent() {
         geologistsCalled--;
     }
 
-    boolean needsGeologist() {
+    public boolean needsGeologist() {
         return geologistsCalled > 0;
     }
 
@@ -123,11 +125,11 @@ public class Flag implements EndPoint {
         scoutsCalled++;
     }
 
-    void scoutSent() {
+    public void scoutSent() {
         scoutsCalled--;
     }
 
-    boolean needsScout() {
+    public boolean needsScout() {
         return scoutsCalled > 0;
     }
 
@@ -135,7 +137,7 @@ public class Flag implements EndPoint {
         return player;
     }
 
-    void setPlayer(Player player) {
+    public void setPlayer(Player player) {
         this.player = player;
     }
 

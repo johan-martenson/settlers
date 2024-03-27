@@ -1,19 +1,19 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.actors.Brewer;
-import org.appland.settlers.model.Brewery;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Brewery;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.DonkeyBreeder;
-import org.appland.settlers.model.DonkeyFarm;
-import org.appland.settlers.model.Farm;
-import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.buildings.DonkeyFarm;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.PigFarm;
+import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;

@@ -1,6 +1,6 @@
 package org.appland.settlers.fuzzing;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;

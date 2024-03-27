@@ -3,13 +3,13 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GoldMine;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Well;
+import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
 import java.util.ArrayList;

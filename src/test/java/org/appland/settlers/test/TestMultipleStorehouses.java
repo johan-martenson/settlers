@@ -1,13 +1,13 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storehouse;
-import org.appland.settlers.model.Well;
+import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
 import java.util.ArrayList;

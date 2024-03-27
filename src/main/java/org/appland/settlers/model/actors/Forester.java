@@ -7,7 +7,7 @@ package org.appland.settlers.model.actors;
 
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
@@ -16,7 +16,7 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
 import org.appland.settlers.model.WorkerAction;

@@ -1,14 +1,14 @@
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.BorderChangeCause;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.Harbor;
+import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;

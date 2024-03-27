@@ -1,7 +1,7 @@
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.BodyType;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.EndPoint;
@@ -14,7 +14,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.WorkerAction;
 
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+
 public class InvalidStateForProduction extends InvalidGameLogicException {
 
     /**

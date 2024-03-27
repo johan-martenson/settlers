@@ -9,11 +9,11 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Before;
 import org.junit.Test;
 

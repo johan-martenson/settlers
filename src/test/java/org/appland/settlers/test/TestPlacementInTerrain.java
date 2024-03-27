@@ -5,20 +5,20 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Fishery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GoldMine;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.HunterHut;
+import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.WildAnimal;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
 

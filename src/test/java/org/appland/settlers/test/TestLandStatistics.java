@@ -1,10 +1,10 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.LandDataPoint;
 import org.appland.settlers.model.LandStatistics;
 import org.appland.settlers.model.actors.Soldier;

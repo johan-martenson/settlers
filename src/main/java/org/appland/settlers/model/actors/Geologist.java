@@ -6,7 +6,7 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.DetailedVegetation;

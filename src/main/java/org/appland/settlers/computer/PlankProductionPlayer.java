@@ -5,14 +5,14 @@
  */
 package org.appland.settlers.computer;
 
-import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Sawmill;
+import org.appland.settlers.model.buildings.Woodcutter;
 
 import java.util.List;
 

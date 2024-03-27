@@ -6,12 +6,12 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -19,7 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorageWorker;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;

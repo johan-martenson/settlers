@@ -6,6 +6,8 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +29,7 @@ public class MapPoint {
     private final Set<Road>  connectedRoads;
     private final Set<Point> connectedFlagsAndBuildings;
 
-    private Building       building;
+    private Building building;
     private Flag           flag;
     private Tree           tree;
     private Stone          stone;

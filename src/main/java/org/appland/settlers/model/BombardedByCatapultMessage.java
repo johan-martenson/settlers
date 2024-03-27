@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+
 public class BombardedByCatapultMessage implements Message {
     private final Catapult catapult;
     private final Building hitBuilding;

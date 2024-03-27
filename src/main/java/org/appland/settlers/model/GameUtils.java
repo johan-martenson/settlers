@@ -6,6 +6,21 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
+import org.appland.settlers.model.buildings.Brewery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.DonkeyFarm;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.GraniteMine;
+import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.IronMine;
+import org.appland.settlers.model.buildings.Metalworks;
+import org.appland.settlers.model.buildings.Mill;
+import org.appland.settlers.model.buildings.Mint;
+import org.appland.settlers.model.buildings.PigFarm;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.ArrayList;
 import java.util.Arrays;

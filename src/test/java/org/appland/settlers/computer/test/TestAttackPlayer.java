@@ -7,9 +7,9 @@ package org.appland.settlers.computer.test;
 
 import org.appland.settlers.computer.AttackPlayer;
 import org.appland.settlers.computer.ComputerPlayer;
-import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;

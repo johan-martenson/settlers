@@ -5,6 +5,8 @@ import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
@@ -263,7 +265,7 @@ public class GameMap {
         }
     }
 
-    void reportBuildingConstructed(Building building) {
+    public void reportBuildingConstructed(Building building) {
         changedBuildings.add(building);
     }
 
@@ -327,7 +329,7 @@ public class GameMap {
         doRemoveRoad(road);
     }
 
-    void doRemoveRoad(Road road) {
+    public void doRemoveRoad(Road road) {
         if (road.getCourier() != null) {
             road.getCourier().returnToStorage();
         }
@@ -2680,7 +2682,7 @@ public class GameMap {
         removedWorkers.add(worker);
     }
 
-    void removeBuilding(Building building) {
+    public void removeBuilding(Building building) {
         MapPoint mapPoint = getMapPoint(building.getPosition());
 
         mapPoint.removeBuilding();
@@ -3391,15 +3393,15 @@ public class GameMap {
         removedFlags.add(flag);
     }
 
-    void reportTornDownBuilding(Building building) {
+    public void reportTornDownBuilding(Building building) {
         changedBuildings.add(building);
     }
 
-    void reportBuildingBurnedDown(Building building) {
+    public void reportBuildingBurnedDown(Building building) {
         changedBuildings.add(building);
     }
 
-    void reportBuildingRemoved(Building building) {
+    public void reportBuildingRemoved(Building building) {
         removedBuildings.add(building);
     }
 
@@ -3743,7 +3745,7 @@ public class GameMap {
         return tileBelowMap.get(point.y * width + point.x);
     }
 
-    void reportBuildingUnderConstruction(Building building) {
+    public void reportBuildingUnderConstruction(Building building) {
         changedBuildings.add(building);
     }
 

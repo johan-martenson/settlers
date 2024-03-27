@@ -1,23 +1,23 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Farm;
+import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GoldMine;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;

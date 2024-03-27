@@ -1,26 +1,26 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.CropType;
-import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.Farm;
+import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.StoneType;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.TreeSize;
-import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 

@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Storehouse;
+
 import java.util.List;
 import java.util.function.Function;
 

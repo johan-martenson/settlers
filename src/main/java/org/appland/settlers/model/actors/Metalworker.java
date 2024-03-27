@@ -1,6 +1,6 @@
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.Building;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Flag;
@@ -9,7 +9,7 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.EnumMap;
 import java.util.Map;
