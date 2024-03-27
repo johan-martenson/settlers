@@ -249,17 +249,17 @@ public abstract class Worker {
         if (isTraveling()) {
             StringBuilder stringBuffer = new StringBuilder();
             if (isExactlyAtPoint()) {
-                stringBuffer.append("Worker at " + getPosition() + " traveling to " + target);
+                stringBuffer.append("Worker at ").append(getPosition()).append(" traveling to ").append(target);
             } else {
-                stringBuffer.append("Worker latest at " + getLastPoint() + " traveling to " + target);
+                stringBuffer.append("Worker latest at ").append(getLastPoint()).append(" traveling to ").append(target);
             }
 
             if (targetBuilding != null) {
-                stringBuffer.append(" for " + targetBuilding);
+                stringBuffer.append(" for ").append(targetBuilding);
             }
 
             if (carriedCargo != null) {
-                stringBuffer.append(" carrying " + carriedCargo);
+                stringBuffer.append(" carrying ").append(carriedCargo);
             }
 
             return stringBuffer.toString();

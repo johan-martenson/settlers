@@ -133,11 +133,11 @@ public class Soldier extends Worker {
 
     private Soldier    opponent;
     private Rank       rank;
-    public State      state;
+    private State      state;
     private int        health;
     private Building buildingToAttack;
     private Building   buildingToDefend;
-    public FightState fightState;
+    private FightState fightState;
 
     public Soldier(Player player, Rank rank, GameMap map) {
         super(player, map);

@@ -91,8 +91,6 @@ public class Shipwright extends Worker {
 
                             /* Report that it's not possible to harvest or plant */
                             productivityMeasurer.reportUnproductivity();
-
-                            return;
                         }
                     }
                 } else {

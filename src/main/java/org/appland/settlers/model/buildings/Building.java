@@ -686,7 +686,6 @@ public class Building implements EndPoint {
             case SMALL -> TIME_TO_BUILD_SMALL_HOUSE;
             case MEDIUM -> TIME_TO_BUILD_MEDIUM_HOUSE;
             case LARGE -> TIME_TO_BUILD_LARGE_HOUSE;
-            default -> 0;
         };
     }
 
