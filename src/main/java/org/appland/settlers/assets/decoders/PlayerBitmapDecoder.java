@@ -24,12 +24,14 @@ public class PlayerBitmapDecoder {
         int nx = streamReader.getInt16();
         int ny = streamReader.getInt16();
 
+        // Unknown - always 0
         long unknown1 = streamReader.getUint32();
 
         int width = streamReader.getUint16();
         int height = streamReader.getUint16();
 
-        int unknown2 = streamReader.getUint16();
+        // Palette id - always 1
+        int paletteId = streamReader.getUint16();
 
         long length = streamReader.getUint32();
 

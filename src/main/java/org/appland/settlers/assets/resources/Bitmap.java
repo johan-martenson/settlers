@@ -20,6 +20,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static org.appland.settlers.assets.TextureFormat.BGRA;
+import static org.appland.settlers.assets.TextureFormat.PALETTED;
+
 public class Bitmap {
     protected final int height;
     protected final int width;
@@ -46,13 +49,11 @@ public class Bitmap {
         this.nx = nx;
         this.ny = ny;
 
-        if (format == TextureFormat.BGRA) {
-            bytesPerPixel = 4;
-        } else if (format == TextureFormat.BGR) {
-            bytesPerPixel = 3;
-        } else {
-            bytesPerPixel = 1;
-        }
+        bytesPerPixel = switch (format) {
+            case BGRA -> 4;
+            case BGR -> 3;
+            case PALETTED, ORIGINAL -> 1;
+        };
 
         if (debug) {
             System.out.println("    ++++ Set bits per pixel to: " + bytesPerPixel);
@@ -67,39 +68,28 @@ public class Bitmap {
     }
 
     public void setPixelByColorIndex(int x, int y, short colorIndex) { // uint 16, uint 16, uint 8
+        switch (format) {
+            case PALETTED -> imageData[(y * width + x)] = (byte)(colorIndex & 0xFF);
+            case BGRA -> {
+                if (palette.isColorIndexTransparent(colorIndex)) {
+                    imageData[(y * width + x) * bytesPerPixel + 3] = 0;
+                } else {
+                    RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-        /* If format is paletted - assign the color index */
-        if (format == TextureFormat.PALETTED) {
-            imageData[(y * width + x) * bytesPerPixel] = (byte)(colorIndex & 0xFF);
-
-        /* If format is BGRA - look up the real color and assign */
-        } else if (format == TextureFormat.BGRA) {
-
-            /* Handle transparency */
-            if (palette.isColorIndexTransparent(colorIndex)) {
-
-                imageData[(y * width + x) * bytesPerPixel + 3] = 0;
-
-                /* Look up the color and assign the individual parts */
-            } else {
+                    imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
+                    imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
+                    imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
+                    imageData[(y * width + x) * bytesPerPixel + 3] = (byte) 0xFF;
+                }
+            }
+            case BGR -> {
                 RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
                 imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
                 imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
                 imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
-                imageData[(y * width + x) * bytesPerPixel + 3] = (byte) 0xFF;
             }
-
-        /*  Handle BGR */
-        } else if (format == TextureFormat.BGR) {
-
-            RGBColor colorRGB = palette.getColorForIndex(colorIndex);
-
-            imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
-            imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
-            imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
-        } else {
-            throw new RuntimeException("Cannot set pixel in format " + format);
+            case ORIGINAL -> throw new RuntimeException("Cannot set pixel in format " + format);
         }
     }
 
@@ -116,8 +106,6 @@ public class Bitmap {
     }
 
     public void writeToFile(String filename) throws IOException {
-        int samplesPerPixel = 4;
-        int[] bandOffsets = {2, 1, 0, 3}; // BGRA order
 
         if (debug) {
             System.out.println(width);
@@ -126,10 +114,40 @@ public class Bitmap {
             System.out.println(imageData.length);
         }
 
-        DataBuffer buffer = new DataBufferByte(imageData, imageData.length);
-        WritableRaster raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
+        WritableRaster raster;
+        ColorModel colorModel;
 
-        ColorModel colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+        if (format == PALETTED) {
+            int samplesPerPixel = 4;
+            int[] bandOffsets = {0, 1, 2, 3};
+
+            var rgbArray = new byte[width * height * 4];
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    var colorIndex = imageData[y * width + x] & 0xFF;
+                    var color = palette.getColorForIndex(colorIndex);
+
+                    rgbArray[(y * width + x) * 4] = color.getRed();
+                    rgbArray[(y * width + x) * 4 + 1] = color.getGreen();
+                    rgbArray[(y * width + x) * 4 + 2] = color.getBlue();
+                    rgbArray[(y * width + x) * 4 + 3] = palette.getTransparentIndex() == colorIndex ? 0 : Byte.MAX_VALUE;
+                }
+            }
+
+            DataBuffer buffer = new DataBufferByte(rgbArray, rgbArray.length);
+            raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
+            colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+        } else if (format == BGRA){
+            int samplesPerPixel = 4;
+            int[] bandOffsets = {2, 1, 0, 3};
+
+            DataBuffer buffer = new DataBufferByte(imageData, imageData.length);
+            raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
+            colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
+        } else {
+            throw new RuntimeException("Can't write file with format " + format.name());
+        }
 
         BufferedImage image = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
 
@@ -149,15 +167,19 @@ public class Bitmap {
     }
 
     public void setPixelValue(int x, int y, byte red, byte green, byte blue, byte transparency) {
-        if (format == TextureFormat.BGRA) {
-            int offset = (y * width + x) * this.bytesPerPixel;
-
-            this.imageData[offset] = blue;
-            this.imageData[offset + 1] = green;
-            this.imageData[offset + 2] = red;
-            this.imageData[offset + 3] = transparency;
-        } else {
-            throw new RuntimeException("Can only set pixel value for BGRA format. Not " + format);
+        switch (format) {
+            case BGRA -> {
+                this.imageData[(y * width + x) * 4] = blue;
+                this.imageData[(y * width + x) * 4 + 1] = green;
+                this.imageData[(y * width + x) * 4 + 2] = red;
+                this.imageData[(y * width + x) * 4 + 3] = transparency;
+            }
+            case BGR -> {
+                this.imageData[(y * width + x) * 3] = blue;
+                this.imageData[(y * width + x) * 3 + 1] = green;
+                this.imageData[(y * width + x) * 3 + 2] = red;
+            }
+            default -> throw new RuntimeException("Can't set pixel value for format: " + format);
         }
     }
 
@@ -178,55 +200,38 @@ public class Bitmap {
     }
 
     public byte getBlueAsByte(int x, int y) {
-        if (format == TextureFormat.BGRA) {
-            return imageData[(y * width + x) * 4];
-        } else if (format == TextureFormat.BGR) {
-            return imageData[(y * width + x) * 3];
-        } else if (format == TextureFormat.PALETTED) {
-            return palette.getBlueAsByte(
-                imageData[y * width + x]
-            );
-        }
-
-        throw new RuntimeException("Can't manage format " + format);
+        return switch (format) {
+            case BGRA -> imageData[(y * width + x) * 4];
+            case BGR -> imageData[(y * width + x) * 3];
+            case PALETTED -> palette.getBlueAsByte(imageData[y * width + x]);
+            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+        };
     }
 
     public byte getGreenAsByte(int x, int y) {
-        if (format == TextureFormat.BGRA) {
-            return imageData[(y * width + x) * 4 + 1];
-        } else if (format == TextureFormat.BGR) {
-            return imageData[(y * width + x) * 3 + 1];
-        } else if (format == TextureFormat.PALETTED) {
-            return palette.getGreenAsByte(
-                    imageData[y * width + x]
-            );
-        }
-
-        throw new RuntimeException("Can't manage format " + format);
+        return switch (format) {
+            case BGRA -> imageData[(y * width + x) * 4 + 1];
+            case BGR -> imageData[(y * width + x) * 3 + 1];
+            case PALETTED -> palette.getGreenAsByte(imageData[y * width + x]);
+            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+        };
     }
 
     public byte getRedAsByte(int x, int y) {
-        if (format == TextureFormat.BGRA) {
-            return imageData[(y * width + x) * 4 + 2];
-        } else if (format == TextureFormat.BGR) {
-            return imageData[(y * width + x) * 3 + 2];
-        } else if (format == TextureFormat.PALETTED) {
-            return palette.getRedAsByte(
-                    imageData[y * width + x]
-            );
-        }
-
-        throw new RuntimeException("Can't manage format " + format);
+        return switch (format) {
+            case BGRA -> imageData[(y * width + x) * 4 + 2];
+            case BGR -> imageData[(y * width + x) * 3 + 2];
+            case PALETTED -> palette.getRedAsByte(imageData[y * width + x]);
+            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+        };
     }
 
     public byte getAlphaAsByte(int x, int y) {
-        if (format == TextureFormat.BGRA) {
-            return imageData[(y * width + x) * 4 + 3];
-        } else if (format == TextureFormat.BGR || format == TextureFormat.PALETTED) {
-            return (byte)0xFF;
-        }
-
-        throw new RuntimeException("Can't manage format " + format);
+        return switch (format) {
+            case BGRA -> imageData[(y * width + x) * 4 + 3];
+            case PALETTED, BGR -> (byte)0xFF;
+            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+        };
     }
 
     public Bitmap getSubBitmap(int x0, int y0, int x1, int y1) {
@@ -304,7 +309,6 @@ public class Bitmap {
     }
 
     public void copyNonTransparentPixels(Bitmap bitmap, Point toUpperLeft, Point fromUpperLeft, Dimension fromSize) {
-
         Point toIterator = new Point(toUpperLeft.x, toUpperLeft.y);
 
         for (int fromY = fromUpperLeft.y; fromY < fromSize.height + fromUpperLeft.y; fromY++) {
@@ -422,9 +426,11 @@ public class Bitmap {
     }
 
     public boolean isTransparent(int x, int y) {
-        byte alpha = getAlphaAsByte(x, y);
-
-        return alpha == 0;
+        return switch (format) {
+            case PALETTED -> imageData[y * width + x] == palette.getTransparentIndex();
+            case BGRA -> getAlphaAsByte(x, y) == 0;
+            default -> false;
+        };
     }
 
     public Dimension getDimension() {
@@ -468,8 +474,27 @@ public class Bitmap {
         this.bytesPerPixel = bytesPerPixel;
     }
 
+    protected void copyPixelFrom(int x, int y, Bitmap bitmap) {
+        setPixelValue(
+                x,
+                y,
+                bitmap.getRedAsByte(x, y),
+                bitmap.getGreenAsByte(x, y),
+                bitmap.getBlueAsByte(x, y),
+                bitmap.getAlphaAsByte(x, y)
+        );
+    }
+
+    protected short getColorIndex(int x, int y) {
+        if (format == PALETTED) {
+            return imageData[y * width + x];
+        } else {
+            throw new RuntimeException("Can't get color for index in non-paletted bitmap");
+        }
+    }
+
     public interface PixelAction {
-        void apply(int x, int y, byte red, byte green, byte blue);
+        void apply(int x, int y, byte red, byte green, byte blue, byte alpha);
     }
 
     public void forEachPixel(PixelAction fun) {
@@ -480,7 +505,8 @@ public class Bitmap {
                         y,
                         getRedAsByte(x, y),
                         getGreenAsByte(x, y),
-                        getBlueAsByte(x, y)
+                        getBlueAsByte(x, y),
+                        getAlphaAsByte(x, y)
                 );
             }
         }

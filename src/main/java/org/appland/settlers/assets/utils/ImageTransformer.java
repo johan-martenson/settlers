@@ -16,7 +16,7 @@ public class ImageTransformer {
                 bitmap.getFormat()
         );
 
-        bitmap.forEachPixel((x, y, red, green, blue) -> {
+        bitmap.forEachPixel((x, y, red, green, blue, alpha) -> {
             if (!bitmap.isTransparent(x, y)) {
                 silhouette.setPixelValue(x, y, (byte)0xFF, (byte)0xFF, (byte)0xFF, (byte)0xFF);
             }

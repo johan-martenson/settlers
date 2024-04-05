@@ -80,15 +80,7 @@ import static org.appland.settlers.model.WorkerAction.*;
 
 public class Extractor {
 
-    private static class TitleAndFilename {
-        private final String filename;
-        private final String title;
-
-        TitleAndFilename(String title, String filename) {
-            this.title = title;
-            this.filename = filename;
-        }
-    }
+    private record TitleAndFilename(String title, String filename) { }
 
     private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
 

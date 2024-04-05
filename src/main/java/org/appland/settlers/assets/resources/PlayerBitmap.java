@@ -7,9 +7,11 @@ import org.appland.settlers.assets.Unsigned;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static org.appland.settlers.assets.resources.PlayerBitmap.SegmentType.*;
+
 public class PlayerBitmap extends Bitmap {
 
-    private final PalettedPixelBuffer texturePixelData;
+    private final Bitmap playerTexture;
 
     private boolean debug = false;
     private long length;
@@ -17,7 +19,7 @@ public class PlayerBitmap extends Bitmap {
     public PlayerBitmap(int width, int height, Palette palette, TextureFormat format) {
         super(width, height, palette, format);
 
-        texturePixelData = new PalettedPixelBuffer(width, height, Palette.DEFAULT_TRANSPARENT_INDEX);
+        playerTexture = new Bitmap(width, height, palette, TextureFormat.PALETTED);
     }
 
     public static PlayerBitmap loadFrom(int nx, short ny, int width, ColorBlock colorBlock, int[] starts, boolean absoluteStarts, Palette palette, TextureFormat format) {
@@ -34,21 +36,21 @@ public class PlayerBitmap extends Bitmap {
     }
 
     public void loadImageFromData(byte[] sourceData, int[] starts, boolean absoluteStarts) {
-
         if (debug) {
-            System.out.println("       - New height from startlist.size: " + height);
+            System.out.println("       - Height based on start list size: " + height);
         }
 
         ByteBuffer sourceByteBuffer = ByteBuffer.wrap(sourceData).order(ByteOrder.LITTLE_ENDIAN);
 
-        // y: uint 16
+        // Build the image, line by line
         for (int y = 0; y < height; y++) {
-            int x = 0;  // uint 16
+            int x = 0;
 
-            int position = starts[y]; // uint 32 - change to int 32 for now as input is uint 16
+            // Look up where the first non-transparent pixel is on the line
+            int position = starts[y];
 
             if (!absoluteStarts) {
-                position = position - height * 2; // height * sizeof(uint16)
+                position = position - height * 2;
             }
 
             if (debug) {
@@ -58,54 +60,64 @@ public class PlayerBitmap extends Bitmap {
                 System.out.println("       - X start at: " + x);
             }
 
+            // Read the line
             while (x < width) {
-                short shift = Unsigned.getUnsignedByte(sourceByteBuffer, position);
+                short typeAndLength = Unsigned.getUnsignedByte(sourceByteBuffer, position);
+                var segment = Segment.uint16ToSegment(typeAndLength);
 
                 position = position + 1;
 
-                // Handle transparent pixel
-                if (shift < 0x40) {
-                    x = x + shift;
+                switch (segment.type) {
+                    case TRANSPARENT -> {
+                        x = x + segment.length;
+                    }
+                    case COLOR -> {
+                        for (int i = 0; i < segment.length; i++, x++) {
+                            setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position));
 
-                // Handle colored pixel
-                } else if (shift < 0x80) {
-                    shift = (short)(shift - 0x40); // uint 8 = uint 8 - 0x40
+                            position = position + 1;
+                        }
+                    }
+                    case PLAYER_COLOR -> {
+                        for (int i = 0; i < segment.length; i++, x++) {
+                            playerTexture.setPixelByColorIndex(x, y, (short)(Unsigned.getUnsignedByte(sourceByteBuffer, position)));
 
-                    for (int i = 0; i < shift; i++, x++) {
-                        setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position));
+                            setPixelByColorIndex(x, y, (short)(Unsigned.getUnsignedByte(sourceByteBuffer, position) + 128));
+                            //setPixelByColorIndex(x, y, (short)5);
+                        }
 
                         position = position + 1;
                     }
+                    case COMPRESSED -> {
+                        for (int i = 0; i < segment.length; i++, x++) {
+                            setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position));
+                        }
 
-                // Handle pixel with player color
-                } else if (shift < 0xC0) {
-                    shift = (short)(shift - 0x80);
-
-                    // Set pixel to player color
-                    for (int i = 0; i < shift; i++, x++) {
-                        texturePixelData.set(x, y, sourceData[position]); // TODO: verify that this is correct
-
-                        setPixelByColorIndex(x, y, (short)(Unsigned.getUnsignedByte(sourceByteBuffer, position) + 128));
+                        position = position + 1;
                     }
-
-                    position = position + 1;
-
-                // Set compressed pixel
-                } else {
-                    shift = (short)(shift - 0xC0);
-
-                    for (int i = 0; i < shift; i++, x++) {
-                        setPixelByColorIndex(x, y, Unsigned.getUnsignedByte(sourceByteBuffer, position));
-                    }
-
-                    position = position + 1;
                 }
             }
         }
     }
 
-    public PalettedPixelBuffer getTextureBitmap() {
-        return this.texturePixelData;
+    public Bitmap getBitmapForPlayer(PlayerColor playerColor) {
+        Bitmap bitmap = new Bitmap(width, height, nx, ny, getPalette(), TextureFormat.BGRA);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (playerTexture.isTransparent(x, y)) {
+                    bitmap.copyPixelFrom(x, y, this);
+                } else {
+                    bitmap.setPixelByColorIndex(x, y, (short)(playerTexture.getColorIndex(x, y) + 128 + playerColor.index * 4));
+                }
+            }
+        }
+
+        return bitmap;
+    }
+
+    public Bitmap getTextureBitmap() {
+        return this.playerTexture;
     }
 
     public PlayerBitmap setLength(long length) {
@@ -116,5 +128,51 @@ public class PlayerBitmap extends Bitmap {
 
     public long getLength() {
         return length;
+    }
+
+    static class Segment {
+        private final SegmentType type;
+        private final int length;
+
+        Segment(SegmentType type, int length) {
+            this.type = type;
+            this.length = length;
+        }
+
+        static Segment uint16ToSegment(int input) {
+            if (input < 0x40) {
+                return new Segment(TRANSPARENT, input);
+            } else if (input < 0x80) {
+                return new Segment(COLOR, input - 0x40);
+            } else if (input < 0xC0) {
+                return new Segment(PLAYER_COLOR, input - 0x80);
+            } else {
+                return new Segment(COMPRESSED, input - 0xC0);
+            }
+        }
+    }
+
+    enum SegmentType {
+        TRANSPARENT,
+        COLOR,
+        PLAYER_COLOR,
+        COMPRESSED;
+    }
+
+    public enum PlayerColor {
+        BLUE(0),
+        YELLOW(1),
+        RED(2),
+        PURPLE(3),
+        GRAY(4),
+        GREEN(5),
+        BROWN(6),
+        WHITE(7);
+
+        private final int index;
+
+        PlayerColor(int index) {
+            this.index = index;
+        }
     }
 }

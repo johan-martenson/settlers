@@ -1,7 +1,6 @@
 package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.decoders.BbmDecoder;
-import org.appland.settlers.assets.decoders.DatDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
@@ -73,7 +72,6 @@ public class Reader {
             gameResourceMap.put(assetFilename, reader.loadFile(assetFilename));
 
             System.out.println("Read file " + assetFilename);
-            //System.out.println(gameResourceMap);
             System.out.println("Loaded " + gameResourceMap.size() + " resources");
         }
 
@@ -109,90 +107,13 @@ public class Reader {
         ).toList();
 
         for (Path path : paths) {
-
             if (Files.isDirectory(path)) {
                 continue;
             }
 
             String filename = path.toString();
 
-            switch (type) {
-                case "LST":
-                case "BOB":
-                    try {
-                        List<GameResource> gameResourcesToAdd = LstDecoder.loadLstFile(filename, palette);
-
-                        gameResourceMap.put(filename, gameResourcesToAdd);
-                    } catch (Throwable t) {
-                        System.out.println("Failed to load " + filename);
-                        t.printStackTrace();
-                    }
-                    break;
-
-                case "LBM":
-                    try {
-                        GameResource gameResource = LbmDecoder.loadLBMFile(filename, palette);
-
-                        List<GameResource> gameResourcesLbmList = new ArrayList<>();
-
-                        gameResourcesLbmList.add(gameResource);
-
-                        gameResourceMap.put(filename, gameResourcesLbmList);
-                    } catch (Throwable t) {
-                        System.out.println("Failed to load " + filename);
-                        t.printStackTrace();
-                    }
-
-                    break;
-
-                case "DAT":
-
-                    try {
-                        System.out.println("Loading as sound stream");
-
-                        byte[] bytes = Files.newInputStream(Paths.get(filename)).readAllBytes();
-
-                        GameResource gameResource = SoundLoader.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
-
-                        System.out.println(gameResource);
-
-                        List<GameResource> result = new ArrayList<>();
-
-                        result.add(gameResource);
-
-                        gameResourceMap.put(filename, result);
-
-                    } catch (Throwable t) {
-                        System.out.println("Failed to load " + filename);
-                        t.printStackTrace();
-                    }
-
-                    break;
-
-                case "BBM":
-
-                    List<GameResource> gameResourceList = BbmDecoder.loadBbmFile(filename);
-
-                    gameResourceMap.put(filename, gameResourceList);
-
-                    break;
-
-                case "GER":
-                case "ENG":
-
-                    List<String> strings = TextDecoder.loadTextFile(filename);
-
-                    List<GameResource> stringResourceList = new ArrayList<>();
-
-                    stringResourceList.add(new TextResource(strings));
-
-                    gameResourceMap.put(filename, stringResourceList);
-
-                    break;
-
-                default:
-                    throw new RuntimeException("Not supporting " + type);
-            }
+            gameResourceMap.put(filename, loadFile(filename));
         }
 
         return gameResourceMap;
@@ -397,6 +318,16 @@ public class Reader {
                         PlayerBitmap playerBitmap = playerBitmapResource.getBitmap();
                         playerBitmap.writeToFile(outFile);
 
+                        for (var playerColor : PlayerBitmap.PlayerColor.values()) {
+                            playerBitmap.getBitmapForPlayer(playerColor).writeToFile(
+                                    format("%s/%s-%d (%s).png", dirToWrite, filenameWithoutPath, i, playerColor.name())
+                            );
+                        }
+
+                        playerBitmap.getTextureBitmap().writeToFile(
+                                format("%s/%s-%d (mask).png", dirToWrite, filenameWithoutPath, i)
+                        );
+
                         break;
 
                     case WAVE_SOUND:
@@ -545,46 +476,82 @@ public class Reader {
         this.palette = PaletteDecoder.loadPaletteFromFile(DEFAULT_PALETTE);
     }
 
-    private List<GameResource> loadFile(String assetFilename) throws IOException, UnknownResourceTypeException, InvalidFormatException {
+    private List<GameResource> loadFile(String filename) throws IOException, InvalidFormatException {
 
-        int lastSeparator = assetFilename.lastIndexOf("/");
-        String filenameWithoutPath = assetFilename.substring(lastSeparator + 1);
+        int lastSeparator = filename.lastIndexOf("/");
+        String filenameWithoutPath = filename.substring(lastSeparator + 1);
 
         int lastPeriod = filenameWithoutPath.lastIndexOf(".");
         String fileSuffix = filenameWithoutPath.substring(lastPeriod + 1);
 
-        System.out.println("Asset filename and path: " + assetFilename);
+        System.out.println("Asset filename and path: " + filename);
         System.out.println("Asset filename: " + filenameWithoutPath);
         System.out.println("File type: " + fileSuffix);
 
         switch (fileSuffix) {
             case "LST", "BOB" -> {
-
-                return LstDecoder.loadLstFile(assetFilename, palette);
+                try {
+                    return LstDecoder.loadLstFile(filename, palette);
+                } catch (Throwable t) {
+                    System.out.println("Failed to load " + filename);
+                    t.printStackTrace();
+                }
             }
             case "LBM" -> {
-                List<GameResource> result = new ArrayList<>();
+                try {
+                    GameResource gameResource = LbmDecoder.loadLBMFile(filename, palette);
 
-                result.add(LbmDecoder.loadLBMFile(assetFilename, palette));
+                    List<GameResource> gameResourcesLbmList = new ArrayList<>();
 
-                return result;
+                    gameResourcesLbmList.add(gameResource);
+
+                    return gameResourcesLbmList;
+                } catch (Throwable t) {
+                    System.out.println("Failed to load " + filename);
+                    t.printStackTrace();
+                }
             }
             case "DAT" -> {
-                return DatDecoder.loadDatFile(assetFilename, palette);
-/*            try {
-                System.out.println("Loading as sound stream");
 
-                DatLoader datLoader = new DatLoader();
+                try {
+                    System.out.println("Loading as sound stream");
 
-                datLoader.load(assetFilename);
+                    byte[] bytes = Files.newInputStream(Paths.get(filename)).readAllBytes();
 
-                return null;
+                    GameResource gameResource = SoundLoader.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
 
-            } catch (Throwable t) {
-                System.out.println("Failed to load " + assetFilename);
-                t.printStackTrace();
-            }*/
+                    System.out.println(gameResource);
+
+                    List<GameResource> result = new ArrayList<>();
+
+                    result.add(gameResource);
+
+                    return result;
+
+                } catch (Throwable t) {
+                    System.out.println("Failed to load " + filename);
+                    t.printStackTrace();
+                }
             }
+            case "BBM" -> {
+
+                System.out.println("Loading BBM file");
+                List<GameResource> gameResourceList = BbmDecoder.loadBbmFile(filename);
+                System.out.println("Got " + gameResourceList);
+
+                return gameResourceList;
+            }
+            case "GER", "ENG" -> {
+
+                List<String> strings = TextDecoder.loadTextFile(filename);
+
+                List<GameResource> stringResourceList = new ArrayList<>();
+
+                stringResourceList.add(new TextResource(strings));
+
+                return stringResourceList;
+            }
+            default -> throw new RuntimeException("Not supporting " + type);
         }
 
         return null;
