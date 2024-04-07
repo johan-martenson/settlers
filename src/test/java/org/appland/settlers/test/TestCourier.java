@@ -6,24 +6,25 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.ForesterHut;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.GuardHouse;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.GuardHouse;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,23 +33,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
-import static org.appland.settlers.model.Material.COURIER;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -65,7 +54,7 @@ public class TestCourier {
     public void testNewStorageHasCouriers() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -88,7 +77,7 @@ public class TestCourier {
     public void testCourierWalksToIntendedRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -134,7 +123,7 @@ public class TestCourier {
     public void testCourierGoesToMiddlePointOfRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -177,7 +166,7 @@ public class TestCourier {
     public void testCourierIsIdleWhenMiddlePointIsReached() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -219,7 +208,7 @@ public class TestCourier {
     public void testCourierRemainsIdleWhenThereIsNoCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -264,7 +253,7 @@ public class TestCourier {
     public void testCourierWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -324,7 +313,7 @@ public class TestCourier {
     public void testCourierPicksUpCargoFromFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -397,7 +386,7 @@ public class TestCourier {
     public void testCourierDeliversCargoAndBecomesIdle() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -487,7 +476,7 @@ public class TestCourier {
     public void testCourierPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -580,7 +569,7 @@ public class TestCourier {
     public void testCourierPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -669,7 +658,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingAfterBeingIdle() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -754,7 +743,7 @@ public class TestCourier {
     public void testCourierGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -847,7 +836,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingAfterDeliveryToOtherBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -933,7 +922,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -1030,7 +1019,7 @@ public class TestCourier {
     public void testCouriersStopCarryingThingsAtSplittingRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1125,7 +1114,7 @@ public class TestCourier {
     public void testCannotAssignTwoCouriersToSameRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -1162,8 +1151,8 @@ public class TestCourier {
     public void testCourierGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1221,7 +1210,7 @@ public class TestCourier {
     public void testAssignedCourierHasCorrectlySetPlayer() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1254,8 +1243,8 @@ public class TestCourier {
     public void testCourierIsNotDispatchedToOpponentsRoadWithoutConnectedStorage() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -1323,7 +1312,7 @@ public class TestCourier {
     public void testCourierReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1381,7 +1370,7 @@ public class TestCourier {
     public void testCourierCanBeFatOrThin() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1423,7 +1412,7 @@ public class TestCourier {
     public void testCourierCanChewGumWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1478,7 +1467,7 @@ public class TestCourier {
     public void testCourierDoesNotChewGumWhileCarryingCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1519,7 +1508,7 @@ public class TestCourier {
     public void testCourierChewsGumForTheRightAmountOfTime() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1571,7 +1560,7 @@ public class TestCourier {
     public void testCourierStopsChewingGumWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1629,7 +1618,7 @@ public class TestCourier {
     public void testOnlyFatCourierChewsGum() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1671,7 +1660,7 @@ public class TestCourier {
 
         for (int j = 0; j < 20; j++) {
             /* Creating new game map with size 40x40 */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -1730,7 +1719,7 @@ public class TestCourier {
     public void testCourierCanReadThePaperWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1785,7 +1774,7 @@ public class TestCourier {
     public void testCourierDoesNotReadThePaperWhileCarryingCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1841,7 +1830,7 @@ public class TestCourier {
     public void testCourierReadThePaperForTheRightAmountOfTime() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1893,7 +1882,7 @@ public class TestCourier {
     public void testCourierStopsReadingThePaperWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1951,7 +1940,7 @@ public class TestCourier {
     public void testOnlyThinCourierReadsThePaper() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1993,7 +1982,7 @@ public class TestCourier {
 
         for (int j = 0; j < 20; j++) {
             /* Creating new game map with size 40x40 */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -2051,7 +2040,7 @@ public class TestCourier {
     public void testCourierCanTouchNoseWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2106,7 +2095,7 @@ public class TestCourier {
     public void testCourierDoesNotTouchNoseWhileCarryingCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2162,7 +2151,7 @@ public class TestCourier {
     public void testCourierTouchNoseForTheRightAmountOfTime() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2214,7 +2203,7 @@ public class TestCourier {
     public void testCourierStopsTouchingNoseWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2272,7 +2261,7 @@ public class TestCourier {
     public void testOnlyThinCourierTouchesNose() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2315,7 +2304,7 @@ public class TestCourier {
         for (int j = 0; j < 40; j++) {
 
             /* Creating new game map with size 40x40 */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -2373,7 +2362,7 @@ public class TestCourier {
     public void testCourierJumpSkipRopeWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2428,7 +2417,7 @@ public class TestCourier {
     public void testCourierDoesNotJumpSkipRopeWhileCarryingCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2484,7 +2473,7 @@ public class TestCourier {
     public void testCourierJumpsSkipRopeForTheRightAmountOfTime() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2536,7 +2525,7 @@ public class TestCourier {
     public void testCourierStopsJumpingSkipRopeWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2594,7 +2583,7 @@ public class TestCourier {
     public void testOnlyThinCourierJumpsSkipRope() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2635,7 +2624,7 @@ public class TestCourier {
     public void testCourierJumpsSkipRopeAtRightFrequency() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2692,7 +2681,7 @@ public class TestCourier {
     public void testCourierSitsDownWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2747,7 +2736,7 @@ public class TestCourier {
     public void testCourierDoesNotSitDownWhileCarryingCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2803,7 +2792,7 @@ public class TestCourier {
     public void testCourierSitsDownForTheRightAmountOfTime() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2855,7 +2844,7 @@ public class TestCourier {
     public void testCourierStopsSittingDownWhenWalkingToPickUpNewCargo() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2913,7 +2902,7 @@ public class TestCourier {
     public void testOnlyThinCourierSitsDown() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2956,7 +2945,7 @@ public class TestCourier {
         for (int j = 0; j < 20; j++) {
 
             /* Creating new game map with size 40x40 */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -3014,7 +3003,7 @@ public class TestCourier {
     public void testIdleFatCourierIsIdle() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3064,7 +3053,7 @@ public class TestCourier {
     public void testIdleThinCourierIsIdle() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3115,7 +3104,7 @@ public class TestCourier {
     public void testCargoIsReturnedToHeadquartersWhenRoadInPathIsRemoved() throws InvalidUserActionException {
 
         /* Creating new game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

@@ -1,14 +1,15 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -18,9 +19,7 @@ import java.util.Set;
 
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.STONE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 public class TestRobustTransportation {
@@ -29,7 +28,7 @@ public class TestRobustTransportation {
     public void testCourierDoesNotCarryItsCargoBackAndForth() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

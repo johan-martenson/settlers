@@ -6,34 +6,34 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.GraniteMine;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.actors.Miner;
-import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.GraniteMine;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Mint;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.*;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -47,7 +47,7 @@ public class TestGraniteMine {
     public void testGraniteMineCanHoldTwoFishTwoBreadsTwoMeats() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -107,7 +107,7 @@ public class TestGraniteMine {
     public void testGraniteMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -148,7 +148,7 @@ public class TestGraniteMine {
     public void testGraniteMineCannotBeConstructedWithThreePlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -188,7 +188,7 @@ public class TestGraniteMine {
     public void testConstructGraniteMine() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -215,7 +215,7 @@ public class TestGraniteMine {
     public void testGraniteMineIsNotMilitary() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -245,7 +245,7 @@ public class TestGraniteMine {
     public void testGraniteMineUnderConstructionNotNeedsMiner() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -271,7 +271,7 @@ public class TestGraniteMine {
     public void testFinishedGraniteMineNeedsMiner() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -299,7 +299,7 @@ public class TestGraniteMine {
     public void testMinerIsAssignedToFinishedGraniteMine() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -340,7 +340,7 @@ public class TestGraniteMine {
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -363,7 +363,7 @@ public class TestGraniteMine {
     public void testArrivedMinerRests() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -406,7 +406,7 @@ public class TestGraniteMine {
     public void testMinerMinesGranite() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -460,7 +460,7 @@ public class TestGraniteMine {
     public void testGraniteMineGoesToFlagWithCargoAndBack() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -522,7 +522,7 @@ public class TestGraniteMine {
     public void testStoneCargoIsDeliveredToMintWhichIsCloserThanHeadquarters() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -579,7 +579,7 @@ public class TestGraniteMine {
     public void testStoneIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -648,7 +648,7 @@ public class TestGraniteMine {
     public void testStoneIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -719,7 +719,7 @@ public class TestGraniteMine {
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 12, 12);
@@ -741,7 +741,7 @@ public class TestGraniteMine {
     public void testGraniteMineRunsOutOfGranite() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -820,7 +820,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutGraniteProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -871,7 +871,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutFoodProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -915,7 +915,7 @@ public class TestGraniteMine {
     public void testMiningConsumesFood() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -962,7 +962,7 @@ public class TestGraniteMine {
     public void testGraniteMineCanConsumeAllTypesOfFood() throws Exception {
 
         /* Start new game with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1020,7 +1020,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1091,7 +1091,7 @@ public class TestGraniteMine {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1193,7 +1193,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackToStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1240,7 +1240,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1294,7 +1294,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1357,7 +1357,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1429,7 +1429,7 @@ public class TestGraniteMine {
     public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1470,9 +1470,9 @@ public class TestGraniteMine {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
-        Player player2 = new Player("Player 2", RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player2 = new Player("Player 2", PlayerColor.RED);
 
         List<Player> players = new LinkedList<>();
 
@@ -1529,7 +1529,7 @@ public class TestGraniteMine {
     public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1595,7 +1595,7 @@ public class TestGraniteMine {
     public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1664,7 +1664,7 @@ public class TestGraniteMine {
     public void testMinerReturnsToStorageIfGraniteMineIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1729,7 +1729,7 @@ public class TestGraniteMine {
     public void testMinerGoesOffroadBackToClosestStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1783,7 +1783,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1840,7 +1840,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1900,7 +1900,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1951,7 +1951,7 @@ public class TestGraniteMine {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1997,7 +1997,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutResourcesHasZeroProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2037,7 +2037,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithAbundantResourcesHasFullProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2096,7 +2096,7 @@ public class TestGraniteMine {
     public void testGraniteMineLosesProductivityWhenResourcesRunOut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2150,7 +2150,7 @@ public class TestGraniteMine {
     public void testUnoccupiedGraniteMineHasNoProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2182,7 +2182,7 @@ public class TestGraniteMine {
     public void testGraniteMineCanProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2212,7 +2212,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2240,7 +2240,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2274,7 +2274,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2315,7 +2315,7 @@ public class TestGraniteMine {
     public void testGraniteMineWaitsWhenFlagIsFull() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2388,7 +2388,7 @@ public class TestGraniteMine {
     public void testGraniteMineDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2479,7 +2479,7 @@ public class TestGraniteMine {
     public void testWhenStoneDeliveryAreBlockedGraniteMineFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2539,7 +2539,7 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2608,7 +2608,7 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2679,7 +2679,7 @@ public class TestGraniteMine {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2717,7 +2717,7 @@ public class TestGraniteMine {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2762,7 +2762,7 @@ public class TestGraniteMine {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2826,7 +2826,7 @@ public class TestGraniteMine {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

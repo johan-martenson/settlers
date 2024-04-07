@@ -6,8 +6,8 @@ import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.maps.SettlersMapLoadingException;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class SettlersMapLoaderDriver {
 
             List<Player> players = new ArrayList<>();
 
-            players.add(new Player("Player 0", Color.BLUE));
+            players.add(new Player("Player 0", PlayerColor.BLUE));
 
             map.stepTime();
         } catch (SettlersMapLoadingException | InvalidMapException e) {

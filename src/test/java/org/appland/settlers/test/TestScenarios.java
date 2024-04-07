@@ -6,37 +6,32 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.actors.SawmillWorker;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.SawmillWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Quarry;
+import org.appland.settlers.model.buildings.Sawmill;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestScenarios {
 
@@ -47,7 +42,7 @@ public class TestScenarios {
 
         // TODO: RE-verify and add asserts!
         /* Create starting position */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -289,7 +284,7 @@ public class TestScenarios {
     public void buildWoodcutterSawmillQuarrySequentiallyFromScratch() throws Exception {
 
         /* Create initial game setup */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -336,7 +331,7 @@ public class TestScenarios {
     public void testGameStartFromScratchWithUserInput() throws Exception {
 
         /* Create initial game setup */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);

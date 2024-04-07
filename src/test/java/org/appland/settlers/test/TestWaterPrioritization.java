@@ -1,20 +1,21 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Baker;
 import org.appland.settlers.model.actors.Brewer;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.buildings.DonkeyFarm;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.buildings.Bakery;
-import org.appland.settlers.model.actors.Baker;
-import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class TestWaterPrioritization {
     public void testOnlyBakeryGetsWater() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -156,7 +157,7 @@ public class TestWaterPrioritization {
     public void testOnlyDonkeyFarmGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -277,7 +278,7 @@ public class TestWaterPrioritization {
     public void testOnlyPigFarmGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -398,7 +399,7 @@ public class TestWaterPrioritization {
     public void testOnlyBreweryGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -519,7 +520,7 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWheatWithBakeryMissing() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -635,7 +636,7 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWheatWithBakeryNotReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -744,7 +745,7 @@ public class TestWaterPrioritization {
     public void testOtherConsumersGetWaterWithFullyStockedBakery() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

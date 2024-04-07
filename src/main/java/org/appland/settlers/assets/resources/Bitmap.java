@@ -28,7 +28,6 @@ public class Bitmap {
     protected final int width;
     private final TextureFormat format;
 
-    protected int bytesPerPixel;
     protected byte[] imageData; // uint 8
 
     private Palette palette;
@@ -49,21 +48,10 @@ public class Bitmap {
         this.nx = nx;
         this.ny = ny;
 
-        bytesPerPixel = switch (format) {
-            case BGRA -> 4;
-            case BGR -> 3;
-            case PALETTED, ORIGINAL -> 1;
-        };
-
-        if (debug) {
-            System.out.println("    ++++ Set bits per pixel to: " + bytesPerPixel);
-        }
-
-        imageData = new byte[width * height * bytesPerPixel];
+        imageData = new byte[width * height * getBytesPerPixel()];
 
         if (debug) {
             System.out.println("    ++++ Image size is: " + imageData.length);
-            System.out.println("    ++++ Should be: " + width * height * bytesPerPixel);
         }
     }
 
@@ -72,22 +60,22 @@ public class Bitmap {
             case PALETTED -> imageData[(y * width + x)] = (byte)(colorIndex & 0xFF);
             case BGRA -> {
                 if (palette.isColorIndexTransparent(colorIndex)) {
-                    imageData[(y * width + x) * bytesPerPixel + 3] = 0;
+                    imageData[(y * width + x) * 4 + 3] = 0;
                 } else {
                     RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-                    imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
-                    imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
-                    imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
-                    imageData[(y * width + x) * bytesPerPixel + 3] = (byte) 0xFF;
+                    imageData[(y * width + x) * 4] = colorRGB.getBlue();
+                    imageData[(y * width + x) * 4 + 1] = colorRGB.getGreen();
+                    imageData[(y * width + x) * 4 + 2] = colorRGB.getRed();
+                    imageData[(y * width + x) * 4 + 3] = (byte) 0xFF;
                 }
             }
             case BGR -> {
                 RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-                imageData[(y * width + x) * bytesPerPixel] = colorRGB.getBlue();
-                imageData[(y * width + x) * bytesPerPixel + 1] = colorRGB.getGreen();
-                imageData[(y * width + x) * bytesPerPixel + 2] = colorRGB.getRed();
+                imageData[(y * width + x) * 3] = colorRGB.getBlue();
+                imageData[(y * width + x) * 3 + 1] = colorRGB.getGreen();
+                imageData[(y * width + x) * 3 + 2] = colorRGB.getRed();
             }
             case ORIGINAL -> throw new RuntimeException("Cannot set pixel in format " + format);
         }
@@ -188,7 +176,11 @@ public class Bitmap {
     }
 
     public int getBytesPerPixel() {
-        return bytesPerPixel;
+        return switch (format) {
+            case BGRA -> 4;
+            case BGR -> 3;
+            case PALETTED, ORIGINAL -> 1;
+        };
     }
 
     public TextureFormat getFormat() {
@@ -468,10 +460,6 @@ public class Bitmap {
         }
 
         return mirror;
-    }
-
-    public void setBytesPerPixel(short bytesPerPixel) {
-        this.bytesPerPixel = bytesPerPixel;
     }
 
     protected void copyPixelFrom(int x, int y, Bitmap bitmap) {

@@ -5,37 +5,38 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.actors.Armorer;
-import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.actors.Baker;
-import org.appland.settlers.model.buildings.Bakery;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Size;
+import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.IronFounder;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
 import org.appland.settlers.model.buildings.Mill;
-import org.appland.settlers.model.actors.Miller;
-import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.buildings.Mint;
-import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.actors.SawmillWorker;
-import org.appland.settlers.model.Size;
-import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.buildings.Well;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -43,28 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.IRON_FOUNDER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -76,7 +57,7 @@ public class TestPrioritization {
     public void testMinesGetEqualAmountsOfFood() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -201,7 +182,7 @@ public class TestPrioritization {
     public void testOnlyGoldMineGetsFood() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -329,7 +310,7 @@ public class TestPrioritization {
     public void testOnlyIronMineGetsFood() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -457,7 +438,7 @@ public class TestPrioritization {
     public void testOnlyCoalMineGetsFood() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -585,7 +566,7 @@ public class TestPrioritization {
     public void testOnlyGraniteMineGetsFood() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -713,7 +694,7 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithCoalMissing() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -826,7 +807,7 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithCoalMineNotReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -957,7 +938,7 @@ public class TestPrioritization {
     public void testOtherMinesGetFoodWithFullyStockedCoalMine() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1103,7 +1084,7 @@ public class TestPrioritization {
     public void testFoodContinuesToBeAllocatedWhenQuotaIsReduced() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1189,7 +1170,7 @@ public class TestPrioritization {
     public void testCoalConsumersGetEqualAmountsOfCoal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1300,7 +1281,7 @@ public class TestPrioritization {
     public void testOnlyIronSmelterGetsCoal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1419,7 +1400,7 @@ public class TestPrioritization {
     public void testOnlyMintGetsCoal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1538,7 +1519,7 @@ public class TestPrioritization {
     public void testOnlyArmoryGetsCoal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1657,7 +1638,7 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithIronSmelterMissing() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1761,7 +1742,7 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithIronSmelterNotReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1877,7 +1858,7 @@ public class TestPrioritization {
     public void testOtherConsumersGetCoalWithFullyStockedIronSmelter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2024,7 +2005,7 @@ public class TestPrioritization {
     public void testCourierPicksUpCargoOfHighestPriority() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -2132,7 +2113,7 @@ public class TestPrioritization {
     public void testStorageWorkerHandsOutCargoOfHighestPriority() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
@@ -2294,7 +2275,7 @@ public class TestPrioritization {
     public void testReprioritizedMaterialsDoNotGetDuplicated() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
@@ -2325,7 +2306,7 @@ public class TestPrioritization {
     public void testCannotSetTransportPriorityToNegativeNumber() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
@@ -2348,7 +2329,7 @@ public class TestPrioritization {
     public void testCannotSetTransportPriorityToTooLargeNumber() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
@@ -2371,7 +2352,7 @@ public class TestPrioritization {
     public void testCanSetTransportPriorityToLargeNumber() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);

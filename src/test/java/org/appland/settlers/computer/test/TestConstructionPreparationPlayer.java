@@ -40,7 +40,7 @@ public class TestConstructionPreparationPlayer {
     public void testCreatePlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -55,7 +55,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerFirstPlacesForesterHut() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -89,7 +89,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerDoesNothingUntilForesterHutIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -111,7 +111,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesWoodcutterWhenForesterHutIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -153,7 +153,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesSawmillWhenWoodcutterIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -181,7 +181,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesQuarryAfterSawmillIsConstructed() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -216,7 +216,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerPlacesQuarryCloseToStone() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -254,7 +254,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerDestroysQuarryWhenStoneRunsOut() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -334,7 +334,7 @@ public class TestConstructionPreparationPlayer {
     public void testPlayerRemovesRoadWhenItRemovesQuarry() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

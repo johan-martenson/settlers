@@ -2,47 +2,47 @@ package org.appland.settlers.fuzzing;
 
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
-import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fishery;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.HunterHut;
-import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.buildings.IronMine;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.SlaughterHouse;
 import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.utils.TestCaseGenerator;
 
-import java.awt.Color;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,7 +132,7 @@ public class SettlersModelDriver {
         //}
 
         for (int i = 0; i < mapFile.getStartingPoints().size(); i++) {
-            players.add(new Player("Player " + i, Color.BLUE));
+            players.add(new Player("Player " + i, PlayerColor.BLUE));
         }
 
         GameMap map = mapLoader.convertMapFileToGameMap(mapFile);

@@ -5,33 +5,33 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.buildings.Well;
-import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.buildings.Well;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
 
@@ -45,7 +45,7 @@ public class TestRoads {
     public void testGetNotExistingRoad() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -61,7 +61,7 @@ public class TestRoads {
     public void testUnreachableRoute() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -92,7 +92,7 @@ public class TestRoads {
     public void testFindRouteWithSingleRoad() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -137,7 +137,7 @@ public class TestRoads {
          */
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -235,7 +235,7 @@ public class TestRoads {
     public void testNeedsCourier() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -270,7 +270,7 @@ public class TestRoads {
     public void testAssignWorkerToRoadNotOnMap() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 16, 16);
@@ -308,7 +308,7 @@ public class TestRoads {
     public void testAssignTwoWorkersToRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -347,7 +347,7 @@ public class TestRoads {
     public void testRoadCanNotShareSegment() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -381,7 +381,7 @@ public class TestRoads {
     public void testRoadsCanNotCross() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -417,7 +417,7 @@ public class TestRoads {
     public void testWayPointsEqualsChosenRoad() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -454,7 +454,7 @@ public class TestRoads {
     public void testLargerStepThanOneIsNotOk() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -483,7 +483,7 @@ public class TestRoads {
     public void testPossibleDirectConnectionsFromFlag() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -517,7 +517,7 @@ public class TestRoads {
     public void testPossibleDirectConnectionsInCorners() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -587,7 +587,7 @@ public class TestRoads {
     public void testAvailableFlagPointOnRoadIsPossibleDirectConnection() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -622,7 +622,7 @@ public class TestRoads {
     public void testPossibleDirectConnectionsOnSides() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -696,7 +696,7 @@ public class TestRoads {
     public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -739,7 +739,7 @@ public class TestRoads {
     public void testNoPossibleConnectionUnderBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -765,7 +765,7 @@ public class TestRoads {
     public void testNoPossibleConnectionUnderStone() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -790,7 +790,7 @@ public class TestRoads {
     public void testNoPossibleConnectionUnderTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -815,7 +815,7 @@ public class TestRoads {
     public void testNoPossibleConnectionsAtAndOutsideBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -848,7 +848,7 @@ public class TestRoads {
     public void testNoPossibleConnectionThroughNewCrop() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -874,7 +874,7 @@ public class TestRoads {
     public void testPlaceRoadWithVarargs() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -901,7 +901,7 @@ public class TestRoads {
     public void testNotPossibleToPlaceRoadThroughNewCrop() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -934,7 +934,7 @@ public class TestRoads {
     public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -975,7 +975,7 @@ public class TestRoads {
     public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1025,7 +1025,7 @@ public class TestRoads {
     public void testPlaceFlagInReverseExistingRoadSplitsTheRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1074,7 +1074,7 @@ public class TestRoads {
     public void testIdleCourierIsAssignedWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1122,7 +1122,7 @@ public class TestRoads {
     public void testCourierDeliveringToBuildingChoosesClosestRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1194,7 +1194,7 @@ public class TestRoads {
     public void testCourierJustAfterDeliveryToBuildingChoosesClosestRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1266,7 +1266,7 @@ public class TestRoads {
     public void testIdleCourierIsAssignedToClosestFromLeftRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1309,7 +1309,7 @@ public class TestRoads {
     public void testIdleCourierIsAssignedToClosestFromRightRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1350,7 +1350,7 @@ public class TestRoads {
     public void testCourierDeliveringCargoFinishesDeliveryAndIsAssignedWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1419,7 +1419,7 @@ public class TestRoads {
     public void testCourierFarFromToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1499,7 +1499,7 @@ public class TestRoads {
     public void testCourierCloseToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1591,7 +1591,7 @@ public class TestRoads {
     public void testCourierWalkingToAssignedRoadAdaptsWhenItsRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1642,7 +1642,7 @@ public class TestRoads {
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1731,7 +1731,7 @@ public class TestRoads {
     public void testCourierDeliversCorrectlyToBuildingAfterItsRoadIsSplit() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1802,7 +1802,7 @@ public class TestRoads {
     public void testRoadCanNotOverlapExistingFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1842,7 +1842,7 @@ public class TestRoads {
     public void testOnlyOneCourierIsAssignedToNewRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1892,7 +1892,7 @@ public class TestRoads {
     public void testThatCourierIsNotDispatchedToNewRoadWithNoConnection() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1930,7 +1930,7 @@ public class TestRoads {
     public void testOnlyTwoCouriersAreAssignedToTwoRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1992,7 +1992,7 @@ public class TestRoads {
     public void testFindShortestWay() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2024,7 +2024,7 @@ public class TestRoads {
     public void testRoadCannotGoThroughSmallBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2055,7 +2055,7 @@ public class TestRoads {
     public void testRoadIsCreatedBetweenHouseAndFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2075,7 +2075,7 @@ public class TestRoads {
     public void testRoadBetweenHouseAndFlagNeedsNoCourier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2095,7 +2095,7 @@ public class TestRoads {
     public void testCannotPlaceFlagsTooCloseTogether() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2125,7 +2125,7 @@ public class TestRoads {
     public void testSplitHorizontalRoadWithTooShortRemainingRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2169,7 +2169,7 @@ public class TestRoads {
     public void testSplitHorizontalRoadInEndWithTooShortRemainingRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2208,7 +2208,7 @@ public class TestRoads {
     public void testCourierGoesBackToStorageWhenRoadIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2246,7 +2246,7 @@ public class TestRoads {
     public void testCourierGoesBackToStorageOnRoadsIfPossibleWhenRoadIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2288,7 +2288,7 @@ public class TestRoads {
     public void testRoadCannotBePlacedThroughExistingFlagThatIsAlsoEndpoint() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2321,7 +2321,7 @@ public class TestRoads {
     public void testRoadBecomesAgedWithDeliveryToBuilding() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2383,7 +2383,7 @@ public class TestRoads {
     public void testRoadBecomesAgedWithDeliveryToFlag() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2453,7 +2453,7 @@ public class TestRoads {
     public void testDrivewayBecomesAgedWithDeliveriesToStorage() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2512,7 +2512,7 @@ public class TestRoads {
     public void testDrivewayBecomesAgedWithWellWorkersDeliveries() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2571,7 +2571,7 @@ public class TestRoads {
     public void testDifferentRoadsWithSameEndpointsAreNotEqual() throws Exception {
 
         /* Create player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -2602,7 +2602,7 @@ public class TestRoads {
     public void testGetOtherEndPoint() throws Exception {
 
         /* Create player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -2635,7 +2635,7 @@ public class TestRoads {
     public void testSplitMainRoadResultsInTwoMainRoadsAndMainFlag() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

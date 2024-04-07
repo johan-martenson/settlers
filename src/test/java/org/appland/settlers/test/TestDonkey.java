@@ -5,40 +5,31 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
-import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -55,7 +46,7 @@ public class TestDonkey {
     public void testDonkeyIsDispatchedToMainRoad() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -140,7 +131,7 @@ public class TestDonkey {
     public void testDonkeyWalksToIntendedRoad() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -185,7 +176,7 @@ public class TestDonkey {
     public void testDonkeyIsNotASoldier() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -227,7 +218,7 @@ public class TestDonkey {
     public void testDonkeyGoesToMiddlePointOfRoad() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -270,7 +261,7 @@ public class TestDonkey {
     public void testDonkeyIsIdleWhenMiddlePointIsReached() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -314,7 +305,7 @@ public class TestDonkey {
     public void testDonkeyRemainsIdleWhenThereIsNoCargo() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -363,7 +354,7 @@ public class TestDonkey {
     public void testDonkeyWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -421,7 +412,7 @@ public class TestDonkey {
     public void testDonkeyPicksUpCargoFromFlag() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -493,7 +484,7 @@ public class TestDonkey {
     public void testDonkeyDeliversCargoAndBecomesIdle() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -582,7 +573,7 @@ public class TestDonkey {
     public void testDonkeyPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -673,7 +664,7 @@ public class TestDonkey {
     public void testDonkeyPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -760,7 +751,7 @@ public class TestDonkey {
     public void testDonkeyDeliversToBuilding() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -844,7 +835,7 @@ public class TestDonkey {
     public void testDonkeyGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -936,7 +927,7 @@ public class TestDonkey {
     public void testDonkeyDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -1031,7 +1022,7 @@ public class TestDonkey {
     public void testDonkeysStopCarryingThingsAtSplittingRoads() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1125,7 +1116,7 @@ public class TestDonkey {
     public void testBothDonkeyAndCourierCanBeAssignedToSameRoad() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1160,7 +1151,7 @@ public class TestDonkey {
     public void testCannotAssignTwoDonkeysToSameRoad() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1197,7 +1188,7 @@ public class TestDonkey {
     public void testDonkeyIsNotDispatchedToDriveway() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1262,8 +1253,8 @@ public class TestDonkey {
     public void testDonkeyIsNotDispatchedToOpponentsRoadWithoutConnectedStorage() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -1359,7 +1350,7 @@ public class TestDonkey {
     public void testDonkeyDoesntDoSpecialActionsWhenIdle() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

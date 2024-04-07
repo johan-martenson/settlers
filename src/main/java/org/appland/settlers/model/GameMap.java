@@ -2741,7 +2741,7 @@ public class GameMap {
     }
 
     private boolean allPlayersHaveUniqueColor() {
-        List<Color> usedColors = new ArrayList<>();
+        List<PlayerColor> usedColors = new ArrayList<>();
 
         for (Player player : players) {
             if (usedColors.contains(player.getColor())) {

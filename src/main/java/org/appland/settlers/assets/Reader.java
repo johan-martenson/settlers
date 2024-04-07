@@ -14,6 +14,7 @@ import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.resources.WaveFile;
 import org.appland.settlers.assets.utils.SoundLoader;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.utils.ByteArrayReader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -318,7 +319,7 @@ public class Reader {
                         PlayerBitmap playerBitmap = playerBitmapResource.getBitmap();
                         playerBitmap.writeToFile(outFile);
 
-                        for (var playerColor : PlayerBitmap.PlayerColor.values()) {
+                        for (var playerColor : PlayerColor.values()) {
                             playerBitmap.getBitmapForPlayer(playerColor).writeToFile(
                                     format("%s/%s-%d (%s).png", dirToWrite, filenameWithoutPath, i, playerColor.name())
                             );

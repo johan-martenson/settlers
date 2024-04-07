@@ -1,23 +1,24 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Brewer;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.DonkeyBreeder;
 import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fortress;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Mill;
-import org.appland.settlers.model.actors.Miller;
-import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class TestWheatPrioritization {
     public void testOnlyMillGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -155,7 +156,7 @@ public class TestWheatPrioritization {
     public void testOnlyDonkeyFarmGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -276,7 +277,7 @@ public class TestWheatPrioritization {
     public void testOnlyPigFarmGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -397,7 +398,7 @@ public class TestWheatPrioritization {
     public void testOnlyBreweryGetsWheat() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -518,7 +519,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatWithMillMissing() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -634,7 +635,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatWithMillNotReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -745,7 +746,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatWithFullyStockedMill() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -860,7 +861,7 @@ public class TestWheatPrioritization {
     public void testOnlyMillGetsWheatFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1014,7 +1015,7 @@ public class TestWheatPrioritization {
     public void testOnlyDonkeyFarmGetsWheatFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1161,7 +1162,7 @@ public class TestWheatPrioritization {
     public void testOnlyPigFarmGetsWheatFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1312,7 +1313,7 @@ public class TestWheatPrioritization {
     public void testOnlyBreweryGetsWheatFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1463,7 +1464,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatWithMillMissingFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1625,7 +1626,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatFromFarmWithMillNotReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1771,7 +1772,7 @@ public class TestWheatPrioritization {
     public void testOtherConsumersGetWheatWithFullyStockedMillFromFarm() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

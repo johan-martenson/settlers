@@ -1,12 +1,13 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class TestTreeConservationProgram {
     public void testTreeConservationProgramIsEnabledByDefault() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -41,7 +42,7 @@ public class TestTreeConservationProgram {
     public void testCanEnableTreeConservationProgram() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -60,7 +61,7 @@ public class TestTreeConservationProgram {
     public void testCanDisableTreeConservationProgram() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -79,7 +80,7 @@ public class TestTreeConservationProgram {
     public void testTreeConservationProgramIsActivatedWhenAmountOfPlanksIsLow() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -112,7 +113,7 @@ public class TestTreeConservationProgram {
     public void testTreeConservationProgramDoesNotActivateIfItIsDisabled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -149,7 +150,7 @@ public class TestTreeConservationProgram {
     public void testTreeConservationProgramIsDeactivatedWhenThereAreEnoughPlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -191,7 +192,7 @@ public class TestTreeConservationProgram {
     public void testTreeConservationProgramIsNotActivatedWhenASecondStorehouseHasEnoughPlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

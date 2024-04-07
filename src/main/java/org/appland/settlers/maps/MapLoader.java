@@ -4,12 +4,12 @@ import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -657,8 +658,10 @@ public class MapLoader {
         /* Generate list of players */
         List<Player> players = new ArrayList<>();
 
+        var colors = Arrays.stream(PlayerColor.values()).toList();
+
         for (int i = 0; i < mapFile.maxNumberOfPlayers; i++) {
-            players.add(new Player("Player " + i, new Color(i*20, i*20, i*20)));
+            players.add(new Player("Player " + i, colors.get(i)));
         }
 
         TranslationMode translationMode = POLISHED;

@@ -1,14 +1,14 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class TestHeight {
     public void testDefaultHeight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -50,7 +50,7 @@ public class TestHeight {
     public void testSettingHeight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -69,7 +69,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -96,7 +96,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnUpLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -123,7 +123,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnUpRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -150,7 +150,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -177,7 +177,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnDownRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -204,7 +204,7 @@ public class TestHeight {
     public void testCannotPlaceFortressWithTooMuchHeightDifferenceOnDownLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -231,7 +231,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -254,7 +254,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnUpLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -277,7 +277,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnUpRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -300,7 +300,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -323,7 +323,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceDownRight() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 
@@ -346,7 +346,7 @@ public class TestHeight {
     public void testNoFortressAvailableWithTooMuchHeightDifferenceOnDownLeft() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.RED);
         List<Player> players = new LinkedList<>();
         players.add(player0);
 

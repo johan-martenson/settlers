@@ -6,26 +6,27 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.GoldMine;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,7 +35,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.*;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.DetailedVegetation.*;
 import static org.appland.settlers.model.Material.*;
@@ -55,7 +55,7 @@ public class TestFishery {
     public void testFisheryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -91,7 +91,7 @@ public class TestFishery {
     public void testFisheryCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -126,7 +126,7 @@ public class TestFishery {
     public void testConstructFisherman() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -167,7 +167,7 @@ public class TestFishery {
     public void testPromiseWorkerToUnfinishedFishery() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -187,7 +187,7 @@ public class TestFishery {
     public void testAssignWorkerToUnfinishedFisherman() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -207,7 +207,7 @@ public class TestFishery {
     public void testAssignWorkerTwice() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -243,7 +243,7 @@ public class TestFishery {
     public void testPromiseWorkerTwice() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -271,7 +271,7 @@ public class TestFishery {
     public void testFisheryIsNotMilitary() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -309,7 +309,7 @@ public class TestFishery {
     public void testFishermanIsAssignedToFishery() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -340,7 +340,7 @@ public class TestFishery {
     public void testFishermanIsCreatedFromRod() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -375,7 +375,7 @@ public class TestFishery {
     public void testOnlyOneFishermanIsAssignedToFishery() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -411,7 +411,7 @@ public class TestFishery {
     public void testOnlyOneFishermanIsNotASoldier() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -443,7 +443,7 @@ public class TestFishery {
     public void testArrivedFishermanRestsInFisheryAndThenLeaves() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -489,7 +489,7 @@ public class TestFishery {
     public void testFishermanFindsSpotToFish() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -540,7 +540,7 @@ public class TestFishery {
     public void testFishermanReachesPointToFish() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -595,7 +595,7 @@ public class TestFishery {
     public void testFishermanFishes() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -670,7 +670,7 @@ public class TestFishery {
     public void testFishermanReturnsHomeAfterFishing() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -739,7 +739,7 @@ public class TestFishery {
     public void testFishCargoIsDeliveredToMineWhichIsCloserThanHeadquarters() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -803,7 +803,7 @@ public class TestFishery {
     public void testFishIsNotDeliveredToStorehouseUnderConstruction() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -867,7 +867,7 @@ public class TestFishery {
     public void testFishIsNotDeliveredTwiceToBuildingThatOnlyNeedsOne() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -951,7 +951,7 @@ public class TestFishery {
     public void testFishermanPlacesFishAtFlag() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1038,7 +1038,7 @@ public class TestFishery {
     public void testFishermanStaysInsideWhenThereIsNoWaterClose() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1085,7 +1085,7 @@ public class TestFishery {
     public void testPlaceFisherySoFirstMatchIsMiddleOfLake() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1167,7 +1167,7 @@ public class TestFishery {
     public void testFishermanCanRunOutOfFish() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1275,7 +1275,7 @@ public class TestFishery {
     public void testFisheryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1357,7 +1357,7 @@ public class TestFishery {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1460,7 +1460,7 @@ public class TestFishery {
     public void testFishermanGoesBackToStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1503,7 +1503,7 @@ public class TestFishery {
     public void testFishermanGoesBackOnToStorageOnRoadsIfPossibleWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1553,7 +1553,7 @@ public class TestFishery {
     public void testProductionInFisheryCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1625,7 +1625,7 @@ public class TestFishery {
     public void testProductionInFisheryCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1702,7 +1702,7 @@ public class TestFishery {
     public void testAssignedFishermanHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1739,9 +1739,9 @@ public class TestFishery {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
-        Player player2 = new Player("Player 2", RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player2 = new Player("Player 2", PlayerColor.RED);
 
         List<Player> players = new LinkedList<>();
 
@@ -1794,7 +1794,7 @@ public class TestFishery {
     public void testFishermanReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1856,7 +1856,7 @@ public class TestFishery {
     public void testFishermanContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1921,7 +1921,7 @@ public class TestFishery {
     public void testFishermanReturnsToStorageIfFisheryIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1982,7 +1982,7 @@ public class TestFishery {
     public void testFishermanGoesOffroadBackToClosestStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2032,7 +2032,7 @@ public class TestFishery {
     public void testFishermanReturnsOffroadAndAvoidsBurningStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2085,7 +2085,7 @@ public class TestFishery {
     public void testFishermanReturnsOffroadAndAvoidsDestroyedStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2141,7 +2141,7 @@ public class TestFishery {
     public void testFishermanReturnsOffroadAndAvoidsUnfinishedStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2188,7 +2188,7 @@ public class TestFishery {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2230,7 +2230,7 @@ public class TestFishery {
     public void testFisheryWithoutResourcesHasZeroProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2266,7 +2266,7 @@ public class TestFishery {
     public void testFisheryWithAbundantResourcesHasFullProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2321,7 +2321,7 @@ public class TestFishery {
     public void testFisheryLosesProductivityWhenResourcesRunOut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2379,7 +2379,7 @@ public class TestFishery {
     public void testUnoccupiedFisheryHasNoProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2411,7 +2411,7 @@ public class TestFishery {
     public void testFisheryCanProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2438,7 +2438,7 @@ public class TestFishery {
     public void testFisheryReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2463,7 +2463,7 @@ public class TestFishery {
     public void testFisheryReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2494,7 +2494,7 @@ public class TestFishery {
     public void testFisheryReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2522,7 +2522,7 @@ public class TestFishery {
     public void testFisheryWaitsWhenFlagIsFull() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2587,7 +2587,7 @@ public class TestFishery {
     public void testFisheryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2672,7 +2672,7 @@ public class TestFishery {
     public void testWhenFishDeliveryAreBlockedFisheryFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2727,7 +2727,7 @@ public class TestFishery {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndFisheryIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2798,7 +2798,7 @@ public class TestFishery {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndFisheryIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2871,7 +2871,7 @@ public class TestFishery {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2913,7 +2913,7 @@ public class TestFishery {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2962,7 +2962,7 @@ public class TestFishery {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -3026,7 +3026,7 @@ public class TestFishery {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -3093,7 +3093,7 @@ public class TestFishery {
     public void testFishermanFishNextToWater2OnTileBelow() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3178,7 +3178,7 @@ public class TestFishery {
     public void testFishermanFishNextToWater2OnTileAbove() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3263,7 +3263,7 @@ public class TestFishery {
     public void testFishermanFishNextToNormalWaterOnTileBelow() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3348,7 +3348,7 @@ public class TestFishery {
     public void testFishermanFishNextToNormalWaterOnTileAbove() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3433,7 +3433,7 @@ public class TestFishery {
     public void testFishermanFishNextToBuildableWaterOnTileBelow() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3518,7 +3518,7 @@ public class TestFishery {
     public void testFishermanFishNextToBuildableWaterOnTileAbove() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

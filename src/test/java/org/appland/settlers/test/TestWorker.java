@@ -7,18 +7,19 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.Sawmill;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
 
@@ -26,8 +27,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
@@ -43,7 +42,7 @@ public class TestWorker {
     public void testWorkerCannotEnterBuildingWhenItsNotAtRightPosition() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -73,7 +72,7 @@ public class TestWorker {
     public void testWalking() throws Exception {
 
         /* Create gamemap */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -220,8 +219,8 @@ public class TestWorker {
     public void testWalkingHalfway() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 

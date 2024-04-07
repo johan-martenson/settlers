@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.actors.WildAnimal;
@@ -19,31 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
-import static org.appland.settlers.model.DetailedVegetation.DESERT_1;
-import static org.appland.settlers.model.DetailedVegetation.LAVA;
-import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_MEADOW;
-import static org.appland.settlers.model.DetailedVegetation.SAVANNAH;
-import static org.appland.settlers.model.DetailedVegetation.SNOW;
-import static org.appland.settlers.model.DetailedVegetation.STEPPE;
-import static org.appland.settlers.model.DetailedVegetation.SWAMP;
-import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.DetailedVegetation.WATER_2;
-import static org.appland.settlers.model.actors.WildAnimal.Type.DEER;
-import static org.appland.settlers.model.actors.WildAnimal.Type.DEER_2;
-import static org.appland.settlers.model.actors.WildAnimal.Type.DUCK;
-import static org.appland.settlers.model.actors.WildAnimal.Type.DUCK_2;
-import static org.appland.settlers.model.actors.WildAnimal.Type.FOX;
-import static org.appland.settlers.model.actors.WildAnimal.Type.RABBIT;
-import static org.appland.settlers.model.actors.WildAnimal.Type.SHEEP;
-import static org.appland.settlers.model.actors.WildAnimal.Type.STAG;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.actors.WildAnimal.Type.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -55,7 +34,7 @@ public class TestWildAnimal {
     public void testWildAnimalsAppearSpontaneously() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -79,7 +58,7 @@ public class TestWildAnimal {
     public void testWildAnimalMovesSometimes() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -108,7 +87,7 @@ public class TestWildAnimal {
     public void testWildAnimalDoesNotGetStuck() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -140,7 +119,7 @@ public class TestWildAnimal {
     public void testWildAnimalsAreCreatedAcrossTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -199,7 +178,7 @@ public class TestWildAnimal {
     public void testWildAnimalsStayAliveUnlessKilled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -222,7 +201,7 @@ public class TestWildAnimal {
     public void testWildAnimalWithNowhereToGoStandsStill() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -278,7 +257,7 @@ public class TestWildAnimal {
     public void testCannotPlaceWildAnimalOnWater() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -298,7 +277,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnGrass() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -323,7 +302,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnSwamp() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -348,7 +327,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -373,7 +352,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnSavannah() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -398,7 +377,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnSnow() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -423,7 +402,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnDesert() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -448,7 +427,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnSteppe() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -473,7 +452,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnMountainMeadow() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -498,7 +477,7 @@ public class TestWildAnimal {
     public void testCanPlaceWildAnimalOnBuildableMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -523,7 +502,7 @@ public class TestWildAnimal {
     public void testCannotPlaceWildAnimalOnDeepWater() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -543,7 +522,7 @@ public class TestWildAnimal {
     public void testCannotPlaceWildAnimalOnLava() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -568,7 +547,7 @@ public class TestWildAnimal {
     public void testWildAnimalsDoesNotAppearTooCloseToTheEdge() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -624,7 +603,7 @@ public class TestWildAnimal {
     public void testGetTypeOfWildAnimal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -643,7 +622,7 @@ public class TestWildAnimal {
     public void testPlaceRabbit() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -661,7 +640,7 @@ public class TestWildAnimal {
     public void testPlaceFox() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -679,7 +658,7 @@ public class TestWildAnimal {
     public void testPlaceStag() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -697,7 +676,7 @@ public class TestWildAnimal {
     public void testPlaceDeer() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -715,7 +694,7 @@ public class TestWildAnimal {
     public void testPlaceDuck() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -733,7 +712,7 @@ public class TestWildAnimal {
     public void testPlaceSheep() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -751,7 +730,7 @@ public class TestWildAnimal {
     public void testPlaceDeer2() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -769,7 +748,7 @@ public class TestWildAnimal {
     public void testPlaceDuck2() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

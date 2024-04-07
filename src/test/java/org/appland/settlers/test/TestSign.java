@@ -6,9 +6,10 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TestSign {
     public void testSignExpires() throws Exception {
 
         /* Create a new game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

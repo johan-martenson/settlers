@@ -3,6 +3,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Stone;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.assets.StoneAmount.*;
 import static org.junit.Assert.assertEquals;
 
@@ -20,7 +20,7 @@ public class TestStones {
     public void testStoneAmount() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -57,7 +57,7 @@ public class TestStones {
     public void testStoneAmountIsEqualForBothTypes() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

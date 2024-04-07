@@ -7,47 +7,39 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Harbor;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.buildings.Well;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -71,7 +63,7 @@ public class TestHarbor {
     public void testCanMarkAvailablePlaceForHarborOnMap() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -93,7 +85,7 @@ public class TestHarbor {
     public void testCannotPlaceHarborWithoutMarkingFirst() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -122,7 +114,7 @@ public class TestHarbor {
     public void testHarborOnlyNeedsFourPlanksAndSixStonesForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -163,7 +155,7 @@ public class TestHarbor {
     public void testHarborCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -204,7 +196,7 @@ public class TestHarbor {
     public void testHarborCannotBeConstructedWithTooFewStones() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -245,7 +237,7 @@ public class TestHarbor {
     public void testHarborIsConstructedWithRequiredResources() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -289,7 +281,7 @@ public class TestHarbor {
     public void testUnfinishedHarborNotNeedsWorker() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -317,7 +309,7 @@ public class TestHarbor {
     public void testHarborNeedsWorker() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -353,7 +345,7 @@ public class TestHarbor {
     public void testStorageWorkerGetsAssignedToFinishedHarbor() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -395,7 +387,7 @@ public class TestHarbor {
     public void testStorageWorkerIsNotASoldier() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -437,7 +429,7 @@ public class TestHarbor {
     public void testStorageWorkerRests() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -483,7 +475,7 @@ public class TestHarbor {
     public void testStorageWorkerRestsThenDeliversCargo() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -543,7 +535,7 @@ public class TestHarbor {
     public void testStorageWorkerGoesBackToHarborAfterDelivery() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -607,7 +599,7 @@ public class TestHarbor {
     public void testStorageWorkerRestsInHarborAfterDelivery() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -676,7 +668,7 @@ public class TestHarbor {
     public void testStorageWorkerGoesBackToHarborWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -728,7 +720,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -780,7 +772,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -838,7 +830,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -899,7 +891,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -951,7 +943,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackOffroadToBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1004,7 +996,7 @@ public class TestHarbor {
     public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1060,7 +1052,7 @@ public class TestHarbor {
     public void testStorageWorkerGoesBackOnToHarborOnRoadsIfPossibleWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1117,7 +1109,7 @@ public class TestHarbor {
     public void testDestroyedHarborIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1169,7 +1161,7 @@ public class TestHarbor {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1204,7 +1196,7 @@ public class TestHarbor {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1239,7 +1231,7 @@ public class TestHarbor {
     public void testProductionInHarborCannotBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1282,7 +1274,7 @@ public class TestHarbor {
     public void testProductionInHarborCannotBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1325,7 +1317,7 @@ public class TestHarbor {
     public void testAssignedStorageWorkerHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1369,9 +1361,9 @@ public class TestHarbor {
     public void testHarborRemainsWhenSupportingOtherMilitaryBuildingIsRemoved() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
-        Player player2 = new Player("Player 2", RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player2 = new Player("Player 2", PlayerColor.RED);
 
         List<Player> players = new LinkedList<>();
 
@@ -1440,9 +1432,9 @@ public class TestHarbor {
     public void testRoadCloseToOpponentGetsPopulatedFromCorrectPlayer() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
-        Player player2 = new Player("Player 2", RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player2 = new Player("Player 2", PlayerColor.RED);
 
         List<Player> players = new LinkedList<>();
 
@@ -1560,7 +1552,7 @@ public class TestHarbor {
     public void testStorageWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1632,7 +1624,7 @@ public class TestHarbor {
     public void testStorageWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1708,7 +1700,7 @@ public class TestHarbor {
     public void testStorageWorkerReturnsToHarborIfHarborIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1779,7 +1771,7 @@ public class TestHarbor {
     public void testStorageWorkerGoesOffroadBackToClosestStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1836,7 +1828,7 @@ public class TestHarbor {
     public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1896,7 +1888,7 @@ public class TestHarbor {
     public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1959,7 +1951,7 @@ public class TestHarbor {
     public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorehouseWhenHarborIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2013,7 +2005,7 @@ public class TestHarbor {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2064,7 +2056,7 @@ public class TestHarbor {
     public void testHarborCannotProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2098,7 +2090,7 @@ public class TestHarbor {
     public void testHarborReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2129,7 +2121,7 @@ public class TestHarbor {
     public void testHarborReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2169,7 +2161,7 @@ public class TestHarbor {
     public void testHarborReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2204,7 +2196,7 @@ public class TestHarbor {
     public void testHarborWaitsWhenFlagIsFull() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2278,7 +2270,7 @@ public class TestHarbor {
     public void testHarborDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2377,7 +2369,7 @@ public class TestHarbor {
     public void testPushedOutCargoGoesToOtherHarbor() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2434,7 +2426,7 @@ public class TestHarbor {
     public void testPushedOutWorkerGoesToOtherHarborWhenOwnStoreIsBlocked() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2501,7 +2493,7 @@ public class TestHarbor {
     public void testPushedOutMaterialFollowsPriorityOrder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2561,7 +2553,7 @@ public class TestHarbor {
     public void testDeliveriesGoToOtherHarborWhenDeliveryIsBlocked() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2661,7 +2653,7 @@ public class TestHarbor {
     public void testPushedOutMaterialStopsWhenFlagFillsUp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

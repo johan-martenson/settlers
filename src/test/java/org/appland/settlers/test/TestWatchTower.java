@@ -6,22 +6,23 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.buildings.ForesterHut;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.WatchTower;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.WatchTower;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -30,21 +31,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_FIRST_CLASS_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.SERGEANT_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -56,7 +45,7 @@ public class TestWatchTower {
     public void testWatchTowerNeedsThreePlanksAndFiveStonesForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -101,7 +90,7 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -148,7 +137,7 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -195,7 +184,7 @@ public class TestWatchTower {
     public void testWatchTowerGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -240,7 +229,7 @@ public class TestWatchTower {
     public void testBorderIsNotExtendedWhenWatchTowerIsFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -271,7 +260,7 @@ public class TestWatchTower {
     public void testBorderIsExtendedWhenWatchTowerIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -323,7 +312,7 @@ public class TestWatchTower {
     public void testWatchTowerOnlyNeedsSixSoldiers() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -354,7 +343,7 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -385,7 +374,7 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldMoreThanSixSoldiers() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -424,7 +413,7 @@ public class TestWatchTower {
     public void testWatchTowerNeedsCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -446,7 +435,7 @@ public class TestWatchTower {
     public void testUnfinishedWatchTowerNotNeedsCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -466,7 +455,7 @@ public class TestWatchTower {
     public void testWatchTowerCanHoldThreeCoins() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -510,7 +499,7 @@ public class TestWatchTower {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -546,7 +535,7 @@ public class TestWatchTower {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -581,7 +570,7 @@ public class TestWatchTower {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -621,7 +610,7 @@ public class TestWatchTower {
     public void testPromotionConsumesCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -656,7 +645,7 @@ public class TestWatchTower {
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -693,7 +682,7 @@ public class TestWatchTower {
     public void testWatchTowerWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -729,7 +718,7 @@ public class TestWatchTower {
     public void testCanDisableCoinsToWatchTower() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -757,7 +746,7 @@ public class TestWatchTower {
     public void testOccupiedWatchTowerCanBeEvacuated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -794,7 +783,7 @@ public class TestWatchTower {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -839,7 +828,7 @@ public class TestWatchTower {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -881,7 +870,7 @@ public class TestWatchTower {
     public void testNoMilitaryIsDispatchedToEvacuatedWatchTower() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -914,7 +903,7 @@ public class TestWatchTower {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -963,7 +952,7 @@ public class TestWatchTower {
     public void testMilitaryGoesBackToStorageWhenWatchTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1005,7 +994,7 @@ public class TestWatchTower {
     public void testProductionCannotBeResumedInWatchTower() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1033,7 +1022,7 @@ public class TestWatchTower {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenWatchTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1082,7 +1071,7 @@ public class TestWatchTower {
     public void testCannotStopProductionInBarracks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1117,7 +1106,7 @@ public class TestWatchTower {
     public void testWatchTowerCannotProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1144,7 +1133,7 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1168,7 +1157,7 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1201,7 +1190,7 @@ public class TestWatchTower {
     public void testWatchTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1234,7 +1223,7 @@ public class TestWatchTower {
     public void testHostedMilitaryListIsEmptyForWatchTowerUnderConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1255,7 +1244,7 @@ public class TestWatchTower {
     public void testHostedMilitaryListIsEmptyForEmptyWatchTower() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1279,7 +1268,7 @@ public class TestWatchTower {
     public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1307,7 +1296,7 @@ public class TestWatchTower {
     public void testRankIsCorrectInHostedMilitaryList() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1334,7 +1323,7 @@ public class TestWatchTower {
     public void testBorderForWatchTowerIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -1392,7 +1381,7 @@ public class TestWatchTower {
     public void testLandForWatchTowerIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -1443,7 +1432,7 @@ public class TestWatchTower {
     public void testDiscoveredLandForWatchTowerIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -1503,7 +1492,7 @@ public class TestWatchTower {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -1531,7 +1520,7 @@ public class TestWatchTower {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -1559,7 +1548,7 @@ public class TestWatchTower {
     public void testWatchTowerCanBeUpgraded() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1616,7 +1605,7 @@ public class TestWatchTower {
     public void testUnfinishedWatchTowerCannotBeUpgraded() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1646,7 +1635,7 @@ public class TestWatchTower {
     public void testBurningWatchTowerCannotBeUpgraded() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1682,7 +1671,7 @@ public class TestWatchTower {
     public void testCannotUpgradeWatchTowerWithoutMaterial() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1732,7 +1721,7 @@ public class TestWatchTower {
     public void testCannotUpgradeWatchTowerBeingUpgraded() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1771,7 +1760,7 @@ public class TestWatchTower {
     public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1834,7 +1823,7 @@ public class TestWatchTower {
     public void testOccupiedWatchTowerIsOccupiedAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1890,7 +1879,7 @@ public class TestWatchTower {
     public void testCoinRemainsAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1949,7 +1938,7 @@ public class TestWatchTower {
     public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2004,9 +1993,9 @@ public class TestWatchTower {
     public void testPlayerIsCorrectAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
-        Player player2 = new Player("Player 2", java.awt.Color.BLACK);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.GRAY);
         List<Player> players = new ArrayList<>();
         players.add(player2);
         players.add(player0);
@@ -2071,7 +2060,7 @@ public class TestWatchTower {
     public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2127,7 +2116,7 @@ public class TestWatchTower {
     public void testBorderIsExpandedAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2183,7 +2172,7 @@ public class TestWatchTower {
     public void testFlagIsCorrectAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2240,7 +2229,7 @@ public class TestWatchTower {
     public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2294,7 +2283,7 @@ public class TestWatchTower {
     public void testEvacuatedBuildingKeepsSendingHomeMilitary() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2334,7 +2323,7 @@ public class TestWatchTower {
     public void testCanUpgradeAfterDisablingPromotions() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2393,7 +2382,7 @@ public class TestWatchTower {
     public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2478,7 +2467,7 @@ public class TestWatchTower {
     public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2539,7 +2528,7 @@ public class TestWatchTower {
     public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
 
         /* Creating new player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2605,7 +2594,7 @@ public class TestWatchTower {
     public void testUpgradedWatchTowerGetsPopulatedFully() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

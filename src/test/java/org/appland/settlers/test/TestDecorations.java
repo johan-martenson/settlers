@@ -1,20 +1,21 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.actors.Forester;
-import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.actors.Forester;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
@@ -24,15 +25,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.DecorationType.*;
 import static org.appland.settlers.model.DecorationType.STONE;
+import static org.appland.settlers.model.DecorationType.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.junit.Assert.*;
 
 public class TestDecorations {
@@ -84,7 +83,7 @@ public class TestDecorations {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -115,7 +114,7 @@ public class TestDecorations {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -149,7 +148,7 @@ public class TestDecorations {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -183,7 +182,7 @@ public class TestDecorations {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -221,7 +220,7 @@ public class TestDecorations {
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -288,8 +287,8 @@ public class TestDecorations {
     public void testSkeletonAppearsWhenSoldierDies() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -380,7 +379,7 @@ public class TestDecorations {
     public void testStoneDecorationIsPlacedWhenStoneRunsOut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

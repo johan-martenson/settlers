@@ -1,25 +1,26 @@
 package org.appland.settlers.maps;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.jline.terminal.TerminalBuilder;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +29,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import static java.awt.Color.*;
 import static java.lang.String.format;
 
 public class Inspector {
@@ -86,18 +86,7 @@ public class Inspector {
     private boolean placePlayers = false;
 
     /* Regular fields */
-    private static final List<Color> COLORS = new ArrayList<>();
-
-    static {
-        COLORS.add(BLUE);
-        COLORS.add(RED);
-        COLORS.add(WHITE);
-        COLORS.add(GREEN);
-        COLORS.add(YELLOW);
-        COLORS.add(BLACK);
-        COLORS.add(GRAY);
-        COLORS.add(PINK);
-    }
+    private static final List<PlayerColor> COLORS = Arrays.stream(PlayerColor.values()).toList();
 
     private final MapLoader mapLoader;
 

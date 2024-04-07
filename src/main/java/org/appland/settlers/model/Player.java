@@ -40,7 +40,6 @@ import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessa
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,12 +64,12 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
-    private GameMap map;
-    private Color   color;
-    private Nation  nation;
-    private String  name;
-    private boolean treeConservationProgramActive;
-    private boolean treeConservationProgramEnabled;
+    private GameMap     map;
+    private PlayerColor color;
+    private Nation      nation;
+    private String      name;
+    private boolean     treeConservationProgramActive;
+    private boolean     treeConservationProgramEnabled;
 
     private final List<BorderChange> changedBorders;
     private final List<Building> buildings;
@@ -137,7 +136,7 @@ public class Player {
     private int amountWhenPopulatingFarFromBorder;
     private int amountSoldiersAvailableForAttack;
 
-    public Player(String name, Color color) {
+    public Player(String name, PlayerColor color) {
         this.name           = name;
         this.color          = color;
 
@@ -530,7 +529,7 @@ public class Player {
         return name;
     }
 
-    public Color getColor() {
+    public PlayerColor getColor() {
         return color;
     }
 
@@ -712,7 +711,7 @@ public class Player {
         return false;
     }
 
-    public void setColor(Color color) {
+    public void setColor(PlayerColor color) {
         this.color = color;
     }
 

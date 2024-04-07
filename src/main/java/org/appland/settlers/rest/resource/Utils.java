@@ -3,6 +3,7 @@ package org.appland.settlers.rest.resource;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
@@ -159,7 +160,7 @@ class Utils {
         JSONObject jsonPlayer = new JSONObject();
 
         jsonPlayer.put("name", player.getName());
-        jsonPlayer.put("color", colorToHexString(player.getColor()));
+        jsonPlayer.put("color", player.getColor().name().toUpperCase());
         jsonPlayer.put("id", playerId);
         jsonPlayer.put("nation", player.getNation().name());
 
@@ -237,7 +238,7 @@ class Utils {
 
     Player jsonToPlayer(JSONObject jsonPlayer) {
         String name = (String) jsonPlayer.get("name");
-        Color color = jsonToColor((String) jsonPlayer.get("color"));
+        PlayerColor color = jsonToColor((String) jsonPlayer.get("color"));
 
         String nationString = (String) jsonPlayer.get("nation");
         Nation nation = Nation.valueOf(nationString);
@@ -249,8 +250,8 @@ class Utils {
         return player;
     }
 
-    private Color jsonToColor(String hexColor) {
-        return Color.decode(hexColor);
+    private PlayerColor jsonToColor(String colorName) {
+        return PlayerColor.valueOf(colorName);
     }
 
     JSONObject terrainToJson(GameMap map) {
@@ -811,7 +812,7 @@ class Utils {
 
         jsonPlayer.put("id", idManager.getId(player));
         jsonPlayer.put("name", player.getName());
-        jsonPlayer.put("color", colorToHexString(player.getColor()));
+        jsonPlayer.put("color", player.getColor().name().toUpperCase());
         jsonPlayer.put("nation", player.getNation().name());
 
         return jsonPlayer;
@@ -914,7 +915,7 @@ class Utils {
             JSONObject jsonPlayer = new JSONObject();
 
             jsonPlayer.put("name", player.getName());
-            jsonPlayer.put("color", colorToHexString(player.getColor()));
+            jsonPlayer.put("color", player.getColor().name().toUpperCase());
             jsonPlayer.put("id", idManager.getId(player));
 
             jsonPlayers.add(jsonPlayer);

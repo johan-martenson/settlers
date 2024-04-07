@@ -1,20 +1,20 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
 import static org.junit.Assert.assertTrue;
 
 public class TestCrop {
@@ -23,7 +23,7 @@ public class TestCrop {
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -61,7 +61,7 @@ public class TestCrop {
     public void testFarmerPlantsBothTypesOfCrops() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

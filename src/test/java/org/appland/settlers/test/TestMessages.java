@@ -1,81 +1,64 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Projectile;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sign;
+import org.appland.settlers.model.actors.CatapultWorker;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.messages.BombardedByCatapultMessage;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Quarry;
+import org.appland.settlers.model.buildings.Sawmill;
+import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.messages.BombardedByCatapultMessage;
 import org.appland.settlers.model.messages.BuildingCapturedMessage;
 import org.appland.settlers.model.messages.BuildingLostMessage;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.Catapult;
-import org.appland.settlers.model.actors.CatapultWorker;
-import org.appland.settlers.model.buildings.CoalMine;
-import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.buildings.Fishery;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.messages.GameEndedMessage;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.actors.Geologist;
 import org.appland.settlers.model.messages.GeologistFindMessage;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.messages.Message;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.messages.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.messages.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.messages.MilitaryBuildingReadyMessage;
-import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.messages.NoMoreResourcesMessage;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Projectile;
-import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.Sign;
-import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.messages.Message.MessageType.BOMBARDED_BY_CATAPULT;
-import static org.appland.settlers.model.messages.Message.MessageType.BUILDING_CAPTURED;
-import static org.appland.settlers.model.messages.Message.MessageType.BUILDING_LOST;
-import static org.appland.settlers.model.messages.Message.MessageType.GAME_ENDED;
-import static org.appland.settlers.model.messages.Message.MessageType.GEOLOGIST_FIND;
-import static org.appland.settlers.model.messages.Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND;
-import static org.appland.settlers.model.messages.Message.MessageType.NO_MORE_RESOURCES;
-import static org.appland.settlers.model.messages.Message.MessageType.STORE_HOUSE_IS_READY;
-import static org.appland.settlers.model.messages.Message.MessageType.TREE_CONSERVATION_PROGRAM_ACTIVATED;
-import static org.appland.settlers.model.messages.Message.MessageType.TREE_CONSERVATION_PROGRAM_DEACTIVATED;
-import static org.appland.settlers.model.messages.Message.MessageType.UNDER_ATTACK;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.messages.Message.MessageType.*;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestMessages {
 
@@ -90,7 +73,7 @@ public class TestMessages {
     public void testNoMessagesOnStart() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -109,7 +92,7 @@ public class TestMessages {
     public void testAMessageIsReceivedWhenBarracksIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -145,7 +128,7 @@ public class TestMessages {
     public void testNoMessageWhenNonMilitaryBuildingIsReady() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -172,7 +155,7 @@ public class TestMessages {
     public void testBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -228,7 +211,7 @@ public class TestMessages {
     public void testMessageSentWhenQuarryRunsOutOfResources() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -287,7 +270,7 @@ public class TestMessages {
     public void testMessageSentWhenFishermanCanRunOutOfFish() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -396,7 +379,7 @@ public class TestMessages {
     public void testNoMessageWhenOtherBuildingRunsOutOfResources() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -425,7 +408,7 @@ public class TestMessages {
     public void testMessageSentWhenGeologistFindsGoldOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -497,7 +480,7 @@ public class TestMessages {
     public void testNoMessageSentWhenGeologistFindsNothingOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -560,8 +543,8 @@ public class TestMessages {
     public void testMessageSentWhenBarracksIsUnderAttack() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -627,8 +610,8 @@ public class TestMessages {
     public void testMessagesAreSentWhenAnAttackerTakesOverBuildingAfterWinningFight() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -736,7 +719,7 @@ public class TestMessages {
     public void testMessageSentWhenCoalmineRunsOutOfCoal() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -821,7 +804,7 @@ public class TestMessages {
     public void testMessageIsOnlySentOnceWhenCoalmineRunsOutOfCoal() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -910,7 +893,7 @@ public class TestMessages {
     public void testMessageSentWhenStorageIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -964,7 +947,7 @@ public class TestMessages {
     public void testMessageSentWhenTreeConservationProgramIsActivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1003,7 +986,7 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenTreeConservationProgramIsActivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1049,7 +1032,7 @@ public class TestMessages {
     public void testMessageSentWhenTreeConservationProgramIsDeactivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1097,7 +1080,7 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenTreeConservationProgramIsDeactivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1156,8 +1139,8 @@ public class TestMessages {
     public void testThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -1218,8 +1201,8 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -1291,8 +1274,8 @@ public class TestMessages {
     public void testMessageSentWhenPlayerWins() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1374,8 +1357,8 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenPlayerWins() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1469,8 +1452,8 @@ public class TestMessages {
     public void testMessageSentToEachPlayerWhenPlayerWins() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1568,8 +1551,8 @@ public class TestMessages {
     public void testMessageSentWhenCatapultHitsBarracks() throws Exception {
 
         /* Create new game map */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -1650,8 +1633,8 @@ public class TestMessages {
     public void testMessageSentWhenCatapultHitsBarracksIsOnlySentOnce() throws Exception {
 
         /* Create new game map */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);

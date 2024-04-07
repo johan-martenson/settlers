@@ -33,7 +33,7 @@ public class TestPlankProductionPlayer {
     public void testCreatePlankProductionPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -48,7 +48,7 @@ public class TestPlankProductionPlayer {
     public void testPlayerFirstPlacesForesterHut() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -82,7 +82,7 @@ public class TestPlankProductionPlayer {
     public void testPlayerDoesNothingUntilForesterHutIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -121,7 +121,7 @@ public class TestPlankProductionPlayer {
     public void testPlayerPlacesWoodcutterWhenForesterHutIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -149,7 +149,7 @@ public class TestPlankProductionPlayer {
     public void testPlayerPlacesSawmillWhenWoodcutterIsCompleted() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -183,7 +183,7 @@ public class TestPlankProductionPlayer {
     public void testPlayerDoesNothingAfterPlacingSawmill() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

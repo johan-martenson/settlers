@@ -1,25 +1,18 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
@@ -31,21 +24,27 @@ import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Quarry;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
-import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
 import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
@@ -57,7 +56,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenForesterPlantsTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -129,7 +128,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenForesterPlantsTreeIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -210,7 +209,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenWoodcutterCutsDownTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -300,7 +299,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenWoodcutterCutsDownTreeIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -399,7 +398,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenStonemasonGetsStone() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -491,7 +490,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenStonemasonGetsStoneIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -592,7 +591,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -670,7 +669,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvestIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -757,7 +756,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventsWhenFishermanFishes() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -857,7 +856,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenFishermanFishesIsOnlySentOnce() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -937,7 +936,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenGeologistDoesResearch() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1003,7 +1002,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenGeologistDoesResearchIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1078,7 +1077,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenFarmerHarvestsWhenPossible() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1165,7 +1164,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenFarmerHarvestsWhenPossibleIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1261,7 +1260,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenBuilderHammers() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1349,7 +1348,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenBuilderHammersIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1446,7 +1445,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierChewsGum() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1496,7 +1495,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierChewsGumIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1555,7 +1554,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierCanReadThePaperWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1607,7 +1606,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierReadsThePaperWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1666,7 +1665,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierTouchesNoseWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1718,7 +1717,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenCourierTouchesNoseWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1777,7 +1776,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testCourierJumpSkipRopeWhileBored() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1829,7 +1828,7 @@ public class TestGameMonitoringOfWorkerActions {
     public void testCourierJumpSkipRopeWhileBoredIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1888,8 +1887,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenHitting() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1983,8 +1982,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenHittingIsOnlySentOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2092,8 +2091,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierJumpsBack() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2258,8 +2257,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierJumpsBackIsOnlySentOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2443,8 +2442,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierStandsAside() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2608,8 +2607,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierStandsAsideIsOnlySentOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2816,8 +2815,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierGetsHit() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2912,8 +2911,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierGetsHitIsOnlySentOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -3021,8 +3020,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierIsDying() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -3116,8 +3115,8 @@ public class TestGameMonitoringOfWorkerActions {
     public void testMonitoringEventWhenSoldierIsDyingIsOnlySentOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
 

@@ -2,38 +2,24 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.statistics.ProductionDataPoint;
 import org.appland.settlers.model.statistics.ProductionDataSeries;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.statistics.StatisticsManager;
-import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 public class TestProductionStatistics {
 
@@ -41,7 +27,7 @@ public class TestProductionStatistics {
     public void testGetStatisticsInstance() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -60,7 +46,7 @@ public class TestProductionStatistics {
     public void testGetProductionStatisticsForAMaterial() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -88,7 +74,7 @@ public class TestProductionStatistics {
     public void testGetTimeForAProductionStatisticsMeasurement() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -114,9 +100,9 @@ public class TestProductionStatistics {
     public void testGetProductionStatisticsHasRightAmountOfValues() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
-        Player player2 = new Player("Player 2", java.awt.Color.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -151,9 +137,9 @@ public class TestProductionStatistics {
     public void testProductionStatisticsDataSeriesGrowsOverTime() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
-        Player player2 = new Player("Player 2", java.awt.Color.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -199,9 +185,9 @@ public class TestProductionStatistics {
     public void testCollectedWoodIsReportedInProductionStatistics() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
-        Player player2 = new Player("Player 2", java.awt.Color.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -284,9 +270,9 @@ public class TestProductionStatistics {
     public void testProductionStatisticsIsCollectedPeriodically() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
-        Player player2 = new Player("Player 2", java.awt.Color.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -345,7 +331,7 @@ public class TestProductionStatistics {
     public void testGetInitialProductionStatisticsForRequiredMaterials() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);

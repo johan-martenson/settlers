@@ -4,16 +4,14 @@ import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestPossibleHarborPoints {
 
@@ -27,7 +25,7 @@ public class TestPossibleHarborPoints {
     public void testCanMarkPlaceForHarborNotDirectlyNextToWater() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -48,7 +46,7 @@ public class TestPossibleHarborPoints {
     public void testCannotMarkPlaceForHarborDirectlyNextToWater() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -73,7 +71,7 @@ public class TestPossibleHarborPoints {
     public void testCanMarkAvailablePlaceForHarborWithWaterNextToFlag() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -94,7 +92,7 @@ public class TestPossibleHarborPoints {
     public void testCanMarkAvailablePlaceForHarborWithWaterOneStepAway() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -115,7 +113,7 @@ public class TestPossibleHarborPoints {
     public void testCanMarkAvailablePlaceForHarborWithoutWaterOneStepAway() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

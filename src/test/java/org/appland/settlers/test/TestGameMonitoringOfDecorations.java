@@ -3,19 +3,17 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestGameMonitoringOfDecorations {
 
@@ -31,7 +29,7 @@ public class TestGameMonitoringOfDecorations {
         for (DecorationType decoration : TestDecorations.PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 
@@ -76,7 +74,7 @@ public class TestGameMonitoringOfDecorations {
         for (DecorationType decoration : TestDecorations.PURE_DECORATIONS) {
 
             /* Create new game map */
-            Player player0 = new Player("Player 0", BLUE);
+            Player player0 = new Player("Player 0", PlayerColor.BLUE);
             List<Player> players = new ArrayList<>();
             players.add(player0);
 

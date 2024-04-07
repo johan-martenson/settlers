@@ -1,16 +1,17 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Fortress;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.junit.Test;
 
@@ -19,21 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.OFFICER_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_FIRST_CLASS_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.actors.Soldier.Rank.SERGEANT_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.junit.Assert.*;
 
 public class TestSoldierCreationAndPromotion {
 
@@ -41,7 +30,7 @@ public class TestSoldierCreationAndPromotion {
     public void createPrivate() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -104,7 +93,7 @@ public class TestSoldierCreationAndPromotion {
     public void storageDoesNotPromote() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -136,7 +125,7 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithoutMilitary() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -165,7 +154,7 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithOnlyGenerals() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -199,7 +188,7 @@ public class TestSoldierCreationAndPromotion {
     public void promoteWithoutGold() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -229,7 +218,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPlayerIsCorrectInMilitaryDispatchedFromHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -259,7 +248,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedPrivateBecomesCorporal() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -294,7 +283,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedCorporalBecomesSergeant() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -329,7 +318,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedSergeantBecomesOfficer() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -364,7 +353,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPromotedOfficerBecomesGeneral() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -399,7 +388,7 @@ public class TestSoldierCreationAndPromotion {
     public void testGeneralCannotBePromoted() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -434,7 +423,7 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfAllRanksAtSameTime() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -486,7 +475,7 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfOnlyPrivates() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -538,7 +527,7 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndOnePrivateFirstRank() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -590,7 +579,7 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeant() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -642,7 +631,7 @@ public class TestSoldierCreationAndPromotion {
     public void testUpgradeOfPrivatesAndPrivateFirstRankAndOneSergeantAndOneOfficer() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -694,7 +683,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPrivateIsSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -731,7 +720,7 @@ public class TestSoldierCreationAndPromotion {
     public void testPrivateFirstRankIsSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -769,7 +758,7 @@ public class TestSoldierCreationAndPromotion {
     public void testSergeantIsSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -807,7 +796,7 @@ public class TestSoldierCreationAndPromotion {
     public void testOfficerIsSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -845,7 +834,7 @@ public class TestSoldierCreationAndPromotion {
     public void testGeneralIsSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

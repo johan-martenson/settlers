@@ -5,47 +5,29 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.GoldMine;
-import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.actors.WildAnimal;
-import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.GoldMine;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.HunterHut;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
-import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_WATER;
-import static org.appland.settlers.model.DetailedVegetation.DESERT_1;
-import static org.appland.settlers.model.DetailedVegetation.MEADOW_1;
-import static org.appland.settlers.model.DetailedVegetation.LAVA;
-import static org.appland.settlers.model.DetailedVegetation.MAGENTA;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_MEADOW;
-import static org.appland.settlers.model.DetailedVegetation.SAVANNAH;
-import static org.appland.settlers.model.DetailedVegetation.WATER_2;
-import static org.appland.settlers.model.DetailedVegetation.SNOW;
-import static org.appland.settlers.model.DetailedVegetation.STEPPE;
-import static org.appland.settlers.model.DetailedVegetation.SWAMP;
-import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -59,7 +41,7 @@ public class TestPlacementInTerrain {
     public void testPathCloseToLake() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -149,7 +131,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -171,7 +153,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -196,7 +178,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -218,7 +200,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -244,7 +226,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -266,7 +248,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineInDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -292,7 +274,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -322,7 +304,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -347,7 +329,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -376,7 +358,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -423,7 +405,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -470,7 +452,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfDesertAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -501,7 +483,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfDesertAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -529,7 +511,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnDesert() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -559,7 +541,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -581,7 +563,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -607,7 +589,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -629,7 +611,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -655,7 +637,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -677,7 +659,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -703,7 +685,7 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -735,7 +717,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -760,7 +742,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -789,7 +771,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -842,7 +824,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotGoIntoSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -880,7 +862,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfSnowAndWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -913,7 +895,7 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfSnowAndWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -941,7 +923,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -970,7 +952,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -992,7 +974,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1017,7 +999,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1039,7 +1021,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1065,7 +1047,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1087,7 +1069,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1113,7 +1095,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1143,7 +1125,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1190,7 +1172,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMeadow1() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1237,7 +1219,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMeadow1AndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1268,7 +1250,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMeadow1AndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1299,7 +1281,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1321,7 +1303,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1347,7 +1329,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1369,7 +1351,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1395,7 +1377,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1417,7 +1399,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1443,7 +1425,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1473,7 +1455,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1520,7 +1502,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1565,7 +1547,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfSavannahAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1597,7 +1579,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfSavannahAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1625,7 +1607,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnSavannah() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1653,7 +1635,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1675,7 +1657,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1701,7 +1683,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1723,7 +1705,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1749,7 +1731,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1771,7 +1753,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1797,7 +1779,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1827,7 +1809,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1874,7 +1856,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1921,7 +1903,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfBuildableWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1953,7 +1935,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfBuildableWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1981,7 +1963,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnBuildableWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2009,7 +1991,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2031,7 +2013,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2057,7 +2039,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2079,7 +2061,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2105,7 +2087,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2127,7 +2109,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2153,7 +2135,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2183,7 +2165,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2230,7 +2212,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2275,7 +2257,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfSteppeAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2307,7 +2289,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfSteppeAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2335,7 +2317,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnSteppe() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2363,7 +2345,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2385,7 +2367,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2411,7 +2393,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2433,7 +2415,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2459,7 +2441,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2481,7 +2463,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2507,7 +2489,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2537,7 +2519,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2584,7 +2566,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2631,7 +2613,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMountainMeadowAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2663,7 +2645,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMountainMeadowAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2691,7 +2673,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnMountainMeadow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2718,7 +2700,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2740,7 +2722,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2766,7 +2748,7 @@ public class TestPlacementInTerrain {
     public void testAvailableHouseOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2788,7 +2770,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHouseOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2814,7 +2796,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2836,7 +2818,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2862,7 +2844,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2892,7 +2874,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2939,7 +2921,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2984,7 +2966,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfBuildableMountainAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3016,7 +2998,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfBuildableMountainAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3044,7 +3026,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceHeadquarterOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3069,7 +3051,7 @@ public class TestPlacementInTerrain {
     public void testAvailableLargeHouseOnBuildableMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3100,7 +3082,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3122,7 +3104,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3148,7 +3130,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3170,7 +3152,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3196,7 +3178,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3218,7 +3200,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3244,7 +3226,7 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3276,7 +3258,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3301,7 +3283,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3330,7 +3312,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3383,7 +3365,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfLavaAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3416,7 +3398,7 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfLavaAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3444,7 +3426,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3470,7 +3452,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnLava() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3501,7 +3483,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3523,7 +3505,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3549,7 +3531,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3571,7 +3553,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3597,7 +3579,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3619,7 +3601,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3645,7 +3627,7 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3677,7 +3659,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3702,7 +3684,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3731,7 +3713,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3785,7 +3767,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfDeepWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3818,7 +3800,7 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfDeepWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3846,7 +3828,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3872,7 +3854,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnDeepWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3903,7 +3885,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3925,7 +3907,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3951,7 +3933,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3973,7 +3955,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -3999,7 +3981,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4021,7 +4003,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4047,7 +4029,7 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4079,7 +4061,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4104,7 +4086,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4133,7 +4115,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4187,7 +4169,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4220,7 +4202,7 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfWaterAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4248,7 +4230,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4274,7 +4256,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4305,7 +4287,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableFlagOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4327,7 +4309,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4353,7 +4335,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4375,7 +4357,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4401,7 +4383,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4423,7 +4405,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4449,7 +4431,7 @@ public class TestPlacementInTerrain {
     public void testCannotBuildRoadAcrossSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4481,7 +4463,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4506,7 +4488,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4535,7 +4517,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotWalkOffroadAcrossSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4588,7 +4570,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCannotGoIntoSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4626,7 +4608,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceFlagOnBorderOfSwampAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4659,7 +4641,7 @@ public class TestPlacementInTerrain {
     public void testNoFlagPointAvailableOnBorderOfSwampAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4687,7 +4669,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4714,7 +4696,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnSwamp() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -4744,7 +4726,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4766,7 +4748,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4792,7 +4774,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4814,7 +4796,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4840,7 +4822,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableMineInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4862,7 +4844,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceMineInMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4888,7 +4870,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4918,7 +4900,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4943,7 +4925,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -4972,7 +4954,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5019,7 +5001,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5066,7 +5048,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMagentaAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5098,7 +5080,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMagentaAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5126,7 +5108,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5152,7 +5134,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnMagenta() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5182,7 +5164,7 @@ public class TestPlacementInTerrain {
     public void testAvailableFlagInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5204,7 +5186,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5230,7 +5212,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5252,7 +5234,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5278,7 +5260,7 @@ public class TestPlacementInTerrain {
     public void testAvailableMineInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5300,7 +5282,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceMineInMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5326,7 +5308,7 @@ public class TestPlacementInTerrain {
     public void testCanBuildRoadAcrossMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5356,7 +5338,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableHouseOnBorderOfMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5381,7 +5363,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHouseOnBorderOfMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5410,7 +5392,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanWalkOffroadAcrossMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -5457,7 +5439,7 @@ public class TestPlacementInTerrain {
     public void testWorkerCanGoIntoMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5504,7 +5486,7 @@ public class TestPlacementInTerrain {
     public void testCanPlaceFlagOnBorderOfMountainAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5536,7 +5518,7 @@ public class TestPlacementInTerrain {
     public void testFlagPointAvailableOnBorderOfMountainAndSnow() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5564,7 +5546,7 @@ public class TestPlacementInTerrain {
     public void testCannotPlaceHeadquarterOnMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -5590,7 +5572,7 @@ public class TestPlacementInTerrain {
     public void testNoAvailableLargeHouseOnMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

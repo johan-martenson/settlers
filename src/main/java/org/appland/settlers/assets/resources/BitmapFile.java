@@ -117,7 +117,7 @@ public class BitmapFile extends Bitmap {
                 ", pixelOffset=" + pixelOffset +
                 ", headerSize=" + headerSize +
                 ", planes=" + planes +
-                ", bytesPerPixel=" + bytesPerPixel +
+                ", bytesPerPixel=" + getBytesPerPixel() +
                 ", sourceBitsPerPixel=" + sourceBitsPerPixel +
                 ", compression=" + compression +
                 ", size=" + size +

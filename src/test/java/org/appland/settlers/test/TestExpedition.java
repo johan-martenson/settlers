@@ -4,15 +4,16 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Harbor;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Shipwright;
+import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.junit.Test;
 
@@ -22,24 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.Direction.DOWN;
-import static org.appland.settlers.model.Direction.DOWN_LEFT;
-import static org.appland.settlers.model.Direction.DOWN_RIGHT;
-import static org.appland.settlers.model.Direction.LEFT;
-import static org.appland.settlers.model.Direction.RIGHT;
-import static org.appland.settlers.model.Direction.UP;
-import static org.appland.settlers.model.Direction.UP_LEFT;
-import static org.appland.settlers.model.Direction.UP_RIGHT;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.appland.settlers.model.Direction.*;
+import static org.appland.settlers.model.Material.*;
+import static org.junit.Assert.*;
 
 public class TestExpedition {
 
@@ -70,7 +56,7 @@ public class TestExpedition {
     public void testAlreadyStoredMaterialIsUsedToPrepareExpeditionIfAvailable() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -136,7 +122,7 @@ public class TestExpedition {
     public void testCannotStartExpeditionInWrongDirection() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -265,7 +251,7 @@ public class TestExpedition {
     public void testNoPossibleExpeditionsFromShipWithoutPreparingExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -345,7 +331,7 @@ public class TestExpedition {
     public void testGetNoPossibleExpeditionsFromShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -447,7 +433,7 @@ public class TestExpedition {
     public void testCannotLaunchExpeditionInInvalidDirection() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 40);
@@ -558,7 +544,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionAboveFromShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 40);
@@ -663,7 +649,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionBelowFromShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 40);
@@ -768,7 +754,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionRightOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 40);
@@ -873,7 +859,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionLeftOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -978,7 +964,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionUpLeftOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -1089,7 +1075,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionDownLeftOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -1200,7 +1186,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionUpRightOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -1337,7 +1323,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionDownRightOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -1448,7 +1434,7 @@ public class TestExpedition {
     public void testGetPossibleExpeditionLeftAndDownLeftOfShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 70, 70);
@@ -1564,7 +1550,7 @@ public class TestExpedition {
     public void testNotMoreThanRequiredMaterialIsCollected() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1649,7 +1635,7 @@ public class TestExpedition {
     public void testShipIsNotReusedWhenStartingNextExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1865,7 +1851,7 @@ public class TestExpedition {
     public void testOnlyOneShipSailsToHarborToGetReadyForExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2033,7 +2019,7 @@ public class TestExpedition {
     public void testCanDoTwoExpeditions() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

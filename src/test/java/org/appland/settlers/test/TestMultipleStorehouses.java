@@ -1,11 +1,12 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Well;
 import org.junit.Test;
@@ -13,15 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.OFFICER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WELL_WORKER;
+import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,7 +24,7 @@ public class TestMultipleStorehouses {
     public void testHouseGetsDeliveryFromRemoteHeadquarterWhenLocalStorehouseLacksMaterial() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -92,7 +85,7 @@ public class TestMultipleStorehouses {
     public void testHouseGetsAssignedWorkerFromRemoteHeadquarterWhenLocalStorehouseLacksWorker() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -152,7 +145,7 @@ public class TestMultipleStorehouses {
     public void testMilitaryHouseGetsAssignedSoldierFromRemoteHeadquarterWhenLocalStorehouseLacksSoldier() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

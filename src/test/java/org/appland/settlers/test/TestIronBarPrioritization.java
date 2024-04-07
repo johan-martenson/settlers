@@ -1,16 +1,17 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.actors.Armorer;
-import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.actors.Metalworker;
-import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Metalworker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Metalworks;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class TestIronBarPrioritization {
     public void testOnlyArmoryGetsIronBar() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -128,7 +129,7 @@ public class TestIronBarPrioritization {
     public void testOnlyMetalworksGetsIronBars() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -229,7 +230,7 @@ public class TestIronBarPrioritization {
     public void testMetalworksGetsDoubleAmountIronBars() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -331,7 +332,7 @@ public class TestIronBarPrioritization {
     public void testArmoryGetsDoubleAmountIronBars() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -433,7 +434,7 @@ public class TestIronBarPrioritization {
     public void testMetalworksGetsIronBarWithFullyStockedArmory() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

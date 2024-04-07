@@ -1,21 +1,22 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.Direction;
-import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.actors.Forester;
-import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fishery;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.DetailedVegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
@@ -41,7 +41,7 @@ public class TestWorkerHasDirections {
     public void testCourierLeavingHeadquartersHasDirectionDownRight() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -68,7 +68,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingRightHasDirectionRight() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -101,7 +101,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingUpRightHasDirectionUpRight() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -134,7 +134,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingDownRightHasDirectionDownRight() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -167,7 +167,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingLeftHasDirectionLeft() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -200,7 +200,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingDownLeftHasDirectionDownLeft() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -233,7 +233,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingUpLeftHasDirectionUpLeft() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -303,7 +303,7 @@ public class TestWorkerHasDirections {
     public void testCourierWalkingForNextPickupHasCorrectDirection() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -342,7 +342,7 @@ public class TestWorkerHasDirections {
     public void testForesterReturnsHomeAfterPlantingTreeWithDirectionDownLeft() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -418,7 +418,7 @@ public class TestWorkerHasDirections {
     public void testCourierWithNewlyPickedUpCargoHasCorrectDirection() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -456,7 +456,7 @@ public class TestWorkerHasDirections {
     public void testFishermanFishingHasCorrectDirection() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -546,7 +546,7 @@ public class TestWorkerHasDirections {
     public void testFishermanFishingOnHorizontalShoreWithWaterDownHasCorrectDirection() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

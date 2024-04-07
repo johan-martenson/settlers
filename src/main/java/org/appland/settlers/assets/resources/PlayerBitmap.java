@@ -3,6 +3,7 @@ package org.appland.settlers.assets.resources;
 import org.appland.settlers.assets.ColorBlock;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.Unsigned;
+import org.appland.settlers.model.PlayerColor;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -157,22 +158,5 @@ public class PlayerBitmap extends Bitmap {
         COLOR,
         PLAYER_COLOR,
         COMPRESSED;
-    }
-
-    public enum PlayerColor {
-        BLUE(0),
-        YELLOW(1),
-        RED(2),
-        PURPLE(3),
-        GRAY(4),
-        GREEN(5),
-        BROWN(6),
-        WHITE(7);
-
-        private final int index;
-
-        PlayerColor(int index) {
-            this.index = index;
-        }
     }
 }

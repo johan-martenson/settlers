@@ -1,26 +1,27 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.buildings.Harbor;
-import org.appland.settlers.model.messages.HarborIsFinishedMessage;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.messages.Message;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Ship;
-import org.appland.settlers.model.messages.ShipHasReachedDestinationMessage;
-import org.appland.settlers.model.messages.ShipReadyForExpeditionMessage;
 import org.appland.settlers.model.actors.Shipwright;
+import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.model.messages.HarborIsFinishedMessage;
+import org.appland.settlers.model.messages.Message;
+import org.appland.settlers.model.messages.ShipHasReachedDestinationMessage;
+import org.appland.settlers.model.messages.ShipReadyForExpeditionMessage;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,17 +30,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Direction.RIGHT;
-import static org.appland.settlers.model.Material.BUILDER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.messages.Message.MessageType.SHIP_READY_FOR_EXPEDITION;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestExpeditionNormalFlow {
 
@@ -87,7 +81,7 @@ public class TestExpeditionNormalFlow {
     public void testReadyShipWaitsCloseToShipyard() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -197,7 +191,7 @@ public class TestExpeditionNormalFlow {
     public void testPrepareExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -275,7 +269,7 @@ public class TestExpeditionNormalFlow {
     public void testShipReadyForExpeditionGameMessage() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -430,7 +424,7 @@ public class TestExpeditionNormalFlow {
     public void testExpeditionMaterialIsTransferredToShip() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -596,7 +590,7 @@ public class TestExpeditionNormalFlow {
     public void testExpeditionsAreAvailableInTheShipAfterMaterialIsTransferred() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -768,7 +762,7 @@ public class TestExpeditionNormalFlow {
     public void testStartExpedition() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -945,7 +939,7 @@ public class TestExpeditionNormalFlow {
     public void testShipSailsToExpeditionTargetAndDoesNotAutomaticallyBuildHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1134,7 +1128,7 @@ public class TestExpeditionNormalFlow {
     public void testGameMessageWhenShipReachesExpeditionTarget() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1334,7 +1328,7 @@ public class TestExpeditionNormalFlow {
     public void testShipSailsToExpeditionTargetPlayerCanBuildHarbor() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1536,7 +1530,7 @@ public class TestExpeditionNormalFlow {
     public void testGameMessageWhenNewHarborInSettlementIsFinished() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1760,7 +1754,7 @@ public class TestExpeditionNormalFlow {
     public void testNewHarborGetsOwnBorderDirectly() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -1958,7 +1952,7 @@ public class TestExpeditionNormalFlow {
     public void testNewHarborGetsStoredBuilderWhenConstructionIsDone() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -2167,7 +2161,7 @@ public class TestExpeditionNormalFlow {
     public void testNewHarborGetsShipmentWithNeededGoods() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -2401,7 +2395,7 @@ public class TestExpeditionNormalFlow {
     public void testShipCanStartNewExpeditionAfterFirstSettlementIsFinished() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);

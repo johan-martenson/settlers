@@ -1,76 +1,64 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.actors.Armorer;
-import org.appland.settlers.model.buildings.Armory;
-import org.appland.settlers.model.actors.Baker;
-import org.appland.settlers.model.buildings.Bakery;
-import org.appland.settlers.model.actors.Brewer;
-import org.appland.settlers.model.buildings.Brewery;
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.DetailedVegetation;
-import org.appland.settlers.model.actors.DonkeyBreeder;
-import org.appland.settlers.model.buildings.DonkeyFarm;
-import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.actors.Farmer;
-import org.appland.settlers.model.actors.Fisherman;
-import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Brewer;
+import org.appland.settlers.model.actors.Butcher;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Hunter;
+import org.appland.settlers.model.actors.IronFounder;
+import org.appland.settlers.model.actors.Metalworker;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.WellWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
+import org.appland.settlers.model.buildings.Brewery;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.CoalMine;
+import org.appland.settlers.model.buildings.DonkeyFarm;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.actors.Hunter;
 import org.appland.settlers.model.buildings.HunterHut;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
-import org.appland.settlers.model.actors.Metalworker;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Mill;
-import org.appland.settlers.model.actors.Miller;
-import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.buildings.Mint;
-import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.actors.SawmillWorker;
 import org.appland.settlers.model.buildings.SlaughterHouse;
-import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.buildings.Well;
-import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.test.Utils.constructHouse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestMonitoringProductivity {
 
@@ -78,7 +66,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenArmoryProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -139,7 +127,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenArmoryProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -215,7 +203,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenBakeryProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -274,7 +262,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenBakeryProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -348,7 +336,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenBreweryProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -409,7 +397,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenBreweryProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -484,7 +472,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenCoalMineProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -544,7 +532,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenCoalMineProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -619,7 +607,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenDonkeyFarmProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -679,7 +667,7 @@ public class TestMonitoringProductivity {
     public void testDonkeyFarmWithAbundantResourcesHasFullProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -754,7 +742,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenFarmProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -806,7 +794,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenFarmProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -873,7 +861,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenFisheryProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -929,7 +917,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenFisheryProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1000,7 +988,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenGoldMineProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1060,7 +1048,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenGoldMineProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1135,7 +1123,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenGraniteMineProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1195,7 +1183,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenGraniteMineProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1270,7 +1258,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenHunterHutProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1335,7 +1323,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenHunterHutProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1414,7 +1402,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenIronMineProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1474,7 +1462,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenIronMineProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1549,7 +1537,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenIronSmelterProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1611,7 +1599,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenIronSmelterProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1687,7 +1675,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMetalworksProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1748,7 +1736,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMetalworksProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1824,7 +1812,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMillProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1880,7 +1868,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMillProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1951,7 +1939,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMintProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2011,7 +1999,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenMintProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2086,7 +2074,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenPigFarmProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2146,7 +2134,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenPigFarmProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2221,7 +2209,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenQuarryProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2281,7 +2269,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenQuarryProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2356,7 +2344,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenSawmillProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2412,7 +2400,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenSawmillProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2483,7 +2471,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenSlaughterHouseProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2539,7 +2527,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenSlaughterHouseProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2610,7 +2598,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenWellProductionPercentageChanges() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2662,7 +2650,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenWellProductionPercentageChangesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2729,7 +2717,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenWoodcutterProductionPercentageChanges() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2788,7 +2776,7 @@ public class TestMonitoringProductivity {
     public void testMonitoringWhenWoodcutterProductionPercentageChangesIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

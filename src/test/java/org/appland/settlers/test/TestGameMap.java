@@ -6,35 +6,30 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Test;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.PlayerColor.BLUE;
+import static org.appland.settlers.model.PlayerColor.GREEN;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -47,7 +42,7 @@ public class TestGameMap {
 
         /* Create single player game */
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Some name", Color.YELLOW));
+        players.add(new Player("Some name", PlayerColor.YELLOW));
 
         GameMap map = new GameMap(players, 100, 100);
 
@@ -71,7 +66,7 @@ public class TestGameMap {
     public void testSetStartingPoints() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -95,7 +90,7 @@ public class TestGameMap {
 
         /* Create single player game */
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Some player", Color.YELLOW));
+        players.add(new Player("Some player", PlayerColor.YELLOW));
 
         GameMap map = new GameMap(players, 100, 100);
 
@@ -119,7 +114,7 @@ public class TestGameMap {
     public void testPlaceBuildingOnEmptyMap() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -136,7 +131,7 @@ public class TestGameMap {
     public void testPlaceSameBuildingTwice() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -164,7 +159,7 @@ public class TestGameMap {
     public void testPlaceTwoBuildingsOnSameSpot() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -192,7 +187,7 @@ public class TestGameMap {
     public void testPlaceFlagsOnSamePlace() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -218,7 +213,7 @@ public class TestGameMap {
     public void testAddRoadBetweenFlagsNotOnMap() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -246,7 +241,7 @@ public class TestGameMap {
     public void testFindWayBetweenSameFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -272,7 +267,7 @@ public class TestGameMap {
     public void testCreateMinimalMap() throws Exception {
 
         /* Verify that it's possible to create a minimal game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -287,7 +282,7 @@ public class TestGameMap {
     public void testCreateTooSmallMap() {
 
         /* Verify that it's not possible to create a too small game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -302,7 +297,7 @@ public class TestGameMap {
     public void testCreateMapWithNegativeHeight() {
 
         /* Verify that it's not possible to create a map with negative height */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -317,7 +312,7 @@ public class TestGameMap {
     public void testCreateMapWithNegativeWidth() {
 
         /* Verify that it's not possible to create a game with a negative width */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -332,7 +327,7 @@ public class TestGameMap {
     public void testGetFlags() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -362,7 +357,7 @@ public class TestGameMap {
     public void testPlaceBuildingOnInvalidPoint() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -389,7 +384,7 @@ public class TestGameMap {
     public void testPlaceFlagOnInvalidPoint() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -415,7 +410,7 @@ public class TestGameMap {
     public void testPlaceBuildingSetsMap() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -440,7 +435,7 @@ public class TestGameMap {
     public void testFindWayBetweenHouseAndItsFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -473,7 +468,7 @@ public class TestGameMap {
     public void testCreateHouseNextToExistingFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -498,7 +493,7 @@ public class TestGameMap {
     public void testPlaceFlagOutsideBorder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -522,7 +517,7 @@ public class TestGameMap {
     public void testPlaceBuildingOutsideBorderHasNoEffect() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -549,7 +544,7 @@ public class TestGameMap {
     public void testPlaceRoadThatGoesOutsideTheBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -581,7 +576,7 @@ public class TestGameMap {
     public void testPlaceRoadThatTouchesBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -614,7 +609,7 @@ public class TestGameMap {
     public void testRemoveFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -639,7 +634,7 @@ public class TestGameMap {
     public void testRemovingFlagRemovesConnectedRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -671,7 +666,7 @@ public class TestGameMap {
     public void testDestroyBuildingByRemovingFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -701,7 +696,7 @@ public class TestGameMap {
     public void testRemoveBuildingByRemovingFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -729,7 +724,7 @@ public class TestGameMap {
     public void testRemovingRemoteBarracksSplitsBorder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -782,7 +777,7 @@ public class TestGameMap {
     public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -832,7 +827,7 @@ public class TestGameMap {
     public void testShrinkingBorderDestroysFlagNowOutsideOfBorder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -874,7 +869,7 @@ public class TestGameMap {
     public void testShrinkingBorderDestroysRoadNowOutsideOfBorder() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -923,7 +918,7 @@ public class TestGameMap {
     public void testBorderCanBeConcave() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -979,7 +974,7 @@ public class TestGameMap {
     public void testFieldOfViewIsOutsideBorder() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -999,7 +994,7 @@ public class TestGameMap {
     public void testFieldOfViewCannotShrink() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1032,7 +1027,7 @@ public class TestGameMap {
     public void testFieldOfViewGrowsWhenBorderGrows() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1068,7 +1063,7 @@ public class TestGameMap {
     public void testGetWidthAndHeight() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 30);
@@ -1082,7 +1077,7 @@ public class TestGameMap {
     public void testPointWithinBorderAreDiscovered() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1102,7 +1097,7 @@ public class TestGameMap {
     public void testRemotePointOutsideBorderIsNotDiscovered() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1122,8 +1117,8 @@ public class TestGameMap {
     public void testCircleOfBarracksCreatesInternalBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1219,8 +1214,8 @@ public class TestGameMap {
     public void testCannotGetNonExistingFlagAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1241,8 +1236,8 @@ public class TestGameMap {
     public void testGetRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1272,8 +1267,8 @@ public class TestGameMap {
     public void testIsRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1301,8 +1296,8 @@ public class TestGameMap {
     public void testIsNotRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1323,8 +1318,8 @@ public class TestGameMap {
     public void testPlaceTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1348,8 +1343,8 @@ public class TestGameMap {
     public void testIsTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1373,8 +1368,8 @@ public class TestGameMap {
     public void testIsNoTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1399,8 +1394,8 @@ public class TestGameMap {
     public void testGetTrees() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0", BLUE);
-        Player player1 = new Player("Player 1", GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);

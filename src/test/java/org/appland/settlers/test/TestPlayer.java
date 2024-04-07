@@ -15,8 +15,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.RED;
+import static org.appland.settlers.model.PlayerColor.BLUE;
+import static org.appland.settlers.model.PlayerColor.RED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -31,7 +31,7 @@ public class TestPlayer {
     public void testPlayerIsSetWhenBuildingIsCreated() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         /* Create building with the player set */
         Woodcutter woodcutter0 = new Woodcutter(player0);
@@ -45,7 +45,7 @@ public class TestPlayer {
     public void testNameIsSetInPlayer() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         /* Verify that the name is set */
         assertEquals(player0.getName(), "Player 0");
@@ -168,7 +168,7 @@ public class TestPlayer {
     public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -194,7 +194,7 @@ public class TestPlayer {
     public void testCannotPlaceRoadWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -226,7 +226,7 @@ public class TestPlayer {
     public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -288,7 +288,7 @@ public class TestPlayer {
     public void testCannotHaveTwoPlayersWithSameColor() {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         Player player1 = new Player("Player 1", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -306,7 +306,7 @@ public class TestPlayer {
     public void testPlayerDefaultNationIsRoman() throws InvalidUserActionException {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
@@ -325,7 +325,7 @@ public class TestPlayer {
     public void testSetNationForPlayer() throws InvalidUserActionException {
 
         /* Create players */
-        Player player0 = new Player("Player 0", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 

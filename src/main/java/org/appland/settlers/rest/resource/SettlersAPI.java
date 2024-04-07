@@ -3,31 +3,32 @@ package org.appland.settlers.rest.resource;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.messages.BuildingCapturedMessage;
-import org.appland.settlers.model.messages.BuildingLostMessage;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.messages.GeologistFindMessage;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.statistics.LandDataPoint;
-import org.appland.settlers.model.statistics.LandStatistics;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.TransportCategory;
+import org.appland.settlers.model.actors.WildAnimal;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.messages.BuildingCapturedMessage;
+import org.appland.settlers.model.messages.BuildingLostMessage;
+import org.appland.settlers.model.messages.GeologistFindMessage;
 import org.appland.settlers.model.messages.Message;
 import org.appland.settlers.model.messages.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.messages.MilitaryBuildingReadyMessage;
 import org.appland.settlers.model.messages.NoMoreResourcesMessage;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
+import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
+import org.appland.settlers.model.messages.UnderAttackMessage;
+import org.appland.settlers.model.statistics.LandDataPoint;
+import org.appland.settlers.model.statistics.LandStatistics;
 import org.appland.settlers.model.statistics.ProductionDataPoint;
 import org.appland.settlers.model.statistics.ProductionDataSeries;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.statistics.StatisticsManager;
-import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
-import org.appland.settlers.model.TransportCategory;
-import org.appland.settlers.model.messages.UnderAttackMessage;
-import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -47,7 +48,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -480,7 +480,7 @@ public class SettlersAPI {
         }
 
         if (jsonUpdates.containsKey("color")) {
-            player.setColor(Color.decode((String)jsonUpdates.get("color")));
+            player.setColor(PlayerColor.valueOf((String)jsonUpdates.get("color")));
         }
 
         return Response.status(200).entity(utils.playerToJson(player).toJSONString()).build();

@@ -1,25 +1,26 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.actors.Builder;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.buildings.ForesterHut;
-import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Woodcutter;
@@ -38,7 +39,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenBeerIsAddedToHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -119,7 +120,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenPlankIsRemovedFromHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -206,7 +207,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenBuilderLeavesHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -301,7 +302,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenPlankIsAddedToBuildingUnderConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -370,7 +371,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenConstructionProgresses() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -416,7 +417,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsRaisedAndSoldierInInventoryBecomesHosted() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -500,7 +501,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsLoweredAndHostedSoldierMovesToInventory() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -584,7 +585,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenEvacuatingMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -639,7 +640,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenStoppingEvacuationOfMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -690,7 +691,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsEnabledInMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -741,7 +742,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsDisabledInMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -789,7 +790,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsEnabled() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -865,7 +866,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsDisabled() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -938,7 +939,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingReceivesMaterial() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1010,7 +1011,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingConsumesMaterial() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1103,7 +1104,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1196,7 +1197,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1212,7 +1213,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductivityChangedInBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1272,7 +1273,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenUpgradingMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1402,7 +1403,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenChangingAmountReservedInHeadquarters() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1470,8 +1471,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding () throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1546,8 +1547,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding () throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1617,8 +1618,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenMilitaryBuildingIsTornDown() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.RED);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
