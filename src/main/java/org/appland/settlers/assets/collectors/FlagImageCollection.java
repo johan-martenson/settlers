@@ -6,6 +6,7 @@ import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.PlayerColor;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
@@ -27,7 +28,6 @@ public class FlagImageCollection {
         flagShadowMap = new EnumMap<>(Nation.class);
 
         for (Nation nation : Nation.values()) {
-
             flagMap.put(nation, new EnumMap<>(Flag.FlagType.class));
             flagShadowMap.put(nation, new EnumMap<>(Flag.FlagType.class));
 
@@ -55,15 +55,20 @@ public class FlagImageCollection {
 
                 jsonNationInfo.put(flagType.name().toUpperCase(), jsonFlagType);
 
-                jsonFlagType.put(
-                        "images",
-                        imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(flagMap.get(nation).get(flagType))));
+                Arrays.stream(PlayerColor.values()).forEach(playerColor -> {
+                    JSONObject jsonPlayer = new JSONObject();
+
+                    jsonFlagType.put(playerColor.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(
+                                            ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType)))));
+                });
 
                 jsonFlagType.put(
                         "shadows",
                         imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(flagShadowMap.get(nation).get(flagType))));
+                                ImageTransformer.normalizeImageSeries(
+                                        flagShadowMap.get(nation).get(flagType))));
             });
         });
 

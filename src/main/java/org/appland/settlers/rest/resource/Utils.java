@@ -699,6 +699,7 @@ class Utils {
         jsonFlag.put("playerId", idManager.getId(flag.getPlayer()));
         jsonFlag.put("type", flag.getType().name());
         jsonFlag.put("nation", flag.getPlayer().getNation().name().toUpperCase());
+        jsonFlag.put("color", flag.getPlayer().getColor().name().toUpperCase());
 
         if (!flag.getStackedCargo().isEmpty()) {
             jsonFlag.put("stackedCargo", cargosToMaterialJson(flag.getStackedCargo()));
