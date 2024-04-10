@@ -1,15 +1,17 @@
 package org.appland.settlers.assets.collectors;
 
+import org.appland.settlers.assets.CompassDirection;
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Bob;
-import org.appland.settlers.assets.CompassDirection;
-import org.appland.settlers.assets.utils.ImageBoard;
-import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.utils.NormalizedImageList;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
-import org.appland.settlers.assets.TextureFormat;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageTransformer;
+import org.appland.settlers.assets.utils.NormalizedImageList;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Courier;
 import org.json.simple.JSONObject;
@@ -26,47 +28,49 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
-import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.COLUMN;
-import static org.appland.settlers.assets.utils.ImageBoard.LayoutDirection.ROW;
 
 public class WorkerImageCollection {
     private final String name;
-    private final Map<Nation, Map<CompassDirection, List<Bitmap>>> nationSpecificBodyAndHeadImages;
-    private final Map<CompassDirection, List<Bitmap>> commonShadowImages;
-    private final Map<Material, Map<CompassDirection, List<Bitmap>>> commonCargoImages;
-    private final Map<CompassDirection, List<Bitmap>> commonHeadImagesWithoutCargo;
-    private final Map<CompassDirection, List<Bitmap>> commonBodyImages;
-    private final Map<CompassDirection, List<Bitmap>> commonBodyAndHeadImages;
-    private final Map<WorkerAction, List<Bitmap>> commonActions;
-    private final Map<WorkerAction, Map<CompassDirection, List<Bitmap>>> commonActionsWithDirection;
+    private final Map<Nation, Map<CompassDirection, List<Bitmap>>> nationSpecificImages;
+    private final Map<Nation, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> nationSpecificImagesWithPlayerColor;
+    private final Map<CompassDirection, List<Bitmap>> shadowImages;
+    private final Map<Material, Map<CompassDirection, List<Bitmap>>> cargoImages;
+    private final Map<CompassDirection, List<Bitmap>> imagesWithoutCargo;
+    private final Map<CompassDirection, List<Bitmap>> bodyImages;
+    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesPerPlayer;
+    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesWithPlayerColor;
+    private final Map<WorkerAction, Map<PlayerColor, List<Bitmap>>> actionsByPlayer;
+    private final Map<WorkerAction, Map<CompassDirection, List<Bitmap>>> actionsWithDirection;
     private final Map<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> nationSpecificActionsWithDirection;
 
     public WorkerImageCollection(String name) {
         this.name = name;
 
-        nationSpecificBodyAndHeadImages = new EnumMap<>(Nation.class);
-        commonHeadImagesWithoutCargo = new EnumMap<>(CompassDirection.class);
-        commonShadowImages = new EnumMap<>(CompassDirection.class);
-        commonCargoImages = new EnumMap<>(Material.class);
-        commonBodyImages = new EnumMap<>(CompassDirection.class);
-        commonBodyAndHeadImages = new EnumMap<>(CompassDirection.class);
-        commonActions = new EnumMap<>(WorkerAction.class);
-        commonActionsWithDirection = new EnumMap<>(WorkerAction.class);
+        nationSpecificImages = new EnumMap<>(Nation.class);
+        imagesWithoutCargo = new EnumMap<>(CompassDirection.class);
+        shadowImages = new EnumMap<>(CompassDirection.class);
+        cargoImages = new EnumMap<>(Material.class);
+        bodyImages = new EnumMap<>(CompassDirection.class);
+        imagesPerPlayer = new EnumMap<>(CompassDirection.class);
+        actionsByPlayer = new EnumMap<>(WorkerAction.class);
+        actionsWithDirection = new EnumMap<>(WorkerAction.class);
         nationSpecificActionsWithDirection = new EnumMap<>(Nation.class);
+        nationSpecificImagesWithPlayerColor = new EnumMap<>(Nation.class);
+        imagesWithPlayerColor = new EnumMap<>(CompassDirection.class);
     }
 
-    public void addNationSpecificFullImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {
-        if (!nationSpecificBodyAndHeadImages.containsKey(nation)) {
-            nationSpecificBodyAndHeadImages.put(nation, new EnumMap<>(CompassDirection.class));
+    public void addNationSpecificImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {
+        if (!nationSpecificImages.containsKey(nation)) {
+            nationSpecificImages.put(nation, new EnumMap<>(CompassDirection.class));
         }
 
-        Map<CompassDirection, List<Bitmap>> directions = nationSpecificBodyAndHeadImages.get(nation);
+        Map<CompassDirection, List<Bitmap>> directions = nationSpecificImages.get(nation);
 
         if (!directions.containsKey(compassDirection)) {
             directions.put(compassDirection, new ArrayList<>());
         }
 
-        nationSpecificBodyAndHeadImages.get(nation).get(compassDirection).add(workerImage);
+        nationSpecificImages.get(nation).get(compassDirection).add(workerImage);
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
@@ -75,135 +79,154 @@ public class WorkerImageCollection {
          * Write the image atlas, one row per direction, and collect metadata to write as json
          *
          * JSON format:
-         *   - common: walking images without cargo, not nation-specific
+         *   - common: walking images without cargo
          *        - fullImages
-         *        - cargoImages: walking images with cargo, not nation-specific
+         *        - fullImagesByPlayer
+         *              - BLUE
+         *        - actions
+         *        - bodyImages
+         *        - cargoImages: walking images with cargo
          *        - shadowImages: shadow images, same regardless of nation or cargo
          *   - nationSpecific: walking images without cargo, nation-specific
          *        - fullImages
+         *        - fullImagesByPlayer
          *        - cargoImages
          */
         ImageBoard imageBoard = new ImageBoard();
 
         JSONObject jsonImageAtlas = new JSONObject();
+
         JSONObject jsonCommon = new JSONObject();
+        JSONObject jsonImagesByPlayer = new JSONObject();
         JSONObject jsonNationSpecific = new JSONObject();
+        JSONObject jsonNationSpecificByPlayer = new JSONObject();
         JSONObject jsonActions = new JSONObject();
 
         jsonImageAtlas.put("common", jsonCommon);
         jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
 
-        if (!commonActionsWithDirection.isEmpty() || !commonActions.isEmpty()) {
+        if (!actionsWithDirection.isEmpty() || !actionsByPlayer.isEmpty()) {
             jsonCommon.put("actions", jsonActions);
         }
 
-        Point cursor = new Point(0, 0);
-
         // Write walking animations where the worker isn't carrying anything and that are not nation-specific
-        if (!commonBodyAndHeadImages.isEmpty()) {
-            JSONObject jsonImages = new JSONObject();
+        if (!imagesPerPlayer.isEmpty()) {
+            JSONObject jsonDirection = new JSONObject();
 
-            jsonCommon.put("fullImages", jsonImages);
+            jsonCommon.put("fullImagesByPlayer", jsonDirection);
 
-            for (Map.Entry<CompassDirection, List<Bitmap>> entry : commonBodyAndHeadImages.entrySet()) {
-                CompassDirection compassDirection = entry.getKey();
-                List<Bitmap> images = entry.getValue();
+            for (var entry : imagesPerPlayer.entrySet()) {
+                var direction = entry.getKey();
+                var playerMap = entry.getValue();
 
-                cursor.x = 0;
+                JSONObject jsonPlayer = new JSONObject();
 
-                NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-                List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+                jsonDirection.put(direction.name().toUpperCase(), jsonPlayer);
 
-                imageBoard.placeImageSeries(normalizedImages, cursor, ROW);
+                for (var entry1 : playerMap.entrySet()) {
+                    var playerColor = entry1.getKey();
+                    var images = entry1.getValue();
 
-                jsonImages.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedImages));
-
-                cursor.y = cursor.y + normalizedImageList.getImageHeight();
+                    jsonPlayer.put(
+                            playerColor.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(images)));
+                }
             }
-        } else {
+        } else if (!bodyImages.isEmpty()) {
             JSONObject jsonBodyImages = new JSONObject();
 
-            jsonCommon.put("bodyImages", jsonBodyImages);
+            jsonCommon.put("bodyImagesByPlayer", jsonBodyImages);
 
-            for (Map.Entry<CompassDirection, List<Bitmap>> entry : commonBodyImages.entrySet()) {
-                CompassDirection compassDirection = entry.getKey();
-                List<Bitmap> images = entry.getValue();
+            for (Map.Entry<CompassDirection, List<Bitmap>> entry : bodyImages.entrySet()) {
+                var direction = entry.getKey();
+                var images = entry.getValue();
 
-                cursor.x = 0;
+                JSONObject jsonDirection = new JSONObject();
 
-                NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-                List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+                jsonBodyImages.put(direction.name().toUpperCase(), jsonDirection);
 
-                imageBoard.placeImageSeries(normalizedImages, cursor, ROW);
+                for (var playerColor : PlayerColor.values()) {
+                    jsonDirection.put(
+                            playerColor.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(ImageTransformer.drawForPlayer(playerColor, images))
+                    );
+                }
+            }
+        }
 
-                jsonBodyImages.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedImages));
+        // Write walking animations with the correct player color
+        if (!imagesWithPlayerColor.isEmpty()) {
+            jsonCommon.put("fullImagesByPlayer", jsonImagesByPlayer);
 
-                cursor.y = cursor.y + normalizedImageList.getImageHeight();
+            for (Map.Entry<CompassDirection, Map<PlayerColor, List<Bitmap>>> entry : imagesWithPlayerColor.entrySet()) {
+                var direction = entry.getKey();
+                var playerMap = entry.getValue();
+
+                JSONObject jsonDirection = new JSONObject();
+
+                jsonImagesByPlayer.put(direction.name().toUpperCase(), jsonDirection);
+
+                for (Map.Entry<PlayerColor, List<Bitmap>> entry1 : playerMap.entrySet()) {
+                    var playerColor = entry1.getKey();
+                    var images = entry1.getValue();
+
+                    jsonDirection.put(playerColor.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(images)));
+                }
             }
         }
 
         // Write walking animations, per nation and direction
-        if (!nationSpecificBodyAndHeadImages.isEmpty()) {
+        if (!nationSpecificImages.isEmpty()) {
             JSONObject jsonFullImages = new JSONObject();
 
             jsonNationSpecific.put("fullImages", jsonFullImages);
 
             for (Nation nation : Nation.values()) {
-
-                Map<CompassDirection, List<Bitmap>> directionToImageMap = nationSpecificBodyAndHeadImages.get(nation);
+                Map<CompassDirection, List<Bitmap>> directionToImageMap = nationSpecificImages.get(nation);
 
                 JSONObject jsonNationInfo = new JSONObject();
 
                 jsonFullImages.put(nation.name().toUpperCase(), jsonNationInfo);
 
                 for (CompassDirection compassDirection : CompassDirection.values()) {
-
                     if (directionToImageMap.get(compassDirection).isEmpty()) {
                         continue;
                     }
 
-                    cursor.x = 0;
-
                     // Handle each image per nation x direction
                     List<Bitmap> workerImages = directionToImageMap.get(compassDirection);
-                    NormalizedImageList normalizedWorkerList = new NormalizedImageList(workerImages);
-                    List<Bitmap> normalizedWorkerImages = normalizedWorkerList.getNormalizedImages();
 
-                    imageBoard.placeImageSeries(normalizedWorkerImages, cursor, ROW);
-
-                    jsonNationInfo.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedWorkerImages));
-
-                    cursor.y = cursor.y + normalizedWorkerList.getImageHeight();
+                    jsonNationInfo.put(
+                            compassDirection.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(workerImages)));
                 }
             }
         }
 
         // Write shadows, per direction (shadows are not nation-specific or are the same regardless of if/what the courier is carrying)
-        if (!commonShadowImages.isEmpty()) {
+        if (!shadowImages.isEmpty()) {
             JSONObject jsonShadowImages = new JSONObject();
 
             jsonCommon.put("shadowImages", jsonShadowImages);
 
-            for (Map.Entry<CompassDirection, List<Bitmap>> entry : commonShadowImages.entrySet()) {
+            for (Map.Entry<CompassDirection, List<Bitmap>> entry : shadowImages.entrySet()) {
                 CompassDirection compassDirection = entry.getKey();
                 List<Bitmap> shadowImagesForDirection = entry.getValue();
 
-                cursor.x = 0;
-
-                NormalizedImageList normalizedShadowListForDirection = new NormalizedImageList(shadowImagesForDirection);
-                List<Bitmap> normalizedShadowImagesForDirection = normalizedShadowListForDirection.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedShadowImagesForDirection, cursor, ROW);
-
-                jsonShadowImages.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedShadowImagesForDirection));
-
-                cursor.y = cursor.y + normalizedShadowListForDirection.getImageHeight();
+                jsonShadowImages.put(
+                        compassDirection.name().toUpperCase(),
+                        imageBoard.placeImageSeriesBottom(
+                            ImageTransformer.normalizeImageSeries(shadowImagesForDirection)));
             }
         }
 
         // Write direction-specific actions (if any)
-        if (!commonActionsWithDirection.isEmpty()) {
-            for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> entry : commonActionsWithDirection.entrySet()) {
+        if (!actionsWithDirection.isEmpty()) {
+            for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> entry : actionsWithDirection.entrySet()) {
                 String action = entry.getKey().name().toUpperCase();
                 Map<CompassDirection, List<Bitmap>> actions = entry.getValue();
 
@@ -215,28 +238,20 @@ public class WorkerImageCollection {
                     CompassDirection compassDirection = actionEntry.getKey();
                     List<Bitmap> images = actionEntry.getValue();
 
-                    cursor.x = 0;
-
-                    NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-                    List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
-
-                    imageBoard.placeImageSeries(normalizedImages, cursor, ROW);
-
-                    jsonAction.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedImages));
-
-                    cursor.y = cursor.y + normalizedImageList.getImageHeight();
+                    jsonAction.put(compassDirection.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(images)));
                 }
             }
         }
 
         // Write lists of cargo images (if any)
-        if (!commonCargoImages.keySet().isEmpty()) {
-
+        if (!cargoImages.keySet().isEmpty()) {
             JSONObject jsonMultipleCargoImages = new JSONObject();
 
             jsonCommon.put("cargoImages", jsonMultipleCargoImages);
 
-            for (Map.Entry<Material, Map<CompassDirection, List<Bitmap>>> materialMapEntry : commonCargoImages.entrySet()) {
+            for (Map.Entry<Material, Map<CompassDirection, List<Bitmap>>> materialMapEntry : cargoImages.entrySet()) {
                 Material material = materialMapEntry.getKey();
                 Map<CompassDirection, List<Bitmap>> imagesForMaterial = materialMapEntry.getValue();
 
@@ -249,44 +264,38 @@ public class WorkerImageCollection {
                 jsonMultipleCargoImages.put(material.name().toUpperCase(), jsonMaterialImages);
 
                 for (Map.Entry<CompassDirection, List<Bitmap>> compassDirectionListEntry : imagesForMaterial.entrySet()) {
-
                     CompassDirection compassDirection = compassDirectionListEntry.getKey();
                     List<Bitmap> cargoImagesForDirection = compassDirectionListEntry.getValue();
 
-                    cursor.x = 0;
-
-                    NormalizedImageList normalizedCargoListForDirection = new NormalizedImageList(cargoImagesForDirection);
-                    List<Bitmap> normalizedCargoImagesForDirection = normalizedCargoListForDirection.getNormalizedImages();
-
-                    imageBoard.placeImageSeries(normalizedCargoImagesForDirection, cursor, ROW);
-
-                    jsonMaterialImages.put(compassDirection.name().toUpperCase(), imageBoard.imageSeriesLocationToJson(normalizedCargoImagesForDirection));
-
-                    cursor.y = cursor.y + normalizedCargoListForDirection.getImageHeight();
+                    jsonMaterialImages.put(compassDirection.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(cargoImagesForDirection)));
                 }
             }
         }
 
         // Write actions that apply to any direction (if any)
-        if (!commonActions.isEmpty()) {
-            for (Map.Entry<WorkerAction, List<Bitmap>> entry : commonActions.entrySet()) {
-                String action = entry.getKey().name().toUpperCase();
-                List<Bitmap> images = entry.getValue();
-
-                cursor.x = imageBoard.getCurrentWidth();
-                cursor.y = 0;
+        if (!actionsByPlayer.isEmpty()) {
+            for (var entry : actionsByPlayer.entrySet()) {
+                var action = entry.getKey().name().toUpperCase();
+                var playerMap = entry.getValue();
 
                 JSONObject jsonAction = new JSONObject();
 
-                NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-                List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedImages, cursor, COLUMN);
-
                 jsonActions.put(action, jsonAction);
-                jsonAction.put("any", imageBoard.imageSeriesLocationToJson(normalizedImages));
 
-                cursor.y = cursor.y + normalizedImageList.getImageHeight();
+                for (var entry1 : playerMap.entrySet()) {
+                    var playerColor = entry1.getKey();
+                    var images = entry1.getValue();
+
+                    JSONObject jsonPlayerColor = new JSONObject();
+
+                    jsonAction.put("any", jsonPlayerColor);
+
+                    jsonPlayerColor.put(playerColor.name().toUpperCase(),
+                            imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.normalizeImageSeries(images)));
+                }
             }
         }
 
@@ -322,12 +331,45 @@ public class WorkerImageCollection {
                         var direction = directionEntry.getKey();
                         var images = directionEntry.getValue();
 
-                        NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-                        List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+                        jsonAction.put(direction.name().toUpperCase(),
+                                imageBoard.placeImageSeriesBottom(
+                                        ImageTransformer.normalizeImageSeries(images)));
+                    }
+                }
+            }
+        }
 
-                        JSONObject jsonImageSeries = imageBoard.placeImageSeriesBottom(normalizedImages);
+        // Write nation-specific images by player
+        if (!nationSpecificImagesWithPlayerColor.isEmpty()) {
+            jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
 
-                        jsonAction.put(direction.name().toUpperCase(), jsonImageSeries);
+            jsonNationSpecific.put("fullImagesByPlayer", jsonNationSpecificByPlayer);
+
+            for (var entry : nationSpecificImagesWithPlayerColor.entrySet()) {
+                var nation = entry.getKey();
+                var directionMap = entry.getValue();
+
+                JSONObject jsonNation = new JSONObject();
+
+                jsonNationSpecificByPlayer.put(nation.name().toUpperCase(), jsonNation);
+
+                int width = imageBoard.getCurrentWidth();;
+
+                for (var entry1 : directionMap.entrySet()) {
+                    var direction = entry1.getKey();
+                    var playerColorMap = entry1.getValue();
+
+                    JSONObject jsonDirection = new JSONObject();
+
+                    jsonNation.put(direction.name().toUpperCase(), jsonDirection);
+
+                    for (var entry2 : playerColorMap.entrySet()) {
+                        var playerColor = entry2.getKey();
+                        var images = entry2.getValue();
+
+                        jsonDirection.put(
+                                playerColor.name().toUpperCase(),
+                                imageBoard.placeImageSeriesBottomRightOf(width, ImageTransformer.normalizeImageSeries(images)));
                     }
                 }
             }
@@ -342,7 +384,7 @@ public class WorkerImageCollection {
     }
 
     public void addShadowImages(CompassDirection compassDirection, List<Bitmap> images) {
-        commonShadowImages.put(compassDirection, images);
+        shadowImages.put(compassDirection, images);
     }
 
     public void readCargoImagesFromBob(Material material, Courier.BodyType bodyType, int bobId, Bob jobsBob) {
@@ -352,10 +394,9 @@ public class WorkerImageCollection {
             fatOffset = 1;
         }
 
-        commonCargoImages.put(material, new EnumMap<>(CompassDirection.class));
+        cargoImages.put(material, new EnumMap<>(CompassDirection.class));
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
-
             List<Bitmap> cargoImagesForDirection = new ArrayList<>();
 
             for (int i = 0; i < 8; i++) {
@@ -365,7 +406,7 @@ public class WorkerImageCollection {
                 cargoImagesForDirection.add(jobsBob.getBitmapAtIndex(index));
             }
 
-            commonCargoImages.get(material).put(compassDirection, cargoImagesForDirection);
+            cargoImages.get(material).put(compassDirection, cargoImagesForDirection);
         }
     }
 
@@ -377,7 +418,6 @@ public class WorkerImageCollection {
         }
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
-
             List<Bitmap> cargoImagesForDirection = new ArrayList<>();
 
             for (int i = 0; i < 8; i++) {
@@ -387,15 +427,15 @@ public class WorkerImageCollection {
                 cargoImagesForDirection.add(jobsBob.getBitmapAtIndex(index));
             }
 
-            commonHeadImagesWithoutCargo.put(compassDirection, cargoImagesForDirection);
+            imagesWithoutCargo.put(compassDirection, cargoImagesForDirection);
         }
     }
 
     public void mergeBodyAndHeadImages(Palette palette) {
-        for (Map.Entry<CompassDirection, List<Bitmap>> entry : commonBodyImages.entrySet()) {
-            CompassDirection compassDirection = entry.getKey();
+        for (Map.Entry<CompassDirection, List<Bitmap>> entry : bodyImages.entrySet()) {
+            CompassDirection direction = entry.getKey();
             List<Bitmap> bodyImagesForDirection = entry.getValue();
-            List<Bitmap> headImagesForDirection = commonHeadImagesWithoutCargo.get(compassDirection);
+            List<Bitmap> headImagesForDirection = imagesWithoutCargo.get(direction);
 
             List<Bitmap> mergedBodyAndHeadImagesForDirection = new ArrayList<>();
 
@@ -414,11 +454,30 @@ public class WorkerImageCollection {
                 Bitmap normalizedBodyImage = normalizedImages.get(0);
                 Bitmap normalizedHeadImage = normalizedImages.get(1);
 
-                Bitmap combinedImage = new Bitmap(
-                        normalizedImageList.getImageWidth(),
-                        normalizedImageList.getImageHeight(),
-                        palette,
-                        TextureFormat.BGRA);
+                Bitmap combinedImage;
+
+                if (normalizedBodyImage instanceof PlayerBitmap normalizedBodyImagePlayer) {
+                    PlayerBitmap playerCombinedImage = new PlayerBitmap(
+                            normalizedImageList.getImageWidth(),
+                            normalizedImageList.getImageHeight(),
+                            palette,
+                            TextureFormat.BGRA);
+
+                    playerCombinedImage.getTextureBitmap().copyNonTransparentPixels(
+                            normalizedBodyImagePlayer.getTextureBitmap(),
+                            new Point(0, 0),
+                            new Point(0, 0),
+                            normalizedBodyImage.getDimension()
+                    );
+
+                    combinedImage = playerCombinedImage;
+                } else {
+                    combinedImage = new Bitmap(
+                            normalizedImageList.getImageWidth(),
+                            normalizedImageList.getImageHeight(),
+                            palette,
+                            TextureFormat.BGRA);
+                }
 
                 combinedImage.copyNonTransparentPixels(
                         normalizedBodyImage,
@@ -440,35 +499,41 @@ public class WorkerImageCollection {
                 mergedBodyAndHeadImagesForDirection.add(combinedImage);
             }
 
-            commonBodyAndHeadImages.put(compassDirection, mergedBodyAndHeadImagesForDirection);
+            imagesPerPlayer.put(direction, new EnumMap<>(PlayerColor.class));
+            for (var playerColor : PlayerColor.values()) {
+                imagesPerPlayer.get(direction).put(playerColor, ImageTransformer.drawForPlayer(playerColor, mergedBodyAndHeadImagesForDirection));
+            }
         }
     }
 
     public void readBodyImagesFromBob(Courier.BodyType bodyType, Bob carrierBob) {
-        for (CompassDirection compassDirection : CompassDirection.values()) {
-
+        for (CompassDirection direction : CompassDirection.values()) {
             List<Bitmap> bodyImagesForDirection = new ArrayList<>();
 
             for (int animationIndex = 0; animationIndex < 8; animationIndex++) {
-                PlayerBitmap body = carrierBob.getBody(bodyType == FAT, compassDirection.ordinal(), animationIndex);
+                PlayerBitmap body = carrierBob.getBody(bodyType == FAT, direction.ordinal(), animationIndex);
 
                 bodyImagesForDirection.add(body);
             }
 
-            commonBodyImages.put(compassDirection, bodyImagesForDirection);
+            bodyImages.put(direction, bodyImagesForDirection);
         }
     }
 
     public void addAnimation(WorkerAction action, List<Bitmap> images) {
-        commonActions.put(action, images);
+        actionsByPlayer.put(action, new EnumMap<>(PlayerColor.class));
+
+        for (var playerColor : PlayerColor.values()) {
+            actionsByPlayer.get(action).put(playerColor, ImageTransformer.drawForPlayer(playerColor, images));
+        }
     }
 
     public void addWorkAnimationInDirection(WorkerAction action, CompassDirection direction, List<Bitmap> images) {
-        if (!commonActionsWithDirection.containsKey(action)) {
-            commonActionsWithDirection.put(action, new EnumMap<>(CompassDirection.class));
+        if (!actionsWithDirection.containsKey(action)) {
+            actionsWithDirection.put(action, new EnumMap<>(CompassDirection.class));
         }
 
-        commonActionsWithDirection.get(action).put(direction, images);
+        actionsWithDirection.get(action).put(direction, images);
     }
 
     public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection direction, WorkerAction workerAction, List<Bitmap> images) {
@@ -485,5 +550,47 @@ public class WorkerImageCollection {
         var directionToImages = actionToDirection.get(workerAction);
 
         directionToImages.put(direction, images);
+    }
+
+    public void addImage(CompassDirection direction, Bitmap image) {
+        if (!imagesPerPlayer.containsKey(direction)) {
+            imagesPerPlayer.put(direction, new EnumMap<>(PlayerColor.class));
+        }
+
+        for (var playerColor : PlayerColor.values()) {
+            if (!imagesPerPlayer.get(direction).containsKey(playerColor)) {
+                imagesPerPlayer.get(direction).put(playerColor, new ArrayList<>());
+            }
+
+            imagesPerPlayer.get(direction).get(playerColor).add(((PlayerBitmap)image).getBitmapForPlayer(playerColor));
+        }
+    }
+
+    public void addNationSpecificImageWithPlayerColor(Nation nation, PlayerColor playerColor, CompassDirection direction, Bitmap image) {
+        if (!nationSpecificImagesWithPlayerColor.containsKey(nation)) {
+            nationSpecificImagesWithPlayerColor.put(nation, new EnumMap<>(CompassDirection.class));
+        }
+
+        if (!nationSpecificImagesWithPlayerColor.get(nation).containsKey(direction)) {
+            nationSpecificImagesWithPlayerColor.get(nation).put(direction, new EnumMap<>(PlayerColor.class));
+        }
+
+        if (!nationSpecificImagesWithPlayerColor.get(nation).get(direction).containsKey(playerColor)) {
+            nationSpecificImagesWithPlayerColor.get(nation).get(direction).put(playerColor, new ArrayList<>());
+        }
+
+        nationSpecificImagesWithPlayerColor.get(nation).get(direction).get(playerColor).add(image);
+    }
+
+    public void addImageWithPlayerColor(PlayerColor playerColor, CompassDirection direction, Bitmap image) {
+        if (!imagesWithPlayerColor.containsKey(direction)) {
+            imagesWithPlayerColor.put(direction, new EnumMap<>(PlayerColor.class));
+        }
+
+        if (!imagesWithPlayerColor.get(direction).containsKey(playerColor)) {
+            imagesWithPlayerColor.get(direction).put(playerColor, new ArrayList<>());
+        }
+
+        imagesWithPlayerColor.get(direction).get(playerColor).add(image);
     }
 }

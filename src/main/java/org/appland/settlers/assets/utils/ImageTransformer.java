@@ -1,6 +1,8 @@
 package org.appland.settlers.assets.utils;
 
 import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.model.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +48,16 @@ public class ImageTransformer {
         getHitAnimation.add(image);
 
         return getHitAnimation;
+    }
+
+    public static List<Bitmap> drawForPlayer(PlayerColor playerColor, List<Bitmap> images) {
+        return images.stream()
+                .map(image -> {
+                    if (image instanceof PlayerBitmap playerBitmap) {
+                        return playerBitmap.getBitmapForPlayer(playerColor);
+                    } else {
+                        return image;
+                    }
+                }).toList();
     }
 }

@@ -3,6 +3,7 @@ package org.appland.settlers.assets.utils;
 import org.appland.settlers.assets.Area;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -18,7 +19,6 @@ public class NormalizedImageList {
     public final int ny;
 
     public NormalizedImageList(List<Bitmap> images) {
-
         int maxWidthBeforeNx = 0;
         int maxWidthAfterNx = 0;
         int maxHeightBelowNy = 0;
@@ -47,11 +47,18 @@ public class NormalizedImageList {
         this.normalizedImages = new ArrayList<>();
 
         for (Bitmap originalImage : originalImages) {
-            Bitmap normalizedImage = new Bitmap(width, height, originalImages.getFirst().getPalette(), TextureFormat.BGRA);
+            Bitmap normalizedImage;
+
+            if (originalImage instanceof PlayerBitmap) {
+                normalizedImage = new PlayerBitmap(width, height, originalImages.getFirst().getPalette(), TextureFormat.BGRA);
+            } else {
+                normalizedImage = new Bitmap(width, height, originalImages.getFirst().getPalette(), TextureFormat.BGRA);
+            }
 
             Point copyTo = new Point(0, 0);
             Point copyFrom = new Point(0, 0);
 
+            // TODO: rewrite to use Math.max() instead of ifs
             if (originalImage.getNx() < nx) {
                 copyTo.x = nx - originalImage.getNx();
                 copyFrom.x = 0;
@@ -78,6 +85,24 @@ public class NormalizedImageList {
 
             normalizedImage.setNx(nx);
             normalizedImage.setNy(ny);
+
+            if (originalImage instanceof PlayerBitmap playerBitmap) {
+                Bitmap originalPlayerTexture = playerBitmap.getTextureBitmap();
+                Bitmap normalizedPlayerTexture = ((PlayerBitmap) normalizedImage).getTextureBitmap();
+
+                normalizedPlayerTexture.copyNonTransparentPixels(
+                        originalPlayerTexture,
+                        copyTo,
+                        copyFrom,
+                        new Dimension(
+                                Math.min(nx, originalImage.getNx()) + Math.min(width - nx, originalImage.getWidth() - originalImage.getNx()),
+                                Math.min(ny, originalImage.getNy()) + Math.min(height - ny, originalImage.getHeight() - originalImage.getNy())
+                        )
+                );
+
+                normalizedPlayerTexture.setNx(nx);
+                normalizedPlayerTexture.setNy(ny);
+            }
 
             this.normalizedImages.add(normalizedImage);
         }

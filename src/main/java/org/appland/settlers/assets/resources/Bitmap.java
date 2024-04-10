@@ -305,13 +305,18 @@ public class Bitmap {
 
         for (int fromY = fromUpperLeft.y; fromY < fromSize.height + fromUpperLeft.y; fromY++) {
             for (int fromX = fromUpperLeft.x; fromX < fromSize.width + fromUpperLeft.x; fromX++) {
-                byte blue = bitmap.getBlueAsByte(fromX, fromY);
-                byte green = bitmap.getGreenAsByte(fromX, fromY);
-                byte red = bitmap.getRedAsByte(fromX, fromY);
-                byte alpha = bitmap.getAlphaAsByte(fromX, fromY);
 
-                if (alpha != 0) {
-                    setPixelValue(toIterator.x, toIterator.y, red, green, blue, alpha);
+                if (format == PALETTED) {
+                    setPixelByColorIndex(toIterator.x, toIterator.y, bitmap.getColorIndex(fromX, fromY));
+                } else {
+                    byte blue = bitmap.getBlueAsByte(fromX, fromY);
+                    byte green = bitmap.getGreenAsByte(fromX, fromY);
+                    byte red = bitmap.getRedAsByte(fromX, fromY);
+                    byte alpha = bitmap.getAlphaAsByte(fromX, fromY);
+
+                    if (alpha != 0) {
+                        setPixelValue(toIterator.x, toIterator.y, red, green, blue, alpha);
+                    }
                 }
 
                 toIterator.x = toIterator.x + 1;

@@ -49,6 +49,7 @@ import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 import org.json.simple.JSONArray;
@@ -102,8 +103,6 @@ public class Extractor {
             new TitleAndFilename("Track 7", "audio/07_-_Track_07.mp3"),
             new TitleAndFilename("Track 8", "audio/08_-_Track_08.mp3")
             ));
-    private static final String SONG_0_TITLE = "Song 1";
-    private static final String SONG_1_TITLE = "Song 2";
 
     @Option(name = "--from-dir", usage = "Asset directory to load from")
     static String fromDir;
@@ -434,21 +433,27 @@ public class Extractor {
         Map<JobType, RenderedWorker> renderedWorkers = BobDecoder.renderWorkerImages(jobsBobResource.getBob(), workerDetailsMap);
         Map<JobType, WorkerImageCollection> workerImageCollectors = new EnumMap<>(JobType.class);
 
+        var nationSpecificWorkers = List.of(
+                JobType.PRIVATE,
+                JobType.PRIVATE_FIRST_CLASS,
+                JobType.SERGEANT,
+                JobType.OFFICER,
+                JobType.GENERAL);
+
         for (JobType jobType : JobType.values()) {
             RenderedWorker renderedWorker = renderedWorkers.get(jobType);
 
             WorkerImageCollection workerImageCollection = new WorkerImageCollection(jobType.name().toLowerCase());
 
             for (Nation nation : Nation.values()) {
-                for (CompassDirection compassDirection : CompassDirection.values()) {
-
-                    StackedBitmaps[] stackedBitmaps = renderedWorker.getAnimation(nation, compassDirection);
+                for (CompassDirection direction : CompassDirection.values()) {
+                    StackedBitmaps[] stackedBitmaps = renderedWorker.getAnimation(nation, direction);
 
                     if (stackedBitmaps == null) {
                         System.out.println("Stacked bitmaps is null");
                         System.out.println(jobType);
                         System.out.println(nation);
-                        System.out.println(compassDirection);
+                        System.out.println(direction);
                     }
 
                     for (StackedBitmaps frame : stackedBitmaps) {
@@ -465,12 +470,11 @@ public class Extractor {
 
                             Point maxPosition = maxOrigin;
 
-                            boolean hasPlayer = false;
+                            boolean hasPlayerColor = false;
 
                             for (Bitmap bitmap : frame.getBitmaps()) {
-
                                 if (bitmap instanceof PlayerBitmap) {
-                                    hasPlayer = true;
+                                    hasPlayerColor = true;
                                 }
 
                                 Area bitmapVisibleArea = bitmap.getVisibleArea();
@@ -483,32 +487,67 @@ public class Extractor {
                                 maxPosition.y = Math.max(maxPosition.y, bitmapVisibleArea.height - bitmapOrigin.y);
                             }
 
-                            /* Create a bitmap to merge both body and head into */
-                            Bitmap merged = new Bitmap(maxOrigin.x + maxPosition.x, maxOrigin.y + maxPosition.y, defaultPalette, TextureFormat.BGRA);
+                            for (var playerColor : PlayerColor.values()) {
 
-                            merged.setNx(maxOrigin.x);
-                            merged.setNy(maxOrigin.y);
+                                /* Create a bitmap to merge both body and head into */
+                                Bitmap merged = new Bitmap(maxOrigin.x + maxPosition.x, maxOrigin.y + maxPosition.y, defaultPalette, TextureFormat.BGRA);
 
-                            /* Draw the body */
-                            Area bodyVisibleArea = body.getVisibleArea();
+                                merged.setNx(maxOrigin.x);
+                                merged.setNy(maxOrigin.y);
 
-                            Point bodyToUpperLeft = new Point(maxOrigin.x - body.getOrigin().x, maxOrigin.y - body.getOrigin().y);
-                            Point bodyFromUpperLeft = bodyVisibleArea.getUpperLeftCoordinate();
+                                /* Draw the body */
+                                Area bodyVisibleArea = body.getVisibleArea();
 
-                            merged.copyNonTransparentPixels(body, bodyToUpperLeft, bodyFromUpperLeft, bodyVisibleArea.getDimension());
+                                Point bodyToUpperLeft = new Point(maxOrigin.x - body.getOrigin().x, maxOrigin.y - body.getOrigin().y);
+                                Point bodyFromUpperLeft = bodyVisibleArea.getUpperLeftCoordinate();
 
-                            /* Draw the head */
-                            Area headVisibleArea = head.getVisibleArea();
+                                if (hasPlayerColor) {
+                                    merged.copyNonTransparentPixels(
+                                            body.getBitmapForPlayer(playerColor),
+                                            bodyToUpperLeft,
+                                            bodyFromUpperLeft,
+                                            bodyVisibleArea.getDimension());
+                                } else {
+                                    merged.copyNonTransparentPixels(
+                                            body,
+                                            bodyToUpperLeft,
+                                            bodyFromUpperLeft,
+                                            bodyVisibleArea.getDimension());
+                                }
 
-                            Point headToUpperLeft = new Point(maxOrigin.x - head.getOrigin().x, maxOrigin.y - head.getOrigin().y);
-                            Point headFromUpperLeft = headVisibleArea.getUpperLeftCoordinate();
+                                /* Draw the head */
+                                Area headVisibleArea = head.getVisibleArea();
 
-                            merged.copyNonTransparentPixels(head, headToUpperLeft, headFromUpperLeft, headVisibleArea.getDimension());
+                                Point headToUpperLeft = new Point(maxOrigin.x - head.getOrigin().x, maxOrigin.y - head.getOrigin().y);
+                                Point headFromUpperLeft = headVisibleArea.getUpperLeftCoordinate();
 
-                            /* Store the image in the worker image collection */
-                            workerImageCollection.addNationSpecificFullImage(nation, compassDirection, merged);
+                                merged.copyNonTransparentPixels(head, headToUpperLeft, headFromUpperLeft, headVisibleArea.getDimension());
+
+                                /* Store the image in the worker image collection */
+                                if (nationSpecificWorkers.contains(jobType)) {
+                                    if (hasPlayerColor) {
+                                        workerImageCollection.addNationSpecificImageWithPlayerColor(nation, playerColor, direction, merged);
+                                    } else {
+                                        workerImageCollection.addNationSpecificImage(nation, direction, merged);
+                                    }
+                                } else {
+                                    if (hasPlayerColor) {
+                                        workerImageCollection.addImageWithPlayerColor(playerColor, direction, merged);
+                                    } else {
+                                        workerImageCollection.addImage(direction, merged);
+                                    }
+                                }
+
+                                if (!hasPlayerColor) {
+                                    break;
+                                }
+                            }
                         }
                     }
+                }
+
+                if (!nationSpecificWorkers.contains(jobType)) {
+                    break;
                 }
             }
 

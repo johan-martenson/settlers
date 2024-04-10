@@ -164,6 +164,12 @@ public class ImageBoard {
         return placeImage(image, 0, currentMaxY);
     }
 
+    public JSONObject placeImageSeriesBottomRightOf(int right, List<Bitmap> images) {
+        int currentMaxY = this.getCurrentHeightRightOf(right);
+
+        return placeImageSeries(images, new Point(right + 1, currentMaxY), LayoutDirection.ROW);
+    }
+
     public JSONObject placeImageSeriesBottom(List<Bitmap> images) {
         int currentMaxY = this.getCurrentHeight();
 
@@ -225,7 +231,6 @@ public class ImageBoard {
         }
 
         for (ImageSeries oneImageSeries : imageSeries.values()) {
-
             if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
                 currentWidth = Math.max(currentWidth, oneImageSeries.width * oneImageSeries.images.size() + oneImageSeries.x);
             } else {
@@ -234,6 +239,36 @@ public class ImageBoard {
         }
 
         return currentWidth;
+    }
+
+    public int getCurrentHeightRightOf(int right) {
+        int currentHeight = 0;
+
+        for (ImageOnBoard imageOnBoard : images.values()) {
+            if (imageOnBoard.x + imageOnBoard.image.getWidth() <= right) {
+                continue;
+            }
+
+            currentHeight = Math.max(currentHeight, imageOnBoard.image.getHeight() + imageOnBoard.y);
+        }
+
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
+            if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
+                if (oneImageSeries.x + oneImageSeries.width * oneImageSeries.images.size() <= right) {
+                    continue;
+                }
+
+                currentHeight = Math.max(currentHeight, oneImageSeries.height + oneImageSeries.y);
+            } else {
+                if (oneImageSeries.x + oneImageSeries.width <= right) {
+                    continue;
+                }
+
+                currentHeight = Math.max(currentHeight, oneImageSeries.height * oneImageSeries.images.size() + oneImageSeries.y);
+            }
+        }
+
+        return currentHeight;
     }
 
     public int getCurrentHeight() {

@@ -390,9 +390,10 @@ class Utils {
     JSONObject houseToJson(Building building, Player player) throws InvalidUserActionException {
         JSONObject jsonHouse = pointToJson(building.getPosition());
 
-        jsonHouse.put("type", building.getClass().getSimpleName());
-        jsonHouse.put("playerId", idManager.getId(building.getPlayer()));
         jsonHouse.put("id", idManager.getId(building));
+        jsonHouse.put("playerId", idManager.getId(building.getPlayer()));
+        jsonHouse.put("type", building.getClass().getSimpleName());
+        jsonHouse.put("nation", building.getPlayer().getNation().name().toUpperCase());
 
         if (building.canProduce()) {
             JSONArray jsonProduces = new JSONArray();
@@ -654,11 +655,13 @@ class Utils {
     JSONObject workerToJson(Worker worker) {
         JSONObject jsonWorker = pointToJson(worker.getPosition());
 
+        jsonWorker.put("id", idManager.getId(worker));
         jsonWorker.put("type", workerTypeToJson(worker));
         jsonWorker.put("inside", worker.isInsideBuilding());
         jsonWorker.put("betweenPoints", !worker.isExactlyAtPoint());
-        jsonWorker.put("id", idManager.getId(worker));
         jsonWorker.put("direction", worker.getDirection().name().toUpperCase());
+        jsonWorker.put("color", worker.getPlayer().getColor().name().toUpperCase());
+        jsonWorker.put("nation", worker.getPlayer().getNation().name().toUpperCase());
 
         if (!worker.isExactlyAtPoint()) {
             jsonWorker.put("previous", pointToJson(worker.getLastPoint()));
@@ -1623,11 +1626,12 @@ class Utils {
             jsonWorkerWithNewTarget.put("y", worker.getPosition().y);
 
             jsonWorkerWithNewTarget.put("type", workerTypeToJson(worker));
+            jsonWorkerWithNewTarget.put("color", worker.getPlayer().getColor().name().toUpperCase());
+            jsonWorkerWithNewTarget.put("nation", worker.getPlayer().getNation().name().toUpperCase());
 
             jsonWorkerWithNewTarget.put("direction", worker.getDirection().name().toUpperCase());
 
             if (worker instanceof Courier courier) {
-
                 jsonWorkerWithNewTarget.put("bodyType", courier.getBodyType().name().toUpperCase());
             }
 
