@@ -3,6 +3,7 @@ package org.appland.settlers.assets.collectors;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Flag;
@@ -81,7 +82,7 @@ public class FlagImageCollection {
         Files.writeString(filePath, jsonImageAtlas.toJSONString());
     }
 
-    public void addImagesForFlag(Nation nation, Flag.FlagType flagType, List<Bitmap> images) {
+    public void addImagesForFlag(Nation nation, Flag.FlagType flagType, List<PlayerBitmap> images) {
         this.flagMap.get(nation).get(flagType).addAll(images);
     }
 

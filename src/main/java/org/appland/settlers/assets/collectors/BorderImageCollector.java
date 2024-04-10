@@ -1,9 +1,10 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.model.PlayerColor;
 import org.json.simple.JSONObject;
 
 import java.awt.Point;
@@ -24,11 +25,11 @@ public class BorderImageCollector {
         }
     }
 
-    public void addLandBorderImage(Nation nation, Bitmap image) {
+    public void addLandBorderImage(Nation nation, PlayerBitmap image) {
         borderMap.get(nation).setLandBorder(image);
     }
 
-    public void addWaterBorderImage(Nation nation, Bitmap image) {
+    public void addWaterBorderImage(Nation nation, PlayerBitmap image) {
         borderMap.get(nation).setCoastBorder(image);
     }
 
@@ -42,32 +43,29 @@ public class BorderImageCollector {
         // Fill in the image atlas
         Point cursor = new Point(0, 0);
         for (Nation nation : Nation.values()) {
-
             cursor.x = 0;
 
             JSONObject jsonNation = new JSONObject();
 
-            jsonImageAtlas.put(nation.name().toLowerCase(), jsonNation);
+            jsonImageAtlas.put(nation.name().toUpperCase(), jsonNation);
 
-            BorderForNation borderForNation = borderMap.get(nation);
+            for (var playerColor : PlayerColor.values()) {
+                JSONObject jsonPlayer = new JSONObject();
 
-            // Land border
-            imageBoard.placeImage(borderForNation.landBorder, cursor);
+                jsonNation.put(playerColor.name().toUpperCase(), jsonPlayer);
 
-            JSONObject jsonLandBorder = imageBoard.imageLocationToJson(borderForNation.landBorder);
+                BorderForNation borderForNation = borderMap.get(nation);
 
-            jsonNation.put("landBorder", jsonLandBorder);
+                // Land border
+                jsonPlayer.put("landBorder", imageBoard.placeImage(borderForNation.landBorder.getBitmapForPlayer(playerColor), cursor));
 
-            cursor.x = cursor.x + borderForNation.landBorder.getWidth();
+                cursor.x = cursor.x + borderForNation.landBorder.getWidth();
 
-            // Coast border
-            imageBoard.placeImage(borderForNation.coastBorder, cursor);
+                // Coast border
+                jsonPlayer.put("coastBorder", imageBoard.placeImage(borderForNation.coastBorder.getBitmapForPlayer(playerColor), cursor));
 
-            JSONObject jsonCoastBorder = imageBoard.imageLocationToJson(borderForNation.coastBorder);
-
-            jsonNation.put("coastBorder", jsonCoastBorder);
-
-            cursor.y = cursor.y + Math.max(borderForNation.landBorder.getHeight(), borderForNation.coastBorder.getHeight());
+                cursor.y = cursor.y + Math.max(borderForNation.landBorder.getHeight(), borderForNation.coastBorder.getHeight());
+            }
         }
 
         // Write to file
@@ -77,14 +75,14 @@ public class BorderImageCollector {
     }
 
     private static class BorderForNation {
-        private Bitmap landBorder;
-        private Bitmap coastBorder;
+        private PlayerBitmap landBorder;
+        private PlayerBitmap coastBorder;
 
-        public void setLandBorder(Bitmap image) {
+        public void setLandBorder(PlayerBitmap image) {
             landBorder = image;
         }
 
-        public void setCoastBorder(Bitmap image) {
+        public void setCoastBorder(PlayerBitmap image) {
             coastBorder = image;
         }
     }

@@ -69,8 +69,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
-import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.model.Material.*;
@@ -78,6 +76,8 @@ import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.appland.settlers.model.Stone.StoneType.STONE_2;
 import static org.appland.settlers.model.WorkerAction.*;
+import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
+import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 
 public class Extractor {
 
@@ -300,17 +300,17 @@ public class Extractor {
 
         BorderImageCollector borderImageCollector = new BorderImageCollector();
 
-        borderImageCollector.addLandBorderImage(AFRICANS, getImageAt(mbobAfrBobsLst, MbobAfrBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(AFRICANS, getImageAt(mbobAfrBobsLst, MbobAfrBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(JAPANESE, getImageAt(mbobJapBobsLst, MbobJapBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(JAPANESE, getImageAt(mbobJapBobsLst, MbobJapBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(ROMANS, getImageAt(mbobRomBobsLst, MbobRomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(ROMANS, getImageAt(mbobRomBobsLst, MbobRomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(VIKINGS, getImageAt(mbobVikBobsLst, MbobVikBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(VIKINGS, getImageAt(mbobVikBobsLst, MbobVikBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addLandBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWaterBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.COAST_BORDER_ICON));
 
         borderImageCollector.writeImageAtlas(toDir, defaultPalette);
     }
@@ -325,43 +325,43 @@ public class Extractor {
         FlagImageCollection flagImageCollection = new FlagImageCollection();
 
         // Africans
-        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.NORMAL, getPlayerImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.NORMAL, getImagesAt(afrZLst, AfrZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MAIN, getPlayerImagesAt(afrZLst, AfrZLst.MAIN_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.MAIN, getImagesAt(afrZLst, AfrZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(AFRICANS, Flag.FlagType.MARINE, getPlayerImagesAt(afrZLst, AfrZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(AFRICANS, Flag.FlagType.MARINE, getImagesAt(afrZLst, AfrZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Japanese
-        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.NORMAL, getPlayerImagesAt(japZLst, JapZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.NORMAL, getImagesAt(japZLst, JapZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MAIN, getPlayerImagesAt(japZLst, JapZLst.MAIN_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.MAIN, getImagesAt(japZLst, JapZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(JAPANESE, Flag.FlagType.MARINE, getPlayerImagesAt(japZLst, JapZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(JAPANESE, Flag.FlagType.MARINE, getImagesAt(japZLst, JapZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Romans
-        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.NORMAL, getPlayerImagesAt(romZLst, RomZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.NORMAL, getImagesAt(romZLst, RomZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MAIN, getPlayerImagesAt(romZLst, RomZLst.MAIN_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.MAIN, getImagesAt(romZLst, RomZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(ROMANS, Flag.FlagType.MARINE, getPlayerImagesAt(romZLst, RomZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(ROMANS, Flag.FlagType.MARINE, getImagesAt(romZLst, RomZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Vikings
-        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.NORMAL, getPlayerImagesAt(vikZLst, VikZLst.NORMAL_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.NORMAL, getImagesAt(vikZLst, VikZLst.NORMAL_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MAIN, getPlayerImagesAt(vikZLst, VikZLst.MAIN_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.MAIN, getImagesAt(vikZLst, VikZLst.MAIN_FLAG_SHADOW_ANIMATION, 8));
 
-        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
+        flagImageCollection.addImagesForFlag(VIKINGS, Flag.FlagType.MARINE, getPlayerImagesAt(vikZLst, VikZLst.MARINE_FLAG_ANIMATION, 8));
         flagImageCollection.addImagesForFlagShadow(VIKINGS, Flag.FlagType.MARINE, getImagesAt(vikZLst, VikZLst.MARINE_FLAG_SHADOW_ANIMATION, 8));
 
         // Write the image atlas to file
@@ -2118,6 +2118,16 @@ public class Extractor {
         buildingsImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
     }
 
+    private List<PlayerBitmap> getPlayerImagesAt(List<GameResource> gameResources, int start, int amount) {
+        List<PlayerBitmap> images = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            images.add(getPlayerImageAt(gameResources, start + i));
+        }
+
+        return images;
+    }
+
     private List<Bitmap> getImagesAt(List<GameResource> gameResourceList, int startLocation, int amount) {
         List<Bitmap> images = new ArrayList<>();
 
@@ -2126,6 +2136,10 @@ public class Extractor {
         }
 
         return images;
+    }
+
+    private PlayerBitmap getPlayerImageAt(List<GameResource> gameResourceList, int location) {
+        return ((PlayerBitmapResource) gameResourceList.get(location)).getBitmap();
     }
 
     private Bitmap getImageAt(List<GameResource> gameResourceList, int location) {
