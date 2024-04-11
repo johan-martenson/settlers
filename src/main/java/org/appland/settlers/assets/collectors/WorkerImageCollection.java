@@ -17,9 +17,6 @@ import org.appland.settlers.model.actors.Courier;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -74,129 +71,95 @@ public class WorkerImageCollection {
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-
-        /*
-         * Write the image atlas, one row per direction, and collect metadata to write as json
-         *
-         * JSON format:
-         *   - common: walking images without cargo
-         *        - fullImages
-         *        - fullImagesByPlayer
-         *              - BLUE
-         *        - actions
-         *        - bodyImages
-         *        - cargoImages: walking images with cargo
-         *        - shadowImages: shadow images, same regardless of nation or cargo
-         *   - nationSpecific: walking images without cargo, nation-specific
-         *        - fullImages
-         *        - fullImagesByPlayer
-         *        - cargoImages
-         */
         ImageBoard imageBoard = new ImageBoard();
 
+        // TODO: resolve obvious bug where two sets of images are written to the same path:
+        //   - common / fullImagesByPlayer / <direction> / <player color>
+
         // Write walking animations where the worker isn't carrying anything and that are not nation-specific
-        imagesPerPlayer.forEach(
-                (direction, playerMap) -> playerMap.forEach(
-                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(images),
-                            "common",
-                            "fullImagesByPlayer",
-                            direction.name().toUpperCase(),
-                            playerColor.name().toUpperCase()
-                        )));
+        imagesPerPlayer.forEach((direction, playerMap) -> playerMap
+                .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "common",
+                        "fullImagesByPlayer",
+                        direction.name().toUpperCase(),
+                        playerColor.name().toUpperCase())));
 
         if (imagesPerPlayer.isEmpty() && !bodyImages.isEmpty()) {
-            bodyImages.forEach(
-                    (direction, images) -> Arrays.stream(PlayerColor.values()).forEach(
-                            (playerColor -> imageBoard.placeImageSeriesBottom(
-                                    ImageTransformer.drawForPlayer(playerColor, images),
-                                    "common",
-                                    "bodyImagesByPlayer",
-                                    direction.name().toUpperCase(),
-                                    playerColor.name().toUpperCase()
-                            ))));
+            bodyImages.forEach((direction, images) -> Arrays.stream(PlayerColor.values())
+                    .forEach((playerColor -> imageBoard.placeImageSeriesBottom(
+                            ImageTransformer.drawForPlayer(playerColor, images),
+                            "common",
+                            "bodyImagesByPlayer",
+                            direction.name().toUpperCase(),
+                            playerColor.name().toUpperCase()))));
         }
 
         // Write walking animations with the correct player color
-        imagesWithPlayerColor.forEach(
-                (direction, playerColorMap) -> playerColorMap.forEach(
-                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(images),
-                                "common",
-                                "fullImagesByPlayer",
-                                direction.name().toUpperCase(),
-                                playerColor.name().toUpperCase()
-                        )));
-
-        // Write walking animations, per nation and direction
-        nationSpecificImages.forEach(
-                (nation,  directionMap) -> directionMap.forEach(
-                        (direction, images) -> imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(images),
-                                "nationSpecific",
-                                "fullImages",
-                                nation.name().toUpperCase(),
-                                direction.name().toUpperCase()
-                        )));
-
-        // Write shadows, per direction (shadows are not nation-specific or are the same regardless of if/what the courier is carrying)
-        shadowImages.forEach(
-                (direction, images) -> imageBoard.placeImageSeriesBottom(
+        imagesWithPlayerColor.forEach((direction, playerColorMap) -> playerColorMap
+                .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
                         ImageTransformer.normalizeImageSeries(images),
                         "common",
-                        "shadowImages",
-                        direction.name().toUpperCase()
-                ));
+                        "fullImagesByPlayer",
+                        direction.name().toUpperCase(),
+                        playerColor.name().toUpperCase())));
+
+        // Write walking animations, per nation and direction
+        nationSpecificImages.forEach((nation, directionMap) -> directionMap
+                .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "nationSpecific",
+                        "fullImages",
+                        nation.name().toUpperCase(),
+                        direction.name().toUpperCase())));
+
+        // Write shadows, per direction (shadows are not nation-specific or are the same regardless of if/what the courier is carrying)
+        shadowImages.forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(images),
+                "common",
+                "shadowImages",
+                direction.name().toUpperCase()));
 
         // Write direction-specific actions (if any)
-        actionsWithDirection.forEach(
-                (action, directionMap) -> directionMap.forEach(
-                        (direction, images) -> imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(images),
-                                "actions",
-                                action.name().toUpperCase(),
-                                direction.name().toUpperCase())
-                ));
+        actionsWithDirection.forEach((action, directionMap) -> directionMap
+                .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "actions",
+                        action.name().toUpperCase(),
+                        direction.name().toUpperCase())));
 
         // Write lists of cargo images (if any)
-        cargoImages.forEach(
-                (material, directionMap) -> directionMap.forEach(
-                        (direction, images) -> imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(images),
-                                "common",
-                                "cargoImages",
-                                material.name().toUpperCase(),
-                                direction.name().toUpperCase())
-                ));
+        cargoImages.forEach((material, directionMap) -> directionMap
+                .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "common",
+                        "cargoImages",
+                        material.name().toUpperCase(),
+                        direction.name().toUpperCase())));
 
         // Write actions that apply to any direction (if any)
-        actionsByPlayer.forEach(
-                (action, playerColorMap) -> playerColorMap.forEach(
-                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
+        actionsByPlayer.forEach((action, playerColorMap) -> playerColorMap
+                .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "common",
+                        "actions",
+                        action.name().toUpperCase(),
+                        "any",
+                        playerColor.name().toUpperCase())));
+
+        // Write actions that are specific per nation and per direction (if any)
+        nationSpecificActionsWithDirection.forEach((nation, actionMap) -> actionMap
+                .forEach((action, directionMap) -> directionMap
+                        .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
                                 ImageTransformer.normalizeImageSeries(images),
                                 "common",
                                 "actions",
+                                nation.name().toUpperCase(),
                                 action.name().toUpperCase(),
-                                "any",
-                                playerColor.name().toUpperCase())
-                ));
-
-        // Write actions that are specific per nation and per direction (if any)
-        nationSpecificActionsWithDirection.forEach(
-                (nation, actionMap) -> actionMap.forEach(
-                        (action, directionMap) -> directionMap.forEach(
-                                (direction, images) -> imageBoard.placeImageSeriesBottom(
-                                        ImageTransformer.normalizeImageSeries(images),
-                                        "common",
-                                        "actions",
-                                        nation.name().toUpperCase(),
-                                        action.name().toUpperCase(),
-                                        direction.name().toUpperCase())
-                        )));
+                                direction.name().toUpperCase()))));
 
         // Write nation-specific images by player
-        nationSpecificImagesWithPlayerColor.forEach(
-                (nation, directionMap) -> {
+        nationSpecificImagesWithPlayerColor.forEach((nation, directionMap) -> {
                     int width = imageBoard.getCurrentWidth();
 
                     directionMap.forEach(
@@ -206,18 +169,11 @@ public class WorkerImageCollection {
                                             "fullImagesByPlayer",
                                             nation.name().toUpperCase(),
                                             direction.name().toUpperCase(),
-                                            playerColor.name().toUpperCase())
-                            ));
+                                            playerColor.name().toUpperCase())));
                 }
         );
 
-        // Write the image atlas to disk
-        imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-" + name.toLowerCase() + ".png");
-
-        Path filePath = Paths.get(directory, "image-atlas-" + name.toLowerCase() + ".json");
-
-        //Files.writeString(filePath, jsonImageAtlas.toJSONString());
-        Files.writeString(filePath, imageBoard.getMetadataAsJson().toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
     }
 
     public void addShadowImages(CompassDirection compassDirection, List<Bitmap> images) {

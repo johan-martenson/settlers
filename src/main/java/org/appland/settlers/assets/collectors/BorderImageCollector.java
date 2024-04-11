@@ -6,9 +6,10 @@ import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.PlayerColor;
 
-import java.awt.Point;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class BorderImageCollector {
@@ -33,34 +34,21 @@ public class BorderImageCollector {
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        Point cursor = new Point(0, 0);
-        for (Nation nation : Nation.values()) {
-            cursor.x = 0;
-
-            for (var playerColor : PlayerColor.values()) {
-                BorderForNation borderForNation = borderMap.get(nation);
-
-                imageBoard.placeImage(
-                        borderForNation.landBorder.getBitmapForPlayer(playerColor),
-                        cursor,
-                        nation.name().toUpperCase(),
-                        playerColor.name().toUpperCase(),
-                        "landBorder"
-                );
-
-                cursor.x = cursor.x + borderForNation.landBorder.getWidth();
-
-                imageBoard.placeImage(
-                        borderForNation.coastBorder.getBitmapForPlayer(playerColor),
-                        cursor,
-                        nation.name().toUpperCase(),
-                        playerColor.name().toUpperCase(),
-                        "coastBorder"
-                        );
-
-                cursor.y = cursor.y + Math.max(borderForNation.landBorder.getHeight(), borderForNation.coastBorder.getHeight());
-            }
-        }
+        Arrays.stream(Nation.values()).forEach(nation -> Arrays.stream(PlayerColor.values())
+                .forEach(playerColor -> imageBoard.placeImagesAsRow(
+                        List.of(
+                                ImageBoard.makeImagePathPair(
+                                        borderMap.get(nation).landBorder.getBitmapForPlayer(playerColor),
+                                        nation.name().toUpperCase(),
+                                        playerColor.name().toUpperCase(),
+                                        "landBorder"
+                                ),
+                                ImageBoard.makeImagePathPair(
+                                        borderMap.get(nation).coastBorder.getBitmapForPlayer(playerColor),
+                                        nation.name().toUpperCase(),
+                                        playerColor.name().toUpperCase(),
+                                        "coastBorder"
+                                )))));
 
         imageBoard.writeBoard(toDir, "image-atlas-border", palette);
     }

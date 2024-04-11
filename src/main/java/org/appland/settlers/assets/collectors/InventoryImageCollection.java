@@ -1,11 +1,10 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.Material;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,79 +35,47 @@ public class InventoryImageCollection {
         this.nationIcons.get(nation).put(material, image);
     }
 
-    public void writeImageAtlas(String toDir, Palette defaultPalette) throws IOException {
-
-        // Create the image atlas
+    public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        icons.forEach((material, image) -> imageBoard.placeImageBottom(
+                image,
+                "generic",
+                material.name().toUpperCase()));
 
-        // Fill in the image atlas
-        JSONObject jsonGeneric = new JSONObject();
-        JSONObject jsonNationSpecific = new JSONObject();
+        nationIcons.forEach((nation, materialMap) -> materialMap
+                        .forEach((material, image) -> imageBoard.placeImageBottom(
+                                image,
+                                "nationSpecific",
+                                nation.name().toUpperCase(),
+                                material.name().toUpperCase())));
 
-        jsonImageAtlas.put("generic", jsonGeneric);
-        jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
-
-        // Fill in generic icons
-        for (Map.Entry<Material, Bitmap> entry : icons.entrySet()) {
-            Material material = entry.getKey();
-            Bitmap image = entry.getValue();
-
-            imageBoard.placeImageBottom(image);
-
-            JSONObject jsonIconImage = imageBoard.imageLocationToJson(image);
-
-            jsonGeneric.put(material.name().toUpperCase(), jsonIconImage);
-        }
-
-        // Fill in nation-specific icons
-        for (Map.Entry<Nation, Map<Material, Bitmap>> entry : nationIcons.entrySet()) {
-            Nation nation = entry.getKey();
-            Map<Material, Bitmap> iconsForNation = entry.getValue();
-
-            JSONObject jsonNation = new JSONObject();
-
-            jsonNationSpecific.put(nation.name().toUpperCase(), jsonNation);
-
-            for (Map.Entry<Material, Bitmap> materialBitmapEntry : iconsForNation.entrySet()) {
-                imageBoard.placeImageBottom(materialBitmapEntry.getValue());
-
-                JSONObject jsonIcon = imageBoard.imageLocationToJson(materialBitmapEntry.getValue());
-
-                jsonNation.put(materialBitmapEntry.getKey().name().toUpperCase(), jsonIcon);
-            }
-        }
-
-        // Write the image atlas to file
-        imageBoard.writeBoardToBitmap(defaultPalette).writeToFile(toDir + "/image-atlas-inventory-icons.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-inventory-icons.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-inventory-icons", palette);
 
         // Write inventory icons
-        Path inventoryIconDir = Paths.get(toDir, "inventory-icons");
+        Path inventoryIconDir = Paths.get(directory, "inventory-icons");
 
         Files.createDirectory(inventoryIconDir);
 
         // Write generic inventory icons
-        for (Map.Entry<Material, Bitmap> entry : icons.entrySet()) {
-            Path iconPath = Paths.get(inventoryIconDir.toString(), entry.getKey().name().toUpperCase() + ".png");
-
-            entry.getValue().writeToFile(iconPath);
+        for (var entry : icons.entrySet()) {
+            entry.getValue().writeToFile(
+                    Paths.get(inventoryIconDir.toString(), entry.getKey().name().toUpperCase() + ".png")
+            );
         }
 
         // Write nation-specific inventory icons
-        for (Map.Entry<Nation, Map<Material, Bitmap>> entry : nationIcons.entrySet()) {
+        for (var entry : nationIcons.entrySet()) {
             Path nationSpecificPath = Paths.get(inventoryIconDir.toString(), entry.getKey().name().toUpperCase());
 
             if (!Files.isDirectory(nationSpecificPath)) {
                 Files.createDirectory(nationSpecificPath);
             }
 
-            for (Map.Entry<Material, Bitmap> materialBitmapEntry : entry.getValue().entrySet()) {
-                Path iconPath = Paths.get(nationSpecificPath.toString(), materialBitmapEntry.getKey().name().toUpperCase() + ".png");
-
-                materialBitmapEntry.getValue().writeToFile(iconPath);
+            for (var materialBitmapEntry : entry.getValue().entrySet()) {
+                materialBitmapEntry.getValue().writeToFile(
+                        Paths.get(nationSpecificPath.toString(), materialBitmapEntry.getKey().name().toUpperCase() + ".png")
+                );
             }
         }
     }

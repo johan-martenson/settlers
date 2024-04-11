@@ -6,11 +6,12 @@ import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class BuildingsImageCollection {
 
@@ -60,160 +61,77 @@ public class BuildingsImageCollection {
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-
-        // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
-        // Fill in the image atlas and fill in the meta-data
-        int startNextNationAtX = 0;
-        int currentNationStartedAtX = 0;
-        Point cursor = new Point(0, 0);
+        buildingMap.forEach((nation, buildings) -> {
+            int right = imageBoard.getCurrentWidth();
 
-        for (Nation nation : Nation.values()) {
-            currentNationStartedAtX = cursor.x;
+            buildings
+                    .forEach((building, buildingImages) -> imageBoard.placeImagesAtBottomRightOf(
+                            Stream.of(
+                                    ImageBoard.makeImagePathPair(
+                                            buildingImages.buildingReadyImage,
+                                            "buildings",
+                                            nation.name().toUpperCase(),
+                                            building,
+                                            "ready"
+                                    ),
+                                    ImageBoard.makeImagePathPair(
+                                            buildingImages.buildingReadyShadowImage,
+                                            "buildings",
+                                            nation.name().toUpperCase(),
+                                            building,
+                                            "readyShadow"
+                                    ),
+                                    ImageBoard.makeImagePathPair(
+                                            buildingImages.buildingUnderConstruction,
+                                            "buildings",
+                                            nation.name().toUpperCase(),
+                                            building,
+                                            "underConstruction"
+                                    ),
+                                    ImageBoard.makeImagePathPair(
+                                            buildingImages.buildingUnderConstructionShadowImage,
+                                            "buildings",
+                                            nation.name().toUpperCase(),
+                                            building,
+                                            "underConstructionShadow"
+                                    )
+                            )
+                            .filter(imagePathPair -> imagePathPair.image() != null)
+                            .toList(),
+                            right
+                    ));
 
-            cursor.x = startNextNationAtX;
-            cursor.y = 0;
+            imageBoard.placeImagesAsRowRightOf(
+                    List.of(
+                            ImageBoard.makeImagePathPair(
+                                    specialImagesMap.get(nation).constructionPlannedImage,
+                                    "constructionPlanned",
+                                    nation.name().toUpperCase(),
+                                    "image"
+                            ),
+                            ImageBoard.makeImagePathPair(
+                                    specialImagesMap.get(nation).constructionPlannedShadowImage,
+                                    "constructionPlanned",
+                                    nation.name().toUpperCase(),
+                                    "shadowImage"
+                            ),
+                            ImageBoard.makeImagePathPair(
+                                    specialImagesMap.get(nation).constructionJustStartedImage,
+                                    "constructionJustStarted",
+                                    nation.name().toUpperCase(),
+                                    "image"
+                            ),
+                            ImageBoard.makeImagePathPair(
+                                    specialImagesMap.get(nation).constructionJustStartedShadowImage,
+                                    "constructionJustStarted",
+                                    nation.name().toUpperCase(),
+                                    "shadowImage"
+                            )
+                    ));
+        });
 
-            for (Map.Entry<String, BuildingImages> entry : this.buildingMap.get(nation).entrySet()) {
-                String building = entry.getKey();
-                BuildingImages images = entry.getValue();
-
-                int currentRowHeight = 0;
-
-                // Building ready image
-                if (images.buildingReadyImage != null) {
-                    imageBoard.placeImage(
-                            images.buildingReadyImage,
-                            cursor,
-                            "buildings",
-                            nation.name().toUpperCase(),
-                            building,
-                            "ready"
-                            );
-
-                    startNextNationAtX = Math.max(startNextNationAtX, cursor.x + images.buildingReadyImage.getWidth());
-
-                    currentRowHeight = Math.max(currentRowHeight, images.buildingReadyImage.getHeight());
-
-                    cursor.x = cursor.x + images.buildingReadyImage.getWidth();
-                }
-
-                // Building ready shadow image
-                if (images.buildingReadyShadowImage != null) {
-                    imageBoard.placeImage(
-                            images.buildingReadyShadowImage,
-                            cursor,
-                            "buildings",
-                            nation.name().toUpperCase(),
-                            building,
-                            "readyShadow"
-                    );
-
-                    startNextNationAtX = Math.max(startNextNationAtX, cursor.x + images.buildingReadyShadowImage.getWidth());
-
-                    currentRowHeight = Math.max(currentRowHeight, images.buildingReadyShadowImage.getHeight());
-
-                    cursor.x = cursor.x + images.buildingReadyShadowImage.getWidth();
-                }
-
-                // Under construction image
-                if (images.buildingUnderConstruction != null) {
-                    imageBoard.placeImage(
-                            images.buildingUnderConstruction,
-                            cursor,
-                            "buildings",
-                            nation.name().toUpperCase(),
-                            building,
-                            "underConstruction"
-                    );
-
-                    startNextNationAtX = Math.max(startNextNationAtX, cursor.x + images.buildingUnderConstruction.getWidth());
-
-                    currentRowHeight = Math.max(currentRowHeight, images.buildingUnderConstruction.getHeight());
-
-                    cursor.x = cursor.x + images.buildingUnderConstruction.getWidth();
-                }
-
-                // Under construction shadow image
-                if (images.buildingUnderConstructionShadowImage != null) {
-                    imageBoard.placeImage(
-                            images.buildingUnderConstructionShadowImage,
-                            cursor,
-                            "buildings",
-                            nation.name().toUpperCase(),
-                            building,
-                            "underConstructionShadow"
-                    );
-
-                    startNextNationAtX = Math.max(startNextNationAtX, cursor.x + images.buildingUnderConstructionShadowImage.getWidth());
-
-                    currentRowHeight = Math.max(currentRowHeight, images.buildingUnderConstructionShadowImage.getHeight());
-
-                    cursor.x = cursor.x + images.buildingUnderConstructionShadowImage.getWidth();
-                }
-
-                cursor.y = cursor.y + currentRowHeight;
-                cursor.x = currentNationStartedAtX;
-            }
-
-            cursor.x = currentNationStartedAtX;
-
-            // Fill in construction planned and construction just started
-            SpecialImages specialImages = specialImagesMap.get(nation);
-
-            Bitmap constructionPlannedImage = specialImages.constructionPlannedImage;
-            Bitmap constructionPlannedShadowImage = specialImages.constructionPlannedShadowImage;
-            Bitmap constructionJustStartedImage = specialImages.constructionJustStartedImage;
-            Bitmap constructionJustStartedShadowImage = specialImages.constructionJustStartedShadowImage;
-
-            // Construction planned image
-            imageBoard.placeImage(
-                    constructionPlannedImage,
-                    cursor,
-                    "constructionPlanned",
-                    nation.name().toUpperCase(),
-                    "image"
-                    );
-
-            cursor.x = cursor.x + constructionPlannedImage.getWidth();
-
-            // Construction planned shadow image
-            imageBoard.placeImage(
-                    constructionPlannedShadowImage,
-                    cursor,
-                    "constructionPlanned",
-                    nation.name().toUpperCase(),
-                    "shadowImage"
-            );
-
-            cursor.x = cursor.x + constructionPlannedShadowImage.getWidth();
-
-            // Under construction image
-            imageBoard.placeImage(
-                    constructionJustStartedImage,
-                    cursor,
-                    "constructionJustStarted",
-                    nation.name().toUpperCase(),
-                    "image"
-            );
-
-            cursor.x = cursor.x + constructionJustStartedImage.getWidth();
-
-            // Under construction shadow image
-            imageBoard.placeImage(
-                    constructionJustStartedShadowImage,
-                    cursor,
-                    "constructionJustStarted",
-                    nation.name().toUpperCase(),
-                    "shadowImage"
-            );
-
-            // Start at the right place for the next column
-            cursor.x = startNextNationAtX;
-        }
-
-        // Write the image and the meta-data to files
         imageBoard.writeBoard(directory, "image-atlas-buildings", palette);
 
         // Write individual images for icons
@@ -224,7 +142,6 @@ public class BuildingsImageCollection {
             Utils.createDirectory(buildingDir);
 
             for (Map.Entry<String, BuildingImages> entry : this.buildingMap.get(nation).entrySet()) {
-
                 String buildingFile = buildingDir + "/" + entry.getKey() + ".png";
 
                 // Write each ready building as a separate image

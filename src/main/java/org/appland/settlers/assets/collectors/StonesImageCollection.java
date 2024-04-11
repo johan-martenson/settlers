@@ -5,11 +5,8 @@ import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.Stone;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
@@ -37,31 +34,25 @@ public class StonesImageCollection {
     }
 
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-
-        // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        Arrays.stream(Stone.StoneType.values())
+                .forEach(stoneType -> Arrays.stream(StoneAmount.values())
+                        .forEach(stoneAmount -> {
+                            imageBoard.placeImageBottom(
+                                    stoneMap.get(stoneType).get(stoneAmount),
+                                    stoneType.name().toUpperCase(),
+                                    stoneAmount.name().toUpperCase(),
+                                    "image"
+                            );
+                            imageBoard.placeImageBottom(
+                                    stoneShadowMap.get(stoneType).get(stoneAmount),
+                                    stoneType.name().toUpperCase(),
+                                    stoneAmount.name().toUpperCase(),
+                                    "shadowImage"
+                            );
+                        }));
 
-        // Fill in the image atlas
-        Arrays.stream(Stone.StoneType.values()).forEach(stoneType -> {
-            JSONObject jsonStoneType = new JSONObject();
-
-            jsonImageAtlas.put(stoneType.name().toUpperCase(), jsonStoneType);
-
-            Arrays.stream(StoneAmount.values()).forEach(stoneAmount -> {
-                JSONObject jsonStoneAmount = new JSONObject();
-
-                jsonStoneType.put(stoneAmount.name().toUpperCase(), jsonStoneAmount);
-
-                jsonStoneAmount.put("image", imageBoard.placeImageBottom(stoneMap.get(stoneType).get(stoneAmount)));
-                jsonStoneAmount.put("shadowImage", imageBoard.placeImageBottom(stoneShadowMap.get(stoneType).get(stoneAmount)));
-            });
-        });
-
-        // Write the image atlas to disk
-        imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-stones.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-stones.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(toDir, "image-atlas-stones", palette);
     }
 }

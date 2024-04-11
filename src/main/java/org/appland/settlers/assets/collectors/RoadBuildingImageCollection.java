@@ -1,16 +1,13 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
-import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.RoadConnectionDifference;
-import org.json.simple.JSONObject;
+import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 public class RoadBuildingImageCollection {
@@ -40,88 +37,31 @@ public class RoadBuildingImageCollection {
         this.downwardsConnectionImages.put(difference, image);
     }
 
-    public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-
-        // Create the image atlas
-        // Layout:
-        //     - row 1: start point, same level connection
-        //     - row 2: upwards connection small, medium, large
-        //     - row 3: downwards connection small, medium, large
+    public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        imageBoard.placeImagesAsRow(
+                List.of(
+                        ImageBoard.makeImagePathPair(startPointImage, "startPoint"),
+                        ImageBoard.makeImagePathPair(sameLevelConnectionImage, "sameLevelConnection")
+                ));
 
-        // Fill in the image atlas
+        imageBoard.placeImagesAsRow(
+                upwardsConnectionImages.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                        entry.getValue(),
+                                        "upwardsConnections",
+                                        entry.getKey().name().toUpperCase()))
+                        .toList());
 
-        Point cursor = new Point(0, 0);
+        imageBoard.placeImagesAsRow(
+                downwardsConnectionImages.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "downwardsConnections",
+                                entry.getKey().name().toUpperCase()))
+                        .toList());
 
-        // Start point
-        imageBoard.placeImage(startPointImage, cursor);
-
-        JSONObject jsonStartPoint = imageBoard.imageLocationToJson(startPointImage);
-
-        jsonImageAtlas.put("startPoint", jsonStartPoint);
-
-        cursor.x = cursor.x + startPointImage.getWidth();
-
-        // Connection on same level
-        imageBoard.placeImage(sameLevelConnectionImage, cursor);
-
-        JSONObject jsonSameLevelConnection = imageBoard.imageLocationToJson(sameLevelConnectionImage);
-
-        jsonImageAtlas.put("sameLevelConnection", jsonSameLevelConnection);
-
-        // Upwards connections
-        JSONObject jsonUpwardsConnections = new JSONObject();
-
-        jsonImageAtlas.put("upwardsConnections", jsonUpwardsConnections);
-
-        cursor.x = 0;
-        cursor.y = Math.max(startPointImage.getHeight(), sameLevelConnectionImage.getHeight());
-
-        int rowHeight = 0;
-
-        for (Map.Entry<RoadConnectionDifference, Bitmap> entry : this.upwardsConnectionImages.entrySet()) {
-
-            RoadConnectionDifference difference = entry.getKey();
-            Bitmap image = entry.getValue();
-
-            imageBoard.placeImage(image, cursor);
-
-            JSONObject jsonUpwardsConnection = imageBoard.imageLocationToJson(image);
-
-            jsonUpwardsConnections.put(difference.name().toUpperCase(), jsonUpwardsConnection);
-
-            rowHeight = Math.max(rowHeight, image.getHeight());
-
-            cursor.x = cursor.x + image.getWidth();
-        }
-
-        // Downwards connections
-        JSONObject jsonDownwardsConnections = new JSONObject();
-
-        jsonImageAtlas.put("downwardsConnections", jsonDownwardsConnections);
-
-        cursor.y = cursor.y + rowHeight;
-        cursor.x = 0;
-
-        for (Map.Entry<RoadConnectionDifference, Bitmap> entry : this.downwardsConnectionImages.entrySet()) {
-
-            RoadConnectionDifference difference = entry.getKey();
-            Bitmap image = entry.getValue();
-
-            imageBoard.placeImage(image, cursor);
-
-            JSONObject jsonDownwardsConnection = imageBoard.imageLocationToJson(image);
-
-            jsonDownwardsConnections.put(difference.name().toUpperCase(), jsonDownwardsConnection);
-
-            cursor.x = cursor.x + image.getWidth();
-        }
-
-        // Write the image atlas to file
-        imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-road-building.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-road-building.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-road-building", palette);
     }
 }

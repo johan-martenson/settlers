@@ -12,13 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 public class CargoImageCollection {
     private final Map<Material, Bitmap> cargos;
     private final Map<Nation, Map<Material, Bitmap>> nationCargos;
-    private final Map<Bitmap, Material> imageToMaterial;
 
     public CargoImageCollection() {
         nationCargos = new EnumMap<>(Nation.class);
@@ -27,13 +25,10 @@ public class CargoImageCollection {
         for (Nation nation : Nation.values()) {
             nationCargos.put(nation, new EnumMap<>(Material.class));
         }
-
-        imageToMaterial = new HashMap<>();
     }
 
     public void addCargoImage(Material material, Bitmap image) {
         cargos.put(material, image);
-        imageToMaterial.put(image, material);
     }
 
     public void addCargoImageForNation(Nation nation, Material material, Bitmap image) {
@@ -41,8 +36,6 @@ public class CargoImageCollection {
     }
 
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-
-        // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
         // Fill in the image atlas

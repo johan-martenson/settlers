@@ -8,7 +8,6 @@ import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Material;
 
-import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -40,79 +39,40 @@ public class AnimalImageCollection {
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-
-        // Write the image atlas, one row per direction, and collect metadata to write as json
         ImageBoard imageBoard = new ImageBoard();
 
-        // Fill in the images into the image atlas
-        Point cursor = new Point(0, 0);
-
-        // Fill in animal walking in each direction
         directionToImageMap.forEach(
                 (direction, images) -> imageBoard.placeImageSeriesBottom(
                         ImageTransformer.normalizeImageSeries(images),
                         "images",
-                        direction.name().toUpperCase()
-                ));
+                        direction.name().toUpperCase()));
 
-        // Fill in shadows if they exist. One per direction
-        cursor.y = imageBoard.getCurrentHeight();
+        imageBoard.placeImagesAsRow(
+                shadowImages.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "shadowImages",
+                                entry.getKey().name().toUpperCase()))
+                        .toList());
 
-        if (!shadowImages.isEmpty()) {
-            cursor.x = 0;
+        imageBoard.placeImagesAsRow(
+                cargoImages.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "cargos",
+                                entry.getKey().name().toUpperCase()))
+                        .toList());
 
-            for (Map.Entry<CompassDirection, Bitmap> entry : shadowImages.entrySet()) {
-                CompassDirection compassDirection = entry.getKey();
-                Bitmap shadowImage = entry.getValue();
+        nationCargoImages.forEach((nation, materialMap) -> imageBoard.placeImagesAsRow(
+                materialMap.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "nationSpecific",
+                                nation.name().toUpperCase(),
+                                entry.getKey().name().toUpperCase()
+                                ))
+                        .toList()));
 
-                imageBoard.placeImage(shadowImage, cursor, "shadowImages", compassDirection.name().toUpperCase());
-
-                cursor.x = cursor.x + shadowImage.getWidth();
-            }
-        }
-
-        // Write the cargos (if any)
-        if (!cargoImages.isEmpty()) {
-            cursor.y = imageBoard.getCurrentHeight();
-            cursor.x = 0;
-
-            for (Map.Entry<Material, Bitmap> entry : cargoImages.entrySet()) {
-                Material material = entry.getKey();
-                Bitmap image = entry.getValue();
-
-                imageBoard.placeImage(image, cursor, "cargos", material.name().toUpperCase());
-
-                cursor.x += image.getWidth();
-            }
-        }
-
-        // Write nation-specific cargos (if any)
-        if (!nationCargoImages.isEmpty()) {
-            cursor.y = imageBoard.getCurrentHeight();
-            cursor.x = 0;
-
-            for (Map.Entry<Nation, Map<Material, Bitmap>> nationEntry : nationCargoImages.entrySet()) {
-                Nation nation = nationEntry.getKey();
-                Map<Material, Bitmap> materialBitmapMap = nationEntry.getValue();
-
-                for (Map.Entry<Material, Bitmap> entry : materialBitmapMap.entrySet()) {
-                    Material material = entry.getKey();
-                    Bitmap image = entry.getValue();
-
-                    imageBoard.placeImage(
-                            image,
-                            cursor,
-                            "nationSpecific",
-                            nation.name().toUpperCase(),
-                            material.name().toUpperCase()
-                    );
-
-                    cursor.x += image.getWidth();
-                }
-            }
-        }
-
-        // Write the image atlas
         imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
     }
 

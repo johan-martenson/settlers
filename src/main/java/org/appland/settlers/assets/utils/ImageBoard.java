@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,32 @@ public class ImageBoard {
         Files.writeString(pathJsonFile, getMetadataAsJson().toJSONString());
     }
 
+    public void placeImageRightOf(Bitmap image, String... metadata) {
+        int x = getCurrentWidth();
+
+        placeImage(image, x, 0, metadata);
+    }
+
+    public void placeImagesAtBottomRightOf(Collection<ImagePathPair> imagePathPairs, int right) {
+        int x = right;
+        int y = getCurrentHeightRightOf(right);
+
+        for (var imagePathPair : imagePathPairs) {
+            placeImage(imagePathPair.image, x, y, imagePathPair.path);
+
+            x += imagePathPair.image.getWidth();
+        }
+    }
+
+    public void placeImagesAsRowRightOf(Collection<ImagePathPair> imagePathPairs) {
+        int x = getCurrentWidth();
+        int y = getCurrentHeightRightOf(x);
+
+        for (var imagePathPair : imagePathPairs) {
+            placeImage(imagePathPair.image, x, y, imagePathPair.path);
+        }
+    }
+
     public record ImagePathPair(Bitmap image, String[] path) { }
 
     public static ImagePathPair makeImagePathPair(Bitmap value, String... path) {
@@ -69,6 +96,10 @@ public class ImageBoard {
     }
 
     public JSONObject placeImage(Bitmap image, int x, int y, String... metadata) {
+        if (image == null) {
+            throw new RuntimeException("Image is null for path: " + Arrays.asList(metadata));
+        }
+
         images.put(image, new ImageOnBoard(image, x, y, metadata));
 
         ImageOnBoard imageOnBoard = images.get(image);

@@ -1,16 +1,12 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
-import org.appland.settlers.assets.utils.NormalizedImageList;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Tree;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -42,141 +38,49 @@ public class TreeImageCollection {
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-
-        // Write the image atlas, one row per tree, and collect metadata to write as json
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        grownTreeMap.forEach((treeType, images) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(images),
+                "grownTrees",
+                treeType.name().toUpperCase()));
 
-        JSONObject jsonGrownTrees = new JSONObject();
-        JSONObject jsonGrownTreeShadows = new JSONObject();
-        JSONObject jsonGrowingTrees = new JSONObject();
-        JSONObject jsonGrowingTreeShadows = new JSONObject();
-        JSONObject jsonFallingTrees = new JSONObject();
-        JSONObject jsonFallingTreeShadows = new JSONObject();
+        grownTreeShadowMap.forEach((treeType, shadowImages) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(shadowImages),
+                "grownTreeShadows",
+                treeType.name().toUpperCase()));
 
-        jsonImageAtlas.put("grownTrees", jsonGrownTrees);
-        jsonImageAtlas.put("grownTreeShadows", jsonGrownTreeShadows);
-        jsonImageAtlas.put("growingTrees", jsonGrowingTrees);
-        jsonImageAtlas.put("growingTreeShadows", jsonGrowingTreeShadows);
-        jsonImageAtlas.put("fallingTrees", jsonFallingTrees);
-        jsonImageAtlas.put("fallingTreeShadows", jsonFallingTreeShadows);
+        growingTreeMap.forEach((treeType, sizeMap) -> imageBoard.placeImagesAsRow(
+                sizeMap.entrySet().stream()
+                        .map((entry) -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "growingTrees",
+                                treeType.name().toUpperCase(),
+                                entry.getKey().name().toUpperCase()
+                        )).toList()
+        ));
 
-        int y = 0;
-        int x;
-        int rowHeight = 0;
-        for (Tree.TreeType treeType : Tree.TreeType.values()) {
+        growingTreeShadowMap.forEach((treeType, sizeMap) -> imageBoard.placeImagesAsRow(
+                sizeMap.entrySet().stream()
+                        .map((entry) -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "growingTreeShadows",
+                                treeType.name().toUpperCase(),
+                                entry.getKey().name().toUpperCase()
+                        )).toList()
+        ));
 
-            x = 0;
+        treeFalling.forEach((treeType, images) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(images),
+                "fallingTrees",
+                treeType.name().toUpperCase()));
 
-            // Grown tree animation
-            List<Bitmap> images = this.grownTreeMap.get(treeType);
-            NormalizedImageList normalizedImageList = new NormalizedImageList(images);
-            List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
+        treeFallingShadow.forEach((treeType, images) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(images),
+                "fallingTreeShadows",
+                treeType.name().toUpperCase()));
 
-            imageBoard.placeImageSeries(normalizedImages, x, y, ImageBoard.LayoutDirection.ROW);
-
-            JSONObject jsonGrownTreeInfo = imageBoard.imageSeriesLocationToJson(normalizedImages);
-
-            jsonGrownTrees.put(treeType.name().toUpperCase(), jsonGrownTreeInfo);
-
-            x = normalizedImageList.size() * normalizedImageList.getImageWidth();
-            rowHeight = normalizedImageList.getImageHeight();
-
-            // Grown tree shadow animation
-            List<Bitmap> shadowImages = grownTreeShadowMap.get(treeType);
-            NormalizedImageList normalizedShadowImageList = new NormalizedImageList(shadowImages);
-            List<Bitmap> normalizedShadowImages = normalizedShadowImageList.getNormalizedImages();
-
-            imageBoard.placeImageSeries(normalizedShadowImages, x, y, ImageBoard.LayoutDirection.ROW);
-
-            JSONObject jsonGrownTreeShadowInfo = imageBoard.imageSeriesLocationToJson(normalizedShadowImages);
-
-            jsonGrownTreeShadows.put(treeType.name().toUpperCase(), jsonGrownTreeShadowInfo);
-
-            x = x + normalizedShadowImageList.size() * normalizedShadowImageList.getImageWidth();
-            rowHeight = Math.max(rowHeight, normalizedShadowImageList.getImageHeight());
-
-            // Growing tree
-            if (growingTreeMap.containsKey(treeType)) {
-
-                JSONObject jsonGrowingTreeType = new JSONObject();
-                JSONObject jsonGrowingTreeShadowType = new JSONObject();
-
-                jsonGrowingTrees.put(treeType.name().toUpperCase(), jsonGrowingTreeType);
-                jsonGrowingTreeShadows.put(treeType.name().toUpperCase(), jsonGrowingTreeShadowType);
-
-                // Growing tree
-                for (Map.Entry<Tree.TreeSize, Bitmap> entry : growingTreeMap.get(treeType).entrySet()) {
-                    Tree.TreeSize treeSize = entry.getKey();
-                    Bitmap image = entry.getValue();
-
-                    imageBoard.placeImage(image, x, y);
-
-                    JSONObject jsonGrowingTreeImage = imageBoard.imageLocationToJson(image);
-
-                    jsonGrowingTreeType.put(treeSize.name().toUpperCase(), jsonGrowingTreeImage);
-
-                    x = x + image.getWidth();
-                    rowHeight = Math.max(rowHeight, image.getHeight());
-                }
-
-                // Growing tree's shadow
-                for (Map.Entry<Tree.TreeSize, Bitmap> entry : growingTreeShadowMap.get(treeType).entrySet()) {
-                    Tree.TreeSize treeSize = entry.getKey();
-                    Bitmap shadowImage = entry.getValue();
-
-                    imageBoard.placeImage(shadowImage, x, y);
-
-                    JSONObject jsonGrowingTreeShadowImage = imageBoard.imageLocationToJson(shadowImage);
-
-                    jsonGrowingTreeShadowType.put(treeSize.name().toUpperCase(), jsonGrowingTreeShadowImage);
-
-                    x = x + shadowImage.getWidth();
-                    rowHeight = Math.max(rowHeight, shadowImage.getHeight());
-                }
-            }
-
-            // Falling tree animation
-            if (treeFalling.containsKey(treeType)) {
-
-                // Falling tree animation
-                List<Bitmap> fallingTreeImages = treeFalling.get(treeType);
-                NormalizedImageList normalizedFallingTreeImageList = new NormalizedImageList(fallingTreeImages);
-                List<Bitmap> normalizedFallingTreeImages = normalizedFallingTreeImageList.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedFallingTreeImages, x, y, ImageBoard.LayoutDirection.ROW);
-
-                JSONObject jsonFallingTreeImages = imageBoard.imageSeriesLocationToJson(normalizedFallingTreeImages); //new JSONObject();
-
-                jsonFallingTrees.put(treeType.name().toUpperCase(), jsonFallingTreeImages);
-
-                x = x + normalizedFallingTreeImageList.size() * normalizedFallingTreeImageList.getImageWidth();
-                rowHeight = Math.max(rowHeight, normalizedFallingTreeImageList.getImageHeight());
-
-                // Falling tree's shadow animation
-                NormalizedImageList normalizedFallingTreeShadowList = new NormalizedImageList(treeFallingShadow.get(treeType));
-                List<Bitmap> normalizedFallingTreeShadowImages = normalizedFallingTreeShadowList.getNormalizedImages();
-
-                imageBoard.placeImageSeries(normalizedFallingTreeShadowImages, x, y, ImageBoard.LayoutDirection.ROW);
-
-                JSONObject jsonFallingTreeShadowImages = imageBoard.imageSeriesLocationToJson(normalizedFallingTreeShadowImages);
-
-                jsonFallingTreeShadows.put(treeType.name().toUpperCase(), jsonFallingTreeShadowImages);
-
-                x = x + normalizedFallingTreeShadowList.size() * normalizedFallingTreeShadowList.getImageWidth();
-                rowHeight = Math.max(rowHeight, normalizedFallingTreeShadowList.getImageHeight());
-            }
-
-            y = y + rowHeight;
-        }
-
-        imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/image-atlas-" + name.toLowerCase() + ".png");
-
-        // Write a JSON file that specifies where each image is in pixels
-        Path filePath = Paths.get(directory, "image-atlas-" + name.toLowerCase() + ".json");
-
-        Files.writeString(filePath, jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
     }
 
     public void addImagesForTree(Tree.TreeType treeType, List<Bitmap> imagesFromResourceLocations) {
