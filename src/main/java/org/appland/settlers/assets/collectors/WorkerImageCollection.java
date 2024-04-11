@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -94,217 +95,121 @@ public class WorkerImageCollection {
         ImageBoard imageBoard = new ImageBoard();
 
         // Write walking animations where the worker isn't carrying anything and that are not nation-specific
-        if (!imagesPerPlayer.isEmpty()) {
-            for (var entry : imagesPerPlayer.entrySet()) {
-                var direction = entry.getKey();
-                var playerMap = entry.getValue();
-
-                for (var entry1 : playerMap.entrySet()) {
-                    var playerColor = entry1.getKey();
-                    var images = entry1.getValue();
-
-                    imageBoard.placeImageSeriesBottom(
+        imagesPerPlayer.forEach(
+                (direction, playerMap) -> playerMap.forEach(
+                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
                             ImageTransformer.normalizeImageSeries(images),
                             "common",
                             "fullImagesByPlayer",
                             direction.name().toUpperCase(),
                             playerColor.name().toUpperCase()
-                            );
-                }
-            }
-        } else if (!bodyImages.isEmpty()) {
-            for (Map.Entry<CompassDirection, List<Bitmap>> entry : bodyImages.entrySet()) {
-                var direction = entry.getKey();
-                var images = entry.getValue();
+                        )));
 
-                for (var playerColor : PlayerColor.values()) {
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.drawForPlayer(playerColor, images),
-                            "common",
-                            "bodyImagesByPlayer",
-                            direction.name().toUpperCase(),
-                            playerColor.name().toUpperCase()
-                    );
-                }
-            }
+        if (imagesPerPlayer.isEmpty() && !bodyImages.isEmpty()) {
+            bodyImages.forEach(
+                    (direction, images) -> Arrays.stream(PlayerColor.values()).forEach(
+                            (playerColor -> imageBoard.placeImageSeriesBottom(
+                                    ImageTransformer.drawForPlayer(playerColor, images),
+                                    "common",
+                                    "bodyImagesByPlayer",
+                                    direction.name().toUpperCase(),
+                                    playerColor.name().toUpperCase()
+                            ))));
         }
 
         // Write walking animations with the correct player color
-        if (!imagesWithPlayerColor.isEmpty()) {
-            for (Map.Entry<CompassDirection, Map<PlayerColor, List<Bitmap>>> entry : imagesWithPlayerColor.entrySet()) {
-                var direction = entry.getKey();
-                var playerMap = entry.getValue();
-
-                for (Map.Entry<PlayerColor, List<Bitmap>> entry1 : playerMap.entrySet()) {
-                    var playerColor = entry1.getKey();
-                    var images = entry1.getValue();
-
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(images),
-            "common",
-                    "fullImagesByPlayer",
-                    direction.name().toUpperCase(),
-                    playerColor.name().toUpperCase()
-                    );
-                }
-            }
-        }
+        imagesWithPlayerColor.forEach(
+                (direction, playerColorMap) -> playerColorMap.forEach(
+                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "common",
+                                "fullImagesByPlayer",
+                                direction.name().toUpperCase(),
+                                playerColor.name().toUpperCase()
+                        )));
 
         // Write walking animations, per nation and direction
-        if (!nationSpecificImages.isEmpty()) {
-            for (Nation nation : Nation.values()) {
-                Map<CompassDirection, List<Bitmap>> directionToImageMap = nationSpecificImages.get(nation);
-
-                for (CompassDirection direction : CompassDirection.values()) {
-                    if (directionToImageMap.get(direction).isEmpty()) {
-                        continue;
-                    }
-
-                    // Handle each image per nation x direction
-                    List<Bitmap> workerImages = directionToImageMap.get(direction);
-
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(workerImages),
-                            "nationSpecific",
-                            "fullImages",
-                            nation.name().toUpperCase(),
-                            direction.name().toUpperCase()
-                            );
-                }
-            }
-        }
+        nationSpecificImages.forEach(
+                (nation,  directionMap) -> directionMap.forEach(
+                        (direction, images) -> imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "nationSpecific",
+                                "fullImages",
+                                nation.name().toUpperCase(),
+                                direction.name().toUpperCase()
+                        )));
 
         // Write shadows, per direction (shadows are not nation-specific or are the same regardless of if/what the courier is carrying)
-        if (!shadowImages.isEmpty()) {
-            for (Map.Entry<CompassDirection, List<Bitmap>> entry : shadowImages.entrySet()) {
-                CompassDirection direction = entry.getKey();
-                List<Bitmap> shadowImagesForDirection = entry.getValue();
-
-                imageBoard.placeImageSeriesBottom(
-                    ImageTransformer.normalizeImageSeries(shadowImagesForDirection),
+        shadowImages.forEach(
+                (direction, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
                         "common",
                         "shadowImages",
                         direction.name().toUpperCase()
-                );
-            }
-        }
+                ));
 
         // Write direction-specific actions (if any)
-        if (!actionsWithDirection.isEmpty()) {
-            for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> entry : actionsWithDirection.entrySet()) {
-                String action = entry.getKey().name().toUpperCase();
-                Map<CompassDirection, List<Bitmap>> actions = entry.getValue();
-
-                for (Map.Entry<CompassDirection, List<Bitmap>> actionEntry : actions.entrySet()) {
-                    CompassDirection direction = actionEntry.getKey();
-                    List<Bitmap> images = actionEntry.getValue();
-
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(images),
-                    "actions",
-                            action,
-                            direction.name().toUpperCase());
-                }
-            }
-        }
+        actionsWithDirection.forEach(
+                (action, directionMap) -> directionMap.forEach(
+                        (direction, images) -> imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "actions",
+                                action.name().toUpperCase(),
+                                direction.name().toUpperCase())
+                ));
 
         // Write lists of cargo images (if any)
-        if (!cargoImages.keySet().isEmpty()) {
-            for (Map.Entry<Material, Map<CompassDirection, List<Bitmap>>> materialMapEntry : cargoImages.entrySet()) {
-                Material material = materialMapEntry.getKey();
-                Map<CompassDirection, List<Bitmap>> imagesForMaterial = materialMapEntry.getValue();
-
-                if (material == null) {
-                    continue;
-                }
-
-                for (Map.Entry<CompassDirection, List<Bitmap>> compassDirectionListEntry : imagesForMaterial.entrySet()) {
-                    CompassDirection direction = compassDirectionListEntry.getKey();
-                    List<Bitmap> cargoImagesForDirection = compassDirectionListEntry.getValue();
-
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(cargoImagesForDirection),
-                            "common",
-                            "cargoImages",
-                            material.name().toUpperCase(),
-                            direction.name().toUpperCase());
-                }
-            }
-        }
+        cargoImages.forEach(
+                (material, directionMap) -> directionMap.forEach(
+                        (direction, images) -> imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "common",
+                                "cargoImages",
+                                material.name().toUpperCase(),
+                                direction.name().toUpperCase())
+                ));
 
         // Write actions that apply to any direction (if any)
-        if (!actionsByPlayer.isEmpty()) {
-            for (var entry : actionsByPlayer.entrySet()) {
-                var action = entry.getKey().name().toUpperCase();
-                var playerMap = entry.getValue();
-
-                for (var entry1 : playerMap.entrySet()) {
-                    var playerColor = entry1.getKey();
-                    var images = entry1.getValue();
-
-                    imageBoard.placeImageSeriesBottom(
-                            ImageTransformer.normalizeImageSeries(images),
-                            "common",
-                            "actions",
-                            action,
-                            "any",
-                            playerColor.name().toUpperCase());
-                }
-            }
-        }
-
-        // Write actions that are specific per nation and per direction (if any)
-        if (!nationSpecificActionsWithDirection.isEmpty()) {
-            for (Map.Entry<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> entry : nationSpecificActionsWithDirection.entrySet()) {
-                var nation = entry.getKey();
-                var actionToDirection = entry.getValue();
-
-                for (Map.Entry<WorkerAction, Map<CompassDirection, List<Bitmap>>> actionEntry : actionToDirection.entrySet()) {
-                    var action = actionEntry.getKey();
-                    var directionToImages = actionEntry.getValue();
-
-                    for (Map.Entry<CompassDirection, List<Bitmap>> directionEntry : directionToImages.entrySet()) {
-                        var direction = directionEntry.getKey();
-                        var images = directionEntry.getValue();
-
-                        imageBoard.placeImageSeriesBottom(
+        actionsByPlayer.forEach(
+                (action, playerColorMap) -> playerColorMap.forEach(
+                        (playerColor, images) -> imageBoard.placeImageSeriesBottom(
                                 ImageTransformer.normalizeImageSeries(images),
                                 "common",
                                 "actions",
-                                nation.name().toUpperCase(),
                                 action.name().toUpperCase(),
-                                direction.name().toUpperCase());
-                    }
-                }
-            }
-        }
+                                "any",
+                                playerColor.name().toUpperCase())
+                ));
+
+        // Write actions that are specific per nation and per direction (if any)
+        nationSpecificActionsWithDirection.forEach(
+                (nation, actionMap) -> actionMap.forEach(
+                        (action, directionMap) -> directionMap.forEach(
+                                (direction, images) -> imageBoard.placeImageSeriesBottom(
+                                        ImageTransformer.normalizeImageSeries(images),
+                                        "common",
+                                        "actions",
+                                        nation.name().toUpperCase(),
+                                        action.name().toUpperCase(),
+                                        direction.name().toUpperCase())
+                        )));
 
         // Write nation-specific images by player
-        if (!nationSpecificImagesWithPlayerColor.isEmpty()) {
-            for (var entry : nationSpecificImagesWithPlayerColor.entrySet()) {
-                var nation = entry.getKey();
-                var directionMap = entry.getValue();
+        nationSpecificImagesWithPlayerColor.forEach(
+                (nation, directionMap) -> {
+                    int width = imageBoard.getCurrentWidth();
 
-                int width = imageBoard.getCurrentWidth();;
-
-                for (var entry1 : directionMap.entrySet()) {
-                    var direction = entry1.getKey();
-                    var playerColorMap = entry1.getValue();
-
-                    for (var entry2 : playerColorMap.entrySet()) {
-                        var playerColor = entry2.getKey();
-                        var images = entry2.getValue();
-
-                        imageBoard.placeImageSeriesBottomRightOf(width, ImageTransformer.normalizeImageSeries(images),
-                                "nationSpecific",
-                                "fullImagesByPlayer",
-                                nation.name().toUpperCase(),
-                                direction.name().toUpperCase(),
-                                playerColor.name().toUpperCase());
-                    }
+                    directionMap.forEach(
+                            (direction, playerColorMap) -> playerColorMap.forEach(
+                                    (playerColor, images) -> imageBoard.placeImageSeriesBottomRightOf(width, ImageTransformer.normalizeImageSeries(images),
+                                            "nationSpecific",
+                                            "fullImagesByPlayer",
+                                            nation.name().toUpperCase(),
+                                            direction.name().toUpperCase(),
+                                            playerColor.name().toUpperCase())
+                            ));
                 }
-            }
-        }
+        );
 
         // Write the image atlas to disk
         imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-" + name.toLowerCase() + ".png");
