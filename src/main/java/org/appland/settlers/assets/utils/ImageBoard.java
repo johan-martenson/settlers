@@ -163,16 +163,16 @@ public class ImageBoard {
         return placeImage(image, 0, currentMaxY);
     }
 
-    public JSONObject placeImageSeriesBottomRightOf(int right, List<Bitmap> images) {
+    public JSONObject placeImageSeriesBottomRightOf(int right, List<Bitmap> images, String... metadata) {
         int currentMaxY = this.getCurrentHeightRightOf(right);
 
-        return placeImageSeries(images, new Point(right + 1, currentMaxY), LayoutDirection.ROW);
+        return placeImageSeries(images, new Point(right + 1, currentMaxY), LayoutDirection.ROW, metadata);
     }
 
-    public JSONObject placeImageSeriesBottom(List<Bitmap> images) {
+    public JSONObject placeImageSeriesBottom(List<Bitmap> images, String... metadata) {
         int currentMaxY = this.getCurrentHeight();
 
-        return placeImageSeries(images, new Point(0, currentMaxY), LayoutDirection.ROW);
+        return placeImageSeries(images, new Point(0, currentMaxY), LayoutDirection.ROW, metadata);
     }
 
     private static class ImageOnBoard {
