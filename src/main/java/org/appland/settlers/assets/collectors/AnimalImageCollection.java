@@ -1,13 +1,12 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.CompassDirection;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.utils.NormalizedImageList;
+import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Material;
-import org.json.simple.JSONObject;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -33,6 +32,7 @@ public class AnimalImageCollection {
         for (CompassDirection compassDirection : CompassDirection.values()) {
             this.directionToImageMap.put(compassDirection, new ArrayList<>());
         }
+
         shadowImages = new EnumMap<>(CompassDirection.class);
         cargoImages = new EnumMap<>(Material.class);
         nationCargoImages = new EnumMap<>(Nation.class);
@@ -47,47 +47,28 @@ public class AnimalImageCollection {
         // Write the image atlas, one row per direction, and collect metadata to write as json
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
-        JSONObject jsonImages = new JSONObject();
-
-        jsonImageAtlas.put("images", jsonImages);
-
         // Fill in the images into the image atlas
         Point cursor = new Point(0, 0);
 
         // Fill in animal walking in each direction
-        for (CompassDirection compassDirection : CompassDirection.values()) {
-
-            cursor.x = 0;
-
-            List<Bitmap> directionImages = directionToImageMap.get(compassDirection);
-            NormalizedImageList directionNormalizedList = new NormalizedImageList(directionImages);
-            List<Bitmap> normalizedDirectionImages = directionNormalizedList.getNormalizedImages();
-
-            imageBoard.placeImageSeries(normalizedDirectionImages, cursor, ImageBoard.LayoutDirection.ROW);
-
-            JSONObject jsonDirectionInfo = imageBoard.imageSeriesLocationToJson(normalizedDirectionImages);
-
-            jsonImages.put(compassDirection.name().toUpperCase(), jsonDirectionInfo);
-
-            cursor.y = cursor.y + directionNormalizedList.getImageHeight();
-        }
+        directionToImageMap.forEach(
+                (direction, images) -> imageBoard.placeImageSeriesBottom(
+                        ImageTransformer.normalizeImageSeries(images),
+                        "images",
+                        direction.name().toUpperCase()
+                ));
 
         // Fill in shadows if they exist. One per direction
+        cursor.y = imageBoard.getCurrentHeight();
+
         if (!shadowImages.isEmpty()) {
             cursor.x = 0;
-
-            JSONObject jsonShadowImages = new JSONObject();
-
-            jsonImageAtlas.put("shadowImages", jsonShadowImages);
 
             for (Map.Entry<CompassDirection, Bitmap> entry : shadowImages.entrySet()) {
                 CompassDirection compassDirection = entry.getKey();
                 Bitmap shadowImage = entry.getValue();
 
-                imageBoard.placeImage(shadowImage, cursor);
-
-                jsonShadowImages.put(compassDirection.name().toUpperCase(), imageBoard.imageLocationToJson(shadowImage));
+                imageBoard.placeImage(shadowImage, cursor, "shadowImages", compassDirection.name().toUpperCase());
 
                 cursor.x = cursor.x + shadowImage.getWidth();
             }
@@ -95,10 +76,6 @@ public class AnimalImageCollection {
 
         // Write the cargos (if any)
         if (!cargoImages.isEmpty()) {
-            JSONObject jsonCargos = new JSONObject();
-
-            jsonImageAtlas.put("cargos", jsonCargos);
-
             cursor.y = imageBoard.getCurrentHeight();
             cursor.x = 0;
 
@@ -106,9 +83,7 @@ public class AnimalImageCollection {
                 Material material = entry.getKey();
                 Bitmap image = entry.getValue();
 
-                imageBoard.placeImage(image, cursor);
-
-                jsonCargos.put(material.name().toUpperCase(), imageBoard.imageLocationToJson(image));
+                imageBoard.placeImage(image, cursor, "cargos", material.name().toUpperCase());
 
                 cursor.x += image.getWidth();
             }
@@ -116,10 +91,6 @@ public class AnimalImageCollection {
 
         // Write nation-specific cargos (if any)
         if (!nationCargoImages.isEmpty()) {
-            JSONObject jsonNationSpecific = new JSONObject();
-
-            jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
-
             cursor.y = imageBoard.getCurrentHeight();
             cursor.x = 0;
 
@@ -127,17 +98,17 @@ public class AnimalImageCollection {
                 Nation nation = nationEntry.getKey();
                 Map<Material, Bitmap> materialBitmapMap = nationEntry.getValue();
 
-                JSONObject jsonNationCargos = new JSONObject();
-
-                jsonNationSpecific.put(nation.name().toUpperCase(), jsonNationCargos);
-
                 for (Map.Entry<Material, Bitmap> entry : materialBitmapMap.entrySet()) {
                     Material material = entry.getKey();
                     Bitmap image = entry.getValue();
 
-                    imageBoard.placeImage(image, cursor);
-
-                    jsonNationCargos.put(material.name().toUpperCase(), imageBoard.imageLocationToJson(image));
+                    imageBoard.placeImage(
+                            image,
+                            cursor,
+                            "nationSpecific",
+                            nation.name().toUpperCase(),
+                            material.name().toUpperCase()
+                    );
 
                     cursor.x += image.getWidth();
                 }
@@ -149,7 +120,7 @@ public class AnimalImageCollection {
 
         Path filePath = Paths.get(directory, "image-atlas-" + name.toLowerCase() + ".json");
 
-        Files.writeString(filePath, jsonImageAtlas.toJSONString());
+        Files.writeString(filePath, imageBoard.getMetadataAsJson().toJSONString());
     }
 
     public void addImages(CompassDirection compassDirection, List<Bitmap> images) {
