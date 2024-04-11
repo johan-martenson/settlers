@@ -20,12 +20,12 @@ public class ImageBoard {
         imageSeries = new HashMap<>();
     }
 
-    public JSONObject placeImage(Bitmap image, Point point) {
-        return placeImage(image, point.x, point.y);
+    public JSONObject placeImage(Bitmap image, Point point, String... metadata) {
+        return placeImage(image, point.x, point.y, metadata);
     }
 
-    public JSONObject placeImage(Bitmap image, int x, int y) {
-        images.put(image, new ImageOnBoard(image, x, y));
+    public JSONObject placeImage(Bitmap image, int x, int y, String... metadata) {
+        images.put(image, new ImageOnBoard(image, x, y, metadata));
 
         ImageOnBoard imageOnBoard = images.get(image);
 
@@ -41,12 +41,12 @@ public class ImageBoard {
         return jsonImageLocation;
     }
 
-    public JSONObject placeImageSeries(List<Bitmap> images, Point position, LayoutDirection layoutDirection) {
-        return placeImageSeries(images, position.x, position.y, layoutDirection);
+    public JSONObject placeImageSeries(List<Bitmap> images, Point position, LayoutDirection layoutDirection, String... metadata) {
+        return placeImageSeries(images, position.x, position.y, layoutDirection, metadata);
     }
 
-    public JSONObject placeImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection) {
-        ImageSeries imageSeriesToPlace = new ImageSeries(images, x, y, layoutDirection);
+    public JSONObject placeImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection, String... metadata) {
+        ImageSeries imageSeriesToPlace = new ImageSeries(images, x, y, layoutDirection, metadata);
 
         imageSeries.put(images, imageSeriesToPlace);
 
@@ -75,7 +75,6 @@ public class ImageBoard {
         }
 
         for (ImageSeries oneImageSeries : imageSeries.values()) {
-
             if (oneImageSeries.layoutDirection == LayoutDirection.ROW) {
                 width = Math.max(width, oneImageSeries.x + oneImageSeries.width * oneImageSeries.images.size());
                 height = Math.max(height, oneImageSeries.y + oneImageSeries.height);
@@ -180,12 +179,14 @@ public class ImageBoard {
         private final int x;
         private final int y;
         private final Bitmap image;
+        private final String[] metadata;
 
-        public ImageOnBoard(Bitmap image, int x, int y) {
+        public ImageOnBoard(Bitmap image, int x, int y, String... metadata) {
             this.x = x;
             this.y = y;
 
             this.image = image;
+            this.metadata = metadata;
         }
     }
 
@@ -199,9 +200,11 @@ public class ImageBoard {
         private final int offsetX;
         private final int offsetY;
         private final LayoutDirection layoutDirection;
+        private final String[] metadata;
 
-        public ImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection) {
+        public ImageSeries(List<Bitmap> images, int x, int y, LayoutDirection layoutDirection, String... metadata) {
             this.images = images;
+            this.metadata = metadata;
 
             this.layoutDirection = layoutDirection;
 
@@ -287,5 +290,58 @@ public class ImageBoard {
         }
 
         return currentHeight;
+    }
+
+    private void addMetadataForImageToRoot(JSONObject jsonRoot, ImageOnBoard imageOnBoard) {
+        JSONObject jsonCurrent = jsonRoot;
+
+        for (var label : imageOnBoard.metadata) {
+            if (!jsonCurrent.containsKey(label)) {
+                jsonCurrent.put(label, new JSONObject());
+            }
+
+            jsonCurrent = (JSONObject) jsonCurrent.get(label);
+        }
+
+        jsonCurrent.put("x", imageOnBoard.x);
+        jsonCurrent.put("y", imageOnBoard.y);
+        jsonCurrent.put("width", imageOnBoard.image.getWidth());
+        jsonCurrent.put("height", imageOnBoard.image.getHeight());
+        jsonCurrent.put("offsetX", imageOnBoard.image.getNx());
+        jsonCurrent.put("offsetY", imageOnBoard.image.getNy());
+    }
+
+    private void addMetadataForImageSeriesToRoot(JSONObject jsonRoot, ImageSeries imageSeries) {
+        JSONObject jsonCurrent = jsonRoot;
+
+        for (var label : imageSeries.metadata) {
+            if (!jsonCurrent.containsKey(label)) {
+                jsonCurrent.put(label, new JSONObject());
+            }
+
+            jsonCurrent = (JSONObject) jsonCurrent.get(label);
+        }
+
+        jsonCurrent.put("startX", imageSeries.x);
+        jsonCurrent.put("startY", imageSeries.y);
+        jsonCurrent.put("width", imageSeries.width);
+        jsonCurrent.put("height", imageSeries.height);
+        jsonCurrent.put("nrImages", imageSeries.images.size());
+        jsonCurrent.put("offsetX", imageSeries.offsetX);
+        jsonCurrent.put("offsetY", imageSeries.offsetY);
+    }
+
+    public JSONObject getMetadataAsJson() {
+        JSONObject jsonRoot = new JSONObject();
+
+        for (ImageOnBoard imageOnBoard : images.values()) {
+            addMetadataForImageToRoot(jsonRoot, imageOnBoard);
+        }
+
+        for (ImageSeries oneImageSeries : imageSeries.values()) {
+            addMetadataForImageSeriesToRoot(jsonRoot, oneImageSeries);
+        }
+
+        return jsonRoot;
     }
 }
