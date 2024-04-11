@@ -1,15 +1,12 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.DecorationType;
-import org.json.simple.JSONObject;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -29,50 +26,27 @@ public class DecorativeImageCollection {
     }
 
     public void writeImageAtlas(String dir, Palette palette) throws IOException {
-
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        var list = new ArrayList<ImageBoard.ImagePathPair>();
 
-        Point cursor = new Point(0, 0);
+        for (var entry : decorationImages.entrySet()) {
+            list.add(ImageBoard.makeImagePathPair(
+                            entry.getValue().image,
+                            entry.getKey().name().toUpperCase(),
+                            "image"));
 
-        for (Map.Entry<DecorationType, DecorationTypeImage> entry : this.decorationImages.entrySet()) {
-            DecorationType decorationType = entry.getKey();
-            Bitmap image = entry.getValue().image;
-            Bitmap shadowImage = entry.getValue().shadowImage;
-
-            int rowHeight = 0;
-            cursor.x = 0;
-
-            JSONObject jsonDecorationType = new JSONObject();
-
-            jsonImageAtlas.put(decorationType.name().toUpperCase(), jsonDecorationType);
-
-            // DecorationType image
-            imageBoard.placeImage(image, cursor);
-
-            jsonDecorationType.put("image", imageBoard.imageLocationToJson(image));
-
-            rowHeight = image.getHeight();
-
-            cursor.x = cursor.x + image.getWidth();
-
-            // DecorationType shadow image
-            if (shadowImage != null) {
-                imageBoard.placeImage(shadowImage, cursor);
-
-                jsonDecorationType.put("shadowImage", imageBoard.imageLocationToJson(shadowImage));
-
-                rowHeight = Math.max(rowHeight, shadowImage.getHeight());
+            if (entry.getValue().shadowImage != null) {
+                list.add(ImageBoard.makeImagePathPair(
+                        entry.getValue().shadowImage,
+                        entry.getKey().name().toUpperCase(),
+                        "shadowImage"));
             }
-
-            cursor.y = cursor.y + rowHeight;
         }
 
-        // Write to file
-        imageBoard.writeBoardToBitmap(palette).writeToFile(dir + "/image-atlas-decorations.png");
+        imageBoard.placeImagesAsColumn(list);
 
-        Files.writeString(Paths.get(dir, "image-atlas-decorations.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(dir, "image-atlas-decorations", palette);
     }
 
     private static class DecorationTypeImage {

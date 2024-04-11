@@ -8,8 +8,6 @@ import org.appland.settlers.model.PlayerColor;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -33,11 +31,8 @@ public class BorderImageCollector {
     }
 
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-
-        // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
-        // Fill in the image atlas
         Point cursor = new Point(0, 0);
         for (Nation nation : Nation.values()) {
             cursor.x = 0;
@@ -45,7 +40,6 @@ public class BorderImageCollector {
             for (var playerColor : PlayerColor.values()) {
                 BorderForNation borderForNation = borderMap.get(nation);
 
-                // Land border
                 imageBoard.placeImage(
                         borderForNation.landBorder.getBitmapForPlayer(playerColor),
                         cursor,
@@ -56,7 +50,6 @@ public class BorderImageCollector {
 
                 cursor.x = cursor.x + borderForNation.landBorder.getWidth();
 
-                // Coast border
                 imageBoard.placeImage(
                         borderForNation.coastBorder.getBitmapForPlayer(playerColor),
                         cursor,
@@ -69,10 +62,7 @@ public class BorderImageCollector {
             }
         }
 
-        // Write to file
-        imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-border.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-border.json"), imageBoard.getMetadataAsJson().toJSONString());
+        imageBoard.writeBoard(toDir, "image-atlas-border", palette);
     }
 
     private static class BorderForNation {

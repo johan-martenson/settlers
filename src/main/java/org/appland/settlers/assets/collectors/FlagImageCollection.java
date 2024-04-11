@@ -8,12 +8,8 @@ import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.PlayerColor;
-import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -40,46 +36,29 @@ public class FlagImageCollection {
     }
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
-
-        // Write the image atlas, one row per flag, and collect metadata to write as json
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        Arrays.stream(Nation.values())
+                .forEach(nation -> Arrays.stream(Flag.FlagType.values())
+                        .forEach(flagType -> {
+                            Arrays.stream(PlayerColor.values()).forEach(playerColor -> {
+                                imageBoard.placeImageSeriesBottom(
+                                        ImageTransformer.normalizeImageSeries(
+                                                ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType))),
+                                        nation.name().toUpperCase(),
+                                        flagType.name().toUpperCase(),
+                                        playerColor.name().toUpperCase());
+                            });
 
-        Arrays.stream(Nation.values()).forEach(nation -> {
-            JSONObject jsonNationInfo = new JSONObject();
-
-            jsonImageAtlas.put(nation.name().toUpperCase(), jsonNationInfo);
-
-            Arrays.stream(Flag.FlagType.values()).forEach(flagType -> {
-                JSONObject jsonFlagType = new JSONObject();
-
-                jsonNationInfo.put(flagType.name().toUpperCase(), jsonFlagType);
-
-                Arrays.stream(PlayerColor.values()).forEach(playerColor -> {
-                    JSONObject jsonPlayer = new JSONObject();
-
-                    jsonFlagType.put(playerColor.name().toUpperCase(),
                             imageBoard.placeImageSeriesBottom(
                                     ImageTransformer.normalizeImageSeries(
-                                            ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType)))));
-                });
+                                            flagShadowMap.get(nation).get(flagType)),
+                                    nation.name().toUpperCase(),
+                                    flagType.name().toUpperCase(),
+                                    "shadows");
+                        }));
 
-                jsonFlagType.put(
-                        "shadows",
-                        imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(
-                                        flagShadowMap.get(nation).get(flagType))));
-            });
-        });
-
-        // Write the image for the image atlas
-        imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-flags.png");
-
-        // Write a JSON file that specifies where each image is in pixels
-        Path filePath = Paths.get(directory, "image-atlas-flags.json");
-
-        Files.writeString(filePath, jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-flags", palette);
     }
 
     public void addImagesForFlag(Nation nation, Flag.FlagType flagType, List<PlayerBitmap> images) {

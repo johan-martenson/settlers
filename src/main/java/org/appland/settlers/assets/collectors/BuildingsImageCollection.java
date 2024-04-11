@@ -8,8 +8,6 @@ import org.appland.settlers.assets.utils.ImageBoard;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -216,9 +214,7 @@ public class BuildingsImageCollection {
         }
 
         // Write the image and the meta-data to files
-        imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/image-atlas-buildings.png");
-        //Files.writeString(Paths.get(directory, "image-atlas-buildings.json"), jsonImageAtlas.toJSONString());
-        Files.writeString(Paths.get(directory, "image-atlas-buildings.json"), imageBoard.getMetadataAsJson().toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-buildings", palette);
 
         // Write individual images for icons
         for (Nation nation : Nation.values()) {

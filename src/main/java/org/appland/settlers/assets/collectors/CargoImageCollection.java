@@ -1,11 +1,10 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.Material;
-import org.json.simple.JSONObject;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -46,63 +45,40 @@ public class CargoImageCollection {
         // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
-
         // Fill in the image atlas
-        JSONObject jsonGeneric = new JSONObject();
-        JSONObject jsonNationSpecific = new JSONObject();
-
-        jsonImageAtlas.put("generic", jsonGeneric);
-        jsonImageAtlas.put("nationSpecific", jsonNationSpecific);
-
         Point cursor = new Point(0, 0);
-        int maxGenericCargoWidth = 0;
 
         // Generic (non-nation specific) cargo images
-        for (Map.Entry<Material, Bitmap> entry : cargos.entrySet()) {
-
-            Material material = entry.getKey();
-            Bitmap image = entry.getValue();
-
-            imageBoard.placeImage(image, cursor);
-
-            JSONObject jsonCargoImage = imageBoard.imageLocationToJson(image);
-
-            jsonGeneric.put(material.name().toUpperCase(), jsonCargoImage);
-
-            maxGenericCargoWidth = Math.max(maxGenericCargoWidth, image.getWidth());
-
-            cursor.y = cursor.y + image.getHeight();
-        }
+        imageBoard.placeImagesAsColumn(
+                cargos.entrySet().stream().map(
+                        (entry) -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "generic",
+                                entry.getKey().name().toUpperCase()
+                        ))
+                        .toList());
 
         cursor.y = 0;
-        cursor.x = maxGenericCargoWidth;
+        cursor.x = imageBoard.getCurrentWidth();
 
         for (Nation nation : Nation.values()) {
-
-            JSONObject jsonNation = new JSONObject();
-
-            jsonNationSpecific.put(nation.name().toUpperCase(), jsonNation);
-
             for (Map.Entry<Material, Bitmap> entry : nationCargos.get(nation).entrySet()) {
-
                 Material material = entry.getKey();
                 Bitmap image = entry.getValue();
 
-                imageBoard.placeImage(image, cursor);
-
-                JSONObject jsonCargoImage = imageBoard.imageLocationToJson(image);
-
-                jsonNation.put(material.name().toUpperCase(), jsonCargoImage);
+                imageBoard.placeImage(
+                        image,
+                        cursor,
+                        "nationSpecific",
+                        material.name().toUpperCase()
+                );
 
                 cursor.y = cursor.y + image.getHeight();
             }
         }
 
         // Write the image atlas to file
-        imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-cargos.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-cargos.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(toDir, "image-atlas-cargos", palette);
 
         // Write cargo icons
         Path cargoIconDir = Paths.get(toDir, "cargo-icons");

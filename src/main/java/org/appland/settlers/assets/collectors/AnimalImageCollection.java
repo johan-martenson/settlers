@@ -10,9 +10,6 @@ import org.appland.settlers.model.Material;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -116,11 +113,7 @@ public class AnimalImageCollection {
         }
 
         // Write the image atlas
-        imageBoard.writeBoardToBitmap(palette).writeToFile(directory + "/" + "image-atlas-" + name.toLowerCase() + ".png");
-
-        Path filePath = Paths.get(directory, "image-atlas-" + name.toLowerCase() + ".json");
-
-        Files.writeString(filePath, imageBoard.getMetadataAsJson().toJSONString());
+        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
     }
 
     public void addImages(CompassDirection compassDirection, List<Bitmap> images) {

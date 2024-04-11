@@ -5,7 +5,12 @@ import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.json.simple.JSONObject;
 
-import java.awt.*;
+import java.awt.Point;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +23,45 @@ public class ImageBoard {
     public ImageBoard() {
         images = new HashMap<>();
         imageSeries = new HashMap<>();
+    }
+
+    public void placeImagesAsColumn(Collection<ImagePathPair> imagePathPairs) {
+        int y = 0;
+
+        for (var imagePathPair : imagePathPairs) {
+            placeImage(
+                    imagePathPair.image,
+                    0,
+                    y,
+                    imagePathPair.path);
+
+            y += imagePathPair.image.getHeight();
+        }
+    }
+
+    public void placeImagesAsRow(Collection<ImagePathPair> imagePathPairs) {
+        int x = 0;
+        int y = getCurrentHeight();
+
+        for (var imagePathPair : imagePathPairs) {
+            placeImage(imagePathPair.image, x, y, imagePathPair.path);
+
+            x += imagePathPair.image.getWidth();
+        }
+    }
+
+    public void writeBoard(String directory, String baseFilename, Palette palette) throws IOException {
+        Path pathBitmapFile = Paths.get(directory, baseFilename + ".png");
+        Path pathJsonFile = Paths.get(directory, baseFilename + ".json");
+
+        writeBoardToBitmap(palette).writeToFile(pathBitmapFile);
+        Files.writeString(pathJsonFile, getMetadataAsJson().toJSONString());
+    }
+
+    public record ImagePathPair(Bitmap image, String[] path) { }
+
+    public static ImagePathPair makeImagePathPair(Bitmap value, String... path) {
+        return new ImagePathPair(value, path);
     }
 
     public JSONObject placeImage(Bitmap image, Point point, String... metadata) {

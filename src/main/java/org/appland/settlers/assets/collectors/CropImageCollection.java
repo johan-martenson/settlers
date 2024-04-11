@@ -1,17 +1,15 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.Crop;
-import org.json.simple.JSONObject;
 
-import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class CropImageCollection {
     private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropMap;
@@ -32,66 +30,34 @@ public class CropImageCollection {
     }
 
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
-
-        // Create the image atlas
         ImageBoard imageBoard = new ImageBoard();
 
-        JSONObject jsonImageAtlas = new JSONObject();
+        for (var entry : this.cropMap.entrySet()) {
+            var list = new ArrayList<ImageBoard.ImagePathPair>();
 
-        // Fill in the image atlas
-        Point cursor = new Point(0, 0);
-        int maxHeightRow = 0;
+            Stream.of(Crop.GrowthState.values()).forEach(
+                    (growthState -> {
+                        list.add(
+                                ImageBoard.makeImagePathPair(
+                                        entry.getValue().get(growthState),
+                                        entry.getKey().name(),
+                                        growthState.name().toUpperCase(),
+                                        "image"
+                                ));
 
-        // Make two rows, one for each crop type
-        for (Map.Entry<Crop.CropType, Map<Crop.GrowthState, Bitmap>> entryForCropType : this.cropMap.entrySet()) {
+                        list.add(
+                                ImageBoard.makeImagePathPair(
+                                        cropShadowMap.get(entry.getKey()).get(growthState),
+                                        entry.getKey().name(),
+                                        growthState.name().toUpperCase(),
+                                        "shadowImage"
+                                ));
+                    }));
 
-            JSONObject jsonCropType = new JSONObject();
-
-            jsonImageAtlas.put(entryForCropType.getKey().name().toUpperCase(), jsonCropType);
-
-            cursor.x = 0;
-
-            // Add the crop images
-            for (Crop.GrowthState cropGrowth : Crop.GrowthState.values()) {
-
-                Bitmap image = entryForCropType.getValue().get(cropGrowth);
-
-                imageBoard.placeImage(image, cursor);
-
-                JSONObject jsonCropGrowthState = new JSONObject();
-                JSONObject jsonCropImage = imageBoard.imageLocationToJson(image);
-
-                jsonCropType.put(cropGrowth.name().toUpperCase(), jsonCropGrowthState);
-                jsonCropGrowthState.put("image", jsonCropImage);
-
-                maxHeightRow = Math.max(maxHeightRow, image.getHeight());
-
-                cursor.x = cursor.x + image.getWidth();
-            }
-
-            // Add the crop shadow images
-            for (Crop.GrowthState cropGrowth : Crop.GrowthState.values()) {
-
-                Bitmap image = this.cropShadowMap.get(entryForCropType.getKey()).get(cropGrowth);
-
-                imageBoard.placeImage(image, cursor);
-
-                JSONObject jsonCropShadowImage = imageBoard.imageLocationToJson(image);
-
-                ((JSONObject) jsonCropType.get(cropGrowth.name().toUpperCase())).put("shadowImage", jsonCropShadowImage);
-
-                maxHeightRow = Math.max(maxHeightRow, image.getHeight());
-
-                cursor.x = cursor.x + image.getWidth();
-            }
-
-            cursor.y = cursor.y + maxHeightRow;
+            imageBoard.placeImagesAsRow(list);
         }
 
-        // Write the image atlas to file(s)
-        imageBoard.writeBoardToBitmap(palette).writeToFile(toDir + "/image-atlas-crops.png");
-
-        Files.writeString(Paths.get(toDir, "image-atlas-crops.json"), jsonImageAtlas.toJSONString());
+        imageBoard.writeBoard(toDir, "image-atlas-crops", palette);
     }
 
     public void addShadowImage(Crop.CropType cropType, Crop.GrowthState growthState, Bitmap image) {
