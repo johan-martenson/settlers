@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +36,8 @@ public class WorkerImageCollection {
     private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesPerPlayer;
     private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesWithPlayerColor;
     private final Map<WorkerAction, Map<PlayerColor, List<Bitmap>>> actionsByPlayer;
-    private final Map<WorkerAction, Map<CompassDirection, List<Bitmap>>> actionsWithDirection;
-    private final Map<Nation, Map<WorkerAction, Map<CompassDirection, List<Bitmap>>>> nationSpecificActionsWithDirection;
+    private final Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> actionsWithDirectionByPlayer;
+    private final Map<Nation, Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>>> nationSpecificActionsWithDirectionByPlayer;
 
     public WorkerImageCollection(String name) {
         this.name = name;
@@ -50,8 +49,8 @@ public class WorkerImageCollection {
         bodyImages = new EnumMap<>(CompassDirection.class);
         imagesPerPlayer = new EnumMap<>(CompassDirection.class);
         actionsByPlayer = new EnumMap<>(WorkerAction.class);
-        actionsWithDirection = new EnumMap<>(WorkerAction.class);
-        nationSpecificActionsWithDirection = new EnumMap<>(Nation.class);
+        actionsWithDirectionByPlayer = new EnumMap<>(WorkerAction.class);
+        nationSpecificActionsWithDirectionByPlayer = new EnumMap<>(Nation.class);
         nationSpecificImagesWithPlayerColor = new EnumMap<>(Nation.class);
         imagesWithPlayerColor = new EnumMap<>(CompassDirection.class);
     }
@@ -121,12 +120,14 @@ public class WorkerImageCollection {
                 direction.name().toUpperCase()));
 
         // Write direction-specific actions (if any)
-        actionsWithDirection.forEach((action, directionMap) -> directionMap
-                .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
-                        ImageTransformer.normalizeImageSeries(images),
-                        "actions",
-                        action.name().toUpperCase(),
-                        direction.name().toUpperCase())));
+        actionsWithDirectionByPlayer.forEach((action, directionMap) -> directionMap
+                .forEach((direction, playerMap) -> playerMap
+                        .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
+                                ImageTransformer.normalizeImageSeries(images),
+                                "actionsByPlayer",
+                                action.name().toUpperCase(),
+                                direction.name().toUpperCase(),
+                                playerColor.name().toUpperCase()))));
 
         // Write lists of cargo images (if any)
         cargoImages.forEach((material, directionMap) -> directionMap
@@ -142,21 +143,23 @@ public class WorkerImageCollection {
                 .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
                         ImageTransformer.normalizeImageSeries(images),
                         "common",
-                        "actions",
+                        "actionsByPlayer",
                         action.name().toUpperCase(),
                         "any",
                         playerColor.name().toUpperCase())));
 
         // Write actions that are specific per nation and per direction (if any)
-        nationSpecificActionsWithDirection.forEach((nation, actionMap) -> actionMap
+        nationSpecificActionsWithDirectionByPlayer.forEach((nation, actionMap) -> actionMap
                 .forEach((action, directionMap) -> directionMap
-                        .forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
-                                ImageTransformer.normalizeImageSeries(images),
-                                "common",
-                                "actions",
-                                nation.name().toUpperCase(),
-                                action.name().toUpperCase(),
-                                direction.name().toUpperCase()))));
+                        .forEach((direction, playerColorMap) -> playerColorMap
+                                .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
+                                        ImageTransformer.normalizeImageSeries(images),
+                                        "common",
+                                        "actionsByPlayer",
+                                        nation.name().toUpperCase(),
+                                        action.name().toUpperCase(),
+                                        direction.name().toUpperCase(),
+                                        playerColor.name().toUpperCase())))));
 
         // Write nation-specific images by player
         nationSpecificImagesWithPlayerColor.forEach((nation, directionMap) -> {
@@ -313,7 +316,7 @@ public class WorkerImageCollection {
         }
     }
 
-    public void addAnimation(WorkerAction action, List<Bitmap> images) {
+    public void addAnimation(WorkerAction action, List<PlayerBitmap> images) {
         actionsByPlayer.put(action, new EnumMap<>(PlayerColor.class));
 
         for (var playerColor : PlayerColor.values()) {
@@ -322,27 +325,39 @@ public class WorkerImageCollection {
     }
 
     public void addWorkAnimationInDirection(WorkerAction action, CompassDirection direction, List<Bitmap> images) {
-        if (!actionsWithDirection.containsKey(action)) {
-            actionsWithDirection.put(action, new EnumMap<>(CompassDirection.class));
+        if (!actionsWithDirectionByPlayer.containsKey(action)) {
+            actionsWithDirectionByPlayer.put(action, new EnumMap<>(CompassDirection.class));
         }
 
-        actionsWithDirection.get(action).put(direction, images);
+        if (!actionsWithDirectionByPlayer.get(action).containsKey(direction)) {
+            actionsWithDirectionByPlayer.get(action).put(direction, new EnumMap<>(PlayerColor.class));
+        }
+
+        Arrays.stream(PlayerColor.values()).forEach(
+            playerColor -> actionsWithDirectionByPlayer.get(action).get(direction).put(
+                    playerColor,
+                    ImageTransformer.drawForPlayer(playerColor, images)
+            ));
     }
 
-    public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection direction, WorkerAction workerAction, List<Bitmap> images) {
-        if (!nationSpecificActionsWithDirection.containsKey(nation)) {
-            nationSpecificActionsWithDirection.put(nation, new HashMap<>());
+    public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection direction, WorkerAction action, List<PlayerBitmap> images) {
+        if (!nationSpecificActionsWithDirectionByPlayer.containsKey(nation)) {
+            nationSpecificActionsWithDirectionByPlayer.put(nation, new EnumMap<>(WorkerAction.class));
         }
 
-        var actionToDirection = nationSpecificActionsWithDirection.get(nation);
-
-        if (!actionToDirection.containsKey(workerAction)) {
-            actionToDirection.put(workerAction, new HashMap<>());
+        if (!nationSpecificActionsWithDirectionByPlayer.get(nation).containsKey(action)) {
+            nationSpecificActionsWithDirectionByPlayer.get(nation).put(action, new EnumMap<>(CompassDirection.class));
         }
 
-        var directionToImages = actionToDirection.get(workerAction);
+        if (!nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).containsKey(direction)) {
+            nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).put(direction, new EnumMap<>(PlayerColor.class));
+        }
 
-        directionToImages.put(direction, images);
+        Arrays.stream(PlayerColor.values()).forEach(
+                playerColor -> nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).get(direction).put(
+                        playerColor,
+                        ImageTransformer.drawForPlayer(playerColor, images))
+        );
     }
 
     public void addImage(CompassDirection direction, Bitmap image) {
@@ -385,5 +400,9 @@ public class WorkerImageCollection {
         }
 
         imagesWithPlayerColor.get(direction).get(playerColor).add(image);
+    }
+
+    public void addNationSpecificAnimationInDirectionWithPlayerColor(Nation nation, CompassDirection direction, WorkerAction action, List<Bitmap> images) {
+
     }
 }

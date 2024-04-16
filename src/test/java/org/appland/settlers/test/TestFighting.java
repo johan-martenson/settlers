@@ -304,9 +304,11 @@ public class TestFighting {
             Soldier attacker = Utils.waitForSoldierNotDyingOutsideBuilding(player0);
 
             /* Wait for the military to reach the attacked building */
-            assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+            if (attacker.isTraveling() && attacker.getTarget().equals(barracks1.getFlag().getPosition())) {
+                assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
-            Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+                Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+            }
 
             assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 

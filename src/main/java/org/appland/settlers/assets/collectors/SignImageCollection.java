@@ -33,6 +33,7 @@ public class SignImageCollection {
                 .forEach((signType, sizeBitmapMap) -> sizeBitmapMap
                         .forEach((size, image) -> imageBoard.placeImageRightOf(
                                 image,
+                                "images",
                                 signType.name().toUpperCase(),
                                 size.name().toUpperCase())));
 

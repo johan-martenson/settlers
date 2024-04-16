@@ -82,6 +82,8 @@ public class ImageBoard {
 
         for (var imagePathPair : imagePathPairs) {
             placeImage(imagePathPair.image, x, y, imagePathPair.path);
+
+            x += imagePathPair.image.getWidth();
         }
     }
 

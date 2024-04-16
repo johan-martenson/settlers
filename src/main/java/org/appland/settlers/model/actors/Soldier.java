@@ -363,7 +363,7 @@ public class Soldier extends Worker {
                 state = WALKING_TO_FIGHT_TO_DEFEND;
 
                 /* Notify the attacker so it doesn't move */
-                opponent.reserveForFight();
+                opponent.reserveForFight(this);
 
                 /* Walk to the attacker */
                 setOffroadTarget(opponent.getPosition());
@@ -515,6 +515,8 @@ public class Soldier extends Worker {
                 /* Fight the next waiting attacker */
                 opponent = buildingToDefend.pickWaitingAttacker();
 
+                opponent.reserveForFight(this);
+
                 /* Walk to fight the opponent */
                 state = WALKING_TO_FIGHT_TO_DEFEND;
 
@@ -659,6 +661,8 @@ public class Soldier extends Worker {
 
         buildingToDefend.removeWaitingAttacker(opponent);
 
+        opponent.reserveForFight(this);
+
         /* Fight the attacker */
         state = WALKING_TO_FIGHT_TO_DEFEND;
 
@@ -680,6 +684,8 @@ public class Soldier extends Worker {
             /* Get a waiting attacker */
             opponent = building.pickWaitingAttacker();
             building.removeWaitingAttacker(opponent);
+
+            opponent.reserveForFight(this);
 
             /* Fight the attacker */
             state = WALKING_TO_FIGHT_TO_DEFEND;
@@ -837,12 +843,21 @@ public class Soldier extends Worker {
         walkHalfWayOffroadTo(getPosition().left(), OffroadOption.CAN_END_ON_STONE);
 
         state = WALKING_APART_TO_ATTACK;
+
+        /* Tell the flag (if any) that a fight is taking place */
+        if (map.isFlagAtPoint(getPosition())) {
+            var flag = map.getFlagAtPoint(getPosition());
+
+            flag.setFightIsTakingPlace();
+        }
     }
 
-    private void reserveForFight() {
+    private void reserveForFight(Soldier soldier) {
 
         /* A defender has decided to fight this attacker so wait for it instead of looking for a new fight */
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
+
+        opponent = soldier;
     }
 
     private void returnAfterAttackIsOver() {

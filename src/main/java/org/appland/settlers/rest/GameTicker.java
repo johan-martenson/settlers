@@ -95,6 +95,8 @@ public class GameTicker {
                         e.printStackTrace();
                         System.out.println(e.getCause());
                         System.out.println(map);
+
+                        System.exit(1);
                     }
 
                     duration.after("Map.stepTime");

@@ -103,7 +103,7 @@ public class BuildingsImageCollection {
                             right
                     ));
 
-            imageBoard.placeImagesAsRowRightOf(
+            imageBoard.placeImagesAtBottomRightOf(
                     List.of(
                             ImageBoard.makeImagePathPair(
                                     specialImagesMap.get(nation).constructionPlannedImage,
@@ -129,7 +129,9 @@ public class BuildingsImageCollection {
                                     nation.name().toUpperCase(),
                                     "shadowImage"
                             )
-                    ));
+                    ),
+                    right
+            );
         });
 
         imageBoard.writeBoard(directory, "image-atlas-buildings", palette);

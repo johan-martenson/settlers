@@ -19,6 +19,7 @@ public class Flag implements EndPoint {
     private int    scoutsCalled;
     private Player player;
     private FlagType flagType;
+    private boolean fightIsHappening;
 
     public Flag(Point point) {
         position         = point;
@@ -26,6 +27,7 @@ public class Flag implements EndPoint {
         geologistsCalled = 0;
         scoutsCalled     = 0;
         promisedCargo    = new HashSet<>();
+        fightIsHappening = false;
 
         /* Default flag type is normal */
         flagType = FlagType.NORMAL;
@@ -170,6 +172,14 @@ public class Flag implements EndPoint {
 
     public void setType(FlagType flagType) {
         this.flagType = flagType;
+    }
+
+    public void setFightIsTakingPlace() {
+        fightIsHappening = true;
+    }
+
+    public boolean isFightingAtFlag() {
+        return fightIsHappening;
     }
 
     public enum FlagType {

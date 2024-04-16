@@ -51,7 +51,6 @@ public class Courier extends Worker {
     protected boolean shouldDoSpecialActions = true;
 
     protected enum States {
-
         WALKING_TO_ROAD,
         IDLE_AT_ROAD,
         IDLE_CHEWING_GUM,
@@ -66,6 +65,7 @@ public class Courier extends Worker {
         IDLE_TOUCHING_NOSE,
         IDLE_JUMPING_SKIP_ROPE,
         IDLE_SITTING_DOWN,
+        WAITING_FOR_FIGHTING_AT_FLAG,
         RETURNING_TO_STORAGE
     }
 
@@ -89,7 +89,6 @@ public class Courier extends Worker {
 
     @Override
     protected void onIdle() {
-
         if (state == IDLE_AT_ROAD ||
             state == IDLE_CHEWING_GUM ||
             state == IDLE_READING_PAPER ||
@@ -99,18 +98,27 @@ public class Courier extends Worker {
             Flag start = map.getFlagAtPoint(assignedRoad.getStart());
             Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
 
+            // TODO: REMOVE!
+            if (start == null || end == null) {
+                System.out.println(this);
+                System.out.println(assignedRoad);
+                System.out.println(assignedRoad.getStart());
+                System.out.println(assignedRoad.getEnd());
+                System.out.println(getCargo());
+                System.out.println(start);
+                System.out.println(end);
+            }
+
             Cargo cargoAtStart = findCargoToCarry(start);
             Cargo cargoAtEnd = findCargoToCarry(end);
 
-            if (cargoAtStart != null) {
-
+            if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
                 cargoAtStart.promisePickUp();
                 intendedCargo = cargoAtStart;
                 setTarget(start.getPosition());
 
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-            } else if (cargoAtEnd != null) {
-
+            } else if (cargoAtEnd != null && !(end.isFightingAtFlag() && end.getPosition().distance(getPosition()) == 1)) {
                 cargoAtEnd.promisePickUp();
                 intendedCargo = cargoAtEnd;
                 setTarget(end.getPosition());
@@ -119,7 +127,6 @@ public class Courier extends Worker {
             }
 
             if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
-
                 if (random.nextInt(135) == 5 && bodyType == FAT) {
                     state = IDLE_CHEWING_GUM;
 
@@ -152,7 +159,6 @@ public class Courier extends Worker {
                     countdown.countFrom(TIME_TO_SIT_DOWN);
                 }
             } else {
-
                 if (state == IDLE_CHEWING_GUM) {
                     if (countdown.hasReachedZero()) {
                         state = IDLE_AT_ROAD;
@@ -185,7 +191,36 @@ public class Courier extends Worker {
                     }
                 }
             }
+        } else if (state == WAITING_FOR_FIGHTING_AT_FLAG) {
+            if (!waitToGoToFlag.isFightingAtFlag()) {
+                if (getCargo() != null) {
+                    if (waitToGoToFlag.hasPlaceForMoreCargo()) {
+                        state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
+                        setTarget(waitToGoToFlag.getPosition());
+
+                        waitToGoToFlag.promiseCargo(getCargo());
+                    } else {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
+                    }
+                } else {
+                    Cargo cargo = findCargoToCarry(waitToGoToFlag);
+
+                    intendedCargo = cargo;
+
+                    if (cargo != null) {
+                        cargo.promisePickUp();
+
+                        state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+
+                        setTarget(waitToGoToFlag.getPosition());
+                    } else {
+                        state = RETURNING_TO_IDLE_SPOT;
+
+                        setTarget(idlePoint);
+                    }
+                }
+            }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             if (waitToGoToFlag.hasPlaceForMoreCargo()) {
                 state = GOING_TO_FLAG_TO_DELIVER_CARGO;
@@ -272,7 +307,6 @@ public class Courier extends Worker {
 
     @Override
     protected void onArrival() {
-
         if (state == WALKING_TO_ROAD) {
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
@@ -324,7 +358,6 @@ public class Courier extends Worker {
                 setTarget(idlePoint);
             }
         } else if (state == GOING_BACK_TO_ROAD) {
-
             Flag flag = map.getFlagAtPoint(getPosition());
             Cargo cargoToPickUp = findCargoToCarry(flag);
 
@@ -352,23 +385,15 @@ public class Courier extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-        Point position = getPosition();
-        MapPoint mapPoint = map.getMapPoint(position);
-        Cargo cargo = getCargo();
+        var position = getPosition();
+        var plannedPath = getPlannedPath();
+        var mapPoint = map.getMapPoint(position);
+        var cargo = getCargo();
 
-        if (cargo == null) {
-            return;
-        }
-
-        // TODO: verify that this call can be removed. There should be no need for cargos to know where they are when they are being carried
-        cargo.setPosition(getPosition());
-
-        List<Point> plannedPath = getPlannedPath();
-
-        Building cargoTargetBuilding = getCargo().getTarget();
+        var isAtPointBeforeFlag = !plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst());
 
         /* If at the point before the flag */
-        if (!plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst())) {
+        if (isAtPointBeforeFlag) {
             Point nextPoint = plannedPath.getFirst();
             MapPoint mapPointNext = map.getMapPoint(nextPoint);
 
@@ -383,18 +408,32 @@ public class Courier extends Worker {
                     waitToGoToFlag = flag;
 
                     stopWalkingToTarget();
+                } else if (flag.isFightingAtFlag()) {
+                    state = WAITING_FOR_FIGHTING_AT_FLAG;
+
+                    waitToGoToFlag = flag;
+
+                    stopWalkingToTarget();
                 } else {
                     flag.promiseCargo(getCargo());
+                }
+            } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
+                if (flag.isFightingAtFlag()) {
+                    state = WAITING_FOR_FIGHTING_AT_FLAG;
+
+                    waitToGoToFlag = flag;
+
+                    stopWalkingToTarget();
                 }
             }
         }
 
         /* Return the cargo to storage if the building is torn down */
         // TODO: handle the case where the building has had time to get fully removed
-        else if (state != RETURNING_TO_STORAGE && mapPoint.isFlag() &&
-                 (cargoTargetBuilding.isBurningDown() ||
-                  cargoTargetBuilding.isDestroyed()   ||
-                  !cargoTargetBuilding.equals(map.getBuildingAtPoint(cargoTargetBuilding.getPosition())))) {
+        else if (state != RETURNING_TO_STORAGE && mapPoint.isFlag() && getCargo() != null &&
+                 (getCargo().getTarget().isBurningDown() ||
+                  getCargo().getTarget().isDestroyed()   ||
+                  !getCargo().getTarget().equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
 
             Material material = getCargo().getMaterial();
 

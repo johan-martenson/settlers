@@ -6,6 +6,7 @@
 package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.resources.Bitmap;
+import org.appland.settlers.assets.resources.PlayerBitmap;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -218,5 +219,49 @@ public class Utils {
         }
 
         return mirroredSeries;
+    }
+
+    public static List<PlayerBitmap> getPlayerImagesAt(List<GameResource> gameResources, int start, int amount) {
+        List<PlayerBitmap> images = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            images.add(getPlayerImageAt(gameResources, start + i));
+        }
+
+        return images;
+    }
+
+    public static List<Bitmap> getImagesAt(List<GameResource> gameResourceList, int startLocation, int amount) {
+        List<Bitmap> images = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            images.add(getImageAt(gameResourceList, startLocation + i));
+        }
+
+        return images;
+    }
+
+    public static PlayerBitmap getPlayerImageAt(List<GameResource> gameResourceList, int location) {
+        return ((PlayerBitmapResource) gameResourceList.get(location)).getBitmap();
+    }
+
+    public static Bitmap getImageAt(List<GameResource> gameResourceList, int location) {
+        GameResource gameResource = gameResourceList.get(location);
+
+        return switch (gameResource.getType()) {
+            case BITMAP_RLE -> {
+                BitmapRLEResource headquarterRLEBitmapResource = (BitmapRLEResource) gameResource;
+                yield headquarterRLEBitmapResource.getBitmap();
+            }
+            case PLAYER_BITMAP_RESOURCE -> {
+                PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
+                yield playerBitmapResource.getBitmap();
+            }
+            case BITMAP_RESOURCE -> {
+                BitmapResource bitmapResource = (BitmapResource) gameResource;
+                yield bitmapResource.getBitmap();
+            }
+            default -> throw new RuntimeException("CANNOT HANDLE " + gameResource.getClass());
+        };
     }
 }

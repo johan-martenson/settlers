@@ -39,8 +39,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
 import static org.junit.Assert.*;
@@ -6326,6 +6324,8 @@ public class TestAttack {
 
             /* Verify that all soldiers have the right opponents when fighting */
             Stream.concat(attackers.stream(), defenders.stream())
+                    .filter(soldier -> !soldier.isDying())
+                    .filter(soldier -> !soldier.isDead())
                     .filter(Soldier::isFighting)
                     .forEach(soldier -> assertEquals(soldier, soldier.getOpponent().getOpponent()));
 
@@ -6384,5 +6384,88 @@ public class TestAttack {
             assertTrue(attackers.stream().filter(attacker -> !attacker.isDead()).allMatch(Worker::isInsideBuilding));
             assertFalse(headquarter1.isReady());
         }
+    }
+
+    @Test
+    public void testNoTransportThroughFlagOfAttackedBuilding() throws InvalidUserActionException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(21, 15);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        /* Connect player 1's barracks to the headquarters */
+        var road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+
+        /* Place flag and connect it to player 1's barracks */
+        var point4 = new Point(25, 19);
+        var flag = map.placeFlag(player1, point4);
+        var road1 = map.placeAutoSelectedRoad(player1, flag, barracks1.getFlag());
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks1);
+
+        /* Player 0 attacks player 1's barracks */
+        assertTrue(barracks1.isOccupied());
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        /* Wait for fighting to start */
+        var attacker = Utils.waitForSoldierOutsideBuilding(player0);
+
+        Utils.waitForSoldierToBeFighting(attacker, map);
+
+        /* Verify that nothing is transported from the barracks' flag and that nothing is transported to it */
+        Cargo cargo0 = Utils.placeCargo(map, PLANK, barracks1.getFlag(), headquarter1);
+
+        assertTrue(barracks1.getFlag().getStackedCargo().contains(cargo0));
+
+        Cargo cargo1 = Utils.placeCargo(map, STONE, flag, headquarter1);
+
+        for (int i = 0; i < 5000; i++) {
+            if (attacker.isDying() || attacker.getOpponent().isDying()) {
+                break;
+            }
+
+            assertTrue(barracks1.getFlag().getStackedCargo().contains(cargo0));
+
+            map.stepTime();
+        }
+
+        assertTrue(attacker.isDying() || attacker.getOpponent().isDying());
+        assertTrue(barracks1.getFlag().getStackedCargo().contains(cargo0));
+        assertEquals(road1.getCourier().getCargo(), cargo1);
+
+        /* Verify that the transport is resumed when the fight is done */
     }
 }

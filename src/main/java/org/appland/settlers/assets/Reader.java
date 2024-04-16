@@ -37,7 +37,6 @@ import java.util.Objects;
 import static java.lang.String.format;
 
 public class Reader {
-
     private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
     private static final int NUMBER_LINKS_PER_OVERLAY = 8 * 2 * 6;
 

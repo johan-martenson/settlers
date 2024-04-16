@@ -1,5 +1,6 @@
 package org.appland.settlers.assets.collectors;
 
+import org.appland.settlers.assets.UiIcon;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
@@ -13,6 +14,7 @@ import java.util.Map;
 public class UIElementsImageCollection {
     private final Map<Size, Bitmap> hoverAvailableBuilding;
     private final Map<Size, Bitmap> availableBuilding;
+    private final Map<UiIcon, Bitmap> uiElements;
 
     private Bitmap selectedPointImage;
     private Bitmap hoverPointImage;
@@ -26,6 +28,7 @@ public class UIElementsImageCollection {
     public UIElementsImageCollection() {
         hoverAvailableBuilding = new EnumMap<>(Size.class);
         availableBuilding = new EnumMap<>(Size.class);
+        uiElements = new EnumMap<>(UiIcon.class);
     }
 
     public void addSelectedPointImage(Bitmap image) {
@@ -97,6 +100,19 @@ public class UIElementsImageCollection {
                 )
         );
 
+        imageBoard.placeImagesAsRow(
+                uiElements.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                entry.getValue(),
+                                "icons",
+                                entry.getKey().name().toUpperCase()))
+                        .toList()
+        );
+
         imageBoard.writeBoard(toDir, "image-atlas-ui-elements", palette);
+    }
+
+    public void addUiElement(UiIcon uiIcon, Bitmap image) {
+        uiElements.put(uiIcon, image);
     }
 }

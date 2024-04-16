@@ -34,7 +34,7 @@ public class ImageTransformer {
     }
 
     public static List<Bitmap> makeGetHitAnimation(Bitmap image) {
-        Bitmap whiteSilhouette = makeSilhouette(image);
+        var whiteSilhouette = makeSilhouette(image);
 
         List<Bitmap> getHitAnimation = new ArrayList<>();
 
@@ -50,7 +50,7 @@ public class ImageTransformer {
         return getHitAnimation;
     }
 
-    public static List<Bitmap> drawForPlayer(PlayerColor playerColor, List<Bitmap> images) {
+    public static List<Bitmap> drawForPlayer(PlayerColor playerColor, List<? extends Bitmap> images) {
         return images.stream()
                 .map(image -> {
                     if (image instanceof PlayerBitmap playerBitmap) {

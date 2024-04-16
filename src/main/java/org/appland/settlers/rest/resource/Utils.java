@@ -10,6 +10,7 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.messages.BuildingCapturedMessage;
 import org.appland.settlers.model.messages.BuildingLostMessage;
 import org.appland.settlers.model.Cargo;
@@ -532,102 +533,44 @@ class Utils {
     }
 
     public Building buildingFactory(String buildingType, Player player) {
-        Building building = null;
-        switch(buildingType) {
-            case "ForesterHut":
-                building = new ForesterHut(player);
-                break;
-            case "Woodcutter":
-                building = new Woodcutter(player);
-                break;
-            case "Quarry":
-                building = new Quarry(player);
-                break;
-            case "Headquarter":
-                building = new Headquarter(player);
-                break;
-            case "Sawmill":
-                building = new Sawmill(player);
-                break;
-            case "Farm":
-                building = new Farm(player);
-                break;
-            case "Barracks":
-                building = new Barracks(player);
-                break;
-            case "Well":
-                building = new Well(player);
-                break;
-            case "Mill":
-                building = new Mill(player);
-                break;
-            case "Bakery":
-                building = new Bakery(player);
-                break;
-            case "Fishery":
-                building = new Fishery(player);
-                break;
-            case "GoldMine":
-                building = new GoldMine(player);
-                break;
-            case "IronMine":
-                building = new IronMine(player);
-                break;
-            case "CoalMine":
-                building = new CoalMine(player);
-                break;
-            case "GraniteMine":
-                building = new GraniteMine(player);
-                break;
-            case "PigFarm":
-                building = new PigFarm(player);
-                break;
-            case "Mint":
-                building = new Mint(player);
-                break;
-            case "SlaughterHouse":
-                building = new SlaughterHouse(player);
-                break;
-            case "DonkeyFarm":
-                building = new DonkeyFarm(player);
-                break;
-            case "GuardHouse":
-                building = new GuardHouse(player);
-                break;
-            case "WatchTower":
-                building = new WatchTower(player);
-                break;
-            case "Fortress":
-                building = new Fortress(player);
-                break;
-            case "Catapult":
-                building = new Catapult(player);
-                break;
-            case "HunterHut":
-                building = new HunterHut(player);
-                break;
-            case "IronSmelter":
-                building = new IronSmelter(player);
-                break;
-            case "Armory":
-                building = new Armory(player);
-                break;
-            case "Brewery":
-                building = new Brewery(player);
-                break;
-            case "Storehouse":
-                building = new Storehouse(player);
-                break;
-            case "LookoutTower":
-                building = new LookoutTower(player);
-                break;
-            case "Metalworks":
-                building = new Metalworks(player);
-                break;
-            default:
+        Building building = switch (buildingType) {
+            case "ForesterHut" -> new ForesterHut(player);
+            case "Woodcutter" -> new Woodcutter(player);
+            case "Quarry" -> new Quarry(player);
+            case "Headquarter" -> new Headquarter(player);
+            case "Sawmill" -> new Sawmill(player);
+            case "Farm" -> new Farm(player);
+            case "Barracks" -> new Barracks(player);
+            case "Well" -> new Well(player);
+            case "Mill" -> new Mill(player);
+            case "Bakery" -> new Bakery(player);
+            case "Fishery" -> new Fishery(player);
+            case "GoldMine" -> new GoldMine(player);
+            case "IronMine" -> new IronMine(player);
+            case "CoalMine" -> new CoalMine(player);
+            case "GraniteMine" -> new GraniteMine(player);
+            case "PigFarm" -> new PigFarm(player);
+            case "Mint" -> new Mint(player);
+            case "SlaughterHouse" -> new SlaughterHouse(player);
+            case "DonkeyFarm" -> new DonkeyFarm(player);
+            case "GuardHouse" -> new GuardHouse(player);
+            case "WatchTower" -> new WatchTower(player);
+            case "Fortress" -> new Fortress(player);
+            case "Catapult" -> new Catapult(player);
+            case "HunterHut" -> new HunterHut(player);
+            case "IronSmelter" -> new IronSmelter(player);
+            case "Armory" -> new Armory(player);
+            case "Brewery" -> new Brewery(player);
+            case "Storehouse" -> new Storehouse(player);
+            case "LookoutTower" -> new LookoutTower(player);
+            case "Metalworks" -> new Metalworks(player);
+            case "Shipyard" -> new Shipyard(player);
+            default -> {
                 System.out.println("DON'T KNOW HOW TO CREATE BUILDING " + buildingType);
                 System.exit(1);
-        }
+                yield null;
+            }
+        };
 
         return building;
     }
@@ -767,19 +710,19 @@ class Utils {
         } else {
             switch (sign.getType()) {
                 case GOLD:
-                    jsonSign.put("type", "gold");
+                    jsonSign.put("type", "GOLD");
                     break;
                 case IRON:
-                    jsonSign.put("type", "iron");
+                    jsonSign.put("type", "IRON");
                     break;
                 case COAL:
-                    jsonSign.put("type", "coal");
+                    jsonSign.put("type", "COAL");
                     break;
                 case STONE:
-                    jsonSign.put("type", "stone");
+                    jsonSign.put("type", "STONE");
                     break;
                 case WATER:
-                    jsonSign.put("type", "water");
+                    jsonSign.put("type", "WATER");
                     break;
                 default:
                     System.out.println("Cannot have sign of type " + sign.getType());

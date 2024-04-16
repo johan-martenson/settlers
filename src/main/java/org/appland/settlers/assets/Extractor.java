@@ -2,7 +2,6 @@ package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.collectors.AnimalImageCollection;
 import org.appland.settlers.assets.collectors.BorderImageCollector;
-import org.appland.settlers.assets.collectors.BuildingsImageCollection;
 import org.appland.settlers.assets.collectors.CargoImageCollection;
 import org.appland.settlers.assets.collectors.CropImageCollection;
 import org.appland.settlers.assets.collectors.DecorativeImageCollection;
@@ -20,10 +19,12 @@ import org.appland.settlers.assets.decoders.BobDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
+import org.appland.settlers.assets.extractors.BuildingsExtractor;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
 import org.appland.settlers.assets.gamefiles.CbobRomBobsLst;
+import org.appland.settlers.assets.gamefiles.IoLst;
 import org.appland.settlers.assets.gamefiles.JapZLst;
 import org.appland.settlers.assets.gamefiles.JobsBob;
 import org.appland.settlers.assets.gamefiles.Map0ZLst;
@@ -63,6 +64,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +73,7 @@ import java.util.Map.Entry;
 
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
+import static org.appland.settlers.assets.Utils.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
@@ -80,11 +83,11 @@ import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
 
 public class Extractor {
+    private Palette fallbackPalette;
 
     private record TitleAndFilename(String title, String filename) { }
 
-    private static final String DEFAULT_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
-
+    private static final String FALLBACK_PALETTE = "/Users/s0001386/projects/settlers/src/main/resources/default-palette.act";
     private static final String ROMAN_BUILDINGS_DIRECTORY = "roman-buildings";
     private static final String UI_ELEMENTS_DIRECTORY = "ui-elements";
     private static final String NATURE_DIRECTORY = "nature";
@@ -102,7 +105,7 @@ public class Extractor {
             new TitleAndFilename("Track 6", "audio/06_-_Track_06.mp3"),
             new TitleAndFilename("Track 7", "audio/07_-_Track_07.mp3"),
             new TitleAndFilename("Track 8", "audio/08_-_Track_08.mp3")
-            ));
+    ));
 
     @Option(name = "--from-dir", usage = "Asset directory to load from")
     static String fromDir;
@@ -113,7 +116,6 @@ public class Extractor {
     private Palette defaultPalette;
 
     public static void main(String[] args) throws IOException, InvalidFormatException, UnknownResourceTypeException, CmdLineException {
-
         Extractor extractor = new Extractor();
 
         CmdLineParser parser = new CmdLineParser(extractor);
@@ -124,8 +126,8 @@ public class Extractor {
             System.out.println("Must specify an empty directory to extract assets into: " + toDir);
         }
 
-        /* Get the default palette */
-        extractor.loadDefaultPalette();
+        /* Load the palettes */
+        extractor.loadPalettes(fromDir);
 
         /* Extract assets */
         extractor.populateRomanBuildings(fromDir, toDir);
@@ -596,79 +598,84 @@ public class Extractor {
                 bob
         );
 
-        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.CUTTING, 8));
+        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.CUTTING, 8));
 
         // Add roman military attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_ATTACKING_EAST, 8));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_ATTACKING_WEST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_ATTACKING_EAST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_ATTACKING_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_ATTACKING_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_ATTACKING_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_ATTACKING_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_ATTACKING_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_ATTACKING_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_ATTACKING_WEST, 8));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_ATTACKING_EAST, 8));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_ATTACKING_WEST, 8));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_ATTACKING_EAST, 8));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_ATTACKING_WEST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_ATTACKING_EAST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_ATTACKING_WEST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_ATTACKING_EAST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_ATTACKING_WEST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_ATTACKING_EAST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_ATTACKING_WEST, 8));
 
         // Add roman military getting hit
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST, 8));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_EAST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_WEST, 7));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_EAST, 7));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_WEST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST, 8));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST, 6));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_EAST, 6));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_WEST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_EAST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_WEST, 7));
 
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(
-                ROMANS,
-                WEST,
-                GET_HIT,
-                ImageTransformer.makeGetHitAnimation(
-                        getImageAt(
-                                cbobRomBobsLst,
-                                CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST)));
+        Arrays.stream(PlayerColor.values()).forEach(
+                playerColor -> {
+                    privateWorkerImageCollector.addNationSpecificAnimationInDirectionWithPlayerColor(
+                            ROMANS,
+                            WEST,
+                            GET_HIT,
+                            ImageTransformer.makeGetHitAnimation(
+                                    getPlayerImageAt(
+                                            cbobRomBobsLst,
+                                            CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST).getBitmapForPlayer(playerColor)));
 
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(
-                ROMANS,
-                EAST,
-                GET_HIT,
-                ImageTransformer.makeGetHitAnimation(
-                        getImageAt(
-                                cbobRomBobsLst,
-                                CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST)));
+                    privateWorkerImageCollector.addNationSpecificAnimationInDirectionWithPlayerColor(
+                            ROMANS,
+                            EAST,
+                            GET_HIT,
+                            ImageTransformer.makeGetHitAnimation(
+                                    getPlayerImageAt(
+                                            cbobRomBobsLst,
+                                            CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST).getBitmapForPlayer(playerColor)));
+                }
+        );
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_FLINCH_HIT_EAST, 6));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_FLINCH_HIT_WEST, 6));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_GETTING_HIT_EAST, 7));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_GETTING_HIT_WEST, 7));
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_AVOIDING_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_AVOIDING_HIT_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_FLINCH_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_FLINCH_HIT_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_GETTING_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_GETTING_HIT_WEST, 8));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST, 8));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST, 8));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_FLINCH_HIT_EAST, 6));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_FLINCH_HIT_WEST, 6));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_GETTING_HIT_EAST, 7));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_GETTING_HIT_WEST, 7));
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_AVOIDING_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_AVOIDING_HIT_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_FLINCH_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_FLINCH_HIT_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_GETTING_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_GETTING_HIT_WEST, 7));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_AVOIDING_HIT_EAST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_AVOIDING_HIT_WEST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_FLINCH_HIT_EAST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_FLINCH_HIT_WEST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_GETTING_HIT_EAST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SERGEANT_GETTING_HIT_WEST, 8));
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_AVOIDING_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_AVOIDING_HIT_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_FLINCH_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_FLINCH_HIT_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_WEST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_AVOIDING_HIT_EAST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_AVOIDING_HIT_WEST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_FLINCH_HIT_EAST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_FLINCH_HIT_WEST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_GETTING_HIT_EAST, 8));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.OFFICER_GETTING_HIT_WEST, 7));
 
-        privateWorkerImageCollector.addAnimation(DIE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        privateFirstClassWorkerImageCollector.addAnimation(DIE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        sergeantWorkerImageCollector.addAnimation(DIE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        officerWorkerImageCollector.addAnimation(DIE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        generalWorkerImageCollector.addAnimation(DIE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_AVOIDING_HIT_EAST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_AVOIDING_HIT_WEST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_FLINCH_HIT_EAST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_FLINCH_HIT_WEST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_EAST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.GENERAL_GETTING_HIT_WEST, 8));
+
+        privateWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        privateFirstClassWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        sergeantWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        officerWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        generalWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
 
         carpenterImageCollector.readCargoImagesFromBob(
                 PLANK,
@@ -677,7 +684,7 @@ public class Extractor {
                 bob
         );
 
-        carpenterImageCollector.addAnimation(WorkerAction.SAWING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SAWING, 6));
+        carpenterImageCollector.addAnimation(WorkerAction.SAWING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SAWING, 6));
 
         stonemasonImageCollector.readCargoImagesFromBob(
                 STONE,
@@ -686,16 +693,16 @@ public class Extractor {
                 bob
         );
 
-        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE, 8));
+        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE, 8));
 
-        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING, 36));
+        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING, 36));
 
-        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING, 26));
+        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING, 26));
 
-        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING, 16));
+        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING, 16));
 
-        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW, 8));
-        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION, 4));
+        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW, 8));
+        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION, 4));
 
         minterImageCollector.readCargoImagesFromBob(
                 COIN,
@@ -845,8 +852,8 @@ public class Extractor {
                 bob
         );
 
-        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOWING, 8));
-        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.HARVESTING, 8));
+        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOWING, 8));
+        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HARVESTING, 8));
 
         pigBreederImageCollector.readCargoImagesFromBob(
                 PIG,
@@ -869,11 +876,11 @@ public class Extractor {
                 bob
         );
 
-        bakerImageCollector.addAnimation(WorkerAction.BAKING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.BAKING, 8));
+        bakerImageCollector.addAnimation(WorkerAction.BAKING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.BAKING, 8));
 
         // TODO: Handle brewer and/or well worker
 
-        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER, 8));
+        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER, 8));
 
         // TODO: Handle metalworker carrying "shift gear". Assume it's tongs
 
@@ -964,8 +971,8 @@ public class Extractor {
                 bob
         );
 
-        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.HUNTING, 13));
-        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT, 12));
+        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HUNTING, 13));
+        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT, 12));
 
         shipwrightWorkerImageCollector.readCargoImagesFromBob(
                 BOAT,
@@ -1049,11 +1056,11 @@ public class Extractor {
         fatCarrierWithCargo.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
 
         // Add animations for when the couriers are bored
-        fatCarrier.addAnimation(CHEW_GUM, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM, 8));
-        fatCarrier.addAnimation(SIT_DOWN, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN, 5));
-        thinCarrier.addAnimation(READ_NEWSPAPER, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER, 7));
-        thinCarrier.addAnimation(TOUCH_NOSE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE, 5));
-        thinCarrier.addAnimation(JUMP_SKIP_ROPE, getImagesAt(cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE, 7));
+        fatCarrier.addAnimation(CHEW_GUM, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM, 8));
+        fatCarrier.addAnimation(SIT_DOWN, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN, 5));
+        thinCarrier.addAnimation(READ_NEWSPAPER, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER, 7));
+        thinCarrier.addAnimation(TOUCH_NOSE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE, 5));
+        thinCarrier.addAnimation(JUMP_SKIP_ROPE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE, 7));
 
         // Write the image atlases to files
         thinCarrier.writeImageAtlas(toDir + "/", defaultPalette);
@@ -1074,6 +1081,7 @@ public class Extractor {
         List<GameResource> mapBobsLst = LstDecoder.loadLstFile(fromDir + "/" + MapBobsLst.FILENAME, defaultPalette);
         List<GameResource> mapBobs0Lst = LstDecoder.loadLstFile(fromDir + "/" + MapBobs0Lst.FILENAME, defaultPalette);
         List<GameResource> map0ZLst = LstDecoder.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
+        List<GameResource> ioLst = LstDecoder.loadLstFile(fromDir + "/" + IoLst.FILENAME, fallbackPalette);
 
         /* Create the out directories */
         String uiDir = toDir + "/" + UI_ELEMENTS_DIRECTORY;
@@ -1149,6 +1157,12 @@ public class Extractor {
         uiElementsImageCollection.addAvailableBuilding(MEDIUM, getImageAt(mapBobsLst, MapBobsLst.AVAILABLE_MEDIUM_BUILDING));
         uiElementsImageCollection.addAvailableBuilding(LARGE, getImageAt(mapBobsLst, MapBobsLst.AVAILABLE_LARGE_BUILDING));
         uiElementsImageCollection.addAvailableHarbor(getImageAt(mapBobsLst, MapBobsLst.AVAILABLE_HARBOR));
+
+        uiElementsImageCollection.addUiElement(UiIcon.DESTROY_BUILDING, getImageAt(ioLst, IoLst.BURNING_HOUSE_ICON));
+        uiElementsImageCollection.addUiElement(UiIcon.ATTACK, getImageAt(ioLst, IoLst.ATTACK_ICON));
+        uiElementsImageCollection.addUiElement(UiIcon.SCISSORS, getImageAt(ioLst, IoLst.SCISSORS));
+        uiElementsImageCollection.addUiElement(UiIcon.INFORMATION, getImageAt(ioLst, IoLst.INFORMATION));
+        uiElementsImageCollection.addUiElement(UiIcon.GEOLOGIST, getImageAt(ioLst, IoLst.GEOLOGIST_ICON));
 
         uiElementsImageCollection.writeImageAtlas(toDir, defaultPalette);
 
@@ -1842,8 +1856,10 @@ public class Extractor {
         decorativeImageCollection.writeImageAtlas(toDir, defaultPalette);
     }
 
-    private void loadDefaultPalette() throws IOException {
-        defaultPalette = PaletteDecoder.loadPaletteFromFile(DEFAULT_PALETTE);
+    private void loadPalettes(String fromDir) throws IOException {
+        defaultPalette = PaletteDecoder.loadPaletteFromFile(FALLBACK_PALETTE);
+
+        fallbackPalette = PaletteDecoder.loadPaletteFromFile(FALLBACK_PALETTE);
     }
 
     /**
@@ -1935,231 +1951,7 @@ public class Extractor {
 
         writeFilesFromMap(romYLst, imagesToFileMap);
 
-        // Create the image atlas
-        Map<Nation, String> nationsAndBobFiles = new EnumMap<>(Nation.class);
-
-        nationsAndBobFiles.put(ROMANS, "DATA/MBOB/ROM_Y.LST");
-        nationsAndBobFiles.put(JAPANESE, "DATA/MBOB/JAP_Y.LST");
-        nationsAndBobFiles.put(AFRICANS, "DATA/MBOB/AFR_Y.LST");
-        nationsAndBobFiles.put(VIKINGS, "DATA/MBOB/VIK_Y.LST");
-
-        BuildingsImageCollection buildingsImageCollection = new BuildingsImageCollection();
-
-        for (Entry<Nation, String> entry : nationsAndBobFiles.entrySet()) {
-            Nation nation = entry.getKey();
-            String filename = fromDir + "/" + entry.getValue();
-
-            List<GameResource> nationResourceList = LstDecoder.loadLstFile(filename, defaultPalette);
-
-            buildingsImageCollection.addBuildingForNation(nation, "Headquarter", getImageAt(nationResourceList, RomYLst.HEADQUARTER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Headquarter", getImageAt(nationResourceList, RomYLst.HEADQUARTER_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Barracks", getImageAt(nationResourceList, RomYLst.BARRACKS));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Barracks", getImageAt(nationResourceList, RomYLst.BARRACKS_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Barracks", getImageAt(nationResourceList, RomYLst.BARRACKS + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Barracks", getImageAt(nationResourceList, RomYLst.BARRACKS_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "GuardHouse", getImageAt(nationResourceList, RomYLst.GUARDHOUSE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "GuardHouse", getImageAt(nationResourceList, RomYLst.GUARDHOUSE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "GuardHouse", getImageAt(nationResourceList, RomYLst.GUARDHOUSE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "GuardHouse", getImageAt(nationResourceList, RomYLst.GUARDHOUSE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "WatchTower", getImageAt(nationResourceList, RomYLst.WATCHTOWER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "WatchTower", getImageAt(nationResourceList, RomYLst.WATCHTOWER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "WatchTower", getImageAt(nationResourceList, RomYLst.WATCHTOWER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "WatchTower", getImageAt(nationResourceList, RomYLst.WATCHTOWER_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Fortress", getImageAt(nationResourceList, RomYLst.FORTRESS));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Fortress", getImageAt(nationResourceList, RomYLst.FORTRESS_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Fortress", getImageAt(nationResourceList, RomYLst.FORTRESS + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Fortress", getImageAt(nationResourceList, RomYLst.FORTRESS_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "GraniteMine", getImageAt(nationResourceList, RomYLst.GRANITE_MINE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "GraniteMine", getImageAt(nationResourceList, RomYLst.GRANITE_MINE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "GraniteMine", getImageAt(nationResourceList, RomYLst.GRANITE_MINE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "GraniteMine", getImageAt(nationResourceList, RomYLst.GRANITE_MINE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "CoalMine", getImageAt(nationResourceList, RomYLst.COAL_MINE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "CoalMine", getImageAt(nationResourceList, RomYLst.COAL_MINE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "CoalMine", getImageAt(nationResourceList, RomYLst.COAL_MINE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "CoalMine", getImageAt(nationResourceList, RomYLst.COAL_MINE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "IronMine", getImageAt(nationResourceList, RomYLst.IRON_MINE_RESOURCE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "IronMine", getImageAt(nationResourceList, RomYLst.IRON_MINE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "IronMine", getImageAt(nationResourceList, RomYLst.IRON_MINE_RESOURCE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "IronMine", getImageAt(nationResourceList, RomYLst.IRON_MINE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "GoldMine", getImageAt(nationResourceList, RomYLst.GOLD_MINE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "GoldMine", getImageAt(nationResourceList, RomYLst.GOLD_MINE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "GoldMine", getImageAt(nationResourceList, RomYLst.GOLD_MINE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "GoldMine", getImageAt(nationResourceList, RomYLst.GOLD_MINE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "LookoutTower", getImageAt(nationResourceList, RomYLst.LOOKOUT_TOWER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "LookoutTower", getImageAt(nationResourceList, RomYLst.LOOKOUT_TOWER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "LookoutTower", getImageAt(nationResourceList, RomYLst.LOOKOUT_TOWER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "LookoutTower", getImageAt(nationResourceList, RomYLst.LOOKOUT_TOWER_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Catapult", getImageAt(nationResourceList, RomYLst.CATAPULT));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Catapult", getImageAt(nationResourceList, RomYLst.CATAPULT_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Catapult", getImageAt(nationResourceList, RomYLst.CATAPULT + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Catapult", getImageAt(nationResourceList, RomYLst.CATAPULT_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Woodcutter", getImageAt(nationResourceList, RomYLst.WOODCUTTER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Woodcutter", getImageAt(nationResourceList, RomYLst.WOODCUTTER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Woodcutter", getImageAt(nationResourceList, RomYLst.WOODCUTTER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Woodcutter", getImageAt(nationResourceList, RomYLst.WOODCUTTER_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Fishery", getImageAt(nationResourceList, RomYLst.FISHERY));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Fishery", getImageAt(nationResourceList, RomYLst.FISHERY_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Fishery", getImageAt(nationResourceList, RomYLst.FISHERY + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Fishery", getImageAt(nationResourceList, RomYLst.FISHERY_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Quarry", getImageAt(nationResourceList, RomYLst.QUARRY));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Quarry", getImageAt(nationResourceList, RomYLst.QUARRY_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Quarry", getImageAt(nationResourceList, RomYLst.QUARRY + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Quarry", getImageAt(nationResourceList, RomYLst.QUARRY_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "ForesterHut", getImageAt(nationResourceList, RomYLst.FORESTER_HUT));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "ForesterHut", getImageAt(nationResourceList, RomYLst.FORESTER_HUT_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "ForesterHut", getImageAt(nationResourceList, RomYLst.FORESTER_HUT + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "ForesterHut", getImageAt(nationResourceList, RomYLst.FORESTER_HUT_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "SlaughterHouse", getImageAt(nationResourceList, RomYLst.SLAUGHTER_HOUSE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "SlaughterHouse", getImageAt(nationResourceList, RomYLst.SLAUGHTER_HOUSE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "SlaughterHouse", getImageAt(nationResourceList, RomYLst.SLAUGHTER_HOUSE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "SlaughterHouse", getImageAt(nationResourceList, RomYLst.SLAUGHTER_HOUSE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "HunterHut", getImageAt(nationResourceList, RomYLst.HUNTER_HUT));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "HunterHut", getImageAt(nationResourceList, RomYLst.HUNTER_HUT_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "HunterHut", getImageAt(nationResourceList, RomYLst.HUNTER_HUT + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "HunterHut", getImageAt(nationResourceList, RomYLst.HUNTER_HUT_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Brewery", getImageAt(nationResourceList, RomYLst.BREWERY));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Brewery", getImageAt(nationResourceList, RomYLst.BREWERY_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Brewery", getImageAt(nationResourceList, RomYLst.BREWERY + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Brewery", getImageAt(nationResourceList, RomYLst.BREWERY_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Armory", getImageAt(nationResourceList, RomYLst.ARMORY));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Armory", getImageAt(nationResourceList, RomYLst.ARMORY_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Armory", getImageAt(nationResourceList, RomYLst.ARMORY + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Armory", getImageAt(nationResourceList, RomYLst.ARMORY_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Metalworks", getImageAt(nationResourceList, RomYLst.METALWORKS));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Metalworks", getImageAt(nationResourceList, RomYLst.METALWORKS_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Metalworks", getImageAt(nationResourceList, RomYLst.METALWORKS + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Metalworks", getImageAt(nationResourceList, RomYLst.METALWORKS_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "IronSmelter", getImageAt(nationResourceList, RomYLst.IRON_SMELTER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "IronSmelter", getImageAt(nationResourceList, RomYLst.IRON_SMELTER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "IronSmelter", getImageAt(nationResourceList, RomYLst.IRON_SMELTER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "IronSmelter", getImageAt(nationResourceList, RomYLst.IRON_SMELTER_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "PigFarm", getImageAt(nationResourceList, RomYLst.PIG_FARM));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "PigFarm", getImageAt(nationResourceList, RomYLst.PIG_FARM_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "PigFarm", getImageAt(nationResourceList, RomYLst.PIG_FARM + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "PigFarm", getImageAt(nationResourceList, RomYLst.PIG_FARM_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Storehouse", getImageAt(nationResourceList, RomYLst.STOREHOUSE));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Storehouse", getImageAt(nationResourceList, RomYLst.STOREHOUSE_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Storehouse", getImageAt(nationResourceList, RomYLst.STOREHOUSE + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Storehouse", getImageAt(nationResourceList, RomYLst.STOREHOUSE_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Mill", getImageAt(nationResourceList, RomYLst.MILL_NO));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Mill", getImageAt(nationResourceList, RomYLst.MILL_NO_FAN_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Mill", getImageAt(nationResourceList, RomYLst.MILL_NO + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Mill", getImageAt(nationResourceList, RomYLst.MILL_NO_FAN_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Bakery", getImageAt(nationResourceList, RomYLst.BAKERY));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Bakery", getImageAt(nationResourceList, RomYLst.BAKERY_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Bakery", getImageAt(nationResourceList, RomYLst.BAKERY + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Bakery", getImageAt(nationResourceList, RomYLst.BAKERY_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Sawmill", getImageAt(nationResourceList, RomYLst.SAWMILL));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Sawmill", getImageAt(nationResourceList, RomYLst.SAWMILL_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Sawmill", getImageAt(nationResourceList, RomYLst.SAWMILL + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Sawmill", getImageAt(nationResourceList, RomYLst.SAWMILL_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Mint", getImageAt(nationResourceList, RomYLst.MINT));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Mint", getImageAt(nationResourceList, RomYLst.MINT_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Mint", getImageAt(nationResourceList, RomYLst.MINT + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Mint", getImageAt(nationResourceList, RomYLst.MINT_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Well", getImageAt(nationResourceList, RomYLst.WELL));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Well", getImageAt(nationResourceList, RomYLst.WELL_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Well", getImageAt(nationResourceList, RomYLst.WELL + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Well", getImageAt(nationResourceList, RomYLst.WELL_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Shipyard", getImageAt(nationResourceList, RomYLst.SHIPYARD));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Shipyard", getImageAt(nationResourceList, RomYLst.SHIPYARD_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Shipyard", getImageAt(nationResourceList, RomYLst.SHIPYARD + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Shipyard", getImageAt(nationResourceList, RomYLst.SHIPYARD_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Farm", getImageAt(nationResourceList, RomYLst.FARM));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Farm", getImageAt(nationResourceList, RomYLst.FARM_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Farm", getImageAt(nationResourceList, RomYLst.FARM + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Farm", getImageAt(nationResourceList, RomYLst.FARM_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "DonkeyFarm", getImageAt(nationResourceList, RomYLst.DONKEY_BREEDER));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "DonkeyFarm", getImageAt(nationResourceList, RomYLst.DONKEY_BREEDER_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "DonkeyFarm", getImageAt(nationResourceList, RomYLst.DONKEY_BREEDER + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "DonkeyFarm", getImageAt(nationResourceList, RomYLst.DONKEY_BREEDER_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addBuildingForNation(nation, "Harbor", getImageAt(nationResourceList, RomYLst.HARBOR));
-            buildingsImageCollection.addBuildingShadowForNation(nation, "Harbor", getImageAt(nationResourceList, RomYLst.HARBOR_SHADOW));
-            buildingsImageCollection.addBuildingUnderConstructionForNation(nation, "Harbor", getImageAt(nationResourceList, RomYLst.HARBOR + 2));
-            buildingsImageCollection.addBuildingUnderConstructionShadowForNation(nation, "Harbor", getImageAt(nationResourceList, RomYLst.HARBOR_UNDER_CONSTRUCTION_SHADOW));
-
-            buildingsImageCollection.addConstructionPlanned(nation, getImageAt(nationResourceList, RomYLst.CONSTRUCTION_PLANNED));
-            buildingsImageCollection.addConstructionPlannedShadow(nation, getImageAt(nationResourceList, RomYLst.CONSTRUCTION_PLANNED_SHADOW));
-            buildingsImageCollection.addConstructionJustStarted(nation, getImageAt(nationResourceList, RomYLst.CONSTRUCTION_JUST_STARTED_INDEX));
-            buildingsImageCollection.addConstructionJustStartedShadow(nation, getImageAt(nationResourceList, RomYLst.CONSTRUCTION_JUST_STARTED_SHADOW));
-        }
-
-        buildingsImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
-    }
-
-    private List<PlayerBitmap> getPlayerImagesAt(List<GameResource> gameResources, int start, int amount) {
-        List<PlayerBitmap> images = new ArrayList<>();
-
-        for (int i = 0; i < amount; i++) {
-            images.add(getPlayerImageAt(gameResources, start + i));
-        }
-
-        return images;
-    }
-
-    private List<Bitmap> getImagesAt(List<GameResource> gameResourceList, int startLocation, int amount) {
-        List<Bitmap> images = new ArrayList<>();
-
-        for (int i = 0; i < amount; i++) {
-            images.add(getImageAt(gameResourceList, startLocation + i));
-        }
-
-        return images;
-    }
-
-    private PlayerBitmap getPlayerImageAt(List<GameResource> gameResourceList, int location) {
-        return ((PlayerBitmapResource) gameResourceList.get(location)).getBitmap();
-    }
-
-    private Bitmap getImageAt(List<GameResource> gameResourceList, int location) {
-        GameResource gameResource = gameResourceList.get(location);
-
-        return switch (gameResource.getType()) {
-            case BITMAP_RLE -> {
-                BitmapRLEResource headquarterRLEBitmapResource = (BitmapRLEResource) gameResource;
-                yield headquarterRLEBitmapResource.getBitmap();
-            }
-            case PLAYER_BITMAP_RESOURCE -> {
-                PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
-                yield playerBitmapResource.getBitmap();
-            }
-            case BITMAP_RESOURCE -> {
-                BitmapResource bitmapResource = (BitmapResource) gameResource;
-                yield bitmapResource.getBitmap();
-            }
-            default -> throw new RuntimeException("CANNOT HANDLE " + gameResource.getClass());
-        };
+        BuildingsExtractor.extract(fromDir, toDir, defaultPalette);
     }
 
     private void writeFilesFromMap(List<GameResource> gameResourceList, Map<Integer, String> imagesToFileMap) throws IOException {
