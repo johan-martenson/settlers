@@ -1309,7 +1309,7 @@ public class TestCourier {
     }
 
     @Test
-    public void testCourierReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
+    public void testCourierReachesHouseThenReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", PlayerColor.BLUE);
@@ -1328,8 +1328,10 @@ public class TestCourier {
 
         /* Connect the sawmill with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+        System.out.println(sawmill.getFlag().getPosition());
+        System.out.println(headquarter0.getFlag().getPosition());
 
-        /* Fill up the headquarter with material */
+        /* Fill up the headquarters with material */
         Utils.adjustInventoryTo(headquarter0, PLANK, 40);
         Utils.adjustInventoryTo(headquarter0, STONE, 40);
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
@@ -1345,9 +1347,11 @@ public class TestCourier {
         /* Wait until the courier reaches the sawmill's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
 
-        /* Verify that the courier instead returns the cargo to the headquarter because the sawmill is torn down */
+        /* Verify that the courier instead returns the cargo to the headquarters because the sawmill is torn down */
         map.stepTime();
 
+        System.out.println();
+        System.out.println("Tearing down sawmill");
         sawmill.tearDown();
 
         assertEquals(road0.getCourier().getTarget(), sawmill.getPosition());
@@ -1360,6 +1364,63 @@ public class TestCourier {
         assertEquals(road0.getCourier().getCargo(), cargo);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+
+        assertNull(road0.getCourier().getCargo());
+    }
+
+    @Test
+    public void testCourierReachesFlagThenReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(9, 27);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+
+        /* Fill up the headquarters with material */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 40);
+        Utils.adjustInventoryTo(headquarter0, STONE, 40);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 40);
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Wait for the courier to pick up a delivery for the sawmill */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+
+        /* Wait until the courier reaches the point before the sawmill's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition().left());
+
+        /* Verify that the courier instead returns the cargo to the headquarters because the sawmill is torn down */
+        map.stepTime();
+
+        sawmill.tearDown();
+
+        assertEquals(road0.getCourier().getTarget(), sawmill.getPosition());
+
+        Cargo cargo = road0.getCourier().getCargo();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+
+        assertNotNull(road0.getCourier().getCargo());
+        assertEquals(road0.getCourier().getCargo(), cargo);
+        assertEquals(road0.getCourier().getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
 

@@ -327,10 +327,10 @@ public class Courier extends Worker {
                 state = RETURNING_TO_IDLE_SPOT;
             }
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            Building building = map.getBuildingAtPoint(getPosition());
+            var building = map.getBuildingAtPoint(getPosition());
 
             /* Cannot deliver if the building has just been torn down */
-            if (building.isBurningDown()) {
+            if (building == null || building.isBurningDown() || building.isDestroyed()) {
 
                 /* Return to the headquarters off-road because the driveway is gone */
                 state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
@@ -379,7 +379,7 @@ public class Courier extends Worker {
             /* Return the cargo to the headquarters */
             getCargo().transportToStorage();
 
-            setTarget(getAssignedRoad().getOtherPoint(getPosition()));
+            setTarget(getCargo().getTarget().getPosition());
         }
     }
 
@@ -389,71 +389,105 @@ public class Courier extends Worker {
         var plannedPath = getPlannedPath();
         var mapPoint = map.getMapPoint(position);
         var cargo = getCargo();
+        var targetBuilding = cargo != null ? cargo.getTarget() : null;
 
         var isAtPointBeforeFlag = !plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst());
 
-        /* If at the point before the flag */
-        if (isAtPointBeforeFlag) {
-            Point nextPoint = plannedPath.getFirst();
-            MapPoint mapPointNext = map.getMapPoint(nextPoint);
+        switch (state) {
+            case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
+                if (isAtPointBeforeFlag) {
+                    var nextPoint = plannedPath.getFirst();
+                    var mapPointNext = map.getMapPoint(nextPoint);
+                    var flag = mapPointNext.getFlag();
 
-            Flag flag = mapPointNext.getFlag();
+                    if (!flag.hasPlaceForMoreCargo()) {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
 
-            if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
+                        waitToGoToFlag = flag;
 
-                /* Wait if there is no space at the flag to put down the cargo */
-                if (!flag.hasPlaceForMoreCargo()) {
-                    state = WAITING_FOR_SPACE_ON_FLAG;
+                        stopWalkingToTarget();
+                    } else if (flag.isFightingAtFlag()) {
+                        state = WAITING_FOR_FIGHTING_AT_FLAG;
 
-                    waitToGoToFlag = flag;
+                        waitToGoToFlag = flag;
 
-                    stopWalkingToTarget();
-                } else if (flag.isFightingAtFlag()) {
-                    state = WAITING_FOR_FIGHTING_AT_FLAG;
+                        stopWalkingToTarget();
+                    } else {
+                        flag.promiseCargo(getCargo());
+                    }
+                } else if (mapPoint.isFlag()) {
+                    if (targetBuilding != null &&
+                            (targetBuilding.isBurningDown() ||
+                                    targetBuilding.isDestroyed() ||
+                                    !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
 
-                    waitToGoToFlag = flag;
+                        Material material = getCargo().getMaterial();
 
-                    stopWalkingToTarget();
-                } else {
-                    flag.promiseCargo(getCargo());
-                }
-            } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
-                if (flag.isFightingAtFlag()) {
-                    state = WAITING_FOR_FIGHTING_AT_FLAG;
+                        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
-                    waitToGoToFlag = flag;
+                        /* Return the cargo to the storage if possible */
+                        if (storage != null) {
+                            cargo.setTarget(storage);
 
-                    stopWalkingToTarget();
+                            /* Deliver the cargo either to the storage's flag or directly to the storage */
+                            deliverToFlagOrBuilding(cargo);
+
+                            /* Drop the cargo if it cannot be delivered or returned */
+                        } else  {
+                            setCargo(null);
+
+                            state = RETURNING_TO_IDLE_SPOT;
+
+                            setTarget(idlePoint);
+                        }
+                    }
                 }
             }
-        }
+            case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
+                if (isAtPointBeforeFlag) {
+                    var nextPoint = plannedPath.getFirst();
+                    var mapPointNext = map.getMapPoint(nextPoint);
+                    var flag = mapPointNext.getFlag();
 
-        /* Return the cargo to storage if the building is torn down */
-        // TODO: handle the case where the building has had time to get fully removed
-        else if (state != RETURNING_TO_STORAGE && mapPoint.isFlag() && getCargo() != null &&
-                 (getCargo().getTarget().isBurningDown() ||
-                  getCargo().getTarget().isDestroyed()   ||
-                  !getCargo().getTarget().equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
+                    if (flag.isFightingAtFlag()) {
+                        state = WAITING_FOR_FIGHTING_AT_FLAG;
 
-            Material material = getCargo().getMaterial();
+                        waitToGoToFlag = flag;
 
-            Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
-
-            /* Return the cargo to the storage if possible */
-            if (storage != null) {
-                cargo.setTarget(storage);
-
-                /* Deliver the cargo either to the storage's flag or directly to the storage */
-                deliverToFlagOrBuilding(cargo);
-
-            /* Drop the cargo if it cannot be delivered or returned */
-            } else  {
-                setCargo(null);
-
-                state = RETURNING_TO_IDLE_SPOT;
-
-                setTarget(idlePoint);
+                        stopWalkingToTarget();
+                    }
+                }
             }
+            case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
+                if (mapPoint.isFlag()) {
+                    if (targetBuilding != null &&
+                            (targetBuilding.isBurningDown() ||
+                                    targetBuilding.isDestroyed() ||
+                                    !targetBuilding.equals(map.getBuildingAtPoint(getCargo().getTarget().getPosition())))) {
+
+                        Material material = getCargo().getMaterial();
+
+                        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
+
+                        /* Return the cargo to the storage if possible */
+                        if (storage != null) {
+                            cargo.setTarget(storage);
+
+                            /* Deliver the cargo either to the storage's flag or directly to the storage */
+                            deliverToFlagOrBuilding(cargo);
+
+                            /* Drop the cargo if it cannot be delivered or returned */
+                        } else  {
+                            setCargo(null);
+
+                            state = RETURNING_TO_IDLE_SPOT;
+
+                            setTarget(idlePoint);
+                        }
+                    }
+                }
+            }
+            default -> { }
         }
     }
 
