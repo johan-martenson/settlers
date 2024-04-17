@@ -89,145 +89,144 @@ public class Courier extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == IDLE_AT_ROAD ||
-            state == IDLE_CHEWING_GUM ||
-            state == IDLE_READING_PAPER ||
-            state == IDLE_TOUCHING_NOSE ||
-            state == IDLE_JUMPING_SKIP_ROPE ||
-            state == IDLE_SITTING_DOWN) {
-            Flag start = map.getFlagAtPoint(assignedRoad.getStart());
-            Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
+        switch (state) {
+            case IDLE_AT_ROAD, IDLE_CHEWING_GUM, IDLE_READING_PAPER, IDLE_TOUCHING_NOSE, IDLE_JUMPING_SKIP_ROPE, IDLE_SITTING_DOWN -> {
+                Flag start = map.getFlagAtPoint(assignedRoad.getStart());
+                Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
 
-            // TODO: REMOVE!
-            if (start == null || end == null) {
-                System.out.println(this);
-                System.out.println(assignedRoad);
-                System.out.println(assignedRoad.getStart());
-                System.out.println(assignedRoad.getEnd());
-                System.out.println(getCargo());
-                System.out.println(start);
-                System.out.println(end);
-            }
-
-            Cargo cargoAtStart = findCargoToCarry(start);
-            Cargo cargoAtEnd = findCargoToCarry(end);
-
-            if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
-                cargoAtStart.promisePickUp();
-                intendedCargo = cargoAtStart;
-                setTarget(start.getPosition());
-
-                state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-            } else if (cargoAtEnd != null && !(end.isFightingAtFlag() && end.getPosition().distance(getPosition()) == 1)) {
-                cargoAtEnd.promisePickUp();
-                intendedCargo = cargoAtEnd;
-                setTarget(end.getPosition());
-
-                state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-            }
-
-            if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
-                if (random.nextInt(135) == 5 && bodyType == FAT) {
-                    state = IDLE_CHEWING_GUM;
-
-                    map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
-
-                    countdown.countFrom(TIME_TO_CHEW_GUM);
-                } else if (random.nextInt(135) == 5 && bodyType == THIN) {
-                    state = IDLE_READING_PAPER;
-
-                    map.reportWorkerStartedAction(this, READ_NEWSPAPER);
-
-                    countdown.countFrom(TIME_TO_READ_PAPER);
-                } else if (random.nextInt(135) == 5 && bodyType == THIN) {
-                    state = IDLE_TOUCHING_NOSE;
-
-                    map.reportWorkerStartedAction(this, TOUCH_NOSE);
-
-                    countdown.countFrom(TIME_TO_TOUCH_NOSE);
-                } else if (random.nextInt(115) == 5 && bodyType == THIN) {
-                    state = IDLE_JUMPING_SKIP_ROPE;
-
-                    map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
-
-                    countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
-                } else if (random.nextInt(115) == 5 && bodyType == FAT) {
-                    state = IDLE_SITTING_DOWN;
-
-                    map.reportWorkerStartedAction(this, SIT_DOWN);
-
-                    countdown.countFrom(TIME_TO_SIT_DOWN);
+                // TODO: REMOVE!
+                if (start == null || end == null) {
+                    System.out.println(this);
+                    System.out.println(assignedRoad);
+                    System.out.println(assignedRoad.getStart());
+                    System.out.println(assignedRoad.getEnd());
+                    System.out.println(getCargo());
+                    System.out.println(start);
+                    System.out.println(end);
                 }
-            } else {
-                if (state == IDLE_CHEWING_GUM) {
-                    if (countdown.hasReachedZero()) {
-                        state = IDLE_AT_ROAD;
-                    } else {
-                        countdown.step();
-                    }
-                } else if (state == IDLE_READING_PAPER) {
-                    if (countdown.hasReachedZero()) {
-                        state = IDLE_AT_ROAD;
-                    } else {
-                        countdown.step();
-                    }
-                } else if (state == IDLE_TOUCHING_NOSE) {
-                    if (countdown.hasReachedZero()) {
-                        state = IDLE_AT_ROAD;
-                    } else {
-                        countdown.step();
-                    }
-                } else if (state == IDLE_JUMPING_SKIP_ROPE) {
-                    if (countdown.hasReachedZero()) {
-                        state = IDLE_AT_ROAD;
-                    } else {
-                        countdown.step();
-                    }
-                } else if (state == IDLE_SITTING_DOWN) {
-                    if (countdown.hasReachedZero()) {
-                        state = IDLE_AT_ROAD;
-                    } else {
-                        countdown.step();
-                    }
+
+                Cargo cargoAtStart = findCargoToCarry(start);
+                Cargo cargoAtEnd = findCargoToCarry(end);
+
+                if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
+                    cargoAtStart.promisePickUp();
+                    intendedCargo = cargoAtStart;
+                    setTarget(start.getPosition());
+
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                } else if (cargoAtEnd != null && !(end.isFightingAtFlag() && end.getPosition().distance(getPosition()) == 1)) {
+                    cargoAtEnd.promisePickUp();
+                    intendedCargo = cargoAtEnd;
+                    setTarget(end.getPosition());
+
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
                 }
-            }
-        } else if (state == WAITING_FOR_FIGHTING_AT_FLAG) {
-            if (!waitToGoToFlag.isFightingAtFlag()) {
-                if (getCargo() != null) {
-                    if (waitToGoToFlag.hasPlaceForMoreCargo()) {
-                        state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-                        setTarget(waitToGoToFlag.getPosition());
+                if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
+                    if (random.nextInt(135) == 5 && bodyType == FAT) {
+                        state = IDLE_CHEWING_GUM;
 
-                        waitToGoToFlag.promiseCargo(getCargo());
-                    } else {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
+                        map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
+
+                        countdown.countFrom(TIME_TO_CHEW_GUM);
+                    } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                        state = IDLE_READING_PAPER;
+
+                        map.reportWorkerStartedAction(this, READ_NEWSPAPER);
+
+                        countdown.countFrom(TIME_TO_READ_PAPER);
+                    } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                        state = IDLE_TOUCHING_NOSE;
+
+                        map.reportWorkerStartedAction(this, TOUCH_NOSE);
+
+                        countdown.countFrom(TIME_TO_TOUCH_NOSE);
+                    } else if (random.nextInt(115) == 5 && bodyType == THIN) {
+                        state = IDLE_JUMPING_SKIP_ROPE;
+
+                        map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
+
+                        countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
+                    } else if (random.nextInt(115) == 5 && bodyType == FAT) {
+                        state = IDLE_SITTING_DOWN;
+
+                        map.reportWorkerStartedAction(this, SIT_DOWN);
+
+                        countdown.countFrom(TIME_TO_SIT_DOWN);
                     }
                 } else {
-                    Cargo cargo = findCargoToCarry(waitToGoToFlag);
-
-                    intendedCargo = cargo;
-
-                    if (cargo != null) {
-                        cargo.promisePickUp();
-
-                        state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-
-                        setTarget(waitToGoToFlag.getPosition());
-                    } else {
-                        state = RETURNING_TO_IDLE_SPOT;
-
-                        setTarget(idlePoint);
+                    if (state == IDLE_CHEWING_GUM) {
+                        if (countdown.hasReachedZero()) {
+                            state = IDLE_AT_ROAD;
+                        } else {
+                            countdown.step();
+                        }
+                    } else if (state == IDLE_READING_PAPER) {
+                        if (countdown.hasReachedZero()) {
+                            state = IDLE_AT_ROAD;
+                        } else {
+                            countdown.step();
+                        }
+                    } else if (state == IDLE_TOUCHING_NOSE) {
+                        if (countdown.hasReachedZero()) {
+                            state = IDLE_AT_ROAD;
+                        } else {
+                            countdown.step();
+                        }
+                    } else if (state == IDLE_JUMPING_SKIP_ROPE) {
+                        if (countdown.hasReachedZero()) {
+                            state = IDLE_AT_ROAD;
+                        } else {
+                            countdown.step();
+                        }
+                    } else if (state == IDLE_SITTING_DOWN) {
+                        if (countdown.hasReachedZero()) {
+                            state = IDLE_AT_ROAD;
+                        } else {
+                            countdown.step();
+                        }
                     }
                 }
             }
-        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (waitToGoToFlag.hasPlaceForMoreCargo()) {
-                state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+            case WAITING_FOR_FIGHTING_AT_FLAG -> {
+                if (!waitToGoToFlag.isFightingAtFlag()) {
+                    if (getCargo() != null) {
+                        if (waitToGoToFlag.hasPlaceForMoreCargo()) {
+                            state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-                setTarget(waitToGoToFlag.getPosition());
+                            setTarget(waitToGoToFlag.getPosition());
 
-                waitToGoToFlag.promiseCargo(getCargo());
+                            waitToGoToFlag.promiseCargo(getCargo());
+                        } else {
+                            state = WAITING_FOR_SPACE_ON_FLAG;
+                        }
+                    } else {
+                        Cargo cargo = findCargoToCarry(waitToGoToFlag);
+
+                        intendedCargo = cargo;
+
+                        if (cargo != null) {
+                            cargo.promisePickUp();
+
+                            state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+
+                            setTarget(waitToGoToFlag.getPosition());
+                        } else {
+                            state = RETURNING_TO_IDLE_SPOT;
+
+                            setTarget(idlePoint);
+                        }
+                    }
+                }
+            }
+            case WAITING_FOR_SPACE_ON_FLAG -> {
+                if (waitToGoToFlag.hasPlaceForMoreCargo()) {
+                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+
+                    setTarget(waitToGoToFlag.getPosition());
+
+                    waitToGoToFlag.promiseCargo(getCargo());
+                }
             }
         }
     }
