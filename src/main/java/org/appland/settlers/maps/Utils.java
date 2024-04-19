@@ -25,7 +25,6 @@ class Utils {
     }
 
     static DetailedVegetation convertTextureToVegetation(Texture texture) {
-
         switch (texture) {
             case SAVANNAH:             return DetailedVegetation.SAVANNAH;           // Savannah - can build houses
             case MOUNTAIN_1:           return DetailedVegetation.MOUNTAIN_1;         // Mountain 1 - mining

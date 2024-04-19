@@ -24,7 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static org.appland.settlers.maps.MapLoader.TranslationMode.POLISHED;
 import static org.appland.settlers.maps.Utils.isEven;
 
 /**
@@ -664,25 +663,26 @@ public class MapLoader {
             players.add(new Player("Player " + i, colors.get(i)));
         }
 
-        TranslationMode translationMode = POLISHED;
-
         /* Create initial game map with correct dimensions */
-        Dimension gamePointDimension = toGamePointDimension(mapFile.getDimension(), translationMode);
-        GameMap gameMap = new GameMap(players, gamePointDimension.width, gamePointDimension.height);
+        Dimension gamePointDimension = toGamePointDimension(mapFile.getDimension());
+        GameMap gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
 
         /* Set up the terrain */
         for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-
             Point mapFilePosition = mapFilePoint.getPosition();
             org.appland.settlers.model.Point point = mapFilePositionToGamePoint(
                     mapFilePosition,
-                    mapFile.getDimension(),
-                    translationMode
+                    mapFile.getDimension()
             );
 
             /* Assign textures */
-            gameMap.setDetailedVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
-            gameMap.setDetailedVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
+            if (mapFilePoint.getVegetationBelow() != null) {
+                gameMap.setDetailedVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
+            }
+
+            if (mapFilePoint.getVegetationDownRight() != null) {
+                gameMap.setDetailedVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
+            }
 
             /* Set mineral quantities */
             if (mapFilePoint.hasMineral()) {
@@ -693,7 +693,7 @@ public class MapLoader {
 
             /* Place stones */
             if (mapFilePoint.hasStone()) {
-                gameMap.placeStone(point, mapFilePoint.getStoneType(), mapFilePoint.getStoneAmount());
+                gameMap.placeStone(point, mapFilePoint.getStoneType(), Math.min(mapFilePoint.getStoneAmount(), 6));
             }
 
             /* Place trees */
@@ -734,7 +734,7 @@ public class MapLoader {
 
         /* Set starting points */
         List<org.appland.settlers.model.Point> gamePointStartingPoints = mapFile.getStartingPoints().stream()
-                .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension(), translationMode))
+                .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension()))
                 .collect(Collectors.toList());
 
         gameMap.setStartingPoints(gamePointStartingPoints);
@@ -752,58 +752,44 @@ public class MapLoader {
         return gameMap;
     }
 
-    private Dimension toGamePointDimension(Dimension dimension, TranslationMode translationMode) {
-        if (translationMode == POLISHED) {
-            if (isEven(dimension.height)) {
-                return new Dimension(2 * dimension.width - 2, dimension.height - 1);
-            } else {
-                return new Dimension(2 * dimension.width - 2, dimension.height);
-            }
+    private Dimension toGamePointDimension(Dimension dimension) {
+        if (isEven(dimension.height)) {
+            return new Dimension(2 * dimension.width - 2, dimension.height - 1);
         } else {
-            throw new RuntimeException("Only polished translation is supported for now");
+            return new Dimension(2 * dimension.width - 2, dimension.height);
         }
     }
 
     private org.appland.settlers.model.Point mapFilePositionToGamePoint(
             java.awt.Point mapFilePosition,
-            Dimension dimension,
-            TranslationMode translationMode
+            Dimension dimension
     ) {
-        if (translationMode == POLISHED) {
-            if (isEven(dimension.height)) {
-                if (isEven(mapFilePosition.y)) {
-                    return new org.appland.settlers.model.Point(
-                            2 * mapFilePosition.x - 1,
-                            dimension.height - 1 - mapFilePosition.y
-                    );
-                } else {
-                    return new org.appland.settlers.model.Point(
-                            2 * mapFilePosition.x,
-                            dimension.height - 1 - mapFilePosition.y
-                    );
-                }
-
-            // Case where unadjusted height is odd
+        if (isEven(dimension.height)) {
+            if (isEven(mapFilePosition.y)) {
+                return new org.appland.settlers.model.Point(
+                        2 * mapFilePosition.x - 1,
+                        dimension.height - 1 - mapFilePosition.y
+                );
             } else {
-                if (isEven(mapFilePosition.y)) {
-                    return new org.appland.settlers.model.Point(
-                            2 * mapFilePosition.x - 1,
-                            dimension.height - mapFilePosition.y
-                    );
-                } else {
-                    return new org.appland.settlers.model.Point(
-                            2 * mapFilePosition.x,
-                            dimension.height - mapFilePosition.y
-                    );
-                }
+                return new org.appland.settlers.model.Point(
+                        2 * mapFilePosition.x,
+                        dimension.height - 1 - mapFilePosition.y
+                );
             }
+
+        // Case where unadjusted height is odd
         } else {
-            throw new RuntimeException("Only supports polished translation.");
+            if (isEven(mapFilePosition.y)) {
+                return new org.appland.settlers.model.Point(
+                        2 * mapFilePosition.x - 1,
+                        dimension.height - mapFilePosition.y
+                );
+            } else {
+                return new org.appland.settlers.model.Point(
+                        2 * mapFilePosition.x,
+                        dimension.height - mapFilePosition.y
+                );
+            }
         }
-    }
-
-    enum TranslationMode {
-        POLISHED
-
     }
 }
