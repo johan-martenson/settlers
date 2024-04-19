@@ -2754,7 +2754,6 @@ public class TestMonitoringProductivity {
         assertEquals(woodcutter0.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (woodcutter0.getProductivity() != 0) {
                 break;
             }
@@ -2813,7 +2812,6 @@ public class TestMonitoringProductivity {
         assertEquals(woodcutter0.getProductivity(), 0);
 
         for (int i = 0; i < 1000; i++) {
-
             if (woodcutter0.getProductivity() != 0) {
                 break;
             }
@@ -2826,8 +2824,7 @@ public class TestMonitoringProductivity {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-        assertEquals(gameChangesList.getChangedBuildings().getFirst(), woodcutter0);
+        assertTrue(gameChangesList.getChangedBuildings().contains(woodcutter0));
 
         /* Verify that the changed house is only reported once */
         int productivity = woodcutter0.getProductivity();

@@ -49,7 +49,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -91,7 +91,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -140,7 +140,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -185,7 +185,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -237,7 +237,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -279,7 +279,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -328,7 +328,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -352,7 +352,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(13, 13);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Wait for the woodcutter to get constructed */
@@ -361,7 +361,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Verify that the event for the changed available construction when a tree is removed is correct */
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        Utils.waitForTreeToGetCutDown(tree0, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
@@ -379,7 +379,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -403,7 +403,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(13, 13);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Wait for the woodcutter to get constructed */
@@ -412,7 +412,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Verify that the event for the changed available construction when a tree is removed is correct */
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        Utils.waitForTreeToGetCutDown(tree0, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
@@ -437,7 +437,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -479,7 +479,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -528,7 +528,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -575,7 +575,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -629,7 +629,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -678,7 +678,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -734,7 +734,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -781,7 +781,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -835,7 +835,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -877,7 +877,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -926,7 +926,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -971,7 +971,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1023,7 +1023,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1071,7 +1071,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1126,7 +1126,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1174,7 +1174,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1229,7 +1229,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1271,7 +1271,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1320,7 +1320,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1328,7 +1328,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -1371,7 +1371,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1379,7 +1379,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -1429,7 +1429,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1437,7 +1437,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -1480,7 +1480,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1488,7 +1488,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point1 = new Point(10, 10);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -1538,7 +1538,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1585,7 +1585,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1639,7 +1639,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1689,7 +1689,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1746,7 +1746,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1793,7 +1793,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1847,7 +1847,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1894,7 +1894,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1948,7 +1948,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(16, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1998,7 +1998,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(22, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2055,7 +2055,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2100,7 +2100,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2150,7 +2150,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2158,7 +2158,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed and occupied */
@@ -2200,7 +2200,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2208,7 +2208,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed and occupied */
@@ -2257,7 +2257,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2265,7 +2265,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed and occupied */
@@ -2311,7 +2311,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2319,7 +2319,7 @@ public class TestMonitoringOfAvailableConstruction {
         Point point2 = new Point(16, 16);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the farm to get constructed and occupied */
@@ -2374,7 +2374,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -2445,7 +2445,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -2459,7 +2459,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarter */
+        /* Wait for a military sent from the headquarters */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2516,7 +2516,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -2530,7 +2530,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarter */
+        /* Wait for a military sent from the headquarters */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2588,7 +2588,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -2602,7 +2602,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        /* Wait for a military sent from the headquarter */
+        /* Wait for a military sent from the headquarters */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         map.stepTime();
@@ -2665,7 +2665,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2676,7 +2676,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2734,7 +2734,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2745,7 +2745,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2808,7 +2808,7 @@ public class TestMonitoringOfAvailableConstruction {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2819,7 +2819,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */

@@ -1754,6 +1754,10 @@ public class Extractor {
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS),
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS_SHADOW)
         );
+        decorativeImageCollection.addDecorationTypeImage(
+                DecorationType.TREE_STUB,
+                getImageAt(mapBobsLst, MapBobsLst.TREE_STUB)
+        );
         decorativeImageCollection.addDecorationImageWithShadow(
                 DecorationType.BUSH,
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BUSH),

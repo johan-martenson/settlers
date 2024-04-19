@@ -7,6 +7,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -53,7 +54,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -89,7 +90,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -125,7 +126,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -148,7 +149,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -176,7 +177,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -184,7 +185,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
@@ -215,7 +216,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -223,7 +224,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
@@ -246,7 +247,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -254,11 +255,11 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Remove all woodcutter workers and add an axe to the headquarter */
+        /* Remove all woodcutter workers and add an axe to the headquarters */
         Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 0);
         Utils.adjustInventoryTo(headquarter0, Material.AXE, 1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Finish the woodcutter */
@@ -289,7 +290,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -336,7 +337,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -388,7 +389,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -440,7 +441,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -500,7 +501,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -525,6 +526,7 @@ public class TestWoodcutter {
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
+        assertTrue(map.isTreeAtPoint(point2));
 
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
@@ -551,10 +553,37 @@ public class TestWoodcutter {
         for (int i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
             assertTrue(map.isTreeAtPoint(point));
+
             map.stepTime();
         }
 
-        /* Verify that the woodcutter stopped cutting */
+        /* Wait for the tree to fall */
+        for (int i = 0; i < 10; i++) {
+            assertTrue(map.isTreeAtPoint(point));
+            assertEquals(tree, map.getTreeAtPoint(point));
+            assertTrue(tree.isFalling());
+            assertTrue(map.getTrees().contains(tree));
+            assertFalse(wcWorker.isCuttingTree());
+            assertFalse(wcWorker.isTraveling());
+            assertEquals(wcWorker.getPosition(), map.getTreeAtPoint(point).getPosition());
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isDecoratedAtPoint(point));
+        assertEquals(map.getDecorationAtPoint(point), DecorationType.TREE_STUB);
+        assertFalse(map.isTreeAtPoint(point));
+        assertNull(map.getTreeAtPoint(point));
+        assertFalse(map.getTrees().contains(tree));
+        assertFalse(wcWorker.isCuttingTree());
+
+        map.stepTime();
+
+        assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
+        assertNotNull(wcWorker.getCargo());
+        assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
+
+        /* Verify that the woodcutter has got a wood cargo and is walking back to the hut */
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
@@ -571,7 +600,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -586,7 +615,7 @@ public class TestWoodcutter {
         Point point1 = new Point(10, 4);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
@@ -624,11 +653,12 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isCuttingTree());
 
         /* Wait for the woodcutter to cut down the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForTreeToDisappearFromMap(tree, map);
+
+        map.stepTime();
 
         /* The woodcutter has cut down the tree and goes back via the flag */
         assertFalse(wcWorker.isCuttingTree());
-        assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
 
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
@@ -681,7 +711,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -745,7 +775,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -810,7 +840,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -890,7 +920,7 @@ public class TestWoodcutter {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -954,12 +984,17 @@ public class TestWoodcutter {
         assertTrue(woodcutterWorker.isCuttingTree());
 
         /* Wait for the woodcutter to cut down the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForWoodcutterToStopCutting(woodcutterWorker, map);
+
+        /* Wait for the tree to fall down */
+        assertFalse(woodcutterWorker.isCuttingTree());
+        assertTrue(map.getTreeAtPoint(point).isFalling());
+
+        Utils.waitForTreeToDisappearFromMap(tree, map);
+
+        map.stepTime();
 
         /* The woodcutter has cut down the tree and goes back via the flag */
-        assertFalse(woodcutterWorker.isCuttingTree());
-        assertFalse(map.isTreeAtPoint(point));
-
         assertEquals(woodcutterWorker.getTarget(), woodcutter.getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertTrue(woodcutterWorker.getPlannedPath().contains(woodcutter.getFlag().getPosition()));
@@ -999,7 +1034,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1033,7 +1068,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1111,7 +1146,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1174,7 +1209,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -1193,7 +1228,7 @@ public class TestWoodcutter {
         Point point1 = new Point(10, 4);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
@@ -1222,11 +1257,12 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isCuttingTree());
 
         /* Wait for the woodcutter to cut down the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
+
+        map.stepTime();
 
         /* The woodcutter has cut down the tree and goes back to the hut */
         assertFalse(wcWorker.isCuttingTree());
-
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, woodcutter.getPosition());
@@ -1281,7 +1317,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1289,7 +1325,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
@@ -1323,7 +1359,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1350,14 +1386,30 @@ public class TestWoodcutter {
         Utils.fastForward(100, map);
 
         /* Wait for the woodcutter worker to go to the tree */
-        Worker worker = woodcutter0.getWorker();
+        var worker = (WoodcutterWorker) woodcutter0.getWorker();
 
         assertTrue(worker.getTarget().equals(tree0.getPosition()) || worker.getTarget().equals(tree1.getPosition()));
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
 
         /* Wait for the woodcutter to cut the tree */
-        Utils.fastForward(50, map);
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+
+        map.stepTime();
+
+        assertTrue(worker.isCuttingTree());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+        assertTrue(map.isTreeAtPoint(tree0.getPosition()));
+        assertTrue(map.isTreeAtPoint(tree1.getPosition()));
+        assertFalse(tree0.isFalling());
+        assertFalse(tree1.isFalling());
+
+        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(worker.getPosition()), map);
+
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+
+        map.stepTime();
 
         assertNotNull(worker.getCargo());
         assertEquals(worker.getTarget(), woodcutter0.getPosition());
@@ -1389,7 +1441,9 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
 
         /* Wait for the woodcutter to cut the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(worker.getPosition()), map);
+
+        map.stepTime();
 
         assertNotNull(worker.getCargo());
 
@@ -1418,7 +1472,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1449,7 +1503,9 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, tree0.getPosition());
 
         /* Wait for the woodcutter to cut the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
+
+        map.stepTime();
 
         assertNotNull(worker.getCargo());
 
@@ -1476,7 +1532,7 @@ public class TestWoodcutter {
 
         assertEquals(cargo.getPosition(), woodcutter0.getFlag().getPosition());
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Assign a courier to the road */
@@ -1503,14 +1559,14 @@ public class TestWoodcutter {
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier delivers the cargo to the headquarter */
+        /* Verify that the courier delivers the cargo to the headquarters */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(WOOD);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier has delivered the cargo to the headquarter */
+        /* Verify that the courier has delivered the cargo to the headquarters */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WOOD), amount + 1);
     }
@@ -1524,7 +1580,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1546,7 +1602,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
@@ -1554,7 +1610,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
-        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -1567,7 +1623,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1575,7 +1631,7 @@ public class TestWoodcutter {
         Point point26 = new Point(8, 8);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
@@ -1592,7 +1648,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(worker.isInsideBuilding());
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
@@ -1617,7 +1673,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1625,7 +1681,7 @@ public class TestWoodcutter {
         Point point26 = new Point(8, 8);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
@@ -1662,7 +1718,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1690,7 +1746,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -1718,7 +1774,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1732,7 +1788,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1789,7 +1845,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1806,7 +1862,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -1872,7 +1928,7 @@ public class TestWoodcutter {
         /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1883,10 +1939,10 @@ public class TestWoodcutter {
         /* Finish construction of the woodcutter */
         constructHouse(woodcutter0);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
-        /* Wait for woodcutter worker to get assigned and leave the headquarter */
+        /* Wait for woodcutter worker to get assigned and leave the headquarters */
         List<WoodcutterWorker> workers = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         assertNotNull(workers);
@@ -1915,15 +1971,15 @@ public class TestWoodcutter {
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 2's headquarter */
+        /* Place player 2's headquarters */
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        /* Place player 0's headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        /* Place player 1's headquarters */
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1964,7 +2020,7 @@ public class TestWoodcutter {
         /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2004,7 +2060,9 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isCuttingTree());
 
         /* Wait for the woodcutter to cut down the tree */
-        Utils.fastForward(50, map);
+        Utils.waitForTreeToDisappearFromMap(tree, map);
+
+        map.stepTime();
 
         /* Verify that the woodcutter chooses a path back that goes via the flag */
         assertEquals(wcWorker.getTarget(), woodcutter.getPosition());
@@ -2023,7 +2081,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2035,7 +2093,7 @@ public class TestWoodcutter {
         Point point2 = new Point(14, 4);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -2070,7 +2128,7 @@ public class TestWoodcutter {
 
         assertEquals(woodcutterWorker.getPosition(), flag0.getPosition());
 
-        /* Verify that the woodcutter worker returns to the headquarter when it reaches the flag */
+        /* Verify that the woodcutter worker returns to the headquarters when it reaches the flag */
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
@@ -2085,7 +2143,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2097,7 +2155,7 @@ public class TestWoodcutter {
         Point point2 = new Point(14, 4);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -2150,7 +2208,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2162,7 +2220,7 @@ public class TestWoodcutter {
         Point point2 = new Point(14, 4);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        /* Connect headquarters and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the first flag with the second flag */
@@ -2211,7 +2269,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2240,7 +2298,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), storehouse0.getPosition());
 
@@ -2248,7 +2306,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, storehouse0.getPosition());
 
-        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarters */
         assertEquals(storehouse0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2261,7 +2319,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2293,7 +2351,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
@@ -2301,7 +2359,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2314,7 +2372,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2349,7 +2407,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
@@ -2357,7 +2415,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2370,7 +2428,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2396,7 +2454,7 @@ public class TestWoodcutter {
 
         woodcutter0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        /* Verify that the worker leaves the building and goes back to the headquarters */
         assertFalse(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
@@ -2404,7 +2462,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarters */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2417,7 +2475,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -2425,7 +2483,7 @@ public class TestWoodcutter {
         Point point26 = new Point(13, 13);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Place road to connect the headquarter and the woodcutter */
+        /* Place road to connect the headquarters and the woodcutter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Finish construction of the woodcutter */
@@ -2440,7 +2498,7 @@ public class TestWoodcutter {
         /* Tear down the building */
         woodcutter0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        /* Verify that the worker goes to the building and then returns to the headquarters instead of entering */
         assertEquals(worker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
@@ -2459,21 +2517,24 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(9, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place and grow the tree */
-        Point point1 = new Point(12, 6);
+        Point point1 = new Point(12, 12);
         Tree tree = map.placeTree(point1, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutters */
         Point point2 = new Point(7, 5);
         Point point3 = new Point(13, 5);
+
         assertNotNull(map.isAvailableHousePoint(player0, point2));
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
         assertNotNull(map.isAvailableHousePoint(player0, point3));
+
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
         Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
 
         /* Construct the woodcutters */
@@ -2501,8 +2562,7 @@ public class TestWoodcutter {
 
         /* Wait for the woodcutter to finish cutting the tree */
         for (int i = 0; i < 1000; i++) {
-
-            if (!map.isTreeAtPoint(tree.getPosition())) {
+            if (tree.isFalling()) {
                 break;
             }
 
@@ -2512,9 +2572,17 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
+        assertTrue(tree.isFalling());
+        assertFalse(wcWorker0.isCuttingTree());
+        assertFalse(wcWorker1.isCuttingTree());
+
+        Utils.waitForTreeToDisappearFromMap(tree, map);
+
         assertFalse(map.isTreeAtPoint(tree.getPosition()));
 
         /* Verify that one of the woodcutters got the wood and both are going back */
+        map.stepTime();
+
         assertTrue(wcWorker0.getCargo() == null || wcWorker1.getCargo() == null);
         assertTrue(wcWorker0.getCargo() != null || wcWorker1.getCargo() != null);
         assertTrue((wcWorker0.getCargo() != null && wcWorker0.getCargo().getMaterial().equals(WOOD)) ||
@@ -2543,7 +2611,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2579,7 +2647,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2587,44 +2655,42 @@ public class TestWoodcutter {
         Point point1 = new Point(7, 9);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Finish construction of the woodcutter hut */
-        constructHouse(woodcutter0);
-
-        /* Populate the woodcutter hut */
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
-
-        assertTrue(woodcutterWorker.isInsideBuilding());
-        assertEquals(woodcutterWorker.getHome(), woodcutter0);
-        assertEquals(woodcutter0.getWorker(), woodcutterWorker);
-
-        /* Connect the woodcutter hut with the headquarter */
+        /* Connect the woodcutter hut with the headquarters */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+
+        /* Wait for the woodcutter hut to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
+
+        /* Disable production */
+        woodcutter0.stopProduction();
 
         /* Place a lot of trees on the map */
         Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 6), map);
 
-        /* Wait for the trees to grow up */
-        Utils.fastForward(700, map);
+        /* Wait for the trees to grow */
+        Utils.fastForward(1000, map);
 
-        /* Make the woodcutter take down some trees with plenty of trees available */
-        for (int i = 0; i < 1000; i++) {
+        /* Enable production again */
+        woodcutter0.resumeProduction();
+
+        /* Wait for the woodcutter hut to reach full productivity */
+        for (int i = 0; i < 20000; i++) {
+            if (woodcutter0.getProductivity() == 100) {
+                break;
+            }
+
             map.stepTime();
-
-            /* Fill up with more trees */
-            Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 6), map);
         }
 
         /* Verify that the productivity is 100% and stays there */
         assertEquals(woodcutter0.getProductivity(), 100);
 
-        for (int i = 0; i < 1000; i++) {
-
+        for (int i = 0; i < 2000; i++) {
             map.stepTime();
 
             assertEquals(woodcutter0.getProductivity(), 100);
-
-            /* Fill up with more trees */
-            Utils.plantTreesOnPoints(map.getPointsWithinRadius(woodcutter0.getPosition(), 4), map);
         }
     }
 
@@ -2637,7 +2703,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2655,7 +2721,7 @@ public class TestWoodcutter {
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
         assertEquals(woodcutter0.getWorker(), woodcutterWorker0);
 
-        /* Connect the woodcutter hut with the headquarter */
+        /* Connect the woodcutter hut with the headquarters */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Place a lot of trees on the map */
@@ -2693,7 +2759,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2721,7 +2787,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2748,7 +2814,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2773,7 +2839,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2804,7 +2870,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2833,7 +2899,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2849,7 +2915,7 @@ public class TestWoodcutter {
         Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Wait for the woodcutter to get constructed and assigned a worker */
@@ -2869,7 +2935,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        /* Reconnect the woodcutter with the headquarter */
+        /* Reconnect the woodcutter with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2902,7 +2968,7 @@ public class TestWoodcutter {
 
         GameMap map = new GameMap(players, 30, 30);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2918,7 +2984,7 @@ public class TestWoodcutter {
         Tree tree1 = map.placeTree(point3, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Tree tree2 = map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Wait for the woodcutter to get constructed and assigned a worker */
@@ -2938,7 +3004,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        /* Reconnect the woodcutter with the headquarter */
+        /* Reconnect the woodcutter with the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2984,7 +3050,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2992,7 +3058,7 @@ public class TestWoodcutter {
         Point point1 = new Point(7, 9);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place road to connect the woodcutter with the headquarter */
+        /* Place road to connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Place trees */
@@ -3042,7 +3108,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3054,13 +3120,13 @@ public class TestWoodcutter {
         Point point2 = new Point(18, 6);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the woodcutter */
+        /* Place road to connect the headquarters with the woodcutter */
         Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -3103,7 +3169,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3115,13 +3181,13 @@ public class TestWoodcutter {
         Point point2 = new Point(18, 6);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the woodcutter */
+        /* Place road to connect the headquarters with the woodcutter */
         Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -3166,7 +3232,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3204,7 +3270,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3249,7 +3315,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3257,7 +3323,7 @@ public class TestWoodcutter {
         Point point1 = new Point(7, 9);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place road to connect the woodcutter with the headquarter */
+        /* Place road to connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -3309,7 +3375,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3317,7 +3383,7 @@ public class TestWoodcutter {
         Point point1 = new Point(7, 9);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place road to connect the woodcutter with the headquarter */
+        /* Place road to connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);

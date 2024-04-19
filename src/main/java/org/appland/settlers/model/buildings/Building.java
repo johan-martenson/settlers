@@ -1220,7 +1220,6 @@ public class Building implements EndPoint {
     }
 
     public int getProductivity() {
-
         if (isOutOfNaturalResources()) {
             return 0;
         }

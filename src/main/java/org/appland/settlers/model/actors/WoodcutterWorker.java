@@ -20,6 +20,7 @@ import org.appland.settlers.model.WorkerAction;
 
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
+import static org.appland.settlers.model.Tree.TREE_TYPES_THAT_CAN_BE_CUT_DOWN;
 
 /**
  *
@@ -38,29 +39,15 @@ public class WoodcutterWorker extends Worker {
     private State state;
 
     private Point getTreeToCutDown() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
-
-        for (Point point : adjacentPoints) {
-            if (!map.isTreeAtPoint(point)) {
-                continue;
-            }
-
-            Tree tree = map.getTreeAtPoint(point);
-
-            if (!Tree.TREE_TYPES_THAT_CAN_BE_CUT_DOWN.contains(tree.getTreeType())) {
-                continue;
-            }
-
-            if (tree.getSize() != Tree.TreeSize.FULL_GROWN) {
-                continue;
-            }
-
-            if (map.findWayOffroad(point, getHome().getFlag().getPosition(), null) != null) {
-                return point;
-            }
-        }
-
-        return null;
+        return map.getPointsWithinRadius(getHome().getPosition(), RANGE).stream()
+                .filter(map::isTreeAtPoint)
+                .map(map::getTreeAtPoint)
+                .filter(tree -> TREE_TYPES_THAT_CAN_BE_CUT_DOWN.contains(tree.getTreeType()))
+                .filter(tree -> tree.getSize() == Tree.TreeSize.FULL_GROWN)
+                .map(Tree::getPosition)
+                .filter(position -> map.findWayOffroad(position, getHome().getFlag().getPosition(), null) != null)
+                .findFirst()
+                .orElse(null);
     }
 
     private enum State {
@@ -74,7 +61,10 @@ public class WoodcutterWorker extends Worker {
         GOING_BACK_TO_HOUSE,
         WAITING_FOR_PLACE_ON_FLAG,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
-        GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        GOING_TO_DIE,
+        DEAD,
+        WAITING_FOR_TREE_TO_FALL,
+        RETURNING_TO_STORAGE
     }
 
     public WoodcutterWorker(Player player, GameMap map) {
@@ -83,7 +73,7 @@ public class WoodcutterWorker extends Worker {
         state     = State.WALKING_TO_TARGET;
         countdown = new Countdown();
 
-        productivityMeasurer = new ProductivityMeasurer(2 * TIME_TO_REST, null);
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_CUT_TREE + Tree.TIME_TO_FALL, null);
     }
 
     public boolean isCuttingTree() {
@@ -101,67 +91,82 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.hasReachedZero()) {
-                Point point = getTreeToCutDown();
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (getHome().isProductionEnabled()) {
+                    if (countdown.hasReachedZero()) {
+                        Point point = getTreeToCutDown();
 
-                if (point == null) {
-                    productivityMeasurer.reportUnproductivity();
+                        if (point == null) {
+                            productivityMeasurer.reportUnproductivity();
 
-                    return;
+                            return;
+                        }
+
+                        setOffroadTarget(point);
+
+                        state = State.GOING_OUT_TO_CUT_TREE;
+                    } else {
+                        countdown.step();
+                    }
                 }
-
-                setOffroadTarget(point);
-
-                state = State.GOING_OUT_TO_CUT_TREE;
-            } else {
-                countdown.step();
             }
-        } else if (state == State.CUTTING_TREE) {
-            if (countdown.hasReachedZero()) {
-
-                /* Remove the tree if it's still in place */
-                if (map.isTreeAtPoint(getPosition())) {
-                    map.removeTree(getPosition());
-
+            case WAITING_FOR_TREE_TO_FALL -> {
+                if (!map.isTreeAtPoint(getPosition())) {
                     setCargo(new Cargo(WOOD, map));
 
                     state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 
-                    productivityMeasurer.reportProductivity();
-
-                    productivityMeasurer.nextProductivityCycle();
-                } else {
-                    state = State.GOING_BACK_TO_HOUSE;
+                    returnHomeOffroad();
                 }
-
-                returnHomeOffroad();
-            } else {
-                countdown.step();
             }
-        } else if (state == State.IN_HOUSE_WITH_CARGO) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                setTarget(getHome().getFlag().getPosition());
+            case CUTTING_TREE -> {
+                if (countdown.hasReachedZero()) {
 
-                state = State.GOING_OUT_TO_PUT_CARGO;
+                    /* Remove the tree if it's still in place */
+                    if (map.isTreeAtPoint(getPosition()) && !map.getTreeAtPoint(getPosition()).isFalling()) {
+                        map.getTreeAtPoint(getPosition()).fallDown();
 
-                getHome().getFlag().promiseCargo(getCargo());
-            } else {
-                state = State.WAITING_FOR_PLACE_ON_FLAG;
+                        productivityMeasurer.reportProductivity();
+
+                        productivityMeasurer.nextProductivityCycle();
+
+                        state = State.WAITING_FOR_TREE_TO_FALL;
+                    } else {
+                        state = State.GOING_BACK_TO_HOUSE;
+
+                        returnHomeOffroad();
+                    }
+                } else {
+                    countdown.step();
+                }
             }
-        } else if (state == State.WAITING_FOR_PLACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                setTarget(getHome().getFlag().getPosition());
+            case IN_HOUSE_WITH_CARGO -> {
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    setTarget(getHome().getFlag().getPosition());
 
-                state = State.GOING_OUT_TO_PUT_CARGO;
+                    state = State.GOING_OUT_TO_PUT_CARGO;
 
-                getHome().getFlag().promiseCargo(getCargo());
+                    getHome().getFlag().promiseCargo(getCargo());
+                } else {
+                    state = State.WAITING_FOR_PLACE_ON_FLAG;
+                }
             }
-        } else if (state == State.DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+            case WAITING_FOR_PLACE_ON_FLAG -> {
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    setTarget(getHome().getFlag().getPosition());
+
+                    state = State.GOING_OUT_TO_PUT_CARGO;
+
+                    getHome().getFlag().promiseCargo(getCargo());
+                }
+            }
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
@@ -238,6 +243,11 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
+    public String toString() {
+        return "Woodcutter worker at " + getPosition() + ((isTraveling()) ? " walking to " + getNextPoint() : "") + ", state: " + state;
+    }
+
+    @Override
     protected void onReturnToStorage() {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WOODCUTTER_WORKER);
 
@@ -281,7 +291,6 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     public int getProductivity() {
-
         return (int)
                 ((double)(productivityMeasurer.getSumMeasured()) /
                         (productivityMeasurer.getNumberOfCycles()) * 100);

@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.computer.ComputerPlayer;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
@@ -1058,8 +1059,8 @@ public class Utils {
         }
     }
 
-    public static void plantTreesOnPoints(List<Point> pointsWithinRadius, GameMap map) {
-        for (Point point : pointsWithinRadius) {
+    public static void plantTreesOnPoints(List<Point> points, GameMap map) {
+        for (Point point : points) {
             if (map.isTreeAtPoint(point)) {
                 continue;
             }
@@ -1128,7 +1129,6 @@ public class Utils {
     }
 
     public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
-
         GameMap map = building.getMap();
         Worker worker = null;
 
@@ -1345,7 +1345,7 @@ public class Utils {
         assertFalse(map.isCropAtPoint(crop0.getPosition()));
     }
 
-    public static void waitForTreeToGetCutDown(Tree tree0, GameMap map) throws InvalidUserActionException {
+    public static void waitForTreeToDisappearFromMap(Tree tree0, GameMap map) throws InvalidUserActionException {
         assertTrue(map.isTreeAtPoint(tree0.getPosition()));
         assertEquals(map.getTreeAtPoint(tree0.getPosition()), tree0);
 
@@ -3111,6 +3111,10 @@ public class Utils {
         assertEquals(map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
                 .filter(worker -> Objects.equals(player, worker.getPlayer()))
                 .filter(worker -> !worker.isInsideBuilding()).count(), amount);
+    }
+
+    public static void waitForWoodcutterToStopCutting(WoodcutterWorker woodcutterWorker, GameMap map) throws InvalidUserActionException {
+        waitFor((Void v) -> !woodcutterWorker.isCuttingTree(), map);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

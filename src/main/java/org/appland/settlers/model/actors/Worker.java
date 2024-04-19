@@ -53,8 +53,8 @@ public abstract class Worker {
     private boolean     dead;
     private List<Point> path;
     private State       state;
-    private Cargo carriedCargo;
-    private Building targetBuilding;
+    private Cargo       carriedCargo;
+    private Building    targetBuilding;
     private Point       position;
     private Point       target;
     private Building    home;

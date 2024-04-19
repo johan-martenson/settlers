@@ -11,7 +11,6 @@ import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
 import org.appland.settlers.utils.Stats;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -121,6 +120,7 @@ public class GameMap {
     private final List<Point> removedDecorations;
     private final Set<GameChangesList.NewAndOldBuilding> upgradedBuildings;
     private final Set<Stone> changedStones;
+    private final Set<Tree> treesToRemove;
 
     private Player winner;
     private long time;
@@ -167,6 +167,7 @@ public class GameMap {
         stones              = new ArrayList<>();
         crops               = new ArrayList<>();
         workersToAdd        = new LinkedList<>();
+        treesToRemove       = new HashSet<>();
         animalCountdown     = new Countdown();
         random              = new Random(1);
         startingPoints      = new ArrayList<>();
@@ -487,6 +488,12 @@ public class GameMap {
         /* Add workers that were placed during the round */
         workers.addAll(workersToAdd);
         workersToAdd.clear();
+
+        /* Remove trees that fell during the round */
+        trees.removeAll(treesToRemove);
+        treesToRemove.forEach(tree -> getMapPoint(tree.getPosition()).removeTree());
+        removedTrees.addAll(treesToRemove);
+        treesToRemove.clear();
 
         /* Remove crops that were removed during this round */
         crops.removeAll(cropsToRemove);
@@ -2269,6 +2276,8 @@ public class GameMap {
         /* Report that a new tree is planted */
         newTrees.add(tree);
 
+        tree.setMap(this);
+
         return tree;
     }
 
@@ -3895,5 +3904,9 @@ public class GameMap {
 
     public boolean isSurroundedByNonWalkableTerrain(Point point) {
         return getSurroundingTiles(point).stream().noneMatch(DetailedVegetation::canWalkOn);
+    }
+
+    public void removeTreeFromStepTime(Tree tree) {
+        treesToRemove.add(tree);
     }
 }

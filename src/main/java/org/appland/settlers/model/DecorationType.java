@@ -90,7 +90,8 @@ public enum DecorationType {
     LITTLE_GRASS,
     DEAD_TREE_2,
     DEAD_TREE_3,
-    SOLDIER_SKELETON;
+    SOLDIER_SKELETON,
+    TREE_STUB;
 
     public static final Set<DecorationType> NO_IMPACT_ON_GAME;
 

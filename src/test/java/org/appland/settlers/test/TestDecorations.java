@@ -61,7 +61,8 @@ public class TestDecorations {
             SOME_WATER,
             LITTLE_GRASS,
             DEAD_TREE,
-            DEAD_TREE_LYING_DOWN
+            DEAD_TREE_LYING_DOWN,
+            TREE_STUB
     );
 
     /**
@@ -110,7 +111,6 @@ public class TestDecorations {
 
     @Test
     public void testPlaceFlagOnPureDecorations() throws InvalidUserActionException {
-
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
@@ -144,7 +144,6 @@ public class TestDecorations {
 
     @Test
     public void testPlaceBuildingOnPureDecorations() throws InvalidUserActionException {
-
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
@@ -178,7 +177,6 @@ public class TestDecorations {
 
     @Test
     public void testPlaceRoadOnPureDecorations() throws InvalidUserActionException {
-
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */
@@ -216,7 +214,6 @@ public class TestDecorations {
 
     @Test
     public void testForesterPlantsTreeOnPureDecorations() throws InvalidUserActionException {
-
         for (DecorationType decoration : PURE_DECORATIONS) {
 
             /* Create new game map */

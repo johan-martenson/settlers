@@ -272,9 +272,15 @@ public class TestGameMonitoringOfWorkerActions {
             map.stepTime();
         }
 
+        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(point), map);
+
+        map.stepTime();
+
         /* Verify that the woodcutter stopped cutting */
         assertFalse(woodcutterWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
+
+        /* Verify that the woodcutter stopped cutting */
         assertNotNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
 
@@ -309,7 +315,7 @@ public class TestGameMonitoringOfWorkerActions {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
+        Point point2 = new Point(16, 4);
         Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
 
         Utils.fastForwardUntilTreeIsGrown(tree, map);
@@ -362,9 +368,16 @@ public class TestGameMonitoringOfWorkerActions {
             map.stepTime();
         }
 
-        /* Verify that the woodcutter stopped cutting */
+        /* Wait for the tree to fall */
         assertFalse(woodcutterWorker.isCuttingTree());
+
+        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(point), map);
+
+        map.stepTime();
+
+        /* Verify that the woodcutter stopped cutting */
         assertFalse(map.isTreeAtPoint(point));
+
         assertNotNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
 

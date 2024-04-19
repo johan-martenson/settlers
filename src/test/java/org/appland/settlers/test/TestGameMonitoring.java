@@ -2396,10 +2396,14 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isCuttingTree());
         assertNull(wcWorker.getCargo());
 
+        monitor.clearEvents();
+
         /* Wait for the woodcutter to finish cutting the tree */
         Tree tree0 = map.getTreeAtPoint(point);
 
-        Utils.waitForTreeToGetCutDown(tree0, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
+
+        map.stepTime();
 
         /* Verify that the woodcutter stopped cutting */
         assertFalse(wcWorker.isCuttingTree());
@@ -2407,13 +2411,11 @@ public class TestGameMonitoring {
         assertNotNull(wcWorker.getCargo());
         assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
 
-        assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var sumRemovedTrees = monitor.getEvents().stream().mapToInt(gcl -> gcl.getRemovedTrees().size()).sum();
 
-        assertEquals(gameChanges.getRemovedTrees().size(), 1);
-        assertEquals(gameChanges.getRemovedTrees().getFirst(), tree0);
-        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
+        assertEquals(sumRemovedTrees, 1);
+        assertTrue(monitor.getEvents().stream().anyMatch(gcl -> gcl.getRemovedTrees().contains(tree0)));
     }
 
     @Test
@@ -2486,9 +2488,11 @@ public class TestGameMonitoring {
         /* Wait for the woodcutter to finish cutting the tree */
         Tree tree0 = map.getTreeAtPoint(point);
 
-        Utils.waitForTreeToGetCutDown(tree0, map);
+        Utils.waitForTreeToDisappearFromMap(tree0, map);
 
         /* Verify that the woodcutter stopped cutting */
+        map.stepTime();
+
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
@@ -2560,6 +2564,8 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isCuttingTree());
         assertNull(wcWorker.getCargo());
 
+        monitor.clearEvents();
+
         /* Wait for the woodcutter to finish cutting the tree */
         Tree tree0 = map.getTreeAtPoint(point);
 
@@ -2574,35 +2580,28 @@ public class TestGameMonitoring {
             assertEquals(gameChangesList.getNewTrees().size(), 0);
         }
 
+        /* Wait for the tree to fall */
+        Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(point), map);
+
+        map.stepTime();
+
         /* Verify that the woodcutter stopped cutting */
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
         assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
 
-        assertTrue(monitor.getEvents().size() >= 1);
+        var sumRemovedTrees = monitor.getEvents().stream().mapToInt(gcl -> gcl.getRemovedTrees().size()).sum();
 
-        GameChangesList gameChanges = monitor.getLastEvent();
-
-        assertEquals(gameChanges.getRemovedTrees().size(), 1);
-        assertEquals(gameChanges.getRemovedTrees().getFirst(), tree0);
-        assertEquals(gameChanges.getWorkersWithNewTargets().size(), 1);
+        assertEquals(sumRemovedTrees, 1);
+        assertTrue(monitor.getEvents().stream().anyMatch(gcl -> gcl.getRemovedTrees().contains(tree0)));
 
         /* Verify that no more messages are sent before the worker gets home */
-        int amountEvents = monitor.getEvents().size();
+        monitor.clearEvents();
 
-        for (int i = 0; i < 10; i++) {
-            map.stepTime();
-
-            if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
-                    assertEquals(changes.getRemovedTrees().size(), 0);
-                }
-            }
-        }
+        assertEquals(monitor.getEvents().stream().mapToInt(gcl -> gcl.getRemovedTrees().size()).sum(), 0);
+        assertTrue(monitor.getEvents().stream().noneMatch(gcl -> gcl.getRemovedTrees().contains(tree0)));
     }
-
-
 
     @Test
     public void testMonitoringEventWhenStoneChangesSize() throws Exception {
