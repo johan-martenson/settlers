@@ -28,7 +28,6 @@ import static org.appland.settlers.model.Material.STONEMASON;
  */
 @Walker(speed = 10)
 public class Stonemason extends Worker {
-
     private static final int TIME_TO_REST = 99;
     private static final int TIME_TO_GET_STONE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;

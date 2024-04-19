@@ -1750,6 +1750,16 @@ public class Extractor {
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BEACH_GRASS_SHADOW)
         );
         decorativeImageCollection.addDecorationImageWithShadow(
+                DecorationType.STONE_REMAINING_STYLE_1,
+                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI),
+                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI_SHADOW)
+        );
+        decorativeImageCollection.addDecorationImageWithShadow(
+                DecorationType.STONE_REMAINING_STYLE_2,
+                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI),
+                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI_SHADOW)
+        );
+        decorativeImageCollection.addDecorationImageWithShadow(
                 DecorationType.GRASS_1,
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS),
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS_SHADOW)

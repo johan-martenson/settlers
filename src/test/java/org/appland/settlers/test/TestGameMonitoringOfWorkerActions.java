@@ -524,6 +524,89 @@ public class TestGameMonitoringOfWorkerActions {
     }
 
     @Test
+    public void testMonitoringEventWhenStonemasonGetsFinalPieceOfStone() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarters */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(10, 4);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place stone */
+        Point point2 = new Point(11, 5);
+        Stone stone = map.placeStone(point2, Stone.StoneType.STONE_1, 1);
+
+        /* Construct the quarry */
+        constructHouse(quarry);
+
+        /* Assign a stonemason to the quarry */
+        Stonemason stonemason = new Stonemason(player0, map);
+
+        Utils.occupyBuilding(stonemason, quarry);
+
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertTrue(map.isStoneAtPoint(point2));
+
+        /* Step once to let the stonemason go out to get stone */
+        map.stepTime();
+
+        assertFalse(stonemason.isInsideBuilding());
+
+        Point point = stonemason.getTarget();
+
+        assertEquals(stonemason.getTarget(), stone.getPosition());
+        assertTrue(stonemason.isTraveling());
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Let the stonemason reach the chosen spot if it isn't already there */
+        if (!stonemason.isArrived()) {
+            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
+        }
+
+        assertTrue(stonemason.isArrived());
+        assertEquals(stonemason.getPosition(), stone.getPosition());
+        assertTrue(stonemason.isGettingStone());
+
+        /* Verify that the stonemason gets stone */
+        for (int i = 0; i < 49; i++) {
+            assertTrue(stonemason.isGettingStone());
+            map.stepTime();
+        }
+
+        assertTrue(stonemason.isGettingStone());
+
+        /* Verify that the stonemason is done getting stone at the correct time */
+        map.stepTime();
+
+        assertFalse(stonemason.isGettingStone());
+        assertNotNull(stonemason.getCargo());
+        assertEquals(stonemason.getCargo().getMaterial(), STONE);
+
+        /* Verify that an event was sent the final piece of stone was removed and only gravel remains */
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getNewDecorations().containsKey(point2))
+                .filter(gcl -> gcl.getNewDecorations().get(point2) == DecorationType.STONE_REMAINING_STYLE_1)
+                .count(),
+                1);
+    }
+
+    @Test
     public void testMonitoringEventWhenStonemasonGetsStoneIsOnlySentOnce() throws Exception {
 
         /* Create single player game */

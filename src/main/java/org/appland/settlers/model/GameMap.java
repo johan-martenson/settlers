@@ -2414,6 +2414,12 @@ public class GameMap {
 
             /* Report that the stone was removed */
             removedStones.add(stone);
+
+            if (stone.getStoneType() == Stone.StoneType.STONE_1) {
+                placeDecoration(position, DecorationType.STONE_REMAINING_STYLE_1);
+            } else {
+                placeDecoration(position, DecorationType.STONE_REMAINING_STYLE_2);
+            }
         } else {
             changedStones.add(stone);
         }
