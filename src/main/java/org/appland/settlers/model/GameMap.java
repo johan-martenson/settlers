@@ -126,6 +126,8 @@ public class GameMap {
     private long time;
     private boolean winnerReported;
     private boolean isBorderUpdated;
+    private final Map<Point, DecorationType> addedDecorations;
+    private final Set<Tree> newFallingTrees;
 
     /**
      * Creates a new game map
@@ -235,6 +237,8 @@ public class GameMap {
         workersWithStartedActions = new HashMap<>();
         upgradedBuildings = new HashSet<>();
         changedStones = new HashSet<>();
+        addedDecorations = new HashMap<>();
+        newFallingTrees = new HashSet<>();
 
         winnerReported = false;
 
@@ -577,6 +581,18 @@ public class GameMap {
                 continue;
             }
 
+            newFallingTrees.forEach(tree -> {
+                if (player.getDiscoveredLand().contains(tree.getPosition())) {
+                    player.reportNewFallingTree(tree);
+                }
+            });
+
+            addedDecorations.forEach((point, decoration) -> {
+                if (player.getDiscoveredLand().contains(point)) {
+                    player.reportNewDecoration(point, decoration);
+                }
+            });
+
             changedStones.forEach(stone -> {
                 if (player.getDiscoveredLand().contains(stone.getPosition())) {
                     player.reportChangedStone(stone);
@@ -775,6 +791,8 @@ public class GameMap {
         removedDecorations.clear();
         upgradedBuildings.clear();
         changedStones.clear();
+        addedDecorations.clear();
+        newFallingTrees.clear();
 
         duration.after("Clear monitoring tracking lists");
 
@@ -3878,6 +3896,8 @@ public class GameMap {
         mapPoint.setDecoration(decoration);
 
         decorations.put(point, decoration);
+
+        addedDecorations.put(point, decoration);
     }
 
     public boolean isDecoratedAtPoint(Point point) {
@@ -3908,5 +3928,9 @@ public class GameMap {
 
     public void removeTreeFromStepTime(Tree tree) {
         treesToRemove.add(tree);
+    }
+
+    public void reportFallingTree(Tree tree) {
+        newFallingTrees.add(tree);
     }
 }

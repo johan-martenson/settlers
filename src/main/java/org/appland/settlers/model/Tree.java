@@ -123,6 +123,8 @@ public class Tree {
         isFallingDown = true;
 
         countdown.countFrom(TIME_TO_FALL);
+
+        map.reportFallingTree(this);
     }
 
     public boolean isFalling() {

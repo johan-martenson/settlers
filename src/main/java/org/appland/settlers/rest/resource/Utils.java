@@ -994,6 +994,10 @@ class Utils {
 
         Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.getChangedBuildings());
 
+        if (!gameChangesList.getNewFallingTrees().isEmpty()) {
+            jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.getNewFallingTrees()));
+        }
+
         if (!gameChangesList.getPromotedRoads().isEmpty()) {
             jsonMonitoringEvents.put("changedRoads", roadsToJson(gameChangesList.getPromotedRoads()));
         }
@@ -1473,7 +1477,7 @@ class Utils {
         return treesToJson(newTrees);
     }
 
-    private JSONArray treesToJson(List<Tree> newTrees) {
+    private JSONArray treesToJson(Collection<Tree> newTrees) {
         JSONArray jsonTrees = new JSONArray();
 
         for (Tree tree : newTrees) {

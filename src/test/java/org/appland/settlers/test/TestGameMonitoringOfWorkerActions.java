@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
@@ -279,26 +280,49 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that the woodcutter stopped cutting */
         assertFalse(woodcutterWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
-
-        /* Verify that the woodcutter stopped cutting */
         assertNotNull(woodcutterWorker.getCargo());
         assertEquals(woodcutterWorker.getCargo().getMaterial(), WOOD);
+        assertTrue(map.isDecoratedAtPoint(point));
+        assertEquals(map.getDecorationAtPoint(point), DecorationType.TREE_STUB);
 
-        /* Verify that an event was sent when the forester started planting the tree */
-        boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(woodcutterWorker)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(woodcutterWorker);
+        /* Verify that an event was sent when the woodcutter cut down the tree */
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getWorkersWithStartedActions().containsKey(woodcutterWorker))
+                .filter(gcl -> gcl.getWorkersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
+                .count(),
+        1);
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getNewFallingTrees().contains(tree))
+                        .count(),
+                1
+        );
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getNewDecorations().containsKey(point))
+                .filter(gcl -> gcl.getNewDecorations().get(point) == DecorationType.TREE_STUB)
+                .count(),
+                1
+        );
 
-                assertEquals(workerAction, WorkerAction.CUTTING);
+        /* Verify that the events are only sent once */
+        Utils.fastForward(5, map);
 
-                foundEvent = true;
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getWorkersWithStartedActions().containsKey(woodcutterWorker))
+                        .filter(gcl -> gcl.getWorkersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
+                        .count(),
+                1);
 
-                break;
-            }
-        }
-
-        assertTrue(foundEvent);
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getNewDecorations().containsKey(point))
+                        .filter(gcl -> gcl.getNewDecorations().get(point) == DecorationType.TREE_STUB)
+                        .count(),
+                1
+        );
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getNewFallingTrees().contains(tree))
+                        .count(),
+                1
+        );
     }
 
     @Test
@@ -3232,4 +3256,5 @@ public class TestGameMonitoringOfWorkerActions {
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.GET_HIT)));
-    }}
+    }
+}

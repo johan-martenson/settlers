@@ -127,6 +127,7 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> waterAllocation;
     private final Map<Class<? extends Building>, Integer> ironBarAllocation;
     private final Set<Stone> changedStones;
+    private final Set<Tree> newFallingTrees;
 
     private int strengthWhenPopulatingMilitaryBuildings;
     private int defenseStrength;
@@ -250,9 +251,10 @@ public class Player {
         upgradedBuildings = new ArrayList<>();
         removedMessages = new HashSet<>();
         changedStones = new HashSet<>();
+        newFallingTrees = new HashSet<>();
 
         /* Set default production of all tools */
-        for (Material tool : Material.TOOLS) {
+        for (Material tool : TOOLS) {
             toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA);
         }
     }
@@ -586,7 +588,7 @@ public class Player {
                 continue;
             }
 
-            for (Material material : Material.values()) {
+            for (Material material : values()) {
                 if (!result.containsKey(material)) {
                     result.put(material, 0);
                 }
@@ -1127,7 +1129,8 @@ public class Player {
                 newDecorations,
                 new ArrayList<>(upgradedBuildings),
                 new ArrayList<>(removedMessages),
-                new ArrayList<>(changedStones));
+                new ArrayList<>(changedStones),
+                new ArrayList<>(newFallingTrees));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -1175,6 +1178,7 @@ public class Player {
         upgradedBuildings.clear();
         removedMessages.clear();
         changedStones.clear();
+        newFallingTrees.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1479,7 +1483,7 @@ public class Player {
             throw new InvalidUserActionException("Cannot set quota " + quota + " below min quota at " + MIN_PRODUCTION_QUOTA);
         }
 
-        if (!Material.isTool(tool)) {
+        if (!isTool(tool)) {
             throw new InvalidUserActionException("Cannot set quota for material that is not a tool: " + tool);
         }
 
@@ -1826,5 +1830,13 @@ public class Player {
         }
 
         amountSoldiersAvailableForAttack = amount;
+    }
+
+    public void reportNewDecoration(Point point, DecorationType decoration) {
+        newDecorations.put(point, decoration);
+    }
+
+    public void reportNewFallingTree(Tree tree) {
+        newFallingTrees.add(tree);
     }
 }

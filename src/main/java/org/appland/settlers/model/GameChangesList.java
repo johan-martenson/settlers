@@ -49,6 +49,7 @@ public class GameChangesList {
     private final Collection<NewAndOldBuilding> upgradedBuildings;
     private final Collection<Message> removedMessages;
     private final Collection<Stone> changedStones;
+    private final Collection<Tree> newFallingTrees;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -86,7 +87,8 @@ public class GameChangesList {
                            Map<Point, DecorationType> newDecorations,
                            Collection<NewAndOldBuilding> upgradedBuildings,
                            Collection<Message> removedMessages,
-                           Collection<Stone> changedStones) {
+                           Collection<Stone> changedStones,
+                           Collection<Tree> newFallingTrees) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -124,6 +126,7 @@ public class GameChangesList {
         this.upgradedBuildings = upgradedBuildings;
         this.removedMessages = removedMessages;
         this.changedStones = changedStones;
+        this.newFallingTrees = newFallingTrees;
     }
 
     public long getTime() {
@@ -314,6 +317,10 @@ public class GameChangesList {
 
     public Collection<Stone> getChangedStones() {
         return changedStones;
+    }
+
+    public Collection<Tree> getNewFallingTrees() {
+        return newFallingTrees;
     }
 
     public static class NewAndOldBuilding {
