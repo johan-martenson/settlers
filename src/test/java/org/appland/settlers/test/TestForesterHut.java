@@ -904,7 +904,7 @@ public class TestForesterHut {
         /* Verify that the forester plants different types of trees */
         Map<Tree.TreeType, Integer> treeTypeCount = new HashMap<>();
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 200; i++) {
             Utils.waitForWorkerToBeOutside(forester, map);
 
             Utils.waitForForesterToBePlantingTree(forester, map);
@@ -920,10 +920,11 @@ public class TestForesterHut {
             treeTypeCount.put(tree.getTreeType(), currentAmount + 1);
 
             Utils.waitForWorkerToBeInside(forester, map);
+
+            map.removeTree(tree.getPosition());
         }
 
         for (Tree.TreeType treeType : Tree.TreeType.values()) {
-
             if (treeType == Tree.TreeType.PINE_APPLE) {
                 assertEquals((int)treeTypeCount.getOrDefault(Tree.TreeType.PINE_APPLE, 0), 0);
 
