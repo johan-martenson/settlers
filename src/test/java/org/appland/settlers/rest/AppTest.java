@@ -119,7 +119,7 @@ public class AppTest extends TestCase {
         Map<String, String> player0 = new HashMap<>();
 
         player0.put("name", "Player 0");
-        player0.put("color", "#000000");
+        player0.put("color", "BLUE");
         player0.put("nation", "ROMANS");
 
         players.add(player0);
@@ -133,7 +133,7 @@ public class AppTest extends TestCase {
                 .statusCode(201)
 
                 .body("players[0].name", equalTo("Player 0"))
-                .body("players[0].color", equalTo("#000000"))
+                .body("players[0].color", equalTo("BLUE"))
                 .body("mapId", equalTo(mapId))
 
                 .extract().jsonPath().getString("id");
@@ -239,7 +239,7 @@ public class AppTest extends TestCase {
         Map<String, String> player0 = new HashMap<>();
 
         player0.put("name", "Player 0");
-        player0.put("color", "#000000");
+        player0.put("color", "RED");
         player0.put("nation", "ROMANS");
 
         players.add(player0);
@@ -326,7 +326,7 @@ public class AppTest extends TestCase {
         Map<String, String> player0 = new HashMap<>();
 
         player0.put("name", "Player 0");
-        player0.put("color", "#000000");
+        player0.put("color", "YELLOW");
         player0.put("nation", "ROMANS");
 
         players.add(player0);
@@ -400,7 +400,7 @@ public class AppTest extends TestCase {
         Map<String, String> player0 = new HashMap<>();
 
         player0.put("name", "Player 0");
-        player0.put("color", "#000000");
+        player0.put("color", "BLUE");
         player0.put("nation", "ROMANS");
 
         players.add(player0);
@@ -699,7 +699,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Name");
-        player.put("color", "#121212");
+        player.put("color", "RED");
         player.put("nation", "ROMANS");
 
         given().contentType(ContentType.JSON).body(player)
@@ -710,7 +710,7 @@ public class AppTest extends TestCase {
 
                 /* Verify that the player is returned in the body */
                 .body("name", equalTo("Some Name"))
-                .body("color", equalTo("#121212"))
+                .body("color", equalTo("RED"))
 
                 /* Store the id */
                 .extract().jsonPath().getString("id");
@@ -741,7 +741,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "GREEN");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -784,7 +784,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "BLUE");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -860,7 +860,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "BLUE");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -881,7 +881,7 @@ public class AppTest extends TestCase {
 
                 /* Verify the body */
                 .body("name", equalTo("Some Other Name"))
-                .body("color", equalTo("#343434"))
+                .body("color", equalTo("BLUE"))
                 .body("id", equalTo(playerId));
     }
 
@@ -901,7 +901,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "BLUE");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -915,20 +915,20 @@ public class AppTest extends TestCase {
 
         /* Update the player's name and color */
         player.put("name", "Changed name");
-        player.put("color", "#AABBCC");
+        player.put("color", "RED");
 
         given().contentType(ContentType.JSON).body(player).when()
                 .patch("/games/{gameId}/players/{playerId}", gameId, playerId).then()
 
                 .body("name", equalTo("Changed name"))
-                .body("color", equalTo("#aabbcc"));
+                .body("color", equalTo("RED"));
 
         /* Get the player again and verify that it's correct */
         given().contentType(ContentType.JSON).when()
                 .get("/games/{gameId}/players/{playerId}", gameId, playerId).then()
 
                 .body("name", equalTo("Changed name"))
-                .body("color", equalTo("#aabbcc"));
+                .body("color", equalTo("RED"));
     }
 
     @Test
@@ -947,7 +947,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "YELLOW");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -964,7 +964,7 @@ public class AppTest extends TestCase {
                 .delete("/games/{gameId}/players/{playerId}", gameId, playerId).then()
 
                 .body("name", equalTo("Some Other Name"))
-                .body("color", equalTo("#343434"))
+                .body("color", equalTo("YELLOW"))
                 .body("id", equalTo(playerId));
 
         /* Verify that the player cannot can be retrieved again */
@@ -991,7 +991,7 @@ public class AppTest extends TestCase {
         Map<String, String> player = new HashMap<>();
 
         player.put("name", "Some Other Name");
-        player.put("color", "#343434");
+        player.put("color", "RED");
         player.put("nation", "ROMANS");
 
         String playerId = given().contentType(ContentType.JSON).body(player)
@@ -1017,7 +1017,7 @@ public class AppTest extends TestCase {
 
                 /* Verify the body */
                 .body("[0].name", equalTo("Some Other Name"))
-                .body("[0].color", equalTo("#343434"))
+                .body("[0].color", equalTo("RED"))
                 .body("[0].id", equalTo(playerId));
     }
 
@@ -1615,8 +1615,7 @@ public class AppTest extends TestCase {
         assertTrue(jsonPlayer.containsKey("name"));
         assertTrue(jsonPlayer.containsKey("color"));
         assertEquals(jsonPlayer.get("name"), "Player 0");
-        assertEquals(jsonPlayer.get("color"), "#000000");
-
+        assertEquals(jsonPlayer.get("color"), "BLUE");
     }
 
     private Map getLandStatistics(String gameId) {
@@ -1682,7 +1681,7 @@ public class AppTest extends TestCase {
         Map<String, String> player0 = new HashMap<>();
 
         player0.put("name", "Player 0");
-        player0.put("color", "#000000");
+        player0.put("color", "BLUE");
         player0.put("nation", "ROMANS");
 
         players.add(player0);
