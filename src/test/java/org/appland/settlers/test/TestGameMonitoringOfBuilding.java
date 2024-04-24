@@ -10,9 +10,11 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
@@ -28,6 +30,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.appland.settlers.model.Material.*;
@@ -1681,4 +1684,154 @@ public class TestGameMonitoringOfBuilding {
     }
 
     // TODO: test when soldiers leave for other reason - i.e. going out to attack or defend, changing military settings
+
+
+    @Test
+    public void testMonitoringEventWhenDoorOpensAndCloses() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut and connect it to the headquarters */
+        var point1 = new Point(9, 7);
+        var woodcutterHut = map.placeBuilding(new Woodcutter(player0), point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter0.getFlag());
+
+        /* Place tree */
+        var point2 = new Point(13, 9);
+        var tree = map.placeTree(point2, Tree.TreeType.OAK, Tree.TreeSize.FULL_GROWN);
+
+        /* Start monitoring */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that an event is sent when a woodcutter worker enters the woodcutter hut */
+
+        /* Wait for the woodcutter worker to appear */
+        for (int i = 0; i < 2000; i++) {
+            if (!Utils.findWorkersOfTypeOutsideForPlayer(WoodcutterWorker.class, player0).isEmpty()) {
+                break;
+            }
+
+            assertTrue(woodcutterHut.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        var worker = Utils.findWorkersOfTypeOutsideForPlayer(WoodcutterWorker.class, player0).getFirst();
+
+        monitor.clearEvents();
+
+        /* Wait for the woodcutter worker to get to the flag of the woodcutter hut */
+        for (int i = 0; i < 2000; i++) {
+            if (worker.isExactlyAtPoint() && Objects.equals(worker.getPosition(), woodcutterHut.getFlag().getPosition())) {
+                break;
+            }
+
+            assertTrue(woodcutterHut.isDoorClosed());
+            assertTrue(monitor.getEvents().stream().noneMatch(gcl -> gcl.getChangedBuildings().contains(woodcutterHut)));
+
+            map.stepTime();
+        }
+
+        assertFalse(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                .count(),
+                1);
+
+        map.stepTime();
+
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+
+        /* Verify that an event is sent when the door closes again */
+        monitor.clearEvents();
+
+        /* Wait for the door to close */
+        for (int i = 0; i < 2000; i++) {
+            if (woodcutterHut.isDoorClosed()) {
+                break;
+            }
+
+            assertFalse(monitor.getEvents().stream().anyMatch(gcl -> gcl.getChangedBuildings().contains(woodcutterHut)));
+
+            map.stepTime();
+        }
+
+        assertTrue(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                .count(),
+                1);
+
+        map.stepTime();
+
+        assertTrue(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+
+        /* Verify that an event is sent when the woodcutter leaves the woodcutter hut */
+        monitor.clearEvents();
+
+        /* Wait for the woodcutter to leave the hut */
+        assertTrue(woodcutterHut.getWorker().isInsideBuilding());
+
+        for (int i = 0; i < 2000; i++) {
+            if (!woodcutterHut.getWorker().isInsideBuilding()) {
+                break;
+            }
+
+            assertTrue(woodcutterHut.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        assertFalse(woodcutterHut.getWorker().isInsideBuilding());
+        assertFalse(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+
+        map.stepTime();
+
+        assertFalse(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+
+        /* Verify that an event is sent when the door closes by itself */
+        monitor.clearEvents();
+
+        Utils.waitForDoorToClose(woodcutterHut);
+
+        assertTrue(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+
+        map.stepTime();
+
+        assertTrue(woodcutterHut.isDoorClosed());
+        assertEquals(monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
+                1);
+    }
 }

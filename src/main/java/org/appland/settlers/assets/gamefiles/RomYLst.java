@@ -213,6 +213,7 @@ public class RomYLst {
     public static final int WOODCUTTER = 108;
     public static final int WOODCUTTER_SHADOW = 109;
     public static final int WOODCUTTER_UNDER_CONSTRUCTION_SHADOW = 111;
+    public static final int WOODCUTTER_OPEN_DOOR = 112;
     public static final int FISHERY = 113;
     public static final int FISHERY_SHADOW = 114;
     public static final int FISHERY_UNDER_CONSTRUCTION_SHADOW = 116;
@@ -277,5 +278,4 @@ public class RomYLst {
     public static final int CONSTRUCTION_PLANNED_SHADOW = 213;
     public static final int CONSTRUCTION_JUST_STARTED_INDEX = 214;
     public static final int CONSTRUCTION_JUST_STARTED_SHADOW = 215;
-
 }

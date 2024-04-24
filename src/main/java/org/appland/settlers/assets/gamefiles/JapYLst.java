@@ -34,10 +34,10 @@ public class JapYLst {
     public static final int LOOKOUT_TOWER_UNDER_CONSTRUCTION_SHADOW = 102;
     public static final int CATAPULT = 104;
     public static final int CATAPULT_SHADOW = 105;
-    public static final int CATAPULT_UNDER_CONSTRUCTION_SHADOW = 107;
     public static final int WOODCUTTER = 108;
     public static final int WOODCUTTER_SHADOW = 109;
     public static final int WOODCUTTER_UNDER_CONSTRUCTION_SHADOW = 111;
+    public static final int WOODCUTTER_OPEN_DOOR = 112;
     public static final int FISHERY = 113;
     public static final int FISHERY_SHADOW = 114;
     public static final int FISHERY_UNDER_CONSTRUCTION_SHADOW = 116;

@@ -84,6 +84,8 @@ public class WoodcutterWorker extends Worker {
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
 
+        building.closeDoor();
+
         countdown.countFrom(TIME_TO_REST);
 
         productivityMeasurer.setBuilding(building);
@@ -104,6 +106,8 @@ public class WoodcutterWorker extends Worker {
                         }
 
                         setOffroadTarget(point);
+
+                        getHome().openDoor(10);
 
                         state = State.GOING_OUT_TO_CUT_TREE;
                     } else {
@@ -148,6 +152,8 @@ public class WoodcutterWorker extends Worker {
                     state = State.GOING_OUT_TO_PUT_CARGO;
 
                     getHome().getFlag().promiseCargo(getCargo());
+
+                    getHome().openDoor();
                 } else {
                     state = State.WAITING_FOR_PLACE_ON_FLAG;
                 }
@@ -275,17 +281,34 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
+        switch (state) {
+            case WALKING_TO_TARGET -> {
+                var upLeft = getPosition().upLeft();
 
-        /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                if (map.isFlagAtPoint(getPosition())) {
 
-            /* Don't try to enter the woodcutter upon arrival */
-            clearTargetBuilding();
+                    /* Return to storage if the planned path no longer exists */
+                    if (!map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Go back to the storage */
-            returnToStorage();
+                        /* Don't try to enter the woodcutter upon arrival */
+                        clearTargetBuilding();
+
+                        /* Go back to the storage */
+                        returnToStorage();
+                    } else if (getTarget().equals(upLeft)) {
+                        var house = map.getBuildingAtPoint(upLeft);
+
+                        house.openDoor();
+                    }
+                }
+            }
+            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
+                var upLeft = getPosition().upLeft();
+
+                if (map.isFlagAtPoint(getPosition()) && upLeft.equals(getTarget())) {
+                    getHome().openDoor();
+                }
+            }
         }
     }
 

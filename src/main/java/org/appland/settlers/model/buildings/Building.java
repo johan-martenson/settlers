@@ -68,6 +68,8 @@ public class Building implements EndPoint {
     private final List<Soldier> promisedSoldier;
     private final Map<Material, Integer> receivedMaterial;
     private final Set<Soldier>          waitingDefenders;
+    private DoorState door;
+    private int doorClosing;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
@@ -113,6 +115,7 @@ public class Building implements EndPoint {
         outOfResources        = false;
         upgrading             = false;
         builder               = null;
+        door                  = DoorState.CLOSED;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -466,7 +469,6 @@ public class Building implements EndPoint {
     }
 
     public void stepTime() {
-
         Stats stats = map.getStats();
 
         String counterName = "Building." + getClass().getSimpleName() + ".stepTime";
@@ -475,6 +477,18 @@ public class Building implements EndPoint {
         stats.addVariableToGroup(counterName, StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
 
         Duration duration = new Duration(counterName);
+
+        if (door == DoorState.OPEN_CLOSE_SOON) {
+            System.out.println(doorClosing);
+
+            if (doorClosing == 0) {
+                door = DoorState.CLOSED;
+
+                map.reportChangedBuilding(this);
+            } else {
+                doorClosing -= 1;
+            }
+        }
 
         if (isUnderAttack()) {
 
@@ -1458,5 +1472,27 @@ public class Building implements EndPoint {
         return 1 + ((Long)
                 (Math.round((getMaxHostedSoldiers() - 1) *
                         populationSetting / 10.0))).intValue();
+    }
+
+    public boolean isDoorClosed() {
+        return door == DoorState.CLOSED;
+    }
+
+    public void openDoor(int time) {
+        door = DoorState.OPEN_CLOSE_SOON;
+
+        doorClosing = time;
+
+        map.reportChangedBuilding(this);
+    }
+
+    public void openDoor() {
+        door = DoorState.OPEN;
+        map.reportChangedBuilding(this);
+    }
+
+    public void closeDoor() {
+        door = DoorState.CLOSED;
+        map.reportChangedBuilding(this);
     }
 }

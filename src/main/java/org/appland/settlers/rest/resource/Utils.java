@@ -446,6 +446,8 @@ class Utils {
 
         if (building.isUnderConstruction()) {
             jsonHouse.put("constructionProgress", building.getConstructionProgress());
+        } else if (building.isReady()) {
+            jsonHouse.put("door", building.isDoorClosed() ? "CLOSED" : "OPEN");
         }
 
         /* Add amount of hosted soldiers for military buildings */

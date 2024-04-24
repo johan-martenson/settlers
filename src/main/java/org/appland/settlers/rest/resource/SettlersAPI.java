@@ -143,7 +143,13 @@ public class SettlersAPI {
         JSONArray jsonGameResources = new JSONArray();
 
         for (GameResource gameResource : gameResources) {
-            jsonGameResources.add(utils.gameResourceToJson(gameResource));
+            if (gameResource.status == STARTED) {
+                synchronized (gameResource.getGameMap()) {
+                    jsonGameResources.add(utils.gameResourceToJson(gameResource));
+                }
+            } else {
+                jsonGameResources.add(utils.gameResourceToJson(gameResource));
+            }
         }
 
         return Response.status(200).entity(jsonGameResources.toJSONString()).build();

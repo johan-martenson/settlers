@@ -3939,4 +3939,8 @@ public class GameMap {
     public void reportFallingTree(Tree tree) {
         newFallingTrees.add(tree);
     }
+
+    public void reportChangedBuilding(Building building) {
+        changedBuildings.add(building);
+    }
 }

@@ -1,18 +1,13 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.computer.ComputerPlayer;
-import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.DetailedVegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -23,7 +18,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
@@ -36,7 +30,13 @@ import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WildAnimal;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
+import org.appland.settlers.model.buildings.Barracks;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -3115,6 +3115,10 @@ public class Utils {
 
     public static void waitForWoodcutterToStopCutting(WoodcutterWorker woodcutterWorker, GameMap map) throws InvalidUserActionException {
         waitFor((Void v) -> !woodcutterWorker.isCuttingTree(), map);
+    }
+
+    public static void waitForDoorToClose(Building building) throws InvalidUserActionException {
+        waitFor((Void v) -> building.isDoorClosed(), building.getMap());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

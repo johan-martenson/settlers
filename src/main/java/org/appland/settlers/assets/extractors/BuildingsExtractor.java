@@ -25,7 +25,6 @@ public class BuildingsExtractor {
         var afrYLst = LstDecoder.loadLstFile(fromDir + "/" + AfrYLst.FILENAME, palette);
         var vikYLst = LstDecoder.loadLstFile(fromDir + "/" + VikYLst.FILENAME, palette);
 
-
         // Load roman buildings
         buildingsImageCollection.addBuildingForNation(ROMANS, "Headquarter", getImageAt(romYLst, RomYLst.HEADQUARTER));
         buildingsImageCollection.addBuildingShadowForNation(ROMANS, "Headquarter", getImageAt(romYLst, RomYLst.HEADQUARTER_SHADOW));
@@ -83,6 +82,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addBuildingShadowForNation(ROMANS, "Woodcutter", getImageAt(romYLst, RomYLst.WOODCUTTER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(ROMANS, "Woodcutter", getImageAt(romYLst, RomYLst.WOODCUTTER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(ROMANS, "Woodcutter", getImageAt(romYLst, RomYLst.WOODCUTTER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(ROMANS, "Woodcutter", getImageAt(romYLst, RomYLst.WOODCUTTER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(ROMANS, "Fishery", getImageAt(romYLst, RomYLst.FISHERY));
         buildingsImageCollection.addBuildingShadowForNation(ROMANS, "Fishery", getImageAt(romYLst, RomYLst.FISHERY_SHADOW));
@@ -247,6 +247,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Woodcutter", getImageAt(japYLst, JapYLst.WOODCUTTER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Woodcutter", getImageAt(japYLst, JapYLst.WOODCUTTER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Woodcutter", getImageAt(japYLst, JapYLst.WOODCUTTER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Woodcutter", getImageAt(japYLst, JapYLst.WOODCUTTER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY_SHADOW));

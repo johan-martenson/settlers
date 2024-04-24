@@ -96,6 +96,13 @@ public class BuildingsImageCollection {
                                             nation.name().toUpperCase(),
                                             building,
                                             "underConstructionShadow"
+                                    ),
+                                    ImageBoard.makeImagePathPair(
+                                            buildingImages.openDoorImage,
+                                            "buildings",
+                                            nation.name().toUpperCase(),
+                                            building,
+                                            "openDoor"
                                     )
                             )
                             .filter(imagePathPair -> imagePathPair.image() != null)
@@ -184,11 +191,24 @@ public class BuildingsImageCollection {
         this.specialImagesMap.get(nation).addConstructionJustStartedShadowImage(image);
     }
 
+    public void addOpenDoorForBuilding(Nation nation, String building, Bitmap image) {
+        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
+
+        if (!buildingsForNation.containsKey(building)) {
+            buildingsForNation.put(building, new BuildingImages());
+        }
+
+        BuildingImages buildingImages = buildingsForNation.get(building);
+
+        buildingImages.addOpenDoorImage(image);
+    }
+
     private static class BuildingImages {
         private Bitmap buildingReadyImage;
         private Bitmap buildingUnderConstruction;
         private Bitmap buildingReadyShadowImage;
         private Bitmap buildingUnderConstructionShadowImage;
+        private Bitmap openDoorImage;
 
         BuildingImages() {
             this.buildingReadyImage = null;
@@ -209,6 +229,10 @@ public class BuildingsImageCollection {
 
         public void addUnderConstructionBuildingShadowImage(Bitmap image) {
             buildingUnderConstructionShadowImage = image;
+        }
+
+        public void addOpenDoorImage(Bitmap image) {
+            openDoorImage = image;
         }
     }
 
