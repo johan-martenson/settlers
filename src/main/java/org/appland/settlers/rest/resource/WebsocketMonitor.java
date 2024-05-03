@@ -86,7 +86,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
-            case GET_SOLDIERS_AVAILABLE_FOR_ATTACK: {
+            case GET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
                 int amount;
 
                 synchronized (map) {
@@ -95,9 +95,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case GET_POPULATE_MILITARY_FAR_FROM_BORDER: {
+            case GET_POPULATE_MILITARY_FAR_FROM_BORDER -> {
                 int amount;
 
                 synchronized (map) {
@@ -106,9 +104,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case GET_POPULATE_MILITARY_CLOSER_TO_BORDER: {
+            case GET_POPULATE_MILITARY_CLOSER_TO_BORDER -> {
                 int amount;
 
                 synchronized (map) {
@@ -117,9 +113,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case GET_POPULATE_MILITARY_CLOSE_TO_BORDER: {
+            case GET_POPULATE_MILITARY_CLOSE_TO_BORDER -> {
                 int amount;
 
                 synchronized (map) {
@@ -128,45 +122,35 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case SET_SOLDIERS_AVAILABLE_FOR_ATTACK: {
+            case SET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
                 var amount = ((Long) jsonBody.get("amount")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersAvailableForAttack(amount);
                 }
             }
-            break;
-
-            case SET_MILITARY_POPULATION_CLOSE_TO_BORDER: {
+            case SET_MILITARY_POPULATION_CLOSE_TO_BORDER -> {
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingCloseToBorder(amount);
                 }
             }
-            break;
-
-            case SET_MILITARY_POPULATION_CLOSER_TO_BORDER: {
+            case SET_MILITARY_POPULATION_CLOSER_TO_BORDER -> {
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingAwayFromBorder(amount);
                 }
             }
-            break;
-
-            case SET_MILITARY_POPULATION_FAR_FROM_BORDER: {
+            case SET_MILITARY_POPULATION_FAR_FROM_BORDER -> {
                 var amount = ((Long) jsonBody.get("population")).intValue();
 
                 synchronized (map) {
                     player.setAmountOfSoldiersWhenPopulatingFarFromBorder(amount);
                 }
             }
-            break;
-
-            case SET_GAME_SPEED: {
+            case SET_GAME_SPEED -> {
                 GameSpeed gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
                 GameResource game = (GameResource) session.getUserProperties().get("GAME");
@@ -189,9 +173,27 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 });
             }
-            break;
+            case GET_MILITARY_SETTINGS -> {
+                long requestId = (Long) jsonBody.get("requestId");
 
-            case GET_DEFENSE_FROM_SURROUNDING_BUILDINGS: {
+                JSONObject jsonMilitarySettings = new JSONObject();
+
+                jsonMilitarySettings.put("requestId", requestId);
+
+                synchronized (map) {
+                    jsonMilitarySettings.put("defenseStrength", player.getDefenseStrength());
+                    jsonMilitarySettings.put("defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings());
+                    jsonMilitarySettings.put("soldierAmountWhenPopulatingCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder());
+                    jsonMilitarySettings.put("soldierAmountWhenPopulatingAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder());
+                    jsonMilitarySettings.put("soldierAmountWhenPopulatingFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder());
+                    jsonMilitarySettings.put("soldierStrengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings());
+                    jsonMilitarySettings.put("soldierAmountsAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack());
+                }
+
+                sendToPlayer(jsonMilitarySettings, player);
+            }
+
+            case GET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
                 int amount;
 
                 synchronized (map) {
@@ -200,18 +202,14 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case SET_DEFENSE_FROM_SURROUNDING_BUILDINGS: {
+            case SET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setDefenseFromSurroundingBuildings(strength);
                 }
             }
-            break;
-
-            case GET_DEFENSE_STRENGTH: {
+            case GET_DEFENSE_STRENGTH -> {
                 int amount;
 
                 synchronized (map) {
@@ -220,18 +218,14 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case SET_DEFENSE_STRENGTH: {
+            case SET_DEFENSE_STRENGTH -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setDefenseStrength(strength);
                 }
             }
-            break;
-
-            case GET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING: {
+            case GET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
                 int amount;
 
                 synchronized (map) {
@@ -240,18 +234,14 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 sendAmountReplyToPlayer(amount, player, jsonBody);
             }
-            break;
-
-            case SET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING: {
+            case SET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
 
                 synchronized (map) {
                     player.setStrengthOfSoldiersPopulatingBuildings(strength);
                 }
             }
-            break;
-
-            case PAUSE_GAME: {
+            case PAUSE_GAME -> {
                 GameResource game = (GameResource) session.getUserProperties().get("GAME");
 
                 game.status = GameStatus.PAUSED;
@@ -269,9 +259,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 });
             }
-            break;
-
-            case RESUME_GAME: {
+            case RESUME_GAME -> {
                 GameResource game = (GameResource) session.getUserProperties().get("GAME");
 
                 game.status = GameStatus.STARTED;
@@ -282,18 +270,16 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case SET_IRON_BAR_QUOTAS: {
+            case SET_IRON_BAR_QUOTAS -> {
                 Long armoryAmount = (Long) jsonBody.get("armory");
                 Long metalworksAmount = (Long) jsonBody.get("metalworks");
 
-                player.setIronBarQuota(Armory.class, armoryAmount.intValue());
-                player.setIronBarQuota(Metalworks.class, metalworksAmount.intValue());
+                synchronized (map) {
+                    player.setIronBarQuota(Armory.class, armoryAmount.intValue());
+                    player.setIronBarQuota(Metalworks.class, metalworksAmount.intValue());
+                }
             }
-            break;
-
-            case GET_IRON_BAR_QUOTAS: {
+            case GET_IRON_BAR_QUOTAS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 
                 jsonResponse.put("armory", player.getIronBarQuota(Armory.class));
@@ -303,9 +289,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case GET_WATER_QUOTAS: {
+            case GET_WATER_QUOTAS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
                 jsonResponse.put("donkeyFarm", player.getWaterQuota(DonkeyFarm.class));
                 jsonResponse.put("pigFarm", player.getWaterQuota(PigFarm.class));
@@ -316,9 +300,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case GET_WHEAT_QUOTAS: {
+            case GET_WHEAT_QUOTAS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 
                 jsonResponse.put("donkeyFarm", player.getWheatQuota(DonkeyFarm.class));
@@ -330,35 +312,33 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case SET_WATER_QUOTAS: {
+            case SET_WATER_QUOTAS -> {
                 Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
                 Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
                 Long bakeryAmount = (Long) jsonBody.get("bakery");
                 Long breweryAmount = (Long) jsonBody.get("brewery");
 
-                player.setWaterQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
-                player.setWaterQuota(PigFarm.class, pigFarmAmount.intValue());
-                player.setWaterQuota(Bakery.class, bakeryAmount.intValue());
-                player.setWaterQuota(Brewery.class, breweryAmount.intValue());
+                synchronized (map) {
+                    player.setWaterQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
+                    player.setWaterQuota(PigFarm.class, pigFarmAmount.intValue());
+                    player.setWaterQuota(Bakery.class, bakeryAmount.intValue());
+                    player.setWaterQuota(Brewery.class, breweryAmount.intValue());
+                }
             }
-            break;
-
-            case SET_WHEAT_QUOTAS: {
+            case SET_WHEAT_QUOTAS -> {
                 Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
                 Long pigFarmAmount = (Long) jsonBody.get("pigFarm");
                 Long millAmount = (Long) jsonBody.get("mill");
                 Long breweryAmount = (Long) jsonBody.get("brewery");
 
-                player.setWheatQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
-                player.setWheatQuota(PigFarm.class, pigFarmAmount.intValue());
-                player.setWheatQuota(Mill.class, millAmount.intValue());
-                player.setWheatQuota(Brewery.class, breweryAmount.intValue());
+                synchronized (map) {
+                    player.setWheatQuota(DonkeyFarm.class, donkeyFarmAmount.intValue());
+                    player.setWheatQuota(PigFarm.class, pigFarmAmount.intValue());
+                    player.setWheatQuota(Mill.class, millAmount.intValue());
+                    player.setWheatQuota(Brewery.class, breweryAmount.intValue());
+                }
             }
-            break;
-
-            case GET_FOOD_QUOTAS: {
+            case GET_FOOD_QUOTAS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 
                 jsonResponse.put("ironMine", player.getFoodQuota(IronMine.class));
@@ -370,9 +350,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case GET_COAL_QUOTAS: {
+            case GET_COAL_QUOTAS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
 
                 jsonResponse.put("mint", player.getCoalQuota(Mint.class));
@@ -383,42 +361,49 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-            break;
-
-            case SET_FOOD_QUOTAS: {
+            case SET_FOOD_QUOTAS -> {
                 Long ironMineAmount = (Long) jsonBody.get("ironMine");
                 Long coalMineAmount = (Long) jsonBody.get("coalMine");
                 Long goldMineAmount = (Long) jsonBody.get("goldMine");
                 Long graniteMineAmount = (Long) jsonBody.get("graniteMine");
 
-                player.setCoalQuota(IronMine.class, ironMineAmount.intValue());
-                player.setCoalQuota(CoalMine.class, coalMineAmount.intValue());
-                player.setCoalQuota(GoldMine.class, goldMineAmount.intValue());
-                player.setCoalQuota(GraniteMine.class, graniteMineAmount.intValue());
+                synchronized (map) {
+                    player.setFoodQuota(IronMine.class, ironMineAmount.intValue());
+                    player.setFoodQuota(CoalMine.class, coalMineAmount.intValue());
+                    player.setFoodQuota(GoldMine.class, goldMineAmount.intValue());
+                    player.setFoodQuota(GraniteMine.class, graniteMineAmount.intValue());
+                }
             }
-                break;
-
-            case SET_COAL_QUOTAS: {
+            case SET_COAL_QUOTAS -> {
                 Long mintAmount = (Long) jsonBody.get("mint");
                 Long armoryAmount = (Long) jsonBody.get("armory");
                 Long ironSmelterAmount = (Long) jsonBody.get("ironSmelter");
 
-                player.setCoalQuota(Mint.class, mintAmount.intValue());
-                player.setCoalQuota(Armory.class, armoryAmount.intValue());
-                player.setCoalQuota(IronSmelter.class, ironSmelterAmount.intValue());
+                synchronized (map) {
+                    player.setCoalQuota(Mint.class, mintAmount.intValue());
+                    player.setCoalQuota(Armory.class, armoryAmount.intValue());
+                    player.setCoalQuota(IronSmelter.class, ironSmelterAmount.intValue());
+                }
             }
-                break;
+            case REMOVE_MESSAGES -> {
+                for (var messageId : (JSONArray) jsonBody.get("messageIds")) {
+                    Message gameMessage = (Message) idManager.getObject((String) messageId);
 
-            case REMOVE_MESSAGE: {
+                    synchronized (player.getMap()) {
+                        player.removeMessage(gameMessage);
+                    }
+                }
+            }
+            case REMOVE_MESSAGE -> {
                 String messageId = (String) jsonBody.get("messageId");
 
                 Message gameMessage = (Message) idManager.getObject(messageId);
 
-                player.removeMessage(gameMessage);
+                synchronized (player.getMap()) {
+                    player.removeMessage(gameMessage);
+                }
             }
-                break;
-
-            case START_DETAILED_MONITORING: {
+            case START_DETAILED_MONITORING -> {
                 String id = (String) jsonBody.get("id");
 
                 Object object = idManager.getObject(id);
@@ -449,10 +434,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonUpdate.toJSONString());
             }
-
-                break;
-
-            case STOP_DETAILED_MONITORING: {
+            case STOP_DETAILED_MONITORING -> {
                 String buildingId = (String) jsonBody.get("buildingId");
 
                 Building building = (Building) idManager.getObject(buildingId);
@@ -461,10 +443,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     player.removeDetailedMonitoring(building);
                 }
             }
-
-                break;
-
-            case SET_RESERVED_IN_HEADQUARTERS:
+            case SET_RESERVED_IN_HEADQUARTERS -> {
                 synchronized (map) {
                     Optional<Building> optionalHeadquarter = player.getHeadquarter();
 
@@ -484,10 +463,8 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                         System.out.println("Can't find headquarters for the player!");
                     }
                 }
-
-                break;
-
-            case INFORMATION_ON_POINTS: {
+            }
+            case INFORMATION_ON_POINTS -> {
                 JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
                 JSONArray jsonPointsInformation = new JSONArray();
 
@@ -503,9 +480,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
 
                 session.getAsyncRemote().sendText(jsonResponse.toJSONString());
             }
-                break;
-
-            case FULL_SYNC: {
+            case FULL_SYNC -> {
                 synchronized (map) {
                     String playerId = (String) jsonBody.get("playerId");
 
@@ -520,9 +495,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     session.getAsyncRemote().sendText(jsonFullSync.toJSONString());
                 }
             }
-            break;
-
-            case CALL_SCOUT: {
+            case CALL_SCOUT -> {
                 JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
                 Point point = utils.jsonToPoint(jsonPoint);
 
@@ -532,9 +505,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     flag.callScout();
                 }
             }
-            break;
-
-            case CALL_GEOLOGIST: {
+            case CALL_GEOLOGIST -> {
                 JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
                 Point point = utils.jsonToPoint(jsonPoint);
 
@@ -544,9 +515,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     flag.callGeologist();
                 }
             }
-            break;
-
-            case PLACE_BUILDING: {
+            case PLACE_BUILDING -> {
                 Point point = utils.jsonToPoint(jsonBody);
 
                 Building building = utils.buildingFactory(jsonBody, player);
@@ -559,9 +528,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 }
             }
-            break;
-
-            case PLACE_ROAD: {
+            case PLACE_ROAD -> {
                 JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
 
                 List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
@@ -574,9 +541,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 }
             }
-            break;
-
-            case PLACE_FLAG: {
+            case PLACE_FLAG -> {
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
 
                 Point flagPoint = utils.jsonToPoint(jsonFlag);
@@ -589,10 +554,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 }
             }
-
-            break;
-
-            case PLACE_FLAG_AND_ROAD: {
+            case PLACE_FLAG_AND_ROAD -> {
                 // TODO: handle case where the flag already exists
 
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
@@ -648,9 +610,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 }
             }
-            break;
-
-            case REMOVE_ROAD: {
+            case REMOVE_ROAD -> {
                 String roadId = (String) jsonBody.get("id");
 
                 Road road = (Road) idManager.getObject(roadId);
@@ -663,10 +623,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     throw new RuntimeException(e);
                 }
             }
-
-            break;
-
-            case REMOVE_FLAG: {
+            case REMOVE_FLAG -> {
                 String flagId = (String) jsonBody.get("id");
 
                 Flag flag = (Flag) idManager.getObject(flagId);
@@ -679,9 +636,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     throw new RuntimeException(e);
                 }
             }
-            break;
-
-            case REMOVE_BUILDING: {
+            case REMOVE_BUILDING -> {
                 String buildingId = (String) jsonBody.get("id");
 
                 Building building = (Building) idManager.getObject(buildingId);
@@ -694,10 +649,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     throw new RuntimeException(e);
                 }
             }
-            break;
-
-            default:
-                throw new RuntimeException("Message contains unknown command: " + message);
+            default -> throw new RuntimeException("Message contains unknown command: " + message);
         }
     }
 
