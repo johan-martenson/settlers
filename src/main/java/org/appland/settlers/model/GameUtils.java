@@ -679,7 +679,7 @@ public class GameUtils {
         for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
 
             /* Filter points that are not connected to water */
-            if (!isAny(map.getSurroundingTiles(point), DetailedVegetation.WATER)) {
+            if (!isAny(map.getSurroundingTiles(point), Vegetation.WATER)) {
                 continue;
             }
 

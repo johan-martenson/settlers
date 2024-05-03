@@ -31,8 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.appland.settlers.model.DetailedVegetation.WATER;
-import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.PlayerColor.BLUE;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;

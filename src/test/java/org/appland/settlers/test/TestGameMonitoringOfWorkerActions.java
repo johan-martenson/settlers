@@ -40,7 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.WorkerAction.CHEW_GUM;
 import static org.appland.settlers.model.WorkerAction.READ_NEWSPAPER;

@@ -6,7 +6,7 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -354,7 +354,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -408,7 +408,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -467,7 +467,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -547,7 +547,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -589,7 +589,7 @@ public class TestShipyard {
         Point point = shipwright.getTarget();
 
         assertTrue(shipwright.isTraveling());
-        assertTrue(GameUtils.isSomeButNotAll(map.getSurroundingTiles(point), DetailedVegetation.WATER));
+        assertTrue(GameUtils.isSomeButNotAll(map.getSurroundingTiles(point), Vegetation.WATER));
     }
 
     @Test
@@ -603,7 +603,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -692,7 +692,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -769,7 +769,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -862,7 +862,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -933,7 +933,7 @@ public class TestShipyard {
         assertNotNull(point4);
         assertNotEquals(point4, point3);
         assertTrue(GameUtils.distanceInGameSteps(point4, shipyard.getPosition()) < 6);
-        assertTrue(GameUtils.isAll(map.getSurroundingTiles(point4), DetailedVegetation.WATER));
+        assertTrue(GameUtils.isAll(map.getSurroundingTiles(point4), Vegetation.WATER));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ship, point4);
 
@@ -955,7 +955,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(17, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -1019,7 +1019,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(17, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER_2, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER_2, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -1066,7 +1066,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(17, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.BUILDABLE_WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -1112,7 +1112,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(4, 10);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -1176,7 +1176,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(10, 14);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -1240,7 +1240,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(9, 3);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(9, 11);
@@ -1670,7 +1670,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -1750,7 +1750,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -1823,7 +1823,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point0 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -1903,7 +1903,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point0 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -1981,7 +1981,7 @@ public class TestShipyard {
 
         /* Place lake */
         Point point1 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point2 = new Point(10, 6);

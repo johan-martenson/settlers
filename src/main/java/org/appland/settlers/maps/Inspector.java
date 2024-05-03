@@ -1,6 +1,6 @@
 package org.appland.settlers.maps;
 
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
@@ -168,9 +168,9 @@ public class Inspector {
             if (mapFilePoint.isPossiblePlaceForHarbor()) {
                 Point point = mapFilePoint.getGamePointPosition();
 
-                Set<DetailedVegetation> closeTiles = new HashSet<>(map.getSurroundingTiles(point));
-                Set<DetailedVegetation> closeToFlagTiles = new HashSet<>(map.getSurroundingTiles(point.downRight()));
-                Set<DetailedVegetation> oneStepAwayTiles = new HashSet<>();
+                Set<Vegetation> closeTiles = new HashSet<>(map.getSurroundingTiles(point));
+                Set<Vegetation> closeToFlagTiles = new HashSet<>(map.getSurroundingTiles(point.downRight()));
+                Set<Vegetation> oneStepAwayTiles = new HashSet<>();
 
                 Point pointLeft = point.left();
                 Point pointUpLeft = point.upLeft();

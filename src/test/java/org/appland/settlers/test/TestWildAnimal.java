@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.actors.WildAnimal.Type.*;
 import static org.junit.Assert.*;
 

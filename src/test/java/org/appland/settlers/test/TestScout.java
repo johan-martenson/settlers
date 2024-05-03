@@ -23,7 +23,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.SCOUT;
 import static org.junit.Assert.*;
 

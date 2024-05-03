@@ -9,7 +9,7 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -195,19 +195,19 @@ public class Fisherman extends Worker {
 
             Point position = getPosition();
 
-            DetailedVegetation vegetationUpLeft = map.getDetailedVegetationUpLeft(position);
-            DetailedVegetation vegetationAbove = map.getDetailedVegetationAbove(position);
-            DetailedVegetation vegetationUpRight = map.getDetailedVegetationUpRight(position);
-            DetailedVegetation vegetationDownRight = map.getDetailedVegetationDownRight(position);
-            DetailedVegetation vegetationBelow = map.getDetailedVegetationBelow(position);
-            DetailedVegetation vegetationDownLeft = map.getDetailedVegetationDownLeft(position);
+            Vegetation vegetationUpLeft = map.getDetailedVegetationUpLeft(position);
+            Vegetation vegetationAbove = map.getDetailedVegetationAbove(position);
+            Vegetation vegetationUpRight = map.getDetailedVegetationUpRight(position);
+            Vegetation vegetationDownRight = map.getDetailedVegetationDownRight(position);
+            Vegetation vegetationBelow = map.getDetailedVegetationBelow(position);
+            Vegetation vegetationDownLeft = map.getDetailedVegetationDownLeft(position);
 
-            boolean isWaterUpLeft = DetailedVegetation.WATER_VEGETATION.contains(vegetationUpLeft);
-            boolean isWaterAbove = DetailedVegetation.WATER_VEGETATION.contains(vegetationAbove);
-            boolean isWaterUpRight = DetailedVegetation.WATER_VEGETATION.contains(vegetationUpRight);
-            boolean isWaterDownRight = DetailedVegetation.WATER_VEGETATION.contains(vegetationDownRight);
-            boolean isWaterBelow = DetailedVegetation.WATER_VEGETATION.contains(vegetationBelow);
-            boolean isWaterDownLeft = DetailedVegetation.WATER_VEGETATION.contains(vegetationDownLeft);
+            boolean isWaterUpLeft = Vegetation.WATER_VEGETATION.contains(vegetationUpLeft);
+            boolean isWaterAbove = Vegetation.WATER_VEGETATION.contains(vegetationAbove);
+            boolean isWaterUpRight = Vegetation.WATER_VEGETATION.contains(vegetationUpRight);
+            boolean isWaterDownRight = Vegetation.WATER_VEGETATION.contains(vegetationDownRight);
+            boolean isWaterBelow = Vegetation.WATER_VEGETATION.contains(vegetationBelow);
+            boolean isWaterDownLeft = Vegetation.WATER_VEGETATION.contains(vegetationDownLeft);
 
             if (isWaterUpLeft && isWaterDownLeft) {
                 direction = Direction.LEFT;

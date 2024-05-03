@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;

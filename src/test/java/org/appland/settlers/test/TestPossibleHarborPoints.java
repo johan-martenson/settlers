@@ -1,6 +1,6 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
@@ -32,7 +32,7 @@ public class TestPossibleHarborPoints {
 
         /* Place lake of water */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Verify that there is a possible point for harbor with water one step away */
         for (Point point : Utils.getHexagonBorder(point0, 2)) {
@@ -53,7 +53,7 @@ public class TestPossibleHarborPoints {
 
         /* Place lake of water */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Verify that there is no possible point for harbor with water one step away */
         for (Point point : Utils.getHexagonBorder(point0, 1)) {
@@ -78,7 +78,7 @@ public class TestPossibleHarborPoints {
 
         /* Place lake */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Verify that there can be a possible point for harbor with water close to the flag */
         map.setPossiblePlaceForHarbor(point0.upLeft().upLeft());
@@ -99,7 +99,7 @@ public class TestPossibleHarborPoints {
 
         /* Place lake of buildable water */
         Point point0 = new Point(10, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Verify that there is no possible point for harbor with water one step away */
         for (Point point : Utils.getHexagonBorder(point0, 2)) {

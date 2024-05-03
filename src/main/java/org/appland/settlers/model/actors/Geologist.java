@@ -9,7 +9,7 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.MapPoint;
@@ -21,8 +21,8 @@ import org.appland.settlers.model.WorkerAction;
 import java.util.List;
 import java.util.Random;
 
-import static org.appland.settlers.model.DetailedVegetation.CAN_USE_WELL;
-import static org.appland.settlers.model.DetailedVegetation.MINABLE_MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.CAN_USE_WELL;
+import static org.appland.settlers.model.Vegetation.MINABLE_MOUNTAIN;
 import static org.appland.settlers.model.GameUtils.areAllOneOf;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.WATER;
@@ -156,7 +156,7 @@ public class Geologist extends Worker {
         boolean placedSign = false;
         Material foundMaterial = null;
 
-        List<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
         if (areAllOneOf(surroundingVegetation, CAN_USE_WELL)) {
             map.placeSign(WATER, LARGE, point);

@@ -287,7 +287,7 @@ public class TestCaseGenerator {
         printEndTry();
     }
 
-    public void recordSetVegetationDownRight(Point point, DetailedVegetation vegetation) {
+    public void recordSetVegetationDownRight(Point point, Vegetation vegetation) {
         printStartTry();
 
         System.out.println("    map.setVegetationDownRight(" + point + ", " + vegetation + ");");
@@ -295,7 +295,7 @@ public class TestCaseGenerator {
         printEndTry();
     }
 
-    public void recordSetVegetationBelow(Point point, DetailedVegetation vegetation) {
+    public void recordSetVegetationBelow(Point point, Vegetation vegetation) {
         printStartTry();
 
         System.out.println("    map.setVegetationBelow(" + point + ", " + vegetation + ");");

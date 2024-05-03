@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.PlayerColor.RED;

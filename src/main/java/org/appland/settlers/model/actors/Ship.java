@@ -4,7 +4,7 @@ import org.appland.settlers.model.BorderChangeCause;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -76,7 +76,7 @@ public class Ship extends Worker {
                 for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
 
                     /* Filter points not surrounded by water */
-                    if (!GameUtils.isAll(map.getSurroundingTiles(point), DetailedVegetation.WATER)) {
+                    if (!GameUtils.isAll(map.getSurroundingTiles(point), Vegetation.WATER)) {
                         continue;
                     }
 

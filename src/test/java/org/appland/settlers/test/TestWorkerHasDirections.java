@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.appland.settlers.model.DetailedVegetation.WATER;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 

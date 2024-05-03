@@ -7,7 +7,7 @@ package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Point;
@@ -59,9 +59,9 @@ public class WildAnimal extends Worker {
         this(map, WildAnimal.Type.FOX);
     }
 
-    public static boolean cannotWalkOnAny(Collection<DetailedVegetation> surroundingTiles) {
-        for (DetailedVegetation vegetation : surroundingTiles) {
-            if (!DetailedVegetation.WILD_ANIMAL_CAN_NOT_WALK_ON.contains(vegetation)) {
+    public static boolean cannotWalkOnAny(Collection<Vegetation> surroundingTiles) {
+        for (Vegetation vegetation : surroundingTiles) {
+            if (!Vegetation.WILD_ANIMAL_CAN_NOT_WALK_ON.contains(vegetation)) {
                 return false;
             }
         }
@@ -106,7 +106,7 @@ public class WildAnimal extends Worker {
             }
 
             /* Filter points surrounded by shallow water as animals can't walk on water */
-            Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
+            Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
             if (cannotWalkOnAny(surroundingVegetation)) {
                 continue;

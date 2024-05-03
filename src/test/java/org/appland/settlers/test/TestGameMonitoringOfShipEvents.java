@@ -1,6 +1,6 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -36,7 +36,7 @@ public class TestGameMonitoringOfShipEvents {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -119,7 +119,7 @@ public class TestGameMonitoringOfShipEvents {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
@@ -215,7 +215,7 @@ public class TestGameMonitoringOfShipEvents {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -310,7 +310,7 @@ public class TestGameMonitoringOfShipEvents {
 
         /* Place lake */
         Point point2 = new Point(15, 9);
-        Utils.surroundPointWithDetailedVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
 
         /* Place shipyard */
         Point point0 = new Point(10, 6);
@@ -412,7 +412,7 @@ public class TestGameMonitoringOfShipEvents {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -575,7 +575,7 @@ public class TestGameMonitoringOfShipEvents {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */

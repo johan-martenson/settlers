@@ -18,7 +18,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.DetailedVegetation.*;
+import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.junit.Assert.*;
 

@@ -9,7 +9,7 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
@@ -243,7 +243,7 @@ public class WellWorker extends Worker {
     private boolean isWaterInGround() {
 
         /* The well worker can't produce water in a desert */
-        return !map.isSurroundedBy(getHome().getPosition(), DetailedVegetation.BUILDABLE_MOUNTAIN);
+        return !map.isSurroundedBy(getHome().getPosition(), Vegetation.BUILDABLE_MOUNTAIN);
     }
 
     @Override

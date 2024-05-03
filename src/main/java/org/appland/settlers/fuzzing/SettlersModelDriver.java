@@ -3,7 +3,7 @@ package org.appland.settlers.fuzzing;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.AttackStrength;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -72,7 +72,7 @@ public class SettlersModelDriver {
     }
 
     private static final Map<Integer, Class<? extends Building>> buildingClassMap = new HashMap<>();
-    private static final Map<Integer, DetailedVegetation> vegetationMap = new HashMap<>();
+    private static final Map<Integer, Vegetation> vegetationMap = new HashMap<>();
     private static final TestCaseGenerator testCaseGenerator = new TestCaseGenerator();
     private static final int NUMBER_COMMANDS = 43;
 
@@ -116,8 +116,8 @@ public class SettlersModelDriver {
         buildingClassMap.put(26, Woodcutter.class);
 
         /* Set up the vegetation map */
-        for (int i = 0; i < DetailedVegetation.values().length; i++) {
-            vegetationMap.put(i, DetailedVegetation.values()[i]);
+        for (int i = 0; i < Vegetation.values().length; i++) {
+            vegetationMap.put(i, Vegetation.values()[i]);
         }
 
         /* Create game map */
@@ -950,7 +950,7 @@ public class SettlersModelDriver {
     }
 
     private static void setVegetationDownRight(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException {
-        DetailedVegetation vegetation;
+        Vegetation vegetation;
         Point point;
 
         try {
@@ -980,7 +980,7 @@ public class SettlersModelDriver {
     }
 
     private static void setVegetationBelow(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException {
-        DetailedVegetation vegetation;
+        Vegetation vegetation;
         Point point;
 
         try {
@@ -990,7 +990,7 @@ public class SettlersModelDriver {
                 throw new SettlersModelDriverException();
             }
 
-            vegetation = DetailedVegetation.values()[vegetationInt];
+            vegetation = Vegetation.values()[vegetationInt];
 
             point = arguments.getPointForChars();
         } catch (Throwable t) {

@@ -18,7 +18,7 @@ import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fishery;
@@ -275,8 +275,8 @@ class Utils {
             for (int x = start; x + 1 < map.getWidth(); x += 2) {
                 Point point = new Point(x, y);
 
-                DetailedVegetation below = map.getDetailedVegetationBelow(point);
-                DetailedVegetation downRight = map.getDetailedVegetationDownRight(point);
+                Vegetation below = map.getDetailedVegetationBelow(point);
+                Vegetation downRight = map.getDetailedVegetationDownRight(point);
 
                 jsonTrianglesBelow.add(vegetationToJson(below));
                 jsonTrianglesBelowRight.add(vegetationToJson(downRight));
@@ -293,7 +293,7 @@ class Utils {
         return jsonTerrain;
     }
 
-    private String vegetationToJson(DetailedVegetation vegetation) {
+    private String vegetationToJson(Vegetation vegetation) {
         switch (vegetation) {
             case SAVANNAH:           return "SA";
             case MOUNTAIN_1:         return "MO1";

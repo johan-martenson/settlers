@@ -9,7 +9,7 @@ package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -66,13 +66,13 @@ public class Forester extends Worker {
         }
 
         /* Filter points where the surrounding terrain doesn't allow placing a tree */
-        Collection<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
         boolean noVegetationAllowingTrees = true;
 
-        for (DetailedVegetation detailedVegetation : surroundingVegetation) {
-            if (!DetailedVegetation.MINABLE_MOUNTAIN.contains(detailedVegetation) &&
-                !DetailedVegetation.WATER_VEGETATION.contains(detailedVegetation)) {
+        for (Vegetation vegetation : surroundingVegetation) {
+            if (!Vegetation.MINABLE_MOUNTAIN.contains(vegetation) &&
+                !Vegetation.WATER_VEGETATION.contains(vegetation)) {
                 noVegetationAllowingTrees = false;
 
                 break;

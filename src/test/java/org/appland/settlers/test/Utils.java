@@ -4,7 +4,7 @@ import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import static org.appland.settlers.model.DetailedVegetation.MOUNTAIN_1;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -233,7 +233,7 @@ public class Utils {
     }
 
     public static void surroundPointWithWater(Point point, GameMap map) {
-        surroundPointWithVegetation(point, DetailedVegetation.WATER, map);
+        surroundPointWithVegetation(point, Vegetation.WATER, map);
     }
 
     public static void surroundPointWithMinableMountain(Point point, GameMap map) {
@@ -241,7 +241,7 @@ public class Utils {
     }
 
     public static void surroundPointWithSwamp(Point point, GameMap map) {
-        surroundPointWithVegetation(point, DetailedVegetation.SWAMP, map);
+        surroundPointWithVegetation(point, Vegetation.SWAMP, map);
     }
 
     public static void fastForwardUntilBuildingIsConstructed(Building building) throws InvalidUserActionException {
@@ -1030,7 +1030,7 @@ public class Utils {
 
     }
 
-    static void surroundPointWithVegetation(Point point, DetailedVegetation vegetation, GameMap map) {
+    static void surroundPointWithVegetation(Point point, Vegetation vegetation, GameMap map) {
         map.surroundWithVegetation(point, vegetation);
 
         assertEquals(map.getDetailedVegetationUpLeft(point), vegetation);
@@ -1105,7 +1105,7 @@ public class Utils {
         }
     }
 
-    public static void fillMapWithVegetation(GameMap map, DetailedVegetation vegetation) {
+    public static void fillMapWithVegetation(GameMap map, Vegetation vegetation) {
         map.fillMapWithVegetation(vegetation);
     }
 
@@ -2222,13 +2222,13 @@ public class Utils {
         System.out.println("Min: " + pointMin0 + ", " + pointMin1 + ", " + pointMin2);
     }
 
-    public static void surroundPointWithDetailedVegetation(Point point, DetailedVegetation detailedVegetation, GameMap map) {
-        map.setDetailedVegetationUpLeft(point, detailedVegetation);
-        map.setDetailedVegetationAbove(point, detailedVegetation);
-        map.setDetailedVegetationUpRight(point, detailedVegetation);
-        map.setDetailedVegetationDownRight(point, detailedVegetation);
-        map.setDetailedVegetationBelow(point, detailedVegetation);
-        map.setDetailedVegetationDownLeft(point, detailedVegetation);
+    public static void surroundPointWithDetailedVegetation(Point point, Vegetation vegetation, GameMap map) {
+        map.setDetailedVegetationUpLeft(point, vegetation);
+        map.setDetailedVegetationAbove(point, vegetation);
+        map.setDetailedVegetationUpRight(point, vegetation);
+        map.setDetailedVegetationDownRight(point, vegetation);
+        map.setDetailedVegetationBelow(point, vegetation);
+        map.setDetailedVegetationDownLeft(point, vegetation);
     }
 
     public static void waitForWorkerToHaveTargetSet(Worker worker, GameMap map) throws InvalidUserActionException {

@@ -2,7 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -822,7 +822,7 @@ public class TestToString {
         for (int i = 7; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -918,7 +918,7 @@ public class TestToString {
         for (int i = 7; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */

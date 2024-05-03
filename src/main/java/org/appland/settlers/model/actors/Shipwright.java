@@ -3,7 +3,7 @@ package org.appland.settlers.model.actors;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
@@ -188,10 +188,10 @@ public class Shipwright extends Worker {
 
         /* Find points that are on the water's edge */
         for (Point point : largeSurroundingArea) {
-            List<DetailedVegetation> surroundingVegetation = map.getSurroundingTiles(point);
+            List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
 
             /* Filter points that are not on the water's edge */
-            if (!GameUtils.isSomeButNotAll(surroundingVegetation, DetailedVegetation.WATER)) {
+            if (!GameUtils.isSomeButNotAll(surroundingVegetation, Vegetation.WATER)) {
                 continue;
             }
 

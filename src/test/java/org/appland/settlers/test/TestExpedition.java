@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -65,7 +65,7 @@ public class TestExpedition {
         for (int i = 13; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 13, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -131,7 +131,7 @@ public class TestExpedition {
         for (int i = 7; i < 59; i += 2) {
             Point point = new Point(i, 11);  // 7, 11  --  57, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -258,7 +258,7 @@ public class TestExpedition {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Place headquarter */
         Point point2 = new Point(5, 5);
@@ -338,7 +338,7 @@ public class TestExpedition {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(12, 6);
@@ -442,7 +442,7 @@ public class TestExpedition {
         for (int i = 9; i < 31; i += 2) {
             Point point = new Point(13, i);  // 13, 9  --  13, 29
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -553,7 +553,7 @@ public class TestExpedition {
         for (int i = 9; i < 31; i += 2) {
             Point point = new Point(13, i);  // 13, 9  --  13, 29
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -658,7 +658,7 @@ public class TestExpedition {
         for (int i = 9; i < 31; i += 2) {
             Point point = new Point(13, i);  // 13, 9  --  13, 29
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -763,7 +763,7 @@ public class TestExpedition {
         for (int i = 7; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 13, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -868,7 +868,7 @@ public class TestExpedition {
         for (int i = 13; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -973,13 +973,13 @@ public class TestExpedition {
         for (int i = 13; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 13, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
             Point point = new Point(13, i);  // 13, 11  --  13, 51
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1084,13 +1084,13 @@ public class TestExpedition {
         for (int i = 13; i < 53; i += 2) {
             Point point = new Point(i, 55);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
             Point point = new Point(13, i);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1195,13 +1195,13 @@ public class TestExpedition {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11); // 3, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
             Point point = new Point(53, i); // 53, 11  --  53, 51
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1332,13 +1332,13 @@ public class TestExpedition {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 55);  // 3, 55  --  51, 55
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 7; i < 53; i+= 2) {
             Point point = new Point(53, i);  // 53, 7  --  53, 51
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1443,13 +1443,13 @@ public class TestExpedition {
         for (int i = 13; i < 53; i += 2) {
             Point point = new Point(i, 55);  // 13, 55  --  51, 55
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         for (int i = 11; i < 53; i+= 2) {
             Point point = new Point(13, i);  // 13, 11  --  13, 51
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark place for harbor */
@@ -1559,7 +1559,7 @@ public class TestExpedition {
         for (int i = 3; i < 59; i += 2) {
             Point point = new Point(i, 11);  // 3, 11  -- 51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1644,7 +1644,7 @@ public class TestExpedition {
         for (int i = 3; i < 57; i += 2) {
             Point point = new Point(i, 11);  // 3, 11  -- 55, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -1860,7 +1860,7 @@ public class TestExpedition {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -2028,7 +2028,7 @@ public class TestExpedition {
         for (int i = 3; i < 53; i += 2) {
             Point point = new Point(i, 11);
 
-            Utils.surroundPointWithDetailedVegetation(point, DetailedVegetation.WATER, map);
+            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */

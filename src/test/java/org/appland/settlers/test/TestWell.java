@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.appland.settlers.model.DetailedVegetation.BUILDABLE_MOUNTAIN;
+import static org.appland.settlers.model.Vegetation.BUILDABLE_MOUNTAIN;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;

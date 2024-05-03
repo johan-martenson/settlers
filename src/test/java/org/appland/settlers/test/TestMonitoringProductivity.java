@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DetailedVegetation;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -872,7 +872,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);
@@ -928,7 +928,7 @@ public class TestMonitoringProductivity {
 
         /* Place a fish tile */
         Point point2 = new Point(11, 9);
-        Utils.surroundPointWithVegetation(point2, DetailedVegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         /* Place fishery */
         Point point1 = new Point(7, 9);
