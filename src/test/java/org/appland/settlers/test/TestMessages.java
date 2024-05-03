@@ -121,7 +121,7 @@ public class TestMessages {
 
         MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
     }
 
     @Test
@@ -204,7 +204,7 @@ public class TestMessages {
 
         MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) player0.getMessages().get(1);
 
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
     }
 
     @Test
@@ -263,7 +263,7 @@ public class TestMessages {
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), quarry0);
+        assertEquals(message.building(), quarry0);
     }
 
     @Test
@@ -372,7 +372,7 @@ public class TestMessages {
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), fishery);
+        assertEquals(message.building(), fishery);
     }
 
     @Test
@@ -472,8 +472,8 @@ public class TestMessages {
 
         GeologistFindMessage message = (GeologistFindMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getPoint(), geologist.getPosition());
-        assertEquals(message.getMaterial(), GOLD);
+        assertEquals(message.point(), geologist.getPosition());
+        assertEquals(message.material(), GOLD);
     }
 
     @Test
@@ -603,7 +603,7 @@ public class TestMessages {
 
         UnderAttackMessage message = (UnderAttackMessage) player1.getMessages().getLast();
 
-        assertEquals(message.getBuilding(), barracks1);
+        assertEquals(message.building(), barracks1);
     }
 
     @Test
@@ -704,7 +704,7 @@ public class TestMessages {
 
         BuildingCapturedMessage buildingCapturedMessage = (BuildingCapturedMessage) player0.getMessages().getLast();
 
-        assertEquals(buildingCapturedMessage.getBuilding(), barracks1);
+        assertEquals(buildingCapturedMessage.building(), barracks1);
 
         assertTrue(player1.getMessages().size() >= amountMessagesForPlayer1Before);
         assertEquals(player1.getMessages().getLast().getMessageType(), BUILDING_LOST);
@@ -712,7 +712,7 @@ public class TestMessages {
 
         BuildingLostMessage buildingLostMessage = (BuildingLostMessage) player1.getMessages().getLast();
 
-        assertEquals(buildingLostMessage.getBuilding(), barracks1);
+        assertEquals(buildingLostMessage.building(), barracks1);
     }
 
     @Test
@@ -794,7 +794,7 @@ public class TestMessages {
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), mine);
+        assertEquals(message.building(), mine);
 
         /* Verify that the mine is out of resources */
         assertTrue(mine.isOutOfNaturalResources());
@@ -879,7 +879,7 @@ public class TestMessages {
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), mine);
+        assertEquals(message.building(), mine);
 
         /* Verify that no more messages are sent */
         for (int i = 0; i < 500; i++){
@@ -940,7 +940,7 @@ public class TestMessages {
 
         StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) player0.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), storage0);
+        assertEquals(message.building(), storage0);
     }
 
     @Test
@@ -1194,7 +1194,7 @@ public class TestMessages {
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), fortress0);
+        assertEquals(message.building(), fortress0);
     }
 
     @Test
@@ -1257,7 +1257,7 @@ public class TestMessages {
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().getFirst();
 
-        assertEquals(message.getBuilding(), fortress0);
+        assertEquals(message.building(), fortress0);
 
         /* Verify that only one message is sent */
         Utils.fastForward(10, map);
@@ -1350,7 +1350,7 @@ public class TestMessages {
 
         GameEndedMessage message = (GameEndedMessage) player0.getMessages().getLast();
 
-        assertEquals(message.getWinner(), player0);
+        assertEquals(message.winner(), player0);
     }
 
     @Test
@@ -1433,7 +1433,7 @@ public class TestMessages {
 
         GameEndedMessage message = (GameEndedMessage) player0.getMessages().getLast();
 
-        assertEquals(message.getWinner(), player0);
+        assertEquals(message.winner(), player0);
 
         /* Verify that only one message is sent for the event */
         Utils.fastForward(20, map);
@@ -1543,8 +1543,8 @@ public class TestMessages {
 
         assertNotNull(messageForPlayer0);
         assertNotNull(messageForPlayer1);
-        assertEquals(messageForPlayer0.getWinner(), player0);
-        assertEquals(messageForPlayer1.getWinner(), player0);
+        assertEquals(messageForPlayer0.winner(), player0);
+        assertEquals(messageForPlayer1.winner(), player0);
     }
 
     @Test
@@ -1625,8 +1625,8 @@ public class TestMessages {
 
         assertEquals(numberOfBombardedByCatapultMessages, 1);
         assertNotNull(bombardedByCatapultMessage);
-        assertEquals(bombardedByCatapultMessage.getCatapult(), catapult);
-        assertEquals(bombardedByCatapultMessage.getHitBuilding(), barracks0);
+        assertEquals(bombardedByCatapultMessage.catapult(), catapult);
+        assertEquals(bombardedByCatapultMessage.hitBuilding(), barracks0);
     }
 
     @Test
@@ -1707,8 +1707,8 @@ public class TestMessages {
 
         assertEquals(numberOfBombardedByCatapultMessages, 1);
         assertNotNull(bombardedByCatapultMessage);
-        assertEquals(bombardedByCatapultMessage.getCatapult(), catapult);
-        assertEquals(bombardedByCatapultMessage.getHitBuilding(), barracks0);
+        assertEquals(bombardedByCatapultMessage.catapult(), catapult);
+        assertEquals(bombardedByCatapultMessage.hitBuilding(), barracks0);
 
         /* Verify that the message is only sent once */
         Utils.fastForward(30, map);

@@ -2,20 +2,11 @@ package org.appland.settlers.model.messages;
 
 import org.appland.settlers.model.buildings.Building;
 
-public class BuildingCapturedMessage implements Message {
-    private final Building building;
-
-    public BuildingCapturedMessage(Building building) {
-        this.building = building;
-    }
+public record BuildingCapturedMessage(Building building) implements Message {
 
     @Override
     public MessageType getMessageType() {
         return MessageType.BUILDING_CAPTURED;
-    }
-
-    public Building getBuilding() {
-        return building;
     }
 
     @Override

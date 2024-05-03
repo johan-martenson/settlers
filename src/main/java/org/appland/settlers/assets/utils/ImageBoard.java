@@ -252,19 +252,7 @@ public class ImageBoard {
         return placeImageSeries(images, new Point(0, currentMaxY), LayoutDirection.ROW, metadata);
     }
 
-    private static class ImageOnBoard {
-        private final int x;
-        private final int y;
-        private final Bitmap image;
-        private final String[] metadata;
-
-        public ImageOnBoard(Bitmap image, int x, int y, String... metadata) {
-            this.x = x;
-            this.y = y;
-
-            this.image = image;
-            this.metadata = metadata;
-        }
+    private record ImageOnBoard(Bitmap image, int x, int y, String... metadata) {
     }
 
     private static class ImageSeries {

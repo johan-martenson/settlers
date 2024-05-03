@@ -3,22 +3,7 @@ package org.appland.settlers.model.messages;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 
-public class GeologistFindMessage implements Message {
-    private final Point point;
-    private final Material material;
-
-    public GeologistFindMessage(Point point, Material material) {
-        this.point = point;
-        this.material = material;
-    }
-
-    public Point getPoint() {
-        return point;
-    }
-
-    public Material getMaterial() {
-        return material;
-    }
+public record GeologistFindMessage(Point point, Material material) implements Message {
 
     @Override
     public MessageType getMessageType() {

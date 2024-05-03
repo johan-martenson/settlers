@@ -417,7 +417,7 @@ public class TestExpeditionNormalFlow {
         ShipReadyForExpeditionMessage message = (ShipReadyForExpeditionMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), SHIP_READY_FOR_EXPEDITION);
-        assertEquals(message.getShip(), ship);
+        assertEquals(message.ship(), ship);
     }
 
     @Test
@@ -1747,7 +1747,7 @@ public class TestExpeditionNormalFlow {
         HarborIsFinishedMessage message = (HarborIsFinishedMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), Message.MessageType.HARBOR_IS_FINISHED_MESSAGE);
-        assertEquals(message.getHarbor(), newHarbor);
+        assertEquals(message.harbor(), newHarbor);
     }
 
     @Test

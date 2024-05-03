@@ -876,11 +876,11 @@ class Utils {
     public JSONObject buildingLostMessageToJson(BuildingLostMessage buildingLostMessage) {
         JSONObject jsonBuildingLostMessage = new JSONObject();
 
-        Building building = buildingLostMessage.getBuilding();
+        Building building = buildingLostMessage.building();
 
         jsonBuildingLostMessage.put("id", idManager.getId(buildingLostMessage));
         jsonBuildingLostMessage.put("type", "BUILDING_LOST");
-        jsonBuildingLostMessage.put("houseId", idManager.getId(buildingLostMessage.getBuilding()));
+        jsonBuildingLostMessage.put("houseId", idManager.getId(buildingLostMessage.building()));
         jsonBuildingLostMessage.put("houseType", building.getSimpleName());
         jsonBuildingLostMessage.put("point", buildingToPoint(building));
 
@@ -890,11 +890,11 @@ class Utils {
     public JSONObject buildingCapturedMessageToJson(BuildingCapturedMessage buildingCapturedMessage) {
         JSONObject jsonBuildingCapturedMessage = new JSONObject();
 
-        Building building = buildingCapturedMessage.getBuilding();
+        Building building = buildingCapturedMessage.building();
 
         jsonBuildingCapturedMessage.put("id", idManager.getId(buildingCapturedMessage));
         jsonBuildingCapturedMessage.put("type", "BUILDING_CAPTURED");
-        jsonBuildingCapturedMessage.put("houseId", idManager.getId(buildingCapturedMessage.getBuilding()));
+        jsonBuildingCapturedMessage.put("houseId", idManager.getId(buildingCapturedMessage.building()));
         jsonBuildingCapturedMessage.put("houseType", building.getSimpleName());
         jsonBuildingCapturedMessage.put("point", buildingToPoint(building));
 
@@ -904,11 +904,11 @@ class Utils {
     public JSONObject jsonStoreHouseIsReadyMessageToJson(StoreHouseIsReadyMessage storeHouseIsReadyMessage) {
         JSONObject jsonStoreHouseIsReadyMessage = new JSONObject();
 
-        Building building = storeHouseIsReadyMessage.getBuilding();
+        Building building = storeHouseIsReadyMessage.building();
 
         jsonStoreHouseIsReadyMessage.put("id", idManager.getId(storeHouseIsReadyMessage));
         jsonStoreHouseIsReadyMessage.put("type", "STORE_HOUSE_IS_READY");
-        jsonStoreHouseIsReadyMessage.put("houseId", idManager.getId(storeHouseIsReadyMessage.getBuilding()));
+        jsonStoreHouseIsReadyMessage.put("houseId", idManager.getId(storeHouseIsReadyMessage.building()));
         jsonStoreHouseIsReadyMessage.put("houseType", building.getSimpleName());
         jsonStoreHouseIsReadyMessage.put("point", buildingToPoint(building));
 
@@ -918,11 +918,11 @@ class Utils {
     JSONObject militaryBuildingReadyMessageToJson(MilitaryBuildingReadyMessage militaryBuildingReadyMessage) {
         JSONObject jsonMilitaryBuildingOccupiedMessage = new JSONObject();
 
-        Building building = militaryBuildingReadyMessage.getBuilding();
+        Building building = militaryBuildingReadyMessage.building();
 
         jsonMilitaryBuildingOccupiedMessage.put("id", idManager.getId(militaryBuildingReadyMessage));
         jsonMilitaryBuildingOccupiedMessage.put("type", MILITARY_BUILDING_READY.toString());
-        jsonMilitaryBuildingOccupiedMessage.put("houseId", idManager.getId(militaryBuildingReadyMessage.getBuilding()));
+        jsonMilitaryBuildingOccupiedMessage.put("houseId", idManager.getId(militaryBuildingReadyMessage.building()));
         jsonMilitaryBuildingOccupiedMessage.put("houseType", building.getSimpleName());
         jsonMilitaryBuildingOccupiedMessage.put("point", buildingToPoint(building));
 
@@ -932,11 +932,11 @@ class Utils {
     JSONObject noMoreResourcesMessageToJson(NoMoreResourcesMessage noMoreResourcesMessage) {
         JSONObject jsonNoMoreResourcesMessage = new JSONObject();
 
-        Building building = noMoreResourcesMessage.getBuilding();
+        Building building = noMoreResourcesMessage.building();
 
         jsonNoMoreResourcesMessage.put("id", idManager.getId(noMoreResourcesMessage));
         jsonNoMoreResourcesMessage.put("type", NO_MORE_RESOURCES.toString());
-        jsonNoMoreResourcesMessage.put("houseId", idManager.getId(noMoreResourcesMessage.getBuilding()));
+        jsonNoMoreResourcesMessage.put("houseId", idManager.getId(noMoreResourcesMessage.building()));
         jsonNoMoreResourcesMessage.put("houseType", building.getSimpleName());
         jsonNoMoreResourcesMessage.put("point", buildingToPoint(building));
 
@@ -946,7 +946,7 @@ class Utils {
     JSONObject militaryBuildingOccupiedMessageToJson(MilitaryBuildingOccupiedMessage militaryBuildingOccupiedMessage) {
         JSONObject jsonMilitaryBuildingOccupiedMessage = new JSONObject();
 
-        Building building = militaryBuildingOccupiedMessage.getBuilding();
+        Building building = militaryBuildingOccupiedMessage.building();
 
         jsonMilitaryBuildingOccupiedMessage.put("id", idManager.getId(militaryBuildingOccupiedMessage));
         jsonMilitaryBuildingOccupiedMessage.put("type", MILITARY_BUILDING_OCCUPIED.toString());
@@ -961,11 +961,11 @@ class Utils {
         JSONObject jsonUnderAttackMessage;
         jsonUnderAttackMessage = new JSONObject();
 
-        Building building = underAttackMessage.getBuilding();
+        Building building = underAttackMessage.building();
 
         jsonUnderAttackMessage.put("id", idManager.getId(underAttackMessage));
         jsonUnderAttackMessage.put("type", UNDER_ATTACK.toString());
-        jsonUnderAttackMessage.put("houseId", idManager.getId(underAttackMessage.getBuilding()));
+        jsonUnderAttackMessage.put("houseId", idManager.getId(underAttackMessage.building()));
         jsonUnderAttackMessage.put("houseType", building.getSimpleName());
         jsonUnderAttackMessage.put("point", buildingToPoint(building));
 
@@ -977,14 +977,14 @@ class Utils {
 
         JSONObject jsonGeologistFindPoint = new JSONObject();
 
-        jsonGeologistFindPoint.put("x", geologistFindMessage.getPoint().x);
-        jsonGeologistFindPoint.put("y", geologistFindMessage.getPoint().y);
+        jsonGeologistFindPoint.put("x", geologistFindMessage.point().x);
+        jsonGeologistFindPoint.put("y", geologistFindMessage.point().y);
 
         jsonGeologistFindMessage.put("id", idManager.getId(geologistFindMessage));
         jsonGeologistFindMessage.put("type", GEOLOGIST_FIND.toString());
         jsonGeologistFindMessage.put("point", jsonGeologistFindPoint);
 
-        jsonGeologistFindMessage.put("material", geologistFindMessage.getMaterial().toString());
+        jsonGeologistFindMessage.put("material", geologistFindMessage.material().toString());
 
         return jsonGeologistFindMessage;
     }
@@ -1328,7 +1328,7 @@ class Utils {
     private JSONObject militaryBuildingCausedLostLandMessageToJson(MilitaryBuildingCausedLostLandMessage message) {
         JSONObject jsonMilitaryBuildingCausedLostLandMessage = new JSONObject();
 
-        Building building = message.getBuilding();
+        Building building = message.building();
 
         jsonMilitaryBuildingCausedLostLandMessage.put("type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString());
         jsonMilitaryBuildingCausedLostLandMessage.put("houseId", idManager.getId(building));

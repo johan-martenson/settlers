@@ -64,18 +64,18 @@ public class Bitmap {
                 } else {
                     RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-                    imageData[(y * width + x) * 4] = colorRGB.getBlue();
-                    imageData[(y * width + x) * 4 + 1] = colorRGB.getGreen();
-                    imageData[(y * width + x) * 4 + 2] = colorRGB.getRed();
+                    imageData[(y * width + x) * 4] = colorRGB.blue();
+                    imageData[(y * width + x) * 4 + 1] = colorRGB.green();
+                    imageData[(y * width + x) * 4 + 2] = colorRGB.red();
                     imageData[(y * width + x) * 4 + 3] = (byte) 0xFF;
                 }
             }
             case BGR -> {
                 RGBColor colorRGB = palette.getColorForIndex(colorIndex);
 
-                imageData[(y * width + x) * 3] = colorRGB.getBlue();
-                imageData[(y * width + x) * 3 + 1] = colorRGB.getGreen();
-                imageData[(y * width + x) * 3 + 2] = colorRGB.getRed();
+                imageData[(y * width + x) * 3] = colorRGB.blue();
+                imageData[(y * width + x) * 3 + 1] = colorRGB.green();
+                imageData[(y * width + x) * 3 + 2] = colorRGB.red();
             }
             case ORIGINAL -> throw new RuntimeException("Cannot set pixel in format " + format);
         }
@@ -116,9 +116,9 @@ public class Bitmap {
                     var colorIndex = imageData[y * width + x] & 0xFF;
                     var color = palette.getColorForIndex(colorIndex);
 
-                    rgbArray[(y * width + x) * 4] = color.getRed();
-                    rgbArray[(y * width + x) * 4 + 1] = color.getGreen();
-                    rgbArray[(y * width + x) * 4 + 2] = color.getBlue();
+                    rgbArray[(y * width + x) * 4] = color.red();
+                    rgbArray[(y * width + x) * 4 + 1] = color.green();
+                    rgbArray[(y * width + x) * 4 + 2] = color.blue();
                     rgbArray[(y * width + x) * 4 + 3] = palette.getTransparentIndex() == colorIndex ? 0 : Byte.MAX_VALUE;
                 }
             }

@@ -46,15 +46,7 @@ public class GameMap {
     private static final int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
     private static final DetailedVegetation DEFAULT_VEGETATION = MEADOW_1;
 
-    private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = new ConnectionsProvider() {
-
-        @Override
-        public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            return getPossibleAdjacentOffRoadConnections(start);
-        }
-    };
-
-
+    private final ConnectionsProvider OFFROAD_CONNECTIONS_PROVIDER = (start, goal) -> getPossibleAdjacentOffRoadConnections(start);
 
     private final List<Worker>         workers;
     private final int                  height;
@@ -284,13 +276,7 @@ public class GameMap {
      * @return A path a new road can follow
      */
     public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Set<Point> avoid) {
-        return findShortestPath(start, goal, avoid, new ConnectionsProvider() {
-
-            @Override
-            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
-                return getPossibleAdjacentRoadConnections(player, point, goal);
-            }
-        });
+        return findShortestPath(start, goal, avoid, (point, goal1) -> getPossibleAdjacentRoadConnections(player, point, goal1));
     }
 
     /**
@@ -3836,51 +3822,47 @@ public class GameMap {
     }
 
     public List<Point> findWayForShip(Point from, Point to) {
-        return findShortestPath(from, to, null, new ConnectionsProvider() {
+        return findShortestPath(from, to, null, (point, goal) -> {
+            Set<Point> possibleConnections = new HashSet<>();
 
-            @Override
-            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
-                Set<Point> possibleConnections = new HashSet<>();
+            DetailedVegetation vegetationUpLeft = getDetailedVegetationUpLeft(point);
+            DetailedVegetation vegetationAbove = getDetailedVegetationAbove(point);
+            DetailedVegetation vegetationUpRight = getDetailedVegetationUpRight(point);
+            DetailedVegetation vegetationDownRight = getDetailedVegetationDownRight(point);
+            DetailedVegetation vegetationBelow = getDetailedVegetationBelow(point);
+            DetailedVegetation vegetationDownLeft = getDetailedVegetationDownLeft(point);
 
-                DetailedVegetation vegetationUpLeft = getDetailedVegetationUpLeft(point);
-                DetailedVegetation vegetationAbove = getDetailedVegetationAbove(point);
-                DetailedVegetation vegetationUpRight = getDetailedVegetationUpRight(point);
-                DetailedVegetation vegetationDownRight = getDetailedVegetationDownRight(point);
-                DetailedVegetation vegetationBelow = getDetailedVegetationBelow(point);
-                DetailedVegetation vegetationDownLeft = getDetailedVegetationDownLeft(point);
-
-                Point pointLeft = point.left();
-                if (isWithinMap(pointLeft) && (vegetationUpLeft == WATER || vegetationDownLeft == WATER)) {
-                    possibleConnections.add(pointLeft);
-                }
-
-                Point pointUpLeft = point.upLeft();
-                if (isWithinMap(pointUpLeft) && (vegetationUpLeft == WATER || vegetationAbove == WATER)) {
-                    possibleConnections.add(pointUpLeft);
-                }
-
-                Point pointUpRight = point.upRight();
-                if (isWithinMap(pointUpRight) && (vegetationAbove == WATER || vegetationUpRight == WATER)) {
-                    possibleConnections.add(pointUpRight);
-                }
-
-                Point pointRight = point.right();
-                if (isWithinMap(pointRight) && (vegetationUpRight == WATER || vegetationDownRight == WATER)) {
-                    possibleConnections.add(pointRight);
-                }
-
-                Point pointDownRight = point.downRight();
-                if (isWithinMap(pointDownRight) && (vegetationDownRight == WATER || vegetationBelow == WATER)) {
-                    possibleConnections.add(pointDownRight);
-                }
-
-                Point pointDownLeft = point.downLeft();
-                if (isWithinMap(pointDownLeft) && (vegetationBelow == WATER || vegetationDownLeft == WATER)) {
-                    possibleConnections.add(pointDownLeft);
-                }
-
-                return possibleConnections;
+            Point pointLeft = point.left();
+            if (isWithinMap(pointLeft) && (vegetationUpLeft == WATER || vegetationDownLeft == WATER)) {
+                possibleConnections.add(pointLeft);
             }
+
+            Point pointUpLeft = point.upLeft();
+            if (isWithinMap(pointUpLeft) && (vegetationUpLeft == WATER || vegetationAbove == WATER)) {
+                possibleConnections.add(pointUpLeft);
+            }
+
+            Point pointUpRight = point.upRight();
+            if (isWithinMap(pointUpRight) && (vegetationAbove == WATER || vegetationUpRight == WATER)) {
+                possibleConnections.add(pointUpRight);
+            }
+
+            Point pointRight = point.right();
+            if (isWithinMap(pointRight) && (vegetationUpRight == WATER || vegetationDownRight == WATER)) {
+                possibleConnections.add(pointRight);
+            }
+
+            Point pointDownRight = point.downRight();
+            if (isWithinMap(pointDownRight) && (vegetationDownRight == WATER || vegetationBelow == WATER)) {
+                possibleConnections.add(pointDownRight);
+            }
+
+            Point pointDownLeft = point.downLeft();
+            if (isWithinMap(pointDownLeft) && (vegetationBelow == WATER || vegetationDownLeft == WATER)) {
+                possibleConnections.add(pointDownLeft);
+            }
+
+            return possibleConnections;
         });
     }
 

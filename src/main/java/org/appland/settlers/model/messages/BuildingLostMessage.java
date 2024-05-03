@@ -2,20 +2,11 @@ package org.appland.settlers.model.messages;
 
 import org.appland.settlers.model.buildings.Building;
 
-public class BuildingLostMessage implements Message {
-    private final Building building;
-
-    public BuildingLostMessage(Building building) {
-        this.building = building;
-    }
+public record BuildingLostMessage(Building building) implements Message {
 
     @Override
     public MessageType getMessageType() {
         return MessageType.BUILDING_LOST;
-    }
-
-    public Building getBuilding() {
-        return building;
     }
 
     @Override

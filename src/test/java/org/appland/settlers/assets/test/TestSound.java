@@ -97,10 +97,10 @@ public class TestSound {
         XMidiFile xMidiFile = MidiDecoder.loadSoundXMidiFile(TEST_XMIDI_FILE);
 
         assertNotNull(xMidiFile);
-        assertEquals(xMidiFile.getHeaderSize(), 14);
-        assertEquals(xMidiFile.getNumberTracks(), 1);
+        assertEquals(xMidiFile.headerSize(), 14);
+        assertEquals(xMidiFile.numberTracks(), 1);
 
-        List<XMidiTrack> trackList = xMidiFile.getTrackList();
+        List<XMidiTrack> trackList = xMidiFile.trackList();
 
         assertNotNull(trackList);
         assertEquals(trackList.size(), 1);

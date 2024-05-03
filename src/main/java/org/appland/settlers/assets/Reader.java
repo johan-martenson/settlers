@@ -156,7 +156,7 @@ public class Reader {
 
                         RGBColor rgbColor = palette.getColorForIndex(palette.getTransparentIndex());
 
-                        System.out.println("    - Transparency color: " + rgbColor.getRed() + " (red), " + rgbColor.getGreen() + " (green), " + rgbColor.getBlue() + " (blue");
+                        System.out.println("    - Transparency color: " + rgbColor.red() + " (red), " + rgbColor.green() + " (green), " + rgbColor.blue() + " (blue");
 
                         break;
                     case BITMAP_RLE:
@@ -458,9 +458,9 @@ public class Reader {
             for (int x = 0; x < palette.getNumberColors(); x++) {
                 RGBColor rgbColor = palette.getColorForIndex(x);
 
-                data[(i * palette.getNumberColors() + x) * 4] = rgbColor.getBlue();
-                data[(i * palette.getNumberColors() + x) * 4 + 1] = rgbColor.getGreen();
-                data[(i * palette.getNumberColors() + x) * 4 + 2] = rgbColor.getRed();
+                data[(i * palette.getNumberColors() + x) * 4] = rgbColor.blue();
+                data[(i * palette.getNumberColors() + x) * 4 + 1] = rgbColor.green();
+                data[(i * palette.getNumberColors() + x) * 4 + 2] = rgbColor.red();
                 data[(i * palette.getNumberColors() + x) * 4 + 3] = (byte)0xFF;
             }
         }

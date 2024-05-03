@@ -41,14 +41,13 @@ public class FlagImageCollection {
         Arrays.stream(Nation.values())
                 .forEach(nation -> Arrays.stream(Flag.FlagType.values())
                         .forEach(flagType -> {
-                            Arrays.stream(PlayerColor.values()).forEach(playerColor -> {
-                                imageBoard.placeImageSeriesBottom(
-                                        ImageTransformer.normalizeImageSeries(
-                                                ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType))),
-                                        nation.name().toUpperCase(),
-                                        flagType.name().toUpperCase(),
-                                        playerColor.name().toUpperCase());
-                            });
+                            Arrays.stream(PlayerColor.values())
+                                    .forEach(playerColor -> imageBoard.placeImageSeriesBottom(
+                                            ImageTransformer.normalizeImageSeries(
+                                                    ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType))),
+                                            nation.name().toUpperCase(),
+                                            flagType.name().toUpperCase(),
+                                            playerColor.name().toUpperCase()));
 
                             imageBoard.placeImageSeriesBottom(
                                     ImageTransformer.normalizeImageSeries(

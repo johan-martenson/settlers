@@ -1,28 +1,11 @@
 package org.appland.settlers.assets;
 
-public class RGBColor {
-
-    private final byte red;   // uint 8
-    private final byte green; // uint 8
-    private final byte blue;  // uint 8
-
-    public RGBColor(byte red, byte green, byte blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-    }
-
-    public byte getBlue() {
-        return blue;
-    }
-
-    public byte getGreen() {
-        return green;
-    }
-
-    public byte getRed() {
-        return red;
-    }
+/**
+ * @param red   uint 8
+ * @param green uint 8
+ * @param blue  uint 8
+ */
+public record RGBColor(byte red, byte green, byte blue) {
 
     @Override
     public String toString() {

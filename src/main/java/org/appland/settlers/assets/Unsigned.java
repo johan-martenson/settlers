@@ -54,24 +54,4 @@ public class Unsigned {
     public static void putUnsignedInt (ByteBuffer bb, int position, long value) {
         bb.putInt (position, (int)(value & 0xffffffffL));
     }
-
-    // ---------------------------------------------------
-
-    public static void main (String [] argv) {
-        ByteBuffer buffer = ByteBuffer.allocate (20);
-
-        buffer.clear();
-        Unsigned.putUnsignedByte (buffer, 255);
-        Unsigned.putUnsignedByte (buffer, 128);
-        Unsigned.putUnsignedShort (buffer, 0xcafe);
-        Unsigned.putUnsignedInt (buffer, 0xcafebabe);
-
-        for (int i = 0; i < 8; i++) {
-            System.out.println (i + ": "
-                    + Integer.toHexString (getUnsignedByte (buffer, i)));
-        }
-
-        System.out.println ("2: " + Integer.toHexString (getUnsignedShort (buffer, 2)));
-        System.out.println ("4: " + Long.toHexString (getUnsignedInt (buffer, 4)));
-    }
 }

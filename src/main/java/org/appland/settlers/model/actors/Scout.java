@@ -290,19 +290,12 @@ public class Scout extends Worker {
         }
     }
 
-    static class EntityAndScore<T> {
-        final T entity;
-        final double score;
-
-        EntityAndScore(T entity, double score) {
-            this.entity = entity;
-            this.score = score;
-        }
+    record EntityAndScore<T>(T entity, double score) {
 
         public String toString() {
-            return entity + ", " + score;
+                return entity + ", " + score;
+            }
         }
-    }
 
     private Point findNextPoint() {
 

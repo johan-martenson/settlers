@@ -268,33 +268,26 @@ public class GameUtils {
         return direction;
     }
 
-    static class ToSearchItem implements Comparable {
-        final int cost;
-        final Point point;
-
-        ToSearchItem(Point point, int cost) {
-            this.point = point;
-            this.cost = cost;
-        }
+    record ToSearchItem(Point point, int cost) implements Comparable {
 
         // TODO: align with implementation of equals to make them consistent!
-        @Override
-        public int compareTo(Object o) {
-            if (o == null) {
-                return -1;
+            @Override
+            public int compareTo(Object o) {
+                if (o == null) {
+                    return -1;
+                }
+
+                ToSearchItem otherItem = (ToSearchItem) o;
+
+                if (cost < otherItem.cost) {
+                    return -1;
+                } else if (cost > otherItem.cost) {
+                    return 1;
+                }
+
+                return 0;
             }
-
-            ToSearchItem otherItem = (ToSearchItem) o;
-
-            if (cost < otherItem.cost) {
-                return -1;
-            } else if (cost > otherItem.cost) {
-                return 1;
-            }
-
-            return 0;
         }
-    }
 
     public static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
         PriorityQueue<ToSearchItem> toSearch = new PriorityQueue<>();
@@ -348,22 +341,7 @@ public class GameUtils {
         return Optional.empty();
     }
 
-    public static class BuildingAndData<B extends Building, D> {
-        private final D data;
-        private final B building;
-
-        public BuildingAndData(B building, D data) {
-            this.data = data;
-            this.building = building;
-        }
-
-        public D getData() {
-            return data;
-        }
-
-        public B getBuilding() {
-            return building;
-        }
+    public record BuildingAndData<B extends Building, D>(B building, D data) {
     }
 
     public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {

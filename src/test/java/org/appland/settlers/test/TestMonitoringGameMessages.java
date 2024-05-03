@@ -129,7 +129,7 @@ public class TestMonitoringGameMessages {
         MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class TestMonitoringGameMessages {
         MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
 
         /* Verify that an event is sent when the message is removed */
         monitor.clearEvents();
@@ -239,7 +239,7 @@ public class TestMonitoringGameMessages {
         MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
@@ -375,7 +375,7 @@ public class TestMonitoringGameMessages {
         MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_OCCUPIED);
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
     }
 
     @Test
@@ -433,7 +433,7 @@ public class TestMonitoringGameMessages {
         MilitaryBuildingOccupiedMessage message = (MilitaryBuildingOccupiedMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), Message.MessageType.MILITARY_BUILDING_OCCUPIED);
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.building(), barracks0);
 
         /* Verify that the event is only reported once */
         Utils.fastForward(10, map);
@@ -558,7 +558,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
 
-        assertEquals(message.getBuilding(), quarry0);
+        assertEquals(message.building(), quarry0);
     }
 
     @Test
@@ -621,7 +621,7 @@ public class TestMonitoringGameMessages {
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
 
-        assertEquals(message.getBuilding(), quarry0);
+        assertEquals(message.building(), quarry0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);
@@ -803,7 +803,7 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertEquals(message.getBuilding(), fishery);
+        assertEquals(message.building(), fishery);
     }
 
     @Test
@@ -917,7 +917,7 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertEquals(message.getBuilding(), fishery);
+        assertEquals(message.building(), fishery);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);
@@ -1112,8 +1112,8 @@ public class TestMonitoringGameMessages {
         GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), GEOLOGIST_FIND);
-        assertEquals(message.getPoint(), geologist.getPosition());
-        assertEquals(message.getMaterial(), GOLD);
+        assertEquals(message.point(), geologist.getPosition());
+        assertEquals(message.material(), GOLD);
     }
 
     @Test
@@ -1190,8 +1190,8 @@ public class TestMonitoringGameMessages {
         GeologistFindMessage message = (GeologistFindMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), GEOLOGIST_FIND);
-        assertEquals(message.getPoint(), geologist.getPosition());
-        assertEquals(message.getMaterial(), GOLD);
+        assertEquals(message.point(), geologist.getPosition());
+        assertEquals(message.material(), GOLD);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(5, map);
@@ -1350,7 +1350,7 @@ public class TestMonitoringGameMessages {
         UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
-        assertEquals(message.getBuilding(), barracks1);
+        assertEquals(message.building(), barracks1);
     }
 
     @Test
@@ -1429,7 +1429,7 @@ public class TestMonitoringGameMessages {
         UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
-        assertEquals(message.getBuilding(), barracks1);
+        assertEquals(message.building(), barracks1);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);
@@ -1621,9 +1621,9 @@ public class TestMonitoringGameMessages {
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
 
-        assertEquals(messageForPlayer1.getBuilding(), barracks1);
+        assertEquals(messageForPlayer1.building(), barracks1);
         assertEquals(messageForPlayer1.getMessageType(), BUILDING_LOST);
-        assertEquals(messageForPlayer1.getBuilding(), barracks1);
+        assertEquals(messageForPlayer1.building(), barracks1);
     }
 
     @Test
@@ -1737,9 +1737,9 @@ public class TestMonitoringGameMessages {
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
 
-        assertEquals(messageForPlayer1.getBuilding(), barracks1);
+        assertEquals(messageForPlayer1.building(), barracks1);
         assertEquals(messageForPlayer1.getMessageType(), BUILDING_LOST);
-        assertEquals(messageForPlayer1.getBuilding(), barracks1);
+        assertEquals(messageForPlayer1.building(), barracks1);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);
@@ -1949,7 +1949,7 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertEquals(message.getBuilding(), mine);
+        assertEquals(message.building(), mine);
         assertTrue(mine.isOutOfNaturalResources());
     }
 
@@ -2037,7 +2037,7 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertEquals(message.getBuilding(), mine);
+        assertEquals(message.building(), mine);
         assertTrue(mine.isOutOfNaturalResources());
 
         /* Verify that the event is only sent once */
@@ -2187,7 +2187,7 @@ public class TestMonitoringGameMessages {
         StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), STORE_HOUSE_IS_READY);
-        assertEquals(message.getBuilding(), storage0);
+        assertEquals(message.building(), storage0);
     }
 
     @Test
@@ -2246,7 +2246,7 @@ public class TestMonitoringGameMessages {
         StoreHouseIsReadyMessage message = (StoreHouseIsReadyMessage) gameChangesList.getNewGameMessages().getFirst();
 
         assertEquals(message.getMessageType(), STORE_HOUSE_IS_READY);
-        assertEquals(message.getBuilding(), storage0);
+        assertEquals(message.building(), storage0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);

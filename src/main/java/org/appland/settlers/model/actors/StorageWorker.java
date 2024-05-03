@@ -406,22 +406,15 @@ public class StorageWorker extends Worker {
     private void trackAllocation(Building building, Material material) {
 
         if (material.isFood()) {
-
-            int amount = assignedFood.get(building.getClass());
-            assignedFood.put(building.getClass(), amount + 1);
-
+            assignedFood.compute(building.getClass(), (k, amount) -> amount + 1);
         } else if (material == COAL) {
-            int amount = assignedCoal.get(building.getClass());
-            assignedCoal.put(building.getClass(), amount + 1);
+            assignedCoal.compute(building.getClass(), (k, amount) -> amount + 1);
         } else if (material == WHEAT) {
-            int amount = assignedWheat.get(building.getClass());
-            assignedWheat.put(building.getClass(), amount + 1);
+            assignedWheat.compute(building.getClass(), (k, amount) -> amount + 1);
         } else if (material == WATER) {
-            int amount = assignedWater.get(building.getClass());
-            assignedWater.put(building.getClass(), amount + 1);
+            assignedWater.compute(building.getClass(), (k, amount) -> amount + 1);
         } else if (material == IRON_BAR) {
-            int amount = assignedIronBars.get(building.getClass());
-            assignedIronBars.put(building.getClass(), amount + 1);
+            assignedIronBars.compute(building.getClass(), (k, amount) -> amount + 1);
         }
     }
 

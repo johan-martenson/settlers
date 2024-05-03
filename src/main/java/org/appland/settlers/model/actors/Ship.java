@@ -119,8 +119,8 @@ public class Ship extends Worker {
                     .map(harbor -> new GameUtils.BuildingAndData<>(
                             harbor,
                             GameUtils.distanceInGameSteps(position, harbor.getPosition())))
-                    .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::getData))
-                    .map(GameUtils.BuildingAndData::getBuilding)
+                    .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::data))
+                    .map(GameUtils.BuildingAndData::building)
                     .toList();
 
             /* Start sailing to the nearest point that can be reached (if any) */

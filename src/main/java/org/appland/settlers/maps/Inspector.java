@@ -936,7 +936,7 @@ public class Inspector {
             Point point = pointAndComparison.getKey();
             AvailableBuildingComparison comparison = pointAndComparison.getValue();
 
-            System.out.println(" - " + point + ": " + comparison.getAvailableInMap() + ", " + comparison.getAvailableInFile());
+            System.out.println(" - " + point + ": " + comparison.getAvailableInMap() + ", " + comparison.availableInFile());
         }
 
         /* Print the point that didn't match */
@@ -969,7 +969,7 @@ public class Inspector {
             MapFilePoint spotUpRight = mapFile.getMapFilePoint(point.upRight());
             MapFilePoint spotDownRight = mapFile.getMapFilePoint(point.downRight());
 
-            System.out.println(" - " + point + " - game: " + comparison.availableInGame + ", file: " + comparison.getAvailableInFile() +
+            System.out.println(" - " + point + " - game: " + comparison.availableInGame + ", file: " + comparison.availableInFile() +
                     ", distance to border: " + distanceToBorder +
                     ", distance to headquarter: " + distanceToHeadquarter +
                     ", height differences: " + (spot.getHeight() - spotLeft.getHeight()) +
@@ -979,7 +979,7 @@ public class Inspector {
                     ", " + (spot.getHeight() - spotDownRight.getHeight()) +
                     ", " + (spot.getHeight() - spotDownLeft.getHeight()));
 
-            if (comparison.getAvailableInFile() == BuildableSite.OCCUPIED_BY_TREE) {
+            if (comparison.availableInFile() == BuildableSite.OCCUPIED_BY_TREE) {
 
                 if (!map.isTreeAtPoint(point)) {
                     System.out.println("   -- Tree in file but not on map: " + point);
@@ -1070,34 +1070,22 @@ public class Inspector {
         return bfr;
     }
 
-    private static class AvailableBuildingComparison {
-        private final BuildableSite availableInFile;
-        private final Size          availableInGame;
-        private final boolean       availableFlagInGame;
-
-        public AvailableBuildingComparison(Size availableInGame, boolean availableFlagInGame, BuildableSite availableInFile) {
-            this.availableInGame     = availableInGame;
-            this.availableFlagInGame = availableFlagInGame;
-            this.availableInFile     = availableInFile;
-        }
+    private record AvailableBuildingComparison(Size availableInGame, boolean availableFlagInGame,
+                                               BuildableSite availableInFile) {
 
         public boolean matches() {
-            return (availableInGame == Size.LARGE  && availableInFile == BuildableSite.CASTLE) ||
-                   (availableInGame == Size.MEDIUM && availableInFile == BuildableSite.HOUSE)  ||
-                   (availableInGame == Size.SMALL  && availableInFile == BuildableSite.HUT)    ||
-                   (availableFlagInGame && availableInGame == null &&
-                            (availableInFile == BuildableSite.FLAG ||
-                             availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN));
-        }
+                return (availableInGame == Size.LARGE && availableInFile == BuildableSite.CASTLE) ||
+                        (availableInGame == Size.MEDIUM && availableInFile == BuildableSite.HOUSE) ||
+                        (availableInGame == Size.SMALL && availableInFile == BuildableSite.HUT) ||
+                        (availableFlagInGame && availableInGame == null &&
+                                (availableInFile == BuildableSite.FLAG ||
+                                        availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN));
+            }
 
-        public BuildableSite getAvailableInFile() {
-            return availableInFile;
+            public Size getAvailableInMap() {
+                return availableInGame;
+            }
         }
-
-        public Size getAvailableInMap() {
-            return availableInGame;
-        }
-    }
 
     private <T> void incrementInMap(Map<T, Integer> map, T item) {
         int amount = map.getOrDefault(item, 0);

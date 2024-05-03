@@ -2,16 +2,7 @@ package org.appland.settlers.model.messages;
 
 import org.appland.settlers.model.buildings.Building;
 
-public class MilitaryBuildingReadyMessage implements Message {
-    private final Building building;
-
-    public MilitaryBuildingReadyMessage(Building building) {
-        this.building = building;
-    }
-
-    public Building getBuilding() {
-        return building;
-    }
+public record MilitaryBuildingReadyMessage(Building building) implements Message {
 
     @Override
     public MessageType getMessageType() {
