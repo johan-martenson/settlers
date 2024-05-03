@@ -17,7 +17,7 @@ public class DecorativeImageCollection {
         decorationImages = new EnumMap<>(DecorationType.class);
     }
 
-    public void addDecorationTypeImage(DecorationType decorationType, Bitmap image) {
+    public void addDecorationImage(DecorationType decorationType, Bitmap image) {
         decorationImages.put(decorationType, new DecorationTypeImage(image));
     }
 

@@ -1764,7 +1764,7 @@ public class Extractor {
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS),
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS_SHADOW)
         );
-        decorativeImageCollection.addDecorationTypeImage(
+        decorativeImageCollection.addDecorationImage(
                 DecorationType.TREE_STUB,
                 getImageAt(mapBobsLst, MapBobsLst.TREE_STUB)
         );
@@ -1794,16 +1794,14 @@ public class Extractor {
                 getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_GRASS_SHADOW)
         );
 
-        decorativeImageCollection.addDecorationImageWithShadow(
+        decorativeImageCollection.addDecorationImage(
                 DecorationType.HUMAN_SKELETON_1,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1_SHADOW)
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1)
         );
 
-        decorativeImageCollection.addDecorationImageWithShadow(
+        decorativeImageCollection.addDecorationImage(
                 DecorationType.HUMAN_SKELETON_2,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2_SHADOW)
+                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2)
         );
 
         decorativeImageCollection.addDecorationImageWithShadow(
@@ -1821,10 +1819,9 @@ public class Extractor {
                 getImageAt(mapBobs0Lst, MapBobs0Lst.BROWN_MUSHROOM),
                 getImageAt(mapBobs0Lst, MapBobs0Lst.BROWN_MUSHROOM_SHADOW)
         );
-        decorativeImageCollection.addDecorationImageWithShadow(
+        decorativeImageCollection.addDecorationImage(
                 DecorationType.MINI_STONE_WITH_GRASS,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_STONE_WITH_GRASS),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_STONE_WITH_GRASS_SHADOW)
+                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_STONE_WITH_GRASS)
         );
         decorativeImageCollection.addDecorationImageWithShadow(
                 DecorationType.SMALL_STONE_WITH_GRASS,
