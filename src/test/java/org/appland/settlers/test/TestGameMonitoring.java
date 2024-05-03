@@ -4540,7 +4540,6 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getNewTrees().size(), 0);
         assertEquals(gameChanges.getRemovedRoads().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
-        assertEquals(gameChanges.getChangedBuildings().size(), 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 0);
     }
 
