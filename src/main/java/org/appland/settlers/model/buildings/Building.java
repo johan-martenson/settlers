@@ -42,7 +42,6 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
-
     private static final int TIME_TO_PROMOTE_SOLDIER               = 100;
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 100;
     private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 150;
@@ -58,16 +57,16 @@ public class Building implements EndPoint {
     private final int                    maxHostedSoldiers;
     private final int                    defenceRadius;
     private final Map<Material, Integer> requiredGoodsForProduction;
-    private final List<Soldier>         attackers;
-    private final List<Soldier>         waitingAttackers;
-    private final Set<Soldier>          defenders;
+    private final List<Soldier>          attackers;
+    private final List<Soldier>          waitingAttackers;
+    private final Set<Soldier>           defenders;
     private final Countdown countdown;
     private final Countdown              upgradeCountdown;
     private final Map<Material, Integer> promisedDeliveries;
-    private final List<Soldier> hostedSoldiers;
-    private final List<Soldier> promisedSoldier;
+    private final List<Soldier>          hostedSoldiers;
+    private final List<Soldier>          promisedSoldier;
     private final Map<Material, Integer> receivedMaterial;
-    private final Set<Soldier>          waitingDefenders;
+    private final Set<Soldier>           waitingDefenders;
     private DoorState door;
     private int doorClosing;
 

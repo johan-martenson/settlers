@@ -182,6 +182,10 @@ public class Flag implements EndPoint {
         return fightIsHappening;
     }
 
+    public void setNoFightAtFlag() {
+        fightIsHappening = false;
+    }
+
     public enum FlagType {
         NORMAL, MAIN, MARINE
     }

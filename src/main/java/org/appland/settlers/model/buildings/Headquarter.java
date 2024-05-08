@@ -9,7 +9,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.policy.InitialState;
 
@@ -25,7 +25,6 @@ import static org.appland.settlers.model.actors.Soldier.Rank.*;
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
-
     private final Map<Soldier.Rank, Integer> wantedReservedSoldiers;
     private final Map<Soldier.Rank, Integer> actualReservedSoldiers;
 
@@ -84,7 +83,7 @@ public class Headquarter extends Storehouse {
     public void setMap(GameMap map) {
         super.setMap(map);
 
-        Worker storageWorker = new StorageWorker(getPlayer(), map);
+        Worker storageWorker = new StorehouseWorker(getPlayer(), map);
         getMap().placeWorker(storageWorker, this);
 
         storageWorker.enterBuilding(this);
@@ -125,7 +124,7 @@ public class Headquarter extends Storehouse {
         inventory.put(WELL_WORKER, InitialState.STORAGE_INITIAL_WELL_WORKER);
         inventory.put(MILLER, InitialState.STORAGE_INITIAL_MILLER);
         inventory.put(BAKER, InitialState.STORAGE_INITIAL_BAKER);
-        inventory.put(STORAGE_WORKER, InitialState.STORAGE_INITIAL_STORAGE_WORKER);
+        inventory.put(STOREHOUSE_WORKER, InitialState.STORAGE_INITIAL_STORAGE_WORKER);
         inventory.put(FISHERMAN, InitialState.STORAGE_INITIAL_FISHERMAN);
         inventory.put(MINER, InitialState.STORAGE_INITIAL_MINER);
         inventory.put(IRON_FOUNDER, InitialState.STORAGE_INITIAL_IRON_FOUNDER);

@@ -7,7 +7,7 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.actors.Ship;
-import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE, STONE, STONE, STONE})
-@RequiresWorker(workerType = STORAGE_WORKER)
+@RequiresWorker(workerType = STOREHOUSE_WORKER)
 public class Harbor extends Storehouse {
 
     private final Map<Material, Integer> REQUIRED_FOR_EXPEDITION;
@@ -252,11 +252,11 @@ public class Harbor extends Storehouse {
             Player player = getPlayer();
             GameMap map = getMap();
 
-            StorageWorker storageWorker = new StorageWorker(player, map);
+            StorehouseWorker storehouseWorker = new StorehouseWorker(player, map);
 
-            map.placeWorker(storageWorker, getFlag());
-            storageWorker.setTargetBuilding(this);
-            promiseWorker(storageWorker);
+            map.placeWorker(storehouseWorker, getFlag());
+            storehouseWorker.setTargetBuilding(this);
+            promiseWorker(storehouseWorker);
         }
     }
 

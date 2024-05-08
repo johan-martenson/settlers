@@ -193,6 +193,10 @@ public class Soldier extends Worker {
                         if (health == 0) {
                             fightState = FightState.DYING;
 
+                            if (map.isFlagAtPoint(getPosition())) {
+                                map.getFlagAtPoint(getPosition()).setNoFightAtFlag();
+                            }
+
                             map.reportWorkerStartedAction(this, WorkerAction.DIE);
 
                             countdown = TIME_TO_DIE;

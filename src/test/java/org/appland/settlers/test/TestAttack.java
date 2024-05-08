@@ -6468,4 +6468,88 @@ public class TestAttack {
 
         /* Verify that the transport is resumed when the fight is done */
     }
+
+    @Test
+    public void testNoDeliveriesFromHeadquarterUnderAttack() throws InvalidUserActionException {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarters */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        headquarter0.setReservedSoldiers(PRIVATE_RANK, 0);
+
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
+
+        assertEquals(headquarter0.getAmount(PRIVATE), 10);
+
+        /* Place player 1's headquarters */
+        Point point1 = new Point(37, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        Utils.removeAllSoldiersFromStorage(headquarter1);
+
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 10);
+
+        /* Place barracks for player 0 and connect it to the headquarters */
+        Point point2 = new Point(23, 5);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point2);
+
+        var road0 = map.placeAutoSelectedRoad(player0, guardHouse.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the barracks to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(guardHouse);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(guardHouse, 3);
+
+        /* Let player 0 attack player 1's headquarters */
+        player0.attack(headquarter1, 1, AttackStrength.STRONG);
+
+        /* Wait for the fight to start */
+        var attacker = Utils.waitForSoldierOutsideBuilding(player0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        Utils.waitForSoldierToBeFighting(attacker, map);
+
+        /* Place a new house for player 1 and verify that it doesn't get a delivery while the fight is going on */
+        var point3 = new Point(41, 15);
+        var woodcutterHut = map.placeBuilding(new Woodcutter(player1), point3);
+
+        var road1 = map.placeAutoSelectedRoad(player1, woodcutterHut.getFlag(), headquarter1.getFlag());
+
+        for (int i = 0; i < 1000; i++) {
+            if (attacker.isDying()) {
+                break;
+            }
+
+            assertTrue(headquarter1.getWorker().isInsideBuilding());
+            assertEquals(woodcutterHut.getAmount(PLANK), 0);
+
+            map.stepTime();
+        }
+
+        assertTrue(attacker.isDying());
+
+        /* Verify that the delivery is done when the fight is done and the attacker has lost */
+        map.stepTime();
+
+        assertFalse(headquarter1.getWorker().isInsideBuilding());
+        assertNotNull(headquarter1.getWorker().getCargo());
+        assertEquals(headquarter1.getWorker().getCargo().getMaterial(), PLANK);
+        assertEquals(headquarter1.getWorker().getTarget(), headquarter1.getFlag().getPosition());
+    }
 }

@@ -16,7 +16,7 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -174,22 +174,22 @@ public class TestHeadquarter {
         assertTrue(headquarter0.getAmount(PLANK) > 0);
 
         /* Verify that the storage worker delivers stone or planks to the woodcutter */
-        assertTrue(headquarter0.getWorker() instanceof StorageWorker);
+        assertTrue(headquarter0.getWorker() instanceof StorehouseWorker);
 
-        StorageWorker storageWorker0 = (StorageWorker) headquarter0.getWorker();
+        StorehouseWorker storehouseWorker0 = (StorehouseWorker) headquarter0.getWorker();
 
-        assertTrue(storageWorker0.isInsideBuilding());
+        assertTrue(storehouseWorker0.isInsideBuilding());
 
         map.stepTime();
 
-        assertFalse(storageWorker0.isInsideBuilding());
-        assertNotNull(storageWorker0.getCargo());
-        assertEquals(storageWorker0.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(storehouseWorker0.isInsideBuilding());
+        assertNotNull(storehouseWorker0.getCargo());
+        assertEquals(storehouseWorker0.getTarget(), headquarter0.getFlag().getPosition());
         assertTrue(headquarter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker0, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storehouseWorker0, headquarter0.getFlag().getPosition());
 
-        assertNull(storageWorker0.getCargo());
+        assertNull(storehouseWorker0.getCargo());
         assertFalse(headquarter0.getFlag().getStackedCargo().isEmpty());
     }
 

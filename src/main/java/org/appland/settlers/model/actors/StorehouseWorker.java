@@ -45,10 +45,7 @@ import static org.appland.settlers.model.Material.*;
  * @author johan
  */
 @Walker(speed = 10)
-public class StorageWorker extends Worker {
-
-    // TODO: rename to StorehouseWorker
-
+public class StorehouseWorker extends Worker {
     private static final int RESTING_TIME = 19;
 
     private final Countdown countdown;
@@ -72,7 +69,7 @@ public class StorageWorker extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public StorageWorker(Player player, GameMap map) {
+    public StorehouseWorker(Player player, GameMap map) {
         super(player, map);
 
         state = State.WALKING_TO_TARGET;
@@ -218,8 +215,7 @@ public class StorageWorker extends Worker {
     protected void onIdle() {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
-
-                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                if (getHome().getFlag().hasPlaceForMoreCargo() && !getHome().getFlag().isFightingAtFlag()) {
                     Cargo cargo = tryToStartDelivery();
 
                     if (cargo != null) {
@@ -404,7 +400,6 @@ public class StorageWorker extends Worker {
     }
 
     private void trackAllocation(Building building, Material material) {
-
         if (material.isFood()) {
             assignedFood.compute(building.getClass(), (k, amount) -> amount + 1);
         } else if (material == COAL) {
@@ -419,36 +414,30 @@ public class StorageWorker extends Worker {
     }
 
     private boolean isWithinQuota(Building building, Material material) {
-
-        /* Handle quota for food */
         if (material.isFood()) {
             int quota = getPlayer().getFoodQuota(building.getClass());
 
             return assignedFood.get(building.getClass()) < quota;
         }
 
-        /* Handle quota for coal */
         if (material == COAL) {
             int quota = getPlayer().getCoalQuota(building.getClass());
 
             return assignedCoal.get(building.getClass()) < quota;
         }
 
-        /* Handle quota for wheat */
         if (material == WHEAT) {
             int quota = player.getWheatQuota(building.getClass());
 
             return assignedWheat.get(building.getClass()) < quota;
         }
 
-        /* Handle quota for water */
         if (material == WATER) {
             int quota = player.getWaterQuota(building.getClass());
 
             return assignedWater.get(building.getClass()) < quota;
         }
 
-        /* Handle quota for iron bars */
         if (material == IRON_BAR) {
             int quota = player.getIronBarQuota(building.getClass());
 

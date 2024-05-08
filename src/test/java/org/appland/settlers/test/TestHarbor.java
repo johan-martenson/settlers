@@ -20,7 +20,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.TransportCategory;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Scout;
-import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
@@ -372,7 +372,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
 
         /* Run game logic once to let the headquartersassign a harbor worker to the harbor */
-        StorageWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorageWorker.class, player0);
+        StorehouseWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
 
         assertNotNull(harborWorker);
         assertEquals(harborWorker.getTarget(), harbor.getPosition());
@@ -414,7 +414,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
 
         /* Run game logic once to let the headquartersassign a harbor worker to the harbor */
-        StorageWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorageWorker.class, player0);
+        StorehouseWorker harborWorker = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
 
         assertNotNull(harborWorker);
         assertEquals(harborWorker.getTarget(), harbor.getPosition());
@@ -456,7 +456,7 @@ public class TestHarbor {
         Utils.waitForBuildingToBeConstructed(harbor);
 
         /* Wait for a storage worker to start walking to the harbor */
-        StorageWorker harborWorker0 = Utils.waitForWorkerOutsideBuilding(StorageWorker.class, player0);
+        StorehouseWorker harborWorker0 = Utils.waitForWorkerOutsideBuilding(StorehouseWorker.class, player0);
 
         /* Wait for the storage worker to reach the harbor */
         assertEquals(harborWorker0.getTarget(), harbor.getPosition());
@@ -506,7 +506,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor);
 
         /* Occupy the harbor worker */
-        StorageWorker harborWorker0 = new StorageWorker(player0, map);
+        StorehouseWorker harborWorker0 = new StorehouseWorker(player0, map);
         Utils.occupyBuilding(harborWorker0, harbor);
 
         /* The harbor worker rests */
@@ -566,7 +566,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor);
 
         /* Occupy the harbor */
-        StorageWorker harborWorker0 = new StorageWorker(player0, map);
+        StorehouseWorker harborWorker0 = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(harborWorker0, harbor);
 
@@ -630,7 +630,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor);
 
         /* Occupy the harbor */
-        StorageWorker harborWorker0 = new StorageWorker(player0, map);
+        StorehouseWorker harborWorker0 = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(harborWorker0, harbor);
 
@@ -708,12 +708,12 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STORAGE_WORKER);
+        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarters*/
-        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
@@ -967,7 +967,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place storehouse */
         Point point3 = new Point(15, 15);
@@ -1020,7 +1020,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place storehouse */
         Point point4 = new Point(15, 15);
@@ -1079,7 +1079,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Destroy the harbor */
         Worker harborWorker = harbor0.getWorker();
@@ -1258,7 +1258,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Assign a worker to the harbor */
-        StorageWorker harborWorker = new StorageWorker(player0, map);
+        StorehouseWorker harborWorker = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(harborWorker, harbor0);
 
@@ -1301,7 +1301,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Assign a worker to the harbor */
-        StorageWorker harborWorker = new StorageWorker(player0, map);
+        StorehouseWorker harborWorker = new StorehouseWorker(player0, map);
 
         Utils.occupyBuilding(harborWorker, harbor0);
 
@@ -1346,13 +1346,13 @@ public class TestHarbor {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), harbor0.getFlag());
 
         /* Wait for harbor worker to get assigned and leave the headquarters*/
-        List<StorageWorker> workers = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
+        List<StorehouseWorker> workers = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         /* Verify that the player is set correctly in the worker */
-        StorageWorker worker = workers.getFirst();
+        StorehouseWorker worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1415,7 +1415,7 @@ public class TestHarbor {
 
         assertFalse(player0.getBorderPoints().contains(point7));
 
-        StorageWorker worker = Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        StorehouseWorker worker = Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Verify that the harbor remains when the fortress is torn down */
         assertTrue(player0.getBorderPoints().contains(point7));
@@ -1586,13 +1586,13 @@ public class TestHarbor {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
 
         /* Wait for the harbor worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
+        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorageWorker harborWorker = null;
+        StorehouseWorker harborWorker = null;
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof StorageWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorageWorker) worker;
+            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
+                harborWorker = (StorehouseWorker) worker;
             }
         }
 
@@ -1659,13 +1659,13 @@ public class TestHarbor {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
 
         /* Wait for the harbor worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
+        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorageWorker harborWorker = null;
+        StorehouseWorker harborWorker = null;
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof StorageWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorageWorker) worker;
+            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
+                harborWorker = (StorehouseWorker) worker;
             }
         }
 
@@ -1734,13 +1734,13 @@ public class TestHarbor {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, harbor0.getFlag());
 
         /* Wait for the harbor worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0);
+        Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0);
 
-        StorageWorker harborWorker = null;
+        StorehouseWorker harborWorker = null;
 
         for (Worker worker : map.getWorkers()) {
-            if (worker instanceof StorageWorker && harbor0.getPosition().equals(worker.getTarget())) {
-                harborWorker = (StorageWorker) worker;
+            if (worker instanceof StorehouseWorker && harbor0.getPosition().equals(worker.getTarget())) {
+                harborWorker = (StorehouseWorker) worker;
             }
         }
 
@@ -1795,7 +1795,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
         Point point3 = new Point(13, 11);
@@ -1816,12 +1816,12 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), storehouse.getPosition());
 
-        int amount = storehouse.getAmount(STORAGE_WORKER);
+        int amount = storehouse.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, storehouse.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarters*/
-        assertEquals(storehouse.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(storehouse.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
@@ -1852,7 +1852,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
         Point point3 = new Point(13, 13);
@@ -1876,12 +1876,12 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STORAGE_WORKER);
+        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarters*/
-        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
@@ -1912,7 +1912,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
         Point point3 = new Point(13, 13);
@@ -1939,12 +1939,12 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STORAGE_WORKER);
+        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarters*/
-        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
@@ -1975,7 +1975,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Occupy the harbor */
-        Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Place a storehouse closer to the harbor */
         Point point3 = new Point(19, 9);
@@ -1993,12 +1993,12 @@ public class TestHarbor {
         assertFalse(harborWorker.isInsideBuilding());
         assertEquals(harborWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(STORAGE_WORKER);
+        int amount = headquarter0.getAmount(STOREHOUSE_WORKER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, harborWorker, headquarter0.getPosition());
 
         /* Verify that the harbor worker is stored correctly in the headquarters*/
-        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(STOREHOUSE_WORKER), amount + 1);
     }
 
     @Test
@@ -2032,7 +2032,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0).getFirst();
+        Worker worker = Utils.waitForWorkersOutsideBuilding(StorehouseWorker.class, 1, player0).getFirst();
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, harbor0.getFlag().getPosition());
@@ -2080,7 +2080,7 @@ public class TestHarbor {
         Utils.constructHouse(harbor0);
 
         /* Populate the harbor */
-        Worker harborWorker0 = Utils.occupyBuilding(new StorageWorker(player0, map), harbor0);
+        Worker harborWorker0 = Utils.occupyBuilding(new StorehouseWorker(player0, map), harbor0);
 
         /* Verify that the harbor can produce */
         assertFalse(harbor0.canProduce());

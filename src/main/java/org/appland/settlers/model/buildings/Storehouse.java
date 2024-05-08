@@ -34,7 +34,7 @@ import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
-import org.appland.settlers.model.actors.StorageWorker;
+import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
@@ -53,9 +53,8 @@ import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
-@RequiresWorker(workerType = STORAGE_WORKER)
+@RequiresWorker(workerType = STOREHOUSE_WORKER)
 public class Storehouse extends Building {
-
     private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
 
     private final Countdown draftCountdown;
@@ -514,8 +513,8 @@ public class Storehouse extends Building {
             storeOneInInventory(WELL_WORKER);
         } else if (worker instanceof WoodcutterWorker) {
             storeOneInInventory(WOODCUTTER_WORKER);
-        } else if (worker instanceof StorageWorker) {
-            storeOneInInventory(STORAGE_WORKER);
+        } else if (worker instanceof StorehouseWorker) {
+            storeOneInInventory(STOREHOUSE_WORKER);
         } else if (worker instanceof Butcher) {
             storeOneInInventory(BUTCHER);
         } else if (worker instanceof SawmillWorker) {
@@ -587,7 +586,7 @@ public class Storehouse extends Building {
             case WELL_WORKER -> new WellWorker(getPlayer(), getMap());
             case MILLER -> new Miller(getPlayer(), getMap());
             case BAKER -> new Baker(getPlayer(), getMap());
-            case STORAGE_WORKER -> new StorageWorker(getPlayer(), getMap());
+            case STOREHOUSE_WORKER -> new StorehouseWorker(getPlayer(), getMap());
             case FISHERMAN -> new Fisherman(getPlayer(), getMap());
             case MINER -> new Miner(getPlayer(), getMap());
             case IRON_FOUNDER -> new IronFounder(getPlayer(), getMap());
