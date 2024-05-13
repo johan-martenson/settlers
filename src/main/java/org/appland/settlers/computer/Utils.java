@@ -509,7 +509,6 @@ public class Utils {
     }
 
     static <T extends Building> T placeBuilding(Player player, Building buildingCloseBy, T building) throws Exception {
-
         GameMap map  = player.getMap();
         Size    size = building.getSize();
 

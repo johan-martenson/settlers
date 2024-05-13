@@ -3083,10 +3083,6 @@ public class Utils {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 2000; i++) {
-            map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
-                    .filter(worker -> Objects.equals(player, worker.getPlayer()))
-                    .filter(worker -> !worker.isInsideBuilding()).forEach(System.out::println);
-
             assertTrue(map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
                     .filter(worker -> Objects.equals(player, worker.getPlayer()))
                     .allMatch(Worker::isInsideBuilding));
