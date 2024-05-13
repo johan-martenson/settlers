@@ -124,6 +124,7 @@ public class WorkerImageCollection {
                 .forEach((direction, playerMap) -> playerMap
                         .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
                                 ImageTransformer.normalizeImageSeries(images),
+                                "common",
                                 "actionsByPlayer",
                                 action.name().toUpperCase(),
                                 direction.name().toUpperCase(),
