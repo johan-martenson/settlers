@@ -292,22 +292,6 @@ public class Player {
         return ownedLand;
     }
 
-    private void updateDiscoveredLand() {
-        for (Building building : buildings) {
-            if (building.isMilitaryBuilding() && building.isOccupied()) {
-                Collection<Point> landDiscoveredByBuilding = building.getDiscoveredLand();
-
-                /* Remember the points that are newly discovered */
-                if (!gameViewMonitors.isEmpty()) {
-                    newDiscoveredLand.addAll(landDiscoveredByBuilding);
-                    newDiscoveredLand.removeAll(discoveredLand);
-                }
-
-                discoveredLand.addAll(landDiscoveredByBuilding);
-            }
-        }
-    }
-
     public Set<Point> getDiscoveredLand() {
         return discoveredLand;
     }
@@ -502,9 +486,21 @@ public class Player {
         this.ownedLand.addAll(newOwnedLand);
 
         if (!addedOwnedLand.isEmpty()) {
+            var previousDiscoveredLand = new HashSet<>(discoveredLand);
 
             /* Update field of view */
-            updateDiscoveredLand();
+            for (Building militaryBuilding : buildings) {
+                if (militaryBuilding.isMilitaryBuilding() && militaryBuilding.isOccupied()) {
+                    Collection<Point> landDiscoveredByBuilding = militaryBuilding.getDiscoveredLand();
+
+                    discoveredLand.addAll(landDiscoveredByBuilding);
+                }
+            }
+
+            if (hasMonitor()) {
+                newDiscoveredLand.addAll(discoveredLand);
+                newDiscoveredLand.removeAll(previousDiscoveredLand);
+            }
         }
 
         /* Report lost land */

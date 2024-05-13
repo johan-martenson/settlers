@@ -1960,4 +1960,56 @@ public class TestMisc {
         assertTrue(map.isBuildingAtPoint(point0));
         assertEquals(headquarter, map.getBuildingAtPoint(point0));
     }
+
+    @Test
+    public void testMonitoringEventWhenMilitaryBuildingOccupiedOutOfOrder() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place first barracks, but leave it unfinished & unoccupied */
+        var point1 = new Point(58, 68);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Place second barracks and wait for it to get occupied */
+        var point2 = new Point(78, 68);
+        var barracks1 = map.placeBuilding(new Barracks(player0), point2);
+
+        var road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks1);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks1);
+
+        /* Start monitoring */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Let the first barracks get occupied and verify that an event is sent with its discovered points */
+        var road1 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        monitor.clearEvents();
+
+        var point3 = new Point(34, 68);
+
+        assertFalse(player0.getDiscoveredLand().contains(point3));
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
+
+        /* Verify that the event was sent and the points are discovered */
+        assertTrue(player0.getDiscoveredLand().contains(point3));
+        assertEquals(monitor.getEvents().stream()
+                .filter(gcl -> gcl.getNewDiscoveredLand().contains(point3))
+                .count(),
+                1);
+    }
 }

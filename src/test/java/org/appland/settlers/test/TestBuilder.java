@@ -321,7 +321,7 @@ public class TestBuilder {
     }
 
     @Test
-    public void testBuilderWalksAroundDuringConstruction() throws InvalidUserActionException {
+    public void testBuilderWalksAroundSmallBuildingDuringConstruction() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE);
