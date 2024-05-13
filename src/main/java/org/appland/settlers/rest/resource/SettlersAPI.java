@@ -148,7 +148,9 @@ public class SettlersAPI {
                     jsonGameResources.add(utils.gameResourceToJson(gameResource));
                 }
             } else {
-                jsonGameResources.add(utils.gameResourceToJson(gameResource));
+                synchronized (gameResource) {
+                    jsonGameResources.add(utils.gameResourceToJson(gameResource));
+                }
             }
         }
 
@@ -263,7 +265,9 @@ public class SettlersAPI {
 
             MapFile updatedMapFile = (MapFile) idManager.getObject(updatedMapFileId);
 
-            gameResource.setMap(updatedMapFile);
+            synchronized (gameResource) {
+                gameResource.setMap(updatedMapFile);
+            }
 
             return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
@@ -272,9 +276,12 @@ public class SettlersAPI {
             String updatedStatus = (String) jsonUpdates.get("status");
 
             if (updatedStatus.equals("STARTED")) {
-                startGame(gameResource);
 
-                gameResource.setStatus(STARTED);
+                synchronized (gameResource) {
+                    startGame(gameResource);
+
+                    gameResource.setStatus(STARTED);
+                }
 
                 return Response.status(200).entity(utils.gameToJson(gameResource.getGameMap(), gameResource).toJSONString()).build();
             }
@@ -285,7 +292,9 @@ public class SettlersAPI {
         if (jsonUpdates.containsKey("resources")) {
             ResourceLevel level = ResourceLevel.valueOf((String) jsonUpdates.get("resources"));
 
-            gameResource.setResource(level);
+            synchronized (gameResource) {
+                gameResource.setResource(level);
+            }
 
             return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
@@ -293,7 +302,9 @@ public class SettlersAPI {
         if (jsonUpdates.containsKey("othersCanJoin")) {
             System.out.println(jsonUpdates.get("othersCanJoin"));
 
-            gameResource.setOthersCanJoin((Boolean) jsonUpdates.get("othersCanJoin"));
+            synchronized (gameResource) {
+                gameResource.setOthersCanJoin((Boolean) jsonUpdates.get("othersCanJoin"));
+            }
 
             return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
         }
@@ -325,18 +336,11 @@ public class SettlersAPI {
         List<Point> startingPoints = map.getStartingPoints();
 
         for (int i = 0; i < startingPoints.size(); i++) {
-
             if (i == players.size()) {
                 break;
             }
 
             map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
-
-            try {
-                map.placeDeadTree(startingPoints.get(i).right().right());
-            } catch (Throwable t) {
-
-            }
         }
 
         /* Adjust the initial set of resources */
