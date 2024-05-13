@@ -923,7 +923,7 @@ class Utils {
         jsonMilitaryBuildingOccupiedMessage.put("id", idManager.getId(militaryBuildingReadyMessage));
         jsonMilitaryBuildingOccupiedMessage.put("type", MILITARY_BUILDING_READY.toString());
         jsonMilitaryBuildingOccupiedMessage.put("houseId", idManager.getId(militaryBuildingReadyMessage.building()));
-        jsonMilitaryBuildingOccupiedMessage.put("houseType", building.getSimpleName());
+        jsonMilitaryBuildingOccupiedMessage.put("houseType", building.getClass().getSimpleName());
         jsonMilitaryBuildingOccupiedMessage.put("point", buildingToPoint(building));
 
         return jsonMilitaryBuildingOccupiedMessage;
