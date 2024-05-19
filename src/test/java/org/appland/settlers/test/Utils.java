@@ -22,6 +22,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Forester;
@@ -3115,6 +3116,18 @@ public class Utils {
 
     public static void waitForDoorToClose(Building building) throws InvalidUserActionException {
         waitFor((Void v) -> building.isDoorClosed(), building.getMap());
+
+        assertTrue(building.isDoorClosed());
+    }
+
+    public static Donkey waitForRoadToGetAssignedDonkey(Road road0) throws InvalidUserActionException {
+        var map = road0.getPlayer().getMap();
+
+        waitFor((Void v) -> road0.getDonkey() != null, map);
+
+        assertNotNull(road0.getDonkey());
+
+        return road0.getDonkey();
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

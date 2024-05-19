@@ -115,7 +115,6 @@ public class MapLoader {
     }
 
     public MapFile loadMapFromStream(InputStream inputStream) throws SettlersMapLoadingException, IOException, InvalidMapException {
-
         StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
 
         MapFile mapFile = new MapFile();

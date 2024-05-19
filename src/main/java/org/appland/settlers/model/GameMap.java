@@ -325,11 +325,14 @@ public class GameMap {
             road.getCourier().returnToStorage();
         }
 
+        if (road.getDonkey() != null) {
+            road.getDonkey().returnToStorage();
+        }
+
         removeRoadButNotWorker(road);
     }
 
     private void removeRoadButNotWorker(Road road) {
-
         roads.remove(road);
 
         road.getWayPoints().stream()
@@ -2482,7 +2485,6 @@ public class GameMap {
      * @throws InvalidUserActionException Thrown if the flag to remove is null
      */
     public void removeFlag(Flag flag) throws InvalidUserActionException {
-
         if (flag == null) {
             throw new InvalidUserActionException("Cannot remove flag that is null");
         }

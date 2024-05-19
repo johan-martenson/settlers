@@ -60,65 +60,71 @@ public class Building implements EndPoint {
     private final List<Soldier>          attackers;
     private final List<Soldier>          waitingAttackers;
     private final Set<Soldier>           defenders;
-    private final Countdown countdown;
+    private final Countdown              countdown;
     private final Countdown              upgradeCountdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final List<Soldier>          hostedSoldiers;
     private final List<Soldier>          promisedSoldier;
     private final Map<Material, Integer> receivedMaterial;
     private final Set<Soldier>           waitingDefenders;
-    private DoorState door;
-    private int doorClosing;
 
     private enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, PLANNED, DESTROYED
+        UNDER_CONSTRUCTION,
+        UNOCCUPIED,
+        OCCUPIED,
+        BURNING,
+        PLANNED,
+        DESTROYED
     }
 
-    private Collection<Point> defendedLand;
-    private long     generation;
-    private GameMap map;
-    private Player player;
-    private State    state;
-    private Worker worker;
-    private Worker   promisedWorker;
-    private Point    position;
-    private Flag flag;
-    private boolean  enablePromotions;
-    private boolean  evacuated;
-    private boolean  productionEnabled;
-    private boolean  upgrading;
-    private Soldier  ownDefender;
-    private Soldier  primaryAttacker;
-    private boolean  outOfResources;
-    private Builder  builder;
+    private Set<Point> defendedLand;
+    private long       generation;
+    private GameMap    map;
+    private Player     player;
+    private State      state;
+    private Worker     worker;
+    private Worker     promisedWorker;
+    private Point      position;
+    private Flag       flag;
+    private boolean    enablePromotions;
+    private boolean    evacuated;
+    private boolean    productionEnabled;
+    private boolean    upgrading;
+    private Soldier    ownDefender;
+    private Soldier    primaryAttacker;
+    private boolean    outOfResources;
+    private Builder    builder;
+    private DoorState  door;
+    private int        doorClosing;
 
     public Building(Player player) {
-        receivedMaterial      = new EnumMap<>(Material.class);
-        promisedDeliveries    = new EnumMap<>(Material.class);
-        countdown             = new Countdown();
-        upgradeCountdown      = new Countdown();
-        hostedSoldiers = new ArrayList<>();
-        promisedSoldier = new ArrayList<>();
-        attackers             = new LinkedList<>();
-        defenders             = new HashSet<>();
-        waitingDefenders      = new HashSet<>();
-        waitingAttackers      = new LinkedList<>();
-        flag                  = new Flag(null);
-        worker                = null;
-        promisedWorker        = null;
-        position              = null;
-        map                   = null;
-        enablePromotions      = true;
-        evacuated             = false;
-        productionEnabled     = true;
-        outOfResources        = false;
-        upgrading             = false;
-        builder               = null;
-        door                  = DoorState.CLOSED;
+        receivedMaterial   = new EnumMap<>(Material.class);
+        promisedDeliveries = new EnumMap<>(Material.class);
+        countdown          = new Countdown();
+        upgradeCountdown   = new Countdown();
+        hostedSoldiers     = new ArrayList<>();
+        promisedSoldier    = new ArrayList<>();
+        attackers          = new LinkedList<>();
+        defenders          = new HashSet<>();
+        waitingDefenders   = new HashSet<>();
+        waitingAttackers   = new LinkedList<>();
+        flag               = new Flag(null);
+        worker             = null;
+        promisedWorker     = null;
+        position           = null;
+        map                = null;
+        enablePromotions   = true;
+        evacuated          = false;
+        productionEnabled  = true;
+        outOfResources     = false;
+        upgrading          = false;
+        builder            = null;
+        door               = DoorState.CLOSED;
+        state              = State.PLANNED;
+        defendedLand       = null;
 
         countdown.countFrom(getConstructionCountdown());
 
-        state = State.PLANNED;
         this.player = player;
 
         flag.setPlayer(player);
@@ -149,8 +155,6 @@ public class Building implements EndPoint {
             maxHostedSoldiers = 0;
             defenceRadius = 0;
         }
-
-        defendedLand = null;
     }
 
     private Map<Material, Integer> getMaterialNeededForUpgrade() {

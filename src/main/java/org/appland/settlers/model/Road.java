@@ -25,7 +25,6 @@ public class Road {
     private GameMap map;
 
     protected Road(Player player, List<Point> wayPoints) {
-
         if (areRoadStepsTooLong(wayPoints)) {
             throw new InvalidGameLogicException("The steps are too long in " + wayPoints);
         }

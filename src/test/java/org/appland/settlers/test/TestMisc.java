@@ -22,6 +22,7 @@ import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -2011,5 +2012,84 @@ public class TestMisc {
                 .filter(gcl -> gcl.getNewDiscoveredLand().contains(point3))
                 .count(),
                 1);
+    }
+
+    @Test
+    public void testDonkeyGoesBackToStorehouseWhenItsRoadIsRemoved() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is a lot of wood for the sawmill to work on */
+        Utils.adjustInventoryTo(headquarter, WOOD, 500);
+
+        /* Place sawmill and connect it to the headquarters */
+        var point1 = new Point(82, 68);
+        var sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter.getFlag());
+
+        /* Wait for the sawmill to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(sawmill0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
+
+        /* Make the road get promoted to a main road */
+        for (int i = 0; i < 10_000; i++) {
+            if (road0.isMainRoad()) {
+                break;
+            }
+
+            if (sawmill0.getFlag().getStackedCargo().isEmpty()) {
+                Utils.placeCargo(map, PLANK, sawmill0.getFlag(), headquarter);
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(road0.isMainRoad());
+
+        /* Wait for road to get a donkey assigned */
+        var donkey = Utils.waitForRoadToGetAssignedDonkey(road0);
+
+        /* Wait for the donkey to carry a cargo to the sawmill and be at the sawmill's flag */
+        for (int i = 0; i < 5000; i++) {
+            if (donkey.getCargo() != null &&
+                    donkey.getTarget().equals(sawmill0.getPosition()) &&
+                    donkey.getPosition().equals(sawmill0.getFlag().getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(donkey.getCargo());
+        assertEquals(donkey.getTarget(), sawmill0.getPosition());
+        assertEquals(donkey.getPosition(), sawmill0.getFlag().getPosition());
+
+        /* Wait for the donkey to go to the sawmill and deliver the cargo */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, sawmill0.getPosition());
+
+        /* Verify that the donkey goes back to the headquarters when it's between the sawmill and its flag, and its road is removed */
+        map.stepTime();
+
+        assertFalse(donkey.isExactlyAtPoint());
+        assertEquals(donkey.getNextPoint(), sawmill0.getFlag().getPosition());
+
+        map.removeRoad(road0);
+
+        assertEquals(donkey.getTarget(), headquarter.getPosition());
+        assertTrue(map.getWorkers().contains(donkey));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
+
+        assertFalse(map.getWorkers().contains(donkey));
     }
 }
