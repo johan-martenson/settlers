@@ -193,26 +193,31 @@ public class BuildingsExtractor {
         // Load japanese buildings
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Headquarter", getImageAt(japYLst, JapYLst.HEADQUARTER));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Headquarter", getImageAt(japYLst, JapYLst.HEADQUARTER_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Headquarter", getImageAt(japYLst, JapYLst.HEADQUARTER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Barracks", getImageAt(japYLst, JapYLst.BARRACKS));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Barracks", getImageAt(japYLst, JapYLst.BARRACKS_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Barracks", getImageAt(japYLst, JapYLst.BARRACKS + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Barracks", getImageAt(japYLst, JapYLst.BARRACKS_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Barracks", getImageAt(japYLst, JapYLst.BARRACKS_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "GuardHouse", getImageAt(japYLst, JapYLst.GUARDHOUSE));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "GuardHouse", getImageAt(japYLst, JapYLst.GUARDHOUSE_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "GuardHouse", getImageAt(japYLst, JapYLst.GUARDHOUSE + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "GuardHouse", getImageAt(japYLst, JapYLst.GUARDHOUSE_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "GuardHouse", getImageAt(japYLst, JapYLst.GUARDHOUSE_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "WatchTower", getImageAt(japYLst, JapYLst.WATCHTOWER));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "WatchTower", getImageAt(japYLst, JapYLst.WATCHTOWER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "WatchTower", getImageAt(japYLst, JapYLst.WATCHTOWER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "WatchTower", getImageAt(japYLst, JapYLst.WATCHTOWER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "WatchTower", getImageAt(japYLst, JapYLst.WATCHTOWER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Fortress", getImageAt(japYLst, JapYLst.FORTRESS));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Fortress", getImageAt(japYLst, JapYLst.FORTRESS_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Fortress", getImageAt(japYLst, JapYLst.FORTRESS + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Fortress", getImageAt(japYLst, JapYLst.FORTRESS_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Fortress", getImageAt(japYLst, JapYLst.FORTRESS_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "GraniteMine", getImageAt(japYLst, JapYLst.GRANITE_MINE));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "GraniteMine", getImageAt(japYLst, JapYLst.GRANITE_MINE_SHADOW));
@@ -238,6 +243,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "LookoutTower", getImageAt(japYLst, JapYLst.LOOKOUT_TOWER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "LookoutTower", getImageAt(japYLst, JapYLst.LOOKOUT_TOWER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "LookoutTower", getImageAt(japYLst, JapYLst.LOOKOUT_TOWER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "LookoutTower", getImageAt(japYLst, JapYLst.LOOKOUT_TOWER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Catapult", getImageAt(japYLst, JapYLst.CATAPULT));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Catapult", getImageAt(japYLst, JapYLst.CATAPULT_SHADOW));
@@ -253,76 +259,91 @@ public class BuildingsExtractor {
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Fishery", getImageAt(japYLst, JapYLst.FISHERY_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Quarry", getImageAt(japYLst, JapYLst.QUARRY));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Quarry", getImageAt(japYLst, JapYLst.QUARRY_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Quarry", getImageAt(japYLst, JapYLst.QUARRY + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Quarry", getImageAt(japYLst, JapYLst.QUARRY_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Quarry", getImageAt(japYLst, JapYLst.QUARRY_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "ForesterHut", getImageAt(japYLst, JapYLst.FORESTER_HUT));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "ForesterHut", getImageAt(japYLst, JapYLst.FORESTER_HUT_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "ForesterHut", getImageAt(japYLst, JapYLst.FORESTER_HUT + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "ForesterHut", getImageAt(japYLst, JapYLst.FORESTER_HUT_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "ForesterHut", getImageAt(japYLst, JapYLst.FORESTER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "SlaughterHouse", getImageAt(japYLst, JapYLst.SLAUGHTER_HOUSE));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "SlaughterHouse", getImageAt(japYLst, JapYLst.SLAUGHTER_HOUSE_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "SlaughterHouse", getImageAt(japYLst, JapYLst.SLAUGHTER_HOUSE + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "SlaughterHouse", getImageAt(japYLst, JapYLst.SLAUGHTER_HOUSE_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "SlaughterHouse", getImageAt(japYLst, JapYLst.SLAUGHTER_HOUSE_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "HunterHut", getImageAt(japYLst, JapYLst.HUNTER_HUT));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "HunterHut", getImageAt(japYLst, JapYLst.HUNTER_HUT_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "HunterHut", getImageAt(japYLst, JapYLst.HUNTER_HUT + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "HunterHut", getImageAt(japYLst, JapYLst.HUNTER_HUT_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "HunterHut", getImageAt(japYLst, JapYLst.HUNTER_HUT_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Brewery", getImageAt(japYLst, JapYLst.BREWERY));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Brewery", getImageAt(japYLst, JapYLst.BREWERY_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Brewery", getImageAt(japYLst, JapYLst.BREWERY + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Brewery", getImageAt(japYLst, JapYLst.BREWERY_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Brewery", getImageAt(japYLst, JapYLst.BREWERY_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Armory", getImageAt(japYLst, JapYLst.ARMORY));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Armory", getImageAt(japYLst, JapYLst.ARMORY_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Armory", getImageAt(japYLst, JapYLst.ARMORY + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Armory", getImageAt(japYLst, JapYLst.ARMORY_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Armory", getImageAt(japYLst, JapYLst.ARMORY_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Metalworks", getImageAt(japYLst, JapYLst.METALWORKS));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Metalworks", getImageAt(japYLst, JapYLst.METALWORKS_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Metalworks", getImageAt(japYLst, JapYLst.METALWORKS + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Metalworks", getImageAt(japYLst, JapYLst.METALWORKS_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Metalworks", getImageAt(japYLst, JapYLst.METALWORKS_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "IronSmelter", getImageAt(japYLst, JapYLst.IRON_SMELTER));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "IronSmelter", getImageAt(japYLst, JapYLst.IRON_SMELTER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "IronSmelter", getImageAt(japYLst, JapYLst.IRON_SMELTER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "IronSmelter", getImageAt(japYLst, JapYLst.IRON_SMELTER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "IronSmelter", getImageAt(japYLst, JapYLst.IRON_SMELTER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "PigFarm", getImageAt(japYLst, JapYLst.PIG_FARM));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "PigFarm", getImageAt(japYLst, JapYLst.PIG_FARM_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "PigFarm", getImageAt(japYLst, JapYLst.PIG_FARM + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "PigFarm", getImageAt(japYLst, JapYLst.PIG_FARM_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "PigFarm", getImageAt(japYLst, JapYLst.PIG_FARM_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Storehouse", getImageAt(japYLst, JapYLst.STOREHOUSE));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Storehouse", getImageAt(japYLst, JapYLst.STOREHOUSE_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Storehouse", getImageAt(japYLst, JapYLst.STOREHOUSE + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Storehouse", getImageAt(japYLst, JapYLst.STOREHOUSE_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Storehouse", getImageAt(japYLst, JapYLst.STOREHOUSE_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Mill", getImageAt(japYLst, JapYLst.MILL_NO_FAN));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Mill", getImageAt(japYLst, JapYLst.MILL_NO_FAN_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Mill", getImageAt(japYLst, JapYLst.MILL_NO_FAN + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Mill", getImageAt(japYLst, JapYLst.MILL_NO_FAN_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Mill", getImageAt(japYLst, JapYLst.MILL_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Bakery", getImageAt(japYLst, JapYLst.BAKERY));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Bakery", getImageAt(japYLst, JapYLst.BAKERY_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Bakery", getImageAt(japYLst, JapYLst.BAKERY + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Bakery", getImageAt(japYLst, JapYLst.BAKERY_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Bakery", getImageAt(japYLst, JapYLst.BAKERY_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Sawmill", getImageAt(japYLst, JapYLst.SAWMILL));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Sawmill", getImageAt(japYLst, JapYLst.SAWMILL_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Sawmill", getImageAt(japYLst, JapYLst.SAWMILL + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Sawmill", getImageAt(japYLst, JapYLst.SAWMILL_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Sawmill", getImageAt(japYLst, JapYLst.SAWMILL_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Mint", getImageAt(japYLst, JapYLst.MINT));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Mint", getImageAt(japYLst, JapYLst.MINT_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Mint", getImageAt(japYLst, JapYLst.MINT + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Mint", getImageAt(japYLst, JapYLst.MINT_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Mint", getImageAt(japYLst, JapYLst.MINT_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Well", getImageAt(japYLst, JapYLst.WELL));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Well", getImageAt(japYLst, JapYLst.WELL_SHADOW));
@@ -333,16 +354,19 @@ public class BuildingsExtractor {
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Shipyard", getImageAt(japYLst, JapYLst.SHIPYARD_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Shipyard", getImageAt(japYLst, JapYLst.SHIPYARD + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Shipyard", getImageAt(japYLst, JapYLst.SHIPYARD_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Shipyard", getImageAt(japYLst, JapYLst.SHIPYARD_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Farm", getImageAt(japYLst, JapYLst.FARM));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Farm", getImageAt(japYLst, JapYLst.FARM_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "Farm", getImageAt(japYLst, JapYLst.FARM + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "Farm", getImageAt(japYLst, JapYLst.FARM_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "Farm", getImageAt(japYLst, JapYLst.FARM_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "DonkeyFarm", getImageAt(japYLst, JapYLst.DONKEY_BREEDER));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "DonkeyFarm", getImageAt(japYLst, JapYLst.DONKEY_BREEDER_SHADOW));
         buildingsImageCollection.addBuildingUnderConstructionForNation(JAPANESE, "DonkeyFarm", getImageAt(japYLst, JapYLst.DONKEY_BREEDER + 2));
         buildingsImageCollection.addBuildingUnderConstructionShadowForNation(JAPANESE, "DonkeyFarm", getImageAt(japYLst, JapYLst.DONKEY_BREEDER_UNDER_CONSTRUCTION_SHADOW));
+        buildingsImageCollection.addOpenDoorForBuilding(JAPANESE, "DonkeyFarm", getImageAt(japYLst, JapYLst.DONKEY_BREEDER_OPEN_DOOR));
 
         buildingsImageCollection.addBuildingForNation(JAPANESE, "Harbor", getImageAt(japYLst, JapYLst.HARBOR));
         buildingsImageCollection.addBuildingShadowForNation(JAPANESE, "Harbor", getImageAt(japYLst, JapYLst.HARBOR_SHADOW));
