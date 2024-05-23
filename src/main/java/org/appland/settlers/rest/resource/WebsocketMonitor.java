@@ -86,6 +86,37 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case UPGRADE -> {
+                String houseId = (String) jsonBody.get("houseId");
+
+                Building building = (Building) idManager.getObject(houseId);
+
+                synchronized (map) {
+                    building.upgrade();
+                }
+            }
+            case FLAG_DEBUG_INFORMATION -> {
+                String flagId = (String) jsonBody.get("flagId");
+                long requestId = (Long) jsonBody.get("requestId");
+
+                Flag flag = (Flag) idManager.getObject(flagId);
+
+                synchronized (map) {
+                    JSONObject jsonResponse = utils.flagToJson(flag);
+
+                    jsonResponse.put("requestId", requestId);
+
+                    JSONArray jsonCargos = new JSONArray();
+
+                    flag.getStackedCargo().forEach(cargo -> {
+                        jsonCargos.add(utils.cargoToJson(cargo));
+                    });
+
+                    jsonResponse.put("cargos", jsonCargos);
+
+                    sendToPlayer(jsonResponse, player);
+                }
+            }
             case GET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
                 int amount;
 

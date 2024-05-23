@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.appland.settlers.model.Material.COIN;
 import static org.junit.Assert.*;
 
 public class TestDoorOpenClose {
@@ -285,5 +286,79 @@ public class TestDoorOpenClose {
         }
 
         assertTrue(woodcutterHut.isDoorClosed());
+    }
+
+    @Test
+    public void testHeadquarterDoorOpensAndClosesWhenItGetsDelivery() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a flag and a road */
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Wait for the road to get an assigned courier */
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Place a cargo to be delivered to the headquarters */
+        var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+
+        /* Wait for the courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        /* Verify that the door of the headquarters is closed, and opens when the delivery happens */
+        assertTrue(headquarter0.isDoorClosed());
+
+        for (int i = 0; i < 2000; i++) {
+            if (courier.getPosition().equals(headquarter0.getFlag().getPosition())) {
+                break;
+            }
+
+            assertTrue(headquarter0.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        assertFalse(headquarter0.isDoorClosed());
+        assertEquals(courier.getPosition(), headquarter0.getFlag().getPosition());
+
+        for (int i = 0; i < 2000; i++) {
+            if (courier.getPosition().equals(headquarter0.getPosition())) {
+                break;
+            }
+
+            assertFalse(headquarter0.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        map.stepTime();
+
+        assertEquals(courier.getPosition(), headquarter0.getPosition());
+        assertNull(courier.getCargo());
+
+        for (int i = 0; i < 2000; i++) {
+            if (courier.getPosition().equals(headquarter0.getFlag().getPosition())) {
+                System.out.println(courier);
+
+                break;
+            }
+
+            assertFalse(headquarter0.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        assertTrue(headquarter0.isDoorClosed());
     }
 }

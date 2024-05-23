@@ -1906,7 +1906,16 @@ class Utils {
         jsonGameResource.put("resources", gameResource.getResources().name());
         jsonGameResource.put("othersCanJoin", gameResource.getOthersCanJoin());
 
-
         return jsonGameResource;
+    }
+
+    public JSONObject cargoToJson(Cargo cargo) {
+        JSONObject jsonCargo = new JSONObject();
+
+        jsonCargo.put("material", cargo.getMaterial().name().toUpperCase());
+        jsonCargo.put("target", pointToJson(cargo.getTarget().getPosition()));
+        jsonCargo.put("targetType", cargo.getTarget().getClass().getSimpleName());
+
+        return jsonCargo;
     }
 }

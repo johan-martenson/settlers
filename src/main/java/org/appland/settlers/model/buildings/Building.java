@@ -482,8 +482,6 @@ public class Building implements EndPoint {
         Duration duration = new Duration(counterName);
 
         if (door == DoorState.OPEN_CLOSE_SOON) {
-            System.out.println(doorClosing);
-
             if (doorClosing == 0) {
                 door = DoorState.CLOSED;
 

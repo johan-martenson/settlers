@@ -114,16 +114,24 @@ public class Fisherman extends Worker {
             }
         } else if (state == PULLING_UP_FISH) {
             if (countdown.hasReachedZero()) {
-                Cargo cargo = map.catchFishAtPoint(getPosition());
+                if (map.getAmountFishAtPoint(getPosition()) == 0) {
+                    state = GOING_BACK_TO_HOUSE;
 
-                setCargo(cargo);
+                    // TODO: should report non-productivity
 
-                state = GOING_BACK_TO_HOUSE_WITH_FISH;
-                returnHomeOffroad();
+                    returnHomeOffroad();
+                } else {
+                    Cargo cargo = map.catchFishAtPoint(getPosition());
 
-                /* Report that the fisherman produced a fish */
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
+                    setCargo(cargo);
+
+                    state = GOING_BACK_TO_HOUSE_WITH_FISH;
+                    returnHomeOffroad();
+
+                    /* Report that the fisherman produced a fish */
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
+                }
             } else {
                 countdown.step();
             }
@@ -339,7 +347,6 @@ public class Fisherman extends Worker {
         Iterable<Point> fishingArea = GameUtils.getHexagonAreaAroundPoint(getHome().getPosition(), FISHING_RADIUS, map);
 
         for (Point point : fishingArea) {
-
             MapPoint mapPoint = map.getMapPoint(point);
 
             if (mapPoint.isBuilding()) {

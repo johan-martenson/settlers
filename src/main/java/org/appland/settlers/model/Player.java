@@ -848,8 +848,47 @@ public class Player {
     }
 
     public void monitorGameView(PlayerGameViewMonitor monitor) {
+        newFlags.clear();
+        removedFlags.clear();
+        newBuildings.clear();
+        removedBuildings.clear();
+        newRoads.clear();
+        removedRoads.clear();
+        workersWithNewTargets.clear();
+        removedWorkers.clear();
         changedBuildings.clear();
-
+        newTrees.clear();
+        removedTrees.clear();
+        removedStones.clear();
+        newSigns.clear();
+        removedSigns.clear();
+        newCrops.clear();
+        removedCrops.clear();
+        newDiscoveredLand.clear();
+        addedBorder.clear();
+        removedBorder.clear();
+        changedAvailableConstruction.clear();
+        newOwnedLand.clear();
+        newLostLand.clear();
+        newMessages.clear();
+        newStones.clear();
+        promotedRoads.clear();
+        changedBorders.clear();
+        changedFlags.clear();
+        removedDeadTrees.clear();
+        discoveredDeadTrees.clear();
+        harvestedCrops.clear();
+        newShips.clear();
+        finishedShips.clear();
+        shipsWithNewTargets.clear();
+        workersWithStartedActions.clear();
+        newWorkers.clear();
+        removedDecorations.clear();
+        newDecorations.clear();
+        upgradedBuildings.clear();
+        removedMessages.clear();
+        changedStones.clear();
+        newFallingTrees.clear();
         gameViewMonitors.add(monitor);
     }
 
@@ -864,7 +903,7 @@ public class Player {
     public void sendMonitoringEvents(long time) {
 
         /* Don't send an event if there is no new information */
-        // Missing discoveredDeadTrees, changedAvailableConstruction, newWorkers
+        // Missing discoveredDeadTrees, newWorkers
         if (newFlags.isEmpty() && removedFlags.isEmpty() && newBuildings.isEmpty() &&
             newRoads.isEmpty() && removedRoads.isEmpty() && removedWorkers.isEmpty() &&
             changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
@@ -875,7 +914,8 @@ public class Player {
             newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
             finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
-            removedDecorations.isEmpty() && newDecorations.isEmpty() && upgradedBuildings.isEmpty()) {
+            removedDecorations.isEmpty() && newDecorations.isEmpty() && upgradedBuildings.isEmpty() &&
+            changedAvailableConstruction.isEmpty()) {
             return;
         }
 
@@ -1015,7 +1055,7 @@ public class Player {
         for (Building changedBuilding : changedBuildings) {
 
             /* Changes to buildings that are not military and not destroyed do not affect available construction */
-            if (!changedBuilding.isMilitaryBuilding() &&
+            if ((changedBuilding.isHeadquarter() || !changedBuilding.isMilitaryBuilding()) &&
                 (changedBuilding.isReady() || changedBuilding.isUnderConstruction())) {
                 continue;
             }
@@ -1036,7 +1076,6 @@ public class Player {
         }
 
         for (Road road : newRoads) {
-
             /*
              - Each endpoint is now a flag
              - Cannot place anything on the points on the road next to the flags
@@ -1073,7 +1112,6 @@ public class Player {
 
         /* Add changed available construction if the border has been extended */
         if (!addedBorder.isEmpty()) {
-
             // Report changed available construction because of the border change
             changedAvailableConstruction.addAll(newOwnedLand);
             changedAvailableConstruction.addAll(newLostLand);

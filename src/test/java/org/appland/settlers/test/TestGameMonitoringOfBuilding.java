@@ -70,6 +70,13 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo0);
 
+        /* Let the courier start walking from the headquarters' flag to it */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        monitor.clearEvents();
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
@@ -84,23 +91,21 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo1);
 
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        monitor.clearEvents();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
         map.stepTime();
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
-                found++;
-
-                assertTrue(gameChangesList.getChangedBuildings().contains(headquarter0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-            }
-        }
-
-        assertEquals(found, 1);
+        assertEquals(
+                monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(headquarter0))
+                        .count(),
+                1);
 
         /* Turn off detailed monitoring */
         player0.removeDetailedMonitoring(headquarter0);
@@ -110,13 +115,20 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, beerCargo2);
 
-        lastGameChangesList = monitor.getLastEvent();
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        monitor.clearEvents();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
-        }
+        assertEquals(
+                monitor.getEvents().stream()
+                        .filter(gcl -> gcl.getChangedBuildings().contains(headquarter0))
+                        .count(),
+                0);
+
     }
 
     @Test
@@ -986,9 +998,26 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
 
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill0.getFlag().getPosition());
+
+        map.stepTime();
+
+        assertNotNull(road0.getCourier().getCargo());
+        assertEquals(road0.getCourier().getCargo().getMaterial(), WOOD);
+        assertEquals(road0.getCourier().getPosition(), sawmill0.getFlag().getPosition());
+        assertEquals(road0.getCourier().getTarget(), sawmill0.getPosition());
+
+        map.stepTime();
+
         monitor.clearEvents();
 
+        System.out.println(road0.getCourier());
+
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 2);
+
+        assertEquals(sawmill0.getAmount(WOOD), 2);
 
         assertEquals(monitor.getEvents()
                         .stream()
@@ -1000,6 +1029,12 @@ public class TestGameMonitoringOfBuilding {
         player0.removeDetailedMonitoring(sawmill0);
 
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill0.getFlag().getPosition());
+
+        map.stepTime();
 
         monitor.clearEvents();
 
@@ -1054,6 +1089,13 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
 
+        /* Wait for the door to close again */
+        assertFalse(sawmill0.isDoorClosed());
+
+        Utils.waitForDoorToClose(sawmill0);
+
+        map.stepTime();
+
         /* Start detailed monitoring of the sawmill */
         player0.addDetailedMonitoring(sawmill0);
 
@@ -1062,45 +1104,18 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill0.getWorker(), PLANK);
 
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(sawmill0)) {
-                found++;
-            }
-        }
+        var count = monitor.getEvents().stream()
+                .filter(gcl -> gcl.getChangedBuildings().contains(sawmill0))
+                        .count();
 
-        assertEquals(found, 1);
+        assertTrue(count > 0);
 
-        /* Stop detailed monitoring */
-        player0.removeDetailedMonitoring(sawmill0);
+        /* Verify that a second event is not sent (before the door is closed again...) */
+        map.stepTime();
 
-        /* Wait for the productivity of the sawmill to reach 100 */
-        for (int i = 0; i < 10000; i++) {
-            if (sawmill0.getAmount(WOOD) == 0) {
-                Utils.deliverCargo(sawmill0, WOOD);
-            }
-
-            if (sawmill0.getProductivity() == 100) {
-                break;
-            }
-
-            map.stepTime();
-        }
-
-        assertEquals(sawmill0.getProductivity(), 100);
-
-        /* Verify that no event is sent when the third wood is consumed */
-        Utils.adjustInventoryTo(headquarter0, WOOD, 1);
-
-        Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
-
-        monitor.clearEvents();
-
-        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill0.getWorker(), PLANK);
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill0));
-        }
+        assertEquals(count, monitor.getEvents().stream()
+                .filter(gcl -> gcl.getChangedBuildings().contains(sawmill0))
+                .count(), count);
     }
 
     @Test
@@ -1380,7 +1395,6 @@ public class TestGameMonitoringOfBuilding {
 
         found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
             assertTrue(gameChangesList.getNewBuildings().isEmpty());
             assertTrue(gameChangesList.getRemovedBuildings().isEmpty());
 

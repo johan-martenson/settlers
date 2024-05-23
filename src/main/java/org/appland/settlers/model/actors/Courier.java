@@ -30,13 +30,13 @@ import static org.appland.settlers.model.actors.Courier.States.*;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
-
     private static final Random random = new Random(1);
     private static final int TIME_TO_CHEW_GUM = 29;
     private static final int TIME_TO_READ_PAPER = 29;
     private static final int TIME_TO_TOUCH_NOSE = 29;
     private static final int TIME_TO_JUMP_SKIP_ROPE = 29;
     private static final int TIME_TO_SIT_DOWN = 29;
+    private static final int TIME_WALK_TO_FLAG = 10;
 
     private final BodyType bodyType;
     private final Countdown countdown;
@@ -306,79 +306,84 @@ public class Courier extends Worker {
 
     @Override
     protected void onArrival() {
-        if (state == WALKING_TO_ROAD) {
-            state = IDLE_AT_ROAD;
-        } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
-            Flag flag = map.getFlagAtPoint(getPosition());
-            Cargo cargoToPickUp = findCargoToCarry(flag);
+        switch (state) {
+            case WALKING_TO_ROAD -> state = IDLE_AT_ROAD;
+            case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
+                Flag flag = map.getFlagAtPoint(getPosition());
+                Cargo cargoToPickUp = findCargoToCarry(flag);
 
-            if (intendedCargo != null) {
-                intendedCargo.cancelPromisedPickUp();
+                if (intendedCargo != null) {
+                    intendedCargo.cancelPromisedPickUp();
 
-                intendedCargo = null;
+                    intendedCargo = null;
+                }
+
+                if (cargoToPickUp != null) {
+                    pickUpCargoAndGoDeliver(cargoToPickUp);
+                } else {
+                    setTarget(idlePoint);
+
+                    state = RETURNING_TO_IDLE_SPOT;
+                }
             }
+            case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
+                var building = map.getBuildingAtPoint(getPosition());
 
-            if (cargoToPickUp != null) {
-                pickUpCargoAndGoDeliver(cargoToPickUp);
-            } else {
-                setTarget(idlePoint);
+                /* Cannot deliver if the building has just been torn down */
+                if (building == null || building.isBurningDown() || building.isDestroyed()) {
 
-                state = RETURNING_TO_IDLE_SPOT;
+                    /* Return to the headquarters off-road because the driveway is gone */
+                    state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
+
+                    setOffroadTarget(getPosition().downRight());
+
+                    /* Deliver the cargo normally */
+                } else {
+                    deliverCargo();
+
+                    state = GOING_BACK_TO_ROAD;
+
+                    setTarget(getPosition().downRight());
+                }
             }
-        } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            var building = map.getBuildingAtPoint(getPosition());
-
-            /* Cannot deliver if the building has just been torn down */
-            if (building == null || building.isBurningDown() || building.isDestroyed()) {
-
-                /* Return to the headquarters off-road because the driveway is gone */
-                state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
-
-                setOffroadTarget(getPosition().downRight());
-
-            /* Deliver the cargo normally */
-            } else {
+            case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
                 deliverCargo();
 
-                state = GOING_BACK_TO_ROAD;
+                Cargo cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(getPosition()));
 
-                setTarget(getPosition().downRight());
+                if (cargoToPickUp != null) {
+                    pickUpCargoAndGoDeliver(cargoToPickUp);
+                } else {
+
+                    state = RETURNING_TO_IDLE_SPOT;
+                    setTarget(idlePoint);
+                }
             }
-        } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
-            deliverCargo();
+            case GOING_BACK_TO_ROAD -> {
+                Flag flag = map.getFlagAtPoint(getPosition());
+                Cargo cargoToPickUp = findCargoToCarry(flag);
 
-            Cargo cargoToPickUp = findCargoToCarry(map.getFlagAtPoint(getPosition()));
-
-            if (cargoToPickUp != null) {
-                pickUpCargoAndGoDeliver(cargoToPickUp);
-            } else {
-
-                state = RETURNING_TO_IDLE_SPOT;
-                setTarget(idlePoint);
+                if (cargoToPickUp != null) {
+                    pickUpCargoAndGoDeliver(cargoToPickUp);
+                } else {
+                    state = RETURNING_TO_IDLE_SPOT;
+                    setTarget(idlePoint);
+                }
             }
-        } else if (state == GOING_BACK_TO_ROAD) {
-            Flag flag = map.getFlagAtPoint(getPosition());
-            Cargo cargoToPickUp = findCargoToCarry(flag);
+            case RETURNING_TO_IDLE_SPOT -> state = IDLE_AT_ROAD;
+            case RETURNING_TO_STORAGE -> {
+                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
-            if (cargoToPickUp != null) {
-                pickUpCargoAndGoDeliver(cargoToPickUp);
-            } else {
-                state = RETURNING_TO_IDLE_SPOT;
-                setTarget(idlePoint);
+                storehouse.depositWorker(this);
             }
-        } else if (state == RETURNING_TO_IDLE_SPOT) {
-            state = IDLE_AT_ROAD;
-        } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+            case GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
+                state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
-            storehouse.depositWorker(this);
-        } else if (state == GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
+                /* Return the cargo to the headquarters */
+                getCargo().transportToStorage();
 
-            /* Return the cargo to the headquarters */
-            getCargo().transportToStorage();
-
-            setTarget(getCargo().getTarget().getPosition());
+                setTarget(getCargo().getTarget().getPosition());
+            }
         }
     }
 
@@ -459,6 +464,16 @@ public class Courier extends Worker {
             }
             case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
                 if (mapPoint.isFlag()) {
+
+                    // Is the courier at the flag of the building and should the door be open for a delivery?
+                    if (targetBuilding != null &&
+                            getPosition().equals(targetBuilding.getPosition().downRight()) &&
+                            targetBuilding.isReady()) {
+                        targetBuilding.openDoor(TIME_WALK_TO_FLAG * 2);
+
+                    // Has the building been torn down?
+                    }
+
                     if (targetBuilding != null &&
                             (targetBuilding.isBurningDown() ||
                                     targetBuilding.isDestroyed() ||

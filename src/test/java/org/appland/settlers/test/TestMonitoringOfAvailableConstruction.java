@@ -2800,7 +2800,7 @@ public class TestMonitoringOfAvailableConstruction {
     }
 
     @Test
-    public void testMonitoringAvailableConstructionWhenMultipleStoneDisappear() throws Exception {
+    public void testMonitoringAvailableConstructionWhenMultipleStonesDisappear() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE);
@@ -2822,7 +2822,7 @@ public class TestMonitoringOfAvailableConstruction {
         /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
+        /* Place stones */
         Point point1 = new Point(12, 4);
         Point point3 = new Point(13, 3);
         Point point4 = new Point(11, 3);
@@ -2839,6 +2839,8 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
+        map.stepTime();
+
         monitor.setAvailableConstruction(
                 map.getAvailableHousePoints(player0),
                 map.getAvailableFlagPoints(player0),
@@ -2848,28 +2850,11 @@ public class TestMonitoringOfAvailableConstruction {
         /* Verify that there are three correct events for available construction when the stones are gone */
         Utils.waitForStonesToDisappear(map, stone0, stone1, stone2);
 
-        int availableConstructionChanges = 0;
-
-        for (GameChangesList gameChanges : monitor.getEvents()) {
-            if (gameChanges.getChangedAvailableConstruction().isEmpty()) {
-                continue;
-            }
-
-            availableConstructionChanges = availableConstructionChanges + 1;
-        }
-
-        int removedStones = 0;
-
-        for (GameChangesList gameChanges : monitor.getEvents()) {
-            if (gameChanges.getRemovedStones().isEmpty()) {
-                continue;
-            }
-
-            removedStones = removedStones + 1;
-        }
-
-        assertEquals(removedStones, 3);
-        assertEquals(availableConstructionChanges, 3);
+        assertFalse(map.isStoneAtPoint(point1));
+        assertFalse(map.isStoneAtPoint(point2));
+        assertFalse(map.isStoneAtPoint(point3));
+        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.getRemovedStones().isEmpty()).count(), 3);
+        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.getChangedAvailableConstruction().isEmpty()).count(), 3);
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
 }

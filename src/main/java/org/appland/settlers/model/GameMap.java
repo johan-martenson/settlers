@@ -852,7 +852,6 @@ public class GameMap {
                 throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
             }
         } else {
-
             if (isFirstHouse) {
                 borderCheck = CAN_PLACE_OUTSIDE_BORDER;
             }
@@ -1467,7 +1466,6 @@ public class GameMap {
 
         /* Handle the case where the flag is on an existing road that will be split */
         if (mapPoint.isRoad()) {
-
             Road existingRoad = mapPoint.getRoad();
             Courier courier   = existingRoad.getCourier();
 
@@ -2572,7 +2570,7 @@ public class GameMap {
     public Cargo catchFishAtPoint(Point point) {
         MapPoint mapPoint = getMapPoint(point);
 
-        if (mapPoint.getAmountOfFish() ==0) {
+        if (mapPoint.getAmountOfFish() == 0) {
             throw new InvalidGameLogicException("Can't find any fish to catch at " + point);
         }
 

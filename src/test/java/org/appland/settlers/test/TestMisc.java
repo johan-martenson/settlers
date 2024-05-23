@@ -13,12 +13,14 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Donkey;
+import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -2091,5 +2093,73 @@ public class TestMisc {
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
 
         assertFalse(map.getWorkers().contains(donkey));
+    }
+
+    @Test
+    public void testTwoFishermanFishAtSameSpotWhenThereIsOnlyOneFishLeft() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a small lake */
+        var point1 = new Point(74, 68);
+        Utils.surroundPointWithWater(point1, map);
+
+        /* Fix so that there is only one fish available */
+        Utils.adjustFishAvailable(map, point1.upLeft(), 0);
+        Utils.adjustFishAvailable(map, point1.upRight(), 0);
+        Utils.adjustFishAvailable(map, point1.right(), 0);
+        Utils.adjustFishAvailable(map, point1.downRight(), 0);
+        Utils.adjustFishAvailable(map, point1.downLeft(), 0);
+        Utils.adjustFishAvailable(map, point1.left(), 1);
+
+        /* Place two fisheries, construct and occupy them */
+        var point2 = new Point(67, 63);
+        var point3 = new Point(75, 63);
+
+        var fishery0 = map.placeBuilding(new Fishery(player0), point2);
+        var fishery1 = map.placeBuilding(new Fishery(player0), point3);
+
+        Utils.constructHouses(fishery0, fishery1);
+
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery1);
+
+        /* Wait for both fishermen to go out at the same time to the same spot */
+        var fishermen = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 2, player0);
+
+        var fisherman0 = fishermen.getFirst();
+        var fisherman1 = fishermen.get(1);
+
+        assertEquals(fishermen.size(), 2);
+        assertEquals(fisherman0.getTarget(), point1.left());
+        assertEquals(fisherman1.getTarget(), point1.left());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, point1.left());
+
+        Utils.waitForFishermanToStopFishing(fisherman0, map);
+
+        assertFalse(fisherman0.isFishing());
+        assertFalse(fisherman1.isFishing());
+
+        /* Verify that only one fisherman got a fish and that both then go back to their fisheries */
+
+        assertTrue(
+                (fisherman0.getCargo() != null && fisherman1.getCargo() == null) ||
+                        (fisherman0.getCargo() == null && fisherman1.getCargo() != null)
+        );
+        assertTrue(
+                (fisherman0.getTarget().equals(fishery0.getPosition()) && fisherman1.getTarget().equals(fishery1.getPosition())) ||
+                        (fisherman0.getTarget().equals(fishery1.getPosition()) && fisherman1.getTarget().equals(fishery0.getPosition()))
+        );
+
+        Utils.fastForwardUntilWorkersReachTarget(map, fisherman0, fisherman1);
     }
 }

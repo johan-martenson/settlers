@@ -4,7 +4,6 @@ import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
@@ -19,6 +18,7 @@ import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
@@ -57,9 +57,9 @@ import java.util.stream.Collectors;
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import static org.appland.settlers.model.Vegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.model.Vegetation.MOUNTAIN_1;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.*;
 import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
@@ -1412,7 +1412,6 @@ public class Utils {
     }
 
     public static void waitForStonesToDisappear(GameMap map, Stone... stones) throws InvalidUserActionException {
-
         for (int i = 0; i < 10000; i++) {
             boolean allStonesGone = true;
 
@@ -3128,6 +3127,20 @@ public class Utils {
         assertNotNull(road0.getDonkey());
 
         return road0.getDonkey();
+    }
+
+    public static void adjustFishAvailable(GameMap map, Point point, int amount) {
+        while (amount < map.getAmountFishAtPoint(point)) {
+            map.catchFishAtPoint(point);
+        }
+
+        assertEquals(map.getAmountFishAtPoint(point), amount);
+    }
+
+    public static void waitForDoorToOpen(Building building) throws InvalidUserActionException {
+        waitFor((Void v) -> !building.isDoorClosed(), building.getMap());
+
+        assertFalse(building.isDoorClosed());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
