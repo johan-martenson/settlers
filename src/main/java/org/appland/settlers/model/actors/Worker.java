@@ -168,75 +168,73 @@ public abstract class Worker {
 
         Duration duration = new Duration(counterName);
 
-        if (state == State.WALKING_AND_EXACTLY_AT_POINT) {
+        switch (state) {
+            case WALKING_AND_EXACTLY_AT_POINT -> {
+                /* Arrival at target is already handled. In this branch the worker is at a fixed point but not the target */
 
-            /* Arrival at target is already handled. In this branch the worker is at a fixed point but not the target */
+                /* Start the next part of the road */
+                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-            /* Start the next part of the road */
-            walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+                /* Keep track of what direction the worker is walking in */
+                Point next = path.getFirst();
 
-            /* Keep track of what direction the worker is walking in */
-            Point next = path.getFirst();
+                if (position.x == next.x && position.y == next.y) {
+                    throw new RuntimeException("They are the same! I am " + this);
+                }
 
-            if (position.x == next.x && position.y == next.y) {
-                throw new RuntimeException("They are the same! I am " + this);
+                if (position.distance(next) > 2) {
+                    throw new RuntimeException("Too big distance! I am " + this);
+                }
+
+                direction = GameUtils.getDirectionBetweenPoints(position, next);
+
+                state = State.WALKING_BETWEEN_POINTS;
             }
+            case WALKING_BETWEEN_POINTS -> {
+                walkCountdown.step();
 
-            if (position.distance(next) > 2) {
-                throw new RuntimeException("Too big distance! I am " + this);
-            }
+                if (walkCountdown.hasReachedZero()) {
+                    state = State.WALKING_AND_EXACTLY_AT_POINT;
 
-            direction = GameUtils.getDirectionBetweenPoints(position, next);
+                    /* Update the worker's position */
+                    position = path.getFirst();
+                    path.removeFirst();
 
-            state = State.WALKING_BETWEEN_POINTS;
+                    /* Update the cargo's position */
+                    updateCargoPosition();
 
-        } else if (state == State.WALKING_BETWEEN_POINTS) {
-            walkCountdown.step();
+                    /* Call the subclass to let it react */
+                    onWalkingAndAtFixedPoint();
 
-            if (walkCountdown.hasReachedZero()) {
-                state = State.WALKING_AND_EXACTLY_AT_POINT;
+                    /* Handle the arrival if the worker is at the target */
+                    if (position.equals(target)) {
 
-                /* Update the worker's position */
-                position = path.getFirst();
-                path.removeFirst();
+                        /* Set the state to idle and outside */
+                        state = State.IDLE_OUTSIDE;
 
-                /* Update the cargo's position */
-                updateCargoPosition();
-
-                /* Call the subclass to let it react */
-                onWalkingAndAtFixedPoint();
-
-                /* Handle the arrival if the worker is at the target */
-                if (position.equals(target)) {
-
-                    /* Set the state to idle and outside */
-                    state = State.IDLE_OUTSIDE;
-
-                    /* Enter buildings if required and give the subclasses a change to act */
-                    handleArrival();
+                        /* Enter buildings if required and give the subclasses a change to act */
+                        handleArrival();
+                    }
                 }
             }
-        } else if (state == State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT) {
+            case WALKING_HALFWAY_AND_EXACTLY_AT_POINT -> {
+                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-            walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
-
-            state = State.WALKING_HALF_WAY;
-        } else if (state == State.WALKING_HALF_WAY) {
-
-            walkCountdown.step();
-
-            /* The worker has walked half way */
-            if (getPercentageOfDistanceTraveled() >= 50) {
-                onWalkedHalfWay();
-
-                state = State.IDLE_HALF_WAY;
+                state = State.WALKING_HALF_WAY;
             }
-        } else if (state == State.IDLE_OUTSIDE) {
-            onIdle();
-        } else if (state == State.IDLE_INSIDE) {
-            onIdle();
-        } else if (state == State.IDLE_HALF_WAY) {
-            onIdle();
+            case WALKING_HALF_WAY -> {
+                walkCountdown.step();
+
+                /* The worker has walked half way */
+                if (getPercentageOfDistanceTraveled() >= 50) {
+                    onWalkedHalfWay();
+
+                    state = State.IDLE_HALF_WAY;
+                }
+            }
+            case IDLE_INSIDE, IDLE_OUTSIDE, IDLE_HALF_WAY -> {
+                onIdle();
+            }
         }
 
         duration.after("stepTime");
@@ -284,7 +282,6 @@ public abstract class Worker {
 
         /* Just enter the storage and do nothing more */
         if (targetBuilding != null && targetBuilding instanceof Storehouse storehouse && targetBuilding.isOccupied()) {
-
             storehouse.depositWorker(this);
 
             return;

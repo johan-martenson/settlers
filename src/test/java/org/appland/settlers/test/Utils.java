@@ -652,7 +652,6 @@ public class Utils {
         GameMap map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
-
             for (Worker worker : map.getWorkers()) {
                 if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
                     return type.cast(worker);

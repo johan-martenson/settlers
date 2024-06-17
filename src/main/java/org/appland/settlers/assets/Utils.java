@@ -195,6 +195,10 @@ public class Utils {
                 PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
                 yield playerBitmapResource.getBitmap();
             }
+            case LBM_RESOURCE -> {
+                LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
+                yield lbmGameResource.getLbmFile();
+            }
             default -> throw new RuntimeException("Cannot get bitmap for: " + gameResource.getType());
         };
     }

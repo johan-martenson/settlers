@@ -14,11 +14,12 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
-import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -215,101 +216,6 @@ public class TestGameMonitoringOfBuilding {
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
             assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
-        }
-    }
-
-    @Test
-    public void testMonitoringEventWhenBuilderLeavesHeadquarter() throws Exception {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place flag */
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
-
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-
-        /* Place woodcutter */
-        Point point2 = new Point(9, 5);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
-
-        /* Adjust resources in the headquarters */
-        Utils.adjustInventoryTo(headquarter0, BUILDER, 10);
-
-        /* Set up monitoring subscription for the player */
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
-        player0.monitorGameView(monitor);
-
-        /* No house updated event is sent when the first builder leaves the headquarters */
-        Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
-        }
-
-        /* Wait for the builder to return to the headquarters */
-        farm0.tearDown();
-
-        Utils.waitForNoWorkerOutsideBuilding(Builder.class, player0);
-
-        /* Request detailed monitoring of the headquarters */
-        player0.addDetailedMonitoring(headquarter0);
-
-        /* Place a forester and connect it to the headquarters */
-        Point point3 = new Point (14, 8);
-        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point3);
-
-        Road road1 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
-
-        /* Verify that a house updated event is sent when the second builder leaves the headquarters */
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
-
-        Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
-
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
-
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-
-                if (gameChangesList.getChangedBuildings().contains(farm0)) {
-                    continue;
-                }
-
-                found++;
-
-                assertTrue(gameChangesList.getChangedBuildings().contains(headquarter0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-            }
-        }
-
-        assertEquals(found, 1);
-
-        /* Turn off detailed monitoring */
-        player0.removeDetailedMonitoring(headquarter0);
-
-        /* Place a third building and connect it to the headquarters */
-        Point point4 = new Point(4, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4);
-
-        Road road2 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
-
-        /* Verify that no house updated event is sent when the third builder leaves the headquarters */
-        lastGameChangesList = monitor.getLastEvent();
-
-        Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
-
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
         }
     }
 
@@ -1106,7 +1012,7 @@ public class TestGameMonitoringOfBuilding {
 
         var count = monitor.getEvents().stream()
                 .filter(gcl -> gcl.getChangedBuildings().contains(sawmill0))
-                        .count();
+                .count();
 
         assertTrue(count > 0);
 
@@ -1485,7 +1391,7 @@ public class TestGameMonitoringOfBuilding {
     // TODO: monitor changes in ability to attack building - add soldier, remove soldier, upgrade, tear down
 
     @Test
-    public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding () throws InvalidUserActionException {
+    public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE);
@@ -1561,7 +1467,7 @@ public class TestGameMonitoringOfBuilding {
     }
 
     @Test
-    public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding () throws InvalidUserActionException {
+    public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE);
@@ -1759,8 +1665,8 @@ public class TestGameMonitoringOfBuilding {
 
         assertFalse(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
-                .count(),
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
                 1);
 
         map.stepTime();
@@ -1786,8 +1692,8 @@ public class TestGameMonitoringOfBuilding {
 
         assertTrue(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
-                .count(),
+                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .count(),
                 1);
 
         map.stepTime();
@@ -1847,5 +1753,221 @@ public class TestGameMonitoringOfBuilding {
                         .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
+    }
+
+    @Test
+    public void testEventWhenHeadquartersReceivesCargo() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all planks from the headquarters */
+        Utils.clearInventory(headquarter0, PLANK);
+
+        /* Place second flag and connect it to the headquarters */
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Wait for the road to get assigned a courier */
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Place a cargo on the flag intended for the headquarters */
+        var cargo = Utils.placeCargo(map, PLANK, flag0, headquarter0);
+
+        /* Wait for the courier to carry the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        /* Wait for the courier to get close to the headquarters but not yet deliver the cargo */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        Utils.fastForward(9, map);
+
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        assertTrue(courier.isTraveling());
+        assertFalse(courier.isExactlyAtPoint());
+        assertEquals(courier.getNextPoint(), headquarter0.getPosition());
+
+        /* Start monitoring and add detailed monitoring of the headquarters */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        player0.addDetailedMonitoring(headquarter0);
+
+        monitor.clearEvents();
+
+        /* Verify that an event is sent when the headquarters receives the delivery */
+        assertEquals(headquarter0.getAmount(PLANK), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getAmount(PLANK), 1);
+        assertNotEquals(monitor.getEvents().size(), 0);
+        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+    }
+
+    @Test
+    public void testEventWhenHeadquartersReceivesWorker() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all stonemasons from the headquarters */
+        Utils.clearInventory(headquarter0, STONEMASON);
+
+        /* Place second flag and connect it to the headquarters */
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place a stonemason on the flag and make it go to the headquarters */
+        var stonemason = new Stonemason(player0, map);
+        map.placeWorker(stonemason, flag0);
+        stonemason.setPosition(flag0.getPosition());
+        stonemason.returnToStorage();
+
+        /* Wait for the stonemason to get close to the headquarters but not yet reach it */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getFlag().getPosition());
+
+        Utils.fastForward(9, map);
+
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
+        assertTrue(stonemason.isTraveling());
+        assertFalse(stonemason.isExactlyAtPoint());
+        assertEquals(stonemason.getNextPoint(), headquarter0.getPosition());
+
+        /* Start monitoring and add detailed monitoring of the headquarters */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        player0.addDetailedMonitoring(headquarter0);
+
+        monitor.clearEvents();
+
+        /* Verify that an event is sent when the headquarters receives the delivery */
+        assertEquals(headquarter0.getAmount(STONEMASON), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+
+        assertEquals(headquarter0.getAmount(STONEMASON), 1);
+        assertNotEquals(monitor.getEvents().size(), 0);
+        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+    }
+
+    @Test
+    public void testEventWhenSoldierLeavesHeadquarters() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all soldiers from the headquarters */
+        Utils.removeAllSoldiersFromStorage(headquarter0);
+
+        /* Place a fortress and connect it to the headquarters */
+        var point1 = new Point(10, 4);
+        var fortress = map.placeBuilding(new Fortress(player0), point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the fortress to get constructed */
+        Utils.waitForBuildingToBeConstructed(fortress);
+
+        /* Start monitoring and add detailed monitoring of the headquarters */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        player0.addDetailedMonitoring(headquarter0);
+
+        /* Add soldiers to the headquarters */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 20);
+
+        assertEquals(map.getWorkers().stream()
+                .filter(Worker::isSoldier)
+                .count(), 0);
+
+        /* Verify that an event is sent each time a soldier leaves the headquarters to go to the fortress */
+        for (int i = 0; i < 9; i++) {
+            monitor.clearEvents();
+
+            for (int j = 0; j < 2000; j++) {
+                if (map.getWorkers().stream()
+                        .filter(Worker::isSoldier)
+                        .count() == i + 1) {
+                    break;
+                }
+
+                monitor.clearEvents();
+
+                map.stepTime();
+            }
+
+            assertEquals(map.getWorkers().stream()
+                    .filter(Worker::isSoldier)
+                    .count(), i + 1);
+            assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+        }
+    }
+
+    @Test
+    public void testEventWhenWorkerLeavesHeadquarters() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter for the first player */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Control the amount of builders in the headquarters */
+        Utils.adjustInventoryTo(headquarter0, BUILDER, 2);
+
+        /* Place a building and connect it to the headquarters */
+        var point1 = new Point(5, 9);
+        var woodcutterHut = map.placeBuilding(new Woodcutter(player0), point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter0.getFlag());
+
+        /* Start monitoring and add detailed monitoring of the headquarters */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        player0.addDetailedMonitoring(headquarter0);
+
+        /* Verify that an event is sent when the builder goes out to construct the building */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+
+        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
     }
 }

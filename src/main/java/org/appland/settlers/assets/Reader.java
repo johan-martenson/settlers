@@ -1,6 +1,7 @@
 package org.appland.settlers.assets;
 
 import org.appland.settlers.assets.decoders.BbmDecoder;
+import org.appland.settlers.assets.decoders.DatDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
@@ -13,9 +14,7 @@ import org.appland.settlers.assets.resources.LBMFile;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.resources.WaveFile;
-import org.appland.settlers.assets.utils.SoundLoader;
 import org.appland.settlers.model.PlayerColor;
-import org.appland.settlers.utils.ByteArrayReader;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -23,7 +22,6 @@ import org.kohsuke.args4j.Option;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -514,19 +512,11 @@ public class Reader {
             case "DAT" -> {
 
                 try {
-                    System.out.println("Loading as sound stream");
+                    System.out.println("Loading dat file");
 
-                    byte[] bytes = Files.newInputStream(Paths.get(filename)).readAllBytes();
+                    List<GameResource> gameResourceList = DatDecoder.loadDatFile(filename, palette);
 
-                    GameResource gameResource = SoundLoader.loadSoundFromStream(new ByteArrayReader(bytes, ByteOrder.LITTLE_ENDIAN));
-
-                    System.out.println(gameResource);
-
-                    List<GameResource> result = new ArrayList<>();
-
-                    result.add(gameResource);
-
-                    return result;
+                    return gameResourceList;
 
                 } catch (Throwable t) {
                     System.out.println("Failed to load " + filename);

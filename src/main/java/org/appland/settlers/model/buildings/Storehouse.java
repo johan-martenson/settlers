@@ -558,6 +558,8 @@ public class Storehouse extends Building {
         }
 
         getMap().removeWorker(worker);
+
+        getPlayer().reportChangedInventory(this);
     }
 
     public Worker retrieveWorker(Material workerType) {
@@ -689,6 +691,8 @@ public class Storehouse extends Building {
         }
 
         int amount = inventory.getOrDefault(material, 0);
+
+        getPlayer().reportChangedInventory(this);
 
         inventory.put(material, amount - 1);
     }

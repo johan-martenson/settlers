@@ -689,8 +689,8 @@ class Utils {
     }
 
     JSONObject borderToJson(Player player, String playerId) {
+        GameMap map = player.getMap();
 
-        /* Fill in borders */
         JSONObject jsonBorder = new JSONObject();
         jsonBorder.put("playerId", playerId);
 

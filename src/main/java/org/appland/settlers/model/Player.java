@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
 
 /**
@@ -59,7 +60,6 @@ import static org.appland.settlers.model.Material.*;
  *
  */
 public class Player {
-
     private static final int PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM = 10;
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
@@ -143,9 +143,9 @@ public class Player {
 
         this.nation         = Nation.ROMANS;
 
-        buildings           = new LinkedList<>();
+        buildings           = new ArrayList<>();
         discoveredLand      = new HashSet<>();
-        transportPriorities = new LinkedList<>();
+        transportPriorities = new ArrayList<>();
         ownedLand           = new HashSet<>();
         producedMaterials   = new EnumMap<>(Material.class);
         detailedMonitoring  = new HashSet<>();
@@ -160,27 +160,35 @@ public class Player {
         transportCategoryPriorities = new ArrayList<>();
 
         /* Create the food quota and set it to equal distribution */
-        foodAllocation.put(GoldMine.class, 1);
-        foodAllocation.put(IronMine.class, 1);
-        foodAllocation.put(CoalMine.class, 1);
-        foodAllocation.put(GraniteMine.class, 1);
+        foodAllocation.putAll(Map.ofEntries(
+                entry(GoldMine.class, 1),
+                entry(IronMine.class, 1),
+                entry(CoalMine.class, 1),
+                entry(GraniteMine.class, 1)
+        ));
 
         /* Create the coal quota and set it to equal distribution */
-        coalAllocation.put(IronSmelter.class, 1);
-        coalAllocation.put(Mint.class, 1);
-        coalAllocation.put(Armory.class, 1);
+        coalAllocation.putAll(Map.ofEntries(
+                entry(IronSmelter.class, 1),
+                entry(Mint.class, 1),
+                entry(Armory.class, 1)
+        ));
 
         /* Create the wheat quota and set it to equal distribution */
-        wheatAllocation.put(Mill.class, 1);
-        wheatAllocation.put(DonkeyFarm.class, 1);
-        wheatAllocation.put(PigFarm.class, 1);
-        wheatAllocation.put(Brewery.class, 1);
+        wheatAllocation.putAll(Map.ofEntries(
+                entry(Mill.class, 1),
+                entry(DonkeyFarm.class, 1),
+                entry(PigFarm.class, 1),
+                entry(Brewery.class, 1)
+        ));
 
         /* Create the water quota and set it to equal distribution */
-        waterAllocation.put(Bakery.class, 1);
-        waterAllocation.put(DonkeyFarm.class, 1);
-        waterAllocation.put(PigFarm.class, 1);
-        waterAllocation.put(Brewery.class, 1);
+        waterAllocation.putAll(Map.ofEntries(
+                entry(Bakery.class, 1),
+                entry(DonkeyFarm.class, 1),
+                entry(PigFarm.class, 1),
+                entry(Brewery.class, 1)
+        ));
 
         /* Create the iron bar quota and set it to equal distribution */
         ironBarAllocation.put(Armory.class, 1);
@@ -489,14 +497,12 @@ public class Player {
             var previousDiscoveredLand = new HashSet<>(discoveredLand);
 
             /* Update field of view */
-            for (Building militaryBuilding : buildings) {
-                if (militaryBuilding.isMilitaryBuilding() && militaryBuilding.isOccupied()) {
-                    Collection<Point> landDiscoveredByBuilding = militaryBuilding.getDiscoveredLand();
+            buildings.stream()
+                    .filter(b -> b.isMilitaryBuilding() && b.isOccupied())
+                    .flatMap(b -> b.getDiscoveredLand().stream())
+                    .forEach(discoveredLand::add);
 
-                    discoveredLand.addAll(landDiscoveredByBuilding);
-                }
-            }
-
+            // Notify monitors of new discoveries
             if (hasMonitor()) {
                 newDiscoveredLand.addAll(discoveredLand);
                 newDiscoveredLand.removeAll(previousDiscoveredLand);
@@ -1167,9 +1173,7 @@ public class Player {
                 new ArrayList<>(newFallingTrees));
 
         /* Send the event to all monitors */
-        for (PlayerGameViewMonitor monitor : gameViewMonitors) {
-            monitor.onViewChangesForPlayer(this, gameChangesToReport);
-        }
+        gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
 
         /* Clear out the lists to not pollute the next event with old information */
         newFlags.clear();

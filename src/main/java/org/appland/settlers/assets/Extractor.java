@@ -19,7 +19,9 @@ import org.appland.settlers.assets.decoders.BobDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
+import org.appland.settlers.assets.extractors.BackgroundExtractor;
 import org.appland.settlers.assets.extractors.BuildingsExtractor;
+import org.appland.settlers.assets.extractors.CursorExtractor;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
@@ -143,6 +145,10 @@ public class Extractor {
         extractor.populateShips(fromDir, toDir);
 
         extractor.populateAudio(fromDir, toDir);
+
+        CursorExtractor.extractCursors(fromDir, toDir, extractor.defaultPalette);
+
+        BackgroundExtractor.extractBackgrounds(fromDir, toDir, extractor.defaultPalette);
     }
 
     // TODO: extract icons from IO.DAT

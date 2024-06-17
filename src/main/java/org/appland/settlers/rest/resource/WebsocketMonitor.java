@@ -197,6 +197,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 };
 
                 jsonNewTick.put("tick", tick);
+                jsonNewTick.put("gameSpeed", gameSpeed.name().toUpperCase());
 
                 game.getPlayers().forEach(receiver -> {
                     if (playerToSession.containsKey(receiver)) {
