@@ -1320,8 +1320,8 @@ public class TestExpeditionNormalFlow {
         ShipHasReachedDestinationMessage message = (ShipHasReachedDestinationMessage) player0.getMessages().getLast();
 
         assertEquals(message.getMessageType(), Message.MessageType.SHIP_HAS_REACHED_DESTINATION);
-        assertEquals(message.getShip(), ship);
-        assertEquals(message.getPosition(), point5);
+        assertEquals(message.ship(), ship);
+        assertEquals(message.position(), point5);
     }
 
     @Test

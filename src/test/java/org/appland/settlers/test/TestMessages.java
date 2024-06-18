@@ -1626,7 +1626,7 @@ public class TestMessages {
         assertEquals(numberOfBombardedByCatapultMessages, 1);
         assertNotNull(bombardedByCatapultMessage);
         assertEquals(bombardedByCatapultMessage.catapult(), catapult);
-        assertEquals(bombardedByCatapultMessage.hitBuilding(), barracks0);
+        assertEquals(bombardedByCatapultMessage.building(), barracks0);
     }
 
     @Test
@@ -1708,7 +1708,7 @@ public class TestMessages {
         assertEquals(numberOfBombardedByCatapultMessages, 1);
         assertNotNull(bombardedByCatapultMessage);
         assertEquals(bombardedByCatapultMessage.catapult(), catapult);
-        assertEquals(bombardedByCatapultMessage.hitBuilding(), barracks0);
+        assertEquals(bombardedByCatapultMessage.building(), barracks0);
 
         /* Verify that the message is only sent once */
         Utils.fastForward(30, map);

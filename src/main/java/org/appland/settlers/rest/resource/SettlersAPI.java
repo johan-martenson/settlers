@@ -1774,7 +1774,7 @@ public class SettlersAPI {
 
                 jsonGameMessages.add(jsonBuildingCaptured);
             } else if (message.getMessageType() == STORE_HOUSE_IS_READY) {
-                JSONObject jsonStoreHouseIsReady = utils.jsonStoreHouseIsReadyMessageToJson((StoreHouseIsReadyMessage) message);
+                JSONObject jsonStoreHouseIsReady = utils.storeHouseIsReadyMessageToJson((StoreHouseIsReadyMessage) message);
 
                 jsonGameMessages.add(jsonStoreHouseIsReady);
             }
