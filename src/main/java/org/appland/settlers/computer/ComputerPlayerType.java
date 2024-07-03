@@ -9,7 +9,7 @@ package org.appland.settlers.computer;
  *
  * @author johan
  */
-public enum PlayerType {
+public enum ComputerPlayerType {
     BUILDING,
     EXPANDING,
     ATTACKING,
@@ -19,7 +19,7 @@ public enum PlayerType {
     MILITARY_PRODUCER,
     COMPOSITE_PLAYER;
 
-    public static PlayerType playerTypeFromString(String computerPlayerName) {
+    public static ComputerPlayerType playerTypeFromString(String computerPlayerName) {
         return switch (computerPlayerName) {
             case "building" -> BUILDING;
             case "expansion" -> EXPANDING;

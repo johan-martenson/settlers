@@ -17,7 +17,7 @@ public interface Message {
         GAME_ENDED,
         BOMBARDED_BY_CATAPULT,
         SHIP_HAS_REACHED_DESTINATION,
-        HARBOR_IS_FINISHED_MESSAGE,
+        HARBOR_IS_FINISHED,
         SHIP_READY_FOR_EXPEDITION
     }
 

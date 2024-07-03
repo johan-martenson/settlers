@@ -1,6 +1,7 @@
 package org.appland.settlers.rest.resource;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.BorderChange;
@@ -77,6 +78,7 @@ import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
+import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -117,11 +119,11 @@ class Utils {
         ));
     }
 
-    JSONArray gamesToJson(List<GameMap> games, GameResource gameResource) {
+    JSONArray gamesToJson(Collection<GameResource> games) {
         JSONArray jsonGames = new JSONArray();
 
-        for (GameMap map : games) {
-            JSONObject jsonGame = gameToJson(map, gameResource);
+        for (var gameResource : games) {
+            JSONObject jsonGame = gameToJson(gameResource);
 
             jsonGames.add(jsonGame);
         }
@@ -129,12 +131,21 @@ class Utils {
         return jsonGames;
     }
 
-    JSONObject gameToJson(GameMap map, GameResource gameResource) {
-        return new JSONObject(Map.of(
-                "id", idManager.getId(map),
-                "players", playersToJson(map.getPlayers(), gameResource),
-                "status", "STARTED"
+    JSONObject gameToJson(GameResource gameResource) {
+        var jsonGame = new JSONObject(Map.of(
+                "id", idManager.getId(gameResource),
+                "name", gameResource.getName(),
+                "players", playersToJson(gameResource.getPlayers(), gameResource),
+                "status", gameResource.status.name().toUpperCase(),
+                "initialResources", gameResource.getResources().name().toUpperCase(),
+                "othersCanJoin", gameResource.getOthersCanJoin()
         ));
+
+        if (gameResource.getMapFile() != null) {
+            jsonGame.put("map", mapFileToJson(gameResource.getMapFile()));
+        }
+
+        return jsonGame;
     }
 
     JSONArray playersToJson(Collection<Player> players, GameResource gameResource) {
@@ -560,6 +571,8 @@ class Utils {
     JSONObject treeToJson(Tree tree) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(tree),
+                "x", tree.getPosition().x,
+                "y", tree.getPosition().y,
                 "type", tree.getTreeType().name().toUpperCase(),
                 "size", tree.getSize().name().toUpperCase()
         ));
@@ -568,6 +581,8 @@ class Utils {
     JSONObject stoneToJson(Stone stone) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(stone),
+                "x", stone.getPosition().x,
+                "y", stone.getPosition().y,
                 "type", stone.getStoneType().name().toUpperCase(),
                 "amount", stone.getStoneAmount().name().toUpperCase()
         ));
@@ -714,11 +729,11 @@ class Utils {
                 "id", idManager.getId(player),
                 "name", player.getName(),
                 "color", player.getColor().name().toUpperCase(),
-                "nation", player.getNation().name()
+                "nation", player.getNation().name().toUpperCase()
         ));
     }
 
-    JSONArray mapFilesToJson(List<MapFile> mapFiles) {
+    JSONArray mapFilesToJson(Collection<MapFile> mapFiles) {
         JSONArray jsonMapFiles = new JSONArray();
 
         for (MapFile mapFile : mapFiles) {
@@ -731,7 +746,7 @@ class Utils {
     JSONObject mapFileToJson(MapFile mapFile) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(mapFile),
-                "title", mapFile.getTitle(),
+                "name", mapFile.getTitle(),
                 "author", mapFile.getAuthor(),
                 "width", mapFile.getWidth(),
                 "height", mapFile.getHeight(),
@@ -809,7 +824,8 @@ class Utils {
             jsonPlayers.add(new JSONObject(Map.of(
                     "id", idManager.getId(player),
                     "name", player.getName(),
-                    "color", player.getColor().name().toUpperCase()
+                    "color", player.getColor().name().toUpperCase(),
+                    "nation", player.getNation().name().toUpperCase()
             )));
         }
 
@@ -1221,7 +1237,7 @@ class Utils {
                 case TREE_CONSERVATION_PROGRAM_DEACTIVATED -> treeConservationProgramDeactivatedMessageToJson((TreeConservationProgramDeactivatedMessage) message);
                 case MILITARY_BUILDING_CAUSED_LOST_LAND -> militaryBuildingCausedLostLandMessageToJson((MilitaryBuildingCausedLostLandMessage) message);
                 case BOMBARDED_BY_CATAPULT -> bombardedByCatapultMessageToJson((BombardedByCatapultMessage) message);
-                case HARBOR_IS_FINISHED_MESSAGE -> harborFinishedMessageToJson((HarborIsFinishedMessage) message);
+                case HARBOR_IS_FINISHED -> harborFinishedMessageToJson((HarborIsFinishedMessage) message);
                 case SHIP_READY_FOR_EXPEDITION -> shipReadyForExpeditionMessageToJson((ShipReadyForExpeditionMessage) message);
                 case SHIP_HAS_REACHED_DESTINATION -> shipHasReachedDestinationMessageToJson((ShipHasReachedDestinationMessage) message);
                 case GAME_ENDED -> gameEndedMessageToJson((GameEndedMessage) message);
@@ -1265,6 +1281,7 @@ class Utils {
 
         return new JSONObject(Map.of(
                 "type", BOMBARDED_BY_CATAPULT.name().toUpperCase(),
+                "houseType", building.getSimpleName().toUpperCase(),
                 "houseId", idManager.getId(building),
                 "point", buildingToPoint(building)
         ));
@@ -1274,7 +1291,7 @@ class Utils {
         Building harbor = message.harbor();
 
         return new JSONObject(Map.of(
-                "type", HARBOR_IS_FINISHED_MESSAGE.name().toUpperCase(),
+                "type", HARBOR_IS_FINISHED.name().toUpperCase(),
                 "houseId", idManager.getId(harbor),
                 "point", buildingToPoint(harbor)
         ));
@@ -1601,9 +1618,7 @@ class Utils {
         return jsonWildAnimal;
     }
 
-    public JSONObject playerViewToJson(String playerId, GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
-        JSONObject jsonView = new JSONObject();
-
+    public JSONObject playerViewToJson(GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
         JSONArray  jsonHouses                = new JSONArray();
         JSONArray  trees                     = new JSONArray();
         JSONArray  jsonStones                = new JSONArray();
@@ -1619,23 +1634,7 @@ class Utils {
         JSONArray  jsonDeadTrees             = new JSONArray();
         JSONArray  jsonDecorations           = new JSONArray();
 
-        jsonView.put("trees", trees);
-        jsonView.put("houses", jsonHouses);
-        jsonView.put("stones", jsonStones);
-        jsonView.put("workers", jsonWorkers);
-        jsonView.put("wildAnimals", jsonWildAnimals);
-        jsonView.put("flags", jsonFlags);
-        jsonView.put("roads", jsonRoads);
-        jsonView.put("discoveredPoints", jsonDiscoveredPoints);
-        jsonView.put("borders", jsonBorders);
-        jsonView.put("signs", jsonSigns);
-        jsonView.put("crops", jsonCrops);
-        jsonView.put("availableConstruction", jsonAvailableConstruction);
-        jsonView.put("deadTrees", jsonDeadTrees);
-        jsonView.put("decorations", jsonDecorations);
-
-        /* Put the game status */
-        jsonView.put("gameState", gameResource.status.name().toUpperCase());
+        JSONArray jsonMessages = messagesToJson(player.getMessages());
 
         /* Protect access to the map to avoid interference */
         synchronized (map) {
@@ -1715,7 +1714,7 @@ class Utils {
                 jsonDiscoveredPoints.add(pointToJson(point));
             }
 
-            jsonBorders.add(borderToJson(player, playerId));
+            jsonBorders.add(borderToJson(player, idManager.getId(player)));
 
             /* Fill in the signs */
             for (Sign sign : map.getSigns()) {
@@ -1806,40 +1805,81 @@ class Utils {
                 jsonDecorations.add(decorationToJson(decorationType, point));
             }
 
-            /* Add the messages */
-            jsonView.put("messages", messagesToJson(player.getMessages()));
         }
+
+
+        // Add terrain information
+        JSONArray jsonTrianglesBelow = new JSONArray();
+        JSONArray jsonTrianglesBelowRight = new JSONArray();
+        JSONArray jsonHeights = new JSONArray();
+
+        int start = 1;
+
+        for (int y = 1; y < map.getHeight(); y++) {
+            for (int x = start; x + 1 < map.getWidth(); x += 2) {
+                Point point = new Point(x, y);
+
+                Vegetation below = map.getDetailedVegetationBelow(point);
+                Vegetation downRight = map.getDetailedVegetationDownRight(point);
+
+                jsonTrianglesBelow.add(vegetationToJson(below));
+                jsonTrianglesBelowRight.add(vegetationToJson(downRight));
+                jsonHeights.add(map.getHeightAtPoint(point));
+            }
+
+            if (start == 1) {
+                start = 2;
+            } else {
+                start = 1;
+            }
+        }
+
+        JSONObject jsonView = new JSONObject();
+        jsonView.put("trees", trees);
+        jsonView.put("houses", jsonHouses);
+        jsonView.put("stones", jsonStones);
+        jsonView.put("workers", jsonWorkers);
+        jsonView.put("wildAnimals", jsonWildAnimals);
+        jsonView.put("flags", jsonFlags);
+        jsonView.put("roads", jsonRoads);
+        jsonView.put("discoveredPoints", jsonDiscoveredPoints);
+        jsonView.put("borders", jsonBorders);
+        jsonView.put("signs", jsonSigns);
+        jsonView.put("crops", jsonCrops);
+        jsonView.put("availableConstruction", jsonAvailableConstruction);
+        jsonView.put("deadTrees", jsonDeadTrees);
+        jsonView.put("decorations", jsonDecorations);
+        jsonView.put("gameState", gameResource.status.name().toUpperCase());
+
+        jsonView.put("players", playersToJson(map.getPlayers(), gameResource));
+        jsonView.put("gameState", gameResource.status.name().toUpperCase());
+        jsonView.put("messages", jsonMessages);
+
+        jsonView.put("straightBelow", jsonTrianglesBelow);
+        jsonView.put("belowToTheRight", jsonTrianglesBelowRight);
+        jsonView.put("heights", jsonHeights);
+        jsonView.put("width", map.getWidth());
+        jsonView.put("height", map.getHeight());
 
         return jsonView;
     }
 
     public JSONObject gameResourceToJson(GameResource gameResource) {
-        JSONObject jsonGameResource = new JSONObject();
-
-        if (gameResource.getPlayers() != null) {
-            jsonGameResource.put("players", playersToJson(gameResource.getPlayers(), gameResource));
-        } else {
-            jsonGameResource.put("players", Collections.emptyList());
-        }
+        var jsonGameResource = new JSONObject(Map.of(
+                "id", idManager.getId(gameResource),
+                "players", gameResource.getPlayers() != null ? playersToJson(gameResource.getPlayers(), gameResource) : Collections.emptyList(),
+                "name", gameResource.isNameSet() ? gameResource.getName() : "",
+                "status", gameResource.status.name(),
+                "resources", gameResource.getResources().name(),
+                "othersCanJoin", gameResource.getOthersCanJoin()
+        ));
 
         MapFile mapFile = gameResource.getMapFile();
 
         if (mapFile != null) {
             jsonGameResource.put("mapId", idManager.getId(mapFile));
-
             jsonGameResource.put("map", mapFileToJson(mapFile));
         }
-
-        if (gameResource.isNameSet()) {
-            jsonGameResource.put("name", gameResource.getName());
-        } else {
-            jsonGameResource.put("name", "");
-        }
-
-        jsonGameResource.put("id", idManager.getId(gameResource));
-        jsonGameResource.put("status", gameResource.status.name());
-        jsonGameResource.put("resources", gameResource.getResources().name());
-        jsonGameResource.put("othersCanJoin", gameResource.getOthersCanJoin());
 
         return jsonGameResource;
     }
@@ -1850,5 +1890,75 @@ class Utils {
                 "target", pointToJson(cargo.getTarget().getPosition()),
                 "targetType", cargo.getTarget().getClass().getSimpleName()
         ));
+    }
+
+    void startGame(GameResource gameResource, GameTicker gameTicker) throws Exception {
+
+        /* Create the game map */
+        gameResource.createGameMap();
+        GameMap map = gameResource.getGameMap();
+
+        /* Limit the amount of wild animals to make performance bearable -- temporary! */
+        List<WildAnimal> wildAnimals = map.getWildAnimals();
+        List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
+
+        if (reducedWildAnimals.size() > 10) {
+            reducedWildAnimals = reducedWildAnimals.subList(0, 10);
+        }
+
+        wildAnimals.clear();
+
+        wildAnimals.addAll(reducedWildAnimals);
+
+        /* Place a headquarters for each player */
+        List<Player> players = map.getPlayers();
+        List<Point> startingPoints = map.getStartingPoints();
+
+        for (int i = 0; i < startingPoints.size(); i++) {
+            if (i == players.size()) {
+                break;
+            }
+
+            map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
+        }
+
+        /* Adjust the initial set of resources */
+        adjustResources(map, gameResource.getResources());
+
+        /* Start the time for the game by adding it to the game ticker */
+        gameTicker.startGame(gameResource);
+
+        gameResource.setStatus(GameStatus.STARTED);
+    }
+
+    public JSONObject chatMessageToPlayerToJson(ChatManager.ChatMessage chatMessage, Player player) {
+        return new JSONObject(Map.of(
+                "from", idManager.getId(chatMessage.from()),
+                "text", chatMessage.text(),
+                "toPlayerId", idManager.getId(player)
+        ));
+    }
+
+    public JSONObject chatMessageToRoomToJson(ChatManager.ChatMessage chatMessage, String roomId) {
+        return new JSONObject(Map.of(
+                "fromPlayerId", idManager.getId(chatMessage.from()),
+                "fromName", chatMessage.from().getName(),
+                "text", chatMessage.text(),
+                "toRoomId", roomId
+        ));
+    }
+
+    public JSONObject flagToDebugJson(Flag flag) {
+        var jsonFlag = flagToJson(flag);
+
+        JSONArray jsonCargos = new JSONArray();
+
+        flag.getStackedCargo().forEach(cargo -> {
+            jsonCargos.add(cargoToJson(cargo));
+        });
+
+        jsonFlag.put("cargos", jsonCargos);
+
+        return jsonFlag;
     }
 }

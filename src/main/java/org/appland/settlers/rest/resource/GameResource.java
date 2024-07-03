@@ -12,35 +12,52 @@ import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
 
 public class GameResource {
     public GameStatus status;
-    private int height;
-    private int width;
+
     private final List<Player> players;
+    private final Utils utils;
+    private final Map<Player, ComputerPlayer> computerPlayers;
+    private final Collection<GameResourceListener> listeners = new HashSet<>();
+
     private MapFile mapFile;
     private String name;
     private ResourceLevel resourceLevel;
     private GameMap map;
-    private final Utils utils;
-    private final Map<Player, ComputerPlayer> computerPlayers;
     private boolean othersCanJoin;
     private GameSpeed gameSpeed;
+
+    interface GameResourceListener {
+        void onGameResourceChanged(GameResource gameResource);
+    }
 
     GameResource(Utils utils) {
         players = new ArrayList<>();
 
-        resourceLevel = MEDIUM;
-
         this.utils = utils;
+
         computerPlayers = new HashMap<>();
 
+        resourceLevel = MEDIUM;
         status = GameStatus.NOT_STARTED;
-
         othersCanJoin = true;
-
         gameSpeed = GameSpeed.NORMAL;
+    }
+
+    void addChangeListener(GameResourceListener listener) {
+        listeners.add(listener);
+    }
+
+    void removeChangeListener(GameResourceListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyListeners() {
+        listeners.forEach(listener -> listener.onGameResourceChanged(this));
     }
 
     void setPlayers(List<Player> players) {
         this.players.addAll(players);
+
+        notifyListeners();
     }
 
     List<Player> getPlayers() {
@@ -49,13 +66,14 @@ public class GameResource {
 
     void addHumanPlayer(Player player) {
         players.add(player);
+
+        notifyListeners();
     }
 
     void setMap(MapFile updatedMapFile) {
-        width = updatedMapFile.getWidth();
-        height = updatedMapFile.getHeight();
-
         mapFile = updatedMapFile;
+
+        notifyListeners();
     }
 
     MapFile getMapFile() {
@@ -64,6 +82,8 @@ public class GameResource {
 
     void setName(String name) {
         this.name = name;
+
+        notifyListeners();
     }
 
     String getName() {
@@ -80,10 +100,14 @@ public class GameResource {
 
     void setResource(ResourceLevel resourceLevel) {
         this.resourceLevel = resourceLevel;
+
+        notifyListeners();
     }
 
     public void removePlayer(Player player) {
         this.players.remove(player);
+
+        notifyListeners();
     }
 
     public GameMap getGameMap() {
@@ -111,6 +135,8 @@ public class GameResource {
     public void addComputerPlayer(Player player) {
         computerPlayers.put(player, new CompositePlayer(player, player.getMap()));
         players.add(player);
+
+        notifyListeners();
     }
 
     public boolean isStarted() {
@@ -119,6 +145,8 @@ public class GameResource {
 
     public void setStatus(GameStatus gameStatus) {
         status = gameStatus;
+
+        notifyListeners();
     }
 
     public boolean isComputerPlayer(Player player) {
@@ -127,6 +155,8 @@ public class GameResource {
 
     public void setOthersCanJoin(boolean othersCanJoin) {
         this.othersCanJoin = othersCanJoin;
+
+        notifyListeners();
     }
 
     public boolean getOthersCanJoin() {
@@ -139,6 +169,8 @@ public class GameResource {
 
     public void setGameSpeed(GameSpeed gameSpeed) {
         this.gameSpeed = gameSpeed;
+
+        notifyListeners();
     }
 
     public GameSpeed getGameSpeed() {

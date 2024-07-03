@@ -12,9 +12,7 @@ import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.TransportCategory;
-import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.buildings.Building;
-import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.messages.BuildingCapturedMessage;
 import org.appland.settlers.model.messages.BuildingLostMessage;
 import org.appland.settlers.model.messages.GeologistFindMessage;
@@ -63,7 +61,6 @@ import static org.appland.settlers.rest.resource.GameStatus.STARTED;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class SettlersAPI {
-
     public final static String MAP_FILE_LIST = "mapFileList";
     public static final String GAME_TICKER = "gameTicker";
 
@@ -278,12 +275,14 @@ public class SettlersAPI {
             if (updatedStatus.equals("STARTED")) {
 
                 synchronized (gameResource) {
-                    startGame(gameResource);
+                    GameTicker gameTicker = (GameTicker) context.getAttribute(GAME_TICKER);
+
+                    utils.startGame(gameResource, gameTicker);
 
                     gameResource.setStatus(STARTED);
                 }
 
-                return Response.status(200).entity(utils.gameToJson(gameResource.getGameMap(), gameResource).toJSONString()).build();
+                return Response.status(200).entity(utils.gameToJson(gameResource).toJSONString()).build();
             }
 
             return Response.status(400).build();  // Add a bad request message
@@ -311,45 +310,6 @@ public class SettlersAPI {
 
         /* Return bad request (400) if there is no mapFileId included */
         return Response.status(400).build(); // The scope of this is all changes, not only mapId
-    }
-
-    private void startGame(GameResource gameResource) throws Exception {
-
-        /* Create the game map */
-        gameResource.createGameMap();
-        GameMap map = gameResource.getGameMap();
-
-        /* Limit the amount of wild animals to make performance bearable -- temporary! */
-        List<WildAnimal> wildAnimals = map.getWildAnimals();
-        List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
-
-        if (reducedWildAnimals.size() > 10) {
-            reducedWildAnimals = reducedWildAnimals.subList(0, 10);
-        }
-
-        wildAnimals.clear();
-
-        wildAnimals.addAll(reducedWildAnimals);
-
-        /* Place a headquarters for each player */
-        List<Player> players = map.getPlayers();
-        List<Point> startingPoints = map.getStartingPoints();
-
-        for (int i = 0; i < startingPoints.size(); i++) {
-            if (i == players.size()) {
-                break;
-            }
-
-            map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
-        }
-
-        /* Adjust the initial set of resources */
-        utils.adjustResources(map, gameResource.getResources());
-
-        /* Start the time for the game by adding it to the game ticker */
-        GameTicker gameTicker = (GameTicker) context.getAttribute(GAME_TICKER);
-
-        gameTicker.startGame(gameResource);
     }
 
     @DELETE
@@ -1438,7 +1398,7 @@ public class SettlersAPI {
         }
 
         /* Create instances outside the synchronized block when possible */
-        JSONObject jsonView = utils.playerViewToJson(playerId, map, player, gameResource);
+        JSONObject jsonView = utils.playerViewToJson(map, player, gameResource);
 
         return Response.status(200).entity(jsonView.toJSONString()).build();
     }

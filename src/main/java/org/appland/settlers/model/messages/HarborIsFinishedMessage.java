@@ -6,6 +6,6 @@ public record HarborIsFinishedMessage(Harbor harbor) implements Message {
 
     @Override
     public MessageType getMessageType() {
-        return MessageType.HARBOR_IS_FINISHED_MESSAGE;
+        return MessageType.HARBOR_IS_FINISHED;
     }
 }

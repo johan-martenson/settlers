@@ -26,6 +26,7 @@ public class GameTicker {
     private static final int MIN_GAME_TICK_LENGTH = 100;
     private static final int COMPUTER_PLAYER_FREQUENCY = 20;
     private static final String FULL_TICK_TIME = "GameTicker.tick.total";
+    public static final GameTicker GAME_TICKER = new GameTicker();
 
     private final ScheduledExecutorService scheduler;
     private final Set<GameResource> games;

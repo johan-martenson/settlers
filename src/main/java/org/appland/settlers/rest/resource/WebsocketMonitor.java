@@ -1,37 +1,40 @@
 package org.appland.settlers.rest.resource;
 
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.chat.ChatManager;
+import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameChangesList;
+import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerGameViewMonitor;
+import org.appland.settlers.model.PlayerType;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
 import org.appland.settlers.model.buildings.DonkeyFarm;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameChangesList;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.IronSmelter;
-import org.appland.settlers.model.messages.Message;
 import org.appland.settlers.model.buildings.Metalworks;
-import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.PlayerGameViewMonitor;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
+import org.appland.settlers.model.messages.Message;
+import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.servlet.ServletContext;
-import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -39,44 +42,112 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import javax.ws.rs.core.Context;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@ServerEndpoint(value = "/ws/monitor/games/{gameId}/players/{playerId}")
+import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 
-public class WebsocketMonitor implements PlayerGameViewMonitor {
-
+@ServerEndpoint(value = "/ws/monitor/games")
+public class WebsocketMonitor implements PlayerGameViewMonitor,
+        GameResources.GameListListener,
+        GameResource.GameResourceListener,
+        ChatManager.ChatListener {
     private final Map<Player, Session> playerToSession;
     private final Utils utils;
     private final JSONParser parser;
-
-    @Context
-    ServletContext context;
-
     private final IdManager idManager = IdManager.idManager;
+    private final GameTicker gameTicker = GameTicker.GAME_TICKER;
+    private final Collection<Session> gameListListeners = new HashSet<>();
+    private final Map<GameResource, Collection<Session>> gameInfoListeners = new HashMap<>();
+    private final Map<String, Collection<Session>> chatRoomListeners = new HashMap<>();
 
     public WebsocketMonitor() {
-
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
+
         utils = new Utils(idManager);
         parser = new JSONParser();
         playerToSession = new HashMap<>();
+
+        GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
+    }
+
+    @Override
+    public void newMessageForPlayer(ChatManager.ChatMessage chatMessage, Player player) {
+        System.out.println("ON NEW MESSAGE FOR PLAYER");
+
+        sendToPlayer(new JSONObject(Map.of(
+                        "type", "NEW_CHAT_MESSAGES",
+                        "chatMessage", utils.chatMessageToPlayerToJson(chatMessage, player)
+                )),
+                player);
+    }
+
+    @Override
+    public void newMessageForRoom(ChatManager.ChatMessage chatMessage, String roomId) {
+        System.out.println("ON NEW MESSAGE FOR ROOM");
+
+        System.out.println(chatRoomListeners.get(roomId));
+
+        chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
+                new JSONObject(Map.of(
+                        "type", "NEW_CHAT_MESSAGES",
+                        "chatMessage", utils.chatMessageToRoomToJson(chatMessage, roomId)
+                ))));
+    }
+
+    @Override
+    public void onGameResourceChanged(GameResource gameResource) {
+        System.out.println();
+        System.out.println("ON GAME RESOURCE CHANGED");
+
+        if (gameInfoListeners.containsKey(gameResource)) {
+            gameInfoListeners.get(gameResource).forEach(session -> sendToSession(session,
+                    new JSONObject(Map.of(
+                            "type", "GAME_INFO_CHANGED",
+                            "gameInformation", utils.gameToJson(gameResource)
+                    ))));
+        }
+
+        gameListListeners.forEach(session -> sendToSession(session,
+                new JSONObject(Map.of(
+                        "type", "GAME_LIST_CHANGED",
+                        "games", utils.gamesToJson(GAME_RESOURCES.getGames())
+                ))));
+    }
+
+    @Override
+    public void onGameListChanged(Collection<GameResource> games) {
+        System.out.println();
+        System.out.println("ON GAME LIST CHANGED");
+
+        gameListListeners.forEach(session -> sendToSession(session,
+                new JSONObject(Map.of(
+                        "type", "GAME_LIST_CHANGED",
+                        "games", utils.gamesToJson(games)
+                ))));
+
+        if (!gameListListeners.isEmpty()) {
+            games.forEach(gameResource -> gameResource.addChangeListener(this));
+        }
     }
 
     @OnMessage
-    public void onMessage(Session session, String message) throws InvalidUserActionException {
+    public void onMessage(Session session, String message) throws Exception {
         System.out.println("\nON MESSAGE: " + message);
 
-        Player player = (Player) session.getUserProperties().get("PLAYER");
-        GameMap map = player.getMap();
+        var player = (Player) session.getUserProperties().get("PLAYER");
+        var game = (GameResource) session.getUserProperties().get("GAME");
+        var map = player == null ? null : player.getMap();
 
         JSONObject jsonBody;
+
         try {
             jsonBody = (JSONObject) parser.parse(message);
         } catch (ParseException e) {
@@ -86,10 +157,256 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
-            case UPGRADE -> {
-                String houseId = (String) jsonBody.get("houseId");
+            case LISTEN_TO_CHAT_MESSAGES -> {
+                if (jsonBody.containsKey("playerId")) {
+                    ChatManager.addMessageListenerForPlayer((Player) idManager.getObject((String) jsonBody.get("playerId")), this);
+                }
 
-                Building building = (Building) idManager.getObject(houseId);
+                if (jsonBody.containsKey("roomIds")) {
+                    ((JSONArray) jsonBody.get("roomIds"))
+                            .forEach(roomId -> {
+                                ChatManager.addMessageListenerForRoom((String) roomId, this);
+
+                                if (!chatRoomListeners.containsKey(roomId)) {
+                                    chatRoomListeners.put((String) roomId, new ArrayList<>());
+                                }
+
+                                chatRoomListeners.get((String) roomId).add(session);
+                            });
+                }
+            }
+            case SEND_CHAT_MESSAGE_TO_ROOM -> {
+                ChatManager.sendChatToRoom(
+                        (String) jsonBody.get("roomId"),
+                        (String) jsonBody.get("text"),
+                        (Player) idManager.getObject((String) jsonBody.get("from"))
+                );
+            }
+            case SET_GAME -> {
+                var gameToSet = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
+
+                session.getUserProperties().put("GAME", gameToSet);
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "gameInformation", utils.gameToJson(gameToSet)
+                        )));
+            }
+            case SET_SELF_PLAYER -> {
+                var playerToSet = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
+                session.getUserProperties().put("PLAYER", playerToSet);
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "playerInformation", utils.playerToJson(playerToSet)
+                        )));
+            }
+            case LISTEN_TO_GAME_LIST -> {
+                gameListListeners.add(session);
+
+                if (gameListListeners.size() == 1) {
+                    GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
+                }
+
+                GAME_RESOURCES.getGames().forEach(gameResource -> gameResource.addChangeListener(this));
+            }
+            case STOP_LISTENING_TO_GAME_LIST -> {
+                gameListListeners.remove(session);
+
+                if (gameListListeners.isEmpty()) {
+                    GAME_RESOURCES.removeAddedAndRemovedGamesListener(this);
+
+                    GAME_RESOURCES.getGames().stream()
+                            .filter(gameResource -> !gameInfoListeners.containsKey(gameResource))
+                            .forEach(gameResource -> gameResource.removeChangeListener(this));
+                }
+            }
+            case LISTEN_TO_GAME_INFO -> {
+                if (!gameInfoListeners.containsKey(game)) {
+                    gameInfoListeners.put(game, new HashSet<>());
+                }
+
+                gameInfoListeners.get(game).add(session);
+
+                game.addChangeListener(this);
+
+                session.getUserProperties().put("GAME", game);
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "gameInformation", utils.gameToJson(game)
+                        )));
+            }
+            case START_MONITORING_GAME -> {
+                player.monitorGameView(this);
+
+                playerToSession.put(player, session);
+
+                if (map != null) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "playerView", utils.playerViewToJson(map, player, game)
+                            )));
+                } else {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId")
+                            )));
+                }
+            }
+            case STOP_LISTENING_TO_GAME_INFO -> {
+                gameInfoListeners.get(game).remove(session);
+
+                if (gameInfoListeners.get(game).isEmpty()) {
+                    game.removeChangeListener(this);
+                }
+            }
+            case CREATE_GAME -> {
+                var newGame = new GameResource(utils);
+
+                if (jsonBody.containsKey("players")) {
+                    newGame.setPlayers(
+                            utils.jsonToPlayers((JSONArray) jsonBody.get("players"))
+                    );
+                }
+
+                if (jsonBody.containsKey("name")) {
+                    newGame.setName((String) jsonBody.get("name"));
+                }
+
+                session.getUserProperties().put("GAME", newGame);
+                GAME_RESOURCES.addGame(newGame);
+
+                sendToSession(session, new JSONObject(Map.of(
+                        "requestId", jsonBody.get("requestId"),
+                        "gameInformation", utils.gameToJson(newGame)
+                )));
+            }
+            case GET_MAPS -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "maps", utils.mapFilesToJson(MapsResource.mapsResource.getMaps())
+                        )));
+            }
+            case GET_GAMES -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "games", utils.gamesToJson(GAME_RESOURCES.getGames())
+                        )));
+            }
+            case UPDATE_PLAYER -> {
+                var playerId = (String) jsonBody.get("playerId");
+                var playerToUpdate = (Player) idManager.getObject(playerId);
+                var name = (String) jsonBody.get("name");
+                var playerColor = (PlayerColor) PlayerColor.valueOf((String) jsonBody.get("color"));
+                var nation = (Nation) Nation.valueOf((String) jsonBody.get("nation"));
+
+                synchronized (playerToUpdate) {
+                    playerToUpdate.setName(name);
+                    playerToUpdate.setPlayerColor(playerColor);
+                    playerToUpdate.setNation(nation);
+
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "playerInformation", utils.playerToJson(playerToUpdate))
+                            ));
+                }
+            }
+            case REMOVE_PLAYER -> {
+                var playerId = (String) jsonBody.get("playerId");
+                var playerToRemove = (Player) idManager.getObject(playerId);
+
+                synchronized (game) {
+                    game.removePlayer(playerToRemove);
+                }
+            }
+            case CREATE_PLAYER -> {
+                var name = (String) jsonBody.get("name");
+                var playerColor = PlayerColor.valueOf((String) jsonBody.get("color"));
+                var nation = Nation.valueOf((String) jsonBody.get("nation"));
+                var playerType = PlayerType.valueOf((String) jsonBody.get("type"));
+
+                var newPlayer = new Player(name, playerColor);
+
+                newPlayer.setNation(nation);
+                newPlayer.setPlayerType(playerType);
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "playerInformation", utils.playerToJson(newPlayer))
+                        ));
+            }
+            case ADD_PLAYER_TO_GAME -> {
+                var playerToAdd = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+
+                synchronized (game) {
+                    if (playerToAdd.getPlayerType() == PlayerType.COMPUTER) {
+                        game.addComputerPlayer(playerToAdd);
+                    } else {
+                        game.addHumanPlayer(playerToAdd);
+                    }
+
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "gameInformation", utils.gameToJson(game)
+                            )));
+                }
+            }
+
+            case SET_OTHERS_CAN_JOIN -> {
+                var othersCanJoin = (Boolean) jsonBody.get("othersCanJoin");
+
+                synchronized (game) {
+                    game.setOthersCanJoin(othersCanJoin);
+
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "gameInformation", utils.gameToJson(game)
+                            )));
+                }
+            }
+            case START_GAME -> {
+                synchronized (game) {
+                    utils.startGame(game, gameTicker);
+                }
+            }
+            case SET_MAP -> {
+                synchronized (game) {
+                    game.setMap((MapFile) idManager.getObject((String) jsonBody.get("mapId")));
+                }
+            }
+            case SET_INITIAL_RESOURCES -> {
+                ResourceLevel resourceLevel = ResourceLevel.valueOf((String) jsonBody.get("resources"));
+
+                synchronized (game) {
+                    game.setResource(resourceLevel);
+                }
+            }
+            case SET_GAME_NAME -> {
+                synchronized (game) {
+                    game.setName((String) jsonBody.get("name"));
+                }
+            }
+            case GET_GAME_INFORMATION -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "gameInformation", utils.gameToJson(game)
+                        )));
+            }
+            case UPGRADE -> {
+                Building building = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
                 synchronized (map) {
                     building.upgrade();
@@ -97,61 +414,42 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case FLAG_DEBUG_INFORMATION -> {
                 String flagId = (String) jsonBody.get("flagId");
-                long requestId = (Long) jsonBody.get("requestId");
-
                 Flag flag = (Flag) idManager.getObject(flagId);
 
                 synchronized (map) {
-                    JSONObject jsonResponse = utils.flagToJson(flag);
-
-                    jsonResponse.put("requestId", requestId);
-
-                    JSONArray jsonCargos = new JSONArray();
-
-                    flag.getStackedCargo().forEach(cargo -> {
-                        jsonCargos.add(utils.cargoToJson(cargo));
-                    });
-
-                    jsonResponse.put("cargos", jsonCargos);
-
-                    sendToPlayer(jsonResponse, player);
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "flag", utils.flagToDebugJson(flag)
+                    )));
                 }
             }
             case GET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getAmountOfSoldiersAvailableForAttack();
-                }
+                    int amount = player.getAmountOfSoldiersAvailableForAttack();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case GET_POPULATE_MILITARY_FAR_FROM_BORDER -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getAmountOfSoldiersWhenPopulatingFarFromBorder();
-                }
+                    int amount = player.getAmountOfSoldiersWhenPopulatingFarFromBorder();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case GET_POPULATE_MILITARY_CLOSER_TO_BORDER -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getAmountOfSoldiersWhenPopulatingAwayFromBorder();
-                }
+                    int amount = player.getAmountOfSoldiersWhenPopulatingAwayFromBorder();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case GET_POPULATE_MILITARY_CLOSE_TO_BORDER -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getAmountOfSoldiersWhenPopulatingCloseToBorder();
-                }
+                    int amount = player.getAmountOfSoldiersWhenPopulatingCloseToBorder();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case SET_SOLDIERS_AVAILABLE_FOR_ATTACK -> {
                 var amount = ((Long) jsonBody.get("amount")).intValue();
@@ -184,11 +482,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             case SET_GAME_SPEED -> {
                 GameSpeed gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
-                GameResource game = (GameResource) session.getUserProperties().get("GAME");
-
                 game.setGameSpeed(gameSpeed);
-
-                JSONObject jsonNewTick = new JSONObject();
 
                 int tick = switch (gameSpeed) {
                     case FAST -> 100;
@@ -196,8 +490,11 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     case SLOW -> 400;
                 };
 
-                jsonNewTick.put("tick", tick);
-                jsonNewTick.put("gameSpeed", gameSpeed.name().toUpperCase());
+                // TODO: should be handled through the regular game listener somehow?
+                var jsonNewTick = new JSONObject(Map.of(
+                        "tick", tick,
+                        "gameSpeed", gameSpeed.name().toUpperCase()
+                ));
 
                 game.getPlayers().forEach(receiver -> {
                     if (playerToSession.containsKey(receiver)) {
@@ -206,33 +503,26 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 });
             }
             case GET_MILITARY_SETTINGS -> {
-                long requestId = (Long) jsonBody.get("requestId");
-
-                JSONObject jsonMilitarySettings = new JSONObject();
-
-                jsonMilitarySettings.put("requestId", requestId);
-
                 synchronized (map) {
-                    jsonMilitarySettings.put("defenseStrength", player.getDefenseStrength());
-                    jsonMilitarySettings.put("defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings());
-                    jsonMilitarySettings.put("soldierAmountWhenPopulatingCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder());
-                    jsonMilitarySettings.put("soldierAmountWhenPopulatingAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder());
-                    jsonMilitarySettings.put("soldierAmountWhenPopulatingFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder());
-                    jsonMilitarySettings.put("soldierStrengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings());
-                    jsonMilitarySettings.put("soldierAmountsAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack());
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "defenseStrength", player.getDefenseStrength(),
+                            "defenseFromSurroundingBuildings", player.getDefenseFromSurroundingBuildings(),
+                            "soldierAmountWhenPopulatingCloseToBorder", player.getAmountOfSoldiersWhenPopulatingCloseToBorder(),
+                            "soldierAmountWhenPopulatingAwayFromBorder", player.getAmountOfSoldiersWhenPopulatingAwayFromBorder(),
+                            "soldierAmountWhenPopulatingFarFromBorder", player.getAmountOfSoldiersWhenPopulatingFarFromBorder(),
+                            "soldierStrengthWhenPopulatingBuildings", player.getStrengthOfSoldiersPopulatingBuildings(),
+                            "soldierAmountsAvailableForAttack", player.getAmountOfSoldiersAvailableForAttack()
+                    )));
                 }
-
-                sendToPlayer(jsonMilitarySettings, player);
             }
 
             case GET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getDefenseFromSurroundingBuildings();
-                }
+                    int amount = player.getDefenseFromSurroundingBuildings();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case SET_DEFENSE_FROM_SURROUNDING_BUILDINGS -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
@@ -242,13 +532,11 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case GET_DEFENSE_STRENGTH -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getDefenseStrength();
-                }
+                    int amount = player.getDefenseStrength();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case SET_DEFENSE_STRENGTH -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
@@ -258,13 +546,11 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case GET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
-                int amount;
-
                 synchronized (map) {
-                    amount = player.getStrengthOfSoldiersPopulatingBuildings();
-                }
+                    int amount = player.getStrengthOfSoldiersPopulatingBuildings();
 
-                sendAmountReplyToPlayer(amount, player, jsonBody);
+                    sendAmountReplyToPlayer(amount, player, jsonBody);
+                }
             }
             case SET_STRENGTH_WHEN_POPULATING_MILITARY_BUILDING -> {
                 int strength = ((Long) jsonBody.get("strength")).intValue();
@@ -274,33 +560,14 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case PAUSE_GAME -> {
-                GameResource game = (GameResource) session.getUserProperties().get("GAME");
-
-                game.status = GameStatus.PAUSED;
-
-                // Tell all subscribed players that the game is paused
-                JSONObject jsonResponse = new JSONObject();
-
-                jsonResponse.put("gameState", "PAUSED");
-
-                game.getGameMap().getPlayers().forEach(player1 -> {
-                    var playerSession = playerToSession.get(player1);
-
-                    if (playerSession != null) {
-                        playerSession.getAsyncRemote().sendText(jsonResponse.toJSONString());
-                    }
-                });
+                synchronized (game) {
+                    game.setStatus(GameStatus.PAUSED);
+                }
             }
             case RESUME_GAME -> {
-                GameResource game = (GameResource) session.getUserProperties().get("GAME");
-
-                game.status = GameStatus.STARTED;
-
-                JSONObject jsonResponse = new JSONObject();
-
-                jsonResponse.put("gameState", "STARTED");
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (game) {
+                    game.setStatus(GameStatus.STARTED);
+                }
             }
             case SET_IRON_BAR_QUOTAS -> {
                 Long armoryAmount = (Long) jsonBody.get("armory");
@@ -312,37 +579,35 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case GET_IRON_BAR_QUOTAS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
-
-                jsonResponse.put("armory", player.getIronBarQuota(Armory.class));
-                jsonResponse.put("metalworks", player.getIronBarQuota(Metalworks.class));
-
-                System.out.println(jsonResponse.toJSONString());
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "armory", player.getIronBarQuota(Armory.class),
+                            "metalworks", player.getIronBarQuota(Metalworks.class)
+                    )));
+                }
             }
             case GET_WATER_QUOTAS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
-                jsonResponse.put("donkeyFarm", player.getWaterQuota(DonkeyFarm.class));
-                jsonResponse.put("pigFarm", player.getWaterQuota(PigFarm.class));
-                jsonResponse.put("bakery", player.getWaterQuota(Bakery.class));
-                jsonResponse.put("brewery", player.getWaterQuota(Brewery.class));
-
-                System.out.println(jsonResponse.toJSONString());
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "donkeyFarm", player.getWaterQuota(DonkeyFarm.class),
+                            "pigFarm", player.getWaterQuota(PigFarm.class),
+                            "bakery", player.getWaterQuota(Bakery.class),
+                            "brewery", player.getWaterQuota(Brewery.class)
+                    )));
+                }
             }
             case GET_WHEAT_QUOTAS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
-
-                jsonResponse.put("donkeyFarm", player.getWheatQuota(DonkeyFarm.class));
-                jsonResponse.put("pigFarm", player.getWheatQuota(PigFarm.class));
-                jsonResponse.put("mill", player.getWheatQuota(Mill.class));
-                jsonResponse.put("brewery", player.getWheatQuota(Brewery.class));
-
-                System.out.println(jsonResponse.toJSONString());
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "donkeyFarm", player.getWheatQuota(DonkeyFarm.class),
+                            "pigFarm", player.getWheatQuota(PigFarm.class),
+                            "mill", player.getWheatQuota(Mill.class),
+                            "brewery", player.getWheatQuota(Brewery.class)
+                    )));
+                }
             }
             case SET_WATER_QUOTAS -> {
                 Long donkeyFarmAmount = (Long) jsonBody.get("donkeyFarm");
@@ -371,27 +636,25 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case GET_FOOD_QUOTAS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
-
-                jsonResponse.put("ironMine", player.getFoodQuota(IronMine.class));
-                jsonResponse.put("coalMine", player.getFoodQuota(CoalMine.class));
-                jsonResponse.put("goldMine", player.getFoodQuota(GoldMine.class));
-                jsonResponse.put("graniteMine", player.getFoodQuota(GraniteMine.class));
-
-                System.out.println(jsonResponse.toJSONString());
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "ironMine", player.getFoodQuota(IronMine.class),
+                            "coalMine", player.getFoodQuota(CoalMine.class),
+                            "goldMine", player.getFoodQuota(GoldMine.class),
+                            "graniteMine", player.getFoodQuota(GraniteMine.class)
+                    )));
+                }
             }
             case GET_COAL_QUOTAS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
-
-                jsonResponse.put("mint", player.getCoalQuota(Mint.class));
-                jsonResponse.put("armory", player.getCoalQuota(Armory.class));
-                jsonResponse.put("ironSmelter", player.getCoalQuota(IronSmelter.class));
-
-                System.out.println(jsonResponse.toJSONString());
-
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "mint", player.getCoalQuota(Mint.class),
+                            "armory", player.getCoalQuota(Armory.class),
+                            "ironSmelter", player.getCoalQuota(IronSmelter.class)
+                    )));
+                }
             }
             case SET_FOOD_QUOTAS -> {
                 Long ironMineAmount = (Long) jsonBody.get("ironMine");
@@ -418,10 +681,10 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case REMOVE_MESSAGES -> {
-                for (var messageId : (JSONArray) jsonBody.get("messageIds")) {
-                    Message gameMessage = (Message) idManager.getObject((String) messageId);
+                synchronized (player.getMap()) {
+                    for (var messageId : (JSONArray) jsonBody.get("messageIds")) {
+                        Message gameMessage = (Message) idManager.getObject((String) messageId);
 
-                    synchronized (player.getMap()) {
                         player.removeMessage(gameMessage);
                     }
                 }
@@ -437,10 +700,9 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case START_DETAILED_MONITORING -> {
                 String id = (String) jsonBody.get("id");
-
                 Object object = idManager.getObject(id);
 
-                JSONObject jsonUpdate = new JSONObject();
+                var jsonUpdate = new JSONObject();
 
                 if (object instanceof Building building) {
                     synchronized (map) {
@@ -468,7 +730,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case STOP_DETAILED_MONITORING -> {
                 String buildingId = (String) jsonBody.get("buildingId");
-
                 Building building = (Building) idManager.getObject(buildingId);
 
                 synchronized (map) {
@@ -497,12 +758,9 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                 }
             }
             case INFORMATION_ON_POINTS -> {
-                JSONObject jsonResponse = Utils.messageJsonToReplyJson(jsonBody);
                 JSONArray jsonPointsInformation = new JSONArray();
 
                 List<Point> points = utils.jsonToPoints((JSONArray) jsonBody.get("points"));
-
-                jsonResponse.put("pointsWithInformation", jsonPointsInformation);
 
                 synchronized (map) {
                     for (Point point : points) {
@@ -510,21 +768,32 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
                     }
                 }
 
-                session.getAsyncRemote().sendText(jsonResponse.toJSONString());
+                sendToSession(session, new JSONObject(Map.of(
+                        "requestId", jsonBody.get("requestId"),
+                        "pointsWithInformation", jsonPointsInformation
+                )));
             }
             case FULL_SYNC -> {
-                synchronized (map) {
-                    String playerId = (String) jsonBody.get("playerId");
-
-                    GameResource gameResource = (GameResource) session.getUserProperties().get("GAME");
-
-                    JSONObject jsonFullSync = new JSONObject();
-
-                    jsonFullSync.put("playerView", utils.playerViewToJson(playerId, map, player, gameResource));
-
-                    System.out.println("Replying with full sync message");
-
-                    session.getAsyncRemote().sendText(jsonFullSync.toJSONString());
+                switch (game.status) {
+                    case STARTED, PAUSED -> {
+                        synchronized (map) {
+                            sendToSession(session,
+                                    new JSONObject(Map.of(
+                                            "requestId", jsonBody.get("requestId"),
+                                            "gameInformation", utils.gameToJson(game),
+                                            "playerView", utils.playerViewToJson(map, player, game)
+                                    )));
+                        }
+                    }
+                    case NOT_STARTED -> {
+                        synchronized (game) {
+                            sendToSession(session,
+                                    new JSONObject(Map.of(
+                                            "requestId", jsonBody.get("requestId"),
+                                            "gameInformation", utils.gameToJson(game)
+                                    )));
+                        }
+                    }
                 }
             }
             case CALL_SCOUT -> {
@@ -549,7 +818,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case PLACE_BUILDING -> {
                 Point point = utils.jsonToPoint(jsonBody);
-
                 Building building = utils.buildingFactory(jsonBody, player);
 
                 synchronized (map) {
@@ -562,7 +830,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case PLACE_ROAD -> {
                 JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
-
                 List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
 
                 synchronized (map) {
@@ -575,7 +842,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case PLACE_FLAG -> {
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
-
                 Point flagPoint = utils.jsonToPoint(jsonFlag);
 
                 synchronized (map) {
@@ -644,7 +910,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case REMOVE_ROAD -> {
                 String roadId = (String) jsonBody.get("id");
-
                 Road road = (Road) idManager.getObject(roadId);
 
                 try {
@@ -657,7 +922,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case REMOVE_FLAG -> {
                 String flagId = (String) jsonBody.get("id");
-
                 Flag flag = (Flag) idManager.getObject(flagId);
 
                 try {
@@ -670,7 +934,6 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             }
             case REMOVE_BUILDING -> {
                 String buildingId = (String) jsonBody.get("id");
-
                 Building building = (Building) idManager.getObject(buildingId);
 
                 try {
@@ -703,13 +966,32 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
     @OnClose
     public void onClose(Session session) {
         System.out.println("ON CLOSE");
+
+        /* Remove the closed session */
+        gameListListeners.remove(session);
+        gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
+        chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
+
+        Player player = (Player) session.getUserProperties().get("PLAYER");
+
+        if (player != null) {
+            System.out.println("Removing session for player: " + player);
+            playerToSession.remove(player);
+        }
     }
 
     @OnError
     public void onError(Session session, Throwable throwable) {
         System.out.println("ON ERROR: " + throwable);
+        System.out.println(throwable.getCause());
+        System.out.println(throwable.getMessage());
+        System.out.println(Arrays.toString(throwable.getStackTrace()));
 
         /* Remove the error session */
+        gameListListeners.remove(session);
+        gameInfoListeners.forEach((game, listeners) -> listeners.remove(session));
+        chatRoomListeners.forEach((chatRoom, listeners) -> listeners.remove(session));
+
         Player player = (Player) session.getUserProperties().get("PLAYER");
 
         if (player != null) {
@@ -719,26 +1001,17 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
     }
 
     @OnOpen
-    public void onOpen(Session session, @javax.websocket.server.PathParam("gameId") String gameId, @javax.websocket.server.PathParam("playerId") String playerId, EndpointConfig config) throws IOException {
+    public void onOpen(Session session, EndpointConfig config) throws IOException {
+        System.out.println();
+        System.out.println("Websocket session opened");
+    }
 
-        System.out.println("Websocket opened");
+    void sendToSession(Session session, JSONObject jsonObject) {
+        session.getAsyncRemote().sendText(jsonObject.toJSONString());
+    }
 
-        /* Subscribe to changes */
-        Player player = (Player) idManager.getObject(playerId);
-
-        if (player == null || idManager.getObject(gameId) == null) {
-            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "The player or game doesn't exist"));
-        } else {
-
-            session.getUserProperties().put("PLAYER", player);
-            session.getUserProperties().put("GAME", idManager.getObject(gameId));
-
-            System.out.println("Storing session");
-            this.playerToSession.put(player, session);
-
-            System.out.println("Starting to monitor");
-            player.monitorGameView(this);
-        }
+    void sendToSession(Session session, JSONArray jsonArray) {
+        session.getAsyncRemote().sendText(jsonArray.toJSONString());
     }
 
     @Override
@@ -747,11 +1020,11 @@ public class WebsocketMonitor implements PlayerGameViewMonitor {
             Session session = playerToSession.get(player);
 
             if (session != null) {
-                JSONObject jsonGameMonitoringEvent = utils.gameMonitoringEventsToJson(gameChangesList, player);
-
-                session.getAsyncRemote().sendText(jsonGameMonitoringEvent.toJSONString());
+                sendToSession(session, new JSONObject(Map.of(
+                        "type", "PLAYER_VIEW_CHANGED",
+                        "playerViewChanges", utils.gameMonitoringEventsToJson(gameChangesList, player)
+                )));
             }
-
         } catch (Exception e) {
             System.out.println("Exception while sending updates to frontend: " + e);
             e.printStackTrace();

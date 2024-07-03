@@ -2,6 +2,7 @@ package org.appland.settlers.rest;
 
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
+import org.appland.settlers.rest.resource.MapsResource;
 import org.appland.settlers.rest.resource.SettlersAPI;
 
 import javax.servlet.ServletContextEvent;
@@ -27,12 +28,10 @@ class DeploymentListener implements ServletContextListener {
         System.out.println("Context initialized event.");
 
         /* Add a game ticker to the servlet context that drives the game loop for each game */
-        GameTicker gameTicker = new GameTicker();
-
-        servletContextEvent.getServletContext().setAttribute(SettlersAPI.GAME_TICKER, gameTicker);
+        servletContextEvent.getServletContext().setAttribute(SettlersAPI.GAME_TICKER, GameTicker.GAME_TICKER);
 
         /* Start the game ticker */
-        gameTicker.activate();
+        GameTicker.GAME_TICKER.activate();
 
         /* Load all maps and put them into the servlet context */
         //String largeMapDirectoryPath = "/home/johan/projects/settlers-map-manager/maps/WORLDS/";
@@ -54,6 +53,7 @@ class DeploymentListener implements ServletContextListener {
 
                             synchronized (mapFiles) {
                                 mapFiles.add(mapFile);
+                                MapsResource.mapsResource.addMap(mapFile);
                             }
                         } catch (Exception e) {
                             System.out.println(mapFilename.toString());

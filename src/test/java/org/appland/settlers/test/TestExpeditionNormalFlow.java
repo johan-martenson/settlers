@@ -1746,7 +1746,7 @@ public class TestExpeditionNormalFlow {
 
         HarborIsFinishedMessage message = (HarborIsFinishedMessage) player0.getMessages().getLast();
 
-        assertEquals(message.getMessageType(), Message.MessageType.HARBOR_IS_FINISHED_MESSAGE);
+        assertEquals(message.getMessageType(), Message.MessageType.HARBOR_IS_FINISHED);
         assertEquals(message.harbor(), newHarbor);
     }
 

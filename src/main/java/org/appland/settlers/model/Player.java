@@ -46,7 +46,6 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,6 +63,7 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
+    private PlayerType  playerType = PlayerType.HUMAN;
     private GameMap     map;
     private PlayerColor color;
     private Nation      nation;
@@ -267,6 +267,10 @@ public class Player {
         }
     }
 
+    public void setPlayerType(PlayerType playerType) {
+        this.playerType = playerType;
+    }
+
     private void setTransportPriorityForMaterials() {
 
         transportPriorities.clear();
@@ -325,23 +329,14 @@ public class Player {
         }
 
         /* Count soldiers in military buildings that can reach the building */
-        var totalAmount = getBuildings().stream()
+        return (int) (getBuildings().stream()
                 .filter(Building::isMilitaryBuilding)
                 .filter(building -> building.canAttack(buildingToAttack))
-                .mapToInt(building -> {
-                    if (building instanceof Headquarter headquarter) {
-                        return headquarter.getAmount(PRIVATE) +
-                                headquarter.getAmount(PRIVATE_FIRST_CLASS) +
-                                headquarter.getAmount(SERGEANT) +
-                                headquarter.getAmount(OFFICER) +
-                                headquarter.getAmount(GENERAL);
-                    } else {
-                        return Math.max(building.getNumberOfHostedSoldiers() - 1, 0);
-                    }
-                })
-                .sum();
-
-        return (int)((amountSoldiersAvailableForAttack / 10.0) * totalAmount);
+                .mapToInt(building -> building instanceof Headquarter headquarter
+                        ? headquarter.getAmount(PRIVATE) + headquarter.getAmount(PRIVATE_FIRST_CLASS)
+                        + headquarter.getAmount(SERGEANT) + headquarter.getAmount(OFFICER) + headquarter.getAmount(GENERAL)
+                        : Math.max(building.getNumberOfHostedSoldiers() - 1, 0))
+                .sum() * (amountSoldiersAvailableForAttack / 10.0));
     }
 
     public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
@@ -356,20 +351,12 @@ public class Player {
             throw new InvalidUserActionException("Can only attack other players");
         }
 
-        List<Building> eligibleBuildings = new LinkedList<>();
-
         /* Find all eligible buildings to attack from */
-        for (Building building : getBuildings()) {
-            if (!building.isMilitaryBuilding()) {
-                continue;
-            }
-
-            if (!building.canAttack(buildingToAttack)) {
-                continue;
-            }
-
-            eligibleBuildings.add(building);
-        }
+        List<Building> eligibleBuildings = getBuildings().stream()
+                .filter(building -> building.isMilitaryBuilding()
+                        && building.canAttack(buildingToAttack)
+                        && building.getNumberOfHostedSoldiers() >= 2)
+                .toList();
 
         /* Collect all eligible soldiers */
         List<Soldier> availableAttackers = new ArrayList<>();
@@ -1876,5 +1863,13 @@ public class Player {
 
     public void reportNewFallingTree(Tree tree) {
         newFallingTrees.add(tree);
+    }
+
+    public void setPlayerColor(PlayerColor playerColor) {
+        color = playerColor;
+    }
+
+    public PlayerType getPlayerType() {
+        return playerType;
     }
 }
