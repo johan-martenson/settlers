@@ -128,6 +128,7 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> ironBarAllocation;
     private final Set<Stone> changedStones;
     private final Set<Tree> newFallingTrees;
+    private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
 
     private int strengthWhenPopulatingMilitaryBuildings;
     private int defenseStrength;
@@ -708,6 +709,8 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+
+        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
     }
 
     public int getProducedMaterial(Material material) {
@@ -1871,5 +1874,13 @@ public class Player {
 
     public PlayerType getPlayerType() {
         return playerType;
+    }
+
+    public void addPlayerChangeListener(PlayerChangeListener playerChangeListener) {
+        playerChangeListeners.add(playerChangeListener);
+    }
+
+    public void removePlayerChangeListener(PlayerChangeListener playerChangeListener) {
+        playerChangeListeners.remove(playerChangeListener);
     }
 }

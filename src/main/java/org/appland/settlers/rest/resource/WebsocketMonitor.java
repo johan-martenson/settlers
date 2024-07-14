@@ -43,7 +43,6 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -157,6 +156,15 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_CHAT_HISTORY_FOR_ROOM -> {
+                var roomId = (String) jsonBody.get("roomId");
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "chatHistory", utils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
+                        )));
+            }
             case LISTEN_TO_CHAT_MESSAGES -> {
                 if (jsonBody.containsKey("playerId")) {
                     ChatManager.addMessageListenerForPlayer((Player) idManager.getObject((String) jsonBody.get("playerId")), this);
@@ -168,7 +176,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
                                 ChatManager.addMessageListenerForRoom((String) roomId, this);
 
                                 if (!chatRoomListeners.containsKey(roomId)) {
-                                    chatRoomListeners.put((String) roomId, new ArrayList<>());
+                                    chatRoomListeners.put((String) roomId, new HashSet<>());
                                 }
 
                                 chatRoomListeners.get((String) roomId).add(session);
@@ -347,18 +355,19 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
             }
             case ADD_PLAYER_TO_GAME -> {
                 var playerToAdd = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                var gameToAddPlayerTo = (GameResource) idManager.getObject((String) jsonBody.get("gameId"));
 
-                synchronized (game) {
+                synchronized (gameToAddPlayerTo) {
                     if (playerToAdd.getPlayerType() == PlayerType.COMPUTER) {
-                        game.addComputerPlayer(playerToAdd);
+                        gameToAddPlayerTo.addComputerPlayer(playerToAdd);
                     } else {
-                        game.addHumanPlayer(playerToAdd);
+                        gameToAddPlayerTo.addHumanPlayer(playerToAdd);
                     }
 
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", utils.gameToJson(game)
+                                    "gameInformation", utils.gameToJson(gameToAddPlayerTo)
                             )));
                 }
             }

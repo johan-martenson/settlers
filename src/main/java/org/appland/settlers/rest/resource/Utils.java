@@ -86,7 +86,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -131,6 +130,28 @@ class Utils {
         return jsonGames;
     }
 
+    JSONArray chatMessagesToRoomToJson(Collection<ChatManager.ChatMessage> chatMessages, String roomId) {
+        var jsonChatMessages = new JSONArray();
+
+        chatMessages.forEach(chatMessage -> jsonChatMessages.add(new JSONObject(Map.of(
+                "id", idManager.getId(chatMessage),
+                "from", chatMessage.from().getName(),
+                "toRoomId", roomId,
+                "text", chatMessage.text(),
+                "time", simpleTimeToJson(chatMessage.time())
+        ))));
+
+        return jsonChatMessages;
+    }
+
+    JSONObject simpleTimeToJson(ChatManager.SimpleTime time) {
+        return new JSONObject(Map.of(
+                "hours", time.hours(),
+                "minutes", time.minutes(),
+                "seconds", time.seconds()
+        ));
+    }
+
     JSONObject gameToJson(GameResource gameResource) {
         var jsonGame = new JSONObject(Map.of(
                 "id", idManager.getId(gameResource),
@@ -141,8 +162,11 @@ class Utils {
                 "othersCanJoin", gameResource.getOthersCanJoin()
         ));
 
-        if (gameResource.getMapFile() != null) {
-            jsonGame.put("map", mapFileToJson(gameResource.getMapFile()));
+        MapFile mapFile = gameResource.getMapFile();
+
+        if (mapFile != null) {
+            jsonGame.put("mapId", idManager.getId(mapFile));
+            jsonGame.put("map", mapFileToJson(mapFile));
         }
 
         return jsonGame;
@@ -222,7 +246,7 @@ class Utils {
         List<Player> players = new ArrayList<>();
 
         if (jsonPlayers != null) {
-            for (Object jsonPlayer : jsonPlayers) {
+            for (var jsonPlayer : jsonPlayers) {
                 players.add(jsonToPlayer((JSONObject) jsonPlayer));
             }
         }
@@ -231,6 +255,10 @@ class Utils {
     }
 
     Player jsonToPlayer(JSONObject jsonPlayer) {
+        if (jsonPlayer.containsKey("id")) {
+            return (Player) idManager.getObject((String) jsonPlayer.get("id"));
+        }
+
         String name = (String) jsonPlayer.get("name");
         PlayerColor color = jsonToColor((String) jsonPlayer.get("color"));
 
@@ -1864,26 +1892,6 @@ class Utils {
         return jsonView;
     }
 
-    public JSONObject gameResourceToJson(GameResource gameResource) {
-        var jsonGameResource = new JSONObject(Map.of(
-                "id", idManager.getId(gameResource),
-                "players", gameResource.getPlayers() != null ? playersToJson(gameResource.getPlayers(), gameResource) : Collections.emptyList(),
-                "name", gameResource.isNameSet() ? gameResource.getName() : "",
-                "status", gameResource.status.name(),
-                "resources", gameResource.getResources().name(),
-                "othersCanJoin", gameResource.getOthersCanJoin()
-        ));
-
-        MapFile mapFile = gameResource.getMapFile();
-
-        if (mapFile != null) {
-            jsonGameResource.put("mapId", idManager.getId(mapFile));
-            jsonGameResource.put("map", mapFileToJson(mapFile));
-        }
-
-        return jsonGameResource;
-    }
-
     public JSONObject cargoToJson(Cargo cargo) {
         return new JSONObject(Map.of(
                 "material", cargo.getMaterial().name().toUpperCase(),
@@ -1935,7 +1943,16 @@ class Utils {
         return new JSONObject(Map.of(
                 "from", idManager.getId(chatMessage.from()),
                 "text", chatMessage.text(),
-                "toPlayerId", idManager.getId(player)
+                "toPlayerId", idManager.getId(player),
+                "time", timeToJson(chatMessage.time())
+        ));
+    }
+
+    private JSONObject timeToJson(ChatManager.SimpleTime time) {
+        return new JSONObject(Map.of(
+                "hours", time.hours(),
+                "minutes", time.minutes(),
+                "seconds", time.seconds()
         ));
     }
 
@@ -1944,7 +1961,8 @@ class Utils {
                 "fromPlayerId", idManager.getId(chatMessage.from()),
                 "fromName", chatMessage.from().getName(),
                 "text", chatMessage.text(),
-                "toRoomId", roomId
+                "toRoomId", roomId,
+                "time", timeToJson(chatMessage.time())
         ));
     }
 

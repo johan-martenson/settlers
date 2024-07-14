@@ -5,12 +5,18 @@ import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerChangeListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
 
-public class GameResource {
+public class GameResource implements PlayerChangeListener {
     public GameStatus status;
 
     private final List<Player> players;
@@ -24,6 +30,11 @@ public class GameResource {
     private GameMap map;
     private boolean othersCanJoin;
     private GameSpeed gameSpeed;
+
+    @Override
+    public void onPlayerChanged() {
+        listeners.forEach(listener -> listener.onGameResourceChanged(this));
+    }
 
     interface GameResourceListener {
         void onGameResourceChanged(GameResource gameResource);
@@ -57,6 +68,8 @@ public class GameResource {
     void setPlayers(List<Player> players) {
         this.players.addAll(players);
 
+        players.forEach(player -> player.addPlayerChangeListener(this));
+
         notifyListeners();
     }
 
@@ -66,6 +79,8 @@ public class GameResource {
 
     void addHumanPlayer(Player player) {
         players.add(player);
+
+        player.addPlayerChangeListener(this);
 
         notifyListeners();
     }
@@ -107,6 +122,8 @@ public class GameResource {
     public void removePlayer(Player player) {
         this.players.remove(player);
 
+        player.removePlayerChangeListener(this);
+
         notifyListeners();
     }
 
@@ -135,6 +152,8 @@ public class GameResource {
     public void addComputerPlayer(Player player) {
         computerPlayers.put(player, new CompositePlayer(player, player.getMap()));
         players.add(player);
+
+        player.addPlayerChangeListener(this);
 
         notifyListeners();
     }

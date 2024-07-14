@@ -142,11 +142,11 @@ public class SettlersAPI {
         for (GameResource gameResource : gameResources) {
             if (gameResource.status == STARTED) {
                 synchronized (gameResource.getGameMap()) {
-                    jsonGameResources.add(utils.gameResourceToJson(gameResource));
+                    jsonGameResources.add(utils.gameToJson(gameResource));
                 }
             } else {
                 synchronized (gameResource) {
-                    jsonGameResources.add(utils.gameResourceToJson(gameResource));
+                    jsonGameResources.add(utils.gameToJson(gameResource));
                 }
             }
         }
@@ -182,7 +182,7 @@ public class SettlersAPI {
         }
 
         /* Return the game as a JSON document */
-        JSONObject jsonGameResource = utils.gameResourceToJson(gameResource);
+        JSONObject jsonGameResource = utils.gameToJson(gameResource);
 
         System.out.println(jsonGameResource.toJSONString());
 
@@ -227,7 +227,7 @@ public class SettlersAPI {
 
         gameResources.add(gameResource);
 
-        return Response.status(201).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
+        return Response.status(201).entity(utils.gameToJson(gameResource).toJSONString()).build();
     }
 
     @PATCH
@@ -266,7 +266,7 @@ public class SettlersAPI {
                 gameResource.setMap(updatedMapFile);
             }
 
-            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
+            return Response.status(200).entity(utils.gameToJson(gameResource).toJSONString()).build();
         }
 
         if (jsonUpdates.containsKey("status")) {
@@ -295,7 +295,7 @@ public class SettlersAPI {
                 gameResource.setResource(level);
             }
 
-            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
+            return Response.status(200).entity(utils.gameToJson(gameResource).toJSONString()).build();
         }
 
         if (jsonUpdates.containsKey("othersCanJoin")) {
@@ -305,7 +305,7 @@ public class SettlersAPI {
                 gameResource.setOthersCanJoin((Boolean) jsonUpdates.get("othersCanJoin"));
             }
 
-            return Response.status(200).entity(utils.gameResourceToJson(gameResource).toJSONString()).build();
+            return Response.status(200).entity(utils.gameToJson(gameResource).toJSONString()).build();
         }
 
         /* Return bad request (400) if there is no mapFileId included */
