@@ -3,6 +3,7 @@ package org.appland.settlers.rest.resource;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -50,6 +51,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 
@@ -156,6 +158,69 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case CANCEL_EVACUATION -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.cancelEvacuation();
+            }
+            case DISABLE_PROMOTIONS -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.disablePromotions();
+            }
+            case ENABLE_PROMOTIONS -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.enablePromotions();
+            }
+            case PAUSE_PRODUCTION -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.stopProduction();
+            }
+            case RESUME_PRODUCTION -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.resumeProduction();
+            }
+            case DELETE_GAME -> {
+                GAME_RESOURCES.removeGame(game);
+            }
+            case FIND_NEW_ROAD -> {
+                var start = utils.jsonToPoint((JSONObject) jsonBody.get("from"));
+                var goal = utils.jsonToPoint((JSONObject) jsonBody.get("to"));
+                Set<Point> avoid = null;
+
+                if (jsonBody.containsKey("avoid")) {
+                    avoid = utils.jsonToPointsSet((JSONArray) jsonBody.get("avoid"));
+                }
+
+                List<Point> possibleRoad;
+
+                synchronized (map) {
+                    possibleRoad = map.findAutoSelectedRoad(player, start, goal, avoid);
+
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "roadIsPossible", true,
+                                    "possibleRoad", utils.pointsToJson(possibleRoad),
+                                    "closesRoad", map.isFlagAtPoint(goal) || (map.isRoadAtPoint(goal) && map.isAvailableFlagPoint(player, goal))
+                            )));
+                }
+            }
+            case EVACUATE_HOUSE -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+
+                house.evacuate();
+            }
+            case ATTACK_HOUSE -> {
+                var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
+                var attackers = ((Long) jsonBody.get("attackers")).intValue();
+                var attackStrength = AttackStrength.valueOf((String) jsonBody.get("attackType"));
+
+                player.attack(house, attackers, attackStrength);
+            }
             case GET_CHAT_HISTORY_FOR_ROOM -> {
                 var roomId = (String) jsonBody.get("roomId");
 
@@ -408,11 +473,19 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
                 }
             }
             case GET_GAME_INFORMATION -> {
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "gameInformation", utils.gameToJson(game)
-                        )));
+                if (game != null) {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "gameInformation", utils.gameToJson(game)
+                            )));
+                } else {
+                    sendToSession(session,
+                            new JSONObject(Map.of(
+                                    "requestId", jsonBody.get("requestId"),
+                                    "error", "The game doesn't exist on the server."
+                            )));
+                }
             }
             case UPGRADE -> {
                 Building building = (Building) idManager.getObject((String) jsonBody.get("houseId"));
