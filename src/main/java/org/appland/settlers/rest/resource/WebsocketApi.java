@@ -63,7 +63,7 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 
 @ServerEndpoint(value = "/ws/monitor/games")
-public class WebsocketMonitor implements PlayerGameViewMonitor,
+public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
         ChatManager.ChatListener {
@@ -86,7 +86,7 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
     private final Map<GameResource, Collection<Session>> gameInfoListeners = new HashMap<>();
     private final Map<String, Collection<Session>> chatRoomListeners = new HashMap<>();
 
-    public WebsocketMonitor() {
+    public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
 
         utils = new Utils(idManager);
@@ -916,11 +916,16 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
                 session.getAsyncRemote().sendText(jsonUpdate.toJSONString());
             }
             case STOP_DETAILED_MONITORING -> {
-                String buildingId = (String) jsonBody.get("buildingId");
-                Building building = (Building) idManager.getObject(buildingId);
+                var monitoredObject = idManager.getObject((String) jsonBody.get("id"));
 
                 synchronized (map) {
-                    player.removeDetailedMonitoring(building);
+                    if (monitoredObject instanceof Building building) {
+                        player.removeDetailedMonitoring(building);
+                    } else {
+                        var flag = (Flag) monitoredObject;
+
+                        player.removeDetailedMonitoring(flag);
+                    }
                 }
             }
             case SET_RESERVED_IN_HEADQUARTERS -> {

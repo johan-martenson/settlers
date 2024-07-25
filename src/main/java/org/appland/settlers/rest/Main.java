@@ -3,7 +3,7 @@ package org.appland.settlers.rest;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.rest.resource.MapsResource;
-import org.appland.settlers.rest.resource.WebsocketMonitor;
+import org.appland.settlers.rest.resource.WebsocketApi;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
@@ -71,7 +71,7 @@ public class Main {
         ServerContainer container = WebSocketServerContainerInitializer.configureContext(context);
 
         // Add echo endpoint to server container
-        container.addEndpoint(WebsocketMonitor.class);
+        container.addEndpoint(WebsocketApi.class);
 
         server.start();
         server.join();
