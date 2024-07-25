@@ -1,17 +1,21 @@
 package org.appland.settlers.rest;
 
+import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.maps.MapLoader;
+import org.appland.settlers.rest.resource.MapsResource;
 import org.appland.settlers.rest.resource.WebsocketMonitor;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
-import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 
 import javax.websocket.server.ServerContainer;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
-
-    private static final String APPLICATION_PATH = "/settlers/api/*";
+    private final List<MapFile> mapFiles = new ArrayList<>();
     private static final String CONTEXT_ROOT = "/";
 
     public static void main(String[] args) throws Exception {
@@ -21,6 +25,38 @@ public class Main {
     }
 
     private void run() throws Exception {
+
+        // Start the game ticker
+        GameTicker.GAME_TICKER.activate();
+
+        // Load the maps
+        String largeMapDirectoryPath = "maps/WORLDS/";
+
+        File largeMapDirectory = new File(largeMapDirectoryPath);
+
+        MapLoader mapLoader = new MapLoader();
+
+        if (largeMapDirectory.exists()) {
+
+            File[] mapFilenames = largeMapDirectory.listFiles(
+                    (dir, name) -> name.toLowerCase().endsWith(".swd") || name.toLowerCase().endsWith(".wld"));
+
+            Arrays.stream(mapFilenames).parallel().forEach(mapFilename ->
+                    {
+                        try {
+                            MapFile mapFile = mapLoader.loadMapFromFile(mapFilename.toString());
+
+                            synchronized (mapFiles) {
+                                mapFiles.add(mapFile);
+                                MapsResource.mapsResource.addMap(mapFile);
+                            }
+                        } catch (Exception e) {
+                            System.out.println(mapFilename.toString());
+                            System.out.println("Exception while loading maps: " + e);
+                        }
+                    }
+            );
+        }
 
         final int port = 8080;
         final Server server = new Server(port);
@@ -36,15 +72,6 @@ public class Main {
 
         // Add echo endpoint to server container
         container.addEndpoint(WebsocketMonitor.class);
-
-        // Register the lifecycle listener
-        context.addEventListener(new DeploymentListener());
-
-        // Setup RESTEasy's HttpServletDispatcher at "/api/*".
-        final ServletHolder restEasyServlet = new ServletHolder(new HttpServletDispatcher());
-        restEasyServlet.setInitParameter("resteasy.servlet.mapping.prefix", APPLICATION_PATH);
-        restEasyServlet.setInitParameter("javax.ws.rs.Application", FatJarApplication.class.getName());
-        context.addServlet(restEasyServlet, APPLICATION_PATH);
 
         server.start();
         server.join();

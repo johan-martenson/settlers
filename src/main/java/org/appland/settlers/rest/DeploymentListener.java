@@ -3,7 +3,6 @@ package org.appland.settlers.rest;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.rest.resource.MapsResource;
-import org.appland.settlers.rest.resource.SettlersAPI;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -27,14 +26,10 @@ class DeploymentListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         System.out.println("Context initialized event.");
 
-        /* Add a game ticker to the servlet context that drives the game loop for each game */
-        servletContextEvent.getServletContext().setAttribute(SettlersAPI.GAME_TICKER, GameTicker.GAME_TICKER);
-
         /* Start the game ticker */
         GameTicker.GAME_TICKER.activate();
 
         /* Load all maps and put them into the servlet context */
-        //String largeMapDirectoryPath = "/home/johan/projects/settlers-map-manager/maps/WORLDS/";
         String largeMapDirectoryPath = "maps/WORLDS/";
 
         File largeMapDirectory = new File(largeMapDirectoryPath);
@@ -64,14 +59,12 @@ class DeploymentListener implements ServletContextListener {
         }
 
         /* Pick the single reference map */
-         File mapFile = Paths.get("src/test/resources/000.SWD").toFile();
+        File mapFile = Paths.get("src/test/resources/000.SWD").toFile();
 
         try {
             MapFile loadedMapFile = mapLoader.loadMapFromFile(mapFile.toString());
 
             mapFiles.addFirst(loadedMapFile);
-
-            servletContextEvent.getServletContext().setAttribute(SettlersAPI.MAP_FILE_LIST, mapFiles);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED TO LOAD MAP");
