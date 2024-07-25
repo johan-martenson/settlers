@@ -1979,4 +1979,8 @@ class Utils {
 
         return jsonFlag;
     }
+
+    public TransportCategory jsonToTransportCategory(String material) {
+        return TransportCategory.valueOf(material);
+    }
 }

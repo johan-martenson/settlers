@@ -7,6 +7,7 @@ import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerGameViewMonitor;
@@ -30,6 +31,11 @@ import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.messages.Message;
+import org.appland.settlers.model.statistics.LandDataPoint;
+import org.appland.settlers.model.statistics.LandStatistics;
+import org.appland.settlers.model.statistics.ProductionDataPoint;
+import org.appland.settlers.model.statistics.ProductionDataSeries;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -53,6 +59,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 
 @ServerEndpoint(value = "/ws/monitor/games")
@@ -60,6 +67,16 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
         ChatManager.ChatListener {
+    public static final List<Material> PRODUCTION_STATISTICS_MATERIALS = Arrays.asList(
+            WOOD,
+            STONE,
+            PLANK,
+            COIN,
+            GOLD,
+            SWORD,
+            SHIELD
+    );
+
     private final Map<Player, Session> playerToSession;
     private final Utils utils;
     private final JSONParser parser;
@@ -158,6 +175,94 @@ public class WebsocketMonitor implements PlayerGameViewMonitor,
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_PRODUCTION_STATISTICS -> {
+                JSONObject jsonProductionStatisticsForAllMaterials = new JSONObject();
+                StatisticsManager statisticsManager = map.getStatisticsManager();
+
+                for (Material material : PRODUCTION_STATISTICS_MATERIALS) {
+                    synchronized (map) {
+                        ProductionDataSeries materialProductionDataSeries = statisticsManager.getProductionStatisticsForMaterial(material);
+
+                        /* Set the meta data for the report for this material */
+                        JSONArray jsonMaterialStatisticsDataSeries = new JSONArray();
+
+                        /* Add the statistics for this material to the array */
+                        jsonProductionStatisticsForAllMaterials.put(material.name().toUpperCase(), jsonMaterialStatisticsDataSeries);
+
+                        for (ProductionDataPoint dataPoint : materialProductionDataSeries.getProductionDataPoints()) {
+
+                            JSONObject jsonMaterialMeasurementPoint = new JSONObject();
+
+                            /* Set measurement 0 */
+                            jsonMaterialMeasurementPoint.put("time", dataPoint.getTime());
+
+                            JSONArray jsonMaterialMeasurementPointValues = new JSONArray();
+
+                            int[] values = dataPoint.getValues();
+
+                            for (int value : values) {
+                                jsonMaterialMeasurementPointValues.add(value);
+                            }
+
+                            jsonMaterialMeasurementPoint.put("values", jsonMaterialMeasurementPointValues);
+
+                            /* Add the data point to the data series */
+                            jsonMaterialStatisticsDataSeries.add(jsonMaterialMeasurementPoint);
+                        }
+                    }
+                }
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "productionStatistics", jsonProductionStatisticsForAllMaterials
+                        )));
+            }
+
+            case GET_LAND_STATISTICS -> {
+                JSONArray jsonLandStatisticsDataSeries = new JSONArray();
+
+                synchronized (map) {
+                    LandStatistics landStatistics = map.getStatisticsManager().getLandStatistics();
+
+                    for (LandDataPoint landDataPoint : landStatistics.getDataPoints()) {
+                        JSONObject jsonLandMeasurement = new JSONObject();
+
+                        jsonLandMeasurement.put("time", landDataPoint.getTime());
+
+                        JSONArray jsonLandValues = new JSONArray();
+                        for (int landSize : landDataPoint.getValues()) {
+                            jsonLandValues.add(landSize);
+                        }
+
+                        jsonLandMeasurement.put("values", jsonLandValues);
+
+                        jsonLandStatisticsDataSeries.add(jsonLandMeasurement);
+                    }
+                }
+
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "currentTime", map.getCurrentTime(),
+                                "landStatistics", jsonLandStatisticsDataSeries
+                                )));
+            }
+            case GET_TERRAIN -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "terrain", utils.mapFileTerrainToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
+                        )));
+            }
+            case SET_TRANSPORT_PRIORITY -> {
+                var category = utils.jsonToTransportCategory((String) jsonBody.get("category"));
+                int priority = ((Long) jsonBody.get("priority")).intValue();
+
+                synchronized (map) {
+                    player.setTransportPriority(priority, category);
+                }
+            }
             case CANCEL_EVACUATION -> {
                 var house = (Building) idManager.getObject((String) jsonBody.get("houseId"));
 
