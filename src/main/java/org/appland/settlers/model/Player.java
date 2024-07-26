@@ -66,7 +66,7 @@ public class Player {
     private PlayerType  playerType = PlayerType.HUMAN;
     private GameMap     map;
     private PlayerColor color;
-    private Nation      nation;
+    private Nation      nation = Nation.ROMANS;
     private String      name;
     private boolean     treeConservationProgramActive;
     private boolean     treeConservationProgramEnabled;
@@ -137,12 +137,11 @@ public class Player {
     private int amountWhenPopulatingAwayFromToBorder;
     private int amountWhenPopulatingFarFromBorder;
     private int amountSoldiersAvailableForAttack;
+    private boolean transportPriorityChanged = false;
 
     public Player(String name, PlayerColor color) {
         this.name           = name;
         this.color          = color;
-
-        this.nation         = Nation.ROMANS;
 
         buildings           = new ArrayList<>();
         discoveredLand      = new HashSet<>();
@@ -629,6 +628,8 @@ public class Player {
         transportPriorities.clear();
 
         setTransportPriorityForMaterials();
+
+        transportPriorityChanged = true;
     }
 
     public int getTransportPriority(Cargo cargo) {
@@ -911,7 +912,7 @@ public class Player {
             removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
             finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
             removedDecorations.isEmpty() && newDecorations.isEmpty() && upgradedBuildings.isEmpty() &&
-            changedAvailableConstruction.isEmpty()) {
+            changedAvailableConstruction.isEmpty() && !transportPriorityChanged) {
             return;
         }
 
@@ -1160,7 +1161,8 @@ public class Player {
                 new ArrayList<>(upgradedBuildings),
                 new ArrayList<>(removedMessages),
                 new ArrayList<>(changedStones),
-                new ArrayList<>(newFallingTrees));
+                new ArrayList<>(newFallingTrees),
+                transportPriorityChanged);
 
         /* Send the event to all monitors */
         gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
@@ -1207,6 +1209,7 @@ public class Player {
         removedMessages.clear();
         changedStones.clear();
         newFallingTrees.clear();
+        transportPriorityChanged = false;
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {

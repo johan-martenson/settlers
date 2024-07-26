@@ -965,6 +965,10 @@ class Utils {
 
         Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.getChangedBuildings());
 
+        if (gameChangesList.isTransportPriorityChanged()) {
+            jsonMonitoringEvents.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
+        }
+
         if (!gameChangesList.getNewFallingTrees().isEmpty()) {
             jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.getNewFallingTrees()));
         }
@@ -1888,6 +1892,7 @@ class Utils {
         jsonView.put("heights", jsonHeights);
         jsonView.put("width", map.getWidth());
         jsonView.put("height", map.getHeight());
+        jsonView.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
 
         return jsonView;
     }

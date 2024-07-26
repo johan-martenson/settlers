@@ -50,6 +50,7 @@ public class GameChangesList {
     private final Collection<Message> removedMessages;
     private final Collection<Stone> changedStones;
     private final Collection<Tree> newFallingTrees;
+    private final boolean transportPriorityChanged;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -88,7 +89,8 @@ public class GameChangesList {
                            Collection<NewAndOldBuilding> upgradedBuildings,
                            Collection<Message> removedMessages,
                            Collection<Stone> changedStones,
-                           Collection<Tree> newFallingTrees) {
+                           Collection<Tree> newFallingTrees,
+                           boolean transportPriorityChanged) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -127,6 +129,7 @@ public class GameChangesList {
         this.removedMessages = removedMessages;
         this.changedStones = changedStones;
         this.newFallingTrees = newFallingTrees;
+        this.transportPriorityChanged = transportPriorityChanged;
     }
 
     public long getTime() {
@@ -321,6 +324,10 @@ public class GameChangesList {
 
     public Collection<Tree> getNewFallingTrees() {
         return newFallingTrees;
+    }
+
+    public boolean isTransportPriorityChanged() {
+        return transportPriorityChanged;
     }
 
     public static class NewAndOldBuilding {

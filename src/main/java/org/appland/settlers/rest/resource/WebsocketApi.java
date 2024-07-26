@@ -175,6 +175,13 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         Command command = Command.valueOf((String) jsonBody.get("command"));
 
         switch (command) {
+            case GET_TRANSPORT_PRIORITY -> {
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "priority", utils.transportPriorityToJson(player.getTransportPriorities())
+                        )));
+            }
             case GET_PRODUCTION_STATISTICS -> {
                 JSONObject jsonProductionStatisticsForAllMaterials = new JSONObject();
                 StatisticsManager statisticsManager = map.getStatisticsManager();
