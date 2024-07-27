@@ -677,24 +677,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 GameSpeed gameSpeed = GameSpeed.valueOf((String) jsonBody.get("speed"));
 
                 game.setGameSpeed(gameSpeed);
-
-                int tick = switch (gameSpeed) {
-                    case FAST -> 100;
-                    case NORMAL -> 200;
-                    case SLOW -> 400;
-                };
-
-                // TODO: should be handled through the regular game listener somehow?
-                var jsonNewTick = new JSONObject(Map.of(
-                        "tick", tick,
-                        "gameSpeed", gameSpeed.name().toUpperCase()
-                ));
-
-                game.getPlayers().forEach(receiver -> {
-                    if (playerToSession.containsKey(receiver)) {
-                        sendToPlayer(jsonNewTick, receiver);
-                    }
-                });
             }
             case GET_MILITARY_SETTINGS -> {
                 synchronized (map) {
@@ -896,7 +878,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 String id = (String) jsonBody.get("id");
                 Object object = idManager.getObject(id);
 
-                var jsonUpdate = new JSONObject();
+                var jsonUpdate = new JSONObject(Map.of(
+                        "type", "PLAYER_VIEW_CHANGED"
+                ));
 
                 if (object instanceof Building building) {
                     synchronized (map) {
@@ -1215,6 +1199,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     @Override
     public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
+        // Note: This will be called when the gameTicker runs map.stepTime() and synchronizes on the map.
+        //       No part of gameMonitoringEventsToJson can use synchronization - this will cause a deadlock.
+
         try {
             Session session = playerToSession.get(player);
 

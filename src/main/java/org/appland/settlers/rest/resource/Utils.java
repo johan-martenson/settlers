@@ -169,6 +169,19 @@ class Utils {
             jsonGame.put("map", mapFileToJson(mapFile));
         }
 
+        if (gameResource.isStarted()) {
+            var gameSpeed = gameResource.getGameSpeed();
+
+            int tick = switch (gameSpeed) {
+                case FAST -> 100;
+                case NORMAL -> 200;
+                case SLOW -> 400;
+            };
+
+            jsonGame.put("gameSpeed", gameSpeed.name().toUpperCase());
+            jsonGame.put("tick", tick);
+        }
+
         return jsonGame;
     }
 
