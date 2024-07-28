@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
@@ -7,6 +8,7 @@ import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
@@ -70,7 +72,7 @@ public class TestMonitoringGameMessages {
     public void testNoMessagesOnStart() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -95,7 +97,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventForMessageIsReceivedWhenBarracksIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -136,7 +138,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -205,7 +207,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventForMessageIsReceivedWhenBarracksIsReadyIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -253,7 +255,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventForMessageIsReceivedWhenBarracksIsReadyBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -291,7 +293,7 @@ public class TestMonitoringGameMessages {
     public void testNoMessageWhenNonMilitaryBuildingIsReady() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -324,7 +326,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -382,7 +384,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenBorderIsExtendedWhenBarracksIsPopulatedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -447,7 +449,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenBorderIsExtendedWhenBarracksIsPopulatedBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -502,7 +504,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenQuarryRunsOutOfResources() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -565,7 +567,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenQuarryRunsOutOfResourcesIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -635,7 +637,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenQuarryRunsOutOfResourcesBeforeMonitoringStarts() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -696,7 +698,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenFishermanCanRunOutOfFish() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -810,7 +812,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenFishermanCanRunOutOfFishIsOnlySentOnce() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -931,7 +933,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenFishermanCanRunOutOfFishBeforeMonitoringStarts() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1042,7 +1044,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenGeologistFindsGoldOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1120,7 +1122,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenGeologistFindsGoldOnMountainIsSentOnlyOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1205,7 +1207,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenGeologistFindsGoldOnMountainBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1279,8 +1281,8 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenBarracksIsUnderAttack() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1357,8 +1359,8 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenBarracksIsUnderAttackIsSentOnlyOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1443,8 +1445,8 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenBarracksIsUnderAttackBeforeMonitoringStarts() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1512,8 +1514,8 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessagesAreSentWhenAnAttackerTakesOverBuildingAfterWinningFight() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1630,8 +1632,8 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessagesAreSentWhenAnAttackerTakesOverBuildingAfterWinningFightIsSentOnlyOnce() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1757,8 +1759,8 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessagesAreSentWhenAnAttackerTakesOverBuildingAfterWinningFightBeforeMonitoringStarts() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1869,7 +1871,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenCoalmineRunsOutOfCoal() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1957,7 +1959,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenCoalmineRunsOutOfCoalIsOnlySentOnce() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2052,7 +2054,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenCoalmineRunsOutOfCoalBeforeMonitoringStarts() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2135,7 +2137,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenStorageIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2194,7 +2196,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenStorageIsReadyIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2260,7 +2262,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenStorageIsReadyBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2315,7 +2317,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenTreeConservationProgramIsActivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2362,7 +2364,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenTreeConservationProgramIsActivatedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2416,7 +2418,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenTreeConservationProgramIsActivatedBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2461,7 +2463,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenTreeConservationProgramIsDeactivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2517,7 +2519,7 @@ public class TestMonitoringGameMessages {
     public void testMonitoringEventWhenMessageSentWhenTreeConservationProgramIsDeactivatedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2578,7 +2580,7 @@ public class TestMonitoringGameMessages {
     public void testNoMonitoringEventWhenMessageSentWhenTreeConservationProgramIsDeactivatedBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

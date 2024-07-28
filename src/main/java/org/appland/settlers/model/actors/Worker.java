@@ -199,6 +199,7 @@ public abstract class Worker {
                     /* Update the worker's position */
                     position = path.getFirst();
                     path.removeFirst();
+                    var upLeft = getPosition().upLeft();
 
                     /* Update the cargo's position */
                     updateCargoPosition();
@@ -214,6 +215,16 @@ public abstract class Worker {
 
                         /* Enter buildings if required and give the subclasses a change to act */
                         handleArrival();
+
+                    /* Open the door if the worker is about to go to a house */
+                    } else if (upLeft.equals(target)) {
+                        if (target.equals(upLeft) && map.isBuildingAtPoint(upLeft)) {
+                            var house = map.getBuildingAtPoint(upLeft);
+
+                            if (house.isReady()) {
+                                house.openDoor();
+                            }
+                        }
                     }
                 }
             }
@@ -405,6 +416,8 @@ public abstract class Worker {
 
         home = building;
 
+        building.closeDoor();
+
         /* Allow subclasses to add logic */
         onEnterBuilding(building);
 
@@ -442,8 +455,10 @@ public abstract class Worker {
 
         target = point;
 
-        if (state == State.IDLE_INSIDE) {
+        if (state == State.IDLE_INSIDE && map.getBuildingAtPoint(position).isReady()) {
             wasInside = true;
+
+            getHome().openDoor(10);
         }
 
         if (position.equals(point)) {
@@ -535,6 +550,17 @@ public abstract class Worker {
 
     void setTarget(Point point, Point via) {
         target = point;
+
+        if (state == State.IDLE_INSIDE) {
+            if (!map.isBuildingAtPoint(position)) {
+                System.out.println("No building at point!");
+                System.exit(1);
+            }
+
+            if (map.getBuildingAtPoint(position).isReady()) {
+                getHome().openDoor(10);
+            }
+        }
 
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;

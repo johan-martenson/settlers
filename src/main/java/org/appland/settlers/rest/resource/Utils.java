@@ -15,6 +15,7 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
@@ -278,11 +279,7 @@ class Utils {
         String nationString = (String) jsonPlayer.get("nation");
         Nation nation = Nation.valueOf(nationString);
 
-        Player player = new Player(name, color);
-
-        player.setNation(nation);
-
-        return player;
+        return new Player(name, color, nation, PlayerType.HUMAN);
     }
 
     private PlayerColor jsonToColor(String colorName) {

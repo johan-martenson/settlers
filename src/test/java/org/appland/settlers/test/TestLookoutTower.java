@@ -6,12 +6,14 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Scout;
@@ -45,7 +47,7 @@ public class TestLookoutTower {
     public void testLookoutTowerOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -83,7 +85,7 @@ public class TestLookoutTower {
     public void testLookoutTowerCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -121,7 +123,7 @@ public class TestLookoutTower {
     public void testLookoutTowerNeedsWorker() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -162,7 +164,7 @@ public class TestLookoutTower {
     public void testLookoutTowerGetsAssignedWorker() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -216,7 +218,7 @@ public class TestLookoutTower {
     public void testScoutIsCreatedFromBowAndAssignedToLookoutTower() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -269,7 +271,7 @@ public class TestLookoutTower {
     public void testUnoccupiedLookoutTowerDoesNotDiscoverLand() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -302,7 +304,7 @@ public class TestLookoutTower {
     public void testLookoutTowerDiscoversLandWhenOccupied() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -354,7 +356,7 @@ public class TestLookoutTower {
     public void testOccupiedLookoutTowerProducesNothing() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -389,7 +391,7 @@ public class TestLookoutTower {
     public void testUnoccupiedLookoutTowerProducesNothing() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -416,7 +418,7 @@ public class TestLookoutTower {
     public void testScoutGoesBackToStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -459,7 +461,7 @@ public class TestLookoutTower {
     public void testScoutGoesBackOnToStorageOnRoadsIfPossibleWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -509,7 +511,7 @@ public class TestLookoutTower {
     public void testProductionInLookoutTowerCannotBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -552,7 +554,7 @@ public class TestLookoutTower {
     public void testProductionInLookoutTowerCannotBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -593,7 +595,7 @@ public class TestLookoutTower {
     public void testAssignedScoutHasCorrectSetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -630,9 +632,9 @@ public class TestLookoutTower {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
-        Player player2 = new Player("Player 2", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -685,7 +687,7 @@ public class TestLookoutTower {
     public void testScoutReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -747,7 +749,7 @@ public class TestLookoutTower {
     public void testScoutContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -812,7 +814,7 @@ public class TestLookoutTower {
     public void testScoutReturnsToStorageIfLookoutTowerIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -873,7 +875,7 @@ public class TestLookoutTower {
     public void testScoutGoesOffroadBackToClosestStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -923,7 +925,7 @@ public class TestLookoutTower {
     public void testScoutReturnsOffroadAndAvoidsBurningStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -976,7 +978,7 @@ public class TestLookoutTower {
     public void testScoutReturnsOffroadAndAvoidsDestroyedStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1032,7 +1034,7 @@ public class TestLookoutTower {
     public void testScoutReturnsOffroadAndAvoidsUnfinishedStorageWhenLookoutTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1079,7 +1081,7 @@ public class TestLookoutTower {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1121,7 +1123,7 @@ public class TestLookoutTower {
     public void testLookoutTowerAlwaysHasZeroProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1157,7 +1159,7 @@ public class TestLookoutTower {
     public void testUnoccupiedLookoutTowerHasNoProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1185,7 +1187,7 @@ public class TestLookoutTower {
     public void testLookoutTowerCannotProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1212,7 +1214,7 @@ public class TestLookoutTower {
     public void testLookoutTowerReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1236,7 +1238,7 @@ public class TestLookoutTower {
     public void testLookoutTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1268,7 +1270,7 @@ public class TestLookoutTower {
     public void testLookoutTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1292,7 +1294,7 @@ public class TestLookoutTower {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1353,7 +1355,7 @@ public class TestLookoutTower {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1416,7 +1418,7 @@ public class TestLookoutTower {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1454,7 +1456,7 @@ public class TestLookoutTower {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1499,7 +1501,7 @@ public class TestLookoutTower {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1559,7 +1561,7 @@ public class TestLookoutTower {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

@@ -1,9 +1,11 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Tree;
@@ -27,7 +29,7 @@ public class TestProductionStatistics {
     public void testGetStatisticsInstance() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -46,7 +48,7 @@ public class TestProductionStatistics {
     public void testGetProductionStatisticsForAMaterial() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -74,7 +76,7 @@ public class TestProductionStatistics {
     public void testGetTimeForAProductionStatisticsMeasurement() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -100,9 +102,9 @@ public class TestProductionStatistics {
     public void testGetProductionStatisticsHasRightAmountOfValues() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
-        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -137,9 +139,9 @@ public class TestProductionStatistics {
     public void testProductionStatisticsDataSeriesGrowsOverTime() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
-        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -185,9 +187,9 @@ public class TestProductionStatistics {
     public void testCollectedWoodIsReportedInProductionStatistics() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
-        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -270,9 +272,9 @@ public class TestProductionStatistics {
     public void testProductionStatisticsIsCollectedPeriodically() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
-        Player player2 = new Player("Player 2", PlayerColor.YELLOW);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        Player player2 = new Player("Player 2", PlayerColor.YELLOW, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -331,7 +333,7 @@ public class TestProductionStatistics {
     public void testGetInitialProductionStatisticsForRequiredMaterials() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);

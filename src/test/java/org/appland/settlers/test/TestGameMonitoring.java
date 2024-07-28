@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.StoneAmount;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
@@ -10,6 +11,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
@@ -64,12 +66,12 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventsWhenNothingHappens() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -113,12 +115,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFlagIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -157,12 +159,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFlagIsAddedOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -196,18 +198,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenFlagIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -236,12 +238,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFlagIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -285,18 +287,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenFlagIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -330,12 +332,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFlagIsRemovedOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -370,12 +372,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenRoadIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -421,12 +423,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenRoadIsAddedOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -468,18 +470,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -515,12 +517,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -572,12 +574,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenRoadIsRemovedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -633,18 +635,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -683,12 +685,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -728,12 +730,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsAddedIsSentOnlyOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -774,12 +776,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -789,7 +791,7 @@ public class TestGameMonitoring {
 
         assertTrue(woodcutter0.isPlanned());
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Wait for a builder to start walking to the woodcutter */
@@ -824,12 +826,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstructionIsSentOnlyOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -839,7 +841,7 @@ public class TestGameMonitoring {
 
         assertTrue(woodcutter0.isPlanned());
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Wait for a builder to start walking to the woodcutter */
@@ -883,18 +885,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -923,12 +925,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsTornDown() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -976,12 +978,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsTornDownIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1026,12 +1028,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenPlannedHouseIsTornDown() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1075,12 +1077,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenPlannedHouseIsTornDownIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1133,12 +1135,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsConstructed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1150,7 +1152,7 @@ public class TestGameMonitoring {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Verify that the event is sent when the house is constructed */
@@ -1169,12 +1171,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsConstructedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1188,7 +1190,7 @@ public class TestGameMonitoring {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Verify that the event is sent when the house is constructed */
@@ -1214,18 +1216,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsConstructed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1237,33 +1239,39 @@ public class TestGameMonitoring {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarter */
+        /* Connect the woodcutter with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Verify that no event is sent to player 1 when the house is constructed */
-        Utils.waitForBuildingToBeConstructed(woodcutter0);
+        for (int i = 0; i < 2000; i++) {
+            if (woodcutter0.isReady()) {
+                break;
+            }
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+            monitor.clearEvents();
 
-        assertEquals(gameChanges.getChangedBuildings().size(), 0);
+            map.stepTime();
+        }
+
+        assertTrue(monitor.getLastEvent() == null || monitor.getLastEvent().getChangedBuildings().isEmpty());
     }
 
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsTornDown() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1293,12 +1301,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1349,12 +1357,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsDestroyedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1401,18 +1409,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1449,12 +1457,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseDisappears() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1518,12 +1526,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseDisappearsIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1586,18 +1594,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenHouseDisappears() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1640,12 +1648,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1689,12 +1697,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerIsAddedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1737,18 +1745,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenWorkerIsAdded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1777,12 +1785,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerGoesBackToStorage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1859,12 +1867,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerGoesBackToStorageIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -1937,18 +1945,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenWorkerGoesBackToStorage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -1994,12 +2002,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenRoadIsSplit() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2056,18 +2064,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsSplit() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -2114,12 +2122,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenForesterPlantsTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2191,18 +2199,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenForesterPlantsTree() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -2262,12 +2270,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenForesterPlantsTreeIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2339,7 +2347,7 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWoodcutterCutsDownTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2422,18 +2430,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenWoodcutterCutsDownTree() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -2507,7 +2515,7 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWoodcutterCutsDownTreeIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2607,12 +2615,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenStoneChangesSize() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2623,7 +2631,7 @@ public class TestGameMonitoring {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2679,12 +2687,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenStoneChangesSizeIsSentOnlyOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2695,7 +2703,7 @@ public class TestGameMonitoring {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2740,12 +2748,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2756,7 +2764,7 @@ public class TestGameMonitoring {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2811,12 +2819,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenStoneDisappearsAfterAllHasBeenRetrievedIsSentOnlyOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(10, 10);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2827,7 +2835,7 @@ public class TestGameMonitoring {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2884,18 +2892,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -2906,7 +2914,7 @@ public class TestGameMonitoring {
         /* Construct the quarry */
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarter */
+        /* Connect the quarry to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry.getFlag());
 
         /* Place stone */
@@ -2945,12 +2953,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenGeologistDoesResearchAndPutsUpSign() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -2958,7 +2966,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -3029,12 +3037,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenGeologistDoesResearchAndPutsUpSignIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3042,7 +3050,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -3114,18 +3122,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenGeologistDoesResearchAndPutsUpSign() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -3133,7 +3141,7 @@ public class TestGameMonitoring {
         Point point2 = new Point(10, 10);
         Flag flag = map.placeFlag(player0, point2);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -3188,12 +3196,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenSignExpires() throws Exception {
 
         /* Create a new game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3240,12 +3248,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenSignExpiresIsSentOnlyOnce() throws Exception {
 
         /* Create a new game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3292,18 +3300,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenSignExpires() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -3335,7 +3343,7 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsPlacedOnSign() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3383,7 +3391,7 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenHouseIsPlacedOnSignIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -3425,18 +3433,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsPlacedOnSign() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -3466,12 +3474,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3479,7 +3487,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -3553,12 +3561,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFarmerHarvestsCrop() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3566,7 +3574,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -3650,12 +3658,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFarmerHarvestsCropIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3663,7 +3671,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -3763,12 +3771,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvestIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3776,7 +3784,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -3852,18 +3860,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -3871,7 +3879,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -3926,12 +3934,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventFarmerHarvestsWhenPossible() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -3939,7 +3947,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -4007,12 +4015,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventFarmerHarvestsWhenPossibleIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4020,7 +4028,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 4);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -4050,7 +4058,7 @@ public class TestGameMonitoring {
         /* Stop production in the farm */
         farm.stopProduction();
 
-        /* Cut up the road between the farm and the headquarter */
+        /* Cut up the road between the farm and the headquarters */
         map.removeRoad(road0);
 
         /* Wait for the farmer to go back to the farm */
@@ -4090,18 +4098,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenFarmerHarvestsWhenPossible() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -4109,7 +4117,7 @@ public class TestGameMonitoring {
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        /* Connect the farm with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
         /* Wait for the farm to get constructed */
@@ -4164,14 +4172,14 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4179,7 +4187,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4227,7 +4235,6 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getNewTrees().size(), 0);
         assertEquals(gameChanges.getRemovedRoads().size(), 0);
         assertEquals(gameChanges.getRemovedFlags().size(), 0);
-        assertEquals(gameChanges.getChangedBuildings().size(), 0);
         assertEquals(gameChanges.getRemovedBuildings().size(), 0);
     }
 
@@ -4235,18 +4242,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -4254,7 +4261,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4282,14 +4289,14 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenBorderIsExtendedWhenBarracksIsOccupied() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4297,7 +4304,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4369,14 +4376,14 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupiedIsOnlySentOnce() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4384,7 +4391,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4439,18 +4446,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenBorderIsExtendedWhenBarracksIsOccupied() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(75, 75);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -4458,7 +4465,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4486,14 +4493,14 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerEntersBuilding() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4501,7 +4508,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Construct the house */
@@ -4547,14 +4554,14 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWorkerEntersBuildingIsSentOnlyOnce() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4607,18 +4614,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenWorkerEntersBuilding() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -4626,7 +4633,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Construct the house */
@@ -4659,14 +4666,14 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupiedBeforeMonitoringStarts() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point25 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
@@ -4674,7 +4681,7 @@ public class TestGameMonitoring {
         Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarter */
+        /* Connect the barracks with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the barracks */
@@ -4711,12 +4718,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenScoutDiscoversNewGround() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4724,7 +4731,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -4805,12 +4812,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenScoutDiscoversNewGroundIsSentOnlyOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4818,7 +4825,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -4915,12 +4922,12 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventWhenScoutDiscoversNewGroundBeforeMonitoringStarts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -4928,7 +4935,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(21, 5);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -5004,18 +5011,18 @@ public class TestGameMonitoring {
     public void testNoMonitoringEventForOtherPlayerWhenScoutDiscoversNewGround() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
         GameMap map = new GameMap(players, 80, 80);
 
-        /* Place headquarter for player 0 */
+        /* Place headquarters for player 0 */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for player 1 */
+        /* Place headquarters for player 1 */
         Point point1 = new Point(65, 65);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -5023,7 +5030,7 @@ public class TestGameMonitoring {
         Point point2 = new Point(19, 5);
         Flag flag = map.placeFlag(player0, point2);
 
-        /* Connect headquarter and flag */
+        /* Connect headquarters and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
@@ -5090,12 +5097,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenMilitaryBuildingIsUpgraded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5163,12 +5170,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenMilitaryBuildingIsUpgradedIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5178,7 +5185,7 @@ public class TestGameMonitoring {
         Point point1 = new Point(10, 10);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarter */
+        /* Connect the barracks to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the barracks to get constructed */
@@ -5216,12 +5223,12 @@ public class TestGameMonitoring {
     public void testMonitorOnlyGetsOneMessage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5253,12 +5260,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenRoadBecomesPromotedToMainRoad() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -5266,7 +5273,7 @@ public class TestGameMonitoring {
         Point point2 = new Point(5, 9);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Place road between the headquarter and the flag */
+        /* Place road between the headquarters and the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         /* Place a worker on the road */
@@ -5321,12 +5328,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenRoadBecomesPromotedToMainRoadIsOnlySentOnce() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
@@ -5334,7 +5341,7 @@ public class TestGameMonitoring {
         Point point2 = new Point(5, 9);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        /* Place road between the headquarter and the flag */
+        /* Place road between the headquarters and the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
         /* Place a worker on the road */
@@ -5396,12 +5403,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenFlagGetsCargo() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5415,7 +5422,7 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the woodcutter with the flag */
@@ -5452,12 +5459,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenFlagGetsCargoIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5471,7 +5478,7 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the woodcutter with the flag */
@@ -5515,12 +5522,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenCargoGetsPickedUpFromFlag() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5534,10 +5541,10 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Change so there is only one plank in the headquarter */
+        /* Change so there is only one plank in the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the woodcutter with the flag */
@@ -5580,12 +5587,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenCargoGetsPickedUpFromFlagIsOnlySentOnce() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5599,10 +5606,10 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Change so there is only one plank in the headquarter */
+        /* Change so there is only one plank in the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
-        /* Connect the headquarter with the flag */
+        /* Connect the headquarters with the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Connect the woodcutter with the flag */
@@ -5652,27 +5659,27 @@ public class TestGameMonitoring {
     public void testMonitoringWhenCourierWaitsToDeliverWhenFlagIsFull() throws Exception {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag far away from the headquarter */
+        /* Place flag far away from the headquarters */
         Point point1 = new Point(21, 5);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place flag closer to the headquarter */
+        /* Place flag closer to the headquarters */
         Point point2 = new Point(17, 5);
         Flag flag1 = map.placeFlag(player0, point2);
 
         /* Place a short road to make a courier wait on */
         Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
-        /* Place a long road to the headquarter */
+        /* Place a long road to the headquarters */
         Road road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
         /* Wait for both roads to get their couriers assigned and standing idle */
@@ -5680,7 +5687,7 @@ public class TestGameMonitoring {
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
-        /* Place eight cargos on the flag between the roads targeting the headquarter */
+        /* Place eight cargos on the flag between the roads targeting the headquarters */
         Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
 
         /* Place two cargos on the other flag */
@@ -5720,19 +5727,19 @@ public class TestGameMonitoring {
     public void testMonitoringEnemyBorderChanges() throws InvalidUserActionException {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
 
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter for the first player */
+        /* Place headquarters for the first player */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter for the second player */
+        /* Place headquarters for the second player */
         Point point1 = new Point(25, 25);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
@@ -5740,7 +5747,7 @@ public class TestGameMonitoring {
         Point point2 = new Point(18, 18);
         Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
 
-        /* Connect the fortress to the headquarter */
+        /* Connect the fortress to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), fortress0.getFlag());
 
         /* Set up monitoring subscription for the player */
@@ -5818,12 +5825,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenDeadTreeIsRemoved() throws Exception {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5853,12 +5860,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenDeadTreeIsRemovedIsOnlySentOnce() throws Exception {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5895,12 +5902,12 @@ public class TestGameMonitoring {
     public void testMonitoringWhenWildAnimalMoves() throws Exception {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
@@ -5936,12 +5943,12 @@ public class TestGameMonitoring {
     public void testMonitoringEventWhenWildAnimalMovesIsOnlySentOnce() throws Exception {
 
         /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        /* Place headquarters */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 

@@ -1,10 +1,12 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
@@ -30,7 +32,7 @@ public class TestMilitarySettings {
     public void testCannotSetOutOfBoundsValues() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -131,7 +133,7 @@ public class TestMilitarySettings {
     public void tesDefaultStrengthWhenPopulatingMilitaryBuildings() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -148,7 +150,7 @@ public class TestMilitarySettings {
     public void testPrivateOccupiesNewBarracksWithPopulatingStrengthSetToMinimum() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -191,7 +193,7 @@ public class TestMilitarySettings {
     public void testPrivateFirstClassOccupiesNewBarracksWithPopulatingStrengthSetToLow() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -234,7 +236,7 @@ public class TestMilitarySettings {
     public void testSergeantOccupiesNewBarracksWithPopulatingStrengthSetToMedium() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -275,7 +277,7 @@ public class TestMilitarySettings {
     public void testOfficerOccupiesNewBarracksWithPopulatingStrengthSetToHigher() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -316,7 +318,7 @@ public class TestMilitarySettings {
     public void testGeneralOccupiesNewBarracksWithPopulatingStrengthSetToMaximum() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -357,7 +359,7 @@ public class TestMilitarySettings {
     public void testSergeantOccupiesNewBarracksWithPopulatingStrengthSetToMaximumIfNoHigherRankIsAvailable() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -400,7 +402,7 @@ public class TestMilitarySettings {
     public void testOfficerOccupiesNewBarracksWithPopulatingStrengthSetToMinimumIfNoLowerRankIsAvailable() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -446,8 +448,8 @@ public class TestMilitarySettings {
     public void testDefaultDefenseStrength() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -469,8 +471,8 @@ public class TestMilitarySettings {
     public void testPrivateFromFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -555,8 +557,8 @@ public class TestMilitarySettings {
     public void testPrivateFirstClassFromFortressDefendsWhenDefenseStrengthIsLow() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -641,8 +643,8 @@ public class TestMilitarySettings {
     public void testSergeantFromFortressDefendsWhenDefenseStrengthIsMedium() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -727,8 +729,8 @@ public class TestMilitarySettings {
     public void testOfficerFromFortressDefendsWhenDefenseStrengthIsHigh() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -813,8 +815,8 @@ public class TestMilitarySettings {
     public void testGeneralFromFortressDefendsWhenDefenseStrengthIsMaximum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -899,8 +901,8 @@ public class TestMilitarySettings {
     public void testPrivateFromSurroundingFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1004,8 +1006,8 @@ public class TestMilitarySettings {
     public void testPrivateFirstClassFromSurroundingFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1111,8 +1113,8 @@ public class TestMilitarySettings {
     public void testSergeantFromSurroundingFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1216,8 +1218,8 @@ public class TestMilitarySettings {
     public void testOfficerFromSurroundingFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1322,8 +1324,8 @@ public class TestMilitarySettings {
     public void testGeneralFromSurroundingFortressDefendsWhenDefenseStrengthIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1429,8 +1431,8 @@ public class TestMilitarySettings {
     public void testDefaultAmountDefendersFromSurroundingBuildings() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1452,8 +1454,8 @@ public class TestMilitarySettings {
     public void testAmountDefendersFromSurroundingFortressWhenDefenseFromSurroundingIsMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1555,8 +1557,8 @@ public class TestMilitarySettings {
     public void testAmountDefendersFromSurroundingFortressWhenDefenseFromSurroundingIsLow() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1669,8 +1671,8 @@ public class TestMilitarySettings {
     public void testAmountDefendersFromSurroundingFortressWhenDefenseFromSurroundingIsMedium() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1780,8 +1782,8 @@ public class TestMilitarySettings {
     public void testAmountDefendersFromSurroundingFortressWhenDefenseFromSurroundingIsHigh() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1881,8 +1883,8 @@ public class TestMilitarySettings {
     public void testAmountDefendersFromSurroundingFortressWhenDefenseFromSurroundingIsMaximum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2001,8 +2003,8 @@ public class TestMilitarySettings {
     public void testDefaultAmountAvailableAttackers() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2024,8 +2026,8 @@ public class TestMilitarySettings {
     public void testAmountAttackersFromFortressWhenSetToMinimum() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2089,8 +2091,8 @@ public class TestMilitarySettings {
     public void testAmountAttackersFromFortressWhenSetToMedium() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -2150,8 +2152,8 @@ public class TestMilitarySettings {
     public void testAmountAttackersFromFortressWhenSetToHigh() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 

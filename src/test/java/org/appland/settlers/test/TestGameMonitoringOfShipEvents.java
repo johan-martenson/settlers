@@ -1,5 +1,7 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
@@ -29,7 +31,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipwrightStartsBuildingShip() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -112,7 +114,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipwrightStartsBuildingShipIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -204,7 +206,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWater() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -299,7 +301,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipIsFinishedAndMovesToWaterIsOnlySentOnce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -403,7 +405,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipGetsTarget() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -566,7 +568,7 @@ public class TestGameMonitoringOfShipEvents {
     public void testMonitoringEventWhenShipGetsTargetIsOnlySentOnce() throws InvalidUserActionException {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);

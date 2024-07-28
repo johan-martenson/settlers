@@ -1,5 +1,7 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -39,7 +41,7 @@ public class TestVegetation {
     public void testSetAndGetDetailedVegetationAroundPoint() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -66,7 +68,7 @@ public class TestVegetation {
     public void testSetAndGetEachDetailedVegetationType() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -175,7 +177,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -208,7 +210,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -235,7 +237,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -262,7 +264,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -289,7 +291,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -316,7 +318,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -343,7 +345,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -376,7 +378,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -403,7 +405,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -436,7 +438,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -469,7 +471,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -502,7 +504,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -529,7 +531,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -556,7 +558,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -583,7 +585,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -616,7 +618,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -649,7 +651,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -676,7 +678,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -703,7 +705,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -736,7 +738,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -763,7 +765,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -790,7 +792,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -817,7 +819,7 @@ public class TestVegetation {
     public void testCannotBuildHouseOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -844,7 +846,7 @@ public class TestVegetation {
     public void testCanBuildHouseOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -877,7 +879,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -910,7 +912,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -943,7 +945,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -989,7 +991,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1035,7 +1037,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1068,7 +1070,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1114,7 +1116,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1147,7 +1149,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1180,7 +1182,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1213,7 +1215,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1246,7 +1248,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1279,7 +1281,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1312,7 +1314,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1345,7 +1347,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1378,7 +1380,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1411,7 +1413,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1444,7 +1446,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1490,7 +1492,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1523,7 +1525,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1556,7 +1558,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1602,7 +1604,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1648,7 +1650,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1694,7 +1696,7 @@ public class TestVegetation {
     public void testCannotBuildRoadOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1740,7 +1742,7 @@ public class TestVegetation {
     public void testCanBuildRoadOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1773,7 +1775,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnSavannah() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1800,7 +1802,7 @@ public class TestVegetation {
     public void testCanBuildMineOnMountain1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1833,7 +1835,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnSnow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1860,7 +1862,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnSwamp() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1887,7 +1889,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnDesert1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1914,7 +1916,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1941,7 +1943,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnBuildableWater() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1968,7 +1970,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnDesert2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1995,7 +1997,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnMeadow1() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2022,7 +2024,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnMeadow2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2049,7 +2051,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnMeadow3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2076,7 +2078,7 @@ public class TestVegetation {
     public void testCanBuildMineOnMountain2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2109,7 +2111,7 @@ public class TestVegetation {
     public void testCanBuildMineOnMountain3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2142,7 +2144,7 @@ public class TestVegetation {
     public void testCanBuildMineOnMountain4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2175,7 +2177,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnSteppe() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2202,7 +2204,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnFlowerMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2229,7 +2231,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnLava() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2256,7 +2258,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnMagenta() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2283,7 +2285,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnMountainMeadow() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2310,7 +2312,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnWater2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2337,7 +2339,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnLava2() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2364,7 +2366,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnLava3() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2391,7 +2393,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnLava4() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2418,7 +2420,7 @@ public class TestVegetation {
     public void testCannotBuildMineOnBuildableMountain() throws InvalidUserActionException {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

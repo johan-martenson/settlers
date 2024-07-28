@@ -1,9 +1,11 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
@@ -29,7 +31,7 @@ public class TestLandStatistics {
     public void testGetLandStatistics() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -53,7 +55,7 @@ public class TestLandStatistics {
     public void testGetCurrentTimeForGame() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -72,7 +74,7 @@ public class TestLandStatistics {
     public void testCurrentTimeFollowsMapStepTime() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -102,8 +104,8 @@ public class TestLandStatistics {
     public void testThereIsLandStatisticsAtStartForEachPlayer() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -133,8 +135,8 @@ public class TestLandStatistics {
     public void testLandStatisticsIsUpdatedWhenAttackerCapturesBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 

@@ -1,8 +1,10 @@
 package org.appland.settlers.fuzzing;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -132,7 +134,7 @@ public class SettlersModelDriver {
         //}
 
         for (int i = 0; i < mapFile.getStartingPoints().size(); i++) {
-            players.add(new Player("Player " + i, PlayerColor.BLUE));
+            players.add(new Player("Player " + i, PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
         }
 
         GameMap map = mapLoader.convertMapFileToGameMap(mapFile);

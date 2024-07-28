@@ -1,10 +1,12 @@
 package org.appland.settlers.maps;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
@@ -659,7 +661,7 @@ public class MapLoader {
         var colors = Arrays.stream(PlayerColor.values()).toList();
 
         for (int i = 0; i < mapFile.maxNumberOfPlayers; i++) {
-            players.add(new Player("Player " + i, colors.get(i)));
+            players.add(new Player("Player " + i, colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
 
         /* Create initial game map with correct dimensions */

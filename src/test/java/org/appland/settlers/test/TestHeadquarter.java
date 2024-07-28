@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
@@ -13,6 +14,7 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Soldier;
@@ -48,7 +50,7 @@ public class TestHeadquarter {
     public void testInitialInventory() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -99,7 +101,7 @@ public class TestHeadquarter {
     public void testHeadquarterIsReadyDirectly() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -116,7 +118,7 @@ public class TestHeadquarter {
     public void testHeadquarterNeedsNoWorker() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -133,7 +135,7 @@ public class TestHeadquarter {
     public void testHeadquarterGetsWorkerAutomatically() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -151,7 +153,7 @@ public class TestHeadquarter {
     public void testHeadquartersStorageWorkerDeliversCargo() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -197,7 +199,7 @@ public class TestHeadquarter {
     public void testHeadquarterCannotBeTornDown() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -218,7 +220,7 @@ public class TestHeadquarter {
     public void testHeadquarterCannotBeTornDownByRemovingFlag() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -239,7 +241,7 @@ public class TestHeadquarter {
     public void testHeadquarterCannotProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -256,7 +258,7 @@ public class TestHeadquarter {
     public void testCannotPlaceTwoHeadquarters() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -278,7 +280,7 @@ public class TestHeadquarter {
     public void testHeadquarterReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -295,7 +297,7 @@ public class TestHeadquarter {
     public void testHeadquarterReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -316,7 +318,7 @@ public class TestHeadquarter {
     public void testBorderForHeadquarterIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -379,7 +381,7 @@ public class TestHeadquarter {
     public void testLandForHeadquarterIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -417,7 +419,7 @@ public class TestHeadquarter {
     public void testDiscoveredLandForHeadquarterIsCorrect() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -456,7 +458,7 @@ public class TestHeadquarter {
     public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -476,7 +478,7 @@ public class TestHeadquarter {
     public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 80, 80);
@@ -496,7 +498,7 @@ public class TestHeadquarter {
     public void testCreatedSoldierPlacedInInventoryWhenReservedAmountIsZero() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -543,7 +545,7 @@ public class TestHeadquarter {
     public void testCreatedSoldierHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -601,7 +603,7 @@ public class TestHeadquarter {
     public void testArrivingPrivateIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -661,7 +663,7 @@ public class TestHeadquarter {
     public void testArrivingPrivateFirstRankIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -719,7 +721,7 @@ public class TestHeadquarter {
     public void testArrivingSergeantIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -774,7 +776,7 @@ public class TestHeadquarter {
     public void testArrivingOfficerIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -829,7 +831,7 @@ public class TestHeadquarter {
     public void testArrivingGeneralIsHostedWhenReservedAmountIsHigher() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -886,7 +888,7 @@ public class TestHeadquarter {
     public void testArrivingPrivateIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -940,7 +942,7 @@ public class TestHeadquarter {
     public void testArrivingPrivateFirstClassIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -994,7 +996,7 @@ public class TestHeadquarter {
     public void testArrivingSergeantIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1048,7 +1050,7 @@ public class TestHeadquarter {
     public void testArrivingOfficerIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1102,7 +1104,7 @@ public class TestHeadquarter {
     public void testArrivingGeneralIsPutInInventoryWhenReservedAmountIsFull() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1156,7 +1158,7 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesPrivateFromInventoryToHosted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1189,7 +1191,7 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesPrivateFirstClassFromInventoryToHosted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1222,7 +1224,7 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesSergeantFromInventoryToHosted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1255,7 +1257,7 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesOfficerFromInventoryToHosted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1288,7 +1290,7 @@ public class TestHeadquarter {
     public void testIncreasingReservedAmountMovesGeneralFromInventoryToHosted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1321,7 +1323,7 @@ public class TestHeadquarter {
     public void testDecreasingReservedAmountMovesPrivateFromHostedToInventory() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1380,7 +1382,7 @@ public class TestHeadquarter {
     public void testReservedSoldiersArentPromoted() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -1431,8 +1433,8 @@ public class TestHeadquarter {
     public void testReservedSoldiersDontDefendOtherBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1505,8 +1507,8 @@ public class TestHeadquarter {
     public void testReservedSoldiersCantAttackOtherBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -1569,7 +1571,7 @@ public class TestHeadquarter {
     public void testReservedSoldiersDontPopulateMilitaryBuildings() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 

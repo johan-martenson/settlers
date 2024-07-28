@@ -5,9 +5,11 @@
  */
 package org.appland.settlers.computer.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.computer.ExpandLandPlayer;
 import org.appland.settlers.model.AttackStrength;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
@@ -42,7 +44,7 @@ public class TestExpandLandPlayer {
     public void testCreateExpandLandPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -57,7 +59,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesFirstBarracks() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -88,7 +90,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesFirstBarracksCloseToBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -120,7 +122,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesDoesNotPlaceUnnecessaryBarracksCloseToEdgeOfMap() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -170,7 +172,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesPlacesSecondBarracks() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -200,7 +202,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesPlacesSecondBarracksAtCorrectDistanceFromFirstBarracks() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -236,7 +238,7 @@ public class TestExpandLandPlayer {
     public void testPlayerKeepsPlacingBarracksWhenEdgeIsReached() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -277,7 +279,7 @@ public class TestExpandLandPlayer {
     public void testPlayerEvacuatesBarracksWhenItIsFarFromBorder() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -340,7 +342,7 @@ public class TestExpandLandPlayer {
     public void testPlayerPlacesDoesNotPlaceBarracksTooCloseToEdgeOfMap() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -380,7 +382,7 @@ public class TestExpandLandPlayer {
     public void testPlayerBuildsNewBarracksIfCurrentBarracksIsDestroyed() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -420,7 +422,7 @@ public class TestExpandLandPlayer {
     public void testPlayerRestoresRoadIfNeeded() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -464,8 +466,8 @@ public class TestExpandLandPlayer {
     public void testPlayerDoesNotRestoreRoadToCapturedBarracks() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -581,7 +583,7 @@ public class TestExpandLandPlayer {
     public void testPlayerStopsPromotionsInBarracksNotCloseToAnEnemy() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -620,8 +622,8 @@ public class TestExpandLandPlayer {
     public void testPlayerEnablesPromotionsForBarracksCloseToEnemy() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -686,8 +688,8 @@ public class TestExpandLandPlayer {
     public void testPlayerUpgradesBarracksCloseToEnemy() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", org.appland.settlers.model.PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);

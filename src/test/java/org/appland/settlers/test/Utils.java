@@ -3152,7 +3152,6 @@ public class Utils {
             availableConstruction = new HashMap<>();
         }
 
-        // FIXME: HOTSPOT
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
             GameChangesList copiedGameChangesList = Utils.copyGameChangesList(gameChangesList);
@@ -3264,7 +3263,6 @@ public class Utils {
         }
 
         public void assertMonitoredAvailableConstructionMatchesWithMap(GameMap map, Player player0) {
-
             Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player0);
             Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player0);
             List<Point> availableMinesOnMap = map.getAvailableMinePoints(player0);
@@ -3477,8 +3475,7 @@ public class Utils {
 
     public static <T extends Building> T verifyPlayerPlacesOnlyBuilding(ComputerPlayer computerPlayer, Class<T> aClass) throws Exception {
         Player player = computerPlayer.getControlledPlayer();
-        GameMap map = player.getMap();
-        int amount    = player.getBuildings().size();
+        int amount = player.getBuildings().size();
 
         T building = waitForComputerPlayerToPlaceBuilding(computerPlayer, aClass);
 

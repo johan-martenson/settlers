@@ -31,7 +31,7 @@ public class TestPlayer {
     public void testPlayerIsSetWhenBuildingIsCreated() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create building with the player set */
         Woodcutter woodcutter0 = new Woodcutter(player0);
@@ -45,7 +45,7 @@ public class TestPlayer {
     public void testNameIsSetInPlayer() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Verify that the name is set */
         assertEquals(player0.getName(), "Player 0");
@@ -55,7 +55,7 @@ public class TestPlayer {
     public void testCreatePlayer() {
 
         /* Create player 'player one' */
-        Player player = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player.getName(), "Player one");
         assertEquals(player.getColor(), BLUE);
@@ -65,7 +65,7 @@ public class TestPlayer {
     public void testCreateHouseWithPlayer() {
 
         /* Create player 'player one' */
-        Player player = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(player);
@@ -77,7 +77,7 @@ public class TestPlayer {
     public void testPlayerIsAlsoSetInBuildingsFlag() {
 
         /* Create player 'player one' */
-        Player player = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(player);
@@ -90,7 +90,7 @@ public class TestPlayer {
     public void testPlayerCanOnlyCreateOneHeadquarter() throws Exception {
 
         /* Create player 'player one' */
-        Player player = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -118,7 +118,7 @@ public class TestPlayer {
     public void testPlayerIsAlsoSetInRoad() throws Exception {
 
         /* Create player 'player one' */
-        Player player0 = new Player("Player one", BLUE);
+        Player player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -143,7 +143,7 @@ public class TestPlayer {
     public void testPlayerIsSetInDriveWay() throws Exception {
 
         /* Create player 'player one' */
-        Player player0 = new Player("Player one", BLUE);
+        Player player0 = new Player("Player one", BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -168,7 +168,7 @@ public class TestPlayer {
     public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -180,7 +180,7 @@ public class TestPlayer {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a building with an invalid player */
-        Player invalidPlayer = new Player("", BLUE);
+        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Point point1 = new Point(8, 6);
 
         try {
@@ -194,7 +194,7 @@ public class TestPlayer {
     public void testCannotPlaceRoadWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -212,7 +212,7 @@ public class TestPlayer {
         Flag flag1 = map.placeFlag(player0, point3);
 
         /* Verify that it's not possible to place a road with an invalid player */
-        Player invalidPlayer = new Player("", BLUE);
+        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Point point2 = new Point(10, 6);
 
         try {
@@ -226,7 +226,7 @@ public class TestPlayer {
     public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -238,7 +238,7 @@ public class TestPlayer {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a flag with an invalid player */
-        Player invalidPlayer = new Player("", BLUE);
+        Player invalidPlayer = new Player("", BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Point point1 = new Point(8, 6);
 
         try {
@@ -252,7 +252,7 @@ public class TestPlayer {
     public void testColorIsCorrectInPlayer() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", RED);
+        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Verify that the color is set correctly */
         assertEquals(player0.getColor(), RED);
@@ -262,7 +262,7 @@ public class TestPlayer {
     public void testChangeColorInPlayer() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", RED);
+        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Change the color */
         player0.setColor(BLUE);
@@ -275,7 +275,7 @@ public class TestPlayer {
     public void testChangeNameInPlayer() {
 
         /* Create player */
-        Player player0 = new Player("Player 0", RED);
+        Player player0 = new Player("Player 0", RED, Nation.ROMANS, PlayerType.HUMAN);
 
         /* Change the name */
         player0.setName("Another player");
@@ -288,8 +288,8 @@ public class TestPlayer {
     public void testCannotHaveTwoPlayersWithSameColor() {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);
@@ -306,7 +306,7 @@ public class TestPlayer {
     public void testPlayerDefaultNationIsRoman() throws InvalidUserActionException {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 
@@ -325,7 +325,7 @@ public class TestPlayer {
     public void testSetNationForPlayer() throws InvalidUserActionException {
 
         /* Create players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         assertEquals(player0.getNation(), Nation.ROMANS);
 

@@ -1,5 +1,7 @@
 package org.appland.settlers.maps;
 
+import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -540,7 +542,7 @@ public class Inspector {
         List<Player> players = new ArrayList<>();
 
         for (int i = 0; i < startingPoints.size(); i++) {
-            players.add(new Player("" + i, COLORS.get(i)));
+            players.add(new Player("" + i, COLORS.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
         map.setPlayers(players);
 

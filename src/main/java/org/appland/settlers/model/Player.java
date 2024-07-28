@@ -66,98 +66,83 @@ public class Player {
     private PlayerType  playerType = PlayerType.HUMAN;
     private GameMap     map;
     private PlayerColor color;
-    private Nation      nation = Nation.ROMANS;
+    private Nation      nation;
     private String      name;
     private boolean     treeConservationProgramActive;
     private boolean     treeConservationProgramEnabled;
+    private int         strengthWhenPopulatingMilitaryBuildings;
+    private int         defenseStrength;
+    private int         defenseFromSurroundingBuildings;
+    private int         amountWhenPopulatingCloseToBorder;
+    private int         amountWhenPopulatingAwayFromToBorder;
+    private int         amountWhenPopulatingFarFromBorder;
+    private int         amountSoldiersAvailableForAttack;
+    private boolean     transportPriorityChanged = false;
 
-    private final List<BorderChange> changedBorders;
-    private final List<Building> buildings;
-    private final Set<Point> discoveredLand;
-    private final List<Material> transportPriorities;
-    private final Set<Point> ownedLand;
-    private final Map<Class<? extends Building>, Integer> foodAllocation;
-    private final Map<Class<? extends Building>, Integer> coalAllocation;
-    private final Map<Material, Integer> producedMaterials;
-    private final List<Message> messages;
-    private final Set<PlayerGameViewMonitor> gameViewMonitors;
-    private final List<Worker> workersWithNewTargets;
-    private final Set<Building> changedBuildings;
-    private final List<Flag> newFlags;
-    private final List<Flag> removedFlags;
-    private final List<Building> newBuildings;
-    private final List<Building> removedBuildings;
-    private final List<Road> removedRoads;
-    private final List<Road> newRoads;
-    private final List<Worker> removedWorkers;
-    private final List<Tree> newTrees;
-    private final List<Tree> removedTrees;
-    private final List<Stone> removedStones;
-    private final List<Sign> newSigns;
-    private final List<Sign> removedSigns;
-    private final List<Crop> newCrops;
-    private final List<Crop> removedCrops;
-    private final Set<Point> newDiscoveredLand;
-    private final List<Point> addedBorder;
-    private final List<Point> removedBorder;
-    private final List<Stone> newStones;
-    private final Set<Point> borderPoints;
-    private final List<Worker> newWorkers;
-    private final Set<Point> changedAvailableConstruction;
-    private final List<Point> newOwnedLand;
-    private final List<Point> newLostLand;
-    private final List<Message> newMessages;
-    private final List<Road> promotedRoads;
-    private final Map<Material, Integer> toolProductionQuotas;
-    private final List<TransportCategory> transportCategoryPriorities;
-    private final Collection<Flag> changedFlags;
-    private final List<Point> removedDeadTrees;
-    private final List<Point> discoveredDeadTrees;
-    private final List<Crop> harvestedCrops;
-    private final List<Ship> newShips;
-    private final List<Ship> finishedShips;
-    private final List<Ship> shipsWithNewTargets;
-    private final Map<Worker, WorkerAction> workersWithStartedActions;
-    private final List<Point> removedDecorations;
-    private final Map<Point, DecorationType> newDecorations;
-    private final Set<Object> detailedMonitoring;
-    private final Collection<GameChangesList.NewAndOldBuilding> upgradedBuildings;
-    private final Set<Message> removedMessages;
-    private final Map<Class<? extends Building>, Integer> wheatAllocation;
-    private final Map<Class<? extends Building>, Integer> waterAllocation;
-    private final Map<Class<? extends Building>, Integer> ironBarAllocation;
-    private final Set<Stone> changedStones;
-    private final Set<Tree> newFallingTrees;
+    private final List<BorderChange> changedBorders = new ArrayList<>();
+    private final List<Building> buildings = new ArrayList<>();
+    private final Set<Point> discoveredLand = new HashSet<>();
+    private final List<Material> transportPriorities = new ArrayList<>();
+    private final Set<Point> ownedLand = new HashSet<>();
+    private final Map<Class<? extends Building>, Integer> foodAllocation = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> coalAllocation = new HashMap<>();
+    private final Map<Material, Integer> producedMaterials = new EnumMap<>(Material.class);
+    private final List<Message> messages = new ArrayList<>();
+    private final Set<PlayerGameViewMonitor> gameViewMonitors = new HashSet<>();
+    private final List<Worker> workersWithNewTargets = new ArrayList<>();
+    private final Set<Building> changedBuildings = new HashSet<>();
+    private final List<Flag> newFlags = new ArrayList<>();
+    private final List<Flag> removedFlags = new ArrayList<>();
+    private final List<Building> newBuildings = new ArrayList<>();
+    private final List<Building> removedBuildings = new ArrayList<>();
+    private final List<Road> removedRoads = new ArrayList<>();
+    private final List<Road> newRoads = new ArrayList<>();
+    private final List<Worker> removedWorkers = new ArrayList<>();
+    private final List<Tree> newTrees = new ArrayList<>();
+    private final List<Tree> removedTrees = new ArrayList<>();
+    private final List<Stone> removedStones = new ArrayList<>();
+    private final List<Sign> newSigns = new ArrayList<>();
+    private final List<Sign> removedSigns = new ArrayList<>();
+    private final List<Crop> newCrops = new ArrayList<>();
+    private final List<Crop> removedCrops = new ArrayList<>();
+    private final Set<Point> newDiscoveredLand = new HashSet<>();
+    private final List<Point> addedBorder = new ArrayList<>();
+    private final List<Point> removedBorder = new ArrayList<>();
+    private final List<Stone> newStones = new ArrayList<>();
+    private final Set<Point> borderPoints = new HashSet<>();
+    private final List<Worker> newWorkers = new ArrayList<>();
+    private final Set<Point> changedAvailableConstruction = new HashSet<>();
+    private final List<Point> newOwnedLand = new ArrayList<>();
+    private final List<Point> newLostLand = new ArrayList<>();
+    private final List<Message> newMessages = new ArrayList<>();
+    private final List<Road> promotedRoads = new ArrayList<>();
+    private final Map<Material, Integer> toolProductionQuotas = new EnumMap<>(Material.class);
+    private final List<TransportCategory> transportCategoryPriorities = new ArrayList<>();
+    private final Collection<Flag> changedFlags = new HashSet<>();
+    private final List<Point> removedDeadTrees = new ArrayList<>();
+    private final List<Point> discoveredDeadTrees = new ArrayList<>();
+    private final List<Crop> harvestedCrops = new ArrayList<>();
+    private final List<Ship> newShips = new ArrayList<>();
+    private final List<Ship> finishedShips = new ArrayList<>();
+    private final List<Ship> shipsWithNewTargets = new ArrayList<>();
+    private final Map<Worker, WorkerAction> workersWithStartedActions = new HashMap<>();
+    private final List<Point> removedDecorations = new ArrayList<>();
+    private final Map<Point, DecorationType> newDecorations = new HashMap<>();
+    private final Set<Object> detailedMonitoring = new HashSet<>();
+    private final Collection<GameChangesList.NewAndOldBuilding> upgradedBuildings = new ArrayList<>();
+    private final Set<Message> removedMessages = new HashSet<>();
+    private final Map<Class<? extends Building>, Integer> wheatAllocation = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> waterAllocation = new HashMap<>();
+    private final Map<Class<? extends Building>, Integer> ironBarAllocation = new HashMap<>();
+    private final Set<Stone> changedStones = new HashSet<>();
+    private final Set<Tree> newFallingTrees = new HashSet<>();
     private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
 
-    private int strengthWhenPopulatingMilitaryBuildings;
-    private int defenseStrength;
-    private int defenseFromSurroundingBuildings;
-    private int amountWhenPopulatingCloseToBorder;
-    private int amountWhenPopulatingAwayFromToBorder;
-    private int amountWhenPopulatingFarFromBorder;
-    private int amountSoldiersAvailableForAttack;
-    private boolean transportPriorityChanged = false;
-
-    public Player(String name, PlayerColor color) {
-        this.name           = name;
-        this.color          = color;
-
-        buildings           = new ArrayList<>();
-        discoveredLand      = new HashSet<>();
-        transportPriorities = new ArrayList<>();
-        ownedLand           = new HashSet<>();
-        producedMaterials   = new EnumMap<>(Material.class);
-        detailedMonitoring  = new HashSet<>();
-        foodAllocation      = new HashMap<>();
-        coalAllocation      = new HashMap<>();
-        wheatAllocation     = new HashMap<>();
-        waterAllocation     = new HashMap<>();
-        ironBarAllocation   = new HashMap<>();
-        messages            = new ArrayList<>();
-        gameViewMonitors    = new HashSet<>();
-
-        transportCategoryPriorities = new ArrayList<>();
+    public Player(String name, PlayerColor color, Nation nation, PlayerType playerType) {
+        this.name = name;
+        this.color = color;
+        this.nation = nation;
+        this.playerType = playerType;
 
         /* Create the food quota and set it to equal distribution */
         foodAllocation.putAll(Map.ofEntries(
@@ -199,8 +184,6 @@ public class Player {
 
         setTransportPriorityForMaterials();
 
-        /* There are no messages at start */
-
         /* The tree conservation program is not active at start */
         treeConservationProgramActive = false;
 
@@ -216,55 +199,8 @@ public class Player {
         amountWhenPopulatingFarFromBorder = 10;
         amountSoldiersAvailableForAttack = 10;
 
-        /* Prepare for monitors of the game */
-        workersWithNewTargets = new ArrayList<>();
-        changedBuildings = new HashSet<>();
-        newFlags = new ArrayList<>();
-        removedFlags = new ArrayList<>();
-        newBuildings = new ArrayList<>();
-        removedBuildings = new ArrayList<>();
-        removedRoads = new ArrayList<>();
-        newRoads = new ArrayList<>();
-        removedWorkers = new ArrayList<>();
-        newTrees = new ArrayList<>();
-        removedTrees = new ArrayList<>();
-        removedStones = new ArrayList<>();
-        newSigns = new ArrayList<>();
-        removedSigns = new ArrayList<>();
-        newCrops = new ArrayList<>();
-        removedCrops = new ArrayList<>();
-        newDiscoveredLand = new HashSet<>();
-        addedBorder = new ArrayList<>();
-        removedBorder = new ArrayList<>();
-        changedBorders = new ArrayList<>();
-        newStones = new ArrayList<>();
-        borderPoints = new HashSet<>();
-        newWorkers = new ArrayList<>();
-        changedAvailableConstruction = new HashSet<>();
-        newOwnedLand = new ArrayList<>();
-        newLostLand = new ArrayList<>();
-        newMessages = new ArrayList<>();
-        promotedRoads = new ArrayList<>();
-        toolProductionQuotas = new EnumMap<>(Material.class);
-        changedFlags = new HashSet<>();
-        removedDeadTrees = new ArrayList<>();
-        discoveredDeadTrees = new ArrayList<>();
-        harvestedCrops = new ArrayList<>();
-        newShips = new ArrayList<>();
-        finishedShips = new ArrayList<>();
-        shipsWithNewTargets = new ArrayList<>();
-        workersWithStartedActions = new HashMap<>();
-        removedDecorations = new ArrayList<>();
-        newDecorations = new HashMap<>();
-        upgradedBuildings = new ArrayList<>();
-        removedMessages = new HashSet<>();
-        changedStones = new HashSet<>();
-        newFallingTrees = new HashSet<>();
-
         /* Set default production of all tools */
-        for (Material tool : TOOLS) {
-            toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA);
-        }
+        TOOLS.forEach(tool -> toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA));
     }
 
     public void setPlayerType(PlayerType playerType) {
@@ -272,7 +208,6 @@ public class Player {
     }
 
     private void setTransportPriorityForMaterials() {
-
         transportPriorities.clear();
 
         for (TransportCategory transportCategory : transportCategoryPriorities) {
@@ -343,7 +278,7 @@ public class Player {
 
         /* Can only attack military buildings */
         if (!buildingToAttack.isMilitaryBuilding()) {
-            throw new InvalidUserActionException("Cannot attack non-military building " + buildingToAttack);
+            throw new InvalidUserActionException("Cannot attack non-military building %s".formatted(buildingToAttack));
         }
 
         /* A player cannot attack himself */
@@ -407,7 +342,7 @@ public class Player {
 
         /* It's not possible to attack if there are no available attackers */
         if (limitedAttackers.isEmpty()) {
-            throw new InvalidUserActionException("Player '" + this + "' can't attack building '" + buildingToAttack + "'");
+            throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
         }
 
         /* Sort primarily by strength and secondarily by distance */
@@ -567,12 +502,10 @@ public class Player {
     }
 
     public Map<Material, Integer> getInventory() {
-
         Map<Material, Integer> result = new EnumMap<>(Material.class);
         int current;
 
         for (Building building : getBuildings()) {
-
             if (!building.isStorehouse()) {
                 continue;
             }
@@ -617,9 +550,9 @@ public class Player {
 
         /* Throw an exception if the priority is negative or too large */
         if (priority < 0) {
-            throw new InvalidUserActionException("Cannot set a negative transport priority (" + priority + ") for " + category);
+            throw new InvalidUserActionException("Cannot set a negative transport priority (%d) for %s".formatted(priority, category));
         } else if (priority >= TransportCategory.values().length) {
-            throw new InvalidUserActionException("Cannot set a higher transport priority (" + priority + ") than the amount of transportable items");
+            throw new InvalidUserActionException("Cannot set a higher transport priority (%d) than the amount of transportable items".formatted(priority));
         }
 
         transportCategoryPriorities.remove(category);
@@ -657,7 +590,7 @@ public class Player {
     public Player getPlayerAtPoint(Point point) {
 
         /* Don't allow lookup of points the player hasn't discovered yet */
-        if (!getDiscoveredLand().contains(point)) {
+        if (!discoveredLand.contains(point)) {
             return null;
         }
 
@@ -695,13 +628,7 @@ public class Player {
     }
 
     boolean isAlive() {
-        for (Building building : buildings) {
-            if (building.isReady()) {
-                return true;
-            }
-        }
-
-        return false;
+        return buildings.stream().anyMatch(Building::isReady);
     }
 
     public void setColor(PlayerColor color) {
@@ -1049,16 +976,10 @@ public class Player {
             }
         }
 
-        for (Building changedBuilding : changedBuildings) {
-
-            /* Changes to buildings that are not military and not destroyed do not affect available construction */
-            if ((changedBuilding.isHeadquarter() || !changedBuilding.isMilitaryBuilding()) &&
-                (changedBuilding.isReady() || changedBuilding.isUnderConstruction())) {
-                continue;
-            }
-
-            addChangedAvailableConstructionForSmallBuilding(changedBuilding);
-        }
+        // TODO: this looks buggy - in all cases the method for small buildings is called
+        changedBuildings.stream()
+                .filter(Building::isDestroyed)
+                .forEach(this::addChangedAvailableConstructionForSmallBuilding);
 
         for (Building removedBuilding : removedBuildings) {
             addChangedAvailableConstructionForSmallBuilding(removedBuilding);
@@ -1372,7 +1293,6 @@ public class Player {
     }
 
     public void reportChangedBorders(List<BorderChange> borderChanges) {
-
         for (BorderChange borderChange : borderChanges) {
             List<Point> added = new ArrayList<>();
             List<Point> removed = new ArrayList<>();
@@ -1507,15 +1427,15 @@ public class Player {
     public void setProductionQuotaForTool(Material tool, int quota) throws InvalidUserActionException {
 
         if (quota > MAX_PRODUCTION_QUOTA) {
-            throw new InvalidUserActionException("Cannot set quota " + quota + " above max quota at " + MAX_PRODUCTION_QUOTA);
+            throw new InvalidUserActionException("Cannot set quota %d above max quota at %d".formatted(quota, MAX_PRODUCTION_QUOTA));
         }
 
         if (quota < MIN_PRODUCTION_QUOTA) {
-            throw new InvalidUserActionException("Cannot set quota " + quota + " below min quota at " + MIN_PRODUCTION_QUOTA);
+            throw new InvalidUserActionException("Cannot set quota %d below min quota at %d".formatted(quota, MIN_PRODUCTION_QUOTA));
         }
 
         if (!isTool(tool)) {
-            throw new InvalidUserActionException("Cannot set quota for material that is not a tool: " + tool);
+            throw new InvalidUserActionException("Cannot set quota for material that is not a tool: %s".formatted(tool));
         }
 
         toolProductionQuotas.put(tool, quota);
@@ -1688,7 +1608,6 @@ public class Player {
 
         /* Does this soldier affect the number of available attackers in another building? */
         if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
-
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
@@ -1715,7 +1634,6 @@ public class Player {
 
         /* Does this soldier affect the number of available attackers in another building? */
         if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
-
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {

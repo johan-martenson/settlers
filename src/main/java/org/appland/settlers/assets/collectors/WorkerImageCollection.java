@@ -155,7 +155,7 @@ public class WorkerImageCollection {
                         .forEach((direction, playerColorMap) -> playerColorMap
                                 .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
                                         ImageTransformer.normalizeImageSeries(images),
-                                        "common",
+                                        "nationSpecific",
                                         "actionsByPlayer",
                                         nation.name().toUpperCase(),
                                         action.name().toUpperCase(),

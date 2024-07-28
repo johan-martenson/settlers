@@ -5,8 +5,10 @@
  */
 package org.appland.settlers.computer.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.computer.AttackPlayer;
 import org.appland.settlers.computer.ComputerPlayer;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -33,7 +35,7 @@ public class TestAttackPlayer {
     public void testAttackerDoesNotBuild() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -63,8 +65,8 @@ public class TestAttackPlayer {
     public void testAttackerWithBuildingInReachAttacks() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", org.appland.settlers.model.PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         players.add(player1);

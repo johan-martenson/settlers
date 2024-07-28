@@ -33,10 +33,10 @@ public class WoodcutterWorker extends Worker {
     private static final int RANGE            = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_CUT_TREE + Tree.TIME_TO_FALL, null);
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
 
     private Point getTreeToCutDown() {
         return map.getPointsWithinRadius(getHome().getPosition(), RANGE).stream()
@@ -69,11 +69,6 @@ public class WoodcutterWorker extends Worker {
 
     public WoodcutterWorker(Player player, GameMap map) {
         super(player, map);
-
-        state     = State.WALKING_TO_TARGET;
-        countdown = new Countdown();
-
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_CUT_TREE + Tree.TIME_TO_FALL, null);
     }
 
     public boolean isCuttingTree() {
@@ -83,8 +78,6 @@ public class WoodcutterWorker extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
-
-        building.closeDoor();
 
         countdown.countFrom(TIME_TO_REST);
 
@@ -106,8 +99,6 @@ public class WoodcutterWorker extends Worker {
                         }
 
                         setOffroadTarget(point);
-
-                        getHome().openDoor(10);
 
                         state = State.GOING_OUT_TO_CUT_TREE;
                     } else {

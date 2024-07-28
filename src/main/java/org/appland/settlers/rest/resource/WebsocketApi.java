@@ -519,10 +519,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var nation = Nation.valueOf((String) jsonBody.get("nation"));
                 var playerType = PlayerType.valueOf((String) jsonBody.get("type"));
 
-                var newPlayer = new Player(name, playerColor);
-
-                newPlayer.setNation(nation);
-                newPlayer.setPlayerType(playerType);
+                var newPlayer = new Player(name, playerColor, nation, playerType);
 
                 sendToSession(session,
                         new JSONObject(Map.of(

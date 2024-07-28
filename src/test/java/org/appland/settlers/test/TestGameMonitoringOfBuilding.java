@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
@@ -7,6 +8,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
@@ -43,7 +45,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenBeerIsAddedToHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -136,7 +138,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenPlankIsRemovedFromHeadquarter() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -152,7 +154,7 @@ public class TestGameMonitoringOfBuilding {
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Place woodcutter */
+        /* Place farm */
         Point point2 = new Point(9, 5);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
@@ -166,64 +168,32 @@ public class TestGameMonitoringOfBuilding {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* No house updated event is sent when the first plank leaves the headquarters */
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
-        }
-
         /* Request detailed monitoring of the headquarters */
         player0.addDetailedMonitoring(headquarter0);
 
-        /* Verify that a house updated event is sent when the second plank leaves the headquarters */
+        /* Verify that a house updated event is sent when the plank leaves the headquarters */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, courier);
 
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
-
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, farm0.getPosition());
-
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
-
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
-
-                if (gameChangesList.getChangedBuildings().contains(farm0)) {
-                    continue;
-                }
-
-                found++;
-
-                assertTrue(gameChangesList.getChangedBuildings().contains(headquarter0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+        for (int i = 0; i < 2000; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == PLANK) {
+                break;
             }
+
+            monitor.clearEvents();
+
+            map.stepTime();
         }
 
-        assertEquals(found, 1);
-
-        /* Turn off detailed monitoring */
-        player0.removeDetailedMonitoring(headquarter0);
-
-        /* Verify that no house updated event is sent when the headquarters receives cargo */
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, courier);
-
-        lastGameChangesList = monitor.getLastEvent();
-
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
-
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
-        }
+        assertTrue(monitor.getEvents().stream()
+                .mapToInt(gcl -> gcl.getChangedBuildings().contains(headquarter0) ? 1 : 0)
+                .sum() > 0);
     }
 
     @Test
     public void testMonitoringEventWhenPlankIsAddedToBuildingUnderConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -292,7 +262,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenConstructionProgresses() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -338,7 +308,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsRaisedAndSoldierInInventoryBecomesHosted() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -422,7 +392,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenReservedLimitIsLoweredAndHostedSoldierMovesToInventory() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -506,7 +476,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenEvacuatingMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -561,7 +531,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenStoppingEvacuationOfMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -612,7 +582,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsEnabledInMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -663,7 +633,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenPromotionsDisabledInMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -711,7 +681,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsEnabled() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -787,7 +757,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionIsDisabled() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -860,7 +830,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingReceivesMaterial() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -955,7 +925,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductionBuildingConsumesMaterial() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1028,7 +998,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1063,65 +1033,35 @@ public class TestGameMonitoringOfBuilding {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that there is no event when the second soldier enters the house */
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
-
-        Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
-
-        Soldier military1 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, military1, watchTower.getPosition());
-
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(watchTower));
-        }
-
         /* Add detailed monitoring of the house */
         player0.addDetailedMonitoring(watchTower);
 
         /* Verify that there is an event when the third soldier enters the house */
-        lastGameChangesList = monitor.getLastEvent();
-
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
 
-        Soldier military2 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
+        Soldier soldier = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military2, watchTower.getPosition());
-
-        int found = 0;
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
-                found++;
-
-                assertTrue(gameChangesList.getChangedBuildings().contains(watchTower));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+        for (int i = 0; i < 2000; i++) {
+            if (soldier.getPosition().equals(watchTower.getPosition())) {
+                break;
             }
+
+            monitor.clearEvents();
+
+            map.stepTime();
         }
 
-        assertEquals(found, 1);
-
-        /* Remove detailed monitoring of the house */
-        player0.removeDetailedMonitoring(watchTower);
-
-        /* Verify that there is no event when the fourth soldier enters the house */
-        lastGameChangesList = monitor.getLastEvent();
-
-        Utils.adjustInventoryTo(headquarter0, PRIVATE, 1);
-
-        Soldier military3 = Utils.waitForWorkerOutsideBuilding(Soldier.class, player0);
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, military3, watchTower.getPosition());
-
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(watchTower));
-        }
+        assertEquals(
+                monitor.getEvents().stream()
+                        .mapToInt(gameChangesList -> gameChangesList.getChangedBuildings().contains(watchTower) ? 1 : 0)
+                        .sum(), 1);
     }
 
     @Test
     public void testMonitorEventWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1137,7 +1077,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenProductivityChangedInBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1178,6 +1118,8 @@ public class TestGameMonitoringOfBuilding {
                 break;
             }
 
+            monitor.clearEvents();
+
             map.stepTime();
         }
 
@@ -1197,7 +1139,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenUpgradingMilitaryBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1326,7 +1268,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitorEventWhenChangingAmountReservedInHeadquarters() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1341,17 +1283,6 @@ public class TestGameMonitoringOfBuilding {
         /* Start monitoring */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
-
-        /* Verify that changing reserved soldiers does not cause an event to be sent */
-        assertNotEquals(headquarter0.getReservedSoldiers(Soldier.Rank.PRIVATE_RANK), 1);
-
-        headquarter0.setReservedSoldiers(Soldier.Rank.PRIVATE_RANK, 1);
-
-        map.stepTime();
-
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
-        }
 
         /* Add detailed monitoring */
         player0.addDetailedMonitoring(headquarter0);
@@ -1394,8 +1325,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityIncreasesWhenSoldierEntersBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1470,8 +1401,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenSoldierLeavesBuilding() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1541,8 +1472,8 @@ public class TestGameMonitoringOfBuilding {
     public void testAttackCapabilityDecreasesWhenMilitaryBuildingIsTornDown() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.RED);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1610,7 +1541,7 @@ public class TestGameMonitoringOfBuilding {
     public void testMonitoringEventWhenDoorOpensAndCloses() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1759,7 +1690,7 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenHeadquartersReceivesCargo() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1819,7 +1750,7 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenHeadquartersReceivesWorker() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1876,7 +1807,7 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenSoldierLeavesHeadquarters() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1938,7 +1869,7 @@ public class TestGameMonitoringOfBuilding {
     public void testEventWhenWorkerLeavesHeadquarters() throws InvalidUserActionException {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);

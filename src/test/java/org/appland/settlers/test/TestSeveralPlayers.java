@@ -5,7 +5,9 @@
  */
 package org.appland.settlers.test;
 
+import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -47,7 +49,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with one player */
         List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0", PlayerColor.BLUE));
+        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
 
         /* Create game map choosing one players */
         GameMap map = new GameMap(players, 20, 20);
@@ -64,8 +66,8 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0", PlayerColor.BLUE));
-        players.add(new Player("Player 1", GREEN));
+        players.add(new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
+        players.add(new Player("Player 1", GREEN, Nation.ROMANS, PlayerType.HUMAN));
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 20, 20);
@@ -82,8 +84,8 @@ public class TestSeveralPlayers {
     public void testCannotPlacePlayersHeadquartersTogether() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -110,8 +112,8 @@ public class TestSeveralPlayers {
     public void testPlacedHouseHasCorrectPlayerForSeveralPlayers() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -137,8 +139,8 @@ public class TestSeveralPlayers {
     public void testSeveralPlayersCanPlaceAdditionalBuildingsAfterHeadquarter() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
@@ -169,8 +171,8 @@ public class TestSeveralPlayers {
     public void testRetrievePlayersFromGameMap() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN);
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
 
         List<Player> players = new LinkedList<>();
 
