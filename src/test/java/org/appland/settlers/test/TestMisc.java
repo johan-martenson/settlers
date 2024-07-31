@@ -405,7 +405,7 @@ public class TestMisc {
 
                 if (!thisEvent.equals(lastEvent)) {
 
-                    for (Worker worker : monitor.getLastEvent().getWorkersWithNewTargets()) {
+                    for (Worker worker : monitor.getLastEvent().workersWithNewTargets()) {
                         assertNotNull(worker.getPlannedPath());
                         assertNotEquals(worker.getPlannedPath().size(), 0);
                     }
@@ -474,7 +474,7 @@ public class TestMisc {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertTrue(gameChangesList.getWorkersWithNewTargets().contains(woodcutterWorker));
+        assertTrue(gameChangesList.workersWithNewTargets().contains(woodcutterWorker));
     }
 
     @Test
@@ -2013,7 +2013,7 @@ public class TestMisc {
         /* Verify that the event was sent and the points are discovered */
         assertTrue(player0.getDiscoveredLand().contains(point3));
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getNewDiscoveredLand().contains(point3))
+                .filter(gcl -> gcl.newDiscoveredLand().contains(point3))
                 .count(),
                 1);
     }

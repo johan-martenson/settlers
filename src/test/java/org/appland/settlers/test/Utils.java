@@ -2588,7 +2588,7 @@ public class Utils {
         int count = 0;
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            for (Point decoratedPoint : gameChangesList.getRemovedDecorations()) {
+            for (Point decoratedPoint : gameChangesList.removedDecorations()) {
                 if (Objects.equals(point, decoratedPoint)) {
                     count = count + 1;
                 }
@@ -2602,7 +2602,7 @@ public class Utils {
         int count = 0;
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            for (Map.Entry<Point, DecorationType> entry : gameChangesList.getNewDecorations().entrySet()) {
+            for (Map.Entry<Point, DecorationType> entry : gameChangesList.newDecorations().entrySet()) {
                 Point decoratedPoint = entry.getKey();
                 DecorationType decorationType = entry.getValue();
 
@@ -3164,7 +3164,7 @@ public class Utils {
             Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player);
             List<Point> availableMinesOnMap = map.getAvailableMinePoints(player);
 
-            for (Point point : gameChangesList.getChangedAvailableConstruction()) {
+            for (Point point : gameChangesList.changedAvailableConstruction()) {
                 AvailableConstruction.PossibleBuildings possibleBuilding = NO_BUILDING_POSSIBLE;
                 AvailableConstruction.PossibleFlag possibleFlag = NO_FLAG_POSSIBLE;
 
@@ -3359,46 +3359,45 @@ public class Utils {
     }
 
     private static GameChangesList copyGameChangesList(GameChangesList gameChangesList) {
-
-        return new GameChangesList(gameChangesList.getTime(),
-                new ArrayList<>(gameChangesList.getWorkersWithNewTargets()),
-                new ArrayList<>(gameChangesList.getNewFlags()),
-                new ArrayList<>(gameChangesList.getRemovedFlags()),
-                new ArrayList<>(gameChangesList.getNewBuildings()),
-                new ArrayList<>(gameChangesList.getChangedBuildings()),
-                new ArrayList<>(gameChangesList.getRemovedBuildings()),
-                new ArrayList<>(gameChangesList.getNewRoads()),
-                new ArrayList<>(gameChangesList.getRemovedRoads()),
-                new ArrayList<>(gameChangesList.getRemovedWorkers()),
-                new ArrayList<>(gameChangesList.getNewTrees()),
-                new ArrayList<>(gameChangesList.getRemovedTrees()),
-                new ArrayList<>(gameChangesList.getRemovedStones()),
-                new ArrayList<>(gameChangesList.getNewSigns()),
-                new ArrayList<>(gameChangesList.getRemovedSigns()),
-                new ArrayList<>(gameChangesList.getNewCrops()),
-                new ArrayList<>(gameChangesList.getRemovedCrops()),
-                new ArrayList<>(gameChangesList.getNewDiscoveredLand()),
-                new ArrayList<>(gameChangesList.getChangedBorders()),
-                new ArrayList<>(gameChangesList.getNewStones()),
-                new ArrayList<>(gameChangesList.getNewWorkers()),
-                new ArrayList<>(gameChangesList.getChangedAvailableConstruction()),
-                new ArrayList<>(gameChangesList.getNewGameMessages()),
-                new ArrayList<>(gameChangesList.getPromotedRoads()),
-                new ArrayList<>(gameChangesList.getChangedFlags()),
-                new ArrayList<>(gameChangesList.getRemovedDeadTrees()),
-                new ArrayList<>(gameChangesList.getDiscoveredDeadTrees()),
-                new ArrayList<>(gameChangesList.getHarvestedCrops()),
-                new ArrayList<>(gameChangesList.getNewShips()),
-                new ArrayList<>(gameChangesList.getFinishedShips()),
-                new ArrayList<>(gameChangesList.getShipsWithNewTargets()),
-                new HashMap<>(gameChangesList.getWorkersWithStartedActions()),
-                new ArrayList<>(gameChangesList.getRemovedDecorations()),
-                new HashMap<>(gameChangesList.getNewDecorations()),
-                new ArrayList<>(gameChangesList.getUpgradedBuildings()),
-                new ArrayList<>(gameChangesList.getRemovedMessages()),
-                new ArrayList<>(gameChangesList.getChangedStones()),
-                new ArrayList<>(gameChangesList.getNewFallingTrees()),
-                gameChangesList.isTransportPriorityChanged());
+        return new GameChangesList(gameChangesList.time(),
+                new ArrayList<>(gameChangesList.workersWithNewTargets()),
+                new ArrayList<>(gameChangesList.newFlags()),
+                new ArrayList<>(gameChangesList.removedFlags()),
+                new ArrayList<>(gameChangesList.newBuildings()),
+                new ArrayList<>(gameChangesList.changedBuildings()),
+                new ArrayList<>(gameChangesList.removedBuildings()),
+                new ArrayList<>(gameChangesList.newRoads()),
+                new ArrayList<>(gameChangesList.removedRoads()),
+                new ArrayList<>(gameChangesList.removedWorkers()),
+                new ArrayList<>(gameChangesList.newTrees()),
+                new ArrayList<>(gameChangesList.removedTrees()),
+                new ArrayList<>(gameChangesList.removedStones()),
+                new ArrayList<>(gameChangesList.newSigns()),
+                new ArrayList<>(gameChangesList.removedSigns()),
+                new ArrayList<>(gameChangesList.newCrops()),
+                new ArrayList<>(gameChangesList.removedCrops()),
+                new ArrayList<>(gameChangesList.newDiscoveredLand()),
+                new ArrayList<>(gameChangesList.changedBorders()),
+                new ArrayList<>(gameChangesList.newStones()),
+                new ArrayList<>(gameChangesList.newWorkers()),
+                new ArrayList<>(gameChangesList.changedAvailableConstruction()),
+                new ArrayList<>(gameChangesList.newMessages()),
+                new ArrayList<>(gameChangesList.promotedRoads()),
+                new ArrayList<>(gameChangesList.changedFlags()),
+                new ArrayList<>(gameChangesList.removedDeadTrees()),
+                new ArrayList<>(gameChangesList.discoveredDeadTrees()),
+                new ArrayList<>(gameChangesList.harvestedCrops()),
+                new ArrayList<>(gameChangesList.newShips()),
+                new ArrayList<>(gameChangesList.finishedShips()),
+                new ArrayList<>(gameChangesList.shipsWithNewTargets()),
+                new HashMap<>(gameChangesList.workersWithStartedActions()),
+                new ArrayList<>(gameChangesList.removedDecorations()),
+                new HashMap<>(gameChangesList.newDecorations()),
+                new ArrayList<>(gameChangesList.upgradedBuildings()),
+                new ArrayList<>(gameChangesList.removedMessages()),
+                new ArrayList<>(gameChangesList.changedStones()),
+                new ArrayList<>(gameChangesList.newFallingTrees()),
+                gameChangesList.transportPriorityChanged());
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {
@@ -3451,8 +3450,8 @@ public class Utils {
 
     static List<WorkerAction> getMonitoredWorkerActionsForWorker(Worker worker, GameViewMonitor monitor) {
         return monitor.getEvents().stream()
-                .filter(gameChangesList -> gameChangesList.getWorkersWithStartedActions().containsKey(worker))
-                .map(gameChangesList -> gameChangesList.getWorkersWithStartedActions().get(worker))
+                .filter(gameChangesList -> gameChangesList.workersWithStartedActions().containsKey(worker))
+                .map(gameChangesList -> gameChangesList.workersWithStartedActions().get(worker))
                 .collect(Collectors.toList());
     }
 
@@ -3460,7 +3459,7 @@ public class Utils {
         int count = 0;
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            for (Map.Entry<Worker, WorkerAction> entry : gameChangesList.getWorkersWithStartedActions().entrySet()) {
+            for (Map.Entry<Worker, WorkerAction> entry : gameChangesList.workersWithStartedActions().entrySet()) {
                 Worker worker1 = entry.getKey();
                 WorkerAction workerAction1 = entry.getValue();
 

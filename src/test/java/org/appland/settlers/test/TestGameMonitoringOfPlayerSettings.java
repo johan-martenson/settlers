@@ -43,7 +43,7 @@ public class TestGameMonitoringOfPlayerSettings {
 
         /* Verify that the event does not include changes to the transport priority */
         assertNotEquals(monitor.getEvents().size(), 0);
-        assertFalse(monitor.getLastEvent().isTransportPriorityChanged());
+        assertFalse(monitor.getLastEvent().transportPriorityChanged());
 
         /* Verify that an event is sent when the transport priority is */
         monitor.clearEvents();
@@ -52,13 +52,13 @@ public class TestGameMonitoringOfPlayerSettings {
 
         map.stepTime();
 
-        assertTrue(monitor.getLastEvent().isTransportPriorityChanged());
+        assertTrue(monitor.getLastEvent().transportPriorityChanged());
 
         /* Verify that the event is only sent once */
         monitor.clearEvents();
 
         map.stepTime();
 
-        assertTrue(monitor.getEvents().isEmpty() || !monitor.getLastEvent().isTransportPriorityChanged());
+        assertTrue(monitor.getEvents().isEmpty() || !monitor.getLastEvent().transportPriorityChanged());
     }
 }

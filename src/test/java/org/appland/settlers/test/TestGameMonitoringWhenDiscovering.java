@@ -91,8 +91,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewTrees().size(), 1);
-        assertEquals(gameChangesList.getNewTrees().getFirst(), tree0);
+        assertEquals(gameChangesList.newTrees().size(), 1);
+        assertEquals(gameChangesList.newTrees().getFirst(), tree0);
     }
 
     @Test
@@ -139,12 +139,12 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewTrees().size(), 1);
-        assertEquals(gameChangesList.getNewTrees().getFirst(), tree0);
+        assertEquals(gameChangesList.newTrees().size(), 1);
+        assertEquals(gameChangesList.newTrees().getFirst(), tree0);
 
         /* Verify that the new tree event is not sent again */
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(changes.getNewTrees().size(), 0);
+            assertEquals(changes.newTrees().size(), 0);
         }
     }
 
@@ -192,8 +192,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewStones().size(), 1);
-        assertEquals(gameChangesList.getNewStones().getFirst(), stone0);
+        assertEquals(gameChangesList.newStones().size(), 1);
+        assertEquals(gameChangesList.newStones().getFirst(), stone0);
     }
 
     @Test
@@ -240,14 +240,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewStones().size(), 1);
-        assertEquals(gameChangesList.getNewStones().getFirst(), stone0);
+        assertEquals(gameChangesList.newStones().size(), 1);
+        assertEquals(gameChangesList.newStones().getFirst(), stone0);
 
         /* Verify that the event is not sent again */
         Utils.fastForward(200, map);
 
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(changes.getNewStones().size(), 0);
+            assertEquals(changes.newStones().size(), 0);
         }
     }
 
@@ -301,8 +301,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewFlags().size(), 1);
-        assertEquals(gameChangesList.getNewFlags().getFirst(), flag0);
+        assertEquals(gameChangesList.newFlags().size(), 1);
+        assertEquals(gameChangesList.newFlags().getFirst(), flag0);
     }
 
     @Test
@@ -355,14 +355,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewFlags().size(), 1);
-        assertEquals(gameChangesList.getNewFlags().getFirst(), flag0);
+        assertEquals(gameChangesList.newFlags().size(), 1);
+        assertEquals(gameChangesList.newFlags().getFirst(), flag0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getNewFlags().size(), 0);
+            assertEquals(newChanges.newFlags().size(), 0);
         }
     }
 
@@ -416,8 +416,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewBuildings().size(), 1);
-        assertEquals(gameChangesList.getNewBuildings().getFirst(), woodcutter0);
+        assertEquals(gameChangesList.newBuildings().size(), 1);
+        assertEquals(gameChangesList.newBuildings().getFirst(), woodcutter0);
     }
 
     @Test
@@ -470,14 +470,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewBuildings().size(), 1);
-        assertEquals(gameChangesList.getNewBuildings().getFirst(), woodcutter0);
+        assertEquals(gameChangesList.newBuildings().size(), 1);
+        assertEquals(gameChangesList.newBuildings().getFirst(), woodcutter0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getNewBuildings().size(), 0);
+            assertEquals(newChanges.newBuildings().size(), 0);
         }
     }
 
@@ -537,8 +537,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertTrue(gameChangesList.getNewRoads().size() >= 1);
-        assertTrue(gameChangesList.getNewRoads().contains(road0));
+        assertTrue(gameChangesList.newRoads().size() >= 1);
+        assertTrue(gameChangesList.newRoads().contains(road0));
     }
 
     @Test
@@ -597,14 +597,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertTrue(gameChangesList.getNewRoads().size() >= 1);
-        assertTrue(gameChangesList.getNewRoads().contains(road0));
+        assertTrue(gameChangesList.newRoads().size() >= 1);
+        assertTrue(gameChangesList.newRoads().contains(road0));
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getNewRoads().size(), 0);
+            assertEquals(newChanges.newRoads().size(), 0);
         }
     }
 
@@ -664,11 +664,11 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertTrue(gameChangesList.getNewFlags().size() >= 1);
-        assertTrue(gameChangesList.getNewFlags().contains(flag0));
-        assertTrue(gameChangesList.getNewRoads().size() >= 2);
-        assertTrue(gameChangesList.getNewRoads().contains(road0));
-        assertTrue(gameChangesList.getNewRoads().contains(road1));
+        assertTrue(gameChangesList.newFlags().size() >= 1);
+        assertTrue(gameChangesList.newFlags().contains(flag0));
+        assertTrue(gameChangesList.newRoads().size() >= 2);
+        assertTrue(gameChangesList.newRoads().contains(road0));
+        assertTrue(gameChangesList.newRoads().contains(road1));
     }
 
     @Test
@@ -722,9 +722,9 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getChangedBorders().size(), 1);
+        assertEquals(gameChangesList.changedBorders().size(), 1);
 
-        BorderChange borderChange = gameChangesList.getChangedBorders().getFirst();
+        BorderChange borderChange = gameChangesList.changedBorders().getFirst();
 
         assertTrue(borderChange.getNewBorder().size() > 0);
         assertEquals(borderChange.getRemovedBorder().size(), 0);
@@ -794,11 +794,11 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getChangedBorders().size(), 1);
+        assertEquals(gameChangesList.changedBorders().size(), 1);
 
         boolean otherBorderFound = false;
 
-        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
+        for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
             if (borderChange.getPlayer().equals(player1)) {
                 otherBorderFound = true;
 
@@ -815,7 +815,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getChangedBorders().size(), 0);
+            assertEquals(newChanges.newSigns().size(), 0);
         }
     }
 
@@ -863,8 +863,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewSigns().size(), 1);
-        assertEquals(gameChangesList.getNewSigns().getFirst(), sign0);
+        assertEquals(gameChangesList.newSigns().size(), 1);
+        assertEquals(gameChangesList.newSigns().getFirst(), sign0);
     }
 
     @Test
@@ -911,12 +911,12 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewSigns().size(), 1);
-        assertEquals(gameChangesList.getNewSigns().getFirst(), sign0);
+        assertEquals(gameChangesList.newSigns().size(), 1);
+        assertEquals(gameChangesList.newSigns().getFirst(), sign0);
 
         /* Verify that the new sign event is not sent again */
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(changes.getNewSigns().size(), 0);
+            assertEquals(changes.newSigns().size(), 0);
         }
     }
 
@@ -970,8 +970,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewCrops().size(), 1);
-        assertEquals(gameChangesList.getNewCrops().getFirst(), crop0);
+        assertEquals(gameChangesList.newCrops().size(), 1);
+        assertEquals(gameChangesList.newCrops().getFirst(), crop0);
     }
 
     @Test
@@ -1024,14 +1024,14 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewCrops().size(), 1);
-        assertEquals(gameChangesList.getNewCrops().getFirst(), crop0);
+        assertEquals(gameChangesList.newCrops().size(), 1);
+        assertEquals(gameChangesList.newCrops().getFirst(), crop0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getNewCrops().size(), 0);
+            assertEquals(newChanges.newCrops().size(), 0);
         }
     }
 
@@ -1099,9 +1099,9 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewWorkers().size(), 1);
-        assertEquals(gameChangesList.getNewWorkers().getFirst(), courier0);
-        assertEquals(gameChangesList.getWorkersWithNewTargets().size(), 0);
+        assertEquals(gameChangesList.newWorkers().size(), 1);
+        assertEquals(gameChangesList.newWorkers().getFirst(), courier0);
+        assertEquals(gameChangesList.workersWithNewTargets().size(), 0);
     }
 
     @Test
@@ -1169,16 +1169,16 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewWorkers().size(), 1);
-        assertEquals(gameChangesList.getNewWorkers().getFirst(), courier0);
-        assertFalse(gameChangesList.getWorkersWithNewTargets().contains(courier0));
+        assertEquals(gameChangesList.newWorkers().size(), 1);
+        assertEquals(gameChangesList.newWorkers().getFirst(), courier0);
+        assertFalse(gameChangesList.workersWithNewTargets().contains(courier0));
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertFalse(newChanges.getNewWorkers().contains(courier0));
-            assertFalse(newChanges.getWorkersWithNewTargets().contains(courier0));
+            assertFalse(newChanges.newWorkers().contains(courier0));
+            assertFalse(newChanges.workersWithNewTargets().contains(courier0));
         }
     }
 
@@ -1238,7 +1238,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         boolean otherBorderFound = false;
 
-        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
+        for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
             if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
                 otherBorderFound = true;
 
@@ -1305,7 +1305,7 @@ public class TestGameMonitoringWhenDiscovering {
 
         boolean otherBorderFound = false;
 
-        for (BorderChange borderChange : monitor.getLastEvent().getChangedBorders()) {
+        for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
             if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
                 otherBorderFound = true;
 
@@ -1321,7 +1321,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForward(100, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedBorders().size(), 0);
+            assertEquals(newChanges.newSigns().size(), 0);
         }
     }
 
@@ -1422,8 +1422,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertTrue(gameChangesList.getRemovedWorkers().size() > 0);
-        assertTrue(gameChangesList.getRemovedWorkers().contains(defender));
+        assertTrue(gameChangesList.removedWorkers().size() > 0);
+        assertTrue(gameChangesList.removedWorkers().contains(defender));
     }
 
     @Test
@@ -1467,9 +1467,9 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getRemovedDeadTrees().size(), 0);
-        assertTrue(gameChangesList.getDiscoveredDeadTrees().size() > 0);
-        assertTrue(gameChangesList.getDiscoveredDeadTrees().contains(point1));
+        assertEquals(gameChangesList.removedDeadTrees().size(), 0);
+        assertTrue(gameChangesList.discoveredDeadTrees().size() > 0);
+        assertTrue(gameChangesList.discoveredDeadTrees().contains(point1));
     }
 
     @Test
@@ -1513,9 +1513,9 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getRemovedDeadTrees().size(), 0);
-        assertTrue(gameChangesList.getDiscoveredDeadTrees().size() > 0);
-        assertTrue(gameChangesList.getDiscoveredDeadTrees().contains(point1));
+        assertEquals(gameChangesList.removedDeadTrees().size(), 0);
+        assertTrue(gameChangesList.discoveredDeadTrees().size() > 0);
+        assertTrue(gameChangesList.discoveredDeadTrees().contains(point1));
 
         /* Verify that the event is only sent once */
 
@@ -1543,7 +1543,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.fastForward(100, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getDiscoveredDeadTrees().size(), 0);
+            assertEquals(newChanges.discoveredDeadTrees().size(), 0);
         }
     }
 

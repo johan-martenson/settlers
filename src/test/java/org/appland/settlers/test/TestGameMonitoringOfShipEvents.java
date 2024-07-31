@@ -100,7 +100,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Verify that a game monitoring event was sent */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getNewShips().contains(ship)) {
+            if (gameChangesList.newShips().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -183,7 +183,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Verify that a game monitoring event was sent */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getNewShips().contains(ship)) {
+            if (gameChangesList.newShips().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -198,7 +198,7 @@ public class TestGameMonitoringOfShipEvents {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getNewShips().size(), 0);
+            assertEquals(gameChangesList.newShips().size(), 0);
         }
     }
 
@@ -287,7 +287,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Verify that a game monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getFinishedShips().contains(ship)) {
+            if (gameChangesList.finishedShips().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -382,7 +382,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Agame monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getFinishedShips().contains(ship)) {
+            if (gameChangesList.finishedShips().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -397,7 +397,7 @@ public class TestGameMonitoringOfShipEvents {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getFinishedShips().size(), 0);
+            assertEquals(gameChangesList.finishedShips().size(), 0);
         }
     }
 
@@ -554,7 +554,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Verify that a game monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getShipsWithNewTargets().contains(ship)) {
+            if (gameChangesList.shipsWithNewTargets().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -717,7 +717,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Verify that a game monitoring event was sent when the ship moved from land to water */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getShipsWithNewTargets().contains(ship)) {
+            if (gameChangesList.shipsWithNewTargets().contains(ship)) {
                 foundEvent = true;
 
                 break;
@@ -732,7 +732,7 @@ public class TestGameMonitoringOfShipEvents {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getShipsWithNewTargets().size(), 0);
+            assertEquals(gameChangesList.shipsWithNewTargets().size(), 0);
         }
     }
 }

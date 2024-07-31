@@ -79,7 +79,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -121,7 +121,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -129,7 +129,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -173,7 +173,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -218,7 +218,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -226,7 +226,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -267,7 +267,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -309,7 +309,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -317,7 +317,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -367,7 +367,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -418,7 +418,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -426,7 +426,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -467,7 +467,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -509,7 +509,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -517,7 +517,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -562,8 +562,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getChangedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.changedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -609,8 +609,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getChangedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.changedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -618,7 +618,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -665,8 +665,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getChangedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.changedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -714,8 +714,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getChangedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.changedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -723,7 +723,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -768,8 +768,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getRemovedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.removedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -815,8 +815,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertNotEquals(gameChanges.getRemovedBuildings().size(), 0);
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertNotEquals(gameChanges.removedBuildings().size(), 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -824,7 +824,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -865,7 +865,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -907,7 +907,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -915,7 +915,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -959,7 +959,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1004,7 +1004,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1012,7 +1012,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1057,7 +1057,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         Utils.waitForBuildingToBurnDown(sawmill0);
 
-        assertTrue(monitor.getLastEvent().getChangedAvailableConstruction().size() > 0);
+        assertTrue(monitor.getLastEvent().changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1105,7 +1105,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1113,7 +1113,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1160,7 +1160,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1208,7 +1208,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1216,7 +1216,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1257,7 +1257,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1299,7 +1299,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1307,7 +1307,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1357,7 +1357,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1408,7 +1408,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1416,7 +1416,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1466,7 +1466,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1517,7 +1517,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1525,7 +1525,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1571,7 +1571,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1618,7 +1618,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1626,7 +1626,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1675,7 +1675,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1725,7 +1725,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1733,7 +1733,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1779,7 +1779,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1826,7 +1826,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1834,7 +1834,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1880,7 +1880,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -1927,7 +1927,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -1935,7 +1935,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -1984,7 +1984,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2034,7 +2034,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2042,7 +2042,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2086,7 +2086,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2129,7 +2129,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2137,7 +2137,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2244,7 +2244,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2297,7 +2297,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2351,7 +2351,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
+        assertTrue(gameChanges.changedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2359,7 +2359,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2426,10 +2426,10 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertNotEquals(gameChangesList.getChangedAvailableConstruction().size(), 0);
+        assertNotEquals(gameChangesList.changedAvailableConstruction().size(), 0);
         assertNotEquals(map.isAvailableHousePoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()), null);
         assertTrue(map.isAvailableFlagPoint(player0, barracks0.getFlag().getPosition().downLeft().downLeft()));
-        assertFalse(gameChangesList.getChangedBorders().isEmpty());
+        assertFalse(gameChangesList.changedBorders().isEmpty());
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2495,7 +2495,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertNotEquals(gameChangesList.getChangedAvailableConstruction().size(), 0);
+        assertNotEquals(gameChangesList.changedAvailableConstruction().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2505,7 +2505,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEvents()) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2575,8 +2575,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertNotEquals(gameChangesList.getChangedBorders().size(), 0);
-        assertNotEquals(gameChangesList.getChangedAvailableConstruction().size(), 0);
+        assertNotEquals(gameChangesList.changedBorders().size(), 0);
+        assertNotEquals(gameChangesList.changedAvailableConstruction().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2647,8 +2647,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertNotEquals(gameChangesList.getChangedBorders().size(), 0);
-        assertNotEquals(gameChangesList.getChangedAvailableConstruction().size(), 0);
+        assertNotEquals(gameChangesList.changedBorders().size(), 0);
+        assertNotEquals(gameChangesList.changedAvailableConstruction().size(), 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
@@ -2656,7 +2656,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2721,10 +2721,10 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
+        assertEquals(gameChanges.removedStones().size(), 1);
+        assertEquals(gameChanges.removedStones().getFirst(), stone0);
 
-        assertNotEquals(gameChanges.getChangedAvailableConstruction().size() ,0);
+        assertNotEquals(gameChanges.changedAvailableConstruction().size() ,0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
@@ -2784,10 +2784,10 @@ public class TestMonitoringOfAvailableConstruction {
 
         GameChangesList gameChanges = monitor.getLastEvent();
 
-        assertEquals(gameChanges.getRemovedStones().size(), 1);
-        assertEquals(gameChanges.getRemovedStones().getFirst(), stone0);
+        assertEquals(gameChanges.removedStones().size(), 1);
+        assertEquals(gameChanges.removedStones().getFirst(), stone0);
 
-        assertNotEquals(gameChanges.getChangedAvailableConstruction().size() ,0);
+        assertNotEquals(gameChanges.changedAvailableConstruction().size() ,0);
 
         monitor.setAvailableConstruction(
                 map.getAvailableHousePoints(player0),
@@ -2799,7 +2799,7 @@ public class TestMonitoringOfAvailableConstruction {
         Utils.fastForward(10, map);
 
         for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
-            assertEquals(newChanges.getChangedAvailableConstruction().size(), 0);
+            assertEquals(newChanges.changedAvailableConstruction().size(), 0);
         }
     }
 
@@ -2857,8 +2857,8 @@ public class TestMonitoringOfAvailableConstruction {
         assertFalse(map.isStoneAtPoint(point1));
         assertFalse(map.isStoneAtPoint(point2));
         assertFalse(map.isStoneAtPoint(point3));
-        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.getRemovedStones().isEmpty()).count(), 3);
-        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.getChangedAvailableConstruction().isEmpty()).count(), 3);
+        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.removedStones().isEmpty()).count(), 3);
+        assertEquals(monitor.getEvents().stream().filter(gcl -> !gcl.changedAvailableConstruction().isEmpty()).count(), 3);
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
     }
 }

@@ -113,8 +113,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the forester started planting the tree */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(forester)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(forester);
+            if (gameChangesList.workersWithStartedActions().containsKey(forester)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(forester);
 
                 assertEquals(workerAction, WorkerAction.PLANTING_TREE);
 
@@ -185,8 +185,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the forester started planting the tree */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(forester)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(forester);
+            if (gameChangesList.workersWithStartedActions().containsKey(forester)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(forester);
 
                 assertEquals(workerAction, WorkerAction.PLANTING_TREE);
 
@@ -204,7 +204,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertEquals(gameChangesList.workersWithStartedActions().size(), 0);
         }
     }
 
@@ -289,18 +289,18 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Verify that an event was sent when the woodcutter cut down the tree */
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getWorkersWithStartedActions().containsKey(woodcutterWorker))
-                .filter(gcl -> gcl.getWorkersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
+                .filter(gcl -> gcl.workersWithStartedActions().containsKey(woodcutterWorker))
+                .filter(gcl -> gcl.workersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
                 .count(),
         1);
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getNewFallingTrees().contains(tree))
+                        .filter(gcl -> gcl.newFallingTrees().contains(tree))
                         .count(),
                 1
         );
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getNewDecorations().containsKey(point))
-                .filter(gcl -> gcl.getNewDecorations().get(point) == DecorationType.TREE_STUB)
+                .filter(gcl -> gcl.newDecorations().containsKey(point))
+                .filter(gcl -> gcl.newDecorations().get(point) == DecorationType.TREE_STUB)
                 .count(),
                 1
         );
@@ -309,19 +309,19 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getWorkersWithStartedActions().containsKey(woodcutterWorker))
-                        .filter(gcl -> gcl.getWorkersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
+                        .filter(gcl -> gcl.workersWithStartedActions().containsKey(woodcutterWorker))
+                        .filter(gcl -> gcl.workersWithStartedActions().get(woodcutterWorker) == WorkerAction.CUTTING)
                         .count(),
                 1);
 
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getNewDecorations().containsKey(point))
-                        .filter(gcl -> gcl.getNewDecorations().get(point) == DecorationType.TREE_STUB)
+                        .filter(gcl -> gcl.newDecorations().containsKey(point))
+                        .filter(gcl -> gcl.newDecorations().get(point) == DecorationType.TREE_STUB)
                         .count(),
                 1
         );
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getNewFallingTrees().contains(tree))
+                        .filter(gcl -> gcl.newFallingTrees().contains(tree))
                         .count(),
                 1
         );
@@ -410,8 +410,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the forester started planting the tree */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(woodcutterWorker)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(woodcutterWorker);
+            if (gameChangesList.workersWithStartedActions().containsKey(woodcutterWorker)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(woodcutterWorker);
 
                 assertEquals(workerAction, WorkerAction.CUTTING);
 
@@ -429,7 +429,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertEquals(gameChangesList.workersWithStartedActions().size(), 0);
         }
     }
 
@@ -511,8 +511,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(stonemason)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(stonemason);
+            if (gameChangesList.workersWithStartedActions().containsKey(stonemason)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(stonemason);
 
                 assertEquals(workerAction, WorkerAction.HACKING_STONE);
 
@@ -602,8 +602,8 @@ public class TestGameMonitoringOfWorkerActions {
 
         /* Verify that an event was sent the final piece of stone was removed and only gravel remains */
         assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.getNewDecorations().containsKey(point2))
-                .filter(gcl -> gcl.getNewDecorations().get(point2) == DecorationType.STONE_REMAINING_STYLE_1)
+                .filter(gcl -> gcl.newDecorations().containsKey(point2))
+                .filter(gcl -> gcl.newDecorations().get(point2) == DecorationType.STONE_REMAINING_STYLE_1)
                 .count(),
                 1);
     }
@@ -686,8 +686,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(stonemason)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(stonemason);
+            if (gameChangesList.workersWithStartedActions().containsKey(stonemason)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(stonemason);
 
                 assertEquals(workerAction, WorkerAction.HACKING_STONE);
 
@@ -705,7 +705,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertEquals(gameChangesList.workersWithStartedActions().size(), 0);
         }
     }
 
@@ -773,8 +773,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(farmer)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(farmer);
+            if (gameChangesList.workersWithStartedActions().containsKey(farmer)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(farmer);
 
                 assertEquals(workerAction, WorkerAction.PLANTING_WHEAT);
 
@@ -851,8 +851,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the farmer started picking the crop */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(farmer)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(farmer);
+            if (gameChangesList.workersWithStartedActions().containsKey(farmer)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(farmer);
 
                 assertEquals(workerAction, WorkerAction.PLANTING_WHEAT);
 
@@ -870,7 +870,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(farmer));
+            assertFalse(gameChangesList.workersWithStartedActions().containsKey(farmer));
         }
     }
 
@@ -1031,8 +1031,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(fisherman)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(fisherman);
+            if (gameChangesList.workersWithStartedActions().containsKey(fisherman)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(fisherman);
 
                 assertEquals(workerAction, WorkerAction.LOWER_FISHING_ROD);
 
@@ -1050,7 +1050,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertEquals(gameChangesList.workersWithStartedActions().size(), 0);
         }
     }
 
@@ -1106,8 +1106,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(geologist)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(geologist);
+            if (gameChangesList.workersWithStartedActions().containsKey(geologist)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(geologist);
 
                 assertEquals(workerAction, WorkerAction.INVESTIGATING);
 
@@ -1172,8 +1172,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(geologist)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(geologist);
+            if (gameChangesList.workersWithStartedActions().containsKey(geologist)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(geologist);
 
                 assertEquals(workerAction, WorkerAction.INVESTIGATING);
 
@@ -1191,7 +1191,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(geologist));
+            assertFalse(gameChangesList.workersWithStartedActions().containsKey(geologist));
         }
     }
 
@@ -1268,8 +1268,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(farmer)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(farmer);
+            if (gameChangesList.workersWithStartedActions().containsKey(farmer)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(farmer);
 
                 assertEquals(workerAction, WorkerAction.HARVESTING);
 
@@ -1355,8 +1355,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the stonemason started picking the stone */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(farmer)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(farmer);
+            if (gameChangesList.workersWithStartedActions().containsKey(farmer)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(farmer);
 
                 assertEquals(workerAction, WorkerAction.HARVESTING);
 
@@ -1374,7 +1374,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertEquals(gameChangesList.getWorkersWithStartedActions().size(), 0);
+            assertEquals(gameChangesList.workersWithStartedActions().size(), 0);
         }
     }
 
@@ -1452,8 +1452,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the builder hammered */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(builder0)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(builder0);
+            if (gameChangesList.workersWithStartedActions().containsKey(builder0)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(builder0);
 
                 assertEquals(workerAction, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
 
@@ -1540,8 +1540,8 @@ public class TestGameMonitoringOfWorkerActions {
         /* Verify that an event was sent when the builder hammered */
         boolean foundEvent = false;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getWorkersWithStartedActions().containsKey(builder0)) {
-                WorkerAction workerAction = gameChangesList.getWorkersWithStartedActions().get(builder0);
+            if (gameChangesList.workersWithStartedActions().containsKey(builder0)) {
+                WorkerAction workerAction = gameChangesList.workersWithStartedActions().get(builder0);
 
                 assertEquals(workerAction, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
 
@@ -1559,7 +1559,7 @@ public class TestGameMonitoringOfWorkerActions {
         Utils.fastForward(5, map);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
-            assertFalse(gameChangesList.getWorkersWithStartedActions().containsKey(builder0));
+            assertFalse(gameChangesList.workersWithStartedActions().containsKey(builder0));
         }
     }
 
@@ -2203,7 +2203,7 @@ public class TestGameMonitoringOfWorkerActions {
                 .getEvents()
                 .stream()
                 .noneMatch(gameChangesList -> gameChangesList
-                        .getWorkersWithStartedActions()
+                        .workersWithStartedActions()
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.HIT)));
@@ -2557,7 +2557,7 @@ public class TestGameMonitoringOfWorkerActions {
                 .getEvents()
                 .stream()
                 .noneMatch(gameChangesList -> gameChangesList
-                        .getWorkersWithStartedActions()
+                        .workersWithStartedActions()
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.JUMP_BACK)));
@@ -2930,7 +2930,7 @@ public class TestGameMonitoringOfWorkerActions {
                 .getEvents()
                 .stream()
                 .noneMatch(gameChangesList -> gameChangesList
-                        .getWorkersWithStartedActions()
+                        .workersWithStartedActions()
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.STAND_ASIDE)));
@@ -3135,7 +3135,7 @@ public class TestGameMonitoringOfWorkerActions {
                 .getEvents()
                 .stream()
                 .noneMatch(gameChangesList -> gameChangesList
-                        .getWorkersWithStartedActions()
+                        .workersWithStartedActions()
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.GET_HIT)));
@@ -3340,7 +3340,7 @@ public class TestGameMonitoringOfWorkerActions {
                 .getEvents()
                 .stream()
                 .noneMatch(gameChangesList -> gameChangesList
-                        .getWorkersWithStartedActions()
+                        .workersWithStartedActions()
                         .values()
                         .stream()
                         .anyMatch(action -> action == WorkerAction.GET_HIT)));

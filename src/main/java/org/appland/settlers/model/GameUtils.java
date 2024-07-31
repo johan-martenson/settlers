@@ -94,6 +94,14 @@ public class GameUtils {
         });
     }
 
+    public static boolean allCollectionsEmpty(Collection... collections) {
+        return Arrays.stream(collections).allMatch(Collection::isEmpty);
+    }
+
+    public static boolean allMapsEmpty(Map... maps) {
+        return Arrays.stream(maps).allMatch(Map::isEmpty);
+    }
+
     public enum AllocationType {
         WHEAT_ALLOCATION,
         COAL_ALLOCATION,

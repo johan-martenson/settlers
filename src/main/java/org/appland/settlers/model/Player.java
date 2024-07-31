@@ -50,6 +50,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
@@ -201,10 +203,6 @@ public class Player {
 
         /* Set default production of all tools */
         TOOLS.forEach(tool -> toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA));
-    }
-
-    public void setPlayerType(PlayerType playerType) {
-        this.playerType = playerType;
     }
 
     private void setTransportPriorityForMaterials() {
@@ -503,8 +501,14 @@ public class Player {
 
     public Map<Material, Integer> getInventory() {
         Map<Material, Integer> result = new EnumMap<>(Material.class);
-        int current;
 
+        buildings.stream()
+                .filter(building -> !building.isStorehouse())
+                .forEach(building -> Arrays.stream(values())
+                        .forEach(material -> result.put(
+                                material,
+                                result.getOrDefault(material, 0) + building.getAmount(material))));
+/*
         for (Building building : getBuildings()) {
             if (!building.isStorehouse()) {
                 continue;
@@ -515,13 +519,9 @@ public class Player {
                     result.put(material, 0);
                 }
 
-                current = result.get(material);
-
-                current = current + building.getAmount(material);
-
-                result.put(material, current);
+                result.put(material,result.getOrDefault(material, 0) + building.getAmount(material));
             }
-        }
+        }*/
 
         return result;
     }
@@ -828,18 +828,15 @@ public class Player {
 
         /* Don't send an event if there is no new information */
         // Missing discoveredDeadTrees, newWorkers
-        if (newFlags.isEmpty() && removedFlags.isEmpty() && newBuildings.isEmpty() &&
-            newRoads.isEmpty() && removedRoads.isEmpty() && removedWorkers.isEmpty() &&
-            changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
-            removedTrees.isEmpty() && removedStones.isEmpty() && newSigns.isEmpty() &&
-            removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
-            newDiscoveredLand.isEmpty() && addedBorder.isEmpty() && removedBorder.isEmpty() &&
-            workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
-            newMessages.isEmpty() && promotedRoads.isEmpty() && changedFlags.isEmpty() &&
-            removedDeadTrees.isEmpty() && harvestedCrops.isEmpty() && newShips.isEmpty() &&
-            finishedShips.isEmpty() && shipsWithNewTargets.isEmpty() && workersWithStartedActions.isEmpty() &&
-            removedDecorations.isEmpty() && newDecorations.isEmpty() && upgradedBuildings.isEmpty() &&
-            changedAvailableConstruction.isEmpty() && !transportPriorityChanged) {
+        if (GameUtils.allCollectionsEmpty(newFlags, removedFlags, newBuildings, newRoads, removedRoads, removedWorkers,
+                changedBuildings, removedBuildings, newTrees, removedTrees, removedStones, newSigns,
+                removedSigns, newCrops, removedCrops, newDiscoveredLand, addedBorder, removedBorder,
+                workersWithNewTargets, changedBorders, newStones, newMessages, promotedRoads, changedFlags,
+                removedDeadTrees, harvestedCrops, newShips,
+                finishedShips, shipsWithNewTargets,
+                removedDecorations, upgradedBuildings, changedAvailableConstruction) &&
+            GameUtils.allMapsEmpty(workersWithStartedActions, newDecorations) &&
+            !transportPriorityChanged) {
             return;
         }
 
@@ -851,238 +848,172 @@ public class Player {
 
         /* If the player has discovered new land - find out what is on that land */
         if (!newDiscoveredLand.isEmpty()) {
-            for (Point point : newDiscoveredLand) {
+
+            // Find out what's on the newly discovered land
+            newDiscoveredLand.forEach(point -> {
                 MapPoint mapPoint = map.getMapPoint(point);
 
+                // Collect information based on mapPoint properties
                 if (mapPoint.isDeadTree()) {
                     discoveredDeadTrees.add(point);
                 }
-
                 if (mapPoint.isTree()) {
                     newTrees.add(mapPoint.getTree());
                 }
-
                 if (mapPoint.isStone()) {
                     newStones.add(mapPoint.getStone());
                 }
-
                 if (mapPoint.isFlag()) {
                     newFlags.add(mapPoint.getFlag());
                 }
-
                 if (mapPoint.isBuilding()) {
                     newBuildings.add(mapPoint.getBuilding());
                 }
-
                 if (mapPoint.isRoad()) {
                     newRoads.addAll(mapPoint.getConnectedRoads());
                 }
-
                 if (mapPoint.isSign()) {
                     newSigns.add(mapPoint.getSign());
                 }
-
                 if (mapPoint.isCrop()) {
                     newCrops.add(mapPoint.getCrop());
                 }
-
                 if (mapPoint.isDecoration()) {
                     newDecorations.put(point, mapPoint.getDecoration());
                 }
-            }
+            });
 
-            /* Find any discovered border for other players */
-            for (Player player : map.getPlayers()) {
-                if (player.equals(this)) {
-                    continue;
-                }
+            // Find discovered borders for other players
+            map.getPlayers().stream()
+                    .filter(player -> !player.equals(this))
+                    .forEach(player -> {
+                        Set<Point> borderForPlayer = player.getBorderPoints();
+                        List<Point> discoveredBorder = newDiscoveredLand.stream()
+                                .filter(borderForPlayer::contains)
+                                .collect(Collectors.toList());
 
-                Set<Point> borderForPlayer = player.getBorderPoints();
-                List<Point> discoveredBorder = new ArrayList<>();
+                        if (!discoveredBorder.isEmpty()) {
+                            changedBorders.add(new BorderChange(player, discoveredBorder, new ArrayList<>()));
+                        }
+                    });
 
-                for (Point point : newDiscoveredLand) {
-                    if (borderForPlayer.contains(point)) {
-                        discoveredBorder.add(point);
-                    }
-                }
-
-                if (discoveredBorder.isEmpty()) {
-                    continue;
-                }
-
-                changedBorders.add(new BorderChange(player, discoveredBorder, new ArrayList<>()));
-            }
-
-            /* Find any discovered workers */
-            for (Worker worker : map.getWorkers()) {
-                if (worker.getPlayer().equals(this)) {
-                    continue;
-                }
-
-                for (Point point : newDiscoveredLand) {
-                    if (worker.getPosition().equals(point)) {
-                        newWorkers.add(worker);
-                    }
-                }
-            }
+            // Find discovered workers
+            map.getWorkers().stream()
+                    .filter(worker -> !worker.getPlayer().equals(this))
+                    .forEach(worker -> {
+                        newDiscoveredLand.stream()
+                                .filter(point -> worker.getPosition().equals(point))
+                                .forEach(point -> newWorkers.add(worker));
+                    });
         }
 
-        /* Handle any changes in available construction */
-        for (Flag newFlag : newFlags) {
-            addChangedAvailableConstructionForFlag(newFlag);
-        }
+        // Handle changes in available construction
 
-        for (Flag removedFlag : removedFlags) {
-            addChangedAvailableConstructionForFlag(removedFlag);
-        }
+        // New and removed flags change what construction is possible
+        Stream.of(newFlags, removedFlags)
+                .flatMap(Collection::stream)
+                .forEach(this::addChangedAvailableConstructionForFlag);
 
-        for (Tree newTree : newTrees) {
-            addChangedAvailableConstructionForTree(newTree);
-        }
+        // New and removed trees change what construction is possible
+        Stream.of(newTrees, removedTrees)
+                .flatMap(Collection::stream)
+                .forEach(this::addChangedAvailableConstructionForTree);
 
-        for (Tree removedTree : removedTrees) {
-            addChangedAvailableConstructionForTree(removedTree);
-        }
-
-        for (Building newBuilding : newBuildings) {
-            addChangedAvailableConstructionForSmallBuilding(newBuilding);
-
-            /* Handle medium building */
-            if (newBuilding.getSize() == Size.MEDIUM) {
-                addChangedAvailableConstructionForMediumBuilding(newBuilding);
-            }
-
-            /* Handle large building
-            Ref: TestPlacement: testAvailableConstructionAroundLargeHouse
-             - left: none
-             - up-left: none
-             - up-right: none
-             - right: none
-             - down-right: none (is the flag)
-             - down-left: none
-
-             - left-down-left: medium building | flag
-             - left-left: medium building | flag
-             - left-up-left: flag
-             - up-left-up-left: flag
-             - up: flag
-             - up-right-up-right: flag
-             - up-right-right: small house | flag
-             - right-right: small house | flag
-             - right-down-right: ?
-            */
-            if (newBuilding.getSize() == Size.LARGE) {
-                addChangedAvailableConstructionForLargeBuilding(newBuilding);
-            }
-        }
-
-        // TODO: this looks buggy - in all cases the method for small buildings is called
+        // A building that's destroyed frees up new space for available construction
         changedBuildings.stream()
                 .filter(Building::isDestroyed)
                 .forEach(this::addChangedAvailableConstructionForSmallBuilding);
 
-        for (Building removedBuilding : removedBuildings) {
-            addChangedAvailableConstructionForSmallBuilding(removedBuilding);
+        // Handle new and removed buildings together - both cause a change to available construction for the same points
+        Stream.of(newBuildings, removedBuildings)
+                .flatMap(Collection::stream)
+                .forEach(building -> {
+                    addChangedAvailableConstructionForSmallBuilding(building);
 
-            if (removedBuilding.getSize() == Size.MEDIUM) {
-                addChangedAvailableConstructionForMediumBuilding(removedBuilding);
-            }
+                    if (building.getSize() == Size.MEDIUM) {
+                        addChangedAvailableConstructionForMediumBuilding(building);
+                    }
 
-            if (removedBuilding.getSize() == Size.LARGE) {
-                addChangedAvailableConstructionForLargeBuilding(removedBuilding);
-            }
-        }
+                    if (building.getSize() == Size.LARGE) {
+                        addChangedAvailableConstructionForLargeBuilding(building);
+                    }
+                });
 
-        for (Road road : newRoads) {
-            /*
-             - Each endpoint is now a flag
-             - Cannot place anything on the points on the road next to the flags
-             - All other points can have flags (if nothing else prevents it)
+        // Update available construction for new roads
+        newRoads.stream()
+                .flatMap(road -> road.getWayPoints().stream())
+                .forEach(changedAvailableConstruction::add);
 
-            TODO: verify that no other possible construction is affected. What happens with these?
-
-             /       \       \      /            __
-            /         \      /      \     __/      \
-
-             */
-            changedAvailableConstruction.addAll(road.getWayPoints());
-        }
-
+        // Update available construction for removed roads
         // TODO: also consider points up-left. Previously they couldn't have houses because of the flag being blocked
-        for (Road road : removedRoads) {
-            changedAvailableConstruction.addAll(road.getWayPoints());
-        }
+        removedRoads.stream()
+                .flatMap(road -> road.getWayPoints().stream())
+                .forEach(changedAvailableConstruction::add);
 
-        /*
-        TODO: Check that it's really only the point of the crop that is affected
-         */
-        for (Crop crop : newCrops) {
-            addChangedAvailableConstructionForCrop(crop);
-        }
+        // Update available construction for new and removed crops
+        // TODO: Check that it's really only the point of the crop that is affected
+        // TODO: Check that there is no change in available construction between different crop states, e.g.
+        //       place flag on expired crop
+        Stream.of(newCrops, removedCrops)
+                .flatMap(Collection::stream)
+                .forEach(this::addChangedAvailableConstructionForCrop);
 
-        for (Crop crop : removedCrops) {
-            addChangedAvailableConstructionForCrop(crop);
-        }
-
-        for (Stone stone : removedStones) {
-            addChangedAvailableConstructionForStone(stone);
-        }
+        // Update available construction when stones have been removed
+        removedStones.forEach(this::addChangedAvailableConstructionForStone);
 
         /* Add changed available construction if the border has been extended */
         if (!addedBorder.isEmpty()) {
+
             // Report changed available construction because of the border change
             changedAvailableConstruction.addAll(newOwnedLand);
             changedAvailableConstruction.addAll(newLostLand);
 
             // It's now possible to build on point up-left from previous border points as the flag now has space.
-            removedBorder.forEach(removedBorderPoint -> {
-                var pointUpLeft = removedBorderPoint.upLeft();
-
-                if (!newOwnedLand.contains(pointUpLeft)) {
-                    changedAvailableConstruction.add(pointUpLeft);
-                }
-            });
+            removedBorder.stream()
+                    .map(Point::upLeft)
+                    .filter(pointUpLeft -> !newOwnedLand.contains(pointUpLeft))
+                    .forEach(changedAvailableConstruction::add);
         }
 
         /* Create the event message */
         GameChangesList gameChangesToReport = new GameChangesList(time,
-                new ArrayList<>(workersWithNewTargets),
-                new ArrayList<>(newFlags),
-                new ArrayList<>(removedFlags),
-                new ArrayList<>(newBuildings),
-                new ArrayList<>(changedBuildings),
-                new ArrayList<>(removedBuildings),
-                new ArrayList<>(newRoads),
-                new ArrayList<>(removedRoads),
-                new ArrayList<>(removedWorkers),
-                new ArrayList<>(newTrees),
-                new ArrayList<>(removedTrees),
-                new ArrayList<>(removedStones),
-                new ArrayList<>(newSigns),
-                new ArrayList<>(removedSigns),
-                new ArrayList<>(newCrops),
-                new ArrayList<>(removedCrops),
-                new ArrayList<>(newDiscoveredLand),
-                new ArrayList<>(changedBorders),
-                new ArrayList<>(newStones),
-                new ArrayList<>(newWorkers),
-                new ArrayList<>(changedAvailableConstruction),
-                new ArrayList<>(newMessages),
-                new ArrayList<>(promotedRoads),
-                new ArrayList<>(changedFlags),
-                new ArrayList<>(removedDeadTrees),
-                new ArrayList<>(discoveredDeadTrees),
-                new ArrayList<>(harvestedCrops),
-                new ArrayList<>(newShips),
-                new ArrayList<>(finishedShips),
-                new ArrayList<>(shipsWithNewTargets),
-                new HashMap<>(workersWithStartedActions),
-                new ArrayList<>(removedDecorations),
+                workersWithNewTargets,
+                newFlags,
+                removedFlags,
+                newBuildings,
+                changedBuildings,
+                removedBuildings,
+                newRoads,
+                removedRoads,
+                removedWorkers,
+                newTrees,
+                removedTrees,
+                removedStones,
+                newSigns,
+                removedSigns,
+                newCrops,
+                removedCrops,
+                newDiscoveredLand,
+                changedBorders,
+                newStones,
+                newWorkers,
+                changedAvailableConstruction,
+                newMessages,
+                promotedRoads,
+                changedFlags,
+                removedDeadTrees,
+                discoveredDeadTrees,
+                harvestedCrops,
+                newShips,
+                finishedShips,
+                shipsWithNewTargets,
+                workersWithStartedActions,
+                removedDecorations,
                 newDecorations,
-                new ArrayList<>(upgradedBuildings),
-                new ArrayList<>(removedMessages),
-                new ArrayList<>(changedStones),
-                new ArrayList<>(newFallingTrees),
+                upgradedBuildings,
+                removedMessages,
+                changedStones,
+                newFallingTrees,
                 transportPriorityChanged);
 
         /* Send the event to all monitors */

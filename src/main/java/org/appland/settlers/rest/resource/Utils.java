@@ -971,31 +971,31 @@ class Utils {
     public JSONObject gameMonitoringEventsToJson(GameChangesList gameChangesList, Player player) throws InvalidUserActionException {
         JSONObject jsonMonitoringEvents = new JSONObject();
 
-        jsonMonitoringEvents.put("time", gameChangesList.getTime());
+        jsonMonitoringEvents.put("time", gameChangesList.time());
 
-        Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.getChangedBuildings());
+        Set<Building> allChangedBuildings = new HashSet<>(gameChangesList.changedBuildings());
 
-        if (gameChangesList.isTransportPriorityChanged()) {
+        if (gameChangesList.transportPriorityChanged()) {
             jsonMonitoringEvents.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
         }
 
-        if (!gameChangesList.getNewFallingTrees().isEmpty()) {
-            jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.getNewFallingTrees()));
+        if (!gameChangesList.newFallingTrees().isEmpty()) {
+            jsonMonitoringEvents.put("newFallingTrees", treesToJson(gameChangesList.newFallingTrees()));
         }
 
-        if (!gameChangesList.getPromotedRoads().isEmpty()) {
-            jsonMonitoringEvents.put("changedRoads", roadsToJson(gameChangesList.getPromotedRoads()));
+        if (!gameChangesList.promotedRoads().isEmpty()) {
+            jsonMonitoringEvents.put("changedRoads", roadsToJson(gameChangesList.promotedRoads()));
         }
 
-        if (!gameChangesList.getNewStones().isEmpty()) {
-            jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.getNewStones()));
+        if (!gameChangesList.newStones().isEmpty()) {
+            jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.newStones()));
         }
 
-        if (!gameChangesList.getChangedStones().isEmpty()) {
-            jsonMonitoringEvents.put("changedStones", newStonesToJson(gameChangesList.getChangedStones()));
+        if (!gameChangesList.changedStones().isEmpty()) {
+            jsonMonitoringEvents.put("changedStones", newStonesToJson(gameChangesList.changedStones()));
         }
 
-        gameChangesList.getUpgradedBuildings().forEach(newAndOldBuilding -> {
+        gameChangesList.upgradedBuildings().forEach(newAndOldBuilding -> {
             // Move the id to the new building
             System.out.println("Old building: " + newAndOldBuilding.oldBuilding);
             System.out.println("Id: " + idManager.getId(newAndOldBuilding.oldBuilding));
@@ -1007,133 +1007,133 @@ class Utils {
             allChangedBuildings.add(newAndOldBuilding.newBuilding);
         });
 
-        if (!gameChangesList.getWorkersWithNewTargets().isEmpty()) {
-            jsonMonitoringEvents.put("workersWithNewTargets", workersWithNewTargetsToJson(gameChangesList.getWorkersWithNewTargets()));
+        if (!gameChangesList.workersWithNewTargets().isEmpty()) {
+            jsonMonitoringEvents.put("workersWithNewTargets", workersWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
 
-            jsonMonitoringEvents.put("wildAnimalsWithNewTargets", wildAnimalsWithNewTargetsToJson(gameChangesList.getWorkersWithNewTargets()));
+            jsonMonitoringEvents.put("wildAnimalsWithNewTargets", wildAnimalsWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
 
-            jsonMonitoringEvents.put("shipsWithNewTargets", shipWithNewTargetsToJson(gameChangesList.getWorkersWithNewTargets()));
+            jsonMonitoringEvents.put("shipsWithNewTargets", shipWithNewTargetsToJson(gameChangesList.workersWithNewTargets()));
         }
 
-        if (!gameChangesList.getWorkersWithStartedActions().isEmpty()) {
-            jsonMonitoringEvents.put("workersWithStartedActions", workersAndActionsToJson(gameChangesList.getWorkersWithStartedActions()));
+        if (!gameChangesList.workersWithStartedActions().isEmpty()) {
+            jsonMonitoringEvents.put("workersWithStartedActions", workersAndActionsToJson(gameChangesList.workersWithStartedActions()));
         }
 
-        if (!gameChangesList.getNewShips().isEmpty()) {
-            jsonMonitoringEvents.put("newShips", shipsToJson(gameChangesList.getNewShips()));
+        if (!gameChangesList.newShips().isEmpty()) {
+            jsonMonitoringEvents.put("newShips", shipsToJson(gameChangesList.newShips()));
         }
 
-        if (!gameChangesList.getFinishedShips().isEmpty()) {
-            jsonMonitoringEvents.put("finishedShips", shipsToJson(gameChangesList.getFinishedShips()));
+        if (!gameChangesList.finishedShips().isEmpty()) {
+            jsonMonitoringEvents.put("finishedShips", shipsToJson(gameChangesList.finishedShips()));
         }
 
-        if (!gameChangesList.getNewBuildings().isEmpty()) {
-            jsonMonitoringEvents.put("newBuildings", newBuildingsToJson(gameChangesList.getNewBuildings(), player));
+        if (!gameChangesList.newBuildings().isEmpty()) {
+            jsonMonitoringEvents.put("newBuildings", newBuildingsToJson(gameChangesList.newBuildings(), player));
         }
 
-        if (!gameChangesList.getNewFlags().isEmpty()) {
-            jsonMonitoringEvents.put("newFlags", flagsToJson(gameChangesList.getNewFlags()));
+        if (!gameChangesList.newFlags().isEmpty()) {
+            jsonMonitoringEvents.put("newFlags", flagsToJson(gameChangesList.newFlags()));
         }
 
-        if (!gameChangesList.getNewRoads().isEmpty()) {
-            jsonMonitoringEvents.put("newRoads", roadsToJson(gameChangesList.getNewRoads()));
+        if (!gameChangesList.newRoads().isEmpty()) {
+            jsonMonitoringEvents.put("newRoads", roadsToJson(gameChangesList.newRoads()));
         }
 
-        if (!gameChangesList.getNewTrees().isEmpty()) {
-            jsonMonitoringEvents.put("newTrees", newTreesToJson(gameChangesList.getNewTrees()));
+        if (!gameChangesList.newTrees().isEmpty()) {
+            jsonMonitoringEvents.put("newTrees", newTreesToJson(gameChangesList.newTrees()));
         }
 
-        if (!gameChangesList.getDiscoveredDeadTrees().isEmpty()) {
-            jsonMonitoringEvents.put("discoveredTrees", pointsToJson(gameChangesList.getDiscoveredDeadTrees()));
+        if (!gameChangesList.discoveredDeadTrees().isEmpty()) {
+            jsonMonitoringEvents.put("discoveredTrees", pointsToJson(gameChangesList.discoveredDeadTrees()));
         }
 
-        if (!gameChangesList.getNewDiscoveredLand().isEmpty()) {
-            jsonMonitoringEvents.put("newDiscoveredLand", newDiscoveredLandToJson(gameChangesList.getNewDiscoveredLand()));
+        if (!gameChangesList.newDiscoveredLand().isEmpty()) {
+            jsonMonitoringEvents.put("newDiscoveredLand", newDiscoveredLandToJson(gameChangesList.newDiscoveredLand()));
         }
 
-        if (!gameChangesList.getNewCrops().isEmpty()) {
-            jsonMonitoringEvents.put("newCrops", newCropsToJson(gameChangesList.getNewCrops()));
+        if (!gameChangesList.newCrops().isEmpty()) {
+            jsonMonitoringEvents.put("newCrops", newCropsToJson(gameChangesList.newCrops()));
         }
 
-        if (!gameChangesList.getNewSigns().isEmpty()) {
-            jsonMonitoringEvents.put("newSigns", newSignsToJson(gameChangesList.getNewSigns()));
+        if (!gameChangesList.newSigns().isEmpty()) {
+            jsonMonitoringEvents.put("newSigns", newSignsToJson(gameChangesList.newSigns()));
         }
 
         if (!allChangedBuildings.isEmpty()) {
             jsonMonitoringEvents.put("changedBuildings", changedBuildingsToJson(allChangedBuildings, player));
         }
 
-        if (!gameChangesList.getChangedFlags().isEmpty()) {
-            jsonMonitoringEvents.put("changedFlags", flagsToJson(gameChangesList.getChangedFlags()));
+        if (!gameChangesList.changedFlags().isEmpty()) {
+            jsonMonitoringEvents.put("changedFlags", flagsToJson(gameChangesList.changedFlags()));
         }
 
-        if (!gameChangesList.getNewDecorations().isEmpty()) {
-            jsonMonitoringEvents.put("newDecorations", pointsAndDecorationsToJson(gameChangesList.getNewDecorations()));
+        if (!gameChangesList.newDecorations().isEmpty()) {
+            jsonMonitoringEvents.put("newDecorations", pointsAndDecorationsToJson(gameChangesList.newDecorations()));
         }
 
-        if (!gameChangesList.getRemovedDecorations().isEmpty()) {
-            jsonMonitoringEvents.put("removedDecorations", pointsToJson(gameChangesList.getRemovedDecorations()));
+        if (!gameChangesList.removedDecorations().isEmpty()) {
+            jsonMonitoringEvents.put("removedDecorations", pointsToJson(gameChangesList.removedDecorations()));
         }
 
-        if (!gameChangesList.getRemovedWorkers().isEmpty()) {
-            jsonMonitoringEvents.put("removedWorkers", removedWorkersToJson(gameChangesList.getRemovedWorkers()));
+        if (!gameChangesList.removedWorkers().isEmpty()) {
+            jsonMonitoringEvents.put("removedWorkers", removedWorkersToJson(gameChangesList.removedWorkers()));
 
-            jsonMonitoringEvents.put("removedWildAnimals", removedWildAnimalsToJson(gameChangesList.getRemovedWorkers()));
+            jsonMonitoringEvents.put("removedWildAnimals", removedWildAnimalsToJson(gameChangesList.removedWorkers()));
         }
 
-        if (!gameChangesList.getRemovedBuildings().isEmpty()) {
-            jsonMonitoringEvents.put("removedBuildings", removedBuildingsToJson(gameChangesList.getRemovedBuildings()));
+        if (!gameChangesList.removedBuildings().isEmpty()) {
+            jsonMonitoringEvents.put("removedBuildings", removedBuildingsToJson(gameChangesList.removedBuildings()));
         }
 
-        if (!gameChangesList.getRemovedFlags().isEmpty()){
-            jsonMonitoringEvents.put("removedFlags", removedFlagsToJson(gameChangesList.getRemovedFlags()));
+        if (!gameChangesList.removedFlags().isEmpty()){
+            jsonMonitoringEvents.put("removedFlags", removedFlagsToJson(gameChangesList.removedFlags()));
         }
 
-        if (!gameChangesList.getRemovedRoads().isEmpty()) {
-            jsonMonitoringEvents.put("removedRoads", removedRoadsToJson(gameChangesList.getRemovedRoads()));
+        if (!gameChangesList.removedRoads().isEmpty()) {
+            jsonMonitoringEvents.put("removedRoads", removedRoadsToJson(gameChangesList.removedRoads()));
         }
 
-        if (!gameChangesList.getRemovedTrees().isEmpty()) {
-            jsonMonitoringEvents.put("removedTrees", removedTreesToJson(gameChangesList.getRemovedTrees()));
+        if (!gameChangesList.removedTrees().isEmpty()) {
+            jsonMonitoringEvents.put("removedTrees", removedTreesToJson(gameChangesList.removedTrees()));
         }
 
-        if (!gameChangesList.getRemovedDeadTrees().isEmpty()) {
-            jsonMonitoringEvents.put("removedDeadTrees", pointsToJson(gameChangesList.getRemovedDeadTrees()));
+        if (!gameChangesList.removedDeadTrees().isEmpty()) {
+            jsonMonitoringEvents.put("removedDeadTrees", pointsToJson(gameChangesList.removedDeadTrees()));
         }
 
-        if (!gameChangesList.getChangedBorders().isEmpty()) {
-            jsonMonitoringEvents.put("changedBorders", borderChangesToJson(gameChangesList.getChangedBorders()));
+        if (!gameChangesList.changedBorders().isEmpty()) {
+            jsonMonitoringEvents.put("changedBorders", borderChangesToJson(gameChangesList.changedBorders()));
         }
 
-        if (!gameChangesList.getChangedAvailableConstruction().isEmpty()) {
+        if (!gameChangesList.changedAvailableConstruction().isEmpty()) {
             jsonMonitoringEvents.put(
                     "changedAvailableConstruction",
-                    availableConstructionChangesToJson(gameChangesList.getChangedAvailableConstruction(), player)
+                    availableConstructionChangesToJson(gameChangesList.changedAvailableConstruction(), player)
             );
         }
 
-        if (!gameChangesList.getRemovedCrops().isEmpty()) {
-            jsonMonitoringEvents.put("removedCrops", cropsToIdJson(gameChangesList.getRemovedCrops()));
+        if (!gameChangesList.removedCrops().isEmpty()) {
+            jsonMonitoringEvents.put("removedCrops", cropsToIdJson(gameChangesList.removedCrops()));
         }
 
-        if (!gameChangesList.getHarvestedCrops().isEmpty()) {
-            jsonMonitoringEvents.put("harvestedCrops", cropsToIdJson(gameChangesList.getHarvestedCrops()));
+        if (!gameChangesList.harvestedCrops().isEmpty()) {
+            jsonMonitoringEvents.put("harvestedCrops", cropsToIdJson(gameChangesList.harvestedCrops()));
         }
 
-        if (!gameChangesList.getRemovedSigns().isEmpty()) {
-            jsonMonitoringEvents.put("removedSigns", removedSignsToJson(gameChangesList.getRemovedSigns()));
+        if (!gameChangesList.removedSigns().isEmpty()) {
+            jsonMonitoringEvents.put("removedSigns", removedSignsToJson(gameChangesList.removedSigns()));
         }
 
-        if (!gameChangesList.getRemovedStones().isEmpty()) {
-            jsonMonitoringEvents.put("removedStones", removedStonesToJson(gameChangesList.getRemovedStones()));
+        if (!gameChangesList.removedStones().isEmpty()) {
+            jsonMonitoringEvents.put("removedStones", removedStonesToJson(gameChangesList.removedStones()));
         }
 
-        if (!gameChangesList.getNewGameMessages().isEmpty()) {
-            jsonMonitoringEvents.put("newMessages", messagesToJson(gameChangesList.getNewGameMessages()));
+        if (!gameChangesList.newMessages().isEmpty()) {
+            jsonMonitoringEvents.put("newMessages", messagesToJson(gameChangesList.newMessages()));
         }
 
-        if (!gameChangesList.getRemovedMessages().isEmpty()) {
-            jsonMonitoringEvents.put("removedMessages", removedMessagesToJson(gameChangesList.getRemovedMessages()));
+        if (!gameChangesList.removedMessages().isEmpty()) {
+            jsonMonitoringEvents.put("removedMessages", removedMessagesToJson(gameChangesList.removedMessages()));
         }
 
         return jsonMonitoringEvents;

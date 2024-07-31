@@ -83,7 +83,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+            assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
 
         /* Request detailed monitoring of the headquarters */
@@ -106,7 +106,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(
                 monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(headquarter0))
+                        .filter(gcl -> gcl.changedBuildings().contains(headquarter0))
                         .count(),
                 1);
 
@@ -128,7 +128,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(
                 monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(headquarter0))
+                        .filter(gcl -> gcl.changedBuildings().contains(headquarter0))
                         .count(),
                 0);
 
@@ -185,7 +185,7 @@ public class TestGameMonitoringOfBuilding {
         }
 
         assertTrue(monitor.getEvents().stream()
-                .mapToInt(gcl -> gcl.getChangedBuildings().contains(headquarter0) ? 1 : 0)
+                .mapToInt(gcl -> gcl.changedBuildings().contains(headquarter0) ? 1 : 0)
                 .sum() > 0);
     }
 
@@ -227,7 +227,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(farm0));
+            assertFalse(gameChangesList.changedBuildings().contains(farm0));
         }
 
         /* Request detailed monitoring of the headquarters */
@@ -253,7 +253,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(
                 monitor.getEvents()
                         .stream()
-                        .filter(gameChangesList -> gameChangesList.getChangedBuildings().contains(farm0)).count(),
+                        .filter(gameChangesList -> gameChangesList.changedBuildings().contains(farm0)).count(),
                 1
         );
     }
@@ -294,7 +294,7 @@ public class TestGameMonitoringOfBuilding {
                 trackedProgress = farm0.getConstructionProgress();
 
                 if (farm0.getConstructionProgress() % 10 == 0) {
-                    assertTrue(monitor.getLastEvent().getChangedBuildings().contains(farm0));
+                    assertTrue(monitor.getLastEvent().changedBuildings().contains(farm0));
 
                     monitor.clearEvents();
                 }
@@ -340,7 +340,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
+            assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
 
         /* Request detailed monitoring of the headquarters */
@@ -360,11 +360,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(headquarter0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(headquarter0));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -384,7 +384,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+            assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
 
@@ -424,7 +424,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getAmount(PRIVATE), 5);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
+            assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
 
         /* Request detailed monitoring of the headquarters */
@@ -444,11 +444,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(headquarter0));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(headquarter0));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -468,7 +468,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(headquarter0.getAmount(PRIVATE), 9);
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+            assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
 
@@ -516,11 +516,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(watchTower));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(watchTower));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -567,11 +567,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(watchTower));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(watchTower));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -618,11 +618,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(watchTower));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(watchTower));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -666,11 +666,11 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChangesList)) {
-            if (!gameChangesList.getChangedBuildings().isEmpty()) {
+            if (!gameChangesList.changedBuildings().isEmpty()) {
                 found++;
 
-                assertTrue(gameChangesList.getChangedBuildings().contains(watchTower));
-                assertEquals(gameChangesList.getChangedBuildings().size(), 1);
+                assertTrue(gameChangesList.changedBuildings().contains(watchTower));
+                assertEquals(gameChangesList.changedBuildings().size(), 1);
             }
         }
 
@@ -712,7 +712,7 @@ public class TestGameMonitoringOfBuilding {
         sawmill.resumeProduction();
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill));
+            assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
 
         /* Disable production */
@@ -730,7 +730,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
-            if (gameChangesList.getChangedBuildings().contains(sawmill)) {
+            if (gameChangesList.changedBuildings().contains(sawmill)) {
                 found++;
             }
         }
@@ -749,7 +749,7 @@ public class TestGameMonitoringOfBuilding {
         sawmill.resumeProduction();
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill));
+            assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
     }
 
@@ -785,7 +785,7 @@ public class TestGameMonitoringOfBuilding {
         sawmill.stopProduction();
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill));
+            assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
 
         /* Enable production */
@@ -803,7 +803,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
-            if (gameChangesList.getChangedBuildings().contains(sawmill)) {
+            if (gameChangesList.changedBuildings().contains(sawmill)) {
                 found++;
             }
         }
@@ -822,7 +822,7 @@ public class TestGameMonitoringOfBuilding {
         sawmill.resumeProduction();
 
         for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastGameChanges)) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill));
+            assertFalse(gameChangesList.changedBuildings().contains(sawmill));
         }
     }
 
@@ -897,7 +897,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(monitor.getEvents()
                         .stream()
-                        .filter(gameChangesList -> gameChangesList.getChangedBuildings().contains(sawmill0))
+                        .filter(gameChangesList -> gameChangesList.changedBuildings().contains(sawmill0))
                         .count(),
                 1);
 
@@ -917,7 +917,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 3);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(sawmill0));
+            assertFalse(gameChangesList.changedBuildings().contains(sawmill0));
         }
     }
 
@@ -981,7 +981,7 @@ public class TestGameMonitoringOfBuilding {
         Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill0.getWorker(), PLANK);
 
         var count = monitor.getEvents().stream()
-                .filter(gcl -> gcl.getChangedBuildings().contains(sawmill0))
+                .filter(gcl -> gcl.changedBuildings().contains(sawmill0))
                 .count();
 
         assertTrue(count > 0);
@@ -990,7 +990,7 @@ public class TestGameMonitoringOfBuilding {
         map.stepTime();
 
         assertEquals(count, monitor.getEvents().stream()
-                .filter(gcl -> gcl.getChangedBuildings().contains(sawmill0))
+                .filter(gcl -> gcl.changedBuildings().contains(sawmill0))
                 .count(), count);
     }
 
@@ -1053,7 +1053,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(
                 monitor.getEvents().stream()
-                        .mapToInt(gameChangesList -> gameChangesList.getChangedBuildings().contains(watchTower) ? 1 : 0)
+                        .mapToInt(gameChangesList -> gameChangesList.changedBuildings().contains(watchTower) ? 1 : 0)
                         .sum(), 1);
     }
 
@@ -1127,7 +1127,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(quarry)) {
+            if (gameChangesList.changedBuildings().contains(quarry)) {
                 found++;
             }
         }
@@ -1192,7 +1192,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(guardHouse)) {
+            if (gameChangesList.changedBuildings().contains(guardHouse)) {
                 found++;
             }
         }
@@ -1209,13 +1209,13 @@ public class TestGameMonitoringOfBuilding {
         found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
 
-            assertTrue(gameChangesList.getNewBuildings().isEmpty());
-            assertTrue(gameChangesList.getRemovedBuildings().isEmpty());
+            assertTrue(gameChangesList.newBuildings().isEmpty());
+            assertTrue(gameChangesList.removedBuildings().isEmpty());
 
-            if (!gameChangesList.getUpgradedBuildings().isEmpty()) {
-                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.getUpgradedBuildings().stream().findFirst();
+            if (!gameChangesList.upgradedBuildings().isEmpty()) {
+                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
 
-                assertTrue(gameChangesList.getChangedBuildings().isEmpty());
+                assertTrue(gameChangesList.changedBuildings().isEmpty());
                 assertTrue(newAndOldBuildingOptional.isPresent());
                 assertEquals(newAndOldBuildingOptional.get().oldBuilding, guardHouse);
                 assertEquals(newAndOldBuildingOptional.get().newBuilding.getPosition(), guardHouse.getPosition());
@@ -1243,11 +1243,11 @@ public class TestGameMonitoringOfBuilding {
 
         found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getNewBuildings().isEmpty());
-            assertTrue(gameChangesList.getRemovedBuildings().isEmpty());
+            assertTrue(gameChangesList.newBuildings().isEmpty());
+            assertTrue(gameChangesList.removedBuildings().isEmpty());
 
-            if (!gameChangesList.getUpgradedBuildings().isEmpty()) {
-                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.getUpgradedBuildings().stream().findFirst();
+            if (!gameChangesList.upgradedBuildings().isEmpty()) {
+                Optional<GameChangesList.NewAndOldBuilding> newAndOldBuildingOptional = gameChangesList.upgradedBuildings().stream().findFirst();
 
                 assertTrue(newAndOldBuildingOptional.isPresent());
                 assertEquals(newAndOldBuildingOptional.get().oldBuilding, watchTower);
@@ -1296,7 +1296,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(headquarter0)) {
+            if (gameChangesList.changedBuildings().contains(headquarter0)) {
                 found++;
             }
         }
@@ -1314,7 +1314,7 @@ public class TestGameMonitoringOfBuilding {
         map.stepTime();
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter0));
+            assertFalse(gameChangesList.changedBuildings().contains(headquarter0));
         }
     }
 
@@ -1371,7 +1371,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+            if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
         }
@@ -1393,7 +1393,7 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 2);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertFalse(gameChangesList.getChangedBuildings().contains(headquarter1));
+            assertFalse(gameChangesList.changedBuildings().contains(headquarter1));
         }
     }
 
@@ -1455,7 +1455,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+            if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
         }
@@ -1526,7 +1526,7 @@ public class TestGameMonitoringOfBuilding {
 
         int found = 0;
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            if (gameChangesList.getChangedBuildings().contains(headquarter1)) {
+            if (gameChangesList.changedBuildings().contains(headquarter1)) {
                 found++;
             }
         }
@@ -1589,21 +1589,21 @@ public class TestGameMonitoringOfBuilding {
             }
 
             assertTrue(woodcutterHut.isDoorClosed());
-            assertTrue(monitor.getEvents().stream().noneMatch(gcl -> gcl.getChangedBuildings().contains(woodcutterHut)));
+            assertTrue(monitor.getEvents().stream().noneMatch(gcl -> gcl.changedBuildings().contains(woodcutterHut)));
 
             map.stepTime();
         }
 
         assertFalse(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1616,14 +1616,14 @@ public class TestGameMonitoringOfBuilding {
                 break;
             }
 
-            assertFalse(monitor.getEvents().stream().anyMatch(gcl -> gcl.getChangedBuildings().contains(woodcutterHut)));
+            assertFalse(monitor.getEvents().stream().anyMatch(gcl -> gcl.changedBuildings().contains(woodcutterHut)));
 
             map.stepTime();
         }
 
         assertTrue(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1631,7 +1631,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertTrue(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1654,7 +1654,7 @@ public class TestGameMonitoringOfBuilding {
         assertFalse(woodcutterHut.getWorker().isInsideBuilding());
         assertFalse(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1662,7 +1662,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertFalse(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1673,7 +1673,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertTrue(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
 
@@ -1681,7 +1681,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertTrue(woodcutterHut.isDoorClosed());
         assertEquals(monitor.getEvents().stream()
-                        .filter(gcl -> gcl.getChangedBuildings().contains(woodcutterHut))
+                        .filter(gcl -> gcl.changedBuildings().contains(woodcutterHut))
                         .count(),
                 1);
     }
@@ -1743,7 +1743,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(headquarter0.getAmount(PLANK), 1);
         assertNotEquals(monitor.getEvents().size(), 0);
-        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+        assertTrue(monitor.getLastEvent().changedBuildings().contains(headquarter0));
     }
 
     @Test
@@ -1800,7 +1800,7 @@ public class TestGameMonitoringOfBuilding {
 
         assertEquals(headquarter0.getAmount(STONEMASON), 1);
         assertNotEquals(monitor.getEvents().size(), 0);
-        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+        assertTrue(monitor.getLastEvent().changedBuildings().contains(headquarter0));
     }
 
     @Test
@@ -1861,7 +1861,7 @@ public class TestGameMonitoringOfBuilding {
             assertEquals(map.getWorkers().stream()
                     .filter(Worker::isSoldier)
                     .count(), i + 1);
-            assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+            assertTrue(monitor.getLastEvent().changedBuildings().contains(headquarter0));
         }
     }
 
@@ -1899,6 +1899,6 @@ public class TestGameMonitoringOfBuilding {
 
         Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
-        assertTrue(monitor.getLastEvent().getChangedBuildings().contains(headquarter0));
+        assertTrue(monitor.getLastEvent().changedBuildings().contains(headquarter0));
     }
 }
