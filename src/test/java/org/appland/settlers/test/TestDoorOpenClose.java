@@ -351,8 +351,6 @@ public class TestDoorOpenClose {
 
         for (int i = 0; i < 2000; i++) {
             if (courier.getPosition().equals(headquarter0.getFlag().getPosition())) {
-                System.out.println(courier);
-
                 break;
             }
 
@@ -361,6 +359,8 @@ public class TestDoorOpenClose {
             map.stepTime();
         }
 
+        assertTrue(courier.isExactlyAtPoint());
+        assertEquals(courier.getPosition(), headquarter0.getFlag().getPosition());
         assertTrue(headquarter0.isDoorClosed());
     }
 }

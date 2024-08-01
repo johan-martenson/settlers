@@ -1073,59 +1073,53 @@ public class Building implements EndPoint {
     }
 
     private int getLackingAmountWithProjected(Material material) {
+        return switch (state) {
+            case State.UNDER_CONSTRUCTION, State.PLANNED -> {
+                if (!materialsToBuildHouse.containsKey(material)) {
+                    yield 0;
+                }
 
-        /* Handle buildings that are under construction */
-        if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
-
-            if (!materialsToBuildHouse.containsKey(material)) {
-                return 0;
-            }
-
-            int total = materialsToBuildHouse.get(material);
-            int promised = promisedDeliveries.getOrDefault(material, 0);
-            int received = receivedMaterial.getOrDefault(material, 0);
-
-            return total - promised - received;
-
-        /* Handle military buildings that are being upgraded */
-        } else if (isMilitaryBuilding() && isReady()) {
-
-            /* Fully built military buildings can only need planks, stones, and coins */
-            if (material != PLANK && material != STONE && material != COIN) {
-                return 0;
-            }
-
-            int total = 0;
-
-            /* Handle coins for promotions */
-            if (material == COIN && enablePromotions) {
-                total = maxCoins;
-
-            /* Handle planks and stones for upgrades */
-            } else if (isUpgrading()){
-                total = totalAmountNeededForUpgrade.getOrDefault(material, 0);
-            }
-
-            if (total > 0) {
-
+                int total = materialsToBuildHouse.get(material);
                 int promised = promisedDeliveries.getOrDefault(material, 0);
                 int received = receivedMaterial.getOrDefault(material, 0);
 
-                return total - promised - received;
+                yield total - promised - received;
             }
+            case State.UNOCCUPIED, State.OCCUPIED -> {
+                if (isMilitaryBuilding()) {
+                    if (material != PLANK && material != STONE && material != COIN) {
+                        yield 0;
+                    }
 
-            return 0;
+                    int total = 0;
 
-        /* Handle buildings that are ready and are not military buildings */
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            int total = totalAmountNeededForProduction.getOrDefault(material, 0);
-            int promised = promisedDeliveries.getOrDefault(material, 0);
-            int received = receivedMaterial.getOrDefault(material, 0);
+                    /* Handle coins for promotions */
+                    if (material == COIN && enablePromotions) {
+                        total = maxCoins;
 
-            return total - promised - received;
-        }
+                        /* Handle planks and stones for upgrades */
+                    } else if (isUpgrading()) {
+                        total = totalAmountNeededForUpgrade.getOrDefault(material, 0);
+                    }
 
-        return 0;
+                    if (total > 0) {
+                        int promised = promisedDeliveries.getOrDefault(material, 0);
+                        int received = receivedMaterial.getOrDefault(material, 0);
+
+                        yield total - promised - received;
+                    }
+
+                    yield 0;
+                } else {
+                    int total = totalAmountNeededForProduction.getOrDefault(material, 0);
+                    int promised = promisedDeliveries.getOrDefault(material, 0);
+                    int received = receivedMaterial.getOrDefault(material, 0);
+
+                    yield total - promised - received;
+                }
+            }
+            default -> 0;
+        };
     }
 
     public void hitByCatapult(Catapult catapult) throws InvalidUserActionException {

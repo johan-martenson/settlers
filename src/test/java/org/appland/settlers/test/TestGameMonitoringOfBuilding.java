@@ -937,6 +937,8 @@ public class TestGameMonitoringOfBuilding {
         /* Remove all wood from the headquarters */
         Utils.adjustInventoryTo(headquarter0, WOOD, 0);
 
+        assertEquals(headquarter0.getAmount(WOOD), 0);
+
         /* Place sawmill, connect it to the headquarters, and construct it */
         Point point1 = new Point(9, 5);
         Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
@@ -955,8 +957,15 @@ public class TestGameMonitoringOfBuilding {
         /* Wait for the sawmill to get occupied */
         Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill0);
 
-        /* Wait until the worker stops carrying the cargo */
-        Utils.fastForwardUntilWorkerCarriesNoCargo(map, sawmill0.getWorker());
+        /* Wait for the sawmill to consume the cargo and produce a plank */
+        Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 0);
+
+        assertEquals(sawmill0.getAmount(WOOD), 0);
+
+        Utils.waitForFlagToGetStackedCargo(map, sawmill0.getFlag(), 1);
+
+        assertEquals(sawmill0.getFlag().getStackedCargo().size(), 1);
+        assertEquals(sawmill0.getFlag().getStackedCargo().getFirst().getMaterial(), PLANK);
 
         /* Wait for the sawmill to get a second piece of wood */
         Utils.adjustInventoryTo(headquarter0, WOOD, 1);
@@ -964,6 +973,8 @@ public class TestGameMonitoringOfBuilding {
         assertEquals(sawmill0.getAmount(WOOD), 0);
 
         Utils.waitForBuildingToGetAmountOfMaterial(sawmill0, WOOD, 1);
+
+        assertEquals(sawmill0.getAmount(WOOD), 1);
 
         /* Wait for the door to close again */
         assertFalse(sawmill0.isDoorClosed());

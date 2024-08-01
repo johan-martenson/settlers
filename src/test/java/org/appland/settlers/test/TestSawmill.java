@@ -665,8 +665,11 @@ public class TestSawmill {
         Point point4 = new Point(10, 4);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point4);
 
-        /* Deliver planks to the storehouse so it only needs one more plank */
+        /* Deliver planks to the storehouse, so it only needs one more plank */
         Utils.deliverCargos(storehouse, PLANK, 3);
+
+        assertTrue(storehouse.needsMaterial(PLANK));
+        assertEquals(storehouse.getAmount(PLANK), 3);
 
         /* Connect the storehouse to the headquarters */
         Road road2 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
@@ -695,9 +698,12 @@ public class TestSawmill {
         assertEquals(sawmill.getFlag().getStackedCargo().getFirst().getMaterial(), PLANK);
 
         /* Wait for the courier to pick up the cargo */
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), PLANK);
 
-        /* Verify that no stone is delivered from the headquarters */
+        assertEquals(road0.getCourier().getCargo().getMaterial(), PLANK);
+        assertEquals(road0.getCourier().getCargo().getTarget(), storehouse);
+
+        /* Verify that no plank is delivered from the headquarters */
         Utils.adjustInventoryTo(headquarter, PLANK, 1);
 
         assertEquals(storehouse.getCanHoldAmount(PLANK) - storehouse.getAmount(PLANK), 1);

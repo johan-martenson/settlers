@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.DecorationType;
@@ -17,21 +16,26 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import static java.lang.String.format;
 
 /**
  *
  * @author johan
  */
 public abstract class Worker {
-
     private enum State {
         WALKING_AND_EXACTLY_AT_POINT,
         WALKING_BETWEEN_POINTS,
@@ -46,20 +50,20 @@ public abstract class Worker {
 
     protected final Player player;
 
-    private final Countdown walkCountdown;
+    private final Countdown walkCountdown = new Countdown();
 
     final GameMap map;
 
-    private boolean     dead;
-    private List<Point> path;
-    private State       state;
+    private boolean     dead = false;
+    private List<Point> path = null;
+    private State       state = State.IDLE_OUTSIDE;
     private Cargo       carriedCargo;
-    private Building    targetBuilding;
-    private Point       position;
-    private Point       target;
-    private Building    home;
+    private Building    targetBuilding = null;
+    private Point       position = null;
+    private Point       target = null;
+    private Building    home = null;
 
-    protected Direction direction;
+    protected Direction direction = Direction.DOWN_RIGHT;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;
@@ -81,25 +85,17 @@ public abstract class Worker {
         }
 
         void nextProductivityCycle() {
-
-            /* Store the productivity measurement */
-            int productionMeasurementToBeReplaced = productiveTime[productionCycle];
+            int previousMeasurement = productiveTime[productionCycle];
             productiveTime[productionCycle] = currentProductivityMeasurement;
 
-            /* Create a monitoring event if the productivity changed */
-            if (productionMeasurementToBeReplaced != currentProductivityMeasurement && building != null) {
+            if (previousMeasurement != currentProductivityMeasurement && building != null) {
                 building.getPlayer().reportChangedBuilding(building);
             }
 
             currentProductivityMeasurement = 0;
             currentUnproductivityMeasurement = 0;
 
-            /* Sample the next production cycle */
-            productionCycle++;
-
-            if (productionCycle >= productiveTime.length) {
-                productionCycle = 0;
-            }
+            productionCycle = (productionCycle + 1) % productiveTime.length;
         }
 
         boolean isProductivityCycleReached() {
@@ -120,13 +116,7 @@ public abstract class Worker {
         }
 
         int getSumMeasured() {
-            int sum = 0;
-
-            for (int measurement : productiveTime) {
-                sum = sum + measurement;
-            }
-
-            return sum;
+            return Arrays.stream(productiveTime).sum();
         }
 
         int getNumberOfCycles() {
@@ -139,25 +129,11 @@ public abstract class Worker {
     }
 
     Worker(Player player, GameMap map) {
-        this.player    = player;
-        target         = null;
-        position       = null;
-        path           = null;
-        targetBuilding = null;
-        home           = null;
-        this.map       = map;
-
-        walkCountdown  = new Countdown();
-
-        state = State.IDLE_OUTSIDE;
-
-        dead = false;
-
-        direction = Direction.DOWN_RIGHT;
+        this.player = player;
+        this.map = map;
     }
 
     public void stepTime() throws InvalidUserActionException {
-
         Stats stats = map.getStats();
 
         String counterName = "Worker." + getClass().getSimpleName() + ".stepTime";
@@ -172,18 +148,16 @@ public abstract class Worker {
             case WALKING_AND_EXACTLY_AT_POINT -> {
                 /* Arrival at target is already handled. In this branch the worker is at a fixed point but not the target */
 
-                /* Start the next part of the road */
                 walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-                /* Keep track of what direction the worker is walking in */
                 Point next = path.getFirst();
 
                 if (position.x == next.x && position.y == next.y) {
-                    throw new RuntimeException("They are the same! I am " + this);
+                    throw new RuntimeException(format("They are the same! I am %s", this));
                 }
 
                 if (position.distance(next) > 2) {
-                    throw new RuntimeException("Too big distance! I am " + this);
+                    throw new RuntimeException(format("Too big distance! I am %s", this));
                 }
 
                 direction = GameUtils.getDirectionBetweenPoints(position, next);
@@ -199,7 +173,7 @@ public abstract class Worker {
                     /* Update the worker's position */
                     position = path.getFirst();
                     path.removeFirst();
-                    var upLeft = getPosition().upLeft();
+                    var upLeft = position.upLeft();
 
                     /* Update the cargo's position */
                     updateCargoPosition();
@@ -218,12 +192,10 @@ public abstract class Worker {
 
                     /* Open the door if the worker is about to go to a house */
                     } else if (upLeft.equals(target)) {
-                        if (target.equals(upLeft) && map.isBuildingAtPoint(upLeft)) {
-                            var house = map.getBuildingAtPoint(upLeft);
+                        var house = map.getBuildingAtPoint(upLeft);
 
-                            if (house.isReady()) {
-                                house.openDoor();
-                            }
+                        if (house != null && house.isReady()) {
+                            house.openDoor(20);
                         }
                     }
                 }
@@ -243,14 +215,12 @@ public abstract class Worker {
                     state = State.IDLE_HALF_WAY;
                 }
             }
-            case IDLE_INSIDE, IDLE_OUTSIDE, IDLE_HALF_WAY -> {
-                onIdle();
-            }
+            case IDLE_INSIDE, IDLE_OUTSIDE, IDLE_HALF_WAY -> onIdle();
         }
 
         duration.after("stepTime");
 
-        map.getStats().reportVariableValue(counterName, duration.getFullDuration());
+        stats.reportVariableValue(counterName, duration.getFullDuration());
     }
 
     @Override
@@ -258,23 +228,23 @@ public abstract class Worker {
         if (isTraveling()) {
             StringBuilder stringBuffer = new StringBuilder();
             if (isExactlyAtPoint()) {
-                stringBuffer.append("Worker at ").append(getPosition()).append(" traveling to ").append(target);
+                stringBuffer.append(format("Worker at %s traveling to %s", position, target));
             } else {
-                stringBuffer.append("Worker latest at ").append(getLastPoint()).append(" traveling to ").append(target);
+                stringBuffer.append(format("Worker latest at %s traveling to %s", getLastPoint(), target));
             }
 
             if (targetBuilding != null) {
-                stringBuffer.append(" for ").append(targetBuilding);
+                stringBuffer.append(format(" for %s", targetBuilding));
             }
 
             if (carriedCargo != null) {
-                stringBuffer.append(" carrying ").append(carriedCargo);
+                stringBuffer.append(format(" carrying %s", carriedCargo));
             }
 
             return stringBuffer.toString();
         }
 
-        return "Idle worker at " + getPosition();
+        return "Idle worker at %s".formatted(position);
     }
 
     void onArrival() throws InvalidUserActionException {
@@ -292,15 +262,15 @@ public abstract class Worker {
     private void handleArrival() {
 
         /* Just enter the storage and do nothing more */
-        if (targetBuilding != null && targetBuilding instanceof Storehouse storehouse && targetBuilding.isOccupied()) {
+        if (targetBuilding instanceof Storehouse storehouse && targetBuilding.isOccupied()) {
             storehouse.depositWorker(this);
 
             return;
         }
 
         /* If there is a building set as target, enter it */
-        if (getTargetBuilding() != null) {
-            Building building = getTargetBuilding();
+        else if (targetBuilding != null) {
+            Building building = targetBuilding;
 
             /* Enter the building unless it's a soldier or a builder.
              * Soldiers enter on their own and builders should not enter.
@@ -330,11 +300,7 @@ public abstract class Worker {
         try {
             onArrival();
         } catch (InvalidUserActionException e) {
-            InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("");
-
-            invalidGameLogicException.initCause(e);
-
-            throw invalidGameLogicException;
+            throw new InvalidGameLogicException(format("Error during arrival %s", e));
         }
     }
 
@@ -359,16 +325,14 @@ public abstract class Worker {
     }
 
     private int getSpeed() {
-        Walker walker = getClass().getAnnotation(Walker.class);
-
-        return walker.speed();
+        return getClass().getAnnotation(Walker.class).speed();
     }
 
     public void setTargetBuilding(Building building) {
         targetBuilding = building;
         setTarget(building.getPosition());
 
-        /* Let sub classes add logic */
+        // Let sub classes add logic
         onSetTargetBuilding(building);
     }
 
@@ -397,10 +361,12 @@ public abstract class Worker {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (state != State.WALKING_BETWEEN_POINTS &&
-            state != State.WALKING_HALF_WAY &&
-            state != State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
-            state != State.IDLE_HALF_WAY) {
+        if (!Set.of(
+                State.WALKING_BETWEEN_POINTS,
+                State.WALKING_HALF_WAY,
+                State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT,
+                State.IDLE_HALF_WAY
+        ).contains(state)) {
             return 100;
         }
 
@@ -408,8 +374,8 @@ public abstract class Worker {
     }
 
     public void enterBuilding(Building building) {
-        if (!getPosition().equals(building.getPosition())) {
-            throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
+        if (!position.equals(building.getPosition())) {
+            throw new InvalidGameLogicException(format("Can't enter %s when worker is at %s", building, position));
         }
 
         state = State.IDLE_INSIDE;
@@ -474,7 +440,7 @@ public abstract class Worker {
                 // Add the initial step of going from the home to the flag
                 path.addFirst(home.getPosition());
             } else {
-                path = map.findWayOffroad(getPosition(), via, point, null, offroadOption);
+                path = map.findWayOffroad(position, via, point, null, offroadOption);
             }
 
             // Remove the current position so the path only contains the steps to take
@@ -485,7 +451,7 @@ public abstract class Worker {
             direction = GameUtils.getDirection(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
-            getMap().reportWorkerWithNewTarget(this);
+            map.reportWorkerWithNewTarget(this);
         }
     }
 
@@ -508,7 +474,7 @@ public abstract class Worker {
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
             /* Report the new target so it can be monitored */
-            getMap().reportWorkerWithNewTarget(this);
+            map.reportWorkerWithNewTarget(this);
         }
     }
 
@@ -532,7 +498,7 @@ public abstract class Worker {
             direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
-            getMap().reportWorkerWithNewTarget(this);
+            map.reportWorkerWithNewTarget(this);
         }
     }
 
@@ -562,12 +528,22 @@ public abstract class Worker {
             }
         }
 
+        var upLeft = position.upLeft();
+
+        if (point.equals(upLeft)) {
+            var house = map.getBuildingAtPoint(upLeft);
+
+            if (house != null && house.isReady()) {
+                house.openDoor();
+            }
+        }
+
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;
 
             handleArrival();
         } else {
-            Point start = getPosition();
+            Point start = position;
 
             if (via != null) {
                 path = map.findWayWithExistingRoads(start, target, via);
@@ -587,7 +563,7 @@ public abstract class Worker {
             direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
 
             /* Report the new target so it can be monitored */
-            getMap().reportWorkerWithNewTarget(this);
+            map.reportWorkerWithNewTarget(this);
         }
     }
 
@@ -598,7 +574,7 @@ public abstract class Worker {
         target = null;
 
         /* Report that this worker stopped walking */
-        getMap().reportWorkerWithNewTarget(this);
+        map.reportWorkerWithNewTarget(this);
     }
 
     public Point getTarget() {
@@ -613,13 +589,13 @@ public abstract class Worker {
         carriedCargo = cargo;
 
         if (carriedCargo != null) {
-            carriedCargo.setPosition(getPosition());
+            carriedCargo.setPosition(position);
         }
     }
 
     private void updateCargoPosition() {
         if (carriedCargo != null) {
-            carriedCargo.setPosition(getPosition());
+            carriedCargo.setPosition(position);
         }
     }
 
@@ -632,7 +608,7 @@ public abstract class Worker {
     }
 
     void returnHome() {
-        if (getPosition().equals(home.getFlag().getPosition())) {
+        if (position.equals(home.getFlag().getPosition())) {
             setTarget(home.getPosition());
         } else {
             setTarget(home.getPosition(), home.getFlag().getPosition());
@@ -672,7 +648,6 @@ public abstract class Worker {
     }
 
     void returnToFixedPoint() {
-
         Point previousTarget = target;
         Point previousLastPoint = getLastPoint();
 
@@ -715,23 +690,15 @@ public abstract class Worker {
     }
 
     protected Point findPlaceToDie() {
-        Collection<Point> area = GameUtils.getHexagonAreaAroundPoint(getPosition(), 8, map);
+        Collection<Point> area = GameUtils.getHexagonAreaAroundPoint(position, 8, map);
 
-        for (Point point : area) {
-            List<Point> path = map.findWayOffroad(getPosition(), point, null); // FIXME: this hides a field
-
-            if (path == null) {
-                continue;
-            }
-
-            if (path.isEmpty()) {
-                continue;
-            }
-
-            return point;
-        }
-
-        return null;
+        return area.stream()
+                .map(point -> map.findWayOffroad(position, point, null))
+                .filter(Objects::nonNull)
+                .filter(path -> !path.isEmpty())
+                .map(List::getLast)
+                .findFirst()
+                .orElse(null);
     }
 
     protected void setDead() {

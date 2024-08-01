@@ -94,7 +94,7 @@ public class Cargo {
     }
 
     public void transportToReceivingBuilding(Function<Building, Boolean> func) {
-        Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, func);
+        Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, func);
 
         setTarget(receivingBuilding);
 
@@ -104,7 +104,7 @@ public class Cargo {
     }
 
     public void transportToStorage() {
-        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, material);
+        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, material);
 
         if (storehouse0 != null) {
             setTarget(storehouse0);
