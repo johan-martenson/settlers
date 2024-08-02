@@ -27,6 +27,7 @@ import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Sawmill;
+import org.appland.settlers.model.buildings.Shipyard;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -2163,5 +2164,74 @@ public class TestMisc {
         );
 
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman0, fisherman1);
+    }
+
+    @Test
+    public void testSawmillDeliversDirectlyToShipyard() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarters */
+        Point point0 = new Point(68, 68);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place a small lake
+        var point1 = new Point(74, 74);
+
+        // Adjust the headquarters so it only has enough planks to construct the buildings and no wood
+        Utils.adjustInventoryTo(headquarter, PLANK, 5);
+        Utils.adjustInventoryTo(headquarter, WOOD, 0);
+
+        // Disable the tree conservation program
+        player0.disableTreeConservationProgram();
+
+        // Place a shipyard
+        var point2 = new Point(72, 68);
+        var shipyard = map.placeBuilding(new Shipyard(player0), point2);
+
+        // Place a sawmill
+        var point3 = new Point(76, 68);
+        var sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        // Connect them to the headquarters and wait for them to get constructed and occupied
+        var road0 = map.placeAutoSelectedRoad(player0, shipyard.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), shipyard.getFlag());
+
+        Utils.waitForBuildingsToBeConstructed(shipyard, sawmill);
+
+        assertEquals(headquarter.getAmount(PLANK), 0);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(shipyard, sawmill);
+
+        // Wait for the sawmill to produce a plank and place it at its flag
+        Utils.adjustInventoryTo(headquarter, WOOD, 1);
+
+        Utils.waitForFlagToGetStackedCargo(map, sawmill.getFlag(), 1);
+
+        assertEquals(sawmill.getFlag().getStackedCargo().getFirst().getMaterial(), PLANK);
+
+        // Verify that the plank is delivered to the sawmill
+        assertEquals(shipyard.getAmount(PLANK), 0);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), PLANK);
+
+        assertEquals(road1.getCourier().getTarget(), shipyard.getPosition());
+
+        for (int i = 0; i < 2000; i++) {
+            assertNotEquals(road1.getCourier().getPosition(), headquarter.getPosition());
+
+            if (road1.getCourier().getPosition().equals(shipyard.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(road1.getCourier().getPosition(), shipyard.getPosition());
+        assertEquals(shipyard.getAmount(PLANK), 1);
     }
 }

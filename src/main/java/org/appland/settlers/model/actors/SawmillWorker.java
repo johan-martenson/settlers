@@ -132,7 +132,7 @@ public class SawmillWorker extends Worker {
             return true;
         }
 
-        return building.isUnderConstruction() && building.needsMaterial(PLANK);
+        return building.needsMaterial(PLANK);
 
         // TODO: also handle the ship/boat construction case
     }
