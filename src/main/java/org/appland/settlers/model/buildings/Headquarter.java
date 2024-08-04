@@ -73,7 +73,7 @@ public class Headquarter extends Storehouse {
     }
 
     @Override
-    public boolean spaceAvailableToHostSoldier(Soldier soldier) {
+    public boolean isSpaceAvailableToHostSoldier(Soldier soldier) {
         Soldier.Rank rank = soldier.getRank();
 
         return wantedReservedSoldiers.getOrDefault(rank, 0) > getHostedSoldiersWithRank(rank);

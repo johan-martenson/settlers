@@ -1,9 +1,11 @@
 package org.appland.settlers.assets.collectors;
 
+import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.Utils;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.GameFiles;
 import org.appland.settlers.assets.utils.ImageBoard;
 
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import static org.appland.settlers.assets.Utils.getImageAt;
 
 public class BuildingsImageCollection {
 
@@ -201,6 +205,30 @@ public class BuildingsImageCollection {
         BuildingImages buildingImages = buildingsForNation.get(building);
 
         buildingImages.addOpenDoorImage(image);
+    }
+
+    public void addImagesForBuilding(List<GameResource> lstFile, Nation nation, GameFiles.House house) {
+        addBuildingForNation(nation, house.name(), getImageAt(lstFile, house.index()));
+        addBuildingShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 1));
+
+        if (house.underConstruction()) {
+            addBuildingUnderConstructionForNation(nation, house.name(), getImageAt(lstFile, house.index() + 2));
+            addBuildingUnderConstructionShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 3));
+        }
+
+        if (house.openDoor()) {
+            var offset = 2;
+
+            if (house.underConstruction()) {
+                offset += 1;
+            }
+
+            if (house.underConstructionShadow()) {
+                offset += 1;
+            }
+
+            addOpenDoorForBuilding(nation, house.name(), getImageAt(lstFile, house.index() + offset));
+        }
     }
 
     private static class BuildingImages {
