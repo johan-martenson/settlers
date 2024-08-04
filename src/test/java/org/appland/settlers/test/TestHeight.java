@@ -197,6 +197,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.upLeft());
+
             Assert.fail();
         } catch (Exception e) {
         }
