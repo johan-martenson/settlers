@@ -1234,6 +1234,10 @@ public class GameMap {
         List<Point> path1 = findWayWithExistingRoads(start, via);
         List<Point> path2 = findWayWithExistingRoads(via, end);
 
+        if (path1 == null || path2 == null) {
+            return null;
+        }
+
         path2.removeFirst();
 
         path1.addAll(path2);
