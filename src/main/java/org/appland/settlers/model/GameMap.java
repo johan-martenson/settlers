@@ -2006,11 +2006,11 @@ public class GameMap {
         MapPoint mapPoint = getMapPoint(point);
 
         if (mapPoint.isFlag()) {
-            throw new InvalidUserActionException("Can't place tree on " + point + " on existing flag");
+            throw new InvalidUserActionException(String.format("Can't place tree on %s on existing flag", point));
         } else if (mapPoint.isRoad()) {
-            throw new InvalidUserActionException("Can't place tree on " + point + " on existing road");
+            throw new InvalidUserActionException(String.format("Can't place tree on %s on existing road", point));
         } else if (mapPoint.isStone()) {
-            throw new InvalidUserActionException("Can't place tree on " + point + " on existing stone");
+            throw new InvalidUserActionException(String.format("Can't place tree on %s on existing stone", point));
         }
 
         Tree tree = new Tree(point, treeType, treeSize);
