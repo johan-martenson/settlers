@@ -30,7 +30,7 @@ import static org.appland.settlers.model.actors.Courier.States.*;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
-    private static final Random random = new Random(1);
+    private static final Random RANDOM = new Random(1);
     private static final int TIME_TO_CHEW_GUM = 29;
     private static final int TIME_TO_READ_PAPER = 29;
     private static final int TIME_TO_TOUCH_NOSE = 29;
@@ -39,13 +39,13 @@ public class Courier extends Worker {
     private static final int TIME_WALK_TO_FLAG = 10;
 
     private final BodyType bodyType;
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
-    private Cargo intendedCargo;
-    private Road assignedRoad;
-    private States state;
+    private Cargo intendedCargo = null;
+    private Road assignedRoad = null;
+    private States state = WALKING_TO_ROAD;
     private Point idlePoint;
-    private Cargo  lastCargo;
+    private Cargo lastCargo = null;
     private Flag waitToGoToFlag;
 
     protected boolean shouldDoSpecialActions = true;
@@ -72,19 +72,7 @@ public class Courier extends Worker {
     public Courier(Player player, GameMap map) {
         super(player, map);
 
-        intendedCargo = null;
-        assignedRoad = null;
-        lastCargo = null;
-
-        state = WALKING_TO_ROAD;
-
-        if (random.nextBoolean()) {
-            bodyType = THIN;
-        } else {
-            bodyType = FAT;
-        }
-
-        countdown = new Countdown();
+        bodyType = RANDOM.nextBoolean() ? THIN : FAT;
     }
 
     @Override
@@ -105,9 +93,11 @@ public class Courier extends Worker {
                     System.out.println(end);
                 }
 
+                // Find cargo to carry
                 Cargo cargoAtStart = findCargoToCarry(start);
                 Cargo cargoAtEnd = findCargoToCarry(end);
 
+                // Pick up cargo if available
                 if (cargoAtStart != null && !(start.isFightingAtFlag() && start.getPosition().distance(getPosition()) == 1)) {
                     cargoAtStart.promisePickUp();
                     intendedCargo = cargoAtStart;
@@ -122,32 +112,33 @@ public class Courier extends Worker {
                     state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
                 }
 
+                // Handle special actions
                 if (shouldDoSpecialActions && state == IDLE_AT_ROAD) {
-                    if (random.nextInt(135) == 5 && bodyType == FAT) {
+                    if (RANDOM.nextInt(135) == 5 && bodyType == FAT) {
                         state = IDLE_CHEWING_GUM;
 
                         map.reportWorkerStartedAction(this, WorkerAction.CHEW_GUM);
 
                         countdown.countFrom(TIME_TO_CHEW_GUM);
-                    } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                    } else if (RANDOM.nextInt(135) == 5 && bodyType == THIN) {
                         state = IDLE_READING_PAPER;
 
                         map.reportWorkerStartedAction(this, READ_NEWSPAPER);
 
                         countdown.countFrom(TIME_TO_READ_PAPER);
-                    } else if (random.nextInt(135) == 5 && bodyType == THIN) {
+                    } else if (RANDOM.nextInt(135) == 5 && bodyType == THIN) {
                         state = IDLE_TOUCHING_NOSE;
 
                         map.reportWorkerStartedAction(this, TOUCH_NOSE);
 
                         countdown.countFrom(TIME_TO_TOUCH_NOSE);
-                    } else if (random.nextInt(115) == 5 && bodyType == THIN) {
+                    } else if (RANDOM.nextInt(115) == 5 && bodyType == THIN) {
                         state = IDLE_JUMPING_SKIP_ROPE;
 
                         map.reportWorkerStartedAction(this, JUMP_SKIP_ROPE);
 
                         countdown.countFrom(TIME_TO_JUMP_SKIP_ROPE);
-                    } else if (random.nextInt(115) == 5 && bodyType == FAT) {
+                    } else if (RANDOM.nextInt(115) == 5 && bodyType == FAT) {
                         state = IDLE_SITTING_DOWN;
 
                         map.reportWorkerStartedAction(this, SIT_DOWN);
@@ -251,56 +242,50 @@ public class Courier extends Worker {
 
         newRoad.setCourier(this);
 
-        /* Fulfill delivery if it has been started */
-        if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
+        switch (state) {
+            case GOING_TO_FLAG_TO_DELIVER_CARGO -> {
 
-            /* Change the target if it doesn't match any of the end points of the new road */
-            if (!getTarget().equals(newRoad.getStart()) && !getTarget().equals(newRoad.getEnd())) {
+                /* Change the target if it doesn't match any of the end points of the new road */
+                if (!getTarget().equals(newRoad.getStart()) && !getTarget().equals(newRoad.getEnd())) {
 
-                if (newRoad.getStart().equals(previousRoad.getStart()) || newRoad.getStart().equals(previousRoad.getEnd())) {
-                    setTarget(newRoad.getEnd());
-                } else {
-                    setTarget(newRoad.getStart());
+                    if (newRoad.getStart().equals(previousRoad.getStart()) || newRoad.getStart().equals(previousRoad.getEnd())) {
+                        setTarget(newRoad.getEnd());
+                    } else {
+                        setTarget(newRoad.getStart());
+                    }
                 }
             }
+            case GOING_TO_BUILDING_TO_DELIVER_CARGO -> {
+                List<Point> plannedPath = getPlannedPath();
 
-        /* Fulfill delivery if it has been started */
-        } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            List<Point> plannedPath = getPlannedPath();
+                /* Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building */
+                if (!getTarget().equals(newRoad.getStart().upLeft()) && !getTarget().equals(newRoad.getEnd().upLeft())) {
+                    int indexOfStart = plannedPath.indexOf(newRoad.getStart());
+                    int indexOfEnd = plannedPath.indexOf(newRoad.getEnd());
 
-            /* Deliver cargo to the closest flag in the road if none of the flags are next to the current targeted building */
-            if (!getTarget().equals(newRoad.getStart().upLeft()) && !getTarget().equals(newRoad.getEnd().upLeft())) {
-                int indexOfStart = plannedPath.indexOf(newRoad.getStart());
-                int indexOfEnd = plannedPath.indexOf(newRoad.getEnd());
+                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-                state = GOING_TO_FLAG_TO_DELIVER_CARGO;
-
-                if (indexOfStart == -1) {
-                    setTarget(newRoad.getEnd());
-                } else if (indexOfEnd == -1) {
-                    setTarget(newRoad.getStart());
+                    if (indexOfStart == -1) {
+                        setTarget(newRoad.getEnd());
+                    } else if (indexOfEnd == -1) {
+                        setTarget(newRoad.getStart());
+                    }
                 }
             }
+            case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
+                intendedCargo.cancelPromisedPickUp();
 
-        /*
-         *  If the courier is on the road closest to the building, keep the state and target so that it goes to the building and delivers the cargo
-         *
-         * If the courier is going to pick up a new cargo, cancel and go to the new road
-         *  */
-        } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
-            intendedCargo.cancelPromisedPickUp();
+                intendedCargo = null;
 
-            intendedCargo = null;
+                state = WALKING_TO_ROAD;
 
-            state = WALKING_TO_ROAD;
+                setTarget(idlePoint);
+            }
+            default -> {
+                state = WALKING_TO_ROAD;
 
-            setTarget(idlePoint);
-
-        /* For the other states, just go to the new road */
-        } else {
-            state = WALKING_TO_ROAD;
-
-            setTarget(idlePoint);
+                setTarget(idlePoint);
+            }
         }
     }
 
@@ -394,7 +379,6 @@ public class Courier extends Worker {
         var mapPoint = map.getMapPoint(position);
         var cargo = getCargo();
         var targetBuilding = cargo != null ? cargo.getTarget() : null;
-
         var isAtPointBeforeFlag = !plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.getFirst());
 
         switch (state) {
@@ -526,33 +510,25 @@ public class Courier extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            for (Building building : getPlayer().getBuildings()) {
-                if (building.isStorehouse()) {
-                    state = RETURNING_TO_STORAGE;
-
-                    setOffroadTarget(building.getPosition());
-
-                    break;
-                }
-            }
+            getPlayer().getBuildings().stream()
+                    .filter(Building::isStorehouse)
+                    .findFirst()
+                    .ifPresent(building -> {
+                        state = RETURNING_TO_STORAGE;
+                        setOffroadTarget(building.getPosition());
+                    });
         }
     }
 
     @Override
     public String toString() {
-        if (isExactlyAtPoint()) {
-            if (getCargo() == null) {
-                return "Courier for " + assignedRoad + " at " + getPosition();
-            } else {
-                return "Courier for " + assignedRoad + " at " + getPosition() + " carrying " + getCargo().getMaterial();
-            }
-        } else {
-            if (getCargo() == null) {
-                return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint();
-            } else {
-                return "Courier for " + assignedRoad + " walking "  + getPosition() + " - " + getNextPoint() + " carrying " + getCargo().getMaterial();
-            }
-        }
+        return isExactlyAtPoint() ?
+                (getCargo() == null ?
+                        String.format("Courier for %s at %s", assignedRoad, getPosition()) :
+                        String.format("Courier for %s at %s carrying %s", assignedRoad, getPosition(), getCargo().getMaterial())) :
+                (getCargo() == null ?
+                        String.format("Courier for %s walking %s - %s", assignedRoad, getPosition(), getNextPoint()) :
+                        String.format("Courier for %s walking %s - %s carrying %s", assignedRoad, getPosition(), getNextPoint(), getCargo().getMaterial()));
     }
 
     private void deliverCargo() {
@@ -571,7 +547,6 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargoAndGoDeliver(Cargo cargoToPickUp) {
-
         Point point = getPosition();
         Flag endPoint = map.getFlagAtPoint(point);
 
@@ -584,9 +559,8 @@ public class Courier extends Worker {
 
         /* Pick up the cargo where we stand if needed */
         } else if (cargoToPickUp != null) {
-
             if (!point.equals(endPoint.getPosition())) {
-                throw new InvalidGameLogicException("Not at " + endPoint);
+                throw new InvalidGameLogicException(String.format("Not at %s", endPoint));
             }
 
             endPoint.retrieveCargo(cargoToPickUp);
@@ -598,8 +572,6 @@ public class Courier extends Worker {
     }
 
     private void deliverToFlagOrBuilding(Cargo cargo) {
-
-        /* If the intended building is directly after the flag, deliver it all the way */
         Point cargoTarget = cargo.getTarget().getPosition();
 
         if (cargoTarget.downRight().equals(assignedRoad.getStart()) ||
@@ -657,50 +629,36 @@ public class Courier extends Worker {
     private EndPoint getEndPointAtPoint(Point point) {
         MapPoint mapPoint = map.getMapPoint(point);
 
-        if (mapPoint.isFlag()) {
-            return mapPoint.getFlag();
-        }
-
-        return mapPoint.getBuilding();
+        return mapPoint.isFlag() ? mapPoint.getFlag() : mapPoint.getBuilding();
     }
 
     public Cargo findCargoToCarry(Flag flag) {
         GameMap map = getMap();
-
         Point point = flag.getPosition();
         MapPoint mapPoint = map.getMapPoint(point);
 
+        // Look for the most prioritized cargo. Lower is better.
+        int priority = Integer.MAX_VALUE;
         Cargo waitingCargo = null;
 
-        /* Look for the most prioritized cargo. Lower is better. */
-        int priority = Integer.MAX_VALUE;
-
-        /* Look up the other end of the road */
         EndPoint otherEndOfRoad = getAssignedRoad().getOtherEndPoint(flag);
 
-        /* Go through the cargos and look for the best cargo to pick up */
         for (Cargo cargo : flag.getStackedCargo()) {
-
-            /* Get the target for the cargo */
             Building target = cargo.getTarget();
 
-            /* Filter cargos where pickup is already planned */
+            // Filter cargos where pickup is already planned
             if (cargo.isPickupPromised() && !Objects.equals(cargo, intendedCargo)) {
                 continue;
             }
 
-            /* Filter cargos without a target */
+            // Filter cargos without a target
             if (target == null) {
                 continue;
             }
 
-            /* Try to avoid picking up the cargo that the courier just dropped off */
+            // Try to avoid picking up the cargo that the courier just dropped off
             if (cargo.equals(lastCargo)) {
-
-                /* Does the flag have other roads? */
                 if (mapPoint.getConnectedRoads().size() > 1) {
-
-                    /* Is there another way for the cargo to get delivered? */
                     List<Point> otherRoute = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target, otherEndOfRoad.getPosition());
 
                     if (otherRoute != null) {
@@ -709,28 +667,25 @@ public class Courier extends Worker {
                 }
             }
 
-            /* Filter cargos that will not benefit from going through the courier's road */
+            // Filter cargos that will not benefit from going through the courier's road
             List<Point> bestPath = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(flag, target);
-
             List<Point> pathThroughRoad = map.findDetailedWayWithExistingRoadsInFlagsAndBuildings(otherEndOfRoad, target, point);
 
-            /* Filter cargos where there is no road available */
+            // Filter cargos where there is no road available
             if (bestPath == null) {
                 continue;
             }
 
-            /* Filter cargos where going through the couriers road doesn't lead to the target */
+            // Filter cargos where going through the couriers road doesn't lead to the target
             if (pathThroughRoad == null) {
                 continue;
             }
 
-            /* Let the best courier do the delivery if it's available */
+            // Let the best courier do the delivery if it's available
             Road optimalRoad = map.getRoadAtPoint(bestPath.get(1));
-
             Courier courierForOptimalRoad = optimalRoad.getCourier();
             Donkey donkeyForOptimalRoad = optimalRoad.getDonkey();
 
-            /* If the courier's road is not the optimal road - see if the optimal courier or donkey is idle */
             if (!getAssignedRoad().equals(optimalRoad)) {
                 if ((courierForOptimalRoad != null && courierForOptimalRoad.isIdle()) ||
                     (donkeyForOptimalRoad  != null && donkeyForOptimalRoad.isIdle())) {
@@ -738,13 +693,12 @@ public class Courier extends Worker {
                 }
             }
 
-            /* Avoid roads that are more than double as long as the most optimal road */
+            // Avoid roads that are more than double as long as the most optimal road
             if (pathThroughRoad.size() > bestPath.size() * 2) {
                 continue;
             }
 
             int candidatePriority = player.getTransportPriority(cargo);
-
             if (candidatePriority < priority) {
                 priority = candidatePriority;
                 waitingCargo = cargo;
