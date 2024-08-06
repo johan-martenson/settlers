@@ -22,6 +22,7 @@ import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.buildings.Storehouse;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -349,8 +350,7 @@ public class GameUtils {
         return Optional.empty();
     }
 
-    public record BuildingAndData<B extends Building, D>(B building, D data) {
-    }
+    public record BuildingAndData<B extends Building, D>(B building, D data) { }
 
     public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {
         Set<Point> hexagonBorder = new HashSet<>();
@@ -424,58 +424,38 @@ public class GameUtils {
         return area;
     }
 
+    /**
+     * Finds the closest storehouse off-road where delivery is possible.
+     *
+     * @param point   The starting point to search from.
+     * @param avoid   The building to avoid during the search.
+     * @param player  The player owning the buildings.
+     * @param material The material to be delivered.
+     * @return The closest storehouse where delivery is possible, or null if no storehouse is found.
+     */
     public static Building getClosestStorageOffroadWhereDeliveryIsPossible(Point point, Building avoid, Player player, Material material) {
-        Storehouse storehouse = null;
-        int distance = Integer.MAX_VALUE;
-
         GameMap map = player.getMap();
 
-        for (Building building : map.getBuildings()) {
+        return map.getBuildings().stream()
+                .filter(building -> player.equals(building.getPlayer())) // Filter buildings that belong to another player
+                .filter(building -> !building.equals(avoid)) // Filter buildings to avoid
+                .filter(Building::isReady) // Filter buildings that are not operational
+                .filter(Building::isStorehouse) // Filter buildings that are not storehouses
+                .map(Storehouse.class::cast) // Cast Building to Storehouse
+                .filter(storehouse -> !storehouse.isDeliveryBlocked(material)) // Filter storehouses where delivery is blocked
+                .map(storehouse -> {
+                    if (storehouse.getFlag().getPosition().equals(point)) {
+                        return new Tuple<>(storehouse, 0);
+                    }
 
-            /* Filter buildings that belong to another player */
-            if (!player.equals(building.getPlayer())) {
-                continue;
-            }
+                    var path = map.findWayOffroad(point, storehouse.getFlag().getPosition(), null);
 
-            /* Filter buildings to avoid */
-            if (building.equals(avoid)) {
-                continue;
-            }
-
-            /* Filter buildings that are not operational */
-            if (!building.isReady()) {
-                continue;
-            }
-
-            /* Filter buildings that are not storehouses */
-            if (!building.isStorehouse()) {
-                continue;
-            }
-
-            /* Filter storehouses where the delivery is not allowed */
-            if (((Storehouse)building).isDeliveryBlocked(material)) {
-                continue;
-            }
-
-            /* If the building has its flag on the point we know we have found the closest building */
-            if (building.getFlag().getPosition().equals(point)) {
-                storehouse = (Storehouse)building;
-                break;
-            }
-
-            List<Point> path = map.findWayOffroad(point, building.getFlag().getPosition(), null);
-
-            if (path == null) {
-                continue;
-            }
-
-            if (path.size() < distance) {
-                distance = path.size();
-                storehouse = (Storehouse) building;
-            }
-        }
-
-        return storehouse;
+                    return new Tuple<>(storehouse, path != null ? path.size() : Integer.MAX_VALUE);
+                })
+                .filter(tuple -> tuple.t2() != Integer.MAX_VALUE)
+                .min(Comparator.comparingInt(Tuple::t2))
+                .map(Tuple::t1)
+                .orElse(null); // Return null if no storehouse is found
     }
 
     public static <T> boolean isAll(Collection<T> collection, T item) {
@@ -607,7 +587,6 @@ public class GameUtils {
     }
 
     static boolean areAllUnique(Collection<Point> points) {
-
         Set<Point> pointsSet = new HashSet<>(points);
 
         return points.size() == pointsSet.size();
@@ -622,7 +601,6 @@ public class GameUtils {
 
             /* Above */
             if (deltaY > 0) {
-
                 if (deltaY > deltaX * 2) {
                     return UP;
                 }
@@ -635,7 +613,6 @@ public class GameUtils {
 
             /* Below */
             } else {
-
                 if (abs(deltaY) > deltaX * 2) {
                     return DOWN;
                 }
@@ -666,7 +643,6 @@ public class GameUtils {
 
             /* Below */
             } else {
-
                 if (deltaY < deltaX * 2) {
                     return DOWN;
                 }
@@ -723,38 +699,34 @@ public class GameUtils {
         return minimum;
     }
 
+    /**
+     * Finds the closest harbor off-road for a given player within a specified radius.
+     *
+     * @param player   The player for whom to find the closest harbor.
+     * @param position The starting position to search from.
+     * @param radius   The radius within which to search for harbors.
+     * @return The closest harbor off-road or null if no harbor is found within the radius.
+     */
     public static Harbor getClosestHarborOffroadForPlayer(Player player, Point position, int radius) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
-        Harbor closestHarbor = null;
-        int distanceToClosestHarbor = Integer.MAX_VALUE;
+        return player.getBuildings().stream()
+                .filter(Building::isReady)
+                .filter(Building::isHarbor)
+                .map(Harbor.class::cast)
+                .map(harbor -> {
+                    var path = map.findWayOffroad(position, harbor.getPosition(), null);
 
-        for (Point point : GameUtils.getHexagonAreaAroundPoint(position, radius, map)) {
+                    if (path == null) {
+                        return new Tuple<>(harbor, Integer.MAX_VALUE);
+                    }
 
-            Building building = map.getBuildingAtPoint(point);
-
-            /* Filter points without a building */
-            if (building == null) {
-                continue;
-            }
-
-            /* Filter buildings that are not harbors */
-            if (!Objects.equals(building.getClass(), Harbor.class)) {
-                continue;
-            }
-
-            int candidateDistance = distanceInGameSteps(position, building.getPosition());
-
-            /* Filter buildings that are further away than the current candidate */
-            if (candidateDistance >= distanceToClosestHarbor) {
-                continue;
-            }
-
-            closestHarbor = (Harbor) building;
-            distanceToClosestHarbor = candidateDistance;
-        }
-
-        return closestHarbor;
+                    return new Tuple<>(harbor, path.size());
+                })
+                .filter(tuple -> tuple.t2() <= radius)
+                .min(Comparator.comparingInt(Tuple::t2))
+                .map(Tuple::t1)
+                .orElse(null);
     }
 
     public static void putCargos(Material material, int amount, Building building) {
@@ -769,21 +741,6 @@ public class GameUtils {
         }
     }
 
-    public static void putCargosOnFlag(Material material, int amount, Building building, Flag flag, GameMap map) {
-        for (int i = 0; i < amount; i++) {
-            Cargo cargo = new Cargo(material, map);
-
-            cargo.setPosition(flag.getPosition());
-            cargo.setTarget(building);
-
-            building.promiseDelivery(material);
-
-            flag.promiseCargo(cargo);
-
-            flag.putCargo(cargo);
-        }
-    }
-
     public static void retrieveCargos(Storehouse storehouse, Material material, int amount) {
         for (int i = 0; i < amount; i++) {
             storehouse.retrieve(material);
@@ -795,7 +752,6 @@ public class GameUtils {
     }
 
     static class PointAndCost implements Comparable<PointAndCost> {
-
         private final Point point;
         private final int estimatedFullCostThroughPoint;
 
@@ -934,7 +890,6 @@ public class GameUtils {
     }
 
     public static class PathOnExistingRoadsProvider implements ConnectionsProvider {
-
         private final GameMap map;
 
         public PathOnExistingRoadsProvider(GameMap map) {
@@ -943,61 +898,13 @@ public class GameUtils {
 
         @Override
         public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            MapPoint mapPoint = map.getMapPoint(start);
-
-            return mapPoint.getConnectedNeighbors();
-        }
-    }
-
-    public static class ConnectedFlagsAndBuildingsProvider implements ConnectionsProvider {
-        private final Map<Point, MapPoint> pointToGameObject;
-
-        public ConnectedFlagsAndBuildingsProvider(Map<Point, MapPoint> pointToGameObject) {
-            this.pointToGameObject = pointToGameObject;
-        }
-
-        @Override
-        public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-            MapPoint mapPoint = pointToGameObject.get(start);
-
-            return mapPoint.getConnectedFlagsAndBuildings();
-        }
-
-        public int realDistance(Point currentPoint, Point neighbor) {
-
-            MapPoint mapPoint = pointToGameObject.get(currentPoint);
-
-            int distance = Integer.MAX_VALUE;
-
-            /* Find the shortest road that connects the two points */
-            for (Road road : mapPoint.getConnectedRoads()) {
-                if (!road.getStart().equals(currentPoint) && !road.getEnd().equals(currentPoint)) {
-                    continue;
-                }
-
-                if (!road.getStart().equals(neighbor) && !road.getEnd().equals(neighbor)) {
-                    continue;
-                }
-
-                /* Count the number of segments to walk (don't include the starting point) */
-                int tmpDistance = road.getWayPoints().size() - 1;
-
-                if (tmpDistance < distance) {
-                    distance = tmpDistance;
-                }
-
-                if (distance == 2) {
-                    return 2;
-                }
-            }
-
-            return distance;
+            return map.getMapPoint(start).getConnectedNeighbors();
         }
     }
 
     /**
      * Finds the shortest path following roads between any two points. The points
-     * must  be flags or buildings.
+     * must be flags or buildings.
      *
      * The path returned will only contain points with flags or buildings.
      *
@@ -1392,230 +1299,135 @@ public class GameUtils {
         return false;
     }
 
+    /**
+     * Finds the closest storage offroad for a given player from a specified point.
+     *
+     * @param player The player for whom the closest storage is to be found.
+     * @param point  The starting point to search from.
+     * @return The closest Storehouse building that is accessible offroad, or null if none are available.
+     */
     public static Storehouse getClosestStorageOffroad(Player player, Point point) {
-        int distance = Integer.MAX_VALUE;
-        Storehouse storehouse = null;
         GameMap map = player.getMap();
 
-        for (Building building : player.getBuildings()) {
-
-            /* Filter buildings that are not ready */
-            if (!building.isReady()) {
-                continue;
-            }
-
-            /* Filter other buildings than storage buildings */
-            if (!building.isStorehouse()) {
-                continue;
-            }
-
-            List<Point> pathToStorage = map.findWayOffroad(point, building.getPosition(), null);
-
-            /* Filter storage buildings that can't be reached */
-            if (pathToStorage == null) {
-                continue;
-            }
-
-            int currentDistance = pathToStorage.size();
-
-            if (currentDistance < distance) {
-                storehouse = (Storehouse)building;
-                distance = currentDistance;
-            }
-        }
-
-        return storehouse;
+        return player.getBuildings().stream()
+                .filter(Building::isReady)
+                .filter(Building::isStorehouse)
+                .map(building -> new Tuple<>(
+                        (Storehouse) building,
+                        map.findWayOffroad(point, building.getPosition(), null)))
+                .filter(entry -> entry.t2() != null)
+                .min(Comparator.comparingInt(entry -> entry.t2().size()))
+                .map(Tuple::t1)
+                .orElse(null);
     }
 
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Player player) {
         return getClosestStorageConnectedByRoads(point, null, player);
     }
 
-    // FIXME: HOTSPOT
+    /**
+     * Finds the closest storehouse connected by roads to the given point for a specified player.
+     *
+     * @param point  The starting point from which to find the closest storehouse.
+     * @param avoid  The building to avoid in the search.
+     * @param player The player whose buildings will be considered in the search.
+     * @return The closest storehouse connected by roads, or null if none is found.
+     */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) {
-        Storehouse storehouse = null;
-        int distance = Integer.MAX_VALUE;
         GameMap map = player.getMap();
 
-        for (Building building : player.getBuildings()) {
+        return player.getBuildings().stream()
+                .filter(building -> !building.equals(avoid))
+                .filter(Building::isReady)
+                .filter(Building::isStorehouse)
+                .map(building -> {
 
-            /* Filter buildings to avoid */
-            if (building.equals(avoid)) {
-                continue;
-            }
+                    // If the building's flag is directly at the point, return it immediately
+                    if (building.getFlag().getPosition().equals(point)) {
+                        return new Tuple<>((Storehouse) building, 0);
+                    }
 
-            /* Filter buildings that are not ready */
-            if (!building.isReady()) {
-                continue;
-            }
-
-            if (building.isStorehouse()) {
-                if (building.getFlag().getPosition().equals(point)) {
-                    storehouse = (Storehouse)building;
-                    break;
-                }
-
-                /* Filter buildings that cannot be closer than the current */
-                int bestCaseDistance = distanceInGameSteps(point, building.getFlag().getPosition()) + 1;
-
-                if (bestCaseDistance > distance) {
-                    continue;
-                }
-
-                List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-
-                /* Filter points that can't be reached */
-                if (path == null) {
-                    continue;
-                }
-
-                if (path.size() < distance) {
-                    distance = path.size();
-                    storehouse = (Storehouse) building;
-                }
-            }
-        }
-
-        return storehouse;
+                    List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+                    return new Tuple<>((Storehouse) building, path == null ? Integer.MAX_VALUE : path.size());
+                })
+                .filter(entry -> entry.t2() < Integer.MAX_VALUE)
+                .min(Comparator.comparingInt(Tuple::t2))
+                .map(Tuple::t1)
+                .orElse(null);
     }
 
     public static Storehouse getClosestStorageConnectedByRoads(Point point, GameMap map) {
         return getClosestStorageConnectedByRoads(point, null, map);
     }
 
+    public record Tuple<T1, T2>(T1 t1, T2 t2) { }
+
+    /**
+     * Finds the closest storehouse connected by roads to the given point.
+     *
+     * @param point The starting point from which to find the closest storehouse.
+     * @param avoid The building to avoid in the search.
+     * @param map   The game map containing buildings and roads.
+     * @return The closest storehouse connected by roads, or null if none is found.
+     */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) {
-        Storehouse storehouse = null;
-        int distance = Integer.MAX_VALUE;
+        return map.getBuildings().stream()
+                .filter(building -> !building.equals(avoid))
+                .filter(Building::isReady)
+                .filter(Building::isStorehouse)
+                .map(building -> {
 
-        for (Building building : map.getBuildings()) {
+                    // Check if the building's flag is directly at the point
+                    if (building.getFlag().getPosition().equals(point)) {
+                        return new Tuple<>((Storehouse) building, 0);
+                    }
 
-            /* Filter buildings to avoid */
-            if (building.equals(avoid)) {
-                continue;
-            }
-
-            /* Filter buildings that are under construction or destroyed */
-            if (!building.isReady()) {
-                continue;
-            }
-
-            /* Filter buildings that are not storehouses */
-            if (!building.isStorehouse()) {
-                continue;
-            }
-
-            /* If the building has its flag on the point we know we have found the closest building */
-            if (building.getFlag().getPosition().equals(point)) {
-                storehouse = (Storehouse)building;
-                break;
-            }
-
-            /* Filter buildings that cannot be closer than the current */
-            int bestCaseDistance = distanceInGameSteps(point, building.getFlag().getPosition()) + 1;
-
-            if (bestCaseDistance > distance) {
-                continue;
-            }
-
-            List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-
-            if (path == null) {
-                continue;
-            }
-
-            if (path.size() < distance) {
-                distance = path.size();
-                storehouse = (Storehouse) building;
-            }
-        }
-
-        return storehouse;
+                    // Calculate the path to the building's flag
+                    List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+                    return new Tuple<>((Storehouse) building, path == null ? Integer.MAX_VALUE : path.size());
+                })
+                .filter(tuple -> tuple.t2() < Integer.MAX_VALUE)
+                .min(Comparator.comparingInt(Tuple::t2))
+                .map(Tuple::t1)
+                .orElse(null);
     }
 
     public static Building getClosestBuildingConnectedByRoads(Point point, Building avoid, GameMap map, Function <Building, Boolean> func) {
-        Building building = null;
-        int distance = Integer.MAX_VALUE;
-
-        for (Building candidate : map.getBuildings()) {
-
-            /* Filter buildings to avoid */
-            if (candidate.equals(avoid)) {
-                continue;
-            }
-
-            /* Filter buildings that don't match the requirement */
-            if (!func.apply(candidate)) {
-                continue;
-            }
-
-            /* If the building has its flag on the point we know we have found the closest building */
-            if (candidate.getFlag().getPosition().equals(point)) {
-                building = candidate;
-                break;
-            }
-
-            List<Point> path = map.findWayWithExistingRoads(point, candidate.getFlag().getPosition());
-
-            if (path == null) {
-                continue;
-            }
-
-            if (path.size() < distance) {
-                distance = path.size();
-                building = candidate;
-            }
-        }
-
-        return building;
+        return map.getBuildings().stream()
+                .filter(candidate -> !candidate.equals(avoid))
+                .filter(func::apply)
+                .map(candidate -> {
+                    if (candidate.getFlag().getPosition().equals(point)) {
+                        return new AbstractMap.SimpleEntry<>(candidate, List.of(point));
+                    }
+                    List<Point> path = map.findWayWithExistingRoads(point, candidate.getFlag().getPosition());
+                    return new AbstractMap.SimpleEntry<>(candidate, path);
+                })
+                .filter(entry -> entry.getValue() != null)
+                .min(Comparator.comparingInt(entry -> entry.getValue().size()))
+                .map(AbstractMap.SimpleEntry::getKey)
+                .orElse(null);
     }
 
     public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) {
-        Storehouse storehouse = null;
-        int distance = Integer.MAX_VALUE;
+        return (Storehouse) map.getBuildings().stream()
+                .filter(building -> !building.equals(avoid))                       // Avoid specific building
+                .filter(Building::isReady)                                         // Check if building is ready
+                .filter(Building::isStorehouse)                                    // Check if it's a storehouse
+                .filter(building -> !((Storehouse) building).isDeliveryBlocked(material)) // Check delivery is possible
+                .map(building -> {
+                    if (building.getFlag().getPosition().equals(point)) {
+                        return new AbstractMap.SimpleEntry<>(building, 0);
+                    }
 
-        for (Building building : map.getBuildings()) {
-
-            /* Filter buildings to avoid */
-            if (building.equals(avoid)) {
-                continue;
-            }
-
-            /* Filter buildings that are destroyed */
-            if (!building.isReady()) {
-                continue;
-            }
-
-            /* Filter buildings that are not storehouses */
-            if (!building.isStorehouse()) {
-                continue;
-            }
-
-            /* Filter storehouses where the delivery is not allowed */
-            if (((Storehouse)building).isDeliveryBlocked(material)) {
-                continue;
-            }
-
-            /* If the building has its flag on the point we know we have found the closest building */
-            if (building.getFlag().getPosition().equals(point)) {
-                storehouse = (Storehouse)building;
-                break;
-            }
-
-            List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
-
-            if (path == null) {
-                continue;
-            }
-
-            if (path.size() < distance) {
-                distance = path.size();
-                storehouse = (Storehouse) building;
-            }
-        }
-
-        return storehouse;
+                    List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+                    return path == null ? null : new AbstractMap.SimpleEntry<>(building, path.size());
+                })
+                .filter(Objects::nonNull)
+                .min(Comparator.comparingInt(AbstractMap.SimpleEntry::getValue))   // Find min by path size
+                .map(AbstractMap.SimpleEntry::getKey)
+                .orElse(null);
     }
-
     public static Set<Flag> findFlagsReachableFromPoint(Player player, Point start) {
         List<Point> toEvaluate = new LinkedList<>();
         Set<Point>  visited    = new HashSet<>();
@@ -1666,45 +1478,24 @@ public class GameUtils {
     }
 
     public static Set<Building> getBuildingsWithinReach(Point startPosition, Player player) {
-        List<Point>   toEvaluate = new LinkedList<>();
-        Set<Point>    visited    = new HashSet<>();
-        Set<Building> reachable  = new HashSet<>();
-        GameMap       map        = player.getMap();
+        List<Point> toEvaluate = new LinkedList<>();
+        Set<Point> visited = new HashSet<>();
+        Set<Building> reachable = new HashSet<>();
+        GameMap map = player.getMap();
 
         toEvaluate.add(startPosition);
 
-        /* Declare variables outside the loop to keep memory churn down */
-        Point point;
-        Point oppositePoint;
-
         while (!toEvaluate.isEmpty()) {
-
-            point = toEvaluate.getFirst();
-            toEvaluate.remove(point);
-
+            Point point = toEvaluate.removeFirst();
             MapPoint mapPoint = map.getMapPoint(point);
 
-            /* Test if this point is connected to a building */
-            if (mapPoint.isBuilding()) {
-                reachable.add(mapPoint.getBuilding());
-            }
-
-            /* Remember that this point has been tested */
+            if (mapPoint.isBuilding()) reachable.add(mapPoint.getBuilding());
             visited.add(point);
 
-            /* Go through the neighbors and add the new points to the list to be evaluated */
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                oppositePoint = road.getOtherPoint(point);
-
-                /* Filter already visited */
-                if (visited.contains(oppositePoint)) {
-                    continue;
-                }
-
-                /* Add the point to the list */
-                toEvaluate.add(oppositePoint);
-            }
+            mapPoint.getConnectedRoads().stream()
+                    .map(road -> road.getOtherPoint(point))
+                    .filter(oppositePoint -> !visited.contains(oppositePoint))
+                    .forEach(toEvaluate::add);
         }
 
         return reachable;
@@ -1785,57 +1576,16 @@ public class GameUtils {
         };
     }
 
-    public static Comparator<? super Soldier> strengthSorter = (soldier0, soldier1) -> {
-        var rank0 = rankToInt(soldier0.getRank());
-        var rank1 = rankToInt(soldier1.getRank());
+    public static Comparator<? super Soldier> strengthSorter = Comparator.comparingInt(s -> rankToInt(s.getRank()));
 
-        if (rank0 < rank1) {
-            return -1;
-        } else if (rank0 > rank1) {
-            return 1;
-        }
-
-        return 0;
-    };
-
-    public static Comparator<SoldierAndDistance> strongerAndShorterDistanceSorter = (soldierAndDistance0, soldierAndDistance1) -> {
-        var rank0 = rankToInt(soldierAndDistance0.soldier.getRank());
-        var rank1 = rankToInt(soldierAndDistance1.soldier.getRank());
-
-        if (rank0 > rank1) {
-            return -1;
-        } else if (rank0 < rank1) {
-            return 1;
-        }
-
-        if (soldierAndDistance0.distance < soldierAndDistance1.distance) {
-            return -1;
-        } else if (soldierAndDistance0.distance > soldierAndDistance1.distance) {
-            return 1;
-        }
-
-        return 0;
-    };
+    public static Comparator<SoldierAndDistance> strongerAndShorterDistanceSorter = Comparator
+            .comparing((SoldierAndDistance sd) -> rankToInt(sd.soldier.getRank())).reversed()
+            .thenComparingInt(sd -> sd.distance);
 
 
-    public static Comparator<SoldierAndDistance> weakerAndShorterDistanceSorter = (soldierAndDistance0, soldierAndDistance1) -> {
-        var rank0 = rankToInt(soldierAndDistance0.soldier.getRank());
-        var rank1 = rankToInt(soldierAndDistance1.soldier.getRank());
-
-        if (rank0 < rank1) {
-            return -1;
-        } else if (rank0 > rank1) {
-            return 1;
-        }
-
-        if (soldierAndDistance0.distance < soldierAndDistance1.distance) {
-            return -1;
-        } else if (soldierAndDistance0.distance > soldierAndDistance1.distance) {
-            return 1;
-        }
-
-        return 0;
-    };
+    public static Comparator<SoldierAndDistance> weakerAndShorterDistanceSorter = Comparator
+            .comparingInt((SoldierAndDistance sd) -> rankToInt(sd.soldier.getRank()))
+            .thenComparingInt(sd -> sd.distance);
 
     public record SoldierAndDistance(Soldier soldier, int distance) { }
 

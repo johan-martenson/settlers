@@ -1252,6 +1252,8 @@ public class GameMap {
      * @param end The point to reach
      * @return The found path, or null if no path exists
      */
+    // TODO: clarify how this method behaves when start and goal are the same. Ensure the behavior is different from
+    //       what happens when there is no possible path
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidGameLogicException {
         if (start.equals(end)) {
             throw new InvalidGameLogicException("Start and end are the same.");
@@ -1919,6 +1921,8 @@ public class GameMap {
      * @param avoid The points to avoid
      * @return The path found or null if there is no way
      */
+    // TODO: clarify how this method behaves when start and goal are the same. Ensure the behavior is different from
+    //       what happens when there is no possible path
     public List<Point> findWayOffroad(Point start, Point goal, Set<Point> avoid) {
         return findShortestPath(start, goal, avoid, OFFROAD_CONNECTIONS_PROVIDER);
     }
