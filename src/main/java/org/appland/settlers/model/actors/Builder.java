@@ -15,14 +15,13 @@ import static org.appland.settlers.model.Material.BUILDER;
 
 @Walker(speed = 10)
 public class Builder extends Worker {
-
     private static final int TIME_TO_HAMMER = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
     private Building building;
-    private State state;
+    private State state = State.WALKING_TO_BUILDING_TO_CONSTRUCT;
 
     private enum State {
         GOING_TO_HAMMER,
@@ -37,14 +36,10 @@ public class Builder extends Worker {
 
     public Builder(Player player, GameMap map) {
         super(player, map);
-
-        state = State.WALKING_TO_BUILDING_TO_CONSTRUCT;
-        countdown = new Countdown();
     }
 
     @Override
     void onIdle() {
-
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
                 setOffroadTarget(building.getFlag().getPosition());
@@ -94,72 +89,58 @@ public class Builder extends Worker {
 
     @Override
     void onArrival() {
-        if (state == State.WALKING_TO_BUILDING_TO_CONSTRUCT) {
-            building = map.getBuildingAtPoint(getPosition());
+        switch (state) {
+            case WALKING_TO_BUILDING_TO_CONSTRUCT -> {
+                building = map.getBuildingAtPoint(getPosition());
 
-            if (building != null) {
-                building.startConstruction();
+                if (building != null) {
+                    building.startConstruction();
 
-                if (map.findWayOffroad(getPosition(), building.getPosition().downLeft(), null) != null) {
-                    setOffroadTarget(building.getPosition().downLeft());
-                    state = State.GOING_TO_HAMMER;
+                    if (map.findWayOffroad(getPosition(), building.getPosition().downLeft(), null) != null) {
+                        setOffroadTarget(building.getPosition().downLeft());
+                        state = State.GOING_TO_HAMMER;
+                    } else {
+                        countdown.countFrom(TIME_TO_HAMMER);
+                        map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+                        state = State.HAMMERING;
+                    }
                 } else {
-                    countdown.countFrom(TIME_TO_HAMMER);
-
-                    map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
-
-                    state = State.HAMMERING;
+                    returnToStorage();
                 }
-            } else {
-                returnToStorage();
             }
-        } else if (state == State.GOING_TO_HAMMER) {
-
-            if (!building.isReady()) {
-                state = State.HAMMERING;
-
-                map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
-
-                countdown.countFrom(TIME_TO_HAMMER);
-            } else {
-                setOffroadTarget(building.getFlag().getPosition());
-
-                state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
+            case GOING_TO_HAMMER -> {
+                if (!building.isReady()) {
+                    state = State.HAMMERING;
+                    map.reportWorkerStartedAction(this, WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW);
+                    countdown.countFrom(TIME_TO_HAMMER);
+                } else {
+                    setOffroadTarget(building.getFlag().getPosition());
+                    state = State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE;
+                }
             }
-        } else if (state == State.WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE) {
-
-            /* Return to storage
-            *
-            * NOTE: don't set state here. State is set inside the method
-            *
-            *  */
-            returnToStorage();
-        } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == State.GOING_TO_DIE) {
-            setDead();
-
-            state = State.DEAD;
-
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
-        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
-
-            if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = State.GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+            case WALKING_TO_FLAG_TO_GO_BACK_TO_STORAGE -> returnToStorage();
+            case RETURNING_TO_STORAGE -> {
+                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                storehouse.depositWorker(this);
             }
+            case GOING_TO_DIE -> {
+                setDead();
+                state = State.DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUILDER);
+
+                if (storehouse != null) {
+                    state = State.RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = State.GOING_TO_DIE;
+                    Point point = findPlaceToDie();
+                    setOffroadTarget(point);
+                }
+            }
+            default -> {}
         }
     }
 
@@ -203,19 +184,28 @@ public class Builder extends Worker {
         }
     }
 
+    /**
+     * Determines if the builder is hammering.
+     *
+     * @return true if hammering, false otherwise.
+     */
     public boolean isHammering() {
         return state == State.HAMMERING;
     }
 
     @Override
     public String toString() {
-        return "Builder for " + building;
+        return String.format("Builder for %s", building);
     }
 
+    /**
+     * Sends the builder to another storage.
+     *
+     * @param building The building to send the builder to.
+     */
     @Override
     public void goToOtherStorage(Building building) {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 

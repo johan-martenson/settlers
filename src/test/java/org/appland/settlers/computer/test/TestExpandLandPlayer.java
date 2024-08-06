@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import org.appland.settlers.model.PlayerColor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -447,11 +448,11 @@ public class TestExpandLandPlayer {
         assertFalse(barracks0.isReady());
 
         /* Remove a road */
-        List<Road> roads = map.getRoadsFromFlag(barracks0.getFlag());
+        Collection<Road> roads = map.getRoadsFromFlag(barracks0.getFlag());
 
         roads.remove(map.getRoad(barracks0.getPosition(), barracks0.getFlag().getPosition()));
 
-        map.removeRoad(roads.getFirst());
+        map.removeRoad(roads.iterator().next());
 
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(barracks0, headquarter));
 

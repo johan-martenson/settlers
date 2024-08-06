@@ -89,7 +89,7 @@ public class Utils {
         while (map.getRoadsFromFlag(flag).size() == 1) {
 
             /* Get the connected road */
-            Road road = map.getRoadsFromFlag(flag).getFirst();
+            Road road = map.getRoadsFromFlag(flag).iterator().next();
 
             /* Move the flag iterator to the other side */
             EndPoint otherSide = road.getOtherEndPoint(flag);

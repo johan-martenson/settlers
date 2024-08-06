@@ -454,10 +454,10 @@ public class GameMap {
         duration.after("Manage tree conservation program");
 
         /* Add worker events to the players if any */
-        List<BorderChange> borderChanges = null;
+        List<BorderChange> changedBorders = null;
 
         if (isBorderUpdated) {
-            borderChanges = players.stream()
+            changedBorders = players.stream()
                     .map(Player::getBorderChange)
                     .filter(Objects::nonNull)
                     .toList();
@@ -487,7 +487,7 @@ public class GameMap {
             });
 
             if (isBorderUpdated) {
-                player.reportChangedBorders(borderChanges);
+                player.reportChangedBorders(changedBorders);
             }
 
             changedFlags.forEach(flag -> {
@@ -2249,7 +2249,7 @@ public class GameMap {
         /* Remove the road if the flag is an endpoint to a road */
         List<Road> roadsToRemove = mapPoint.getConnectedRoads().stream()
                 .filter(road -> road.getStartFlag().equals(flag) || road.getEndFlag().equals(flag))
-                .collect(Collectors.toList());
+                .toList();
 
         /* Remove roads connected to the flag */
         for (Road road : roadsToRemove) {
@@ -2726,8 +2726,8 @@ public class GameMap {
      * @param flag to connect to
      * @return List of roads that connect to the flag
      */
-    public List<Road> getRoadsFromFlag(Flag flag) {
-        return getMapPoint(flag.getPosition()).getConnectedRoadsAsList();
+    public Collection<Road> getRoadsFromFlag(Flag flag) {
+        return getMapPoint(flag.getPosition()).getConnectedRoads();
     }
 
     /**
