@@ -181,24 +181,24 @@ public class Inspector {
                 Point pointDownRight = point.downRight();
                 Point pointDownLeft = point.downLeft();
 
-                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointUpLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointUpLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointUpRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationAbove(pointUpRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationUpRight(pointUpRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointUpRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationUpRight(pointRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointDownRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointDownRight));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownRight(pointDownLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationBelow(pointDownLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownLeft(pointDownLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationUpLeft(pointDownLeft));
-                oneStepAwayTiles.add(map.getDetailedVegetationDownLeft(pointLeft));
+                oneStepAwayTiles.add(map.getVegetationUpLeft(pointLeft));
+                oneStepAwayTiles.add(map.getVegetationAbove(pointLeft));
+                oneStepAwayTiles.add(map.getVegetationUpLeft(pointUpLeft));
+                oneStepAwayTiles.add(map.getVegetationAbove(pointUpLeft));
+                oneStepAwayTiles.add(map.getVegetationUpLeft(pointUpRight));
+                oneStepAwayTiles.add(map.getVegetationAbove(pointUpRight));
+                oneStepAwayTiles.add(map.getVegetationUpRight(pointUpRight));
+                oneStepAwayTiles.add(map.getVegetationDownRight(pointUpRight));
+                oneStepAwayTiles.add(map.getVegetationUpRight(pointRight));
+                oneStepAwayTiles.add(map.getVegetationDownRight(pointRight));
+                oneStepAwayTiles.add(map.getVegetationBelow(pointRight));
+                oneStepAwayTiles.add(map.getVegetationDownRight(pointDownRight));
+                oneStepAwayTiles.add(map.getVegetationBelow(pointDownRight));
+                oneStepAwayTiles.add(map.getVegetationDownRight(pointDownLeft));
+                oneStepAwayTiles.add(map.getVegetationBelow(pointDownLeft));
+                oneStepAwayTiles.add(map.getVegetationDownLeft(pointDownLeft));
+                oneStepAwayTiles.add(map.getVegetationUpLeft(pointDownLeft));
+                oneStepAwayTiles.add(map.getVegetationDownLeft(pointLeft));
 
                 System.out.println(" +");
                 System.out.printf("Close tiles: %s%n", closeTiles);
@@ -752,29 +752,29 @@ public class Inspector {
 
         System.out.println(" - Surrounding terrain:");
         System.out.println("   -- Above 1: " +
-                map.getDetailedVegetationUpLeft(infoPoint.up()) + " " +
-                map.getDetailedVegetationAbove(infoPoint.up()) + " " +
-                map.getDetailedVegetationUpRight(infoPoint.up()));
+                map.getVegetationUpLeft(infoPoint.up()) + " " +
+                map.getVegetationAbove(infoPoint.up()) + " " +
+                map.getVegetationUpRight(infoPoint.up()));
         System.out.println("   -- Above 2: " +
-                map.getDetailedVegetationDownLeft(infoPoint.up()) + " " +
-                map.getDetailedVegetationBelow(infoPoint.up()) + " " +
-                map.getDetailedVegetationDownRight(infoPoint.up()));
+                map.getVegetationDownLeft(infoPoint.up()) + " " +
+                map.getVegetationBelow(infoPoint.up()) + " " +
+                map.getVegetationDownRight(infoPoint.up()));
         System.out.println("   -- Above 3: " +
-                map.getDetailedVegetationUpLeft(infoPoint) + " " +
-                map.getDetailedVegetationAbove(infoPoint) + " " +
-                map.getDetailedVegetationUpRight(infoPoint));
+                map.getVegetationUpLeft(infoPoint) + " " +
+                map.getVegetationAbove(infoPoint) + " " +
+                map.getVegetationUpRight(infoPoint));
         System.out.println("   -- Below 1: " +
-                map.getDetailedVegetationDownLeft(infoPoint) + " " +
-                map.getDetailedVegetationBelow(infoPoint) + " " +
-                map.getDetailedVegetationDownRight(infoPoint));
+                map.getVegetationDownLeft(infoPoint) + " " +
+                map.getVegetationBelow(infoPoint) + " " +
+                map.getVegetationDownRight(infoPoint));
         System.out.println("   -- Below 2: " +
-                map.getDetailedVegetationUpLeft(infoPoint.down()) + " " +
-                map.getDetailedVegetationAbove(infoPoint.down()) + " " +
-                map.getDetailedVegetationUpRight(infoPoint.down()));
+                map.getVegetationUpLeft(infoPoint.down()) + " " +
+                map.getVegetationAbove(infoPoint.down()) + " " +
+                map.getVegetationUpRight(infoPoint.down()));
         System.out.println("   -- Below 3: " +
-                map.getDetailedVegetationDownLeft(infoPoint.down()) + " " +
-                map.getDetailedVegetationBelow(infoPoint.down()) + " " +
-                map.getDetailedVegetationDownRight(infoPoint.down()));
+                map.getVegetationDownLeft(infoPoint.down()) + " " +
+                map.getVegetationBelow(infoPoint.down()) + " " +
+                map.getVegetationDownRight(infoPoint.down()));
 
         System.out.println(" - Surrounding available buildings:");
         System.out.println("   -- Above 1: " +

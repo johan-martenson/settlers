@@ -49,19 +49,19 @@ public class TestVegetation {
         /* Verify that each detailed vegetation can be set and read */
         Point point0 = new Point(10, 20);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_1);
-        map.setDetailedVegetationAbove(point0, Vegetation.MOUNTAIN_2);
-        map.setDetailedVegetationUpRight(point0, Vegetation.MOUNTAIN_3);
-        map.setDetailedVegetationDownRight(point0, Vegetation.MOUNTAIN_4);
-        map.setDetailedVegetationBelow(point0, Vegetation.MEADOW_1);
-        map.setDetailedVegetationDownLeft(point0, Vegetation.MEADOW_2);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_1);
+        map.setVegetationAbove(point0, Vegetation.MOUNTAIN_2);
+        map.setVegetationUpRight(point0, Vegetation.MOUNTAIN_3);
+        map.setVegetationDownRight(point0, Vegetation.MOUNTAIN_4);
+        map.setVegetationBelow(point0, Vegetation.MEADOW_1);
+        map.setVegetationDownLeft(point0, Vegetation.MEADOW_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_1);
-        assertEquals(map.getDetailedVegetationAbove(point0), Vegetation.MOUNTAIN_2);
-        assertEquals(map.getDetailedVegetationUpRight(point0), Vegetation.MOUNTAIN_3);
-        assertEquals(map.getDetailedVegetationDownRight(point0), Vegetation.MOUNTAIN_4);
-        assertEquals(map.getDetailedVegetationBelow(point0), Vegetation.MEADOW_1);
-        assertEquals(map.getDetailedVegetationDownLeft(point0), Vegetation.MEADOW_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_1);
+        assertEquals(map.getVegetationAbove(point0), Vegetation.MOUNTAIN_2);
+        assertEquals(map.getVegetationUpRight(point0), Vegetation.MOUNTAIN_3);
+        assertEquals(map.getVegetationDownRight(point0), Vegetation.MOUNTAIN_4);
+        assertEquals(map.getVegetationBelow(point0), Vegetation.MEADOW_1);
+        assertEquals(map.getVegetationDownLeft(point0), Vegetation.MEADOW_2);
     }
 
     @Test
@@ -76,101 +76,101 @@ public class TestVegetation {
         /* Verify that each detailed vegetation can be set and read */
         Point point0 = new Point(10, 20);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.SAVANNAH);
+        map.setVegetationUpLeft(point0, Vegetation.SAVANNAH);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.SAVANNAH);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.SAVANNAH);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_1);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_1);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_1);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_1);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.SNOW);
+        map.setVegetationUpLeft(point0, Vegetation.SNOW);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.SNOW);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.SNOW);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.SWAMP);
+        map.setVegetationUpLeft(point0, Vegetation.SWAMP);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.SWAMP);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.SWAMP);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.DESERT_1);
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_1);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.DESERT_1);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.DESERT_1);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.WATER);
+        map.setVegetationUpLeft(point0, Vegetation.WATER);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.WATER);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.WATER);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.BUILDABLE_WATER);
+        map.setVegetationUpLeft(point0, Vegetation.BUILDABLE_WATER);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.BUILDABLE_WATER);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.BUILDABLE_WATER);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.DESERT_2);
+        map.setVegetationUpLeft(point0, Vegetation.DESERT_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.DESERT_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.DESERT_2);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MEADOW_1);
+        map.setVegetationUpLeft(point0, Vegetation.MEADOW_1);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MEADOW_1);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MEADOW_1);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MEADOW_2);
+        map.setVegetationUpLeft(point0, Vegetation.MEADOW_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MEADOW_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MEADOW_2);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MEADOW_3);
+        map.setVegetationUpLeft(point0, Vegetation.MEADOW_3);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MEADOW_3);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MEADOW_3);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_2);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_2);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_3);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_3);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_3);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_3);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_4);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_4);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_4);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_4);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.STEPPE);
+        map.setVegetationUpLeft(point0, Vegetation.STEPPE);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.STEPPE);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.STEPPE);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.FLOWER_MEADOW);
+        map.setVegetationUpLeft(point0, Vegetation.FLOWER_MEADOW);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.FLOWER_MEADOW);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.FLOWER_MEADOW);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.LAVA);
+        map.setVegetationUpLeft(point0, Vegetation.LAVA);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.LAVA);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MAGENTA);
+        map.setVegetationUpLeft(point0, Vegetation.MAGENTA);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MAGENTA);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MAGENTA);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.MOUNTAIN_MEADOW);
+        map.setVegetationUpLeft(point0, Vegetation.MOUNTAIN_MEADOW);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.MOUNTAIN_MEADOW);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.MOUNTAIN_MEADOW);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.WATER_2);
+        map.setVegetationUpLeft(point0, Vegetation.WATER_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.WATER_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.WATER_2);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.LAVA_2);
+        map.setVegetationUpLeft(point0, Vegetation.LAVA_2);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.LAVA_2);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA_2);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.LAVA_3);
+        map.setVegetationUpLeft(point0, Vegetation.LAVA_3);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.LAVA_3);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA_3);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.LAVA_4);
+        map.setVegetationUpLeft(point0, Vegetation.LAVA_4);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.LAVA_4);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA_4);
 
-        map.setDetailedVegetationUpLeft(point0, Vegetation.BUILDABLE_MOUNTAIN);
+        map.setVegetationUpLeft(point0, Vegetation.BUILDABLE_MOUNTAIN);
 
-        assertEquals(map.getDetailedVegetationUpLeft(point0), Vegetation.BUILDABLE_MOUNTAIN);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.BUILDABLE_MOUNTAIN);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class TestVegetation {
 
         /* Place savannah */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SAVANNAH, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -221,7 +221,7 @@ public class TestVegetation {
 
         /* Place mountain 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_1, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -248,7 +248,7 @@ public class TestVegetation {
 
         /* Place snow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SNOW, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -275,7 +275,7 @@ public class TestVegetation {
 
         /* Place swamp */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SWAMP, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SWAMP, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -302,7 +302,7 @@ public class TestVegetation {
 
         /* Place desert 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_1, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -329,7 +329,7 @@ public class TestVegetation {
 
         /* Place water */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -356,7 +356,7 @@ public class TestVegetation {
 
         /* Place buildable water */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_WATER, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -389,7 +389,7 @@ public class TestVegetation {
 
         /* Place desert 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_2, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -416,7 +416,7 @@ public class TestVegetation {
 
         /* Place meadow 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_1, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -449,7 +449,7 @@ public class TestVegetation {
 
         /* Place meadow 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_2, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -482,7 +482,7 @@ public class TestVegetation {
 
         /* Place meadow 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_3, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -515,7 +515,7 @@ public class TestVegetation {
 
         /* Place mountain 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_2, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -542,7 +542,7 @@ public class TestVegetation {
 
         /* Place mountain 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_3, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -569,7 +569,7 @@ public class TestVegetation {
 
         /* Place mountain 4 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_4, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_4, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -596,7 +596,7 @@ public class TestVegetation {
 
         /* Place steppe */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.STEPPE, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -629,7 +629,7 @@ public class TestVegetation {
 
         /* Place flower meadow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.FLOWER_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.FLOWER_MEADOW, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -662,7 +662,7 @@ public class TestVegetation {
 
         /* Place lava */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -689,7 +689,7 @@ public class TestVegetation {
 
         /* Place magenta */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MAGENTA, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -716,7 +716,7 @@ public class TestVegetation {
 
         /* Place mountain meadow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -749,7 +749,7 @@ public class TestVegetation {
 
         /* Place water 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.WATER_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.WATER_2, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -776,7 +776,7 @@ public class TestVegetation {
 
         /* Place lava 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_2, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -803,7 +803,7 @@ public class TestVegetation {
 
         /* Place lava 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_3, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -830,7 +830,7 @@ public class TestVegetation {
 
         /* Place lava 4 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_4, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_4, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -857,7 +857,7 @@ public class TestVegetation {
 
         /* Place buildable mountain */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's possible to place well */
         Well well0 = map.placeBuilding(new Well(player0), point1);
@@ -893,9 +893,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SAVANNAH, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.SAVANNAH, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.SAVANNAH, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -926,9 +926,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_1, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MOUNTAIN_1, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MOUNTAIN_1, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -957,7 +957,7 @@ public class TestVegetation {
         /* Place snow */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.SNOW, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1003,7 +1003,7 @@ public class TestVegetation {
         /* Place swamp */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.SWAMP, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.SWAMP, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1051,9 +1051,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_1, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.DESERT_1, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.DESERT_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_1, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.DESERT_1, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.DESERT_1, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1082,7 +1082,7 @@ public class TestVegetation {
         /* Place water */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1130,9 +1130,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_WATER, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.BUILDABLE_WATER, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.BUILDABLE_WATER, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1163,9 +1163,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_2, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.DESERT_2, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.DESERT_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_2, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.DESERT_2, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.DESERT_2, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1196,9 +1196,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_1, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MEADOW_1, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MEADOW_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_1, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MEADOW_1, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MEADOW_1, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1229,9 +1229,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_2, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MEADOW_2, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MEADOW_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_2, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MEADOW_2, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MEADOW_2, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1262,9 +1262,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_3, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MEADOW_3, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MEADOW_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_3, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MEADOW_3, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MEADOW_3, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1295,9 +1295,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_2, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MOUNTAIN_2, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MOUNTAIN_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_2, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MOUNTAIN_2, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MOUNTAIN_2, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1328,9 +1328,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_3, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MOUNTAIN_3, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MOUNTAIN_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_3, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MOUNTAIN_3, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MOUNTAIN_3, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1361,9 +1361,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_4, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MOUNTAIN_4, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MOUNTAIN_4, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_4, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MOUNTAIN_4, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MOUNTAIN_4, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1394,9 +1394,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.STEPPE, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.STEPPE, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.STEPPE, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1427,9 +1427,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.FLOWER_MEADOW, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.FLOWER_MEADOW, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.FLOWER_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.FLOWER_MEADOW, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.FLOWER_MEADOW, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.FLOWER_MEADOW, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1458,7 +1458,7 @@ public class TestVegetation {
         /* Place lava */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1506,9 +1506,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MAGENTA, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MAGENTA, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MAGENTA, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1539,9 +1539,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.MOUNTAIN_MEADOW, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.MOUNTAIN_MEADOW, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1570,7 +1570,7 @@ public class TestVegetation {
         /* Place water 2 */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER_2, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER_2, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1616,7 +1616,7 @@ public class TestVegetation {
         /* Place lava 2 */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.LAVA_2, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA_2, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1662,7 +1662,7 @@ public class TestVegetation {
         /* Place lava 3 */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.LAVA_3, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA_3, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1708,7 +1708,7 @@ public class TestVegetation {
         /* Place lava 4 */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.LAVA_4, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA_4, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -1756,9 +1756,9 @@ public class TestVegetation {
         Point point2 = new Point(9, 9);
         Point point3 = new Point(11, 9);
 
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.BUILDABLE_MOUNTAIN, map);
-        Utils.surroundPointWithDetailedVegetation(point3, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point3, Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's possible to place road */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1786,7 +1786,7 @@ public class TestVegetation {
 
         /* Place savannah */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SAVANNAH, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1813,7 +1813,7 @@ public class TestVegetation {
 
         /* Place mountain 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_1, map);
 
         /* Verify that it's possible to place a mine */
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -1846,7 +1846,7 @@ public class TestVegetation {
 
         /* Place snow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SNOW, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1873,7 +1873,7 @@ public class TestVegetation {
 
         /* Place swamp */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.SWAMP, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.SWAMP, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1900,7 +1900,7 @@ public class TestVegetation {
 
         /* Place desert 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_1, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1927,7 +1927,7 @@ public class TestVegetation {
 
         /* Place water */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.WATER, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1954,7 +1954,7 @@ public class TestVegetation {
 
         /* Place buildable water */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_WATER, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_WATER, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -1981,7 +1981,7 @@ public class TestVegetation {
 
         /* Place desert 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.DESERT_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.DESERT_2, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2008,7 +2008,7 @@ public class TestVegetation {
 
         /* Place meadow 1 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_1, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_1, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2035,7 +2035,7 @@ public class TestVegetation {
 
         /* Place meadow 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_2, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2062,7 +2062,7 @@ public class TestVegetation {
 
         /* Place meadow 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MEADOW_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MEADOW_3, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2089,7 +2089,7 @@ public class TestVegetation {
 
         /* Place mountain 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_2, map);
 
         /* Verify that it's possible to place a mine */
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2122,7 +2122,7 @@ public class TestVegetation {
 
         /* Place mountain 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_3, map);
 
         /* Verify that it's possible to place a mine */
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2155,7 +2155,7 @@ public class TestVegetation {
 
         /* Place mountain 4 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_4, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_4, map);
 
         /* Verify that it's possible to place a mine */
         GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -2188,7 +2188,7 @@ public class TestVegetation {
 
         /* Place steppe */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.STEPPE, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2215,7 +2215,7 @@ public class TestVegetation {
 
         /* Place flower meadow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.FLOWER_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.FLOWER_MEADOW, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2242,7 +2242,7 @@ public class TestVegetation {
 
         /* Place lava */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2269,7 +2269,7 @@ public class TestVegetation {
 
         /* Place magenta */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MAGENTA, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2296,7 +2296,7 @@ public class TestVegetation {
 
         /* Place mountain meadow */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.MOUNTAIN_MEADOW, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2323,7 +2323,7 @@ public class TestVegetation {
 
         /* Place water 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.WATER_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.WATER_2, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2350,7 +2350,7 @@ public class TestVegetation {
 
         /* Place lava 2 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_2, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_2, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2377,7 +2377,7 @@ public class TestVegetation {
 
         /* Place lava 3 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_3, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_3, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2404,7 +2404,7 @@ public class TestVegetation {
 
         /* Place lava 4 */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.LAVA_4, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_4, map);
 
         /* Verify that it's not possible to place a mine */
         try {
@@ -2431,7 +2431,7 @@ public class TestVegetation {
 
         /* Place buildable mountain */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithDetailedVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Verify that it's not possible to place a mine */
         try {

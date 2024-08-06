@@ -846,7 +846,6 @@ public class Utils {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
-
             if (building.getAmount(material) == amount) {
                 break;
             }
@@ -867,9 +866,7 @@ public class Utils {
     }
 
     static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
-
         for (int i = 0; i < 2000; i++) {
-
             if (worker.getCargo() != null) {
                 return worker.getCargo();
             }
@@ -883,9 +880,7 @@ public class Utils {
     }
 
     static void waitForCropToGetReady(GameMap map, Crop crop) throws InvalidUserActionException {
-
         for (int i = 0; i < 1000; i++) {
-
             if (crop.getGrowthState() == FULL_GROWN) {
                 break;
             }
@@ -897,7 +892,6 @@ public class Utils {
     }
 
     static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidUserActionException {
-
         waitForFarmerToStartPlanting(map, farmer0);
 
         Point position = farmer0.getPosition();
@@ -912,9 +906,7 @@ public class Utils {
     }
 
     private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
-
         for (int i = 0; i < 10000; i++) {
-
             if (!farmer.isPlanting()) {
                 break;
             }
@@ -926,9 +918,7 @@ public class Utils {
     }
 
     private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
-
         for (int i = 0; i < 10000; i++) {
-
             if (farmer.isPlanting()) {
                 break;
             }
@@ -992,11 +982,9 @@ public class Utils {
     }
 
     static void waitForBuildingToBurnDown(Building building) throws InvalidUserActionException {
-
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
-
             if (building.isDestroyed()) {
                 break;
             }
@@ -1030,19 +1018,7 @@ public class Utils {
 
     }
 
-    static void surroundPointWithVegetation(Point point, Vegetation vegetation, GameMap map) {
-        map.surroundWithVegetation(point, vegetation);
-
-        assertEquals(map.getDetailedVegetationUpLeft(point), vegetation);
-        assertEquals(map.getDetailedVegetationAbove(point), vegetation);
-        assertEquals(map.getDetailedVegetationUpRight(point), vegetation);
-        assertEquals(map.getDetailedVegetationDownRight(point), vegetation);
-        assertEquals(map.getDetailedVegetationBelow(point), vegetation);
-        assertEquals(map.getDetailedVegetationDownLeft(point), vegetation);
-    }
-
     public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws InvalidUserActionException {
-
         for (int i = 0; i < 1000; i++) {
             assertEquals(worker.getHome().getPosition(), worker.getPosition());
 
@@ -1051,7 +1027,6 @@ public class Utils {
     }
 
     public static void plantTreesOnPlayersLand(Player player) {
-
         for (Point point: player.getLandInPoints()) {
             try {
                 player.getMap().placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
@@ -2221,13 +2196,13 @@ public class Utils {
         System.out.println("Min: " + pointMin0 + ", " + pointMin1 + ", " + pointMin2);
     }
 
-    public static void surroundPointWithDetailedVegetation(Point point, Vegetation vegetation, GameMap map) {
-        map.setDetailedVegetationUpLeft(point, vegetation);
-        map.setDetailedVegetationAbove(point, vegetation);
-        map.setDetailedVegetationUpRight(point, vegetation);
-        map.setDetailedVegetationDownRight(point, vegetation);
-        map.setDetailedVegetationBelow(point, vegetation);
-        map.setDetailedVegetationDownLeft(point, vegetation);
+    public static void surroundPointWithVegetation(Point point, Vegetation vegetation, GameMap map) {
+        map.setVegetationUpLeft(point, vegetation);
+        map.setVegetationAbove(point, vegetation);
+        map.setVegetationUpRight(point, vegetation);
+        map.setVegetationDownRight(point, vegetation);
+        map.setVegetationBelow(point, vegetation);
+        map.setVegetationDownLeft(point, vegetation);
     }
 
     public static void waitForWorkerToHaveTargetSet(Worker worker, GameMap map) throws InvalidUserActionException {

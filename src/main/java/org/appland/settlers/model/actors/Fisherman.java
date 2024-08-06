@@ -203,12 +203,12 @@ public class Fisherman extends Worker {
 
             Point position = getPosition();
 
-            Vegetation vegetationUpLeft = map.getDetailedVegetationUpLeft(position);
-            Vegetation vegetationAbove = map.getDetailedVegetationAbove(position);
-            Vegetation vegetationUpRight = map.getDetailedVegetationUpRight(position);
-            Vegetation vegetationDownRight = map.getDetailedVegetationDownRight(position);
-            Vegetation vegetationBelow = map.getDetailedVegetationBelow(position);
-            Vegetation vegetationDownLeft = map.getDetailedVegetationDownLeft(position);
+            Vegetation vegetationUpLeft = map.getVegetationUpLeft(position);
+            Vegetation vegetationAbove = map.getVegetationAbove(position);
+            Vegetation vegetationUpRight = map.getVegetationUpRight(position);
+            Vegetation vegetationDownRight = map.getVegetationDownRight(position);
+            Vegetation vegetationBelow = map.getVegetationBelow(position);
+            Vegetation vegetationDownLeft = map.getVegetationDownLeft(position);
 
             boolean isWaterUpLeft = Vegetation.WATER_VEGETATION.contains(vegetationUpLeft);
             boolean isWaterAbove = Vegetation.WATER_VEGETATION.contains(vegetationAbove);

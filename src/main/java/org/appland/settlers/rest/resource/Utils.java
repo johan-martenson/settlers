@@ -297,8 +297,8 @@ class Utils {
             for (int x = start; x + 1 < map.getWidth(); x += 2) {
                 Point point = new Point(x, y);
 
-                Vegetation below = map.getDetailedVegetationBelow(point);
-                Vegetation downRight = map.getDetailedVegetationDownRight(point);
+                Vegetation below = map.getVegetationBelow(point);
+                Vegetation downRight = map.getVegetationDownRight(point);
 
                 jsonTrianglesBelow.add(vegetationToJson(below));
                 jsonTrianglesBelowRight.add(vegetationToJson(downRight));
@@ -1861,8 +1861,8 @@ class Utils {
             for (int x = start; x + 1 < map.getWidth(); x += 2) {
                 Point point = new Point(x, y);
 
-                Vegetation below = map.getDetailedVegetationBelow(point);
-                Vegetation downRight = map.getDetailedVegetationDownRight(point);
+                Vegetation below = map.getVegetationBelow(point);
+                Vegetation downRight = map.getVegetationDownRight(point);
 
                 jsonTrianglesBelow.add(vegetationToJson(below));
                 jsonTrianglesBelowRight.add(vegetationToJson(downRight));

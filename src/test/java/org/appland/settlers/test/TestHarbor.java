@@ -73,7 +73,7 @@ public class TestHarbor {
         /* Place a lake */
         Point point0 = new Point(10, 10);
 
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Verify that it's possible to mark that it's possible to place a harbor at a point on the map */
         assertFalse(map.isAvailableHarborPoint(point0));
@@ -123,7 +123,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 12);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 11);
@@ -164,7 +164,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 12);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(11, 9);
@@ -205,7 +205,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 12);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(11, 9);
@@ -246,7 +246,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(7, 13);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(6, 10);
@@ -290,7 +290,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(12, 6);
@@ -318,7 +318,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(10, 8);
@@ -354,7 +354,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(10, 8);
@@ -396,7 +396,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(13, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(10, 8);
@@ -438,7 +438,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(6, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 7);
@@ -484,7 +484,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point2 = new Point(18, 10);
-        Utils.surroundPointWithDetailedVegetation(point2, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point3 = new Point(15, 9);
@@ -544,7 +544,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(10, 14);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(7, 13);
@@ -608,7 +608,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(10, 14);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(7, 13);
@@ -677,7 +677,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 8);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 7);
@@ -729,7 +729,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(20, 14);
@@ -781,7 +781,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(18, 16);
@@ -839,7 +839,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(18, 16);
@@ -900,7 +900,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(24, 16);
@@ -952,7 +952,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(22, 14);
@@ -1005,7 +1005,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 17);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(18, 16);
@@ -1061,7 +1061,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 8);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 7);
@@ -1118,7 +1118,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 8);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 7);
@@ -1170,7 +1170,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(9, 9);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(12, 8);
@@ -1205,7 +1205,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 8);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(9, 7);
@@ -1240,7 +1240,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(11, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -1283,7 +1283,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(12, 6);
@@ -1328,7 +1328,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(19, 15);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(22, 14);
@@ -1378,7 +1378,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(32, 18);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(29, 17);
@@ -1561,7 +1561,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 5);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(13, 5);
@@ -1633,7 +1633,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(12, 6);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(15, 5);
@@ -1709,7 +1709,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 5);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(15, 7);
@@ -1780,7 +1780,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(18, 14);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(15, 13);
@@ -1837,7 +1837,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(18, 18);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(17, 15);
@@ -1897,7 +1897,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 13);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(24, 10);
@@ -1960,7 +1960,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(24, 10);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(27, 9);
@@ -2014,7 +2014,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(18, 18);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(15, 17);
@@ -2065,7 +2065,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(11, 11);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(10, 8);
@@ -2099,7 +2099,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(7, 13);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(6, 10);
@@ -2130,7 +2130,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(7, 13);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(6, 10);
@@ -2170,7 +2170,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(10, 12);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(7, 11);
@@ -2206,7 +2206,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -2280,7 +2280,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -2379,7 +2379,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -2436,7 +2436,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -2503,7 +2503,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(17, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(14, 6);
@@ -2563,7 +2563,7 @@ public class TestHarbor {
 
         /* Place a lake */
         Point point0 = new Point(21, 7);
-        Utils.surroundPointWithDetailedVegetation(point0, Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point0, Vegetation.WATER, map);
 
         /* Mark a possible place for a harbor */
         Point point1 = new Point(16, 6);

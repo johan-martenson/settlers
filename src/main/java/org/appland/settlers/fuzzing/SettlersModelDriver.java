@@ -978,7 +978,7 @@ public class SettlersModelDriver {
 
         testCaseGenerator.recordSetVegetationDownRight(point, vegetation);
 
-        map.setDetailedVegetationDownRight(point, vegetation);
+        map.setVegetationDownRight(point, vegetation);
     }
 
     private static void setVegetationBelow(GameMap map, ArgumentsHandler arguments) throws SettlersModelDriverException {
@@ -1007,7 +1007,7 @@ public class SettlersModelDriver {
 
         testCaseGenerator.recordSetVegetationBelow(point, vegetation);
 
-        map.setDetailedVegetationBelow(point, vegetation);
+        map.setVegetationBelow(point, vegetation);
     }
 
     /**

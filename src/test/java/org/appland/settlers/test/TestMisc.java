@@ -1508,31 +1508,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, STEPPE);
-        map.setDetailedVegetationAbove(point0, STEPPE);
-        map.setDetailedVegetationUpRight(point0, STEPPE);
-        map.setDetailedVegetationDownRight(point0, STEPPE);
-        map.setDetailedVegetationBelow(point0, STEPPE);
-        map.setDetailedVegetationDownLeft(point0, STEPPE);
+        map.setVegetationUpLeft(point0, STEPPE);
+        map.setVegetationAbove(point0, STEPPE);
+        map.setVegetationUpRight(point0, STEPPE);
+        map.setVegetationDownRight(point0, STEPPE);
+        map.setVegetationBelow(point0, STEPPE);
+        map.setVegetationDownLeft(point0, STEPPE);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), STEPPE);
-        map.setDetailedVegetationAbove(point0.upRight(), DESERT_1);
-        map.setDetailedVegetationUpRight(point0.upRight(), DESERT_1);
-        map.setDetailedVegetationAbove(point0.right(), DESERT_1);
-        map.setDetailedVegetationUpRight(point0.right(), DESERT_1);
-        map.setDetailedVegetationDownRight(point0.right(), DESERT_1);
-        map.setDetailedVegetationBelow(point0.right(), DESERT_1);
-        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationBelow(point0.downRight(), STEPPE);
-        map.setDetailedVegetationDownLeft(point0.downRight(), STEPPE);
-        map.setDetailedVegetationBelow(point0.downLeft(), STEPPE);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), STEPPE);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), STEPPE);
-        map.setDetailedVegetationDownLeft(point0.left(), STEPPE);
-        map.setDetailedVegetationUpLeft(point0.left(), STEPPE);
-        map.setDetailedVegetationAbove(point0.left(), STEPPE);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), STEPPE);
-        map.setDetailedVegetationAbove(point0.upLeft(), STEPPE);
+        map.setVegetationUpRight(point0.upLeft(), STEPPE);
+        map.setVegetationAbove(point0.upRight(), DESERT_1);
+        map.setVegetationUpRight(point0.upRight(), DESERT_1);
+        map.setVegetationAbove(point0.right(), DESERT_1);
+        map.setVegetationUpRight(point0.right(), DESERT_1);
+        map.setVegetationDownRight(point0.right(), DESERT_1);
+        map.setVegetationBelow(point0.right(), DESERT_1);
+        map.setVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setVegetationBelow(point0.downRight(), STEPPE);
+        map.setVegetationDownLeft(point0.downRight(), STEPPE);
+        map.setVegetationBelow(point0.downLeft(), STEPPE);
+        map.setVegetationDownLeft(point0.downLeft(), STEPPE);
+        map.setVegetationUpLeft(point0.downLeft(), STEPPE);
+        map.setVegetationDownLeft(point0.left(), STEPPE);
+        map.setVegetationUpLeft(point0.left(), STEPPE);
+        map.setVegetationAbove(point0.left(), STEPPE);
+        map.setVegetationUpLeft(point0.upLeft(), STEPPE);
+        map.setVegetationAbove(point0.upLeft(), STEPPE);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1578,31 +1578,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
-        map.setDetailedVegetationAbove(point0, SAVANNAH);
-        map.setDetailedVegetationUpRight(point0, STEPPE);
-        map.setDetailedVegetationDownRight(point0, STEPPE);
-        map.setDetailedVegetationBelow(point0, STEPPE);
-        map.setDetailedVegetationDownLeft(point0, STEPPE);
+        map.setVegetationUpLeft(point0, SAVANNAH);
+        map.setVegetationAbove(point0, SAVANNAH);
+        map.setVegetationUpRight(point0, STEPPE);
+        map.setVegetationDownRight(point0, STEPPE);
+        map.setVegetationBelow(point0, STEPPE);
+        map.setVegetationDownLeft(point0, STEPPE);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.upRight(), SAVANNAH);
-        map.setDetailedVegetationUpRight(point0.upRight(), MEADOW_2);
-        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
-        map.setDetailedVegetationUpRight(point0.right(), STEPPE);
-        map.setDetailedVegetationDownRight(point0.right(), STEPPE);
-        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
-        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationBelow(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.downRight(), STEPPE);
-        map.setDetailedVegetationBelow(point0.downLeft(), STEPPE);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.left(), DESERT_1);
-        map.setDetailedVegetationUpLeft(point0.left(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.left(), SAVANNAH);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
+        map.setVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setVegetationAbove(point0.upRight(), SAVANNAH);
+        map.setVegetationUpRight(point0.upRight(), MEADOW_2);
+        map.setVegetationAbove(point0.right(), MEADOW_1);
+        map.setVegetationUpRight(point0.right(), STEPPE);
+        map.setVegetationDownRight(point0.right(), STEPPE);
+        map.setVegetationBelow(point0.right(), MEADOW_1);
+        map.setVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setVegetationBelow(point0.downRight(), DESERT_1);
+        map.setVegetationDownLeft(point0.downRight(), STEPPE);
+        map.setVegetationBelow(point0.downLeft(), STEPPE);
+        map.setVegetationDownLeft(point0.downLeft(), DESERT_1);
+        map.setVegetationUpLeft(point0.downLeft(), DESERT_1);
+        map.setVegetationDownLeft(point0.left(), DESERT_1);
+        map.setVegetationUpLeft(point0.left(), SAVANNAH);
+        map.setVegetationAbove(point0.left(), SAVANNAH);
+        map.setVegetationUpLeft(point0.upLeft(), SAVANNAH);
+        map.setVegetationAbove(point0.upLeft(), SAVANNAH);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1648,31 +1648,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
-        map.setDetailedVegetationAbove(point0, SAVANNAH);
-        map.setDetailedVegetationUpRight(point0, SAVANNAH);
-        map.setDetailedVegetationDownRight(point0, SAVANNAH);
-        map.setDetailedVegetationBelow(point0, SAVANNAH);
-        map.setDetailedVegetationDownLeft(point0, SAVANNAH);
+        map.setVegetationUpLeft(point0, SAVANNAH);
+        map.setVegetationAbove(point0, SAVANNAH);
+        map.setVegetationUpRight(point0, SAVANNAH);
+        map.setVegetationDownRight(point0, SAVANNAH);
+        map.setVegetationBelow(point0, SAVANNAH);
+        map.setVegetationDownLeft(point0, SAVANNAH);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.upRight(), SAVANNAH);
-        map.setDetailedVegetationUpRight(point0.upRight(), DESERT_1);
-        map.setDetailedVegetationAbove(point0.right(), DESERT_1);
-        map.setDetailedVegetationUpRight(point0.right(), WATER);
-        map.setDetailedVegetationDownRight(point0.right(), WATER);
-        map.setDetailedVegetationBelow(point0.right(), DESERT_1);
-        map.setDetailedVegetationDownRight(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationBelow(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.downRight(), DESERT_1);
-        map.setDetailedVegetationBelow(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), SAVANNAH);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), SAVANNAH);
-        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_3);
-        map.setDetailedVegetationUpLeft(point0.left(), MEADOW_3);
-        map.setDetailedVegetationAbove(point0.left(), MEADOW_3);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), MEADOW_3);
-        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_2);
+        map.setVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setVegetationAbove(point0.upRight(), SAVANNAH);
+        map.setVegetationUpRight(point0.upRight(), DESERT_1);
+        map.setVegetationAbove(point0.right(), DESERT_1);
+        map.setVegetationUpRight(point0.right(), WATER);
+        map.setVegetationDownRight(point0.right(), WATER);
+        map.setVegetationBelow(point0.right(), DESERT_1);
+        map.setVegetationDownRight(point0.downRight(), DESERT_1);
+        map.setVegetationBelow(point0.downRight(), DESERT_1);
+        map.setVegetationDownLeft(point0.downRight(), DESERT_1);
+        map.setVegetationBelow(point0.downLeft(), DESERT_1);
+        map.setVegetationDownLeft(point0.downLeft(), SAVANNAH);
+        map.setVegetationUpLeft(point0.downLeft(), SAVANNAH);
+        map.setVegetationDownLeft(point0.left(), MEADOW_3);
+        map.setVegetationUpLeft(point0.left(), MEADOW_3);
+        map.setVegetationAbove(point0.left(), MEADOW_3);
+        map.setVegetationUpLeft(point0.upLeft(), MEADOW_3);
+        map.setVegetationAbove(point0.upLeft(), MEADOW_2);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1718,31 +1718,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, MEADOW_1);
-        map.setDetailedVegetationAbove(point0, MEADOW_1);
-        map.setDetailedVegetationUpRight(point0, MEADOW_1);
-        map.setDetailedVegetationDownRight(point0, MEADOW_1);
-        map.setDetailedVegetationBelow(point0, MEADOW_1);
-        map.setDetailedVegetationDownLeft(point0, MEADOW_1);
+        map.setVegetationUpLeft(point0, MEADOW_1);
+        map.setVegetationAbove(point0, MEADOW_1);
+        map.setVegetationUpRight(point0, MEADOW_1);
+        map.setVegetationDownRight(point0, MEADOW_1);
+        map.setVegetationBelow(point0, MEADOW_1);
+        map.setVegetationDownLeft(point0, MEADOW_1);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), MEADOW_1);
-        map.setDetailedVegetationAbove(point0.upRight(), MEADOW_1);
-        map.setDetailedVegetationUpRight(point0.upRight(), MEADOW_1);
-        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
-        map.setDetailedVegetationUpRight(point0.right(), MEADOW_1);
-        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
-        map.setDetailedVegetationDownRight(point0.downRight(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.downRight(), MEADOW_1);
-        map.setDetailedVegetationDownLeft(point0.downRight(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), DESERT_1);
-        map.setDetailedVegetationDownLeft(point0.left(), DESERT_1);
-        map.setDetailedVegetationUpLeft(point0.left(), DESERT_1);
-        map.setDetailedVegetationAbove(point0.left(), DESERT_1);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), DESERT_1);
-        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_1);
+        map.setVegetationUpRight(point0.upLeft(), MEADOW_1);
+        map.setVegetationAbove(point0.upRight(), MEADOW_1);
+        map.setVegetationUpRight(point0.upRight(), MEADOW_1);
+        map.setVegetationAbove(point0.right(), MEADOW_1);
+        map.setVegetationUpRight(point0.right(), MEADOW_1);
+        map.setVegetationDownRight(point0.right(), MEADOW_1);
+        map.setVegetationBelow(point0.right(), MEADOW_1);
+        map.setVegetationDownRight(point0.downRight(), MEADOW_1);
+        map.setVegetationBelow(point0.downRight(), MEADOW_1);
+        map.setVegetationDownLeft(point0.downRight(), MEADOW_1);
+        map.setVegetationBelow(point0.downLeft(), DESERT_1);
+        map.setVegetationDownLeft(point0.downLeft(), DESERT_1);
+        map.setVegetationUpLeft(point0.downLeft(), DESERT_1);
+        map.setVegetationDownLeft(point0.left(), DESERT_1);
+        map.setVegetationUpLeft(point0.left(), DESERT_1);
+        map.setVegetationAbove(point0.left(), DESERT_1);
+        map.setVegetationUpLeft(point0.upLeft(), DESERT_1);
+        map.setVegetationAbove(point0.upLeft(), MEADOW_1);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1790,31 +1790,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, MEADOW_2);
-        map.setDetailedVegetationAbove(point0, MEADOW_2);
-        map.setDetailedVegetationUpRight(point0, MEADOW_2);
-        map.setDetailedVegetationDownRight(point0, MEADOW_1);
-        map.setDetailedVegetationBelow(point0, MEADOW_1);
-        map.setDetailedVegetationDownLeft(point0, MEADOW_2);
+        map.setVegetationUpLeft(point0, MEADOW_2);
+        map.setVegetationAbove(point0, MEADOW_2);
+        map.setVegetationUpRight(point0, MEADOW_2);
+        map.setVegetationDownRight(point0, MEADOW_1);
+        map.setVegetationBelow(point0, MEADOW_1);
+        map.setVegetationDownLeft(point0, MEADOW_2);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.upRight(), WATER);
-        map.setDetailedVegetationUpRight(point0.upRight(), WATER);
-        map.setDetailedVegetationAbove(point0.right(), MEADOW_2);
-        map.setDetailedVegetationUpRight(point0.right(), SAVANNAH);
-        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.right(), MEADOW_1);
-        map.setDetailedVegetationDownRight(point0.downRight(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.downRight(), MEADOW_1);
-        map.setDetailedVegetationDownLeft(point0.downRight(), FLOWER_MEADOW);
-        map.setDetailedVegetationBelow(point0.downLeft(), FLOWER_MEADOW);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), MEADOW_2);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), MEADOW_2);
-        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_2);
-        map.setDetailedVegetationUpLeft(point0.left(), MEADOW_2);
-        map.setDetailedVegetationAbove(point0.left(), MEADOW_2);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.upLeft(), SAVANNAH);
+        map.setVegetationUpRight(point0.upLeft(), SAVANNAH);
+        map.setVegetationAbove(point0.upRight(), WATER);
+        map.setVegetationUpRight(point0.upRight(), WATER);
+        map.setVegetationAbove(point0.right(), MEADOW_2);
+        map.setVegetationUpRight(point0.right(), SAVANNAH);
+        map.setVegetationDownRight(point0.right(), MEADOW_1);
+        map.setVegetationBelow(point0.right(), MEADOW_1);
+        map.setVegetationDownRight(point0.downRight(), MEADOW_1);
+        map.setVegetationBelow(point0.downRight(), MEADOW_1);
+        map.setVegetationDownLeft(point0.downRight(), FLOWER_MEADOW);
+        map.setVegetationBelow(point0.downLeft(), FLOWER_MEADOW);
+        map.setVegetationDownLeft(point0.downLeft(), MEADOW_2);
+        map.setVegetationUpLeft(point0.downLeft(), MEADOW_2);
+        map.setVegetationDownLeft(point0.left(), MEADOW_2);
+        map.setVegetationUpLeft(point0.left(), MEADOW_2);
+        map.setVegetationAbove(point0.left(), MEADOW_2);
+        map.setVegetationUpLeft(point0.upLeft(), SAVANNAH);
+        map.setVegetationAbove(point0.upLeft(), SAVANNAH);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1862,31 +1862,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, SAVANNAH);
-        map.setDetailedVegetationAbove(point0, SAVANNAH);
-        map.setDetailedVegetationUpRight(point0, SAVANNAH);
-        map.setDetailedVegetationDownRight(point0, SAVANNAH);
-        map.setDetailedVegetationBelow(point0, SAVANNAH);
-        map.setDetailedVegetationDownLeft(point0, SAVANNAH);
+        map.setVegetationUpLeft(point0, SAVANNAH);
+        map.setVegetationAbove(point0, SAVANNAH);
+        map.setVegetationUpRight(point0, SAVANNAH);
+        map.setVegetationDownRight(point0, SAVANNAH);
+        map.setVegetationBelow(point0, SAVANNAH);
+        map.setVegetationDownLeft(point0, SAVANNAH);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), WATER);
-        map.setDetailedVegetationAbove(point0.upRight(), WATER);
-        map.setDetailedVegetationUpRight(point0.upRight(), WATER);
-        map.setDetailedVegetationAbove(point0.right(), WATER);
-        map.setDetailedVegetationUpRight(point0.right(), WATER);
-        map.setDetailedVegetationDownRight(point0.right(), WATER);
-        map.setDetailedVegetationBelow(point0.right(), WATER);
-        map.setDetailedVegetationDownRight(point0.downRight(), WATER);
-        map.setDetailedVegetationBelow(point0.downRight(), SAVANNAH);
-        map.setDetailedVegetationDownLeft(point0.downRight(), WATER);
-        map.setDetailedVegetationBelow(point0.downLeft(), WATER);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), WATER);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), SAVANNAH);
-        map.setDetailedVegetationDownLeft(point0.left(), SAVANNAH);
-        map.setDetailedVegetationUpLeft(point0.left(), SAVANNAH);
-        map.setDetailedVegetationAbove(point0.left(), SAVANNAH);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), WATER);
-        map.setDetailedVegetationAbove(point0.upLeft(), WATER);
+        map.setVegetationUpRight(point0.upLeft(), WATER);
+        map.setVegetationAbove(point0.upRight(), WATER);
+        map.setVegetationUpRight(point0.upRight(), WATER);
+        map.setVegetationAbove(point0.right(), WATER);
+        map.setVegetationUpRight(point0.right(), WATER);
+        map.setVegetationDownRight(point0.right(), WATER);
+        map.setVegetationBelow(point0.right(), WATER);
+        map.setVegetationDownRight(point0.downRight(), WATER);
+        map.setVegetationBelow(point0.downRight(), SAVANNAH);
+        map.setVegetationDownLeft(point0.downRight(), WATER);
+        map.setVegetationBelow(point0.downLeft(), WATER);
+        map.setVegetationDownLeft(point0.downLeft(), WATER);
+        map.setVegetationUpLeft(point0.downLeft(), SAVANNAH);
+        map.setVegetationDownLeft(point0.left(), SAVANNAH);
+        map.setVegetationUpLeft(point0.left(), SAVANNAH);
+        map.setVegetationAbove(point0.left(), SAVANNAH);
+        map.setVegetationUpLeft(point0.upLeft(), WATER);
+        map.setVegetationAbove(point0.upLeft(), WATER);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
@@ -1934,31 +1934,31 @@ public class TestMisc {
         /* Create the terrain used in the africa map */
         Point point0 = new Point(68, 68);
 
-        map.setDetailedVegetationUpLeft(point0, MEADOW_2);
-        map.setDetailedVegetationAbove(point0, MEADOW_2);
-        map.setDetailedVegetationUpRight(point0, MEADOW_1);
-        map.setDetailedVegetationDownRight(point0, MEADOW_3);
-        map.setDetailedVegetationBelow(point0, MEADOW_3);
-        map.setDetailedVegetationDownLeft(point0, MEADOW_2);
+        map.setVegetationUpLeft(point0, MEADOW_2);
+        map.setVegetationAbove(point0, MEADOW_2);
+        map.setVegetationUpRight(point0, MEADOW_1);
+        map.setVegetationDownRight(point0, MEADOW_3);
+        map.setVegetationBelow(point0, MEADOW_3);
+        map.setVegetationDownLeft(point0, MEADOW_2);
 
-        map.setDetailedVegetationUpRight(point0.upLeft(), MEADOW_3);
-        map.setDetailedVegetationAbove(point0.upRight(), FLOWER_MEADOW);
-        map.setDetailedVegetationUpRight(point0.upRight(), FLOWER_MEADOW);
-        map.setDetailedVegetationAbove(point0.right(), MEADOW_1);
-        map.setDetailedVegetationUpRight(point0.right(), MEADOW_1);
-        map.setDetailedVegetationDownRight(point0.right(), MEADOW_1);
-        map.setDetailedVegetationBelow(point0.right(), MEADOW_3);
-        map.setDetailedVegetationDownRight(point0.downRight(), SWAMP);
-        map.setDetailedVegetationBelow(point0.downRight(), SWAMP);
-        map.setDetailedVegetationDownLeft(point0.downRight(), MEADOW_2);
-        map.setDetailedVegetationBelow(point0.downLeft(), SWAMP);
-        map.setDetailedVegetationDownLeft(point0.downLeft(), SWAMP);
-        map.setDetailedVegetationUpLeft(point0.downLeft(), MEADOW_2);
-        map.setDetailedVegetationDownLeft(point0.left(), MEADOW_3);
-        map.setDetailedVegetationUpLeft(point0.left(), SWAMP);
-        map.setDetailedVegetationAbove(point0.left(), SWAMP);
-        map.setDetailedVegetationUpLeft(point0.upLeft(), SWAMP);
-        map.setDetailedVegetationAbove(point0.upLeft(), MEADOW_3);
+        map.setVegetationUpRight(point0.upLeft(), MEADOW_3);
+        map.setVegetationAbove(point0.upRight(), FLOWER_MEADOW);
+        map.setVegetationUpRight(point0.upRight(), FLOWER_MEADOW);
+        map.setVegetationAbove(point0.right(), MEADOW_1);
+        map.setVegetationUpRight(point0.right(), MEADOW_1);
+        map.setVegetationDownRight(point0.right(), MEADOW_1);
+        map.setVegetationBelow(point0.right(), MEADOW_3);
+        map.setVegetationDownRight(point0.downRight(), SWAMP);
+        map.setVegetationBelow(point0.downRight(), SWAMP);
+        map.setVegetationDownLeft(point0.downRight(), MEADOW_2);
+        map.setVegetationBelow(point0.downLeft(), SWAMP);
+        map.setVegetationDownLeft(point0.downLeft(), SWAMP);
+        map.setVegetationUpLeft(point0.downLeft(), MEADOW_2);
+        map.setVegetationDownLeft(point0.left(), MEADOW_3);
+        map.setVegetationUpLeft(point0.left(), SWAMP);
+        map.setVegetationAbove(point0.left(), SWAMP);
+        map.setVegetationUpLeft(point0.upLeft(), SWAMP);
+        map.setVegetationAbove(point0.upLeft(), MEADOW_3);
 
         /* Place headquarters */
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);

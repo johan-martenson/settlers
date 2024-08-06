@@ -528,9 +528,9 @@ public class TestTree {
 
         /* Place savannah and mountain on the map */
         Point point1 = new Point(12, 6);
-        map.setDetailedVegetationBelow(point1, SAVANNAH);
-        map.setDetailedVegetationDownRight(point1, MOUNTAIN_1);
-        map.setDetailedVegetationDownLeft(point1, DESERT_1);
+        map.setVegetationBelow(point1, SAVANNAH);
+        map.setVegetationDownRight(point1, MOUNTAIN_1);
+        map.setVegetationDownLeft(point1, DESERT_1);
 
         /* Verify that a dead tree can be placed on a mountain */
         map.placeDeadTree(point1);

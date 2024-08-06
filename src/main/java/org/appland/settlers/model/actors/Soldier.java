@@ -587,8 +587,8 @@ public class Soldier extends Worker {
                 .filter(point -> !taken.contains(point))
                 .filter(point -> !map.isBuildingAtPoint(point))
                 .filter(point -> !map.isStoneAtPoint(point))
-                .filter(point -> map.getDetailedVegetationUpLeft(point).canWalkOn() || map.getDetailedVegetationDownLeft(point).canWalkOn())
-                .filter(point -> map.getDetailedVegetationUpRight(point).canWalkOn() || map.getDetailedVegetationDownRight(point).canWalkOn())
+                .filter(point -> map.getVegetationUpLeft(point).canWalkOn() || map.getVegetationDownLeft(point).canWalkOn())
+                .filter(point -> map.getVegetationUpRight(point).canWalkOn() || map.getVegetationDownRight(point).canWalkOn())
                 .filter(point -> map.findWayOffroad(
                         getPosition(),
                         point,
@@ -698,8 +698,8 @@ public class Soldier extends Worker {
                         .filter(point -> !taken.contains(point))
                         .filter(point -> !map.isBuildingAtPoint(point))
                         .filter(point -> !map.isStoneAtPoint(point))
-                        .filter(point -> map.getDetailedVegetationUpLeft(point).canWalkOn() || map.getDetailedVegetationDownLeft(point).canWalkOn())
-                        .filter(point -> map.getDetailedVegetationUpRight(point).canWalkOn() || map.getDetailedVegetationDownRight(point).canWalkOn())
+                        .filter(point -> map.getVegetationUpLeft(point).canWalkOn() || map.getVegetationDownLeft(point).canWalkOn())
+                        .filter(point -> map.getVegetationUpRight(point).canWalkOn() || map.getVegetationDownRight(point).canWalkOn())
                         .filter(point -> map.findWayOffroad(
                                 getPosition(),
                                 point,

@@ -96,12 +96,12 @@ public class TestPlacementInTerrain {
         Point point7 = new Point(7, 5);
         Point point8 = new Point(8, 4);
 
-        assertEquals(map.getDetailedVegetationDownLeft(fishery0.getFlag().getPosition()), WATER);
-        assertEquals(map.getDetailedVegetationBelow(fishery0.getFlag().getPosition()), WATER);
+        assertEquals(map.getVegetationDownLeft(fishery0.getFlag().getPosition()), WATER);
+        assertEquals(map.getVegetationBelow(fishery0.getFlag().getPosition()), WATER);
 
-        assertEquals(map.getDetailedVegetationDownLeft(point7), WATER);
-        assertEquals(map.getDetailedVegetationBelow(point7), WATER);
-        assertEquals(map.getDetailedVegetationDownRight(point7), MEADOW_1);
+        assertEquals(map.getVegetationDownLeft(point7), WATER);
+        assertEquals(map.getVegetationBelow(point7), WATER);
+        assertEquals(map.getVegetationDownRight(point7), MEADOW_1);
 
         assertTrue(map.isNextToAnyWater(fishery0.getFlag().getPosition()));
         assertTrue(map.isNextToAnyWater(fishery1.getFlag().getPosition()));
@@ -811,8 +811,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getDetailedVegetationAbove(point6), SNOW);
-        assertEquals(map.getDetailedVegetationBelow(point7), SNOW);
+        assertEquals(map.getVegetationAbove(point6), SNOW);
+        assertEquals(map.getVegetationBelow(point7), SNOW);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3352,8 +3352,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getDetailedVegetationAbove(point6), LAVA);
-        assertEquals(map.getDetailedVegetationBelow(point7), LAVA);
+        assertEquals(map.getVegetationAbove(point6), LAVA);
+        assertEquals(map.getVegetationBelow(point7), LAVA);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3753,8 +3753,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getDetailedVegetationAbove(point6), WATER_2);
-        assertEquals(map.getDetailedVegetationBelow(point7), WATER_2);
+        assertEquals(map.getVegetationAbove(point6), WATER_2);
+        assertEquals(map.getVegetationBelow(point7), WATER_2);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4155,8 +4155,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getDetailedVegetationAbove(point6), WATER);
-        assertEquals(map.getDetailedVegetationBelow(point7), WATER);
+        assertEquals(map.getVegetationAbove(point6), WATER);
+        assertEquals(map.getVegetationBelow(point7), WATER);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -4557,8 +4557,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getDetailedVegetationAbove(point6), SWAMP);
-        assertEquals(map.getDetailedVegetationBelow(point7), SWAMP);
+        assertEquals(map.getVegetationAbove(point6), SWAMP);
+        assertEquals(map.getVegetationBelow(point7), SWAMP);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {

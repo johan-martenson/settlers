@@ -886,7 +886,7 @@ public class TestGameMonitoringOfWorkerActions {
         /* Place fish on one tile */
         Point point2 = new Point(5, 5);
 
-        map.setDetailedVegetationBelow(point2, WATER);
+        map.setVegetationBelow(point2, WATER);
 
         /* Place headquarters */
         Point point3 = new Point(15, 9);
@@ -986,7 +986,7 @@ public class TestGameMonitoringOfWorkerActions {
         /* Place fish on one tile */
         Point point2 = new Point(5, 5);
 
-        map.setDetailedVegetationBelow(point2, WATER);
+        map.setVegetationBelow(point2, WATER);
 
         /* Place headquarters */
         Point point3 = new Point(15, 9);

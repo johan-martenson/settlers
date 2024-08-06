@@ -678,11 +678,11 @@ public class MapLoader {
 
             /* Assign textures */
             if (mapFilePoint.getVegetationBelow() != null) {
-                gameMap.setDetailedVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
+                gameMap.setVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
             }
 
             if (mapFilePoint.getVegetationDownRight() != null) {
-                gameMap.setDetailedVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
+                gameMap.setVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
             }
 
             /* Set mineral quantities */

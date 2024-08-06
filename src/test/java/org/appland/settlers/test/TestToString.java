@@ -824,7 +824,7 @@ public class TestToString {
         for (int i = 7; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
@@ -920,7 +920,7 @@ public class TestToString {
         for (int i = 7; i < 53; i += 2) {
             Point point = new Point(i, 11);  // 7, 11  --  51, 11
 
-            Utils.surroundPointWithDetailedVegetation(point, Vegetation.WATER, map);
+            Utils.surroundPointWithVegetation(point, Vegetation.WATER, map);
         }
 
         /* Mark a possible place for a harbor */
