@@ -106,47 +106,40 @@ public class Geologist extends Worker {
 
     @Override
     protected void onArrival() {
-        if (state == WALKING_TO_TARGET) {
-            flagPoint = getPosition();
+        switch (state) {
+            case WALKING_TO_TARGET -> {
+                flagPoint = getPosition();
+                Point point = findSiteToExamine();
 
-            Point point = findSiteToExamine();
-
-            if (point == null) {
+                if (point == null) {
+                    state = RETURNING_TO_STORAGE;
+                    setTarget(GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer()).getPosition(), flagPoint);
+                } else {
+                    state = GOING_TO_NEXT_SITE;
+                    setOffroadTarget(point);
+                }
+            }
+            case GOING_TO_NEXT_SITE -> {
+                state = INVESTIGATING;
+                map.reportWorkerStartedAction(this, WorkerAction.INVESTIGATING);
+                countdown.countFrom(TIME_TO_INVESTIGATE);
+            }
+            case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
+                Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
 
-                setTarget(GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer()).getPosition(), flagPoint);
-            } else {
-                state = GOING_TO_NEXT_SITE;
-
-                setOffroadTarget(point);
+                if (storage != null) {
+                    setTarget(storage.getPosition());
+                } else {
+                    storage = getPlayer().getClosestStorageOffroad(flagPoint);
+                    setOffroadTarget(storage.getPosition());
+                }
             }
-        } else if (state == GOING_TO_NEXT_SITE) {
-            state = INVESTIGATING;
-
-            map.reportWorkerStartedAction(this, WorkerAction.INVESTIGATING);
-
-            countdown.countFrom(TIME_TO_INVESTIGATE);
-        } else if (state == RETURNING_TO_FLAG) {
-            state = RETURNING_TO_STORAGE;
-
-            /* Try to go to the storage on roads */
-            Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
-
-            if (storage != null) {
-                setTarget(storage.getPosition());
-
-            /* Go back off-road if the flag has been removed */
-            } else {
-                storage = getPlayer().getClosestStorageOffroad(flagPoint);
-
-                setOffroadTarget(storage.getPosition());
+            case RETURNING_TO_STORAGE -> {
+                Building storage = map.getBuildingAtPoint(getPosition());
+                storage.putCargo(new Cargo(GEOLOGIST, map));
+                enterBuilding(storage);
             }
-        } else if (state == RETURNING_TO_STORAGE) {
-            Building storage = map.getBuildingAtPoint(getPosition());
-
-            storage.putCargo(new Cargo(GEOLOGIST, map));
-
-            enterBuilding(storage);
         }
     }
 
@@ -192,47 +185,31 @@ public class Geologist extends Worker {
         return foundMaterial;
     }
 
+    /**
+     * Finds a site within a specified radius to examine that is not occupied by any object
+     * and can be reached off-road.
+     *
+     * @return The point to examine or null if no suitable point is found.
+     */
     private Point findSiteToExamine() {
         List<Point> points = map.getPointsWithinRadius(flagPoint, RADIUS_TO_INVESTIGATE);
-
         int offset = RANDOM.nextInt(points.size());
 
-        for (int i = 0; i < points.size(); i++) {
-            int indexWithOffset = (i + offset) % points.size();
+        // Iterate over the points with a random offset
+        var filteredPoints = points.stream()
+                .filter(point -> !point.equals(getPosition())) // Ignore the current position
+                .filter(point -> {
+                    MapPoint mapPoint = map.getMapPoint(point);
 
-            Point point = points.get(indexWithOffset);
+                    // Check if the point is clear of any signs, trees, stones, flags, or buildings
+                    return !(mapPoint.isSign() || mapPoint.isTree() || mapPoint.isStone()
+                            || mapPoint.isFlag() || mapPoint.isBuilding());
+                })
+                .filter(point -> map.findWayOffroad(getPosition(), point, null) != null) // Ensure a path is available
+                .toList();
 
-            if (point.equals(getPosition())) {
-                continue;
-            }
-
-            MapPoint mapPoint = map.getMapPoint(point);
-
-            if (mapPoint.isSign()) {
-                continue;
-            }
-
-            if (mapPoint.isTree()) {
-                continue;
-            }
-
-            if (mapPoint.isStone()) {
-                continue;
-            }
-
-            if (mapPoint.isFlag()) {
-                continue;
-            }
-
-            if (mapPoint.isBuilding()) {
-                continue;
-            }
-
-            if (map.findWayOffroad(getPosition(), point, null) == null) {
-                continue;
-            }
-
-            return point;
+        if (!filteredPoints.isEmpty()) {
+            return filteredPoints.get(offset % filteredPoints.size());
         }
 
         return null;
