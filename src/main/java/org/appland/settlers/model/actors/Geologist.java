@@ -6,10 +6,8 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.MapPoint;
@@ -17,16 +15,16 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WorkerAction;
+import org.appland.settlers.model.buildings.Building;
 
 import java.util.List;
 import java.util.Random;
 
-import static org.appland.settlers.model.Vegetation.CAN_USE_WELL;
-import static org.appland.settlers.model.Vegetation.MINABLE_MOUNTAIN;
-import static org.appland.settlers.model.GameUtils.areAllOneOf;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Size.*;
+import static org.appland.settlers.model.Vegetation.CAN_USE_WELL;
+import static org.appland.settlers.model.Vegetation.MINABLE_MOUNTAIN;
 import static org.appland.settlers.model.actors.Geologist.State.*;
 
 /**
@@ -156,14 +154,14 @@ public class Geologist extends Worker {
         boolean placedSign = false;
         Material foundMaterial = null;
 
-        List<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        var surroundingVegetation = map.getSurroundingTiles(point);
 
-        if (areAllOneOf(surroundingVegetation, CAN_USE_WELL)) {
+        if (CAN_USE_WELL.containsAll(surroundingVegetation)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
 
             foundMaterial = WATER;
-        } else if (areAllOneOf(surroundingVegetation, MINABLE_MOUNTAIN)) {
+        } else if (MINABLE_MOUNTAIN.containsAll(surroundingVegetation)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 

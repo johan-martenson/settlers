@@ -1431,7 +1431,7 @@ public class GameMap {
         }
 
         /* Make it a marine flag if it's next to water */
-        if (areAnyOneOf(getSurroundingTiles(flagPoint), WATER_VEGETATION)) {
+        if (containsAny(WATER_VEGETATION, getSurroundingTiles(flagPoint))) {
             flag.setType(MARINE);
         }
 
@@ -1782,7 +1782,7 @@ public class GameMap {
 
         Collection<Vegetation> surroundingVegetation = getSurroundingTiles(point);
 
-        return !areNonePartOf(surroundingVegetation, CAN_BUILD_ROAD_ON);
+        return containsAny(CAN_BUILD_ROAD_ON, surroundingVegetation);
     }
 
     /**
@@ -3306,7 +3306,7 @@ public class GameMap {
 
         /* The building and the flag can't be completely surrounded by water */
         // TODO: check for all types of non-buildable terrain as well
-        if (isAny(getSurroundingTiles(point), WATER)) {
+        if (getSurroundingTiles(point).contains(WATER)) {
             throw new InvalidUserActionException(String.format("Can't mark a possible point at %s for harbor without access to land", point));
         }
 

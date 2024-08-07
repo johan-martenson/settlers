@@ -487,7 +487,7 @@ public class Building implements EndPoint {
             if (isMilitaryBuilding() &&
                     !isHeadquarter() &&
                     getHostedSoldiers().size() > getWantedAmountHostedSoldiers()) {
-                var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
+                var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
                 var soldier = sortedHostedSoldiers.getLast();
 
                 hostedSoldiers.remove(soldier);
@@ -1342,7 +1342,7 @@ public class Building implements EndPoint {
 
         /* Send out a local defender if there is none (and if possible) */
         if (!getHostedSoldiers().isEmpty() && ownDefender == null) {
-            var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredRank(getHostedSoldiers(), player.getDefenseStrength());
+            var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getDefenseStrength());
 
             this.ownDefender = sortedHostedSoldiers.getFirst();
 
@@ -1368,13 +1368,13 @@ public class Building implements EndPoint {
                             building.getHostedSoldiers().size() > 1)
                     .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
                     .forEach(building -> {
-                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredRank(building.getHostedSoldiers(), player.getDefenseStrength());
+                        var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredStrength(building.getHostedSoldiers(), player.getDefenseStrength());
 
                         potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
                     });
 
             /* Sort by rank, then distance to this building */
-            GameUtils.sortSoldiersByPreferredRankAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
+            GameUtils.sortSoldiersByPreferredStrengthAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
 
             /* Pick defender(s) to come and help defending */
             if (!potentialDefenders.isEmpty()) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.actors.Soldier;
@@ -37,6 +32,7 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.*;
 import static org.appland.settlers.model.Direction.*;
@@ -48,61 +44,74 @@ import static org.appland.settlers.model.Material.*;
  */
 public class GameUtils {
 
-    public static List<Soldier> sortSoldiersByPreferredRank(List<Soldier> soldiers, int strength) {
-        var sortedSoldiers = new ArrayList<>(soldiers);
+    /**
+     * Sorts a list of soldiers based on the preferred strength, expressed as a value from 0 to 10.
+     *
+     * @param soldiers List of soldiers to be sorted.
+     * @param strength Preferred strength of soldiers
+     * @return A new list of soldiers sorted by preferred rank.
+     */
+    public static List<Soldier> sortSoldiersByPreferredStrength(List<Soldier> soldiers, int strength) {
+        return soldiers.stream()
+                .sorted((soldier0, soldier1) -> {
+                    List<Soldier.Rank> prefRankList = GameUtils.strengthToRank(strength);
 
-        sortedSoldiers.sort((soldier0, soldier1) -> {
-            var prefRankList = GameUtils.strengthToRank(strength);
+                    int rankDist0 = prefRankList.indexOf(soldier0.getRank());
+                    int rankDist1 = prefRankList.indexOf(soldier1.getRank());
 
-            var rankDist0 = prefRankList.indexOf(soldier0.getRank());
-            var rankDist1 = prefRankList.indexOf(soldier1.getRank());
-
-            if (rankDist0 == rankDist1) {
-                return 0;
-            } else  {
-                var diff = rankDist0 - rankDist1;
-
-                return diff / Math.abs(diff);
-            }
-        });
-
-        return sortedSoldiers;
+                    return Integer.compare(rankDist0, rankDist1);
+                })
+                .collect(Collectors.toList());
     }
 
-    public static void sortSoldiersByPreferredRankAndDistance(List<Soldier> soldiers, int strength, Point position) {
+    /**
+     * Sorts a list of soldiers by the preferred strength and distance from a given position.
+     *
+     * @param soldiers List of soldiers to be sorted.
+     * @param strength Strength value determining the preference order of ranks.
+     * @param position Position from which distance is calculated.
+     */
+    public static void sortSoldiersByPreferredStrengthAndDistance(List<Soldier> soldiers, int strength, Point position) {
         soldiers.sort((soldier0, soldier1) -> {
             if (soldier0.getRank() == soldier1.getRank()) {
                 var dist0 = GameUtils.distanceInGameSteps(soldier0.getHome().getPosition(), position);
                 var dist1 = GameUtils.distanceInGameSteps(soldier1.getHome().getPosition(), position);
 
-                if (dist0 == dist1) {
-                    return 0;
-                }
-
-                var diff = dist0 - dist1;
-
-                return diff / Math.abs(diff);
+                return Integer.compare(dist0, dist1);
             } else {
                 var prefRankList = GameUtils.strengthToRank(strength);
 
                 var rankDist0 = prefRankList.indexOf(soldier0.getRank());
                 var rankDist1 = prefRankList.indexOf(soldier1.getRank());
 
-                var diff = rankDist0 - rankDist1;
-
-                return diff / Math.abs(diff);
+                return Integer.compare(rankDist0, rankDist1);
             }
         });
     }
 
-    public static boolean allCollectionsEmpty(Collection... collections) {
+    /**
+     * Checks if all provided collections are empty.
+     *
+     * @param collections Varargs of collections to be checked.
+     * @return True if all collections are empty, false otherwise.
+     */
+    public static boolean allCollectionsEmpty(Collection<?>... collections) {
         return Arrays.stream(collections).allMatch(Collection::isEmpty);
     }
 
-    public static boolean allMapsEmpty(Map... maps) {
+    /**
+     * Checks if all provided maps are empty.
+     *
+     * @param maps Varargs of maps to be checked.
+     * @return True if all maps are empty, false otherwise.
+     */
+    public static boolean allMapsEmpty(Map<?, ?>... maps) {
         return Arrays.stream(maps).allMatch(Map::isEmpty);
     }
 
+    /**
+     * Enum for types of allocation that can be controlled.
+     */
     public enum AllocationType {
         WHEAT_ALLOCATION,
         COAL_ALLOCATION,
@@ -112,6 +121,10 @@ public class GameUtils {
         IRON_BAR_ALLOCATION
     }
 
+    /**
+     * Tracks allocations for resources and materials in the game.
+     * Manages the quota and allocation of these resources.
+     */
     public static class AllocationTracker {
         private static final Map<AllocationType, Set<Class<? extends Building>>> AFFECTED_BUILDING_TYPES = new HashMap<>();
         private static final Map<AllocationType, Set<Material>> TRACKED_MATERIALS = new HashMap<>();
@@ -119,38 +132,38 @@ public class GameUtils {
         static {
             AFFECTED_BUILDING_TYPES.put(
                     AllocationType.WHEAT_ALLOCATION,
-                    new HashSet<>(Arrays.asList(Mill.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
-                    ));
+                    Set.of(Mill.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
+            );
 
             AFFECTED_BUILDING_TYPES.put(
                     AllocationType.COAL_ALLOCATION,
-                    new HashSet<>(Arrays.asList(Mint.class, Metalworks.class)
-                    ));
+                    Set.of(Mint.class, Metalworks.class)
+            );
 
             AFFECTED_BUILDING_TYPES.put(
                     AllocationType.WATER_ALLOCATION,
-                    new HashSet<>(Arrays.asList(Bakery.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
-                    ));
+                    Set.of(Bakery.class, Brewery.class, DonkeyFarm.class, PigFarm.class)
+            );
 
             AFFECTED_BUILDING_TYPES.put(
                     AllocationType.FOOD_ALLOCATION,
-                    new HashSet<>(Arrays.asList(CoalMine.class, IronMine.class, GoldMine.class, GraniteMine.class)
-                    ));
+                    Set.of(CoalMine.class, IronMine.class, GoldMine.class, GraniteMine.class)
+            );
 
             AFFECTED_BUILDING_TYPES.put(
                     AllocationType.IRON_BAR_ALLOCATION,
-                    new HashSet<>(Arrays.asList(Armory.class, Metalworks.class)
-                    ));
+                    Set.of(Armory.class, Metalworks.class)
+            );
 
-            TRACKED_MATERIALS.put(AllocationType.WHEAT_ALLOCATION, new HashSet<>(List.of(WHEAT)));
-            TRACKED_MATERIALS.put(AllocationType.COAL_ALLOCATION, new HashSet<>(List.of(COAL)));
-            TRACKED_MATERIALS.put(AllocationType.WATER_ALLOCATION, new HashSet<>(List.of(WATER)));
-            TRACKED_MATERIALS.put(AllocationType.IRON_BAR_ALLOCATION, new HashSet<>(List.of(IRON_BAR)));
-            TRACKED_MATERIALS.put(AllocationType.PLANK_ALLOCATION, new HashSet<>(List.of(PLANK)));
-            TRACKED_MATERIALS.put(AllocationType.FOOD_ALLOCATION, new HashSet<>(List.of(BREAD, FISH, MEAT)));
+            TRACKED_MATERIALS.put(AllocationType.WHEAT_ALLOCATION, Set.of(WHEAT));
+            TRACKED_MATERIALS.put(AllocationType.COAL_ALLOCATION, Set.of(COAL));
+            TRACKED_MATERIALS.put(AllocationType.WATER_ALLOCATION, Set.of(WATER));
+            TRACKED_MATERIALS.put(AllocationType.IRON_BAR_ALLOCATION, Set.of(IRON_BAR));
+            TRACKED_MATERIALS.put(AllocationType.PLANK_ALLOCATION, Set.of(PLANK));
+            TRACKED_MATERIALS.put(AllocationType.FOOD_ALLOCATION, Set.of(BREAD, FISH, MEAT));
         }
 
-        private final Map<Class<? extends Building>, Integer> consumed;
+        private final Map<Class<? extends Building>, Integer> consumed = new HashMap<>();
         private final AllocationType allocationType;
         private final Player player;
         private final Point position;
@@ -159,21 +172,37 @@ public class GameUtils {
             this.player = player;
             this.allocationType = allocationType;
             this.position = position;
-
-            consumed = new HashMap<>();
         }
 
+        /**
+         * Tracks the allocation of resources for a building by incrementing the consumed count.
+         *
+         * @param building The building for which the allocation is tracked.
+         */
         public void trackAllocation(Building building) {
             int amount = consumed.getOrDefault(building.getClass(), 0);
             consumed.put(building.getClass(), amount + 1);
         }
 
+        /**
+         * Determines if delivery is allowed for a building based on the allocation type.
+         *
+         * @param building The building to check for delivery allowance.
+         * @return True if delivery is allowed, false otherwise.
+         */
         public boolean isDeliveryAllowed(Building building) {
             Material material = TRACKED_MATERIALS.get(allocationType).stream().findFirst().get();
 
             return isDeliveryAllowed(building, material);
         }
 
+        /**
+         * Determines if delivery is allowed for a building given a specific material.
+         *
+         * @param building The building to check for delivery allowance.
+         * @param material The material to be delivered.
+         * @return True if delivery is allowed, false otherwise.
+         */
         public boolean isDeliveryAllowed(Building building, Material material) {
             int quota = quotaForBuilding(building);
 
@@ -185,11 +214,7 @@ public class GameUtils {
 
             var didReset = resetAllocationIfNeeded(material);
 
-            if (!didReset) {
-                return false;
-            }
-
-            return consumed.getOrDefault(building.getClass(), 0) < quota;
+            return didReset && consumed.getOrDefault(building.getClass(), 0) < quota;
         }
 
         private int quotaForBuilding(Building building) {
@@ -207,10 +232,22 @@ public class GameUtils {
             };
         }
 
+        /**
+         * Checks if a building type is over its allocation quota.
+         *
+         * @param buildingType The type of building to check.
+         * @return True if the building type is over quota, false otherwise.
+         */
         public boolean isOverQuota(Class<? extends Building> buildingType) {
             return consumed.getOrDefault(buildingType, 0) >= quotaForBuildingType(buildingType);
         }
 
+        /**
+         * Resets allocation if needed based on the material and reachable buildings.
+         *
+         * @param material The material to check for allocation reset.
+         * @return True if the allocation was reset, false otherwise.
+         */
         public boolean resetAllocationIfNeeded(Material material) {
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(position, player);
 
@@ -233,24 +270,14 @@ public class GameUtils {
         }
     }
 
-    public static boolean setContainsNone(Set<Point> set, List<Point> needles) {
-        for (Point point : needles) {
-            if (set.contains(point)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public static boolean setContainsAny(Set<Point> discoveredLand, List<Point> wayPoints) {
-        for (Point point : wayPoints) {
-            if (discoveredLand.contains(point)) {
-                return true;
-            }
-        }
-
-        return false;
+    /**
+     * Checks if any of the points in the specified list exists in the given set.
+     *
+     * @param set   The set of discovered land points.
+     * @param list  The list of waypoints to check for presence in the set.
+     * @return True if any of the points are in the set, false otherwise.
+     */public static boolean setContainsAny(Set<Point> set, List<Point> list) {
+        return list.stream().anyMatch(set::contains);
     }
 
     public static Direction getDirectionBetweenPoints(Point from, Point to) {
@@ -277,27 +304,27 @@ public class GameUtils {
         return direction;
     }
 
-    record ToSearchItem(Point point, int cost) implements Comparable {
+    /**
+     * Represents a point and its associated cost.
+     * Used for priority-based pathfinding algorithms.
+     */
+    record ToSearchItem(Point point, int cost) implements Comparable<ToSearchItem> {
 
         // TODO: align with implementation of equals to make them consistent!
-            @Override
-            public int compareTo(Object o) {
-                if (o == null) {
-                    return -1;
-                }
-
-                ToSearchItem otherItem = (ToSearchItem) o;
-
-                if (cost < otherItem.cost) {
-                    return -1;
-                } else if (cost > otherItem.cost) {
-                    return 1;
-                }
-
-                return 0;
-            }
+        @Override
+        public int compareTo(ToSearchItem otherItem) {
+                return Integer.compare(this.cost, otherItem.cost);
         }
+    }
 
+    /**
+     * Finds the closest house or road from a starting point that matches the given criteria.
+     *
+     * @param start   The starting point for the search.
+     * @param isMatch A function to determine if a HouseOrRoad matches the criteria.
+     * @param map     The game map to search within.
+     * @return An Optional containing the closest matching HouseOrRoad, or an empty Optional if none found.
+     */
     public static Optional<HouseOrRoad> getClosestHouseOrRoad(Point start, Function<HouseOrRoad, Boolean> isMatch, GameMap map) {
         PriorityQueue<ToSearchItem> toSearch = new PriorityQueue<>();
         Set<Point> searched = new HashSet<>();
@@ -350,41 +377,13 @@ public class GameUtils {
         return Optional.empty();
     }
 
+    /**
+     * Represents a combination of building and associated data.
+     *
+     * @param <B> Type of the building.
+     * @param <D> Type of the associated data.
+     */
     public record BuildingAndData<B extends Building, D>(B building, D data) { }
-
-    public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {
-        Set<Point> hexagonBorder = new HashSet<>();
-
-        // Draw the diagonal left-hand lines
-        int upperY = point.y;
-        int lowerY = point.y;
-        for (int x = point.x - (radius * 2); x < point.x - radius; x++) {
-            hexagonBorder.add(new Point(x, upperY));
-            hexagonBorder.add(new Point(x, lowerY));
-
-            upperY++;
-            lowerY--;
-        }
-
-        // Draw the diagonal right-hand lines
-        upperY = point.y + radius;
-        lowerY = point.y - radius;
-        for (int x = point.x + radius; x <= point.x + (radius * 2); x++) {
-            hexagonBorder.add(new Point(x, upperY));
-            hexagonBorder.add(new Point(x, lowerY));
-
-            upperY--;
-            lowerY++;
-        }
-
-        // Draw the top and bottom lines
-        for (int x = point.x - radius; x < point.x + radius; x += 2) {
-            hexagonBorder.add(new Point(x, point.y + radius));
-            hexagonBorder.add(new Point(x, point.y - radius));
-        }
-
-        return hexagonBorder;
-    }
 
     public static Set<Point> getHexagonAreaAroundPoint(Point position, int radius, GameMap map) {
         Set<Point> area = new HashSet<>();
@@ -458,43 +457,37 @@ public class GameUtils {
                 .orElse(null); // Return null if no storehouse is found
     }
 
+    /**
+     * Determines if all items in a collection are equal to a given item.
+     *
+     * @param collection The collection to check.
+     * @param item       The item to compare against.
+     * @param <T>        The type of the item.
+     * @return True if all items are equal to the specified item, false otherwise.
+     */
     public static <T> boolean isAll(Collection<T> collection, T item) {
-        for (T itemInList : collection) {
-            if (!Objects.equals(itemInList, item)) {
-                return false;
-            }
-        }
-
-        return true;
+        return collection.stream().allMatch(item::equals);
     }
 
-    public static <T> boolean isAny(Collection<T> collection, T item) {
-        for (T itemInList : collection) {
-            if (Objects.equals(itemInList, item)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
+    /**
+     * Determines if some, but not all, items in a collection are equal to a given item.
+     *
+     * @param collection The collection to check.
+     * @param item       The item to compare against.
+     * @param <T>        The type of the item.
+     * @return True if some but not all items are equal to the specified item, false otherwise.
+     */
     public static <T> boolean isSomeButNotAll(Collection<T> collection, T item) {
-        boolean foundMatch = false;
-        boolean foundNotMatch = false;
-
-        for (T itemInList : collection) {
-            if (Objects.equals(itemInList, item)) {
-                foundMatch = true;
-
-                continue;
-            }
-
-            foundNotMatch = true;
-        }
-
-        return foundMatch && foundNotMatch;
+        return collection.stream().anyMatch(item::equals) &&
+               collection.stream().anyMatch(e -> !item.equals(e));
     }
 
+    /**
+     * Upgrades a military building, transferring soldiers and resources.
+     *
+     * @param fromBuilding The original building to be upgraded.
+     * @param upgraded     The new upgraded building.
+     */
     public static void upgradeMilitaryBuilding(Building fromBuilding, Building upgraded) {
 
         /* Set the map in the upgraded building */
@@ -544,48 +537,34 @@ public class GameUtils {
         }
     }
 
+    /**
+     * Checks if an integer is even.
+     *
+     * @param i The integer to check.
+     * @return True if the integer is even, false otherwise.
+     */
     public static boolean isEven(int i) {
         return i % 2 == 0;
     }
 
     /**
-     * Returns true if each item in the collection is part of the given set
+     * Determines if any of the items in a list are part of a given set.
      *
-     * @param items The items to determine if the given collection contains
-     * @param collection The collection that may contain all the given items
-     * @param <T> The type of item
-     * @return True if the set of items is a subset of the collection
+     * @param <T>   The type of item.
+     * @param set   The collection to check against.
+     * @param items The list of items to check.
+     * @return True if any of the items are in the collection, false otherwise.
      */
-    public static <T> boolean areAllOneOf(Collection<T> items, Set<T> collection) {
-        for (T itemInList : items) {
-            if (!collection.contains(itemInList)) {
-                return false;
-            }
-        }
-
-        return true;
+    public static <T> boolean containsAny(Set<T> set, Collection<T> items) {
+        return items.stream().anyMatch(set::contains);
     }
 
-    public static <T> boolean areNonePartOf(Collection<T> items, Set<T> collection) {
-        for (T item : items) {
-            if (collection.contains(item)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public static <T> boolean areAnyOneOf(List<T> items, Set<T> collection) {
-        for (T item : items) {
-            if (collection.contains(item)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
+    /**
+     * Determines if all points in a collection are unique.
+     *
+     * @param points The collection of points to check.
+     * @return True if all points are unique, false otherwise.
+     */
     static boolean areAllUnique(Collection<Point> points) {
         Set<Point> pointsSet = new HashSet<>(points);
 
@@ -656,47 +635,38 @@ public class GameUtils {
         }
     }
 
+    /**
+     * Finds the closest water point from a given position on the map.
+     *
+     * @param position The starting position to search from.
+     * @param map      The game map containing water tiles.
+     * @return The closest water point, or null if none is found.
+     */
     public static Point getClosestWaterPoint(Point position, GameMap map) {
-        int distanceToClosestWater = Integer.MAX_VALUE;
-        Point pointClosestWater = null;
-
-        for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
-
-            /* Filter points that are not connected to water */
-            if (!isAny(map.getSurroundingTiles(point), Vegetation.WATER)) {
-                continue;
-            }
-
-            int candidateDistance = distanceInGameSteps(position, point);
-
-            /* Filter points that are not closer than the current best pick */
-            if (candidateDistance >= distanceToClosestWater){
-                continue;
-            }
-
-            distanceToClosestWater = candidateDistance;
-            pointClosestWater = point;
-        }
-
-        return pointClosestWater;
+        return GameUtils.getHexagonAreaAroundPoint(position, 4, map).stream()
+                .filter(point -> map.getSurroundingTiles(point).contains(Vegetation.WATER))
+                .min(Comparator.comparingInt(point -> distanceInGameSteps(position, point)))
+                .orElse(null);
     }
 
+    /**
+     * Finds the closest water point for a given building on the map.
+     *
+     * @param building The building for which the closest water point is to be found.
+     * @return The closest water point, or null if none is found.
+     */
     public static Point getClosestWaterPointForBuilding(Building building) {
-        GameMap map = building.getMap();
-
-        Point position = building.getPosition();
-
-        return getClosestWaterPoint(position, map);
+        return getClosestWaterPoint(building.getPosition(), building.getMap());
     }
 
+    /**
+     * Finds the minimum value among the provided integers.
+     *
+     * @param numbers The integers to compare.
+     * @return The minimum value among the numbers.
+     */
     public static int min(int... numbers) {
-        int minimum = numbers[0];
-
-        for (int number : numbers) {
-            minimum = Math.min(minimum, number);
-        }
-
-        return minimum;
+        return Arrays.stream(numbers).min().orElse(numbers[0]);
     }
 
     /**
@@ -729,18 +699,30 @@ public class GameUtils {
                 .orElse(null);
     }
 
+    /**
+     * Puts a specified amount of cargos of a material into a building.
+     *
+     * @param material The material to be put into the building.
+     * @param amount   The amount of cargos to put into the building.
+     * @param building The building where the cargos are to be placed.
+     */
     public static void putCargos(Material material, int amount, Building building) {
         GameMap map = building.getMap();
 
         for (int i = 0; i < amount; i++) {
             Cargo cargo = new Cargo(material, map);
-
             building.promiseDelivery(material);
-
             building.putCargo(cargo);
         }
     }
 
+    /**
+     * Retrieves a specified amount of cargos of a material from a storehouse.
+     *
+     * @param storehouse The storehouse from which to retrieve cargos.
+     * @param material   The material to retrieve from the storehouse.
+     * @param amount     The amount of cargos to retrieve.
+     */
     public static void retrieveCargos(Storehouse storehouse, Material material, int amount) {
         for (int i = 0; i < amount; i++) {
             storehouse.retrieve(material);
@@ -751,6 +733,10 @@ public class GameUtils {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
     }
 
+    /**
+     * Represents a point and its estimated cost for pathfinding.
+     * Used in priority queues for pathfinding algorithms.
+     */
     static class PointAndCost implements Comparable<PointAndCost> {
         private final Point point;
         private final int estimatedFullCostThroughPoint;
@@ -763,22 +749,24 @@ public class GameUtils {
         // TODO: align with implementation of equals to make them consistent!
         @Override
         public int compareTo(PointAndCost pointAndCost) {
-            if (estimatedFullCostThroughPoint < pointAndCost.estimatedFullCostThroughPoint) {
-                return -1;
-            } else if (estimatedFullCostThroughPoint > pointAndCost.estimatedFullCostThroughPoint) {
-                return 1;
-            }
-
-            return 0;
+            return Integer.compare(this.estimatedFullCostThroughPoint, pointAndCost.estimatedFullCostThroughPoint);
         }
 
         @Override
         public String toString() {
-            return " Point: " + point + ", cost: " + estimatedFullCostThroughPoint;
+            return String.format("Point: %s, cost: %d", point, estimatedFullCostThroughPoint);
         }
     }
 
-    // FIXME: HOTSPOT
+    /**
+     * Finds the shortest path between two points, avoiding specified points.
+     *
+     * @param start             The starting point.
+     * @param goal              The goal point.
+     * @param avoid             Set of points to avoid during pathfinding.
+     * @param connectionProvider Provides connections between points.
+     * @return The shortest path as a list of points, or null if no path is found.
+     */
     static List<Point> findShortestPath(Point start, Point goal, Set<Point> avoid, ConnectionsProvider connectionProvider) {
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
         Map<Point, Point>   cameFrom         = new HashMap<>();
@@ -857,6 +845,13 @@ public class GameUtils {
         return null;
     }
 
+    /**
+     * Finds the closest point to the given coordinates.
+     *
+     * @param px The x-coordinate.
+     * @param py The y-coordinate.
+     * @return The closest point as a Point object.
+     */
     public static Point getClosestPoint(double px, double py) {
 
         /* Round to integers */
@@ -889,6 +884,9 @@ public class GameUtils {
         return new Point(roundedX, roundedY);
     }
 
+    /**
+     * Provides possible connections between points using existing roads on the map.
+     */
     public static class PathOnExistingRoadsProvider implements ConnectionsProvider {
         private final GameMap map;
 
@@ -904,17 +902,14 @@ public class GameUtils {
 
     /**
      * Finds the shortest path following roads between any two points. The points
-     * must be flags or buildings.
+     * must be flags or buildings. The path returned will only contain points with flags or buildings.
      *
-     * The path returned will only contain points with flags or buildings.
-     *
-     * @param start The point to start from
-     * @param goal The point to reach
-     * @param map The instance of the map
-     * @param avoid List of points to avoid when finding the path
-     * @return the list of flag points to pass (included the starting point) required to travel from start to goal
+     * @param start The point to start from.
+     * @param goal  The point to reach.
+     * @param map   The instance of the map.
+     * @param avoid List of points to avoid when finding the path.
+     * @return The list of flag points to pass (including the starting point) required to travel from start to goal.
      */
-    // FIXME: ALLOCATION HOTSPOT
     static List<Point> findShortestPathViaRoads(Point start, Point goal, GameMap map, Point... avoid) {
         Set<Point>          evaluated        = new HashSet<>();
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
@@ -1014,10 +1009,10 @@ public class GameUtils {
      * Determines whether any two points are connected by roads. The points
      * don't need to be flags or buildings but can be any point on a road.
      *
-     * @param start The point to start from
-     * @param goal The point to reach
-     * @param map The game map instance
-     * @return true if the start and end are connected
+     * @param start The point to start from.
+     * @param goal  The point to reach.
+     * @param map   The game map instance.
+     * @return True if the start and end are connected, false otherwise.
      */
     static boolean arePointsConnectedByRoads(Point start, Point goal, GameMap map) {
         Map<Point, Integer> costToGetToPoint = new HashMap<>();
@@ -1084,10 +1079,10 @@ public class GameUtils {
      * Returns a detailed path including points between flags or buildings. Can
      * only be called with a building or flag as start and end point.
      *
-     * @param startEndPoint Flag or building to start from
-     * @param goalEndPoint Flag or building to reach
-     * @param map The instance of the map
-     * @return a detailed list with the steps required to travel from the start to the goal.
+     * @param startEndPoint Flag or building to start from.
+     * @param goalEndPoint  Flag or building to reach.
+     * @param map           The instance of the map.
+     * @return A detailed list with the steps required to travel from the start to the goal.
      */
     static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map, Point... avoid) {
         Set<Point>         evaluated         = new HashSet<>();
@@ -1223,10 +1218,10 @@ public class GameUtils {
     /**
      * Determines if two points with flags or buildings are connected by roads.
      *
-     * @param startEndPoint Flag or building to start from
-     * @param goalEndPoint Flag or building to reach
-     * @param map The instance of the map
-     * @return true if the start and end are connected
+     * @param startEndPoint Flag or building to start from.
+     * @param goalEndPoint  Flag or building to reach.
+     * @param map           The instance of the map.
+     * @return True if the start and end are connected, false otherwise.
      */
     public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map) {
         Set<Point>          evaluated        = new HashSet<>();
@@ -1300,11 +1295,11 @@ public class GameUtils {
     }
 
     /**
-     * Finds the closest storage offroad for a given player from a specified point.
+     * Finds the closest storehouse off-road for a given player from a specified point.
      *
-     * @param player The player for whom the closest storage is to be found.
+     * @param player The player for whom the closest storehouse is to be found.
      * @param point  The starting point to search from.
-     * @return The closest Storehouse building that is accessible offroad, or null if none are available.
+     * @return The closest Storehouse building that is accessible off-road, or null if none are available.
      */
     public static Storehouse getClosestStorageOffroad(Player player, Point point) {
         GameMap map = player.getMap();
@@ -1321,6 +1316,13 @@ public class GameUtils {
                 .orElse(null);
     }
 
+    /**
+     * Finds the closest storehouse connected by roads for a given player from a specified point.
+     *
+     * @param point  The starting point to search from.
+     * @param player The player for whom the closest storehouse is to be found.
+     * @return The closest Storehouse building that is connected by roads, or null if none are available.
+     */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, Player player) {
         return getClosestStorageConnectedByRoads(point, null, player);
     }
@@ -1356,10 +1358,23 @@ public class GameUtils {
                 .orElse(null);
     }
 
+    /**
+     * Finds the closest storehouse connected by roads to the given point for a specified map.
+     *
+     * @param point The starting point from which to find the closest storehouse.
+     * @param map   The game map containing the buildings.
+     * @return The closest storehouse connected by roads, or null if none is found.
+     */
     public static Storehouse getClosestStorageConnectedByRoads(Point point, GameMap map) {
         return getClosestStorageConnectedByRoads(point, null, map);
     }
 
+    /**
+     * A utility class representing a tuple of two elements.
+     *
+     * @param <T1> The type of the first element.
+     * @param <T2> The type of the second element.
+     */
     public record Tuple<T1, T2>(T1 t1, T2 t2) { }
 
     /**
@@ -1392,6 +1407,15 @@ public class GameUtils {
                 .orElse(null);
     }
 
+    /**
+     * Finds the closest building connected by roads for a specified map, point, and condition.
+     *
+     * @param point    The starting point from which to find the closest building.
+     * @param avoid    The building to avoid in the search.
+     * @param map      The game map containing the buildings.
+     * @param func     The function to determine if a building meets the criteria.
+     * @return The closest building connected by roads that meets the criteria, or null if none is found.
+     */
     public static Building getClosestBuildingConnectedByRoads(Point point, Building avoid, GameMap map, Function <Building, Boolean> func) {
         return map.getBuildings().stream()
                 .filter(candidate -> !candidate.equals(avoid))
@@ -1409,6 +1433,15 @@ public class GameUtils {
                 .orElse(null);
     }
 
+    /**
+     * Finds the closest storehouse connected by roads where delivery is possible.
+     *
+     * @param point    The starting point from which to find the closest storehouse.
+     * @param avoid    The building to avoid in the search.
+     * @param map      The game map containing the buildings.
+     * @param material The material for which delivery is possible.
+     * @return The closest storehouse connected by roads where delivery is possible, or null if none is found.
+     */
     public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) {
         return (Storehouse) map.getBuildings().stream()
                 .filter(building -> !building.equals(avoid))                       // Avoid specific building
@@ -1428,6 +1461,14 @@ public class GameUtils {
                 .map(AbstractMap.SimpleEntry::getKey)
                 .orElse(null);
     }
+
+    /**
+     * Finds flags that are reachable from a starting point for a specific player.
+     *
+     * @param player The player whose flags are being searched.
+     * @param start  The starting point for the search.
+     * @return A set of flags reachable from the starting point.
+     */
     public static Set<Flag> findFlagsReachableFromPoint(Player player, Point start) {
         List<Point> toEvaluate = new LinkedList<>();
         Set<Point>  visited    = new HashSet<>();
@@ -1473,10 +1514,23 @@ public class GameUtils {
         return reachable;
     }
 
+    /**
+     * Gets buildings within reach of a specified flag.
+     *
+     * @param flag The flag from which reachability is determined.
+     * @return A set of buildings reachable from the flag.
+     */
     public static Set<Building> getBuildingsWithinReach(Flag flag) {
         return getBuildingsWithinReach(flag.getPosition(), flag.getPlayer());
     }
 
+    /**
+     * Gets buildings within reach of a specified starting position and player.
+     *
+     * @param startPosition The starting position for reachability.
+     * @param player        The player owning the map.
+     * @return A set of buildings reachable from the starting position.
+     */
     public static Set<Building> getBuildingsWithinReach(Point startPosition, Player player) {
         List<Point> toEvaluate = new LinkedList<>();
         Set<Point> visited = new HashSet<>();
@@ -1501,6 +1555,14 @@ public class GameUtils {
         return reachable;
     }
 
+    /**
+     * Calculates the distance in game steps between two points. Game steps means that only
+     * movement horizontally and diagonally is allowed, not vertically.
+     *
+     * @param start The starting point.
+     * @param end   The end point.
+     * @return The distance in game steps between the two points.
+     */
     public static int distanceInGameSteps(Point start, Point end) {
         int distanceX = abs(start.x - end.x);
         int distanceY = abs(start.y - end.y);
@@ -1512,6 +1574,13 @@ public class GameUtils {
         }
     }
 
+    /**
+     * Calculates the angle between two directions given x and y components.
+     *
+     * @param directionX The x-component of the direction.
+     * @param directionY The y-component of the direction.
+     * @return The angle in radians between the directions.
+     */
     public static double calculateAngle(int directionX, int directionY) {
         double angle;
 
@@ -1524,7 +1593,6 @@ public class GameUtils {
         } else if (directionY == 0 && directionX < 0) {
             angle = Math.PI;
         } else {
-
             angle = Math.atan((double)directionY / (double)directionX);
 
             if (directionX < 0 && directionY > 0) {
@@ -1566,29 +1634,31 @@ public class GameUtils {
         }
     }
 
-    private static int rankToInt(Soldier.Rank rank) {
-        return switch (rank) {
-            case PRIVATE_RANK -> 0;
-            case PRIVATE_FIRST_CLASS_RANK -> 1;
-            case SERGEANT_RANK -> 2;
-            case OFFICER_RANK -> 3;
-            case GENERAL_RANK -> 4;
-        };
-    }
+    // Comparator for sorting soldiers by strength
+    public static Comparator<? super Soldier> strengthSorter = Comparator.comparingInt(s -> s.getRank().toInt());
 
-    public static Comparator<? super Soldier> strengthSorter = Comparator.comparingInt(s -> rankToInt(s.getRank()));
-
+    // Comparator for sorting soldiers by strength and shorter distance
     public static Comparator<SoldierAndDistance> strongerAndShorterDistanceSorter = Comparator
-            .comparing((SoldierAndDistance sd) -> rankToInt(sd.soldier.getRank())).reversed()
+            .comparing((SoldierAndDistance sd) -> sd.soldier.getRank().toInt()).reversed()
             .thenComparingInt(sd -> sd.distance);
 
-
+    // Comparator for sorting soldiers by weaker and shorter distance
     public static Comparator<SoldierAndDistance> weakerAndShorterDistanceSorter = Comparator
-            .comparingInt((SoldierAndDistance sd) -> rankToInt(sd.soldier.getRank()))
+            .comparingInt((SoldierAndDistance sd) -> sd.soldier.getRank().toInt())
             .thenComparingInt(sd -> sd.distance);
 
+    /**
+     * Represents a soldier and its associated distance.
+     * Used for sorting soldiers based on distance and rank.
+     */
     public record SoldierAndDistance(Soldier soldier, int distance) { }
 
+    /**
+     * Converts a strength value to a list of preferred Soldier ranks.
+     *
+     * @param strength The strength value to convert.
+     * @return A list of Soldier ranks ordered by preference.
+     */
     public static List<Soldier.Rank> strengthToRank(int strength) {
         List<Integer> populationPreferenceOrder = new ArrayList<>();
 
