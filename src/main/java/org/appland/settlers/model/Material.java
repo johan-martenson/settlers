@@ -1,13 +1,37 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Butcher;
+import org.appland.settlers.model.actors.CatapultWorker;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Forester;
+import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.actors.Hunter;
+import org.appland.settlers.model.actors.IronFounder;
+import org.appland.settlers.model.actors.Metalworker;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Scout;
+import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.StorehouseWorker;
+import org.appland.settlers.model.actors.WellWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public enum Material {
@@ -106,8 +130,7 @@ public enum Material {
             CRUCIBLE,
             TONGS,
             SCYTHE
-    )
-    );
+    ));
 
     public static final Set<? extends Material> WORKERS = EnumSet.copyOf(Arrays.asList(
             DONKEY,
@@ -184,14 +207,37 @@ public enum Material {
     }
 
     public static Material workerToMaterial(Worker worker) {
-
-        if (Objects.equals(worker.getClass(), Builder.class)) {
-            return BUILDER;
-        }
-
-        // TODO: handle remaining types of workers
-
-        return null;
+        return switch (worker) {
+            case Soldier military -> military.getRank().toMaterial();
+            case Forester forester -> FORESTER;
+            case WellWorker wellWorker -> WELL_WORKER;
+            case WoodcutterWorker woodcutterWorker -> WOODCUTTER_WORKER;
+            case StorehouseWorker storehouseWorker -> STOREHOUSE_WORKER;
+            case Butcher butcher -> BUTCHER;
+            case SawmillWorker sawmillWorker -> SAWMILL_WORKER;
+            case Stonemason stonemason -> STONEMASON;
+            case PigBreeder pigBreeder -> PIG_BREEDER;
+            case Minter minter -> MINTER;
+            case Miller miller -> MILLER;
+            case IronFounder ironFounder -> IRON_FOUNDER;
+            case Miner miner -> MINER;
+            case Fisherman fisherman -> FISHERMAN;
+            case Farmer farmer -> FARMER;
+            case Brewer brewer -> BREWER;
+            case Baker baker -> BAKER;
+            case Armorer armorer -> ARMORER;
+            case Geologist geologist -> GEOLOGIST;
+            case DonkeyBreeder donkeyBreeder -> DONKEY_BREEDER;
+            case Scout scout -> SCOUT;
+            case Hunter hunter -> HUNTER;
+            case Metalworker metalworker -> METALWORKER;
+            case Builder builder -> BUILDER;
+            case Shipwright shipwright -> SHIPWRIGHT;
+            case Courier courier -> COURIER;
+            case CatapultWorker catapultWorker -> CATAPULT_WORKER;
+            default -> throw new InvalidGameLogicException(
+                    String.format("Can't map worker of type %s to material", worker.getClass().getSimpleName()));
+        };
     }
 
     public boolean isWorker() {

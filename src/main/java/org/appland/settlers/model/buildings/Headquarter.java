@@ -25,13 +25,11 @@ import static org.appland.settlers.model.actors.Soldier.Rank.*;
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
-    private final Map<Soldier.Rank, Integer> wantedReservedSoldiers;
+    private final Map<Soldier.Rank, Integer> wantedReservedSoldiers = new HashMap<>();
     private final Map<Soldier.Rank, Integer> actualReservedSoldiers;
 
     public Headquarter(Player player) {
         super(player);
-
-        wantedReservedSoldiers = new HashMap<>();
 
         setHeadquarterDefaultInventory(inventory);
         setConstructionReady();
@@ -59,11 +57,10 @@ public class Headquarter extends Storehouse {
     public void putCargo(Cargo cargo) {
         if (cargo.getMaterial().isMilitary()) {
             Soldier.Rank rank = cargo.getMaterial().toRank();
-
             int reservedSoldiers = actualReservedSoldiers.get(rank);
 
             if (wantedReservedSoldiers.getOrDefault(rank, 0) > reservedSoldiers) {
-                actualReservedSoldiers.put(rank, reservedSoldiers + 1);
+                actualReservedSoldiers.merge(rank, 1, Integer::sum);
 
                 return;
             }
@@ -144,7 +141,7 @@ public class Headquarter extends Storehouse {
 
     @Override
     public String toString() {
-        return "Headquarter with inventory " + inventory;
+        return String.format("Headquarter with inventory %s", inventory);
     }
 
     @Override
@@ -204,16 +201,10 @@ public class Headquarter extends Storehouse {
 
     @Override
     public int getNumberOfHostedSoldiers() {
-        return inventory.getOrDefault(PRIVATE, 0) +
-                wantedReservedSoldiers.getOrDefault(PRIVATE_RANK, 0) +
-                inventory.getOrDefault(PRIVATE_FIRST_CLASS, 0) +
-                wantedReservedSoldiers.getOrDefault(PRIVATE_FIRST_CLASS_RANK, 0) +
-                inventory.getOrDefault(SERGEANT, 0) +
-                wantedReservedSoldiers.getOrDefault(SERGEANT_RANK, 0) +
-                inventory.getOrDefault(OFFICER, 0) +
-                wantedReservedSoldiers.getOrDefault(OFFICER_RANK, 0) +
-                inventory.getOrDefault(GENERAL, 0) +
-                wantedReservedSoldiers.getOrDefault(GENERAL_RANK, 0);
+        return Arrays.stream(Soldier.Rank.values())
+                .mapToInt(rank -> inventory.getOrDefault(rank.toMaterial(), 0) +
+                        wantedReservedSoldiers.getOrDefault(rank, 0))
+                .sum();
     }
 
     @Override
@@ -236,9 +227,7 @@ public class Headquarter extends Storehouse {
 
     @Override
     public Soldier retrieveHostedSoldier(Soldier soldier) {
-        var amount = inventory.getOrDefault(soldier.getRank().toMaterial(), 0);
-
-        inventory.put(soldier.getRank().toMaterial(), amount - 1);
+        inventory.merge(soldier.getRank().toMaterial(), -1, Integer::sum);
 
         soldier.setHome(this);
 
@@ -275,7 +264,6 @@ public class Headquarter extends Storehouse {
         int beer = inventory.getOrDefault(BEER, 0);
 
         int privatesToDraft = GameUtils.min(swords, shields, beer);
-        int privatesInInventory = inventory.getOrDefault(PRIVATE, 0);
         int privatesInReserve = actualReservedSoldiers.get(PRIVATE_RANK);
         int wantedPrivatesInReserve = wantedReservedSoldiers.get(PRIVATE_RANK);
         int privatesToEnterReserve = Math.min(wantedPrivatesInReserve - privatesInReserve, privatesToDraft);
@@ -283,11 +271,11 @@ public class Headquarter extends Storehouse {
 
         actualReservedSoldiers.put(PRIVATE_RANK, privatesToEnterReserve);
 
-        inventory.put(PRIVATE, privatesInInventory + privatesToEnterInventory);
+        inventory.merge(PRIVATE, privatesToEnterInventory, Integer::sum);
 
-        inventory.put(BEER, beer - privatesToDraft);
-        inventory.put(SHIELD, shields - privatesToDraft);
-        inventory.put(SWORD, swords - privatesToDraft);
+        inventory.merge(BEER, -privatesToDraft, Integer::sum);
+        inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
+        inventory.merge(SWORD, -privatesToDraft, Integer::sum);
     }
 
     public boolean hasAny(Material... materials) {

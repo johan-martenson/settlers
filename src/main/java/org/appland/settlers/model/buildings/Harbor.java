@@ -190,7 +190,6 @@ public class Harbor extends Storehouse {
             } else {
                 super.depositWorker(worker);
             }
-
         } else {
             super.depositWorker(worker);
         }

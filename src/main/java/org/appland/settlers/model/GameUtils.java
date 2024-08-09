@@ -1,6 +1,34 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.actors.Armorer;
+import org.appland.settlers.model.actors.Baker;
+import org.appland.settlers.model.actors.Brewer;
+import org.appland.settlers.model.actors.Builder;
+import org.appland.settlers.model.actors.Butcher;
+import org.appland.settlers.model.actors.CatapultWorker;
+import org.appland.settlers.model.actors.Courier;
+import org.appland.settlers.model.actors.Donkey;
+import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Farmer;
+import org.appland.settlers.model.actors.Fisherman;
+import org.appland.settlers.model.actors.Forester;
+import org.appland.settlers.model.actors.Geologist;
+import org.appland.settlers.model.actors.Hunter;
+import org.appland.settlers.model.actors.IronFounder;
+import org.appland.settlers.model.actors.Metalworker;
+import org.appland.settlers.model.actors.Miller;
+import org.appland.settlers.model.actors.Miner;
+import org.appland.settlers.model.actors.Minter;
+import org.appland.settlers.model.actors.PigBreeder;
+import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Scout;
+import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
+import org.appland.settlers.model.actors.Stonemason;
+import org.appland.settlers.model.actors.StorehouseWorker;
+import org.appland.settlers.model.actors.WellWorker;
+import org.appland.settlers.model.actors.WoodcutterWorker;
+import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
@@ -37,6 +65,7 @@ import java.util.stream.Collectors;
 import static java.lang.Math.*;
 import static org.appland.settlers.model.Direction.*;
 import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.*;
 
 /**
  *
@@ -1686,5 +1715,44 @@ public class GameUtils {
         }
 
         return ranks;
+    }
+
+    public static Worker materialToWorker(Material material, Player player, GameMap map) {
+        return switch (material) {
+            case FORESTER -> new Forester(player, map);
+            case WOODCUTTER_WORKER -> new WoodcutterWorker(player, map);
+            case STONEMASON -> new Stonemason(player, map);
+            case FARMER -> new Farmer(player, map);
+            case SAWMILL_WORKER -> new SawmillWorker(player, map);
+            case WELL_WORKER -> new WellWorker(player, map);
+            case MILLER -> new Miller(player, map);
+            case BAKER -> new Baker(player, map);
+            case STOREHOUSE_WORKER -> new StorehouseWorker(player, map);
+            case FISHERMAN -> new Fisherman(player, map);
+            case MINER -> new Miner(player, map);
+            case IRON_FOUNDER -> new IronFounder(player, map);
+            case BREWER -> new Brewer(player, map);
+            case MINTER -> new Minter(player, map);
+            case ARMORER -> new Armorer(player, map);
+            case PIG_BREEDER -> new PigBreeder(player, map);
+            case BUTCHER -> new Butcher(player, map);
+            case GEOLOGIST -> new Geologist(player, map);
+            case DONKEY_BREEDER -> new DonkeyBreeder(player, map);
+            case SCOUT -> new Scout(player, map);
+            case CATAPULT_WORKER -> new CatapultWorker(player, map);
+            case HUNTER -> new Hunter(player, map);
+            case METALWORKER -> new Metalworker(player, map);
+            case DONKEY -> new Donkey(player, map);
+            case COURIER -> new Courier(player, map);
+            case PRIVATE -> new Soldier(player, PRIVATE_RANK, map);
+            case PRIVATE_FIRST_CLASS -> new Soldier(player, PRIVATE_FIRST_CLASS_RANK, map);
+            case SERGEANT -> new Soldier(player, SERGEANT_RANK, map);
+            case OFFICER -> new Soldier(player, OFFICER_RANK, map);
+            case GENERAL -> new Soldier(player, GENERAL_RANK, map);
+            case BUILDER -> new Builder(player, map);
+            case SHIPWRIGHT -> new Shipwright(player, map);
+            default -> throw new InvalidGameLogicException(
+                    String.format("Can't retrieve worker of type %s", material));
+        };
     }
 }

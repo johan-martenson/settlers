@@ -14,7 +14,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MilitaryBuilding {
-
     int maxHostedSoldiers();
 
     int defenceRadius();
