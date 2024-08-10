@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.Soldier.Rank.*;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
@@ -42,9 +42,9 @@ public class Headquarter extends Storehouse {
     public void stepTime() {
         super.stepTime();
 
-        List<Soldier> hostedSoldiers = getHostedSoldiers();
-
-        long amountHostedPrivates = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == PRIVATE_RANK).count();
+        long amountHostedPrivates = getHostedSoldiers().stream()
+                .filter(soldier -> soldier.getRank() == PRIVATE_RANK)
+                .count();
 
         boolean lackReservedSoldiers = this.wantedReservedSoldiers.getOrDefault(PRIVATE_RANK, 0) > (int) amountHostedPrivates;
 
@@ -53,15 +53,22 @@ public class Headquarter extends Storehouse {
         }
     }
 
+    private void putCargos(Material material, int amount) {
+        for (int i = 0; i < amount; i++) {
+            putCargo(new Cargo(material, getMap()));
+        }
+    }
+
     @Override
     public void putCargo(Cargo cargo) {
-        if (cargo.getMaterial().isMilitary()) {
-            Soldier.Rank rank = cargo.getMaterial().toRank();
+        Material material = cargo.getMaterial();
+
+        if (material.isMilitary()) {
+            Soldier.Rank rank = material.toRank();
             int reservedSoldiers = actualReservedSoldiers.get(rank);
 
             if (wantedReservedSoldiers.getOrDefault(rank, 0) > reservedSoldiers) {
                 actualReservedSoldiers.merge(rank, 1, Integer::sum);
-
                 return;
             }
         }
@@ -72,7 +79,6 @@ public class Headquarter extends Storehouse {
     @Override
     public boolean isSpaceAvailableToHostSoldier(Soldier soldier) {
         Soldier.Rank rank = soldier.getRank();
-
         return wantedReservedSoldiers.getOrDefault(rank, 0) > getHostedSoldiersWithRank(rank);
     }
 
@@ -82,9 +88,7 @@ public class Headquarter extends Storehouse {
 
         Worker storageWorker = new StorehouseWorker(getPlayer(), map);
         getMap().placeWorker(storageWorker, this);
-
         storageWorker.enterBuilding(this);
-
         assignWorker(storageWorker);
     }
 
@@ -94,6 +98,7 @@ public class Headquarter extends Storehouse {
         inventory.put(BEER, InitialState.STORAGE_INITIAL_BEER);
         inventory.put(GOLD, InitialState.STORAGE_INITIAL_GOLD);
 
+        // TODO: add default inventory for officer and private first class
         inventory.put(PRIVATE, InitialState.STORAGE_INITIAL_PRIVATE);
         inventory.put(SERGEANT, InitialState.STORAGE_INITIAL_SERGEANT);
         inventory.put(GENERAL, InitialState.STORAGE_INITIAL_GENERAL);
@@ -152,7 +157,7 @@ public class Headquarter extends Storehouse {
     @Override
     public void capture(Player player) throws InvalidUserActionException {
 
-        /* Destroy the headquarters if it's captured */
+        // Destroy the headquarters if it's captured
         super.tearDown();
     }
 
@@ -173,21 +178,18 @@ public class Headquarter extends Storehouse {
         int amountInInventory = getAmount(rank.toMaterial());
         int reserveGap = reservedAmount - amountInReserve;
 
-        // Increase the amount of hosted soldiers to close the gap as much as possible
-        if (reservedAmount > amountInReserve && amountInInventory > 0) {
-            actualReservedSoldiers.put(rank, amountInReserve + Math.min(reserveGap, amountInInventory));
+        if (reserveGap > 0) {
+            var addToReserve = Math.min(reserveGap, amountInInventory);
 
-            retrieve(rank.toMaterial(), Math.min(reserveGap, amountInInventory));
+            actualReservedSoldiers.merge(rank, addToReserve, Integer::sum);
+            retrieve(rank.toMaterial(), addToReserve);
 
             getPlayer().reportChangedInventory(this);
-
-        // Decrease the amount of hosted soldiers if needed
         } else if (amountInReserve > reservedAmount) {
+            var excessSoldiers = amountInReserve - reservedAmount;
             actualReservedSoldiers.put(rank, reservedAmount);
 
-            for (int i = 0; i < amountInReserve - reservedAmount; i++) {
-                putCargo(new Cargo(rank.toMaterial(), getMap()));
-            }
+            putCargos(rank.toMaterial(), excessSoldiers);
 
             getPlayer().reportChangedInventory(this);
         } else {
@@ -228,9 +230,7 @@ public class Headquarter extends Storehouse {
     @Override
     public Soldier retrieveHostedSoldier(Soldier soldier) {
         inventory.merge(soldier.getRank().toMaterial(), -1, Integer::sum);
-
         soldier.setHome(this);
-
         getMap().placeWorkerFromStepTime(soldier, this);
 
         return soldier;
@@ -240,11 +240,8 @@ public class Headquarter extends Storehouse {
     public Soldier retrieveHostedSoldier() {
         if (isInStock(PRIVATE)) {
             Soldier defender = (Soldier) retrieveWorker(PRIVATE);
-
             getMap().placeWorker(defender, this);
-
             defender.setHome(this);
-
             defender.setPosition(getPosition());
 
             return defender;
@@ -270,7 +267,6 @@ public class Headquarter extends Storehouse {
         int privatesToEnterInventory = privatesToDraft - privatesToEnterReserve;
 
         actualReservedSoldiers.put(PRIVATE_RANK, privatesToEnterReserve);
-
         inventory.merge(PRIVATE, privatesToEnterInventory, Integer::sum);
 
         inventory.merge(BEER, -privatesToDraft, Integer::sum);

@@ -226,7 +226,7 @@ public class Ship extends Worker {
         return cargos;
     }
 
-    public void putCargos(Material material, int amount, Building building) {
+    public void putCargos(Material material, int amount) {
         for (int i = 0; i < amount; i++) {
             cargos.add(new Cargo(material, getMap()));
 
