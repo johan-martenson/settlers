@@ -1,18 +1,18 @@
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.BorderChangeCause;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.Direction;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
-import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Vegetation;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Harbor;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.appland.settlers.model.BorderCheck.CAN_PLACE_OUTSIDE_BORDER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -30,10 +31,10 @@ public class Ship extends Worker {
     private static final int TIME_TO_BUILD_SHIP = 100;
     private static final int MAX_STORAGE = 33; // TODO: verify that this number is correct
 
-    private final Countdown countdown;
-    private final Set<Cargo> cargos;
+    private final Countdown countdown = new Countdown();
+    private final Set<Cargo> cargos = new HashSet<>();
 
-    private State state;
+    private State state = State.UNDER_CONSTRUCTION;
     private Point targetHarborPoint;
     private Harbor targetHarbor;
 
@@ -50,106 +51,54 @@ public class Ship extends Worker {
     public Ship(Player player, GameMap map) {
         super(player, map);
 
-        state = State.UNDER_CONSTRUCTION;
-
-        countdown = new Countdown();
-
         countdown.countFrom(TIME_TO_BUILD_SHIP);
-        cargos = new HashSet<>();
     }
 
     @Override
     void onIdle() {
+        switch (state) {
+            case UNDER_CONSTRUCTION -> {
+                if (countdown.hasReachedZero()) {
+                    map.reportShipReady(this);
 
-        if (state == State.UNDER_CONSTRUCTION) {
-            if (countdown.hasReachedZero()) {
+                    var pathToWaterPoint = GameUtils.getHexagonAreaAroundPoint(getPosition(), 4, map).stream()
+                            .filter(point -> GameUtils.isAll(map.getSurroundingTiles(point), Vegetation.WATER))
+                            .map(point -> new GameUtils.Tuple<>(point, map.findWayForShip(getPosition(), point)))
+                            .filter(entry -> entry.t2() != null)
+                            .findFirst()
+                            .map(GameUtils.Tuple::t2);
 
-                Point position = getPosition();
-
-                /* Tell the map that the ship is ready, so it's possible to place construction on it again */
-                map.reportShipReady(this);
-
-                /* Sail out a small step into the water if there is no expedition to start */
-                Point surroundedByWaterPoint = null;
-                List<Point> pathToWaterPoint = null;
-
-                for (Point point : GameUtils.getHexagonAreaAroundPoint(position, 4, map)) {
-
-                    /* Filter points not surrounded by water */
-                    if (!GameUtils.isAll(map.getSurroundingTiles(point), Vegetation.WATER)) {
-                        continue;
+                    if (pathToWaterPoint.isPresent()) {
+                        state = State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS;
+                        setOffroadTargetWithPath(pathToWaterPoint.get());
+                    } else {
+                        state = State.WAITING_FOR_TASK;
                     }
-
-                    /* Filter points that can't be reached */
-                    pathToWaterPoint = map.findWayForShip(position, point);
-
-                    if (pathToWaterPoint == null) {
-                        continue;
-                    }
-
-                    surroundedByWaterPoint = point;
-
-                    break;
-                }
-
-                /* Sail to the point surrounded by water close to the shipyard and wait */
-                if (surroundedByWaterPoint != null) {
-                    state = State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS;
-
-                    setOffroadTargetWithPath(pathToWaterPoint);
-
-                /* Just stay in the current place if there is nowhere to go */
                 } else {
-                    state = State.WAITING_FOR_TASK;
+                    countdown.step();
                 }
-            } else {
-                countdown.step();
             }
-        } else if (state == State.WAITING_FOR_TASK) {
+            case WAITING_FOR_TASK -> {
+                List<Harbor> harborsWithTasksForShipSortedByDistance = player.getBuildings().stream()
+                        .filter(Building::isHarbor)
+                        .filter(Building::isReady)
+                        .map(Harbor.class::cast)
+                        .filter(Harbor::hasTaskForShip)
+                        .sorted(Comparator.comparingInt(harbor -> GameUtils.distanceInGameSteps(getPosition(), harbor.getPosition())))
+                        .toList();
 
-            Point position = getPosition();
-
-            List<Harbor> harborsWithTasksForShipSortedByDistance = player.getBuildings().stream()
-                    .filter(Building::isHarbor)
-                    .filter(Building::isReady)
-                    .map(building -> (Harbor) building)
-                    .filter(Harbor::hasTaskForShip)
-
-                    /* Sort by distance to the ship - closest first */
-                    .map(harbor -> new GameUtils.BuildingAndData<>(
-                            harbor,
-                            GameUtils.distanceInGameSteps(position, harbor.getPosition())))
-                    .sorted(Comparator.comparingInt(GameUtils.BuildingAndData::data))
-                    .map(GameUtils.BuildingAndData::building)
-                    .toList();
-
-            /* Start sailing to the nearest point that can be reached (if any) */
-            for (Harbor harbor : harborsWithTasksForShipSortedByDistance) {
-
-                Point waterPoint = GameUtils.getClosestWaterPointForBuilding(harbor);
-
-                /* Filter harbors without any close points in water */
-                if (waterPoint == null) {
-                    continue;
-                }
-
-                /* Filter harbors that cannot be reached */
-                List<Point> path = map.findWayForShip(getPosition(), waterPoint);
-
-                if (path == null) {
-                    continue;
-                }
-
-                /* Sail to the harbor to pick up a new task */
-                targetHarbor = harbor;
-
-                state = State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK;
-
-                targetHarbor.promiseShip(this);
-
-                setOffroadTargetWithPath(path);
-
-                break;
+                harborsWithTasksForShipSortedByDistance.stream()
+                        .map(harbor -> new GameUtils.Tuple<>(harbor, GameUtils.getClosestWaterPointForBuilding(harbor)))
+                        .filter(entry -> entry.t2() != null)
+                        .map(entry -> new GameUtils.Tuple<>(entry.t1(), map.findWayForShip(getPosition(), entry.t2())))
+                        .filter(entry -> entry.t2() != null)
+                        .findFirst()
+                        .ifPresent(entry -> {
+                            targetHarbor = entry.t1();
+                            state = State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK;
+                            targetHarbor.promiseShip(this);
+                            setOffroadTargetWithPath(entry.t2());
+                        });
             }
         }
     }
@@ -164,61 +113,35 @@ public class Ship extends Worker {
 
     @Override
     void onArrival() {
+        switch (state) {
+            case SAILING_TO_HARBOR_TO_TAKE_ON_TASK -> {
+                Harbor harbor = GameUtils.getClosestHarborOffroadForPlayer(getPlayer(), getPosition(), 5);
 
-        Player player = getPlayer();
-        Point position = getPosition();
+                if (harbor.needsToShipToOtherHarbors()) {
+                    Map<Harbor, Map<Material, Integer>> neededShipments = harbor.getNeededShipmentsFromThisHarbor();
+                    targetHarbor = neededShipments.keySet().iterator().next();
 
-        if (state == State.SAILING_TO_HARBOR_TO_TAKE_ON_TASK) {
-            Harbor harbor = GameUtils.getClosestHarborOffroadForPlayer(player, position, 5);
+                    neededShipments.get(targetHarbor).forEach((material, amountNeeded) -> {
+                        int amountAvailable = harbor.getAmount(material);
+                        int spaceAvailable = MAX_STORAGE - cargos.size();
+                        int amountToLoad = Math.min(amountNeeded, Math.min(amountAvailable, spaceAvailable));
+                        cargos.addAll(harbor.retrieve(material, amountToLoad));
+                    });
 
-            if (harbor.needsToShipToOtherHarbors()) {
-
-                // Get needed deliveries from this harbor to other harbors. Harbor-#material
-                // Pick one of the harbors
-                // FIXME: follow priority, pick up material for several harbors if there is capacity, limit pickup to ship's capacity
-                Map<Harbor, Map<Material, Integer>> neededShipments = harbor.getNeededShipmentsFromThisHarbor();
-
-                targetHarbor = neededShipments.keySet().iterator().next();
-                Map<Material, Integer> neededShipmentsForTargetHarbor = neededShipments.get(targetHarbor);
-
-                // Load up on cargo
-                for (Map.Entry<Material, Integer> entry : neededShipmentsForTargetHarbor.entrySet()) {
-                    Material material = entry.getKey();
-                    int amountNeeded = entry.getValue();
-                    int amountAvailable = harbor.getAmount(material);
-                    int spaceAvailable = MAX_STORAGE - cargos.size();
-
-                    int amountToLoadOfMaterial = Math.min(
-                            Math.min(amountNeeded, amountAvailable),
-                            spaceAvailable
-                    );
-
-                    cargos.addAll(harbor.retrieve(material, amountToLoadOfMaterial));
+                    List<Point> pathToTargetHarbor = map.findWayForShip(getPosition(), GameUtils.getClosestWaterPoint(targetHarbor.getPosition(), map));
+                    state = State.SAILING_TO_HARBOR_WITH_CARGO;
+                    setOffroadTargetWithPath(pathToTargetHarbor);
+                } else {
+                    state = State.WAITING_FOR_TASK;
+                    harbor.addShipReadyForTask(this);
                 }
-
-                /* Find the way to the potential target */
-                Point closestWaterPoint = GameUtils.getClosestWaterPoint(targetHarbor.getPosition(), map);
-
-                List<Point> pathToTargetHarbor = map.findWayForShip(position, closestWaterPoint);
-
-                state = State.SAILING_TO_HARBOR_WITH_CARGO;
-
-                setOffroadTargetWithPath(pathToTargetHarbor);
-            } else {
-                state = State.WAITING_FOR_TASK;
-
-                harbor.addShipReadyForTask(this);
             }
-        } else if (state == State.SAILING_TO_START_NEW_SETTLEMENT) {
-            player.reportShipReachedDestination(this);
-        } else if (state == State.SAILING_TO_POINT_TO_WAIT_FOR_ORDERS) {
-            state = State.WAITING_FOR_TASK;
-        } else if (state == State.SAILING_TO_HARBOR_WITH_CARGO) {
-            for (Cargo cargo : cargos) {
-                targetHarbor.putCargo(cargo);
+            case SAILING_TO_START_NEW_SETTLEMENT -> getPlayer().reportShipReachedDestination(this);
+            case SAILING_TO_POINT_TO_WAIT_FOR_ORDERS -> state = State.WAITING_FOR_TASK;
+            case SAILING_TO_HARBOR_WITH_CARGO -> {
+                cargos.forEach(targetHarbor::putCargo);
+                cargos.clear();
             }
-
-            cargos.clear();
         }
     }
 
@@ -239,104 +162,58 @@ public class Ship extends Worker {
     }
 
     public Set<Direction> getPossibleDirectionsForExpedition() {
-
         GameMap map = getMap();
-        Set<Direction> directions = new HashSet<>();
 
-        for (Point point : map.getPossiblePlacesForHarbor()) {
-
-            /* Filter occupied harbor points */
-            if (map.isBuildingAtPoint(point)) {
-                continue;
-            }
-
-            Direction direction = GameUtils.getDirection(getPosition(), point);
-
-            directions.add(direction);
-        }
-
-        return directions;
+        return map.getPossiblePlacesForHarbor().stream()
+                .filter(point -> !map.isBuildingAtPoint(point))
+                .map(point -> GameUtils.getDirection(getPosition(), point))
+                .collect(Collectors.toSet());
     }
 
     public void startExpedition(Direction direction) throws InvalidUserActionException {
         GameMap map = getMap();
         Point position = getPosition();
 
-        /* Select target */
-        for (Point point : map.getPossiblePlacesForHarbor()) {
+        var pathToTarget = map.getPossiblePlacesForHarbor().stream()
+                .filter(point -> !map.isBuildingAtPoint(point)) // Filter occupied harbor points
+                .filter(point -> Objects.equals(GameUtils.getDirection(position, point), direction)) // Filter other directions
+                .map(point -> new GameUtils.Tuple<>(point, map.findWayForShip(position, GameUtils.getClosestWaterPoint(point, map)))) // Find the way to the potential target
+                .filter(entry -> entry.t2() != null) // Filter potential targets that can't be reached
+                .findFirst(); // Select the first valid target
 
-            /* Filter occupied harbor points */
-            if (map.isBuildingAtPoint(point)) {
-                continue;
-            }
-
-            /* Filter other directions than the chosen one */
-            if (!Objects.equals(GameUtils.getDirection(position, point), direction)) {
-                continue;
-            }
-
-            /* Find the way to the potential target */
-            Point closestWaterPoint = GameUtils.getClosestWaterPoint(point, map);
-
-            List<Point> path = map.findWayForShip(position, closestWaterPoint);
-
-            /* Filter potential targets that can't be reached */
-            if (path == null) {
-                continue;
-            }
-
-            /* Select the target */
+        if (pathToTarget.isPresent()) {
             state = State.SAILING_TO_START_NEW_SETTLEMENT;
-
-            setOffroadTargetWithPath(path);
-
-            targetHarborPoint = point;
-
-            break;
-        }
-
-        if (state != State.SAILING_TO_START_NEW_SETTLEMENT) {
-            throw new InvalidUserActionException("No suitable target in this direction: " + direction);
+            setOffroadTargetWithPath(pathToTarget.get().t2());
+            targetHarborPoint = pathToTarget.get().t1();
+        } else {
+            throw new InvalidUserActionException(String.format("No suitable target in this direction: %s", direction));
         }
     }
 
     @Override
     public String toString() {
-        if (state == State.UNDER_CONSTRUCTION) {
-            return "Ship under construction " + getPosition();
-        }
-
-        return "Ship " + getPosition();
+        return state == State.UNDER_CONSTRUCTION
+                ? String.format("Ship under construction %s", getPosition())
+                : String.format("Ship %s", getPosition());
     }
 
     public void startSettlement() throws InvalidUserActionException {
-
         // TODO: make sure the harbor is not within any player's border
 
-        /* Place a harbor */
-        Harbor newHarbor = map.placeBuilding(new Harbor(player), targetHarborPoint, CAN_PLACE_OUTSIDE_BORDER);
+        Harbor newHarbor = map.placeBuilding(new Harbor(getPlayer()), targetHarborPoint, CAN_PLACE_OUTSIDE_BORDER);
 
-        /* Place the builder */
-        Builder builder = new Builder(player, map);
-
+        Builder builder = new Builder(getPlayer(), map);
         map.placeWorker(builder, newHarbor.getFlag());
-
         builder.setTargetBuilding(newHarbor);
-
         newHarbor.promiseBuilder(builder);
 
-        /* Deliver the required material to the harbor */
         GameUtils.putCargos(PLANK, 4, newHarbor);
         GameUtils.putCargos(STONE, 6, newHarbor);
 
         cargos.clear();
-
-        /* Update the border */
         newHarbor.setOwnSettlement();
-
         map.updateBorder(newHarbor, BorderChangeCause.NEW_SETTLEMENT);
 
-        /* Get ready for next task */
         state = State.WAITING_FOR_TASK;
     }
 
