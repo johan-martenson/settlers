@@ -1433,6 +1433,8 @@ public class Player {
 
     public void setNation(Nation nation) {
         this.nation = nation;
+
+        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
     }
 
     public Optional<Building> getHeadquarter() {
@@ -1722,6 +1724,8 @@ public class Player {
 
     public void setPlayerColor(PlayerColor playerColor) {
         color = playerColor;
+
+        playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
     }
 
     public PlayerType getPlayerType() {
