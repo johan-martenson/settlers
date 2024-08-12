@@ -1576,6 +1576,9 @@ public class TestGameMonitoringOfBuilding {
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
+        // Wait for the woodcutter to get constructed
+        Utils.waitForBuildingToBeConstructed(woodcutterHut);
+
         /* Verify that an event is sent when a woodcutter worker enters the woodcutter hut */
 
         /* Wait for the woodcutter worker to appear */
@@ -1584,7 +1587,7 @@ public class TestGameMonitoringOfBuilding {
                 break;
             }
 
-            assertTrue(woodcutterHut.isDoorClosed());
+            assertFalse(woodcutterHut.isDoorClosed());
 
             map.stepTime();
         }
@@ -1599,7 +1602,7 @@ public class TestGameMonitoringOfBuilding {
                 break;
             }
 
-            assertTrue(woodcutterHut.isDoorClosed());
+            assertFalse(woodcutterHut.isDoorClosed());
             assertTrue(monitor.getEvents().stream().noneMatch(gcl -> gcl.changedBuildings().contains(woodcutterHut)));
 
             map.stepTime();

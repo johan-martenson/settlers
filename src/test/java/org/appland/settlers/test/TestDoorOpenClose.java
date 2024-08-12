@@ -68,33 +68,6 @@ public class TestDoorOpenClose {
     }
 
     @Test
-    public void testDoorIsClosedOnUnoccupiedBuilding() throws InvalidUserActionException {
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place woodcutter hut and connect it with the headquarters */
-        Point point1 = new Point(6, 12);
-        var woodcutterHut = map.placeBuilding(new Woodcutter(player0), point1);
-
-        var road0 = map.placeAutoSelectedRoad(player0, woodcutterHut.getFlag(), headquarter0.getFlag());
-
-        /* Wait for the woodcutter hut to be finished and unoccupied */
-        Utils.waitForBuildingToBeConstructed(woodcutterHut);
-
-        assertTrue(woodcutterHut.isReady());
-        assertTrue(woodcutterHut.isUnoccupied());
-        assertTrue(woodcutterHut.isDoorClosed());
-    }
-
-    @Test
     public void testDoorIsClosedOnOccupiedBuildingWithWorkerInside() throws InvalidUserActionException {
 
         /* Starting new game */
@@ -159,6 +132,9 @@ public class TestDoorOpenClose {
             map.stepTime();
         }
 
+        assertTrue(woodcutterHut.isUnoccupied());
+        assertFalse(woodcutterHut.isDoorClosed());
+
         /* Wait for the worker to come out */
         for (int i = 0; i < 500; i++) {
             var workers = Utils.findWorkersOfTypeOutsideForPlayer(WoodcutterWorker.class, player0);
@@ -167,27 +143,14 @@ public class TestDoorOpenClose {
                 break;
             }
 
-            assertTrue(woodcutterHut.isDoorClosed());
+            assertFalse(woodcutterHut.isDoorClosed());
 
             map.stepTime();
         }
 
         var worker = Utils.findWorkersOfTypeOutsideForPlayer(WoodcutterWorker.class, player0).getFirst();
 
-        /* Verify that the door opens when the worker gets to the building's flag */
-        for (int i = 0; i < 500; i++) {
-            if (worker.isExactlyAtPoint() && worker.getPosition().equals(woodcutterHut.getFlag().getPosition())) {
-                break;
-            }
-
-            assertTrue(woodcutterHut.isDoorClosed());
-
-            map.stepTime();
-        }
-
-        assertFalse(woodcutterHut.isDoorClosed());
-        assertEquals(worker.getTarget(), woodcutterHut.getPosition());
-
+        /* Verify that the door is open until the worker gets to the building */
         for (int i = 0; i < 500; i++) {
             if (worker.isInsideBuilding()) {
                 break;
@@ -362,5 +325,45 @@ public class TestDoorOpenClose {
         assertTrue(courier.isExactlyAtPoint());
         assertEquals(courier.getPosition(), headquarter0.getFlag().getPosition());
         assertTrue(headquarter0.isDoorClosed());
+    }
+
+    @Test
+    public void testDoorIsOpenOnUnpopulatedBuilding() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place woodcutter and connected it to the headquarters
+        var point1 = new Point(10, 6);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        var road = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
+
+        // Verify that the door is open on the woodcutter when it's fully constructed
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+
+        assertFalse(woodcutter.isDoorClosed());
+
+        // Verify that the door closes when the woodcutter gets occupied
+        for (int i = 0; i < 2000; i++) {
+            if (!woodcutter.isUnoccupied()) {
+                break;
+            }
+
+            assertFalse(woodcutter.isDoorClosed());
+
+            map.stepTime();
+        }
+
+        assertFalse(woodcutter.isUnderConstruction());
+        assertTrue(woodcutter.isOccupied());
+        assertTrue(woodcutter.isDoorClosed());
     }
 }

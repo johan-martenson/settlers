@@ -452,6 +452,9 @@ public class Building implements EndPoint {
 
                     state = State.UNOCCUPIED;
 
+                    // Unoccupied buildings have open doors
+                    door = DoorState.OPEN;
+
                     /* For military buildings, report the construction */
                     if (isMilitaryBuilding()) {
                         player.reportMilitaryBuildingReady(this);
