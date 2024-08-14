@@ -1,5 +1,6 @@
 package org.appland.settlers.rest.resource;
 
+import jakarta.websocket.server.ServerEndpoint;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
@@ -42,13 +43,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.websocket.EndpointConfig;
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;

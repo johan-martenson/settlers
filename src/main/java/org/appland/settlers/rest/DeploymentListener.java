@@ -1,12 +1,12 @@
 package org.appland.settlers.rest;
 
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.rest.resource.MapsResource;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
