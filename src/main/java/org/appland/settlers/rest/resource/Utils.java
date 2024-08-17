@@ -300,8 +300,8 @@ class Utils {
                 Vegetation below = map.getVegetationBelow(point);
                 Vegetation downRight = map.getVegetationDownRight(point);
 
-                jsonTrianglesBelow.add(vegetationToJson(below));
-                jsonTrianglesBelowRight.add(vegetationToJson(downRight));
+                jsonTrianglesBelow.add(below.toInt());
+                jsonTrianglesBelowRight.add(downRight.toInt());
                 jsonHeights.add(map.getHeightAtPoint(point));
             }
 
@@ -1864,8 +1864,8 @@ class Utils {
                 Vegetation below = map.getVegetationBelow(point);
                 Vegetation downRight = map.getVegetationDownRight(point);
 
-                jsonTrianglesBelow.add(vegetationToJson(below));
-                jsonTrianglesBelowRight.add(vegetationToJson(downRight));
+                jsonTrianglesBelow.add(below.toInt());
+                jsonTrianglesBelowRight.add(downRight.toInt());
                 jsonHeights.add(map.getHeightAtPoint(point));
             }
 

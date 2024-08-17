@@ -103,4 +103,33 @@ public enum Vegetation {
     public boolean canWalkOn() {
         return CAN_WALK_ON.contains(this);
     }
+
+    public int toInt() {
+        return switch (this) {
+            case SAVANNAH -> 0;
+            case MOUNTAIN_1 -> 1;
+            case SNOW -> 2;
+            case SWAMP -> 3;
+            case DESERT_1 -> 4;
+            case WATER -> 5;
+            case BUILDABLE_WATER -> 6;
+            case DESERT_2 -> 7;
+            case MEADOW_1 -> 8;
+            case MEADOW_2 -> 9;
+            case MEADOW_3 -> 10;
+            case MOUNTAIN_2 -> 11;
+            case MOUNTAIN_3 -> 12;
+            case MOUNTAIN_4 -> 13;
+            case STEPPE -> 14;
+            case FLOWER_MEADOW -> 15;
+            case LAVA -> 16;
+            case MAGENTA -> 17;
+            case MOUNTAIN_MEADOW -> 18;
+            case WATER_2 -> 19;
+            case LAVA_2 -> 20;
+            case LAVA_3 -> 21;
+            case LAVA_4 -> 22;
+            case BUILDABLE_MOUNTAIN -> 23;
+        };
+    }
 }

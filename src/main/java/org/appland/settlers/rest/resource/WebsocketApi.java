@@ -62,7 +62,7 @@ import java.util.Set;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 
-@ServerEndpoint(value = "/ws/monitor/games")
+@ServerEndpoint(value = "/ws/api")
 public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,

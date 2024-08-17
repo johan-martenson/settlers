@@ -5,11 +5,15 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.rest.resource.MapsResource;
 import org.appland.settlers.rest.resource.WebsocketApi;
+import org.eclipse.jetty.ee10.servlet.DefaultServlet;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.ee10.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
 import org.eclipse.jetty.server.Server;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class Main {
@@ -67,20 +71,27 @@ public class Main {
         // Add jakarta.websocket support
         JakartaWebSocketServletContainerInitializer.configure(servletContextHandler, (context, container) ->
         {
-            // Add echo endpoint to server container
-            ServerEndpointConfig echoConfig = ServerEndpointConfig.Builder.create(WebsocketApi.class, "/ws/monitor/games").build();
+            ServerEndpointConfig echoConfig = ServerEndpointConfig.Builder.create(WebsocketApi.class, "/ws/api").build();
             container.addEndpoint(echoConfig);
         });
 
-        // Add default servlet (to serve the html/css/js)
-        // Figure out where the static files are stored.
-        /*URL urlStatics = Thread.currentThread().getContextClassLoader().getResource("assets/");
-        Objects.requireNonNull(urlStatics, "Unable to find assets to serve");
-        String urlBase = urlStatics.toExternalForm().replaceFirst("/[^/]*$", "/");
-        ServletHolder defHolder = new ServletHolder("default", new DefaultServlet());
-        defHolder.setInitParameter("resourceBase", urlBase);
-        defHolder.setInitParameter("dirAllowed", "true");
-        servletContextHandler.addServlet(defHolder, "/");*/
+        // Add file server for the assets
+        // add special pathspec of "/alt/" content mapped to the altPath
+        Path altPath = Paths.get("assets").toRealPath();
+
+        System.out.printf("Serving files from %s", altPath);
+
+        ServletHolder holderAlt = new ServletHolder("static-alt", DefaultServlet.class);
+        holderAlt.setInitParameter("resourceBase", altPath.toUri().toASCIIString());
+        holderAlt.setInitParameter("dirAllowed", "true");
+        holderAlt.setInitParameter("pathInfoOnly", "true");
+        servletContextHandler.addServlet(holderAlt, "/assets/*");
+
+        // Lastly, the default servlet for root content (always needed, to satisfy servlet spec)
+        // It is important that this is last.
+        ServletHolder holderDef = new ServletHolder("default", DefaultServlet.class);
+        holderDef.setInitParameter("dirAllowed", "true");
+        servletContextHandler.addServlet(holderDef, "/");
 
         server.start();
         server.join();
