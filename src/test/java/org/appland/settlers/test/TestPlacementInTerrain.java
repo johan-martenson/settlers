@@ -3096,7 +3096,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that there is no available flag point in the lava */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
@@ -3118,7 +3118,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that it is not possible to place a flag on the lava */
         try {
@@ -3144,7 +3144,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that there is no available house point on the lava */
         assertNull(map.isAvailableHousePoint(player0, point1));
@@ -3166,7 +3166,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that it's not possible to place a house on the lava */
         try {
@@ -3192,7 +3192,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that there is no available house point on the lava */
         assertFalse(map.isAvailableMinePoint(player0, point1));
@@ -3214,7 +3214,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that it's not possible to place a house on the lava */
         try {
@@ -3240,7 +3240,7 @@ public class TestPlacementInTerrain {
 
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Place flags */
         Point point2 = new Point(8, 10);
@@ -3273,8 +3273,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         /* Verify that there is no available house point on the border of the lava */
         Point point3 = new Point(11, 11);
@@ -3298,8 +3298,8 @@ public class TestPlacementInTerrain {
         /* Put a small patch of lava on the map */
         Point point1 = new Point(10, 10);
         Point point2 = new Point(12, 10);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         /* Verify that it's not possible to place a house on the border of the lava */
         Point point3 = new Point(11, 11);
@@ -3335,12 +3335,12 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(15, 3);
         Point point6 = new Point(12, 4);
         Point point7 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
-        Utils.surroundPointWithVegetation(point3, LAVA, map);
-        Utils.surroundPointWithVegetation(point4, LAVA, map);
-        Utils.surroundPointWithVegetation(point5, LAVA, map);
-        Utils.surroundPointWithVegetation(point6, LAVA, map);
-        Utils.surroundPointWithVegetation(point7, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point3, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point4, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point5, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point6, LAVA_1, map);
+        Utils.surroundPointWithVegetation(point7, LAVA_1, map);
 
         /* Finish construction of the woodcutter hut */
         Utils.constructHouse(woodcutter0);
@@ -3352,8 +3352,8 @@ public class TestPlacementInTerrain {
         woodcutter0.tearDown();
 
         /* Verify that the woodcutter worker can't go back to the headquarter */
-        assertEquals(map.getVegetationAbove(point6), LAVA);
-        assertEquals(map.getVegetationBelow(point7), LAVA);
+        assertEquals(map.getVegetationAbove(point6), LAVA_1);
+        assertEquals(map.getVegetationBelow(point7), LAVA_1);
         assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         for (int i = 0; i < 1000; i++) {
@@ -3378,7 +3378,7 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
@@ -3411,7 +3411,7 @@ public class TestPlacementInTerrain {
 
         /* Place a swamp on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         /* Place snow next to the swamp */
         Point point3 = new Point(4, 8);
@@ -3435,10 +3435,10 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(4, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, LAVA, map);
+            Utils.surroundPointWithVegetation(point, LAVA_1, map);
         }
 
         /* Verify that a headquarter can be placed on the lava */
@@ -3465,10 +3465,10 @@ public class TestPlacementInTerrain {
 
         /* Place lava on the map */
         Point point2 = new Point(6, 6);
-        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA_1, map);
 
         for (Point point : point2.getAdjacentPoints()) {
-            Utils.surroundPointWithVegetation(point, LAVA, map);
+            Utils.surroundPointWithVegetation(point, LAVA_1, map);
         }
 
         /* Verify that there is no available point for a large house on the lava */

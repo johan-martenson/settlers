@@ -12,19 +12,15 @@ import java.util.Stack;
 public class ByteArrayReader implements ByteReader {
 
     private final ByteBuffer byteArray;
-    private final Stack<ByteOrder> byteOrderStack;
+    private final Stack<ByteOrder> byteOrderStack = new Stack<>();
 
     private ByteOrder order;
-    private long offset;
-    private boolean isEof;
+    private long offset = 0;
+    private boolean isEof = false;
 
     public ByteArrayReader(byte[] byteArray, ByteOrder byteOrder) {
         this.byteArray = ByteBuffer.wrap(byteArray).order(byteOrder);
         this.order = byteOrder;
-
-        byteOrderStack = new Stack<>();
-        offset = 0;
-        isEof = false;
     }
 
     @Override
@@ -122,19 +118,6 @@ public class ByteArrayReader implements ByteReader {
         }
 
         return longArray;
-    }
-
-    @Override
-    public List<Long> getUint32ArrayAsList(int length) {
-        long[] array = getUint32Array(length);
-
-        List<Long> list = new ArrayList<>();
-
-        for (long l : array) {
-            list.add(l);
-        }
-
-        return list;
     }
 
     @Override

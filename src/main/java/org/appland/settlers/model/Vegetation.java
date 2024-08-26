@@ -20,7 +20,7 @@ public enum Vegetation {
     MOUNTAIN_4,
     STEPPE,
     FLOWER_MEADOW,
-    LAVA,
+    LAVA_1,
     MAGENTA,
     MOUNTAIN_MEADOW,
     WATER_2,
@@ -86,7 +86,7 @@ public enum Vegetation {
             WATER,
             WATER_2,
             BUILDABLE_WATER,
-            LAVA,
+            LAVA_1,
             LAVA_2,
             LAVA_3,
             LAVA_4
@@ -122,7 +122,7 @@ public enum Vegetation {
             case MOUNTAIN_4 -> 13;
             case STEPPE -> 14;
             case FLOWER_MEADOW -> 15;
-            case LAVA -> 16;
+            case LAVA_1 -> 16;
             case MAGENTA -> 17;
             case MOUNTAIN_MEADOW -> 18;
             case WATER_2 -> 19;

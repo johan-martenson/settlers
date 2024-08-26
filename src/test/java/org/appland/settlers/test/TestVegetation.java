@@ -140,9 +140,9 @@ public class TestVegetation {
 
         assertEquals(map.getVegetationUpLeft(point0), Vegetation.FLOWER_MEADOW);
 
-        map.setVegetationUpLeft(point0, Vegetation.LAVA);
+        map.setVegetationUpLeft(point0, Vegetation.LAVA_1);
 
-        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA);
+        assertEquals(map.getVegetationUpLeft(point0), Vegetation.LAVA_1);
 
         map.setVegetationUpLeft(point0, Vegetation.MAGENTA);
 
@@ -662,7 +662,7 @@ public class TestVegetation {
 
         /* Place lava */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_1, map);
 
         /* Verify that it's not possible to place well */
         try {
@@ -1458,7 +1458,7 @@ public class TestVegetation {
         /* Place lava */
         Point point2 = new Point(9, 9);
 
-        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point2, Vegetation.LAVA_1, map);
 
         /* Verify that it's not possible to place flag */
         try {
@@ -2242,7 +2242,7 @@ public class TestVegetation {
 
         /* Place lava */
         Point point1 = new Point(7, 9);
-        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA, map);
+        Utils.surroundPointWithVegetation(point1, Vegetation.LAVA_1, map);
 
         /* Verify that it's not possible to place a mine */
         try {

@@ -436,7 +436,7 @@ public class TestTree {
 
         /* Place lava */
         Point point1 = new Point(12, 6);
-        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point1, LAVA_1, map);
 
         /* Verify that a dead tree can be placed on lava */
         map.placeDeadTree(point1);

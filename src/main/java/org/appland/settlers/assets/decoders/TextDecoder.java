@@ -8,6 +8,7 @@ import org.appland.settlers.utils.StreamReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
@@ -58,7 +59,9 @@ public class TextDecoder {
                 throw new InvalidFormatException("Size must be less that count * 4 (" + count * SIZE_OF_UINT32 + "). Not " + size);
             }
 
-            List<Long> starts = streamReader.getUint32ArrayAsList(count);
+            List<Long> starts = Arrays.stream(streamReader.getUint32Array(count))
+                    .boxed()
+                    .toList();
 
             long lastStart = 0;
 

@@ -7,7 +7,6 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.Tree;
 import org.appland.settlers.utils.StreamReader;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -44,10 +43,7 @@ public class MapLoader {
     boolean printInfo = false;
 
     public static void main(String[] args) {
-
-        /* Parse command line and start */
         MapLoader mapLoader = new MapLoader();
-
         CmdLineParser parser = new CmdLineParser(mapLoader);
 
         try {
@@ -66,17 +62,25 @@ public class MapLoader {
         }
     }
 
+    /**
+     * Prints information about the loaded map.
+     *
+     * @param mapFile the MapFile instance to print information about
+     */
     private void printMapInformation(MapFile mapFile) {
         System.out.printf(" - Title: %s%n", mapFile.getTitle());
         System.out.printf(" - Author: %s%n", mapFile.getAuthor());
         System.out.printf(" - Max number of players: %d%n", mapFile.getMaxNumberOfPlayers());
-        System.out.println(" - Starting points:");
 
-        mapFile.getGamePointStartingPoints().forEach(point -> System.out.printf("    - %d, %d%n", point.x, point.y));
+        System.out.println(" - Starting points:");
+        mapFile.getGamePointStartingPoints().forEach(point ->
+                System.out.printf("    - %d, %d%n", point.x, point.y)
+        );
 
         System.out.println(" - Player types:");
-
-        mapFile.getPlayerFaces().forEach(face -> System.out.printf("    - %s%n", face.name().toLowerCase()));
+        mapFile.getPlayerFaces().forEach(face ->
+                System.out.printf("    - %s%n", face.name().toLowerCase())
+        );
 
         System.out.printf(" - Width x height: %d x %d%n", mapFile.getWidth(), mapFile.getHeight());
         System.out.printf(" - Terrain type: %s%n", mapFile.getTerrainType().name().toLowerCase());
@@ -85,17 +89,21 @@ public class MapLoader {
         System.out.printf(" - File header: %s%n", mapFile.getHeaderType().name().toLowerCase());
     }
 
+    /**
+     * Loads a map file from the specified filename.
+     *
+     * @param mapFilename the filename of the map to load
+     * @return the loaded MapFile instance
+     * @throws SettlersMapLoadingException if there is an error loading the map
+     * @throws IOException                 if there is an I/O error
+     * @throws InvalidMapException         if the map is invalid
+     */
     public MapFile loadMapFromFile(String mapFilename) throws SettlersMapLoadingException, IOException, InvalidMapException {
-        printlnIfDebug();
-        printlnIfDebug("Loading: " + mapFilename);
+        printlnIfDebug(String.format("Loading: %s", mapFilename));
 
-        InputStream fileInputStream = Files.newInputStream(Paths.get(mapFilename));
-
-        MapFile mapFile = loadMapFromStream(fileInputStream);
-
-        fileInputStream.close();
-
-        return mapFile;
+        try (InputStream fileInputStream = Files.newInputStream(Paths.get(mapFilename))) {
+            return loadMapFromStream(fileInputStream);
+        }
     }
 
     private void printlnIfDebug() {
@@ -116,50 +124,48 @@ public class MapLoader {
         }
     }
 
+    /**
+     * Loads a map from the provided InputStream.
+     *
+     * @param inputStream the InputStream to load the map from
+     * @return the loaded MapFile instance
+     * @throws SettlersMapLoadingException if there is an error loading the map
+     * @throws IOException                 if there is an I/O error
+     * @throws InvalidMapException         if the map is invalid
+     */
     public MapFile loadMapFromStream(InputStream inputStream) throws SettlersMapLoadingException, IOException, InvalidMapException {
         StreamReader streamReader = new StreamReader(inputStream, ByteOrder.LITTLE_ENDIAN);
-
         MapFile mapFile = new MapFile();
 
-        /* Read file header */
+        // Read file header
         String fileHeader = streamReader.getUint8ArrayAsString(10);
-
-        printlnIfDebug(" -- File header: " + fileHeader);
-
+        printlnIfDebug(String.format(" -- File header: %s", fileHeader));
         mapFile.setHeader(fileHeader);
 
-        /* Read title and potentially width & height.
-        *   - Next 24 bytes are either 20 byte title + 2 byte width + 2 byte height, or
-        *     24 bytes title
-        *  */
-
+        // Read title and dimensions.
+        // Next 24 bytes are either 20 byte title + 2 byte width + 2 byte height, or 24 bytes title
         ByteArray titleAndMaybeWidthAndHeight = streamReader.getUint8ArrayAsByteArray(24);
-
         int maybeWidth = titleAndMaybeWidthAndHeight.getUint16(20);
         int maybeHeight = titleAndMaybeWidthAndHeight.getUint16(22);
+        printlnIfDebug(String.format(" -- Maybe width x height: %d x %d", maybeWidth, maybeHeight));
 
-        printlnIfDebug(" -- Maybe width x height: " + maybeWidth + " x " + maybeHeight);
-
-        /* Read the terrain type */
+        // Read terrain type
         mapFile.setTerrainType(TerrainType.fromUint8(streamReader.getUint8()));
+        printlnIfDebug(String.format(" -- Terrain type: %s", mapFile.getTerrainType()));
 
-        printlnIfDebug(" -- Terrain type: " + mapFile.getTerrainType());
-
-        /* Read number of players */
+        // Read number of players
         mapFile.setMaxNumberOfPlayers(streamReader.getUint8());
-
-        printlnIfDebug(" -- Number of players: " + mapFile.getMaxNumberOfPlayers());
+        printlnIfDebug(String.format(" -- Number of players: %d", mapFile.getMaxNumberOfPlayers()));
 
         if (mapFile.getMaxNumberOfPlayers() < 1) {
             throw new InvalidMapException("The map must contain at least one player");
         }
 
-        /* Read the author */
+        // Read author
         mapFile.setAuthor(streamReader.getUint8ArrayAsNullTerminatedString(20));
+        printlnIfDebug(String.format(" -- Author: %s", mapFile.getAuthor()));
 
-        printlnIfDebug(" -- Author: " + mapFile.getAuthor());
-
-        /* Go through x coordinates for starting positions */
+        // Read starting positions
         List<Point> tmpStartingPositions = new ArrayList<>();
 
         for (int i = 0; i < 7; i++) {
@@ -170,472 +176,372 @@ public class MapLoader {
             }
         }
 
-        /* Go through y coordinates for starting positions */
         for (int i = 0; i < 7; i++) {
             int y = streamReader.getUint16();
 
             if (i < mapFile.getMaxNumberOfPlayers()) {
                 tmpStartingPositions.get(i).y = y;
-
                 mapFile.addStartingPosition(tmpStartingPositions.get(i));
             }
         }
 
-        printlnIfDebug(" -- Starting positions: " + tmpStartingPositions);
+        printlnIfDebug(String.format(" -- Starting positions: %s", tmpStartingPositions));
 
-        /* Determine if the map is intended for unlimited play */
+        // Determine if the map is intended for unlimited play
         if (streamReader.getUint8() == 0) {
             mapFile.enableUnlimitedPlay();
         } else {
             mapFile.disableUnlimitedPlay();
         }
+        printlnIfDebug(String.format(" -- Unlimited play: %b", mapFile.isPlayUnlimited()));
 
-        printlnIfDebug(" -- Unlimited play: " + mapFile.isPlayUnlimited());
-
-        /* Read player faces */
+        // Read player faces
         List<PlayerFace> playerFaces = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-
             short faceType = streamReader.getUint8();
-
             if (i < mapFile.getMaxNumberOfPlayers()) {
-                PlayerFace playerFace = PlayerFace.playerFaceFromShort(faceType);
-
-                playerFaces.add(playerFace);
+                playerFaces.add(PlayerFace.playerFaceFromShort(faceType));
             }
         }
-
         mapFile.setPlayerFaces(playerFaces);
+        playerFaces.forEach(face -> printlnIfDebug(String.format(" -- Player: %s", face.name())));
 
-        for (PlayerFace face : mapFile.getPlayerFaces()) {
-            printlnIfDebug(" -- Player: " + face.name());
-        }
-
-        /* Read starting points for each unique water and land mass */
+        // Read starting points for unique water and land masses
         List<UniqueMass> masses = new ArrayList<>();
-
         for (int i = 0; i < 250; i++) {
             MassType type = MassType.massTypeFromInt(streamReader.getUint8());
-
             int x = streamReader.getUint16();
             int y = streamReader.getUint16();
-
             Point position = new Point(x, y);
-
             long totalMass = streamReader.getUint32();
-            UniqueMass mass = new UniqueMass(type, position, totalMass);
 
-            masses.add(mass);
+            masses.add(new UniqueMass(type, position, totalMass));
 
             if (!position.equals(new Point(0, 0))) {
                 mapFile.addMassStartingPoint(position);
             }
         }
-
         printlnIfDebug(" -- Loaded starting points for water and land masses");
 
-        /* Read map file identification */
+
+        // Read map file identification
         byte[] fileIdBytes = streamReader.getUint8ArrayAsBytes(2);
-
-        /* Verify file id */
         if (fileIdBytes[0] != 0x11 || fileIdBytes[1] != 0x27) {
-            System.out.println("Warning: Invalid file id " + Utils.getHex(fileIdBytes) + " (must be 0x1127). Exiting.");
-
-            //throw new SettlersMapLoadingException("Invalid file id " + Utils.getHex(fileIdBytes) + " (must be 0x1127). Exiting.");
+            System.out.printf("Warning: Invalid file id %s (must be 0x1127). Exiting.%n", Utils.getHex(fileIdBytes));
         }
 
-        /* Skip four un-used bytes */
+        // Skip unused bytes
         byte[] unusedBytes = streamReader.getUint8ArrayAsBytes(4);
-
-        if (unusedBytes[0] != 0 || unusedBytes[1] != 0 ||
-            unusedBytes[2] != 0 || unusedBytes[3] != 0) {
-            System.out.println("Warning: Not zeros although mandatory. Are instead " +
-                                unusedBytes[0] + " " +
-                    unusedBytes[0] + " " +
-                    unusedBytes[0] + " " +
-                    unusedBytes[0] + " ");
+        if (!Arrays.equals(unusedBytes, new byte[]{0, 0, 0, 0})) {
+            System.out.printf("Warning: Not zeros although mandatory. Are instead %s%n", Arrays.toString(unusedBytes));
         }
 
         /* Extra 01 00 bytes may appear here but no files seen so far have this -- might be bug in one map */
         // TODO: implement using streamReader
 
-        /* Read actual width and height, as used by map loaders */
+        // Read actual width and height, as used by map loaders
         int newWidth = streamReader.getUint16();
         int newHeight = streamReader.getUint16();
-
         String title;
 
         if (newWidth != maybeWidth || newHeight != maybeHeight) {
             title = titleAndMaybeWidthAndHeight.getNullTerminatedString(24);
-
             mapFile.setTitleType(MapTitleType.LONG);
         } else {
             title = titleAndMaybeWidthAndHeight.getNullTerminatedString(20);
-
             mapFile.setTitleType(MapTitleType.SHORT);
         }
 
         mapFile.setWidth(newWidth);
         mapFile.setHeight(newHeight);
         mapFile.setTitle(title);
+        printlnIfDebug(String.format(" -- Title type is: %s", mapFile.getTitleType()));
+        printlnIfDebug(String.format(" -- Title is: %s", title));
+        printlnIfDebug(String.format(" -- Width x height: %d x %d", newWidth, newHeight));
 
-        printlnIfDebug(" -- Title type is: " + mapFile.getTitleType());
-        printlnIfDebug(" -- Title is: " + title);
-        printlnIfDebug(" -- Width x height: " + newWidth + " x " + newHeight);
-
-        /* Read first sub block fileHeader with data about heights */
+        // Read height block header and data
         BlockHeader heightBlockHeader = readBlockHeaderFromStream(streamReader);
+        printlnIfDebug(String.format(" -- Height block header: %s", heightBlockHeader));
 
-        printlnIfDebug(" -- Height block header: " + heightBlockHeader);
-
-        /* Verify that the coming six bytes are: 0x 10 27 00 00 00 00 */
         if (!heightBlockHeader.isValid()) {
-            System.out.println("Height block header is invalid: " + heightBlockHeader);
+            System.out.printf("Height block header is invalid: %s", heightBlockHeader);
         }
 
-        /* Handle fixed 01 00 if they appear */
-        // TODO: implement this using streamReader
+        // TODO: Handle fixed 01 00 if they appear
 
-        /* Verify that the dimensions remain */
+        // Verify that the dimension remains the same
         if (mapFile.getWidth() != heightBlockHeader.getWidth() || mapFile.getHeight() != heightBlockHeader.getHeight()) {
-            System.out.println("Mismatch in dimensions. Was "
-                    + mapFile.getWidth() + " x " + mapFile.getHeight() + " but saw "
-                    + heightBlockHeader.getWidth() + " x " + heightBlockHeader.getHeight());
+            System.out.printf("Mismatch in dimensions. Was %s, %s but saw %s, %s",
+                     mapFile.getWidth(),
+                    mapFile.getHeight(),
+                    heightBlockHeader.getWidth(),
+                    heightBlockHeader.getHeight());
 
-            throw new SettlersMapLoadingException("Mismatch in dimensions. Was "
-                    + mapFile.getWidth() + " x " + mapFile.getHeight() + " but saw "
-                    + heightBlockHeader.getWidth() + " x " + heightBlockHeader.getHeight());
+            throw new SettlersMapLoadingException(String.format("Mismatch in dimensions. Was %s, %s but saw %s, %s",
+                    mapFile.getWidth(),
+                    mapFile.getHeight(),
+                    heightBlockHeader.getWidth(),
+                    heightBlockHeader.getHeight()));
         }
 
-        /* Handle fixed 01 00 if they appear */
-        // TODO: implement using streamReader
+        // TODO: Handle fixed 01 00 if they appear
 
         long subBlockSize = heightBlockHeader.getMultiplier() * heightBlockHeader.getBlockLength();
+        printlnIfDebug(String.format(" -- Data size: %d", (int) subBlockSize));
 
-        printlnIfDebug(" -- Data size: " + (int)subBlockSize);
-
-        /* Read heights block */
+        // Read heights block
         for (int i = 0; i < subBlockSize; i++) {
             MapFilePoint spot = new MapFilePoint();
-
             spot.setHeight(streamReader.getUint8());
-
             mapFile.addSpot(spot);
         }
-
         printlnIfDebug(" -- Loaded heights");
 
-        /* Now that the MapFilePoints are added, set the native position for each one, as used in the original game */
+        // Now that the MapFilePoints are added, set the native position for each one, as used in the original game
         int x = 0;
         int y = 0;
         for (int i = 0; i < subBlockSize; i++) {
             MapFilePoint mapFilePoint = mapFile.getMapFilePoints().get(i);
-
             mapFilePoint.setPosition(new Point(x, y));
-
-            x = x + 1;
+            x += 1;
 
             if (x == mapFile.getWidth()) {
                 x = 0;
-                y = y + 1;
+                y += 1;
             }
         }
 
-        /* Read textures below */
+        // Read textures below
         printlnIfDebug();
         printIfDebug("Texture block 1: ");
 
-        /* Read the header and verify that it matches the first header */
+        // Read the header and verify that it matches the first header
         BlockHeader texturesBelowBlockHeader = readBlockHeaderFromStream(streamReader);
 
         if (!texturesBelowBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for upward triangles doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + texturesBelowBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for upward triangles doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for textures below matches");
         }
 
-        /* Read the below texture for each point on the map */
+        // Read the below texture for each point on the map
         for (int i = 0; i < subBlockSize; i++) {
-
             MapFilePoint mapFilePoint = mapFile.getSpot(i);
-
-            /* Set the textures */
             short belowTextureShort = streamReader.getUint8();
             Texture texture = Texture.textureFromUint8(belowTextureShort);
-
             mapFilePoint.setVegetationBelow(texture);
 
-            /* Set the possible harbors */
+            // Set the possible harbors
             if ((belowTextureShort & 0x40) != 0) {
                 mapFilePoint.setPossibleHarbor();
             }
         }
 
-        /* Read textures for down-pointing triangles */
+        // Read textures for down-pointing triangles
         printIfDebug("Texture block 2: ");
 
-        /* Read down-right textures header */
+        // Read down-right textures header
         BlockHeader texturesDownRightBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!texturesDownRightBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for downward triangles doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + texturesDownRightBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for downward triangles doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for textures down right matches");
         }
 
-        /* Read textures */
+        // Read textures
         for (int i = 0; i < subBlockSize; i++) {
             Texture texture = Texture.textureFromUint8(streamReader.getUint8());
-
             mapFile.getSpot(i).setVegetationDownRight(texture);
         }
 
-        /* Read the fourth sub block fileHeader with roads */
+        // Read the fourth sub block fileHeader with roads
         printIfDebug("Road block: ");
 
-        /* Read road block -- ignore for now */
+        // Read road block -- ignore for now
         BlockHeader roadBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!roadBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of road block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + roadBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for roads doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for road block matches");
         }
 
-        /* Read roads -- ignore this block for now*/
+        // Read roads -- ignore this block for now
         streamReader.skip((int) subBlockSize);
 
-        /* Read block with object properties */
+        // Read block with object properties
         printIfDebug("Object property block: ");
 
-        /* Read the block header */
+        // Read the block header
         BlockHeader objectPropertiesBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!objectPropertiesBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for object properties doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + objectPropertiesBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for object properties doesn't match. Exiting.");
         }
 
-        /* Read object properties */
+        // Read object properties
         for (int i = 0; i < subBlockSize; i++) {
             mapFile.getSpot(i).setObjectProperties(streamReader.getUint8());
         }
 
-        /* Read object types */
+        // Read object types
         printIfDebug("Object type block: ");
 
-        /* Read object types */
+        // Read object types
         BlockHeader objectTypesBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!objectTypesBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for object types doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + objectTypesBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for object types doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for object types matches");
         }
 
-        /* Read object types*/
+        // Read object types
         for (int i = 0; i < subBlockSize; i++) {
             mapFile.getSpot(i).setObjectType(streamReader.getUint8());
         }
 
-        /* Read animals */
+        // Read animals
         printIfDebug("Animals block: ");
 
-        /* Read block header */
+        // Read block header
         BlockHeader wildAnimalsBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!wildAnimalsBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for wild animals doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + wildAnimalsBlockHeader);
-
             throw new SettlersMapLoadingException("Header of block for wild animals doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for wild animals matches");
         }
 
-        /* Read animals */
+        // Read animals
         for (int i = 0; i < subBlockSize; i++) {
             Animal animal = Animal.animalFromInt(streamReader.getUint8());
-
             if (animal.isWildAnimal()) {
                 mapFile.getSpot(i).setAnimal(animal);
             }
         }
 
-        /* Skip block with unknown data */
+        // Skip block with unknown data
         printIfDebug("Unknown block: ");
 
-        /* Read block header */
+        // Read block header
         BlockHeader ignoredBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!ignoredBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for ignored block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + ignoredBlockHeader);
-
-            throw new SettlersMapLoadingException("Header of ignored block doesn't match. Exiting.");
+            throw new SettlersMapLoadingException("Header of block for ignored block doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for ignored block matches");
         }
 
-        /* Skip the block */
-        streamReader.skip((int)subBlockSize);
+        // Skip the block
+        streamReader.skip((int) subBlockSize);
 
-        /* Read buildable sites */
+        // Read buildable sites
         printIfDebug("Buildable sites block: ");
 
-        /* Read block header */
+        // Read block header
         BlockHeader buildableSitesBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Verify that the block header matches the previous ones */
+        // Verify that the block header matches the previous ones
         if (!buildableSitesBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for buildable sites doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + buildableSitesBlockHeader);
-
-            throw new SettlersMapLoadingException("Header of buildable sites doesn't match. Exiting.");
+            throw new SettlersMapLoadingException("Header of block for buildable sites doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for buildable sites matches");
         }
 
-        /* Read the buildable sites */
+        // Read the buildable sites
         for (int i = 0; i < subBlockSize; i++) {
             BuildableSite buildableSite = BuildableSite.buildableSiteFromInt(streamReader.getUint8());
-
             mapFile.getSpot(i).setBuildableSite(buildableSite);
         }
 
-        /* Skip tenth block with unknown data */
+        // Skip tenth block with unknown data
         printIfDebug("Second unknown block: ");
 
-        /* Read block header */
+        // Read block header
         BlockHeader unknownBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Verify that the block header matches previous block headers */
+        // Verify that the block header matches previous block headers
         if (!unknownBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of unknown block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + unknownBlockHeader);
-
             throw new SettlersMapLoadingException("Header of unknown block doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for unknown block matches");
         }
 
-        /* Skip the block */
-        streamReader.skip((int)subBlockSize);
+        // Skip the block
+        streamReader.skip((int) subBlockSize);
 
-        /* Skip the next block with map editor cursor position */
+        // Skip the next block with map editor cursor position
         printIfDebug("Map editor cursor position: ");
 
-        /* Get block header */
+        // Get block header
         BlockHeader cursorPositionsBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block header doesn't match the first header */
+        // Exit if the block header doesn't match the first header
         if (!cursorPositionsBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for cursor positions doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + cursorPositionsBlockHeader);
-
-            throw new SettlersMapLoadingException("Header of cursor positions doesn't match. Exiting.");
+            throw new SettlersMapLoadingException("Header of block for cursor positions doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for cursor positions matches");
         }
 
-        /* Skip the block */
-        streamReader.skip((int)subBlockSize);
+        // Skip the block
+        streamReader.skip((int) subBlockSize);
 
-        /* Read the resources block */
+        // Read the resources block
         printIfDebug("Resource block: ");
 
-        /* Get block header */
+        // Get block header
         BlockHeader resourcesBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!resourcesBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of block for resources block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + resourcesBlockHeader);
-
             throw new SettlersMapLoadingException("Header of resources block doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for resources block matches");
         }
 
-        /* Read the resources block */
+        // Read the resources block
         for (int i = 0; i < subBlockSize; i++) {
             Resource resource = Resource.resourceFromInt(streamReader.getUint8());
-
             mapFile.getSpot(i).setResource(resource);
         }
 
-        /* Ignore gouraud shading block */
-
-        /* Get the block header */
+        // Skip gouraud shading block
         BlockHeader gouraudBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
+        // Exit if the block fileHeader doesn't match the first fileHeader
         if (!gouraudBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of gouraud block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + gouraudBlockHeader);
-
             throw new SettlersMapLoadingException("Header of gouraud block doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for gouraud block matches");
         }
 
-        /* Skip gouraud block */
-        streamReader.skip((int)subBlockSize);
+        // Skip gouraud block
+        streamReader.skip((int) subBlockSize);
 
-        /* Ignore passable areas block */
-
-        /* Get the block header */
+        // Skip passable areas block
         BlockHeader passableAreasBlockHeader = readBlockHeaderFromStream(streamReader);
 
-        /* Exit if the block fileHeader doesn't match the first fileHeader */
-        if (!gouraudBlockHeader.equals(heightBlockHeader)) {
-            System.out.println("Header of passable areas block doesn't match. Exiting.");
-            System.out.println("First header: " + heightBlockHeader);
-            System.out.println("Current header: " + passableAreasBlockHeader);
-
+        // Exit if the block fileHeader doesn't match the first fileHeader
+        if (!passableAreasBlockHeader.equals(heightBlockHeader)) {
             throw new SettlersMapLoadingException("Header of passable areas block doesn't match. Exiting.");
         } else {
             printlnIfDebug("Header for passable areas block matches");
         }
 
-        /* Skip passable areas block */
-        streamReader.skip((int)subBlockSize);
+        // Skip passable areas block
+        streamReader.skip((int) subBlockSize);
 
-        /* Footer, always 0xFF */
+        // Footer, always 0xFF
 
-        /* Post process the map file */
+        // Post process the map file
         mapFile.mapFilePointsToGamePoints();
         mapFile.translateFileStartingPointsToGamePoints();
 
@@ -643,40 +549,38 @@ public class MapLoader {
     }
 
     private BlockHeader readBlockHeaderFromStream(StreamReader streamReader) throws IOException {
-        int id = streamReader.getUint16();
-        long unknown = streamReader.getUint32();
-        int width = streamReader.getUint16();
-        int height = streamReader.getUint16();
-        int multiplier = streamReader.getUint16();
-        long blockLength = streamReader.getUint32();
-
-        return new BlockHeader(id, unknown, width, height, multiplier, blockLength);
+        return new BlockHeader(
+                streamReader.getUint16(), // id
+                streamReader.getUint32(), // unknown
+                streamReader.getUint16(), // width
+                streamReader.getUint16(), // height
+                streamReader.getUint16(), // multiplier
+                streamReader.getUint32()  // block length
+        );
     }
 
+    /**
+     * Converts a MapFile to a GameMap.
+     *
+     * @param mapFile the MapFile to convert.
+     * @return the converted GameMap instance.
+     * @throws Exception if there is an error during conversion.
+     */
     public GameMap convertMapFileToGameMap(MapFile mapFile) throws Exception {
-
-        /* Generate list of players */
         List<Player> players = new ArrayList<>();
-
-        var colors = Arrays.stream(PlayerColor.values()).toList();
+        List<PlayerColor> colors = Arrays.stream(PlayerColor.values()).toList();
 
         for (int i = 0; i < mapFile.maxNumberOfPlayers; i++) {
-            players.add(new Player("Player " + i, colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
+            players.add(new Player(String.format("Player %d", i), colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
 
-        /* Create initial game map with correct dimensions */
         Dimension gamePointDimension = toGamePointDimension(mapFile.getDimension());
         GameMap gameMap = new GameMap(players, gamePointDimension.width + 2, gamePointDimension.height + 2);
 
-        /* Set up the terrain */
         for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
             Point mapFilePosition = mapFilePoint.getPosition();
-            org.appland.settlers.model.Point point = mapFilePositionToGamePoint(
-                    mapFilePosition,
-                    mapFile.getDimension()
-            );
+            org.appland.settlers.model.Point point = mapFilePositionToGamePoint(mapFilePosition, mapFile.getDimension());
 
-            /* Assign textures */
             if (mapFilePoint.getVegetationBelow() != null) {
                 gameMap.setVegetationBelow(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationBelow()));
             }
@@ -685,32 +589,23 @@ public class MapLoader {
                 gameMap.setVegetationDownRight(point, Utils.convertTextureToVegetation(mapFilePoint.getVegetationDownRight()));
             }
 
-            /* Set mineral quantities */
             if (mapFilePoint.hasMineral()) {
                 Material mineral = Utils.resourceTypeToMaterial(mapFilePoint.getMineralType());
-
                 gameMap.setMineralAmount(point, mineral, mapFilePoint.getMineralQuantity());
             }
 
-            /* Place stones */
             if (mapFilePoint.hasStone()) {
                 gameMap.placeStone(point, mapFilePoint.getStoneType(), Math.min(mapFilePoint.getStoneAmount(), 6));
             }
 
-            /* Place trees */
             if (mapFilePoint.hasTree()) {
-                Tree.TreeType treeType = mapFilePoint.getTreeType();
-                Tree.TreeSize treeSize = mapFilePoint.getTreeSize();
-
-                gameMap.placeTree(point, treeType, treeSize);
+                gameMap.placeTree(point, mapFilePoint.getTreeType(), mapFilePoint.getTreeSize());
             }
 
-            /* Place dead trees */
             if (mapFilePoint.hasDeadTree()) {
                 gameMap.placeDeadTree(point);
             }
 
-            /* Handle remaining nature decorations */
             if (mapFilePoint.isNatureDecoration()) {
                 DecorationType decorationType = mapFilePoint.getNatureDecorationType();
 
@@ -719,21 +614,17 @@ public class MapLoader {
                 }
             }
 
-            /* Place wild animals */
             if (mapFilePoint.hasWildAnimal()) {
                 gameMap.placeWildAnimal(point);
             }
 
-            /* Set available harbor */
             if (mapFilePoint.isPossiblePlaceForHarbor()) {
                 gameMap.setPossiblePlaceForHarbor(point);
             }
 
-            /* Set the height */
             gameMap.setHeightAtPoint(point, mapFilePoint.getHeight());
         }
 
-        /* Set starting points */
         List<org.appland.settlers.model.Point> gamePointStartingPoints = mapFile.getStartingPoints().stream()
                 .map(point -> mapFilePositionToGamePoint(point, mapFile.getDimension()))
                 .collect(Collectors.toList());
@@ -741,56 +632,27 @@ public class MapLoader {
         gameMap.setStartingPoints(gamePointStartingPoints);
 
         if (debug) {
-            printIfDebug(" -- Starting positions: ");
-        }
-
-        if (debug) {
-            for (Point point : mapFile.getGamePointStartingPoints()) {
-                printIfDebug("(" + point.x + ", " + point.y + ") ");
-            }
+            System.out.println(" -- Starting positions: ");
+            mapFile.getGamePointStartingPoints().forEach(point ->
+                    printIfDebug(String.format("(%d, %d) ", point.x, point.y))
+            );
         }
 
         return gameMap;
     }
 
     private Dimension toGamePointDimension(Dimension dimension) {
-        if (isEven(dimension.height)) {
-            return new Dimension(2 * dimension.width - 2, dimension.height - 1);
-        } else {
-            return new Dimension(2 * dimension.width - 2, dimension.height);
-        }
+        return isEven(dimension.height) ?
+                new Dimension(2 * dimension.width - 2, dimension.height - 1) :
+                new Dimension(2 * dimension.width - 2, dimension.height);
     }
 
-    private org.appland.settlers.model.Point mapFilePositionToGamePoint(
-            java.awt.Point mapFilePosition,
-            Dimension dimension
-    ) {
-        if (isEven(dimension.height)) {
-            if (isEven(mapFilePosition.y)) {
-                return new org.appland.settlers.model.Point(
-                        2 * mapFilePosition.x - 1,
-                        dimension.height - 1 - mapFilePosition.y
-                );
-            } else {
-                return new org.appland.settlers.model.Point(
-                        2 * mapFilePosition.x,
-                        dimension.height - 1 - mapFilePosition.y
-                );
-            }
+    public org.appland.settlers.model.Point mapFilePositionToGamePoint(Point mapFilePosition, Dimension dimension) {
+        int xMultiplier = 2 * mapFilePosition.x;
+        int yAdjusted = dimension.height - mapFilePosition.y;
 
-        // Case where unadjusted height is odd
-        } else {
-            if (isEven(mapFilePosition.y)) {
-                return new org.appland.settlers.model.Point(
-                        2 * mapFilePosition.x - 1,
-                        dimension.height - mapFilePosition.y
-                );
-            } else {
-                return new org.appland.settlers.model.Point(
-                        2 * mapFilePosition.x,
-                        dimension.height - mapFilePosition.y
-                );
-            }
-        }
+        return isEven(dimension.height) ?
+                new org.appland.settlers.model.Point(isEven(mapFilePosition.y) ? xMultiplier - 1 : xMultiplier, yAdjusted - 1) :
+                new org.appland.settlers.model.Point(isEven(mapFilePosition.y) ? xMultiplier - 1 : xMultiplier, yAdjusted);
     }
 }

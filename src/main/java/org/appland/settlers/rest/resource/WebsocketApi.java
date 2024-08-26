@@ -312,6 +312,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 synchronized (map) {
                     possibleRoad = map.findAutoSelectedRoad(player, start, goal, avoid);
 
+                    System.out.println("Possible road: " + possibleRoad);
+
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
@@ -1016,7 +1018,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     try {
                         Road road = map.placeRoad(player, roadPoints);
                     } catch (InvalidUserActionException e) {
-                        throw new RuntimeException(e);
+                        System.out.printf("Refusing to place invalid road: %s", roadPoints);
                     }
                 }
             }

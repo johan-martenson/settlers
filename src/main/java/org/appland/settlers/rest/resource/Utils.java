@@ -83,16 +83,15 @@ import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -120,29 +119,17 @@ class Utils {
     }
 
     JSONArray gamesToJson(Collection<GameResource> games) {
-        JSONArray jsonGames = new JSONArray();
-
-        for (var gameResource : games) {
-            JSONObject jsonGame = gameToJson(gameResource);
-
-            jsonGames.add(jsonGame);
-        }
-
-        return jsonGames;
+        return toJsonArray(games, this::gameToJson);
     }
 
     JSONArray chatMessagesToRoomToJson(Collection<ChatManager.ChatMessage> chatMessages, String roomId) {
-        var jsonChatMessages = new JSONArray();
-
-        chatMessages.forEach(chatMessage -> jsonChatMessages.add(new JSONObject(Map.of(
+        return toJsonArray(chatMessages, chatMessage -> new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
                 "from", chatMessage.from().getName(),
                 "toRoomId", roomId,
                 "text", chatMessage.text(),
                 "time", simpleTimeToJson(chatMessage.time())
-        ))));
-
-        return jsonChatMessages;
+        )));
     }
 
     JSONObject simpleTimeToJson(ChatManager.SimpleTime time) {
@@ -187,15 +174,7 @@ class Utils {
     }
 
     JSONArray playersToJson(Collection<Player> players, GameResource gameResource) {
-        JSONArray jsonPlayers = new JSONArray();
-
-        for (Player player : players) {
-            JSONObject jsonPlayer = playerToJson(player, idManager.getId(player), gameResource);
-
-            jsonPlayers.add(jsonPlayer);
-        }
-
-        return jsonPlayers;
+        return toJsonArray(players, player -> playerToJson(player, idManager.getId(player), gameResource));
     }
 
     JSONObject playerToJson(Player player, String playerId, GameResource gameResource) {
@@ -227,13 +206,7 @@ class Utils {
     }
 
     JSONArray pointsToJson(Collection<Point> points) {
-        JSONArray jsonPoints = new JSONArray();
-
-        for (Point point : points) {
-            jsonPoints.add(pointToJson(point));
-        }
-
-        return jsonPoints;
+        return toJsonArray(points, this::pointToJson);
     }
 
     JSONObject pointToJson(Point point) {
@@ -241,19 +214,6 @@ class Utils {
                 "x", point.x,
                 "y", point.y
         ));
-    }
-
-
-    private String colorToHexString(Color c) {
-        StringBuilder hex = new StringBuilder(Integer.toHexString(c.getRGB() & 0xffffff));
-
-        while (hex.length() < 6) {
-            hex.insert(0, "0");
-        }
-
-        hex.insert(0, "#");
-
-        return hex.toString();
     }
 
     List<Player> jsonToPlayers(JSONArray jsonPlayers) {
@@ -339,7 +299,7 @@ class Utils {
             case MOUNTAIN_4 -> "MO4";
             case STEPPE -> "ST";
             case FLOWER_MEADOW -> "FM";
-            case LAVA -> "L1";
+            case LAVA_1 -> "L1";
             case MAGENTA -> "MA";
             case MOUNTAIN_MEADOW -> "MM";
             case WATER_2 -> "W2";
@@ -347,7 +307,6 @@ class Utils {
             case LAVA_3 -> "L3";
             case LAVA_4 -> "L4";
             case BUILDABLE_MOUNTAIN -> "BM";
-            default -> throw new RuntimeException("Cannot handle this vegetation " + vegetation);
         };
     }
 
@@ -661,7 +620,6 @@ class Utils {
 
     private String rankToTypeString(Soldier soldier) {
         String nameAndRank = soldier.getRank().name().toLowerCase();
-
         int underscorePosition = nameAndRank.indexOf("_");
 
         return nameAndRank.substring(0, 1).toUpperCase() + nameAndRank.substring(1, underscorePosition);
@@ -686,23 +644,11 @@ class Utils {
     }
 
     private JSONArray cargosToMaterialJson(Collection<Cargo> cargos) {
-        JSONArray jsonMaterial = new JSONArray() ;
-
-        for (Cargo cargo : cargos) {
-            Material material = cargo.getMaterial();
-
-            jsonMaterial.add(material.getSimpleName().toUpperCase());
-        }
-
-        return jsonMaterial;
+        return toJsonArray(cargos, cargo -> cargo.getMaterial().getSimpleName().toUpperCase());
     }
 
     JSONObject roadToJson(Road road) {
-        var jsonPoints = new JSONArray();
-
-        road.getWayPoints().stream()
-                .map(this::pointToJson)
-                .forEach(jsonPoints::add);
+        var jsonPoints = toJsonArray(road.getWayPoints(), this::pointToJson);
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(road),
@@ -754,7 +700,7 @@ class Utils {
         return jsonSign;
     }
 
-    Object cropToJson(Crop crop) {
+    JSONObject cropToJson(Crop crop) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(crop),
                 "state", crop.getGrowthState().name().toUpperCase(),
@@ -772,13 +718,7 @@ class Utils {
     }
 
     JSONArray mapFilesToJson(Collection<MapFile> mapFiles) {
-        JSONArray jsonMapFiles = new JSONArray();
-
-        for (MapFile mapFile : mapFiles) {
-            jsonMapFiles.add(mapFileToJson(mapFile));
-        }
-
-        return jsonMapFiles;
+        return toJsonArray(mapFiles, this::mapFileToJson);
     }
 
     JSONObject mapFileToJson(MapFile mapFile) {
@@ -794,12 +734,9 @@ class Utils {
     }
 
     GameMap gamePlaceholderToGame(GameResource gamePlaceholder) throws Exception {
-
-        /* Create a GameMap instance from the map file */
         MapLoader mapLoader = new MapLoader();
         GameMap map = mapLoader.convertMapFileToGameMap(gamePlaceholder.getMapFile());
 
-        /* Assign the players */
         map.setPlayers(gamePlaceholder.getPlayers());
 
         return map;
@@ -822,7 +759,6 @@ class Utils {
                 headquarter.retrieve(Material.WOOD);
                 headquarter.retrieve(Material.WOOD);
             } else if (resources == ResourceLevel.HIGH) {
-
                 deliver(Material.STONE, 3, headquarter);
                 deliver(Material.PLANK, 3, headquarter);
                 deliver(Material.WOOD, 3, headquarter);
@@ -849,25 +785,18 @@ class Utils {
 
     JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
         MapLoader mapLoader = new MapLoader();
-
         GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
 
         return terrainToJson(map);
     }
 
     public JSONArray playersToShortJson(List<Player> players) {
-        JSONArray jsonPlayers = new JSONArray();
-
-        for (Player player : players) {
-            jsonPlayers.add(new JSONObject(Map.of(
-                    "id", idManager.getId(player),
-                    "name", player.getName(),
-                    "color", player.getColor().name().toUpperCase(),
-                    "nation", player.getNation().name().toUpperCase()
-            )));
-        }
-
-        return jsonPlayers;
+        return toJsonArray(players, player -> new JSONObject(Map.of(
+                "id", idManager.getId(player),
+                "name", player.getName(),
+                "color", player.getColor().name().toUpperCase(),
+                "nation", player.getNation().name().toUpperCase()
+        )));
     }
 
     public JSONObject buildingLostMessageToJson(BuildingLostMessage buildingLostMessage) {
@@ -1140,11 +1069,7 @@ class Utils {
     }
 
     private JSONArray removedMessagesToJson(Collection<Message> removedMessages) {
-        JSONArray jsonRemovedMessages = new JSONArray();
-
-        removedMessages.forEach(message -> jsonRemovedMessages.add(idManager.getId(message)));
-
-        return jsonRemovedMessages;
+        return toJsonArray(removedMessages, idManager::getId);
     }
 
     private JSONArray pointsAndDecorationsToJson(Map<Point, DecorationType> pointsAndDecorations) {
@@ -1183,15 +1108,7 @@ class Utils {
     }
 
     private JSONArray shipWithNewTargetsToJson(List<Worker> workers) {
-        JSONArray jsonWorkers = new JSONArray();
-
-        workers.forEach(worker -> {
-            if (worker instanceof Ship ship) {
-                jsonWorkers.add(shipToJson(ship));
-            }
-        });
-
-        return jsonWorkers;
+        return toJsonArrayWithFilter(workers, worker -> shipToJson((Ship) worker), worker -> worker instanceof Ship);
     }
 
     private JSONObject shipToJson(Ship ship) {
@@ -1217,49 +1134,27 @@ class Utils {
     }
 
     private JSONArray shipsToJson(List<Ship> ships) {
-        JSONArray jsonShips = new JSONArray();
-
-        ships.forEach(ship -> jsonShips.add(shipToJson(ship)));
-
-        return jsonShips;
+        return toJsonArray(ships, this::shipToJson);
     }
 
     private JSONArray removedWildAnimalsToJson(List<Worker> removedWorkers) {
-        JSONArray jsonRemovedWildAnimalIds = new JSONArray();
-
-        for (Worker worker : removedWorkers) {
-            if (! (worker instanceof WildAnimal)) {
-                continue;
-            }
-
-            jsonRemovedWildAnimalIds.add(idManager.getId(worker));
-        }
-
-        return jsonRemovedWildAnimalIds;
+        return toJsonArrayWithFilter(
+                removedWorkers,
+                idManager::getId,
+                worker -> worker instanceof WildAnimal
+        );
     }
 
     private JSONArray wildAnimalsWithNewTargetsToJson(List<Worker> workersWithNewTargets) {
-        JSONArray jsonWildAnimals = new JSONArray();
-
-        for (Worker worker : workersWithNewTargets) {
-            if (! (worker instanceof WildAnimal wildAnimal)) {
-                continue;
-            }
-
-            jsonWildAnimals.add(wildAnimalToJson(wildAnimal));
-        }
-
-        return jsonWildAnimals;
+        return toJsonArrayWithFilter(
+                workersWithNewTargets,
+                worker -> wildAnimalToJson((WildAnimal) worker),
+                worker -> worker instanceof WildAnimal
+        );
     }
 
     private JSONArray newStonesToJson(Collection<Stone> newStones) {
-        JSONArray jsonNewStones = new JSONArray();
-
-        for (Stone stone : newStones) {
-            jsonNewStones.add(stoneToJson(stone));
-        }
-
-        return jsonNewStones;
+        return toJsonArray(newStones, this::stoneToJson);
     }
 
     private JSONArray messagesToJson(List<Message> newGameMessages) {
@@ -1404,65 +1299,38 @@ class Utils {
     }
 
     private JSONArray borderChangesToJson(List<BorderChange> changedBorders) {
-        JSONArray jsonBorderChanges = new JSONArray();
-
-        for (BorderChange borderChange : changedBorders) {
-            jsonBorderChanges.add(new JSONObject(Map.of(
-                    "playerId", idManager.getId(borderChange.getPlayer()),
-                    "newBorder", pointsToJson(borderChange.getNewBorder()),
-                    "removedBorder", pointsToJson(borderChange.getRemovedBorder())
-            )));
-        }
-
-        return jsonBorderChanges;
+        return toJsonArray(
+                changedBorders,
+                borderChange -> new JSONObject(Map.of(
+                        "playerId", idManager.getId(borderChange.getPlayer()),
+                        "newBorder", pointsToJson(borderChange.getNewBorder()),
+                        "removedBorder", pointsToJson(borderChange.getRemovedBorder())
+                ))
+        );
     }
 
     private JSONArray removedStonesToJson(List<Stone> removedStones) {
-        JSONArray jsonRemovedStones = new JSONArray();
-
-        for (Stone stone : removedStones) {
-            jsonRemovedStones.add(idManager.getId(stone));
-        }
-
-        return jsonRemovedStones;
+        return toJsonArray(removedStones, idManager::getId);
     }
 
     private JSONArray removedSignsToJson(List<Sign> removedSigns) {
         return objectsToJsonIdArray(removedSigns);
     }
 
-    private JSONArray newSignsToJson(List<Sign> newSigns) {
-        JSONArray jsonSigns = new JSONArray();
-
-        for (Sign sign : newSigns) {
-            jsonSigns.add(signToJson(sign));
-        }
-
-        return jsonSigns;
+    private JSONArray newSignsToJson(List<Sign> signs) {
+        return toJsonArray(signs, this::signToJson);
     }
 
-    private JSONArray cropsToIdJson(List<Crop> removedCrops) {
-        JSONArray jsonRemovedCrops = new JSONArray();
-
-        for (Crop crop : removedCrops) {
-            jsonRemovedCrops.add(idManager.getId(crop));
-        }
-
-        return jsonRemovedCrops;
+    private JSONArray cropsToIdJson(List<Crop> crops) {
+        return toJsonArray(crops, idManager::getId);
     }
 
     private JSONArray newCropsToJson(List<Crop> newCrops) {
         return cropsToJson(newCrops);
     }
 
-    private JSONArray cropsToJson(List<Crop> newCrops) {
-        JSONArray jsonCrops = new JSONArray();
-
-        for (Crop crop : newCrops) {
-            jsonCrops.add(cropToJson(crop));
-        }
-
-        return jsonCrops;
+    private JSONArray cropsToJson(List<Crop> crops) {
+        return toJsonArray(crops, this::cropToJson);
     }
 
     private JSONArray newDiscoveredLandToJson(Collection<Point> newDiscoveredLand) {
@@ -1470,27 +1338,15 @@ class Utils {
     }
 
     private JSONArray removedTreesToJson(List<Tree> removedTrees) {
-        JSONArray jsonRemovedTrees = new JSONArray();
-
-        for (Tree tree : removedTrees) {
-            jsonRemovedTrees.add(idManager.getId(tree));
-        }
-
-        return jsonRemovedTrees;
+        return toJsonArray(removedTrees, idManager::getId);
     }
 
     private JSONArray newTreesToJson(List<Tree> newTrees) {
         return treesToJson(newTrees);
     }
 
-    private JSONArray treesToJson(Collection<Tree> newTrees) {
-        JSONArray jsonTrees = new JSONArray();
-
-        for (Tree tree : newTrees) {
-            jsonTrees.add(treeToJson(tree));
-        }
-
-        return jsonTrees;
+    private JSONArray treesToJson(Collection<Tree> trees) {
+        return toJsonArray(trees, this::treeToJson);
     }
 
     private JSONArray changedBuildingsToJson(Collection<Building> changedBuildings, Player player) throws InvalidUserActionException {
@@ -1510,47 +1366,49 @@ class Utils {
     }
 
     private JSONArray removedWorkersToJson(List<Worker> removedWorkers) {
-        JSONArray jsonIdArray = new JSONArray();
-
-        for (Worker worker : removedWorkers) {
-            if (worker instanceof WildAnimal) {
-                continue;
-            }
-
-            jsonIdArray.add(idManager.getId(worker));
-        }
-
-        return jsonIdArray;
+        return toJsonArrayWithFilter(removedWorkers, idManager::getId, worker -> !(worker instanceof WildAnimal));
     }
 
     private JSONArray objectsToJsonIdArray(List<?> gameObjects) {
-        JSONArray jsonIdArray = new JSONArray();
-
-        for (Object gameObject : gameObjects) {
-            jsonIdArray.add(idManager.getId(gameObject));
-        }
-
-        return jsonIdArray;
+        return toJsonArray(gameObjects, idManager::getId);
     }
 
-    private JSONArray roadsToJson(List<Road> newRoads) {
-        JSONArray jsonRoads = new JSONArray();
-
-        for (Road road : newRoads) {
-            jsonRoads.add(roadToJson(road));
-        }
-
-        return jsonRoads;
+    private JSONArray roadsToJson(List<Road> roads) {
+        return toJsonArray(roads, this::roadToJson);
     }
 
     private JSONArray flagsToJson(Collection<Flag> flags) {
-        JSONArray jsonFlags = new JSONArray();
+        return toJsonArray(flags, this::flagToJson);
+    }
 
-        for (Flag flag : flags) {
-            jsonFlags.add(flagToJson(flag));
+    private <T> JSONArray toJsonArrayWithFilter(Collection<T> fromList, Function<T, Object> mapFunction, Function<T, Boolean> filterFunction) {
+        JSONArray jsonResult = new JSONArray();
+
+        if (fromList == null) {
+            return jsonResult;
         }
 
-        return jsonFlags;
+        for (T t : fromList) {
+            if (filterFunction.apply(t)) {
+                jsonResult.add(mapFunction.apply(t));
+            }
+        }
+
+        return jsonResult;
+    }
+
+    private <T> JSONArray toJsonArray(Collection<T> fromList, Function<T, Object> mapFunction) {
+        JSONArray jsonResult = new JSONArray();
+
+        if (fromList == null) {
+            return jsonResult;
+        }
+
+        for (T t : fromList) {
+            jsonResult.add(mapFunction.apply(t));
+        }
+
+        return jsonResult;
     }
 
     private JSONArray newBuildingsToJson(List<Building> newBuildings, Player player) throws InvalidUserActionException {
@@ -1600,41 +1458,25 @@ class Utils {
     }
 
     private String workerTypeToJson(Worker worker) {
-        if (worker.isSoldier()) {
-            Soldier soldier = (Soldier) worker;
-
-            return rankToTypeString(soldier);
-        } else {
-            return worker.getClass().getSimpleName();
-        }
+        return worker.isSoldier()
+                ? rankToTypeString((Soldier) worker)
+                : worker.getClass().getSimpleName();
     }
 
     public JSONArray transportPriorityToJson(List<TransportCategory> transportPriorityList) {
-        JSONArray jsonTransportPriority = new JSONArray();
-
-        for (TransportCategory category : transportPriorityList) {
-            jsonTransportPriority.add(category.name().toUpperCase());
-        }
-
-        return jsonTransportPriority;
+        return toJsonArray(transportPriorityList, prio -> prio.name().toUpperCase());
     }
 
-    public Set<Point> jsonToPointsSet(JSONArray avoid) {
+    public Set<Point> jsonToPointsSet(JSONArray jsonPoints) {
         Set<Point> pointsSet = new HashSet<>();
 
-        for (Object jsonPoint : avoid) {
+        for (Object jsonPoint : jsonPoints) {
             Point point = jsonToPoint((JSONObject) jsonPoint);
 
             pointsSet.add(point);
         }
 
         return pointsSet;
-    }
-
-    public void printTimestamp(String message) {
-        Date date = new Date();
-        long timeMilli = date.getTime();
-        System.out.println(message + ": " + timeMilli);
     }
 
     public JSONObject wildAnimalToJson(WildAnimal wildAnimal) {
@@ -1662,18 +1504,18 @@ class Utils {
 
     public JSONObject playerViewToJson(GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
         JSONArray  jsonHouses                = new JSONArray();
-        JSONArray  trees                     = new JSONArray();
-        JSONArray  jsonStones                = new JSONArray();
-        JSONArray  jsonWorkers               = new JSONArray();
-        JSONArray  jsonWildAnimals           = new JSONArray();
-        JSONArray  jsonFlags                 = new JSONArray();
+        JSONArray  trees;
+        JSONArray  jsonStones;
+        JSONArray  jsonWorkers;
+        JSONArray  jsonWildAnimals;
+        JSONArray  jsonFlags;
         JSONArray  jsonRoads                 = new JSONArray();
-        JSONArray  jsonDiscoveredPoints      = new JSONArray();
+        JSONArray  jsonDiscoveredPoints;
         JSONArray  jsonBorders               = new JSONArray();
-        JSONArray  jsonSigns                 = new JSONArray();
+        JSONArray  jsonSigns;
         JSONArray  jsonCrops                 = new JSONArray();
         JSONObject jsonAvailableConstruction = new JSONObject();
-        JSONArray  jsonDeadTrees             = new JSONArray();
+        JSONArray  jsonDeadTrees;
         JSONArray  jsonDecorations           = new JSONArray();
 
         JSONArray jsonMessages = messagesToJson(player.getMessages());
@@ -1692,44 +1534,28 @@ class Utils {
             }
 
             /* Fill in trees */
-            for (Tree tree : map.getTrees()) {
-                if (!discoveredLand.contains(tree.getPosition())) {
-                    continue;
-                }
-
-                trees.add(treeToJson(tree));
-            }
+            trees = toJsonArrayWithFilter(map.getTrees(),
+                    this::treeToJson,
+                    tree -> discoveredLand.contains(tree.getPosition()));
 
             /* Fill in stones */
-            for (Stone stone : map.getStones()) {
-                if (!discoveredLand.contains(stone.getPosition())) {
-                    continue;
-                }
+            jsonStones = toJsonArrayWithFilter(
+                    map.getStones(),
+                    this::stoneToJson,
+                    stone -> discoveredLand.contains(stone.getPosition()));
 
-                jsonStones.add(stoneToJson(stone));
-            }
 
             /* Fill in workers */
-            for (Worker worker : map.getWorkers()) {
-                if (!discoveredLand.contains(worker.getPosition())) {
-                    continue;
-                }
-
-                if (worker.isInsideBuilding()) {
-                    continue;
-                }
-
-                jsonWorkers.add(workerToJson(worker));
-            }
+            jsonWorkers = toJsonArrayWithFilter(
+                    map.getWorkers(),
+                    this::workerToJson,
+                    worker -> discoveredLand.contains(worker.getPosition()) && !worker.isInsideBuilding());
 
             /* Fill in flags */
-            for (Flag flag : map.getFlags()) {
-                if (!discoveredLand.contains(flag.getPosition())) {
-                    continue;
-                }
-
-                jsonFlags.add(flagToJson(flag));
-            }
+            jsonFlags = toJsonArrayWithFilter(
+                    map.getFlags(),
+                    this::flagToJson,
+                    flag -> discoveredLand.contains(flag.getPosition()));
 
             /* Fill in roads */
             for (Road road : map.getRoads()) {
@@ -1752,30 +1578,21 @@ class Utils {
             }
 
             /* Fill in the points the player has discovered */
-            for (Point point : discoveredLand) {
-                jsonDiscoveredPoints.add(pointToJson(point));
-            }
+            jsonDiscoveredPoints = pointsToJson(discoveredLand);
 
             jsonBorders.add(borderToJson(player, idManager.getId(player)));
 
             /* Fill in the signs */
-            for (Sign sign : map.getSigns()) {
-                if (!discoveredLand.contains(sign.getPosition())) {
-                    continue;
-                }
-
-                jsonSigns.add(signToJson(sign));
-            }
+            jsonSigns = toJsonArrayWithFilter(
+                    map.getSigns(),
+                    this::signToJson,
+                    sign -> discoveredLand.contains(sign.getPosition()));
 
             /* Fill in wild animals */
-            for (WildAnimal animal : map.getWildAnimals()) {
-                if (!discoveredLand.contains(animal.getPosition())) {
-                    continue;
-                }
-
-                /* Animal is an extension of worker so the same method is used */
-                jsonWildAnimals.add(wildAnimalToJson(animal));
-            }
+            jsonWildAnimals = toJsonArrayWithFilter(
+                    map.getWildAnimals(),
+                    this::wildAnimalToJson,
+                    animal -> discoveredLand.contains(animal.getPosition()));
 
             /* Fill in crops */
             for (Crop crop : map.getCrops()) {
@@ -1787,14 +1604,13 @@ class Utils {
             }
 
             /* Fill in dead trees */
-            for (Point point : map.getDeadTrees()) {
-                jsonDeadTrees.add(pointToJson(point));
-            }
+            jsonDeadTrees = toJsonArrayWithFilter(
+                    map.getDeadTrees(),
+                    this::pointToJson,
+                    discoveredLand::contains);
 
             /* Fill in available construction */
             for (Point point : map.getAvailableFlagPoints(player)) {
-
-                /* Filter points not discovered yet */
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
                 }
@@ -1807,8 +1623,6 @@ class Utils {
             }
 
             for (Map.Entry<Point, Size> site : map.getAvailableHousePoints(player).entrySet()) {
-
-                /* Filter points not discovered yet */
                 if (!player.getDiscoveredLand().contains(site.getKey())) {
                     continue;
                 }
@@ -1821,8 +1635,6 @@ class Utils {
             }
 
             for (Point point : map.getAvailableMinePoints(player)) {
-
-                /* Filter points not discovered yet */
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
                 }
@@ -1839,16 +1651,13 @@ class Utils {
                 Point point = entry.getKey();
                 DecorationType decorationType = entry.getValue();
 
-                /* Filter points not discovered yet */
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
                 }
 
                 jsonDecorations.add(decorationToJson(decorationType, point));
             }
-
         }
-
 
         // Add terrain information
         JSONArray jsonTrianglesBelow = new JSONArray();
@@ -1891,12 +1700,9 @@ class Utils {
         jsonView.put("availableConstruction", jsonAvailableConstruction);
         jsonView.put("deadTrees", jsonDeadTrees);
         jsonView.put("decorations", jsonDecorations);
-        jsonView.put("gameState", gameResource.status.name().toUpperCase());
-
         jsonView.put("players", playersToJson(map.getPlayers(), gameResource));
         jsonView.put("gameState", gameResource.status.name().toUpperCase());
         jsonView.put("messages", jsonMessages);
-
         jsonView.put("straightBelow", jsonTrianglesBelow);
         jsonView.put("belowToTheRight", jsonTrianglesBelowRight);
         jsonView.put("heights", jsonHeights);
@@ -1984,13 +1790,7 @@ class Utils {
     public JSONObject flagToDebugJson(Flag flag) {
         var jsonFlag = flagToJson(flag);
 
-        JSONArray jsonCargos = new JSONArray();
-
-        flag.getStackedCargo().forEach(cargo -> {
-            jsonCargos.add(cargoToJson(cargo));
-        });
-
-        jsonFlag.put("cargos", jsonCargos);
+        jsonFlag.put("cargos", toJsonArray(flag.getStackedCargo(), this::cargoToJson));
 
         return jsonFlag;
     }

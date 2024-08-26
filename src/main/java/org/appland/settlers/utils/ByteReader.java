@@ -4,7 +4,6 @@ import org.appland.settlers.maps.ByteArray;
 
 import java.io.IOException;
 import java.nio.ByteOrder;
-import java.util.List;
 
 public interface ByteReader {
     short getUint8() throws IOException;
@@ -22,8 +21,6 @@ public interface ByteReader {
     short[] getUint8Array(int lengthInBytes) throws IOException;
 
     long[] getUint32Array(int length) throws IOException;
-
-    List<Long> getUint32ArrayAsList(int length) throws IOException;
 
     char[] getUint8ArrayAsChar(int lengthInBytes) throws IOException;
 

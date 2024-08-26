@@ -530,7 +530,7 @@ public class TestWildAnimal {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Set the whole map to lava */
-        Utils.fillMapWithVegetation(map, LAVA);
+        Utils.fillMapWithVegetation(map, LAVA_1);
 
         /* Verify that no wild animals appear */
         for (int i = 0; i < 3000; i++) {

@@ -42,7 +42,7 @@ class Utils {
             case MOUNTAIN_4:           return Vegetation.MOUNTAIN_4;         // Mountain 4 - mining
             case STEPPE:               return Vegetation.STEPPE;             // Steppe - can build houses
             case FLOWER_MEADOW:        return Vegetation.FLOWER_MEADOW;      // Flower meadow - can build houses
-            case LAVA:                 return Vegetation.LAVA;               // Lava - no walking
+            case LAVA:                 return Vegetation.LAVA_1;               // Lava - no walking
             case MAGENTA:              return Vegetation.MAGENTA;            // Magenta - build flags
             case MOUNTAIN_MEADOW:      return Vegetation.MOUNTAIN_MEADOW;    // Mountain meadow - can build houses
             case WATER_2:              return Vegetation.WATER_2;            // Water - no walking, no building, no sailing
