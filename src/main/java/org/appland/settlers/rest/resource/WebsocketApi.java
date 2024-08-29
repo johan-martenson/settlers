@@ -61,6 +61,7 @@ import java.util.Set;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
+import static org.appland.settlers.rest.resource.GameUtils.startGame;
 
 @ServerEndpoint(value = "/ws/api")
 public class WebsocketApi implements PlayerGameViewMonitor,
@@ -78,7 +79,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     );
 
     private final Map<Player, Session> playerToSession;
-    private final Utils utils;
+    private final JsonUtils utils;
     private final JSONParser parser;
     private final IdManager idManager = IdManager.idManager;
     private final GameTicker gameTicker = GameTicker.GAME_TICKER;
@@ -89,7 +90,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
 
-        utils = new Utils(idManager);
+        utils = new JsonUtils(idManager);
         parser = new JSONParser();
         playerToSession = new HashMap<>();
 
@@ -563,7 +564,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case START_GAME -> {
                 synchronized (game) {
-                    utils.startGame(game, gameTicker);
+                    startGame(game, gameTicker);
                 }
             }
             case SET_MAP -> {
@@ -1166,6 +1167,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     public void onError(Session session, Throwable throwable) {
         System.out.println("ON ERROR: " + throwable);
         System.out.println(throwable.getCause());
+        System.out.println(Arrays.asList(throwable.getCause().getStackTrace()));
         System.out.println(throwable.getMessage());
         System.out.println(Arrays.toString(throwable.getStackTrace()));
 
@@ -1207,7 +1209,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             if (session != null) {
                 sendToSession(session, new JSONObject(Map.of(
                         "type", "PLAYER_VIEW_CHANGED",
-                        "playerViewChanges", utils.gameMonitoringEventsToJson(gameChangesList, player)
+                        "playerViewChanges", utils.gameMonitoringEventToJson(gameChangesList, player)
                 )));
             }
         } catch (Exception e) {

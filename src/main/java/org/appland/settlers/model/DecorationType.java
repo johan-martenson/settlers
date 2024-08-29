@@ -6,20 +6,43 @@ import java.util.Set;
 public enum DecorationType {
 
     // Ordered according to MapBobs0.lst
-    MINI_BROWN_MUSHROOM,
+    MINI_BROWN_MUSHROOM, // 283
     TOADSTOOL,
     MINI_STONE,
     SMALL_STONE,
     STONE,
     DEAD_TREE_LYING_DOWN,
+    DEAD_TREE,
     ANIMAL_SKELETON_1,
     ANIMAL_SKELETON_2,
     FLOWERS,
-    LARGE_BUSH,
+    LARGE_BUSH_1,
     PILE_OF_STONES,
     CACTUS_1,
     CACTUS_2,
-    CATTAIL,
+    CATTAIL_1,
+    CATTAIL_2,
+
+    LARGE_BUSH_2, // 322
+    BUSH_3,
+    SMALL_BUSH,
+    CATTAIL_3,
+    CATTAIL_4,
+
+    BROWN_MUSHROOM, // 329
+    MINI_STONE_WITH_GRASS,
+    SMALL_STONE_WITH_GRASS,
+    SOME_SMALL_STONES_1,
+    SOME_SMALL_STONES_2,
+    SOME_SMALL_STONES_3,
+    SPARSE_BUSH,
+    SOME_WATER,
+    LITTLE_GRASS,
+    SNOWMAN,
+
+    PORTAL, // 339
+    SHINING_PORTAL,
+
     STONE_REMAINING_STYLE_1,
 
     // Gap 5 - stones to be cut
@@ -40,18 +63,10 @@ public enum DecorationType {
 
     HUMAN_SKELETON_1,
     HUMAN_SKELETON_2,
-    BROWN_MUSHROOM,
-    MINI_STONE_WITH_GRASS,
-    SMALL_STONE_WITH_GRASS,
     SOME_SMALL_STONES,
     SOME_SMALLER_STONES,
     FEW_SMALL_STONES,
-    SPARSE_BUSH,
-    SOME_WATER,
     MINI_GRASS,
-    SNOWMAN,
-    PORTAL,
-    SHINING_PORTAL,
 
     // Mis1Bobs.lst
     SHARP_STONES_1,
@@ -79,24 +94,18 @@ public enum DecorationType {
 
 
     LARGER_STONES,
-    DEAD_TREE,
 
 
     GRASS_1,
     BUSH,
-    SMALL_BUSH,
     MINI_BUSH,
     GRASS_2,
-    LITTLE_GRASS,
     DEAD_TREE_2,
     DEAD_TREE_3,
     SOLDIER_SKELETON,
     TREE_STUB;
 
-    public static final Set<DecorationType> NO_IMPACT_ON_GAME;
-
-    static {
-        NO_IMPACT_ON_GAME = EnumSet.of(
+    public static final Set<DecorationType> NO_IMPACT_ON_GAME = EnumSet.of(
                 MINI_BROWN_MUSHROOM,
                 TOADSTOOL,
                 MINI_STONE,
@@ -104,24 +113,23 @@ public enum DecorationType {
                 STONE,
                 ANIMAL_SKELETON_2,
                 FLOWERS,
-                LARGE_BUSH,
+                LARGE_BUSH_1,
                 PILE_OF_STONES,
-                CATTAIL,
-                GRASS_1,
-                GRASS_2,
-                MINI_GRASS,
-                BUSH,
+                CATTAIL_1,
+                CATTAIL_2,
+                LARGE_BUSH_2,
+                BUSH_3,
                 SMALL_BUSH,
-                MINI_BUSH,
+                CATTAIL_3,
+                CATTAIL_4,
                 BROWN_MUSHROOM,
                 MINI_STONE_WITH_GRASS,
                 SMALL_STONE_WITH_GRASS,
-                SOME_SMALL_STONES,
-                SOME_SMALLER_STONES,
-                FEW_SMALL_STONES,
+                SOME_SMALL_STONES_1,
+                SOME_SMALL_STONES_2,
+                SOME_SMALL_STONES_3,
                 SPARSE_BUSH,
                 SOME_WATER,
                 LITTLE_GRASS
-        );
-    }
+            );
 }

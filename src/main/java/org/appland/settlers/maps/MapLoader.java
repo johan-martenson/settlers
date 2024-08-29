@@ -606,7 +606,7 @@ public class MapLoader {
                 gameMap.placeDeadTree(point);
             }
 
-            if (mapFilePoint.isNatureDecoration()) {
+            if (mapFilePoint.hasDecoration()) {
                 DecorationType decorationType = mapFilePoint.getNatureDecorationType();
 
                 if (DecorationType.NO_IMPACT_ON_GAME.contains(decorationType)) {

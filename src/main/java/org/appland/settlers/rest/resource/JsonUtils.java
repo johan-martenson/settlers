@@ -79,7 +79,6 @@ import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
-import org.appland.settlers.rest.GameTicker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -97,11 +96,14 @@ import java.util.logging.Logger;
 
 import static org.appland.settlers.model.messages.Message.MessageType.*;
 
-class Utils {
+class JsonUtils {
     private final IdManager idManager;
+    private final MapLoader mapLoader;
 
-    Utils(IdManager idManager) {
+    JsonUtils(IdManager idManager) {
         this.idManager = idManager;
+
+        mapLoader = new MapLoader();
     }
 
     public static JSONObject decorationToJson(DecorationType decorationType, Point point) {
@@ -109,12 +111,6 @@ class Utils {
                 "x", point.x,
                 "y", point.y,
                 "decoration", decorationType.name().toUpperCase()
-        ));
-    }
-
-    public static JSONObject messageJsonToReplyJson(JSONObject jsonBody) {
-        return new JSONObject(Map.of(
-                "requestId", (Long) jsonBody.get("requestId")
         ));
     }
 
@@ -151,7 +147,6 @@ class Utils {
         ));
 
         MapFile mapFile = gameResource.getMapFile();
-
         if (mapFile != null) {
             jsonGame.put("mapId", idManager.getId(mapFile));
             jsonGame.put("map", mapFileToJson(mapFile));
@@ -178,29 +173,20 @@ class Utils {
     }
 
     JSONObject playerToJson(Player player, String playerId, GameResource gameResource) {
-        JSONArray jsonDiscoveredPoints = new JSONArray();
-
-        for (Point point : player.getDiscoveredLand()) {
-            jsonDiscoveredPoints.add(pointToJson(point));
-        }
-
         var jsonPlayer = new JSONObject(Map.of(
                 "id", playerId,
                 "name", player.getName(),
                 "color", player.getColor().name().toUpperCase(),
                 "nation", player.getNation().name(),
                 "type", gameResource.isComputerPlayer(player) ? "COMPUTER" : "HUMAN",
-                "discoveredPoints", jsonDiscoveredPoints
+                "discoveredPoints", pointsToJson(player.getDiscoveredLand())
         ));
 
-        /* Get the player's "center spot" */
-        for (Building building : player.getBuildings()) {
-            if (building instanceof Headquarter) {
-                jsonPlayer.put("centerPoint", pointToJson(building.getPosition()));
-
-                break;
-            }
-        }
+        // Get the player's "center spot"
+        player.getBuildings().stream()
+                .filter(building -> building instanceof Headquarter)
+                .findFirst()
+                .ifPresent(building -> jsonPlayer.put("centerPoint", pointToJson(building.getPosition())));
 
         return jsonPlayer;
     }
@@ -234,15 +220,13 @@ class Utils {
         }
 
         String name = (String) jsonPlayer.get("name");
-        PlayerColor color = jsonToColor((String) jsonPlayer.get("color"));
-
-        String nationString = (String) jsonPlayer.get("nation");
-        Nation nation = Nation.valueOf(nationString);
+        PlayerColor color = jsonToPlayerColor((String) jsonPlayer.get("color"));
+        Nation nation = Nation.valueOf((String) jsonPlayer.get("nation"));
 
         return new Player(name, color, nation, PlayerType.HUMAN);
     }
 
-    private PlayerColor jsonToColor(String colorName) {
+    private PlayerColor jsonToPlayerColor(String colorName) {
         return PlayerColor.valueOf(colorName);
     }
 
@@ -265,11 +249,7 @@ class Utils {
                 jsonHeights.add(map.getHeightAtPoint(point));
             }
 
-            if (start == 1) {
-                start = 2;
-            } else {
-                start = 1;
-            }
+            start = (start == 1) ? 2 : 1;
         }
 
         return new JSONObject(Map.of(
@@ -281,35 +261,6 @@ class Utils {
         ));
     }
 
-    private String vegetationToJson(Vegetation vegetation) {
-        return switch (vegetation) {
-            case SAVANNAH -> "SA";
-            case MOUNTAIN_1 -> "MO1";
-            case SNOW -> "SN";
-            case SWAMP -> "SW";
-            case DESERT_1 -> "D1";
-            case WATER -> "W1";
-            case BUILDABLE_WATER -> "B";
-            case DESERT_2 -> "D2";
-            case MEADOW_1 -> "ME1";
-            case MEADOW_2 -> "ME2";
-            case MEADOW_3 -> "ME3";
-            case MOUNTAIN_2 -> "MO2";
-            case MOUNTAIN_3 -> "MO3";
-            case MOUNTAIN_4 -> "MO4";
-            case STEPPE -> "ST";
-            case FLOWER_MEADOW -> "FM";
-            case LAVA_1 -> "L1";
-            case MAGENTA -> "MA";
-            case MOUNTAIN_MEADOW -> "MM";
-            case WATER_2 -> "W2";
-            case LAVA_2 -> "L2";
-            case LAVA_3 -> "L3";
-            case LAVA_4 -> "L4";
-            case BUILDABLE_MOUNTAIN -> "BM";
-        };
-    }
-
     JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
         JSONObject jsonPointInfo = pointToJson(point);
 
@@ -317,13 +268,13 @@ class Utils {
             if (map.isBuildingAtPoint(point)) {
                 Building building = map.getBuildingAtPoint(point);
                 jsonPointInfo.put("building", houseToJson(building, player));
-                jsonPointInfo.put("is", "building");
+                jsonPointInfo.put("is", "BUILDING");
                 jsonPointInfo.put("buildingId", idManager.getId(building));
             } else if (map.isFlagAtPoint(point)) {
-                jsonPointInfo.put("is", "flag");
+                jsonPointInfo.put("is", "FLAG");
                 jsonPointInfo.put("flagId", idManager.getId(map.getFlagAtPoint(point)));
             } else if (map.isRoadAtPoint(point)) {
-                jsonPointInfo.put("is", "road");
+                jsonPointInfo.put("is", "ROAD");
                 jsonPointInfo.put("roadId", idManager.getId(map.getRoadAtPoint(point)));
             }
 
@@ -332,36 +283,28 @@ class Utils {
 
             try {
                 if (map.isAvailableFlagPoint(player, point)) {
-                    canBuild.add("flag");
+                    canBuild.add("FLAG");
                 }
 
                 if (map.isAvailableMinePoint(player, point)) {
-                    canBuild.add("mine");
+                    canBuild.add("MINE");
                 }
 
                 Size size = map.isAvailableHousePoint(player, point);
-
                 if (size != null) {
-                    if (size == Size.LARGE) {
-                        canBuild.add("large");
-                        canBuild.add("medium");
-                        canBuild.add("small");
-                    } else if (size == Size.MEDIUM) {
-                        canBuild.add("medium");
-                        canBuild.add("small");
-                    } else if (size == Size.SMALL) {
-                        canBuild.add("small");
+                    switch (size) {
+                        case LARGE -> canBuild.addAll(List.of("LARGE", "MEDIUM", "SMALL"));
+                        case MEDIUM -> canBuild.addAll(List.of("MEDIUM", "SMALL"));
+                        case SMALL -> canBuild.add("SMALL");
                     }
                 }
 
                 /* Fill in available connections for a new road */
-                JSONArray jsonPossibleConnections = new JSONArray();
-                jsonPointInfo.put("possibleRoadConnections", jsonPossibleConnections);
-                for (Point possibleConnection : map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, point)) {
-                    jsonPossibleConnections.add(pointToJson(possibleConnection));
-                }
+                jsonPointInfo.put("possibleRoadConnections", pointsToJson(
+                        map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, point))
+                );
             } catch (Exception ex) {
-                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -383,7 +326,7 @@ class Utils {
             return "DESTROYED";
         }
 
-        System.out.println("Can't translate state to string for building: " + building);
+        System.out.printf("Can't translate state to string for building: %s", building);
 
         System.exit(1);
 
@@ -481,39 +424,26 @@ class Utils {
         return jsonHouse;
     }
 
+    <T> List<T> jsonArrayToList(JSONArray jsonArray, Function<JSONObject, T> jsonToObject) {
+        List<T> points = new ArrayList<>();
 
-    List<Point> jsonToPoints(JSONArray jsonPoints) {
-        List<Point> points = new ArrayList<>();
-
-        for (Object point : jsonPoints) {
-            points.add(jsonToPoint((JSONObject) point));
+        for (Object point : jsonArray) {
+            points.add(jsonToObject.apply((JSONObject) point));
         }
 
         return points;
     }
 
-    Point jsonToPoint(JSONObject point) {
-        int x;
-        int y;
+    List<Point> jsonToPoints(JSONArray jsonPoints) {
+        return jsonArrayToList(jsonPoints, this::jsonToPoint);
+    }
 
+    Point jsonToPoint(JSONObject point) {
         Object xObject = point.get("x");
         Object yObject = point.get("y");
 
-        if (xObject instanceof String) {
-            x = Integer.parseInt((String) xObject);
-        } else if (xObject instanceof Integer) {
-            x = (Integer) xObject;
-        } else {
-            x = ((Long) xObject).intValue();
-        }
-
-        if (yObject instanceof String) {
-            y = Integer.parseInt((String) yObject);
-        } else if (yObject instanceof Integer) {
-            y = (Integer) yObject;
-        } else {
-            y = ((Long) yObject).intValue();
-        }
+        int x = xObject instanceof String ? Integer.parseInt((String) xObject) : ((Long) xObject).intValue();
+        int y = yObject instanceof String ? Integer.parseInt((String) yObject) : ((Long) yObject).intValue();
 
         return new Point(x, y);
     }
@@ -619,10 +549,13 @@ class Utils {
     }
 
     private String rankToTypeString(Soldier soldier) {
-        String nameAndRank = soldier.getRank().name().toLowerCase();
-        int underscorePosition = nameAndRank.indexOf("_");
-
-        return nameAndRank.substring(0, 1).toUpperCase() + nameAndRank.substring(1, underscorePosition);
+        return switch (soldier.getRank()) {
+            case PRIVATE_RANK -> "Private";
+            case PRIVATE_FIRST_CLASS_RANK -> "Private_first_class";
+            case SERGEANT_RANK -> "Sergeant";
+            case OFFICER_RANK -> "Officer";
+            case GENERAL_RANK -> "General";
+        };
     }
 
     JSONObject flagToJson(Flag flag) {
@@ -648,25 +581,17 @@ class Utils {
     }
 
     JSONObject roadToJson(Road road) {
-        var jsonPoints = toJsonArray(road.getWayPoints(), this::pointToJson);
-
         return new JSONObject(Map.of(
                 "id", idManager.getId(road),
-                "points", jsonPoints,
+                "points", toJsonArray(road.getWayPoints(), this::pointToJson),
                 "type", road.isMainRoad() ? "MAIN" : "NORMAL"
         ));
     }
 
     JSONObject borderToJson(Player player, String playerId) {
-        var jsonBorderPoints = new JSONArray();
-
-        player.getBorderPoints().stream()
-                .map(this::pointToJson)
-                .forEach(jsonBorderPoints::add);
-
         return new JSONObject(Map.of(
                 "playerId", playerId,
-                "points", jsonBorderPoints
+                "points", pointsToJson(player.getBorderPoints())
         ));
     }
 
@@ -733,46 +658,6 @@ class Utils {
         ));
     }
 
-    GameMap gamePlaceholderToGame(GameResource gamePlaceholder) throws Exception {
-        MapLoader mapLoader = new MapLoader();
-        GameMap map = mapLoader.convertMapFileToGameMap(gamePlaceholder.getMapFile());
-
-        map.setPlayers(gamePlaceholder.getPlayers());
-
-        return map;
-    }
-
-    void adjustResources(GameMap map, ResourceLevel resources) {
-        for (Player player : map.getPlayers()) {
-            Headquarter headquarter = (Headquarter)player.getBuildings().getFirst();
-
-            if (resources == ResourceLevel.LOW) {
-                headquarter.retrieve(Material.STONE);
-                headquarter.retrieve(Material.STONE);
-                headquarter.retrieve(Material.STONE);
-
-                headquarter.retrieve(Material.PLANK);
-                headquarter.retrieve(Material.PLANK);
-                headquarter.retrieve(Material.PLANK);
-
-                headquarter.retrieve(Material.WOOD);
-                headquarter.retrieve(Material.WOOD);
-                headquarter.retrieve(Material.WOOD);
-            } else if (resources == ResourceLevel.HIGH) {
-                deliver(Material.STONE, 3, headquarter);
-                deliver(Material.PLANK, 3, headquarter);
-                deliver(Material.WOOD, 3, headquarter);
-            }
-        }
-    }
-
-    private void deliver(Material material, int amount, Headquarter headquarter) {
-        for (int i = 0; i < amount; i++) {
-            headquarter.promiseDelivery(material);
-            headquarter.putCargo(new Cargo(material, headquarter.getMap()));
-        }
-    }
-
     JSONArray housesToJson(Collection<Building> buildings, Player player) throws InvalidUserActionException {
         JSONArray jsonHouses = new JSONArray();
 
@@ -784,19 +669,9 @@ class Utils {
     }
 
     JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
-        MapLoader mapLoader = new MapLoader();
         GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
 
         return terrainToJson(map);
-    }
-
-    public JSONArray playersToShortJson(List<Player> players) {
-        return toJsonArray(players, player -> new JSONObject(Map.of(
-                "id", idManager.getId(player),
-                "name", player.getName(),
-                "color", player.getColor().name().toUpperCase(),
-                "nation", player.getNation().name().toUpperCase()
-        )));
     }
 
     public JSONObject buildingLostMessageToJson(BuildingLostMessage buildingLostMessage) {
@@ -884,10 +759,7 @@ class Utils {
     }
 
     JSONObject geologistFindMessageToJson(GeologistFindMessage geologistFindMessage) {
-        JSONObject jsonGeologistFindPoint = new JSONObject(Map.of(
-                "x", geologistFindMessage.point().x,
-                "y", geologistFindMessage.point().y
-        ));
+        JSONObject jsonGeologistFindPoint = pointToJson(geologistFindMessage.point());
 
         return new JSONObject(Map.of(
                 "id", idManager.getId(geologistFindMessage),
@@ -897,7 +769,7 @@ class Utils {
         ));
     }
 
-    public JSONObject gameMonitoringEventsToJson(GameChangesList gameChangesList, Player player) throws InvalidUserActionException {
+    public JSONObject gameMonitoringEventToJson(GameChangesList gameChangesList, Player player) throws InvalidUserActionException {
         JSONObject jsonMonitoringEvents = new JSONObject();
 
         jsonMonitoringEvents.put("time", gameChangesList.time());
@@ -917,11 +789,11 @@ class Utils {
         }
 
         if (!gameChangesList.newStones().isEmpty()) {
-            jsonMonitoringEvents.put("newStones", newStonesToJson(gameChangesList.newStones()));
+            jsonMonitoringEvents.put("newStones", stonesToJson(gameChangesList.newStones()));
         }
 
         if (!gameChangesList.changedStones().isEmpty()) {
-            jsonMonitoringEvents.put("changedStones", newStonesToJson(gameChangesList.changedStones()));
+            jsonMonitoringEvents.put("changedStones", stonesToJson(gameChangesList.changedStones()));
         }
 
         gameChangesList.upgradedBuildings().forEach(newAndOldBuilding -> {
@@ -1073,38 +945,21 @@ class Utils {
     }
 
     private JSONArray pointsAndDecorationsToJson(Map<Point, DecorationType> pointsAndDecorations) {
-        JSONArray jsonPointsAndDecorations = new JSONArray();
-
-        for (Map.Entry<Point, DecorationType> entry : pointsAndDecorations.entrySet()) {
-            Point point = entry.getKey();
-            DecorationType decorationType = entry.getValue();
-
-            jsonPointsAndDecorations.add(new JSONObject(Map.of(
-                    "x", point.x,
-                    "y", point.y,
-                    "decoration", decorationType.name().toUpperCase()
-            )));
-        }
-
-        return jsonPointsAndDecorations;
+        return toJsonArray(pointsAndDecorations.entrySet(), entry -> new JSONObject(Map.of(
+                "x", entry.getKey().x,
+                "y", entry.getKey().y,
+                "decoration", entry.getValue().name().toUpperCase()
+        )));
     }
 
     private JSONArray workersAndActionsToJson(Map<Worker, WorkerAction> workersWithStartedActions) {
-        JSONArray workersAndActionsJson = new JSONArray();
-
-        workersWithStartedActions.forEach((worker, action) -> {
-            Point position = worker.getPosition();
-
-            workersAndActionsJson.add(new JSONObject(Map.of(
-                    "id", idManager.getId(worker),
-                    "x", position.x,
-                    "y", position.y,
-                    "direction", worker.getDirection().name().toUpperCase(),
-                    "startedAction", action.name().toUpperCase()
-            )));
-        });
-
-        return workersAndActionsJson;
+        return toJsonArray(workersWithStartedActions.entrySet(), entry -> new JSONObject(Map.of(
+                "id", idManager.getId(entry.getKey()),
+                "x", entry.getKey().getPosition().x,
+                "y", entry.getKey().getPosition().y,
+                "direction", entry.getKey().getDirection().name().toUpperCase(),
+                "startedAction", entry.getValue().name().toUpperCase()
+        )));
     }
 
     private JSONArray shipWithNewTargetsToJson(List<Worker> workers) {
@@ -1112,7 +967,6 @@ class Utils {
     }
 
     private JSONObject shipToJson(Ship ship) {
-        JSONObject jsonCargos = new JSONObject();
         Map<Material, Integer> cargos = new EnumMap<>(Material.class);
 
         for (Cargo cargo : ship.getCargos()) {
@@ -1122,14 +976,14 @@ class Utils {
             cargos.put(material, amount + 1);
         }
 
-        cargos.forEach((material, amount) -> jsonCargos.put(material.name().toUpperCase(), amount));
-
         return new JSONObject(Map.of(
                 "state", ship.isUnderConstruction() ? "UNDER_CONSTRUCTION" : "READY",
                 "x", ship.getPosition().x,
                 "y", ship.getPosition().y,
                 "direction", ship.getDirection().name().toUpperCase(),
-                "cargo", jsonCargos
+                "cargo", toJsonArray(cargos.entrySet(), entry -> new JSONObject(Map.of(
+                        entry.getKey().name().toUpperCase(), entry.getValue()
+                )))
         ));
     }
 
@@ -1153,37 +1007,30 @@ class Utils {
         );
     }
 
-    private JSONArray newStonesToJson(Collection<Stone> newStones) {
-        return toJsonArray(newStones, this::stoneToJson);
+    private JSONArray stonesToJson(Collection<Stone> stones) {
+        return toJsonArray(stones, this::stoneToJson);
     }
 
     private JSONArray messagesToJson(List<Message> newGameMessages) {
-        JSONArray jsonMessages = new JSONArray();
-
-        newGameMessages.forEach(message -> {
-            var jsonMessage = switch (message.getMessageType()) {
-                case MILITARY_BUILDING_OCCUPIED -> militaryBuildingOccupiedMessageToJson((MilitaryBuildingOccupiedMessage) message);
-                case GEOLOGIST_FIND -> geologistFindMessageToJson((GeologistFindMessage) message);
-                case MILITARY_BUILDING_READY -> militaryBuildingReadyMessageToJson((MilitaryBuildingReadyMessage) message);
-                case NO_MORE_RESOURCES -> noMoreResourcesMessageToJson((NoMoreResourcesMessage) message);
-                case UNDER_ATTACK -> underAttackMessageToJson((UnderAttackMessage) message);
-                case BUILDING_CAPTURED -> buildingCapturedMessageToJson((BuildingCapturedMessage) message);
-                case BUILDING_LOST -> buildingLostMessageToJson((BuildingLostMessage) message);
-                case STORE_HOUSE_IS_READY -> storeHouseIsReadyMessageToJson((StoreHouseIsReadyMessage) message);
-                case TREE_CONSERVATION_PROGRAM_ACTIVATED -> treeConservationProgramActivatedMessageToJson((TreeConservationProgramActivatedMessage) message);
-                case TREE_CONSERVATION_PROGRAM_DEACTIVATED -> treeConservationProgramDeactivatedMessageToJson((TreeConservationProgramDeactivatedMessage) message);
-                case MILITARY_BUILDING_CAUSED_LOST_LAND -> militaryBuildingCausedLostLandMessageToJson((MilitaryBuildingCausedLostLandMessage) message);
-                case BOMBARDED_BY_CATAPULT -> bombardedByCatapultMessageToJson((BombardedByCatapultMessage) message);
-                case HARBOR_IS_FINISHED -> harborFinishedMessageToJson((HarborIsFinishedMessage) message);
-                case SHIP_READY_FOR_EXPEDITION -> shipReadyForExpeditionMessageToJson((ShipReadyForExpeditionMessage) message);
-                case SHIP_HAS_REACHED_DESTINATION -> shipHasReachedDestinationMessageToJson((ShipHasReachedDestinationMessage) message);
-                case GAME_ENDED -> gameEndedMessageToJson((GameEndedMessage) message);
-            };
-
-            jsonMessages.add(jsonMessage);
-        });
-
-        return jsonMessages;
+        return toJsonArray(newGameMessages, message ->
+                switch (message.getMessageType()) {
+                    case MILITARY_BUILDING_OCCUPIED -> militaryBuildingOccupiedMessageToJson((MilitaryBuildingOccupiedMessage) message);
+                    case GEOLOGIST_FIND -> geologistFindMessageToJson((GeologistFindMessage) message);
+                    case MILITARY_BUILDING_READY -> militaryBuildingReadyMessageToJson((MilitaryBuildingReadyMessage) message);
+                    case NO_MORE_RESOURCES -> noMoreResourcesMessageToJson((NoMoreResourcesMessage) message);
+                    case UNDER_ATTACK -> underAttackMessageToJson((UnderAttackMessage) message);
+                    case BUILDING_CAPTURED -> buildingCapturedMessageToJson((BuildingCapturedMessage) message);
+                    case BUILDING_LOST -> buildingLostMessageToJson((BuildingLostMessage) message);
+                    case STORE_HOUSE_IS_READY -> storeHouseIsReadyMessageToJson((StoreHouseIsReadyMessage) message);
+                    case TREE_CONSERVATION_PROGRAM_ACTIVATED -> treeConservationProgramActivatedMessageToJson((TreeConservationProgramActivatedMessage) message);
+                    case TREE_CONSERVATION_PROGRAM_DEACTIVATED -> treeConservationProgramDeactivatedMessageToJson((TreeConservationProgramDeactivatedMessage) message);
+                    case MILITARY_BUILDING_CAUSED_LOST_LAND -> militaryBuildingCausedLostLandMessageToJson((MilitaryBuildingCausedLostLandMessage) message);
+                    case BOMBARDED_BY_CATAPULT -> bombardedByCatapultMessageToJson((BombardedByCatapultMessage) message);
+                    case HARBOR_IS_FINISHED -> harborFinishedMessageToJson((HarborIsFinishedMessage) message);
+                    case SHIP_READY_FOR_EXPEDITION -> shipReadyForExpeditionMessageToJson((ShipReadyForExpeditionMessage) message);
+                    case SHIP_HAS_REACHED_DESTINATION -> shipHasReachedDestinationMessageToJson((ShipHasReachedDestinationMessage) message);
+                    case GAME_ENDED -> gameEndedMessageToJson((GameEndedMessage) message);
+                });
     }
 
     private JSONObject gameEndedMessageToJson(GameEndedMessage message) {
@@ -1274,17 +1121,17 @@ class Utils {
                 JSONArray jsonAvailableConstruction = new JSONArray();
 
                 if (map.isAvailableFlagPoint(player, point)) {
-                    jsonAvailableConstruction.add("flag");
+                    jsonAvailableConstruction.add("FLAG");
                 }
 
                 Size size = map.isAvailableHousePoint(player, point);
 
                 if (size != null) {
-                    jsonAvailableConstruction.add(size.name().toLowerCase());
+                    jsonAvailableConstruction.add(size.name().toUpperCase());
                 }
 
                 if (map.isAvailableMinePoint(player, point)) {
-                    jsonAvailableConstruction.add("mine");
+                    jsonAvailableConstruction.add("MINE");
                 }
 
                 jsonPointAndAvailableConstruction.put("available", jsonAvailableConstruction);
@@ -1314,7 +1161,7 @@ class Utils {
     }
 
     private JSONArray removedSignsToJson(List<Sign> removedSigns) {
-        return objectsToJsonIdArray(removedSigns);
+        return toJsonArray(removedSigns, idManager::getId);
     }
 
     private JSONArray newSignsToJson(List<Sign> signs) {
@@ -1354,23 +1201,19 @@ class Utils {
     }
 
     private JSONArray removedRoadsToJson(List<Road> removedRoads) {
-        return objectsToJsonIdArray(removedRoads);
+        return toJsonArray(removedRoads, idManager::getId);
     }
 
     private JSONArray removedFlagsToJson(List<Flag> removedFlags) {
-        return objectsToJsonIdArray(removedFlags);
+        return toJsonArray(removedFlags, idManager::getId);
     }
 
     private JSONArray removedBuildingsToJson(List<Building> removedBuildings) {
-        return objectsToJsonIdArray(removedBuildings);
+        return toJsonArray(removedBuildings, idManager::getId);
     }
 
     private JSONArray removedWorkersToJson(List<Worker> removedWorkers) {
         return toJsonArrayWithFilter(removedWorkers, idManager::getId, worker -> !(worker instanceof WildAnimal));
-    }
-
-    private JSONArray objectsToJsonIdArray(List<?> gameObjects) {
-        return toJsonArray(gameObjects, idManager::getId);
     }
 
     private JSONArray roadsToJson(List<Road> roads) {
@@ -1381,7 +1224,7 @@ class Utils {
         return toJsonArray(flags, this::flagToJson);
     }
 
-    private <T> JSONArray toJsonArrayWithFilter(Collection<T> fromList, Function<T, Object> mapFunction, Function<T, Boolean> filterFunction) {
+    private <T> JSONArray toJsonArrayWithFilter(Iterable<T> fromList, Function<T, Object> mapFunction, Function<T, Boolean> filterFunction) {
         JSONArray jsonResult = new JSONArray();
 
         if (fromList == null) {
@@ -1397,7 +1240,7 @@ class Utils {
         return jsonResult;
     }
 
-    private <T> JSONArray toJsonArray(Collection<T> fromList, Function<T, Object> mapFunction) {
+    private <T> JSONArray toJsonArray(Iterable<T> fromList, Function<T, Object> mapFunction) {
         JSONArray jsonResult = new JSONArray();
 
         if (fromList == null) {
@@ -1422,39 +1265,14 @@ class Utils {
     }
 
     private JSONArray workersWithNewTargetsToJson(List<Worker> workersWithNewTargets) {
-        JSONArray jsonWorkersWithNewTarget = new JSONArray();
+        return toJsonArrayWithFilter(workersWithNewTargets,
+                worker -> {
+                    var jsonWorkerWithNewTarget = workerToJson(worker);
+                    jsonWorkerWithNewTarget.put("path", pointsToJson(worker.getPlannedPath()));
 
-        for (Worker worker : workersWithNewTargets) {
-            JSONObject jsonWorkerWithNewTarget = new JSONObject();
-
-            if (worker instanceof WildAnimal) {
-                continue;
-            }
-
-            jsonWorkerWithNewTarget.put("id", idManager.getId(worker));
-            jsonWorkerWithNewTarget.put("path", pointsToJson(worker.getPlannedPath()));
-
-            jsonWorkerWithNewTarget.put("x", worker.getPosition().x);
-            jsonWorkerWithNewTarget.put("y", worker.getPosition().y);
-
-            jsonWorkerWithNewTarget.put("type", workerTypeToJson(worker));
-            jsonWorkerWithNewTarget.put("color", worker.getPlayer().getColor().name().toUpperCase());
-            jsonWorkerWithNewTarget.put("nation", worker.getPlayer().getNation().name().toUpperCase());
-
-            jsonWorkerWithNewTarget.put("direction", worker.getDirection().name().toUpperCase());
-
-            if (worker instanceof Courier courier) {
-                jsonWorkerWithNewTarget.put("bodyType", courier.getBodyType().name().toUpperCase());
-            }
-
-            if (worker.getCargo() != null) {
-                jsonWorkerWithNewTarget.put("cargo", worker.getCargo().getMaterial().getSimpleName().toUpperCase());
-            }
-
-            jsonWorkersWithNewTarget.add(jsonWorkerWithNewTarget);
-        }
-
-        return jsonWorkersWithNewTarget;
+                    return jsonWorkerWithNewTarget;
+                },
+                worker -> !(worker instanceof WildAnimal));
     }
 
     private String workerTypeToJson(Worker worker) {
@@ -1464,7 +1282,7 @@ class Utils {
     }
 
     public JSONArray transportPriorityToJson(List<TransportCategory> transportPriorityList) {
-        return toJsonArray(transportPriorityList, prio -> prio.name().toUpperCase());
+        return toJsonArray(transportPriorityList, transportCategory -> transportCategory.name().toUpperCase());
     }
 
     public Set<Point> jsonToPointsSet(JSONArray jsonPoints) {
@@ -1480,12 +1298,14 @@ class Utils {
     }
 
     public JSONObject wildAnimalToJson(WildAnimal wildAnimal) {
-        JSONObject jsonWildAnimal = pointToJson(wildAnimal.getPosition());
-
-        jsonWildAnimal.put("type", wildAnimal.getType().name());
-        jsonWildAnimal.put("id", idManager.getId(wildAnimal));
-        jsonWildAnimal.put("betweenPoints", !wildAnimal.isExactlyAtPoint());
-        jsonWildAnimal.put("direction", wildAnimal.getDirection().name().toUpperCase());
+        var jsonWildAnimal = new JSONObject(Map.of(
+                "id", idManager.getId(wildAnimal),
+                "x", wildAnimal.getPosition().x,
+                "y", wildAnimal.getPosition().y,
+                "type", wildAnimal.getType().name(),
+                "betweenPoints", !wildAnimal.isExactlyAtPoint(),
+                "direction", wildAnimal.getDirection().name().toUpperCase()
+        ));
 
         if (wildAnimal.getPlannedPath() != null && wildAnimal.getPlannedPath().isEmpty()) {
             jsonWildAnimal.put("path", pointsToJson(wildAnimal.getPlannedPath()));
@@ -1503,28 +1323,14 @@ class Utils {
     }
 
     public JSONObject playerViewToJson(GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
-        JSONArray  jsonHouses                = new JSONArray();
-        JSONArray  trees;
-        JSONArray  jsonStones;
-        JSONArray  jsonWorkers;
-        JSONArray  jsonWildAnimals;
-        JSONArray  jsonFlags;
-        JSONArray  jsonRoads                 = new JSONArray();
-        JSONArray  jsonDiscoveredPoints;
-        JSONArray  jsonBorders               = new JSONArray();
-        JSONArray  jsonSigns;
-        JSONArray  jsonCrops                 = new JSONArray();
-        JSONObject jsonAvailableConstruction = new JSONObject();
-        JSONArray  jsonDeadTrees;
-        JSONArray  jsonDecorations           = new JSONArray();
+        var jsonHouses                = new JSONArray();
+        var jsonAvailableConstruction = new JSONObject();
+        var jsonDecorations           = new JSONArray();
 
-        JSONArray jsonMessages = messagesToJson(player.getMessages());
-
-        /* Protect access to the map to avoid interference */
         synchronized (map) {
             Set<Point> discoveredLand = player.getDiscoveredLand();
 
-            /* Fill in houses */
+            // Fill in houses
             for (Building building : map.getBuildings()) {
                 if (!discoveredLand.contains(building.getPosition())) {
                     continue;
@@ -1533,83 +1339,59 @@ class Utils {
                 jsonHouses.add(houseToJson(building, player));
             }
 
-            /* Fill in trees */
-            trees = toJsonArrayWithFilter(map.getTrees(),
+            var trees = toJsonArrayWithFilter(map.getTrees(),
                     this::treeToJson,
                     tree -> discoveredLand.contains(tree.getPosition()));
 
-            /* Fill in stones */
-            jsonStones = toJsonArrayWithFilter(
+            var jsonStones = toJsonArrayWithFilter(
                     map.getStones(),
                     this::stoneToJson,
                     stone -> discoveredLand.contains(stone.getPosition()));
 
-
-            /* Fill in workers */
-            jsonWorkers = toJsonArrayWithFilter(
+            var jsonWorkers = toJsonArrayWithFilter(
                     map.getWorkers(),
                     this::workerToJson,
                     worker -> discoveredLand.contains(worker.getPosition()) && !worker.isInsideBuilding());
 
-            /* Fill in flags */
-            jsonFlags = toJsonArrayWithFilter(
+            var jsonFlags = toJsonArrayWithFilter(
                     map.getFlags(),
                     this::flagToJson,
                     flag -> discoveredLand.contains(flag.getPosition()));
 
-            /* Fill in roads */
-            for (Road road : map.getRoads()) {
-                boolean inside = false;
+            var jsonRoads = toJsonArrayWithFilter(
+                    map.getRoads(),
+                    this::roadToJson,
+                    road -> road.getWayPoints().stream().anyMatch(discoveredLand::contains)
+            );
 
-                /* Filter roads the player cannot see */
-                for (Point p : road.getWayPoints()) {
-                    if (discoveredLand.contains(p)) {
-                        inside = true;
+            // Fill in the points the player has discovered
+            var jsonDiscoveredPoints = pointsToJson(discoveredLand);
 
-                        break;
-                    }
-                }
-
-                if (!inside) {
-                    continue;
-                }
-
-                jsonRoads.add(roadToJson(road));
-            }
-
-            /* Fill in the points the player has discovered */
-            jsonDiscoveredPoints = pointsToJson(discoveredLand);
-
+            var jsonBorders = new JSONArray();
             jsonBorders.add(borderToJson(player, idManager.getId(player)));
 
-            /* Fill in the signs */
-            jsonSigns = toJsonArrayWithFilter(
+            var jsonSigns = toJsonArrayWithFilter(
                     map.getSigns(),
                     this::signToJson,
                     sign -> discoveredLand.contains(sign.getPosition()));
 
-            /* Fill in wild animals */
-            jsonWildAnimals = toJsonArrayWithFilter(
+            var jsonWildAnimals = toJsonArrayWithFilter(
                     map.getWildAnimals(),
                     this::wildAnimalToJson,
                     animal -> discoveredLand.contains(animal.getPosition()));
 
-            /* Fill in crops */
-            for (Crop crop : map.getCrops()) {
-                if (!discoveredLand.contains(crop.getPosition())) {
-                    continue;
-                }
+            var jsonCrops = toJsonArrayWithFilter(
+                    map.getCrops(),
+                    this::cropToJson,
+                    crop -> discoveredLand.contains(crop.getPosition())
+            );
 
-                jsonCrops.add(cropToJson(crop));
-            }
-
-            /* Fill in dead trees */
-            jsonDeadTrees = toJsonArrayWithFilter(
+            var jsonDeadTrees = toJsonArrayWithFilter(
                     map.getDeadTrees(),
                     this::pointToJson,
                     discoveredLand::contains);
 
-            /* Fill in available construction */
+            // Fill in available construction
             for (Point point : map.getAvailableFlagPoints(player)) {
                 if (!player.getDiscoveredLand().contains(point)) {
                     continue;
@@ -1619,7 +1401,7 @@ class Utils {
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 
-                ((JSONArray)jsonAvailableConstruction.get(key)).add("flag");
+                ((JSONArray)jsonAvailableConstruction.get(key)).add("FLAG");
             }
 
             for (Map.Entry<Point, Size> site : map.getAvailableHousePoints(player).entrySet()) {
@@ -1631,7 +1413,7 @@ class Utils {
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 
-                ((JSONArray)jsonAvailableConstruction.get(key)).add(site.getValue().toString().toLowerCase());
+                ((JSONArray)jsonAvailableConstruction.get(key)).add(site.getValue().toString().toUpperCase());
             }
 
             for (Point point : map.getAvailableMinePoints(player)) {
@@ -1643,10 +1425,10 @@ class Utils {
 
                 jsonAvailableConstruction.putIfAbsent(key, new JSONArray());
 
-                ((JSONArray)jsonAvailableConstruction.get(key)).add("mine");
+                ((JSONArray)jsonAvailableConstruction.get(key)).add("MINE");
             }
 
-            /* Fill in decorations */
+            // Fill in decorations
             for (Map.Entry<Point, DecorationType> entry : map.getDecorations().entrySet()) {
                 Point point = entry.getKey();
                 DecorationType decorationType = entry.getValue();
@@ -1657,60 +1439,60 @@ class Utils {
 
                 jsonDecorations.add(decorationToJson(decorationType, point));
             }
-        }
 
-        // Add terrain information
-        JSONArray jsonTrianglesBelow = new JSONArray();
-        JSONArray jsonTrianglesBelowRight = new JSONArray();
-        JSONArray jsonHeights = new JSONArray();
+            // Add terrain information
+            JSONArray jsonTrianglesBelow = new JSONArray();
+            JSONArray jsonTrianglesBelowRight = new JSONArray();
+            JSONArray jsonHeights = new JSONArray();
 
-        int start = 1;
+            int start = 1;
 
-        for (int y = 1; y < map.getHeight(); y++) {
-            for (int x = start; x + 1 < map.getWidth(); x += 2) {
-                Point point = new Point(x, y);
+            for (int y = 1; y < map.getHeight(); y++) {
+                for (int x = start; x + 1 < map.getWidth(); x += 2) {
+                    Point point = new Point(x, y);
 
-                Vegetation below = map.getVegetationBelow(point);
-                Vegetation downRight = map.getVegetationDownRight(point);
+                    Vegetation below = map.getVegetationBelow(point);
+                    Vegetation downRight = map.getVegetationDownRight(point);
 
-                jsonTrianglesBelow.add(below.toInt());
-                jsonTrianglesBelowRight.add(downRight.toInt());
-                jsonHeights.add(map.getHeightAtPoint(point));
+                    jsonTrianglesBelow.add(below.toInt());
+                    jsonTrianglesBelowRight.add(downRight.toInt());
+                    jsonHeights.add(map.getHeightAtPoint(point));
+                }
+
+                if (start == 1) {
+                    start = 2;
+                } else {
+                    start = 1;
+                }
             }
 
-            if (start == 1) {
-                start = 2;
-            } else {
-                start = 1;
-            }
+            JSONObject jsonView = new JSONObject();
+            jsonView.put("trees", trees);
+            jsonView.put("houses", jsonHouses);
+            jsonView.put("stones", jsonStones);
+            jsonView.put("workers", jsonWorkers);
+            jsonView.put("wildAnimals", jsonWildAnimals);
+            jsonView.put("flags", jsonFlags);
+            jsonView.put("roads", jsonRoads);
+            jsonView.put("discoveredPoints", jsonDiscoveredPoints);
+            jsonView.put("borders", jsonBorders);
+            jsonView.put("signs", jsonSigns);
+            jsonView.put("crops", jsonCrops);
+            jsonView.put("availableConstruction", jsonAvailableConstruction);
+            jsonView.put("deadTrees", jsonDeadTrees);
+            jsonView.put("decorations", jsonDecorations);
+            jsonView.put("players", playersToJson(map.getPlayers(), gameResource));
+            jsonView.put("gameState", gameResource.status.name().toUpperCase());
+            jsonView.put("messages", messagesToJson(player.getMessages()));
+            jsonView.put("straightBelow", jsonTrianglesBelow);
+            jsonView.put("belowToTheRight", jsonTrianglesBelowRight);
+            jsonView.put("heights", jsonHeights);
+            jsonView.put("width", map.getWidth());
+            jsonView.put("height", map.getHeight());
+            jsonView.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
+
+            return jsonView;
         }
-
-        JSONObject jsonView = new JSONObject();
-        jsonView.put("trees", trees);
-        jsonView.put("houses", jsonHouses);
-        jsonView.put("stones", jsonStones);
-        jsonView.put("workers", jsonWorkers);
-        jsonView.put("wildAnimals", jsonWildAnimals);
-        jsonView.put("flags", jsonFlags);
-        jsonView.put("roads", jsonRoads);
-        jsonView.put("discoveredPoints", jsonDiscoveredPoints);
-        jsonView.put("borders", jsonBorders);
-        jsonView.put("signs", jsonSigns);
-        jsonView.put("crops", jsonCrops);
-        jsonView.put("availableConstruction", jsonAvailableConstruction);
-        jsonView.put("deadTrees", jsonDeadTrees);
-        jsonView.put("decorations", jsonDecorations);
-        jsonView.put("players", playersToJson(map.getPlayers(), gameResource));
-        jsonView.put("gameState", gameResource.status.name().toUpperCase());
-        jsonView.put("messages", jsonMessages);
-        jsonView.put("straightBelow", jsonTrianglesBelow);
-        jsonView.put("belowToTheRight", jsonTrianglesBelowRight);
-        jsonView.put("heights", jsonHeights);
-        jsonView.put("width", map.getWidth());
-        jsonView.put("height", map.getHeight());
-        jsonView.put("transportPriority", transportPriorityToJson(player.getTransportPriorities()));
-
-        return jsonView;
     }
 
     public JSONObject cargoToJson(Cargo cargo) {
@@ -1719,45 +1501,6 @@ class Utils {
                 "target", pointToJson(cargo.getTarget().getPosition()),
                 "targetType", cargo.getTarget().getClass().getSimpleName()
         ));
-    }
-
-    void startGame(GameResource gameResource, GameTicker gameTicker) throws Exception {
-
-        /* Create the game map */
-        gameResource.createGameMap();
-        GameMap map = gameResource.getGameMap();
-
-        /* Limit the amount of wild animals to make performance bearable -- temporary! */
-        List<WildAnimal> wildAnimals = map.getWildAnimals();
-        List<WildAnimal> reducedWildAnimals = new ArrayList<>(wildAnimals);
-
-        if (reducedWildAnimals.size() > 10) {
-            reducedWildAnimals = reducedWildAnimals.subList(0, 10);
-        }
-
-        wildAnimals.clear();
-
-        wildAnimals.addAll(reducedWildAnimals);
-
-        /* Place a headquarters for each player */
-        List<Player> players = map.getPlayers();
-        List<Point> startingPoints = map.getStartingPoints();
-
-        for (int i = 0; i < startingPoints.size(); i++) {
-            if (i == players.size()) {
-                break;
-            }
-
-            map.placeBuilding(new Headquarter(players.get(i)), startingPoints.get(i));
-        }
-
-        /* Adjust the initial set of resources */
-        adjustResources(map, gameResource.getResources());
-
-        /* Start the time for the game by adding it to the game ticker */
-        gameTicker.startGame(gameResource);
-
-        gameResource.setStatus(GameStatus.STARTED);
     }
 
     public JSONObject chatMessageToPlayerToJson(ChatManager.ChatMessage chatMessage, Player player) {

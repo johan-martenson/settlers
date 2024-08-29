@@ -12,14 +12,11 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Tree.TreeType;
 
-import static org.appland.settlers.maps.Translator.DEFAULT_OBJECT_PROPERTY_TO_DECORATION_MAP;
-
 /**
  *
  * @author johan
  */
 class MapFilePoint {
-
     private static final short DEAD_TREE = 0x1F;
     private static final short NATURE_DECORATION_1 = 0xC8;
     private static final short NATURE_DECORATION_2 = 0xC9;
@@ -28,9 +25,8 @@ class MapFilePoint {
     private static final int TERRAIN_OBJECT_MASK = 0x04;
     private static final int OBJECT_EXISTS_MASK = 0x08;
     private static final int TREE_OBJECT_TYPE = 0x01;
-    private static final int DECORATIVE_OBJECT_TYPE = 0x02;
     private static final int GRANITE_OBJECT_TYPE = 0x03;
-    private static final int NONE_OBJECT_TYPE = 0x00;
+    private static final short DECORATION_MASK = 64;
 
     private int height;
     private Texture textureDown;
@@ -42,12 +38,14 @@ class MapFilePoint {
     private Resource resource;
     private Point gamePointPosition;
     private boolean isPossibleHarbor;
-    private TreeType treeType;
-    private Tree.TreeSize treeSize;
-    private DecorationType decorativeObject;
-    private Stone.StoneType stoneType;
-    private short stoneAmount;
     private java.awt.Point mapFilePosition;
+    private int variant;
+    private int type;
+    private int info;
+    private boolean isTimeLimited;
+    private boolean isBurntBuilding;
+    private boolean isTerrainObject;
+    private boolean objectExists;
 
     public MapFilePoint() {
         isPossibleHarbor = false;
@@ -73,95 +71,23 @@ class MapFilePoint {
         return textureDownRight;
     }
 
-    void setObjectProperties(short unsignedByteInArray) {
-        objectProperties = unsignedByteInArray;
+    void setObjectProperties(short objectProperties) {
+        this.objectProperties = objectProperties;
     }
 
     void setObjectType(short objectType) {
-
-        // Store the object type
         this.objectType = objectType;
 
         // Interpret the object type
-        int variant = objectType & 0x03;
-        int type = (objectType >> 2) & 0x03;
-        int info = objectType >> 4;
+        this.variant = objectType & 0x03;
+        this.type = (objectType >> 2) & 0x03;
+        this.info = objectType >> 4;
 
         // Read the info block
-        boolean isTimeLimited = false;
-        boolean isBurntBuilding = false;
-        boolean isTerrainObject = false;
-        boolean objectExists = false;
-
-        if ((info & TIME_LIMITED_MASK) > 0) {
-            isTimeLimited = true;
-        }
-
-        if ((info & BURNT_BUILDING_MASK) > 0) {
-            isBurntBuilding = true;
-        }
-
-        if ((info & TERRAIN_OBJECT_MASK) > 0) {
-            isTerrainObject = true;
-        }
-
-        if ((info & OBJECT_EXISTS_MASK) > 0) {
-            objectExists = true;
-        }
-
-        // Manage objects that are not burnt or time limited
-        if (!isTimeLimited && !isBurntBuilding && objectExists) {
-
-            switch (type) {
-                case TREE_OBJECT_TYPE:
-                    int id = (variant << 2) & (objectProperties >> 6);
-                    int isCut = (objectProperties >> 3) & 0x01;
-                    int size = (objectProperties >> 4) & 0x03;
-                    int step = objectProperties & 0x07;
-
-                    treeType = TreeTranslator.DEFAULT_ID_TO_TREE_TYPE_MAP.get(id);
-                    treeSize = TreeTranslator.TREE_SIZE_MAP.get(size);
-
-                    // TODO: consider the terrain type and pick tree types accordingly (only greenland for now)
-
-                    if (treeType == null) {
-                        throw new RuntimeException("Can't handle this tree type yet: " + id);
-                    }
-
-                    if (treeSize == null) {
-                        throw new RuntimeException("Can't handle tree size: " + size);
-                    }
-
-                    // TODO: consider isCut
-
-                    break;
-                case DECORATIVE_OBJECT_TYPE:
-
-                    // TODO: pick the decoration type based on the MAPBOBS.LST / MIS#BOBS.LST file used
-
-                    this.decorativeObject = DEFAULT_OBJECT_PROPERTY_TO_DECORATION_MAP.get((int)objectProperties);
-
-                    break;
-                case GRANITE_OBJECT_TYPE:
-                    stoneType = Stone.StoneType.STONE_2;
-
-                    if (variant == 0) {
-                        stoneType = Stone.StoneType.STONE_1;
-                    }
-
-                    stoneAmount = objectProperties;
-
-                    break;
-                case NONE_OBJECT_TYPE:
-                    break;
-                default:
-                    throw new RuntimeException("Unknown object type value: " + type);
-            }
-        } else if (isTerrainObject) {
-            System.out.println("We ended up ignoring a terrain object");
-
-            System.exit(1);
-        }
+        this.isTimeLimited = (info & TIME_LIMITED_MASK) > 0;
+        this.isBurntBuilding = (info & BURNT_BUILDING_MASK) > 0;
+        this.isTerrainObject = (info & TERRAIN_OBJECT_MASK) > 0;
+        this.objectExists = (info & OBJECT_EXISTS_MASK) > 0;
     }
 
     void setAnimal(Animal animal) {
@@ -207,31 +133,33 @@ class MapFilePoint {
     }
 
     boolean hasStone() {
-        return stoneType != null;
+        return type == GRANITE_OBJECT_TYPE;
     }
 
     Stone.StoneType getStoneType() {
-        return stoneType;
+        return variant == 0 ? Stone.StoneType.STONE_1 : Stone.StoneType.STONE_2;
     }
 
     short getStoneAmount() {
-        return stoneAmount;
+        return objectProperties;
     }
 
     boolean hasTree() {
-        return treeType != null;
+        return type == TREE_OBJECT_TYPE;
     }
 
-    boolean isNatureDecoration() {
-        return this.decorativeObject != null;
+    boolean hasDecoration() {
+        return (objectType & DECORATION_MASK) != 0;
     }
 
     DecorationType getNatureDecorationType() {
-        return decorativeObject;
+        return Translator.DEFAULT_OBJECT_PROPERTY_TO_DECORATION_MAP.get((int)objectProperties);
     }
 
     TreeType getTreeType() {
-        return treeType;
+        int id = (variant << 2) | ((objectProperties >> 6) & 0x03);
+
+        return TreeTranslator.DEFAULT_ID_TO_TREE_TYPE_MAP.get(id);
     }
 
     public boolean hasWildAnimal() {
@@ -267,7 +195,9 @@ class MapFilePoint {
     }
 
     public Tree.TreeSize getTreeSize() {
-        return treeSize;
+        var sizeIndex = (objectProperties >> 4) & 0x03;
+
+        return TreeTranslator.TREE_SIZE_MAP.get(sizeIndex);
     }
 
     public java.awt.Point getPosition() {

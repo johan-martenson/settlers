@@ -1678,197 +1678,50 @@ public class Extractor {
 
         donkeyImageCollection.writeImageAtlas(natureDir + "/animals/", defaultPalette);
 
-        /*  Extract decorative elements */
+        // Extract decorative elements
+        var decorations = Map.ofEntries(
+                Map.entry(DecorationType.MINI_BROWN_MUSHROOM, MapBobs0Lst.MINI_BROWN_MUSHROOM_AND_SHADOW),
+                Map.entry(DecorationType.TOADSTOOL, MapBobs0Lst.TOADSTOOL_AND_SHADOW),
+                Map.entry(DecorationType.MINI_STONE, MapBobs0Lst.MINI_STONE_AND_SHADOW),
+                Map.entry(DecorationType.SMALL_STONE, MapBobs0Lst.SMALL_STONE_AND_SHADOW),
+                Map.entry(DecorationType.STONE, MapBobs0Lst.STONE_AND_SHADOW),
+                Map.entry(DecorationType.DEAD_TREE_LYING_DOWN, MapBobs0Lst.DEAD_TREE_LYING_DOWN_AND_SHADOW),
+                Map.entry(DecorationType.DEAD_TREE, MapBobs0Lst.DEAD_TREE_AND_SHADOW),
+                Map.entry(DecorationType.ANIMAL_SKELETON_1, MapBobs0Lst.ANIMAL_SKELETON_1_AND_SHADOW),
+                Map.entry(DecorationType.ANIMAL_SKELETON_2, MapBobs0Lst.ANIMAL_SKELETON_2_AND_SHADOW),
+                Map.entry(DecorationType.FLOWERS, MapBobs0Lst.FLOWERS_AND_SHADOW),
+                Map.entry(DecorationType.LARGE_BUSH_1, MapBobs0Lst.LARGE_BUSH_1_AND_SHADOW),
+                Map.entry(DecorationType.PILE_OF_STONES, MapBobs0Lst.PILE_OF_STONES_AND_SHADOW),
+                Map.entry(DecorationType.CACTUS_1, MapBobs0Lst.CACTUS_1_AND_SHADOW),
+                Map.entry(DecorationType.CACTUS_2, MapBobs0Lst.CACTUS_2_AND_SHADOW),
+                Map.entry(DecorationType.CATTAIL_1, MapBobs0Lst.CATTAIL_1_AND_SHADOW),
+                Map.entry(DecorationType.CATTAIL_2, MapBobs0Lst.CATTAIL_2_AND_SHADOW),
+                Map.entry(DecorationType.LARGE_BUSH_2, MapBobs0Lst.LARGE_BUSH_2_AND_SHADOW),
+                Map.entry(DecorationType.BUSH_3, MapBobs0Lst.BUSH_3_AND_SHADOW),
+                Map.entry(DecorationType.SMALL_BUSH, MapBobs0Lst.SMALL_BUSH_AND_SHADOW),
+                Map.entry(DecorationType.CATTAIL_3, MapBobs0Lst.CATTAIL_3_AND_SHADOW),
+                Map.entry(DecorationType.CATTAIL_4, MapBobs0Lst.CATTAIL_4_AND_SHADOW),
+                Map.entry(DecorationType.PORTAL, MapBobs0Lst.PORTAL_AND_SHADOW),
+                Map.entry(DecorationType.SHINING_PORTAL, MapBobs0Lst.SHINING_PORTAL_AND_SHADOW),
+                Map.entry(DecorationType.BROWN_MUSHROOM, MapBobs0Lst.BROWN_MUSHROOM_AND_SHADOW),
+                Map.entry(DecorationType.MINI_STONE_WITH_GRASS, MapBobs0Lst.MINI_STONE_WITH_GRASS_AND_SHADOW),
+                Map.entry(DecorationType.SMALL_STONE_WITH_GRASS, MapBobs0Lst.SMALL_STONE_WITH_GRASS_AND_SHADOW),
+                Map.entry(DecorationType.SOME_SMALL_STONES_1, MapBobs0Lst.SOME_SMALL_STONES_1_AND_SHADOW),
+                Map.entry(DecorationType.SOME_SMALL_STONES_2, MapBobs0Lst.SOME_SMALL_STONES_2_AND_SHADOW),
+                Map.entry(DecorationType.SOME_SMALL_STONES_3, MapBobs0Lst.SOME_SMALL_STONES_3_AND_SHADOW),
+                Map.entry(DecorationType.SPARSE_BUSH, MapBobs0Lst.SPARSE_BUSH_AND_SHADOW),
+                Map.entry(DecorationType.SOME_WATER, MapBobs0Lst.SOME_WATER_AND_SHADOW),
+                Map.entry(DecorationType.LITTLE_GRASS, MapBobs0Lst.LITTLE_GRASS_AND_SHADOW),
+                Map.entry(DecorationType.SNOWMAN, MapBobs0Lst.SNOWMAN_AND_SHADOW)
+        );
+
         DecorativeImageCollection decorativeImageCollection = new DecorativeImageCollection();
 
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.MINI_BROWN_MUSHROOM,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_BROWN_MUSHROOM),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_BROWN_MUSHROOM_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.TOADSTOOL,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MUSHROOM),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MUSHROOM_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.MINI_STONE,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_STONE),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_STONE_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SMALL_STONE,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_STONES),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_STONES_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.STONE,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_STONE),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_STONE_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.DEAD_TREE_LYING_DOWN,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_FALLEN_TREE),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_FALLEN_TREE_SHADOW));
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.DEAD_TREE,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_STANDING_DEAD_TREE),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_STANDING_DEAD_TREE_SHADOW)
-                );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.ANIMAL_SKELETON_1,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_1),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_1_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.ANIMAL_SKELETON_2,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_2),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_ANIMAL_SKELETON_2_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.FLOWERS,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_FLOWERS),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_FLOWERS_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.LARGE_BUSH,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_LARGE_BUSH),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_LARGE_BUSH_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.PILE_OF_STONES,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_LARGER_STONES),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_LARGER_STONES_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.CACTUS_1,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_CACTUS_1),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_CACTUS_1_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.CACTUS_2,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_CACTUS_2),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_CACTUS_2_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.CATTAIL,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BEACH_GRASS),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BEACH_GRASS_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.STONE_REMAINING_STYLE_1,
-                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI),
-                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_1_MINI_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.STONE_REMAINING_STYLE_2,
-                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI),
-                getImageAt(mapBobsLst, MapBobsLst.STONE_TYPE_2_MINI_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.GRASS_1,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_GRASS_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImage(
-                DecorationType.TREE_STUB,
-                getImageAt(mapBobsLst, MapBobsLst.TREE_STUB)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.BUSH,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BUSH),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_BUSH_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SMALL_BUSH,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_BUSH),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_SMALL_BUSH_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.MINI_BUSH,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_BUSH),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_BUSH_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.GRASS_2,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_GRASS_2),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_GRASS_2_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.MINI_GRASS,
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_GRASS),
-                getImageAt(mapBobsLst, MapBobsLst.DECORATIVE_MINI_GRASS_SHADOW)
-        );
-
-        decorativeImageCollection.addDecorationImage(
-                DecorationType.HUMAN_SKELETON_1,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_1)
-        );
-
-        decorativeImageCollection.addDecorationImage(
-                DecorationType.HUMAN_SKELETON_2,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.HUMAN_SKELETON_2)
-        );
-
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.PORTAL,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.PORTAL),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.PORTAL_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SHINING_PORTAL,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SHINING_PORTAL),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SHINING_PORTAL_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.BROWN_MUSHROOM,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.BROWN_MUSHROOM),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.BROWN_MUSHROOM_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImage(
-                DecorationType.MINI_STONE_WITH_GRASS,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.MINI_STONE_WITH_GRASS)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SMALL_STONE_WITH_GRASS,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SMALL_STONE_WITH_GRASS),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SMALL_STONE_WITH_GRASS_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SOME_SMALL_STONES,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_SMALL_STONES),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_SMALL_STONES_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SOME_SMALLER_STONES,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_SMALLER_STONES),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_SMALLER_STONES_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.FEW_SMALL_STONES,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.FEW_SMALL_STONES),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.FEW_SMALL_STONES_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SPARSE_BUSH,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SPARSE_BUSH),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SPARSE_BUSH_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SOME_WATER,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_WATER),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SOME_WATER_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.LITTLE_GRASS,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.LITTLE_GRASS),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.LITTLE_GRASS_SHADOW)
-        );
-        decorativeImageCollection.addDecorationImageWithShadow(
-                DecorationType.SNOWMAN,
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SNOWMAN),
-                getImageAt(mapBobs0Lst, MapBobs0Lst.SNOWMAN_SHADOW)
-        );
+        decorations.forEach((decorationType, imageAndShadowIndex) -> {
+            var image = getImageAt(mapBobs0Lst, imageAndShadowIndex.image());
+            var shadow = getImageAt(mapBobs0Lst, imageAndShadowIndex.shadow());
+            decorativeImageCollection.addDecorationImageWithShadow(decorationType, image, shadow);
+        });
 
         decorativeImageCollection.writeImageAtlas(toDir, defaultPalette);
     }

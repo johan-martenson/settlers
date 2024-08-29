@@ -14,13 +14,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import static org.appland.settlers.rest.resource.GameUtils.gamePlaceholderToGame;
 import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
 
 public class GameResource implements PlayerChangeListener {
     public GameStatus status;
 
     private final List<Player> players;
-    private final Utils utils;
+    private final JsonUtils utils;
     private final Map<Player, ComputerPlayer> computerPlayers;
     private final Collection<GameResourceListener> listeners = new HashSet<>();
 
@@ -40,7 +41,7 @@ public class GameResource implements PlayerChangeListener {
         void onGameResourceChanged(GameResource gameResource);
     }
 
-    GameResource(Utils utils) {
+    GameResource(JsonUtils utils) {
         players = new ArrayList<>();
 
         this.utils = utils;
@@ -132,7 +133,7 @@ public class GameResource implements PlayerChangeListener {
     }
 
     public void createGameMap() throws Exception {
-        this.map = utils.gamePlaceholderToGame(this);
+        this.map = gamePlaceholderToGame(this);
 
         /* Assign the map to each player */
         for (Player player : players) {
