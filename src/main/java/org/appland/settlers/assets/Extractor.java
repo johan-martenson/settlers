@@ -1712,7 +1712,8 @@ public class Extractor {
                 Map.entry(DecorationType.SPARSE_BUSH, MapBobs0Lst.SPARSE_BUSH_AND_SHADOW),
                 Map.entry(DecorationType.SOME_WATER, MapBobs0Lst.SOME_WATER_AND_SHADOW),
                 Map.entry(DecorationType.LITTLE_GRASS, MapBobs0Lst.LITTLE_GRASS_AND_SHADOW),
-                Map.entry(DecorationType.SNOWMAN, MapBobs0Lst.SNOWMAN_AND_SHADOW)
+                Map.entry(DecorationType.SNOWMAN, MapBobs0Lst.SNOWMAN_AND_SHADOW),
+                Map.entry(DecorationType.TREE_STUB, MapBobs0Lst.TREE_STUB_AND_SHADOW)
         );
 
         DecorativeImageCollection decorativeImageCollection = new DecorativeImageCollection();

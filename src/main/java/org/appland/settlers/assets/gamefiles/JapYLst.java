@@ -7,7 +7,7 @@ public class JapYLst {
 
     public static final GameFiles.House HEADQUARTER = GameFiles.House.make("Headquarter", 60, GameFiles.Missing.NO_UNDER_CONSTRUCTION);
     public static final GameFiles.House BARRACKS = new GameFiles.House("Barracks", 63);
-    public static final GameFiles.House GUARDHOUSE = new GameFiles.House("Guardhouse", 68);
+    public static final GameFiles.House GUARDHOUSE = new GameFiles.House("GuardHouse", 68);
     public static final GameFiles.House WATCHTOWER = new GameFiles.House("WatchTower", 73);
     public static final GameFiles.House FORTRESS = new GameFiles.House("Fortress", 78);
     public static final GameFiles.House GRANITE_MINE = GameFiles.House.make("GraniteMine", 83, GameFiles.Missing.NO_OPEN_DOOR);

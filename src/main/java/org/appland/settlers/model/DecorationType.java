@@ -111,6 +111,7 @@ public enum DecorationType {
                 MINI_STONE,
                 SMALL_STONE,
                 STONE,
+                ANIMAL_SKELETON_1,
                 ANIMAL_SKELETON_2,
                 FLOWERS,
                 LARGE_BUSH_1,
@@ -132,4 +133,25 @@ public enum DecorationType {
                 SOME_WATER,
                 LITTLE_GRASS
             );
+
+    public boolean canPlaceFlagOn() {
+        return switch (this) {
+            case CACTUS_1, CACTUS_2, SNOWMAN, PORTAL, SHINING_PORTAL -> false;
+            default -> true;
+        };
+    }
+
+    public boolean canPlaceBuildingOn() {
+        return switch (this) {
+            case CACTUS_1 , CACTUS_2, SNOWMAN, PORTAL, SHINING_PORTAL -> false;
+            default -> true;
+        };
+    }
+
+    public boolean canBuildRoadOn() {
+        return switch (this) {
+            case CACTUS_1, CACTUS_2, SNOWMAN, PORTAL, SHINING_PORTAL -> false;
+            default -> true;
+        };
+    }
 }

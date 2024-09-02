@@ -19,6 +19,8 @@ public class MapBobs0Lst {
     public static final ImageAndShadowIndex CACTUS_2_AND_SHADOW = new ImageAndShadowIndex(296, 354);
     public static final ImageAndShadowIndex CATTAIL_1_AND_SHADOW = new ImageAndShadowIndex(297, 355);
     public static final ImageAndShadowIndex CATTAIL_2_AND_SHADOW = new ImageAndShadowIndex(298, 356);
+
+    public static final ImageAndShadowIndex TREE_STUB_AND_SHADOW = new ImageAndShadowIndex(311, 369);
     public static final ImageAndShadowIndex LARGE_BUSH_2_AND_SHADOW = new ImageAndShadowIndex(322, 380);
     public static final ImageAndShadowIndex BUSH_3_AND_SHADOW = new ImageAndShadowIndex(323, 381);
     public static final ImageAndShadowIndex SMALL_BUSH_AND_SHADOW = new ImageAndShadowIndex(324, 382);

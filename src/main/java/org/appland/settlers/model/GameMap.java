@@ -1565,6 +1565,10 @@ public class GameMap {
             return false;
         }
 
+        if (mapPoint.isDecoration() && !mapPoint.getDecoration().canPlaceFlagOn()) {
+            return false;
+        }
+
         return Stream.of(pointDownRight, pointRight, pointDownLeft)
                 .noneMatch(p -> player.isWithinBorder(p) && getMapPoint(p).isBuildingOfSize(LARGE));
     }
@@ -1777,6 +1781,10 @@ public class GameMap {
         }
 
         if (!player.isWithinBorder(point)) {
+            return false;
+        }
+
+        if (mapPoint.isDecoration() && !mapPoint.getDecoration().canBuildRoadOn()) {
             return false;
         }
 
@@ -2136,14 +2144,8 @@ public class GameMap {
         if (stone.noMoreStone()) {
             mapPoint.setStone(null);
 
-            /* Report that the stone was removed */
+            // Report that the stone was removed
             removedStones.add(stone);
-
-            if (stone.getStoneType() == Stone.StoneType.STONE_1) {
-                placeDecoration(position, DecorationType.STONE_REMAINING_STYLE_1);
-            } else {
-                placeDecoration(position, DecorationType.STONE_REMAINING_STYLE_2);
-            }
         } else {
             changedStones.add(stone);
         }
@@ -2620,10 +2622,16 @@ public class GameMap {
             return null;
         }
 
+        var mapPoint = getMapPoint(point);
+
+        if (mapPoint.isDecoration() && !mapPoint.getDecoration().canPlaceBuildingOn()) {
+            return null;
+        }
+
         /* ADDITIONAL CONDITIONS FOR MEDIUM */
 
         /* A large building can't have a tree directly left, right, or diagonally */
-        if (adjacentMapPoints.stream().anyMatch(mapPoint -> mapPoint != null && mapPoint.isTree())) {
+        if (adjacentMapPoints.stream().anyMatch(mp -> mp != null && mp.isTree())) {
             return SMALL;
         }
 
@@ -2690,7 +2698,7 @@ public class GameMap {
         /* Large buildings cannot be built if the height difference to close points is too large */
         int heightAtPoint = houseMapPoint.getHeight();
         if (adjacentMapPoints.stream().anyMatch(
-                mapPoint -> Math.abs(heightAtPoint - mapPoint.getHeight()) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE
+                mp -> Math.abs(heightAtPoint - mp.getHeight()) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE
         )) {
             return MEDIUM;
         }

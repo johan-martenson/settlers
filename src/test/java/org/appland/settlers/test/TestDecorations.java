@@ -5,6 +5,7 @@ import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
@@ -38,12 +39,21 @@ import static org.junit.Assert.*;
 
 public class TestDecorations {
 
+    static final Set<DecorationType> CANNOT_BUILD_ON_DECORATIONS = EnumSet.of(
+            CACTUS_1,
+            CACTUS_2,
+            SNOWMAN,
+            PORTAL,
+            SHINING_PORTAL
+    );
+
     static final Set<DecorationType> PURE_DECORATIONS = EnumSet.of(
             MINI_BROWN_MUSHROOM,
             TOADSTOOL,
             MINI_STONE,
             SMALL_STONE,
             STONE,
+            ANIMAL_SKELETON_1,
             ANIMAL_SKELETON_2,
             FLOWERS,
             LARGE_BUSH_1,
@@ -425,5 +435,69 @@ public class TestDecorations {
         assertNotEquals(map.getDecorationAtPoint(stone0.getPosition()), ANIMAL_SKELETON_1);
     }
 
+    @Test
+    public void testCannotBuildOnDecoration() throws InvalidUserActionException {
+        for (var decoration : CANNOT_BUILD_ON_DECORATIONS) {
+
+            // Create single player game
+            Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+            List<Player> players = new ArrayList<>();
+            players.add(player0);
+
+            GameMap map = new GameMap(players, 30, 30);
+
+            // Place headquarter
+            Point point0 = new Point(10, 10);
+            map.placeBuilding(new Headquarter(player0), point0);
+
+            // Place decoration
+            Point point1 = new Point(5, 5);
+
+            map.placeDecoration(point1, decoration);
+
+            // Verify that it's not possible to place flags on the decoration
+            assertFalse(map.isAvailableFlagPoint(player0, point1));
+
+            try {
+                map.placeFlag(player0, point1);
+
+                fail();
+            } catch (InvalidUserActionException e) { }
+
+            assertFalse(map.isFlagAtPoint(point1));
+            assertNull(map.getFlagAtPoint(point1));
+
+            // Verify that it's not possible a building on the decoration
+            assertNull(map.isAvailableHousePoint(player0, point1));
+
+            try {
+                map.placeBuilding(new Woodcutter(player0), point1);
+
+                fail();
+            } catch (InvalidUserActionException e) { }
+
+            assertFalse(map.isBuildingAtPoint(point1));
+            assertNull(map.getBuildingAtPoint(point1));
+
+            // Place flags left and right of it
+            var flag0 = map.placeFlag(player0, point1.left());
+            var flag1 = map.placeFlag(player0, point1.right());
+
+            // Verify that it's not possible to place a road across the cacti
+            assertFalse(map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, flag0.getPosition()).contains(point1));
+            assertFalse(map.getPossibleRoadConnectionsExcludingEndpoints(player0, flag0.getPosition()).contains(point1));
+            assertFalse(map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, flag1.getPosition()).contains(point1));
+            assertFalse(map.getPossibleRoadConnectionsExcludingEndpoints(player0, flag1.getPosition()).contains(point1));
+
+            try {
+                map.placeRoad(player0, List.of(flag0.getPosition(), point1, flag1.getPosition()));
+
+                fail();
+            } catch (InvalidUserActionException e) { }
+
+            assertFalse(map.isRoadAtPoint(point1));
+            assertFalse(GameUtils.areBuildingsOrFlagsConnected(flag0, flag1, map));
+        }
+    }
 }
 

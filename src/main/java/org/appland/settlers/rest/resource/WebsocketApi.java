@@ -878,8 +878,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 String id = (String) jsonBody.get("id");
                 Object object = idManager.getObject(id);
 
+                var jsonPlayerViewChanges = new JSONObject();
+
                 var jsonUpdate = new JSONObject(Map.of(
-                        "type", "PLAYER_VIEW_CHANGED"
+                        "type", "PLAYER_VIEW_CHANGED",
+                        "playerViewChanges", jsonPlayerViewChanges
                 ));
 
                 if (object instanceof Building building) {
@@ -888,7 +891,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                         JSONArray jsonUpdatedBuildings = new JSONArray();
 
-                        jsonUpdate.put("changedBuildings", jsonUpdatedBuildings);
+                        jsonPlayerViewChanges.put("changedBuildings", jsonUpdatedBuildings);
 
                         jsonUpdatedBuildings.add(utils.houseToJson(building, player));
                     }
@@ -898,7 +901,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                         JSONArray jsonUpdatedFlags = new JSONArray();
 
-                        jsonUpdate.put("changedFlags", jsonUpdatedFlags);
+                        jsonPlayerViewChanges.put("changedFlags", jsonUpdatedFlags);
 
                         jsonUpdatedFlags.add(utils.flagToJson(flag));
                     }

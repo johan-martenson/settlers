@@ -41,6 +41,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.QUARRY);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.FORESTER_HUT);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.SLAUGHTER_HOUSE);
+        buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.HUNTER_HUT);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.BREWERY);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.ARMORY);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.METALWORKS);
@@ -79,6 +80,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.QUARRY);
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.FORESTER_HUT);
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.SLAUGHTER_HOUSE);
+        buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.HUNTER_HUT);
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.BREWERY);
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.ARMORY);
         buildingsImageCollection.addImagesForBuilding(japYLst, JAPANESE, JapYLst.METALWORKS);
@@ -117,6 +119,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.QUARRY);
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.FORESTER_HUT);
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.SLAUGHTER_HOUSE);
+        buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.HUNTER_HUT);
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.BREWERY);
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.ARMORY);
         buildingsImageCollection.addImagesForBuilding(afrYLst, AFRICANS, AfrYLst.METALWORKS);
@@ -155,6 +158,7 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.QUARRY);
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.FORESTER_HUT);
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.SLAUGHTER_HOUSE);
+        buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.HUNTER_HUT);
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.BREWERY);
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.ARMORY);
         buildingsImageCollection.addImagesForBuilding(vikYLst, VIKINGS, VikYLst.METALWORKS);

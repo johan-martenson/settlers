@@ -601,11 +601,7 @@ public class TestGameMonitoringOfWorkerActions {
         assertEquals(stonemason.getCargo().getMaterial(), STONE);
 
         /* Verify that an event was sent the final piece of stone was removed and only gravel remains */
-        assertEquals(monitor.getEvents().stream()
-                .filter(gcl -> gcl.newDecorations().containsKey(point2))
-                .filter(gcl -> gcl.newDecorations().get(point2) == DecorationType.STONE_REMAINING_STYLE_1)
-                .count(),
-                1);
+        assertTrue(monitor.getEvents().getLast().removedStones().contains(stone));
     }
 
     @Test

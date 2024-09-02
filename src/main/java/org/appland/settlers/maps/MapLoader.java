@@ -20,12 +20,15 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static org.appland.settlers.maps.Utils.isEven;
+import static org.appland.settlers.model.DecorationType.*;
 
 /**
  * Loads a map binary file into a MapFile instance
@@ -41,6 +44,41 @@ public class MapLoader {
 
     @Option(name = "--info", usage = "Print information about the map")
     boolean printInfo = false;
+
+
+    public static final Set<DecorationType> SUPPORTED_DECORATIONS = EnumSet.of(
+            MINI_BROWN_MUSHROOM,
+            TOADSTOOL,
+            MINI_STONE,
+            SMALL_STONE,
+            STONE,
+            ANIMAL_SKELETON_1,
+            ANIMAL_SKELETON_2,
+            FLOWERS,
+            LARGE_BUSH_1,
+            PILE_OF_STONES,
+            CATTAIL_1,
+            CATTAIL_2,
+            LARGE_BUSH_2,
+            BUSH_3,
+            SMALL_BUSH,
+            CATTAIL_3,
+            CATTAIL_4,
+            BROWN_MUSHROOM,
+            MINI_STONE_WITH_GRASS,
+            SMALL_STONE_WITH_GRASS,
+            SOME_SMALL_STONES_1,
+            SOME_SMALL_STONES_2,
+            SOME_SMALL_STONES_3,
+            SPARSE_BUSH,
+            SOME_WATER,
+            LITTLE_GRASS,
+            CACTUS_1,
+            CACTUS_2,
+            SNOWMAN,
+            PORTAL,
+            SHINING_PORTAL
+    );
 
     public static void main(String[] args) {
         MapLoader mapLoader = new MapLoader();
@@ -609,7 +647,7 @@ public class MapLoader {
             if (mapFilePoint.hasDecoration()) {
                 DecorationType decorationType = mapFilePoint.getNatureDecorationType();
 
-                if (DecorationType.NO_IMPACT_ON_GAME.contains(decorationType)) {
+                if (SUPPORTED_DECORATIONS.contains(decorationType)) {
                     gameMap.placeDecoration(point, decorationType);
                 }
             }

@@ -13,7 +13,6 @@ import org.appland.settlers.assets.StoneAmount;
  * @author johan
  */
 public class Stone {
-
     private final Point position;
     private final StoneType stoneType;
 

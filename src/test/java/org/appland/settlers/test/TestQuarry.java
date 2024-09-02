@@ -8,7 +8,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -34,10 +33,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
 import static org.appland.settlers.model.Stone.StoneType.STONE_2;
+import static org.appland.settlers.model.Vegetation.WATER;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
@@ -474,89 +473,7 @@ public class TestQuarry {
     }
 
     @Test
-    public void testStoneType1DecorationWhenStonemasonGetsLastStone() throws Exception {
-
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-
-        /* Place headquarter */
-        Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(player0), point0);
-
-        /* Place quarry */
-        Point point1 = new Point(10, 4);
-        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
-
-        /* Place stone */
-        Point point2 = new Point(11, 5);
-        Stone stone = map.placeStone(point2, STONE_1, 1);
-
-        assertEquals(stone.getStoneType(), STONE_1);
-
-        /* Construct the quarry */
-        constructHouse(quarry);
-
-        /* Assign a stonemason to the quarry */
-        Stonemason stonemason = new Stonemason(player0, map);
-
-        Utils.occupyBuilding(stonemason, quarry);
-
-        /* Wait for the stonemason to rest */
-        Utils.fastForward(99, map);
-
-        assertTrue(stonemason.isInsideBuilding());
-        assertTrue(map.isStoneAtPoint(point2));
-
-        /* Step once to let the stonemason go out to get stone */
-        map.stepTime();
-
-        assertFalse(stonemason.isInsideBuilding());
-
-        Point point = stonemason.getTarget();
-
-        assertEquals(stonemason.getTarget(), stone.getPosition());
-        assertTrue(stonemason.isTraveling());
-
-        map.stepTime();
-
-        /* Let the stonemason reach the chosen spot if it isn't already there */
-        if (!stonemason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, stonemason);
-        }
-
-        assertTrue(stonemason.isArrived());
-        assertEquals(stonemason.getPosition(), stone.getPosition());
-        assertTrue(stonemason.isGettingStone());
-
-        /* Verify that the stonemason gets stone */
-        for (int i = 0; i < 49; i++) {
-            assertTrue(stonemason.isGettingStone());
-            map.stepTime();
-        }
-
-        assertTrue(stonemason.isGettingStone());
-
-        /* Verify that the stonemason is done getting stone at the correct time */
-        assertFalse(map.isDecoratedAtPoint(point2));
-
-        map.stepTime();
-        map.stepTime();
-
-        assertFalse(stonemason.isGettingStone());
-        assertNotNull(stonemason.getCargo());
-        assertEquals(stonemason.getCargo().getMaterial(), STONE);
-        assertFalse(map.isStoneAtPoint(point2));
-        assertNull(map.getStoneAtPoint(point2));
-        assertFalse(map.getStones().contains(stone));
-        assertTrue(map.isDecoratedAtPoint(point2));
-        assertEquals(map.getDecorationAtPoint(point2), DecorationType.STONE_REMAINING_STYLE_1);
-    }
-
-    @Test
-    public void testStoneType2DecorationWhenStonemasonGetsLastStone() throws Exception {
+    public void testNothingRemainsWhenStonemasonGetsLastStone() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -632,8 +549,9 @@ public class TestQuarry {
         assertFalse(map.isStoneAtPoint(point2));
         assertNull(map.getStoneAtPoint(point2));
         assertFalse(map.getStones().contains(stone));
-        assertTrue(map.isDecoratedAtPoint(point2));
-        assertEquals(map.getDecorationAtPoint(point2), DecorationType.STONE_REMAINING_STYLE_2);
+        assertFalse(map.isDecoratedAtPoint(point2));
+        assertNull(map.getDecorationAtPoint(point2));
+        assertFalse(map.isDecoratedAtPoint(point2));
     }
 
     @Test
