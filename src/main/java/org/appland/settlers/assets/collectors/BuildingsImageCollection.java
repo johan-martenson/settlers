@@ -2,7 +2,6 @@ package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.Utils;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.GameFiles;
@@ -19,59 +18,71 @@ import static org.appland.settlers.assets.Utils.getImageAt;
 
 public class BuildingsImageCollection {
 
-    private final Map<Nation, Map<String, BuildingImages>> buildingMap;
-    private final Map<Nation, SpecialImages> specialImagesMap;
+    private final Map<Nation, Map<String, BuildingImages>> buildingMap = new EnumMap<>(Nation.class);
+    private final Map<Nation, SpecialImages> specialImagesMap = new EnumMap<>(Nation.class);
 
-    public BuildingsImageCollection() {
-        this.buildingMap = new EnumMap<>(Nation.class);
-        this.specialImagesMap = new EnumMap<>(Nation.class);
-
-        for (Nation nation : Nation.values()) {
-            this.buildingMap.put(nation, new HashMap<>());
-            this.specialImagesMap.put(nation, new SpecialImages());
-        }
-    }
-
+    /**
+     * Adds a ready building image for a specific nation and building.
+     *
+     * @param nation   the nation
+     * @param building the building name
+     * @param image    the bitmap image to add
+     */
     public void addBuildingForNation(Nation nation, String building, Bitmap image) {
-        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
-
-        if (!buildingsForNation.containsKey(building)) {
-            buildingsForNation.put(building, new BuildingImages());
-        }
-
-        BuildingImages buildingImages = buildingsForNation.get(building);
-
-        buildingImages.addReadyBuildingImage(image);
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addReadyBuildingImage(image);
     }
 
+    /**
+     * Adds an under-construction building image for a specific nation and building.
+     *
+     * @param nation   the nation
+     * @param building the building name
+     * @param image    the bitmap image to add
+     */
     public void addBuildingUnderConstructionForNation(Nation nation, String building, Bitmap image) {
-        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
-
-        if (!buildingsForNation.containsKey(building)) {
-            buildingsForNation.put(building, new BuildingImages());
-        }
-
-        BuildingImages buildingImages = buildingsForNation.get(building);
-
-        buildingImages.addUnderConstructionBuildingImage(image);
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addUnderConstructionBuildingImage(image);
     }
 
+    /**
+     * Adds a construction planned image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the bitmap image to add
+     */
     public void addConstructionPlanned(Nation nation, Bitmap image) {
-        this.specialImagesMap.get(nation).addConstructionPlannedImage(image);
+        specialImagesMap.computeIfAbsent(nation, k -> new SpecialImages())
+                .addConstructionPlannedImage(image);
     }
 
+    /**
+     * Adds a construction just started image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the bitmap image to add
+     */
     public void addConstructionJustStarted(Nation nation, Bitmap image) {
-        this.specialImagesMap.get(nation).addConstructionJustStartedImage(image);
+        specialImagesMap.computeIfAbsent(nation, k -> new SpecialImages())
+                .addConstructionJustStartedImage(image);
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
         buildingMap.forEach((nation, buildings) -> {
             int right = imageBoard.getCurrentWidth();
 
-            buildings
-                    .forEach((building, buildingImages) -> imageBoard.placeImagesAtBottomRightOf(
+            buildings.forEach((building, buildingImages) -> imageBoard.placeImagesAtBottomRightOf(
                             Stream.of(
                                     ImageBoard.makeImagePathPair(
                                             buildingImages.buildingReadyImage,
@@ -146,88 +157,105 @@ public class BuildingsImageCollection {
         });
 
         imageBoard.writeBoard(directory, "image-atlas-buildings", palette);
-
-        // Write individual images for icons
-        for (Nation nation : Nation.values()) {
-            String buildingDir = directory + "/" + nation.name();
-
-            // Create directory
-            Utils.createDirectory(buildingDir);
-
-            for (Map.Entry<String, BuildingImages> entry : this.buildingMap.get(nation).entrySet()) {
-                String buildingFile = buildingDir + "/" + entry.getKey() + ".png";
-
-                // Write each ready building as a separate image
-                entry.getValue().buildingReadyImage.writeToFile(buildingFile);
-            }
-        }
     }
 
+    /**
+     * Adds a shadow image for a ready building for a specific nation and building.
+     *
+     * @param nation   the nation
+     * @param building the building name
+     * @param image    the bitmap image to add
+     */
     public void addBuildingShadowForNation(Nation nation, String building, Bitmap image) {
-        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
-
-        if (!buildingsForNation.containsKey(building)) {
-            buildingsForNation.put(building, new BuildingImages());
-        }
-
-        BuildingImages buildingImages = buildingsForNation.get(building);
-
-        buildingImages.addReadyBuildingShadowImage(image);
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addReadyBuildingShadowImage(image);
     }
 
+    /**
+     * Adds a shadow image for an under-construction building for a specific nation and building.
+     *
+     * @param nation   the nation
+     * @param building the building name
+     * @param image    the bitmap image to add
+     */
     public void addBuildingUnderConstructionShadowForNation(Nation nation, String building, Bitmap image) {
-        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
-
-        if (!buildingsForNation.containsKey(building)) {
-            buildingsForNation.put(building, new BuildingImages());
-        }
-
-        BuildingImages buildingImages = buildingsForNation.get(building);
-
-        buildingImages.addUnderConstructionBuildingShadowImage(image);
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addUnderConstructionBuildingShadowImage(image);
     }
 
+    /**
+     * Adds a shadow image for a construction planned image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the bitmap image to add
+     */
     public void addConstructionPlannedShadow(Nation nation, Bitmap image) {
-        this.specialImagesMap.get(nation).addConstructionPlannedShadowImage(image);
+        specialImagesMap.computeIfAbsent(nation, k -> new SpecialImages())
+                .addConstructionPlannedShadowImage(image);
     }
 
+    /**
+     * Adds a shadow image for a construction just started image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the bitmap image to add
+     */
     public void addConstructionJustStartedShadow(Nation nation, Bitmap image) {
-        this.specialImagesMap.get(nation).addConstructionJustStartedShadowImage(image);
+        specialImagesMap.computeIfAbsent(nation, k -> new SpecialImages())
+                .addConstructionJustStartedShadowImage(image);
     }
 
+    /**
+     * Adds an open door image for a specific nation and building.
+     *
+     * @param nation   the nation
+     * @param building the building name
+     * @param image    the bitmap image to add
+     */
     public void addOpenDoorForBuilding(Nation nation, String building, Bitmap image) {
-        Map<String, BuildingImages> buildingsForNation = this.buildingMap.get(nation);
-
-        if (!buildingsForNation.containsKey(building)) {
-            buildingsForNation.put(building, new BuildingImages());
-        }
-
-        BuildingImages buildingImages = buildingsForNation.get(building);
-
-        buildingImages.addOpenDoorImage(image);
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addOpenDoorImage(image);
     }
 
+    /**
+     * Adds images for a specific building for a nation, including shadows and under-construction states.
+     *
+     * @param lstFile the list of game resources
+     * @param nation  the nation
+     * @param house   the house (building) resource
+     */
     public void addImagesForBuilding(List<GameResource> lstFile, Nation nation, GameFiles.House house) {
         addBuildingForNation(nation, house.name(), getImageAt(lstFile, house.index()));
         addBuildingShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 1));
 
         if (house.underConstruction()) {
             addBuildingUnderConstructionForNation(nation, house.name(), getImageAt(lstFile, house.index() + 2));
-            addBuildingUnderConstructionShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 3));
+
+            if (house.underConstructionShadow()) {
+                addBuildingUnderConstructionShadowForNation(nation, house.name(), getImageAt(lstFile, house.index() + 3));
+            }
+        } else {
+            System.out.println("No under construction for " + house.name());
         }
 
         if (house.openDoor()) {
-            var offset = 2;
-
-            if (house.underConstruction()) {
-                offset += 1;
-            }
-
+            int offset = house.underConstruction() ? 3 : 2;
             if (house.underConstructionShadow()) {
                 offset += 1;
             }
 
+            System.out.println("Adding open door with offset " + offset + " for " + house.name());
+
             addOpenDoorForBuilding(nation, house.name(), getImageAt(lstFile, house.index() + offset));
+        }
+
+        if (house.name().equals("Headquarter")) {
+            System.out.println(house);
+
+            System.out.println(this.buildingMap.get(nation).get(house.name()));
         }
     }
 
@@ -261,6 +289,17 @@ public class BuildingsImageCollection {
 
         public void addOpenDoorImage(Bitmap image) {
             openDoorImage = image;
+        }
+
+        @Override
+        public String toString() {
+            return "BuildingImages{" +
+                    "buildingReadyImage=" + buildingReadyImage +
+                    ", buildingUnderConstruction=" + buildingUnderConstruction +
+                    ", buildingReadyShadowImage=" + buildingReadyShadowImage +
+                    ", buildingUnderConstructionShadowImage=" + buildingUnderConstructionShadowImage +
+                    ", openDoorImage=" + openDoorImage +
+                    '}';
         }
     }
 

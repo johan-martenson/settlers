@@ -8,59 +8,71 @@ import org.appland.settlers.model.Crop;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
 public class CropImageCollection {
-    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropMap;
-    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropShadowMap;
+    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropMap = new EnumMap<>(Crop.CropType.class);
+    private final Map<Crop.CropType, Map<Crop.GrowthState, Bitmap>> cropShadowMap = new EnumMap<>(Crop.CropType.class);
 
-    public CropImageCollection() {
-        cropMap = new EnumMap<>(Crop.CropType.class);
-        cropShadowMap = new EnumMap<>(Crop.CropType.class);
-
-        for (Crop.CropType type : Crop.CropType.values()) {
-            cropMap.put(type, new EnumMap<>(Crop.GrowthState.class));
-            cropShadowMap.put(type, new EnumMap<>(Crop.GrowthState.class));
-        }
-    }
-
+    /**
+     * Adds an image for a specific crop type and growth state.
+     *
+     * @param type    the crop type
+     * @param growth  the growth state
+     * @param image   the bitmap image to add
+     */
     public void addImage(Crop.CropType type, Crop.GrowthState growth, Bitmap image) {
-        cropMap.get(type).put(growth, image);
+        cropMap.computeIfAbsent(type, k -> new EnumMap<>(Crop.GrowthState.class)).put(growth, image);
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param toDir   the directory to save the atlas
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        for (var entry : this.cropMap.entrySet()) {
-            var list = new ArrayList<ImageBoard.ImagePathPair>();
+        cropMap.forEach((cropType, growthMap) -> {
+                    List<ImageBoard.ImagePathPair> imagePairs = new ArrayList<>();
 
             Stream.of(Crop.GrowthState.values()).forEach(
                     (growthState -> {
-                        list.add(
+                        imagePairs.add(
                                 ImageBoard.makeImagePathPair(
-                                        entry.getValue().get(growthState),
-                                        entry.getKey().name(),
+                                        growthMap.get(growthState),
+                                        cropType.name(),
                                         growthState.name().toUpperCase(),
                                         "image"
                                 ));
 
-                        list.add(
+                        imagePairs.add(
                                 ImageBoard.makeImagePathPair(
-                                        cropShadowMap.get(entry.getKey()).get(growthState),
-                                        entry.getKey().name(),
+                                        cropShadowMap.get(cropType).get(growthState),
+                                        cropType.name(),
                                         growthState.name().toUpperCase(),
                                         "shadowImage"
                                 ));
                     }));
 
-            imageBoard.placeImagesAsRow(list);
-        }
+            imageBoard.placeImagesAsRow(imagePairs);
+        });
 
         imageBoard.writeBoard(toDir, "image-atlas-crops", palette);
     }
 
+    /**
+     * Adds a shadow image for a specific crop type and growth state.
+     *
+     * @param cropType    the crop type
+     * @param growthState the growth state
+     * @param image       the bitmap image to add
+     */
     public void addShadowImage(Crop.CropType cropType, Crop.GrowthState growthState, Bitmap image) {
-        cropShadowMap.get(cropType).put(growthState, image);
+        cropShadowMap.computeIfAbsent(cropType, k -> new EnumMap<>(Crop.GrowthState.class)).put(growthState, image);
     }
 }

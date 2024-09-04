@@ -7,51 +7,65 @@ import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.model.Stone;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class StonesImageCollection {
-    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneMap;
-    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneShadowMap;
+    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneMap = new EnumMap<>(Stone.StoneType.class);
+    private final Map<Stone.StoneType, Map<StoneAmount, Bitmap>> stoneShadowMap = new EnumMap<>(Stone.StoneType.class);
 
-    public StonesImageCollection() {
-        stoneMap = new EnumMap<>(Stone.StoneType.class);
-        stoneShadowMap = new EnumMap<>(Stone.StoneType.class);
-
-        for (Stone.StoneType type : Stone.StoneType.values()) {
-            stoneMap.put(type, new EnumMap<>(StoneAmount.class));
-            stoneShadowMap.put(type, new EnumMap<>(StoneAmount.class));
-        }
-    }
-
+    /**
+     * Adds an image for a specific stone type and amount.
+     *
+     * @param type   the stone type
+     * @param amount the stone amount
+     * @param image  the bitmap image to add
+     */
     public void addImage(Stone.StoneType type, StoneAmount amount, Bitmap image) {
-        stoneMap.get(type).put(amount, image);
+        stoneMap.computeIfAbsent(type, k -> new EnumMap<>(StoneAmount.class)).put(amount, image);
     }
 
+    /**
+     * Adds a shadow image for a specific stone type and amount.
+     *
+     * @param type   the stone type
+     * @param amount the stone amount
+     * @param image  the bitmap image to add
+     */
     public void addShadowImage(Stone.StoneType type, StoneAmount amount, Bitmap image) {
-        stoneShadowMap.get(type).put(amount, image);
+        stoneShadowMap.computeIfAbsent(type, k -> new EnumMap<>(StoneAmount.class)).put(amount, image);
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param toDir   the directory to save the atlas
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        Arrays.stream(Stone.StoneType.values())
-                .forEach(stoneType -> Arrays.stream(StoneAmount.values())
-                        .forEach(stoneAmount -> {
-                            imageBoard.placeImageBottom(
-                                    stoneMap.get(stoneType).get(stoneAmount),
-                                    stoneType.name().toUpperCase(),
-                                    stoneAmount.name().toUpperCase(),
-                                    "image"
-                            );
-                            imageBoard.placeImageBottom(
-                                    stoneShadowMap.get(stoneType).get(stoneAmount),
-                                    stoneType.name().toUpperCase(),
-                                    stoneAmount.name().toUpperCase(),
-                                    "shadowImage"
-                            );
-                        }));
+        for (Stone.StoneType stoneType : Stone.StoneType.values()) {
+            for (StoneAmount stoneAmount : StoneAmount.values()) {
+                Bitmap image = stoneMap.get(stoneType).get(stoneAmount);
+                Bitmap shadowImage = stoneShadowMap.get(stoneType).get(stoneAmount);
+
+                imageBoard.placeImageBottom(
+                        image,
+                        stoneType.name().toUpperCase(),
+                        stoneAmount.name().toUpperCase(),
+                        "image");
+
+                if (shadowImage != null) {
+                    imageBoard.placeImageBottom(
+                            shadowImage,
+                            stoneType.name().toUpperCase(),
+                            stoneAmount.name().toUpperCase(),
+                            "shadowImage");
+                }
+            }
+        }
 
         imageBoard.writeBoard(toDir, "image-atlas-stones", palette);
     }

@@ -13,60 +13,75 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BbmDecoder {
+    private static final int PALETTE_LENGTH = 256 * 3;
     private static boolean debug = false;
 
+    /**
+     * Prints debug information if debugging is enabled.
+     *
+     * @param debugString the string to print if debug is enabled
+     */
     private static void debugPrint(String debugString) {
         if (debug) {
             System.out.println(debugString);
         }
     }
 
+    /**
+     * Loads a BBM file and returns its content as a list of game resources.
+     *
+     * @param filename the name of the file to load
+     * @return a list of game resources
+     * @throws IOException            if an I/O error occurs
+     * @throws InvalidFormatException if the file format is invalid
+     */
     public static List<GameResource> loadBbmFile(String filename) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN);
+        try (StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN)) {
 
-        String header = streamReader.getUint8ArrayAsString(4);
-
-        if (!header.equals("FORM")) {
-            throw new InvalidFormatException("Must match 'FORM'. Not " + header);
-        }
-
-        long length = streamReader.getUint32();
-
-        String pbm = streamReader.getUint8ArrayAsString(4);
-
-        if (!pbm.equals("PBM ")) {
-            throw new InvalidFormatException("Must match 'PBM '. Not " + pbm);
-        }
-
-        List<GameResource> palettes = new ArrayList<>();
-        long i = 0;
-
-        while (!streamReader.isEof()) {
-            String chunkId = streamReader.getUint8ArrayAsString(4);
-
-            if (chunkId.equals("CMAP")) {
-                length = streamReader.getUint32();
-
-                if ((length & 1)  == 1) {
-                    length = length + 1;
-                }
-
-                if (length != 256 * 3) {
-                    throw new InvalidFormatException("Length must match 256 x 3. Not " + length);
-                }
-
-                Palette palette = Palette.load(streamReader, false);
-
-                int lastSeparator = filename.lastIndexOf("/");
-
-                palette.setName(filename.substring(lastSeparator + 1) + "(" + i + ")");
-
-                palettes.add(new PaletteResource(palette));
-
-                i = i + 1;
+            // Validate the header
+            String header = streamReader.getUint8ArrayAsString(4);
+            if (!header.equals("FORM")) {
+                throw new InvalidFormatException(String.format("Must match 'FORM'. Not %s", header));
             }
-        }
 
-        return palettes;
+            long length = streamReader.getUint32();
+
+            String pbm = streamReader.getUint8ArrayAsString(4);
+            if (!pbm.equals("PBM ")) {
+                throw new InvalidFormatException(String.format("Must match 'PBM '. Not %s", pbm));
+            }
+
+            // Read the palettes
+            List<GameResource> palettes = new ArrayList<>();
+            long i = 0;
+
+            // Read chunks until EOF
+            while (!streamReader.isEof()) {
+                String chunkId = streamReader.getUint8ArrayAsString(4);
+
+                if (chunkId.equals("CMAP")) {
+                    length = streamReader.getUint32();
+
+                    // Adjust for odd length
+                    if ((length & 1) == 1) {
+                        length = length + 1;
+                    }
+
+                    if (length != PALETTE_LENGTH) {
+                        throw new InvalidFormatException(String.format("Length must match %d. Not %d", PALETTE_LENGTH, length));
+                    }
+
+                    Palette palette = Palette.load(streamReader, false);
+                    int lastSeparator = filename.lastIndexOf("/");
+
+                    palette.setName(String.format("%s(%d)", filename.substring(lastSeparator + 1), i));
+                    palettes.add(new PaletteResource(palette));
+
+                    i++;
+                }
+            }
+
+            return palettes;
+        }
     }
 }

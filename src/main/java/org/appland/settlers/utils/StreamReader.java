@@ -12,7 +12,7 @@ import java.util.Stack;
 /**
  * A utility class to read common data types from an input stream with specific byte order handling.
  */
-public class StreamReader implements ByteReader {
+public class StreamReader implements ByteReader, AutoCloseable {
     public static final int SIZE_OF_UINT32 = 4;
     public static final int SIZE_OF_UINT16 = 2;
     public static final int SIZE_OF_UINT8 = 1;
@@ -441,6 +441,7 @@ public class StreamReader implements ByteReader {
      *
      * @throws IOException if an I/O error occurs
      */
+    @Override
     public void close() throws IOException {
         this.inputStream.close();
     }

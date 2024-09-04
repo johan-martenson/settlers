@@ -14,29 +14,24 @@ import java.util.Map;
 
 public class TreeImageCollection {
     private final String name;
-    private final Map<Tree.TreeType, List<Bitmap>> grownTreeMap;
-    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeMap;
-    private final Map<Tree.TreeType, List<Bitmap>> treeFalling;
-    private final Map<Tree.TreeType, List<Bitmap>> grownTreeShadowMap;
-    private final Map<Tree.TreeType, List<Bitmap>> treeFallingShadow;
-    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeShadowMap;
+    private final Map<Tree.TreeType, List<Bitmap>> grownTreeMap = new EnumMap<>(Tree.TreeType.class);
+    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeMap = new EnumMap<>(Tree.TreeType.class);
+    private final Map<Tree.TreeType, List<Bitmap>> treeFalling = new EnumMap<>(Tree.TreeType.class);
+    private final Map<Tree.TreeType, List<Bitmap>> grownTreeShadowMap = new EnumMap<>(Tree.TreeType.class);
+    private final Map<Tree.TreeType, List<Bitmap>> treeFallingShadow = new EnumMap<>(Tree.TreeType.class);
+    private final Map<Tree.TreeType, Map<Tree.TreeSize, Bitmap>> growingTreeShadowMap = new EnumMap<>(Tree.TreeType.class);
 
     public TreeImageCollection(String name) {
         this.name = name;
-
-        grownTreeMap = new EnumMap<>(Tree.TreeType.class);
-        growingTreeMap = new EnumMap<>(Tree.TreeType.class);
-        treeFalling = new EnumMap<>(Tree.TreeType.class);
-        grownTreeShadowMap = new EnumMap<>(Tree.TreeType.class);
-        treeFallingShadow = new EnumMap<>(Tree.TreeType.class);
-        growingTreeShadowMap = new EnumMap<>(Tree.TreeType.class);
-
-        for (Tree.TreeType treeType : Tree.TreeType.values()) {
-            grownTreeMap.put(treeType, new ArrayList<>());
-            grownTreeShadowMap.put(treeType, new ArrayList<>());
-        }
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
@@ -80,38 +75,68 @@ public class TreeImageCollection {
                 "fallingTreeShadows",
                 treeType.name().toUpperCase()));
 
-        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
+        imageBoard.writeBoard(directory, String.format("image-atlas-%s", name.toLowerCase()), palette);
     }
 
-    public void addImagesForTree(Tree.TreeType treeType, List<Bitmap> imagesFromResourceLocations) {
-        this.grownTreeMap.get(treeType).addAll(imagesFromResourceLocations);
+    /**
+     * Adds images for a fully grown tree of a specific type.
+     *
+     * @param treeType the type of the tree
+     * @param images   the list of bitmap images
+     */
+    public void addImagesForTree(Tree.TreeType treeType, List<Bitmap> images) {
+        grownTreeMap.computeIfAbsent(treeType, k -> new ArrayList<>()).addAll(images);
     }
 
+    /**
+     * Adds an image for a growing tree of a specific type and size.
+     *
+     * @param type     the type of the tree
+     * @param treeSize the size of the tree
+     * @param image    the bitmap image to add
+     */
     public void addImageForGrowingTree(Tree.TreeType type, Tree.TreeSize treeSize, Bitmap image) {
-        if (!growingTreeMap.containsKey(type)) {
-            growingTreeMap.put(type, new EnumMap<>(Tree.TreeSize.class));
-        }
-
-        growingTreeMap.get(type).put(treeSize, image);
+        growingTreeMap.computeIfAbsent(type, k -> new EnumMap<>(Tree.TreeSize.class)).put(treeSize, image);
     }
 
+    /**
+     * Adds images for a tree falling animation of a specific type.
+     *
+     * @param type   the type of the tree
+     * @param images the list of bitmap images
+     */
     public void addImagesForTreeFalling(Tree.TreeType type, List<Bitmap> images) {
         treeFalling.put(type, images);
     }
 
+    /**
+     * Adds shadow images for a fully grown tree of a specific type.
+     *
+     * @param type   the type of the tree
+     * @param images the list of bitmap images
+     */
     public void addImagesForTreeShadow(Tree.TreeType type, List<Bitmap> images) {
-        grownTreeShadowMap.get(type).addAll(images);
+        grownTreeShadowMap.computeIfAbsent(type, k -> new ArrayList<>()).addAll(images);
     }
 
+    /**
+     * Adds shadow images for a tree falling animation of a specific type.
+     *
+     * @param type   the type of the tree
+     * @param images the list of bitmap images
+     */
     public void addImagesForTreeFallingShadow(Tree.TreeType type, List<Bitmap> images) {
         treeFallingShadow.put(type, images);
     }
 
+    /**
+     * Adds a shadow image for a growing tree of a specific type and size.
+     *
+     * @param treeType the type of the tree
+     * @param treeSize the size of the tree
+     * @param image    the bitmap image to add
+     */
     public void addImageForGrowingTreeShadow(Tree.TreeType treeType, Tree.TreeSize treeSize, Bitmap image) {
-        if (!growingTreeShadowMap.containsKey(treeType)) {
-            growingTreeShadowMap.put(treeType, new EnumMap<>(Tree.TreeSize.class));
-        }
-
-        growingTreeShadowMap.get(treeType).put(treeSize, image);
+        growingTreeShadowMap.computeIfAbsent(treeType, k -> new EnumMap<>(Tree.TreeSize.class)).put(treeSize, image);
     }
 }

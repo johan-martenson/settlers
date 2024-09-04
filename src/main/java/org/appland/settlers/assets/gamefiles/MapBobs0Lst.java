@@ -28,8 +28,9 @@ public class MapBobs0Lst {
     public static final ImageAndShadowIndex CATTAIL_4_AND_SHADOW = new ImageAndShadowIndex(326, 384);
     public static final ImageAndShadowIndex PORTAL_AND_SHADOW = new ImageAndShadowIndex(339, 394);
     public static final ImageAndShadowIndex SHINING_PORTAL_AND_SHADOW = new ImageAndShadowIndex(340, 395);
-    public static final ImageAndShadowIndex BROWN_MUSHROOM_AND_SHADOW = new ImageAndShadowIndex(329, 384);
-    public static final ImageAndShadowIndex MINI_STONE_WITH_GRASS_AND_SHADOW = new ImageAndShadowIndex(330, 385);
+    public static final ImageAndShadowIndex BROWN_MUSHROOM_AND_SHADOW = new ImageAndShadowIndex(329, 385);
+    //public static final ImageAndShadowIndex MINI_STONE_WITH_GRASS_AND_SHADOW = new ImageAndShadowIndex(330, 385);
+    public static final ImageIndex MINI_STONE_WITH_GRASS_AND_SHADOW = new ImageIndex(330);
     public static final ImageAndShadowIndex SMALL_STONE_WITH_GRASS_AND_SHADOW = new ImageAndShadowIndex(331, 386);
     public static final ImageAndShadowIndex SOME_SMALL_STONES_1_AND_SHADOW = new ImageAndShadowIndex(332, 387);
     public static final ImageAndShadowIndex SOME_SMALL_STONES_2_AND_SHADOW = new ImageAndShadowIndex(333, 388);

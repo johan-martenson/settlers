@@ -17,32 +17,16 @@ import java.util.List;
 import java.util.Map;
 
 public class FlagImageCollection {
-    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagMap;
-    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagShadowMap;
-
-    public FlagImageCollection() {
-        flagMap = new EnumMap<>(Nation.class);
-        flagShadowMap = new EnumMap<>(Nation.class);
-
-        for (Nation nation : Nation.values()) {
-            flagMap.put(nation, new EnumMap<>(Flag.FlagType.class));
-            flagShadowMap.put(nation, new EnumMap<>(Flag.FlagType.class));
-
-            for (Flag.FlagType flagType : Flag.FlagType.values()) {
-                flagMap.get(nation).put(flagType, new ArrayList<>());
-                flagShadowMap.get(nation).put(flagType, new ArrayList<>());
-            }
-        }
-    }
+    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagMap = new EnumMap<>(Nation.class);
+    private final Map<Nation, Map<Flag.FlagType, List<Bitmap>>> flagShadowMap = new EnumMap<>(Nation.class);
 
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        Arrays.stream(Nation.values())
-                .forEach(nation -> Arrays.stream(Flag.FlagType.values())
-                        .forEach(flagType -> {
-                            Arrays.stream(PlayerColor.values())
-                                    .forEach(playerColor -> imageBoard.placeImageSeriesBottom(
+        Arrays.stream(Nation.values()).forEach(nation ->
+                Arrays.stream(Flag.FlagType.values()).forEach(flagType -> {
+                            Arrays.stream(PlayerColor.values()).forEach(playerColor ->
+                                    imageBoard.placeImageSeriesBottom(
                                             ImageTransformer.normalizeImageSeries(
                                                     ImageTransformer.drawForPlayer(playerColor, flagMap.get(nation).get(flagType))),
                                             nation.name().toUpperCase(),
@@ -61,10 +45,14 @@ public class FlagImageCollection {
     }
 
     public void addImagesForFlag(Nation nation, Flag.FlagType flagType, List<PlayerBitmap> images) {
-        this.flagMap.get(nation).get(flagType).addAll(images);
+        flagMap.computeIfAbsent(nation, k -> new EnumMap<>(Flag.FlagType.class))
+                .computeIfAbsent(flagType, k -> new ArrayList<>())
+                .addAll(images);
     }
 
     public void addImagesForFlagShadow(Nation nation, Flag.FlagType flagType, List<Bitmap> images) {
-        this.flagShadowMap.get(nation).get(flagType).addAll(images);
+        flagShadowMap.computeIfAbsent(nation, k -> new EnumMap<>(Flag.FlagType.class))
+                .computeIfAbsent(flagType, k -> new ArrayList<>())
+                .addAll(images);
     }
 }

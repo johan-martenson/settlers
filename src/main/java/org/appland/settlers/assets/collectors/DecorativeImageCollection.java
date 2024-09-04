@@ -11,57 +11,60 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class DecorativeImageCollection {
-    private final Map<DecorationType, DecorationTypeImage> decorationImages;
+    private final Map<DecorationType, DecorationTypeImage> decorationImages = new EnumMap<>(DecorationType.class);
 
-    public DecorativeImageCollection() {
-        decorationImages = new EnumMap<>(DecorationType.class);
-    }
 
+    /**
+     * Adds a decoration image for the specified decoration type.
+     *
+     * @param decorationType the type of decoration
+     * @param image          the bitmap image to add
+     */
     public void addDecorationImage(DecorationType decorationType, Bitmap image) {
-        decorationImages.put(decorationType, new DecorationTypeImage(image));
+        decorationImages.put(decorationType, new DecorationTypeImage(image, null));
     }
 
+    /**
+     * Adds a decoration image with an optional shadow image for the specified decoration type.
+     *
+     * @param decorationType the type of decoration
+     * @param image          the bitmap image to add
+     * @param shadowImage    the shadow bitmap image to add (nullable)
+     */
     public void addDecorationImageWithShadow(DecorationType decorationType, Bitmap image, Bitmap shadowImage) {
         decorationImages.put(decorationType, new DecorationTypeImage(image, shadowImage));
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param dir     the directory to save the atlas
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String dir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
         var list = new ArrayList<ImageBoard.ImagePathPair>();
 
-        for (var entry : decorationImages.entrySet()) {
+        decorationImages.forEach((decoration, decorationImages) -> {
             list.add(ImageBoard.makeImagePathPair(
-                            entry.getValue().image,
-                            entry.getKey().name().toUpperCase(),
-                            "image"));
+                    decorationImages.image(),
+                    decoration.name().toUpperCase(),
+                    "image"));
 
-            if (entry.getValue().shadowImage != null) {
+            if (decorationImages.shadowImage() != null) {
                 list.add(ImageBoard.makeImagePathPair(
-                        entry.getValue().shadowImage,
-                        entry.getKey().name().toUpperCase(),
+                        decorationImages.shadowImage(),
+                        decoration.name().toUpperCase(),
                         "shadowImage"));
             }
-        }
+        });
 
         imageBoard.placeImagesAsColumn(list);
 
         imageBoard.writeBoard(dir, "image-atlas-decorations", palette);
     }
 
-    private static class DecorationTypeImage {
-
-        private final Bitmap image;
-        private final Bitmap shadowImage;
-
-        public DecorationTypeImage(Bitmap image) {
-            this.image = image;
-            shadowImage = null;
-        }
-
-        public DecorationTypeImage(Bitmap image, Bitmap shadowImage) {
-            this.image = image;
-            this.shadowImage = shadowImage;
-        }
-    }
+    private record DecorationTypeImage (Bitmap image, Bitmap shadowImage){ }
 }

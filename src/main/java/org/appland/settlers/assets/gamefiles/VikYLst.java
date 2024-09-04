@@ -36,7 +36,7 @@ public class VikYLst {
     public static final GameFiles.House SHIPYARD = new GameFiles.House("Shipyard", 191);
     public static final GameFiles.House FARM = new GameFiles.House("Farm", 196);
     public static final GameFiles.House DONKEY_BREEDER = new GameFiles.House("DonkeyBreeder", 201);
-    public static final GameFiles.House HARBOR = new GameFiles.House("Harbor", 206);
+    public static final GameFiles.House HARBOR = GameFiles.House.make("Harbor", 206, GameFiles.Missing.NO_OPEN_DOOR);
 
     public static final int CONSTRUCTION_PLANNED = 210;
     public static final int CONSTRUCTION_PLANNED_SHADOW = 211;

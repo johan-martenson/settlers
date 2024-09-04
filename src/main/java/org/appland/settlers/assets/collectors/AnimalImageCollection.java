@@ -16,36 +16,45 @@ import java.util.Map;
 
 public class AnimalImageCollection {
     private final String name;
-    private final Map<CompassDirection, List<Bitmap>> directionToImageMap;
-    private final Map<CompassDirection, Bitmap> shadowImages;
-    private final Map<Material, Bitmap> cargoImages;
-    private final Map<Nation, Map<Material, Bitmap>> nationCargoImages;
+    private final Map<CompassDirection, List<Bitmap>> directionToImageMap = new EnumMap<>(CompassDirection.class);
+    private final Map<CompassDirection, Bitmap> shadowImages = new EnumMap<>(CompassDirection.class);
+    private final Map<Material, Bitmap> cargoImages = new EnumMap<>(Material.class);
+    private final Map<Nation, Map<Material, Bitmap>> nationCargoImages = new EnumMap<>(Nation.class);
 
     public AnimalImageCollection(String name) {
         this.name = name;
-        directionToImageMap = new EnumMap<>(CompassDirection.class);
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
             this.directionToImageMap.put(compassDirection, new ArrayList<>());
         }
-
-        shadowImages = new EnumMap<>(CompassDirection.class);
-        cargoImages = new EnumMap<>(Material.class);
-        nationCargoImages = new EnumMap<>(Nation.class);
     }
 
-    public void addImage(CompassDirection compassDirection, Bitmap workerImage) {
-        this.directionToImageMap.get(compassDirection).add(workerImage);
+    /**
+     * Adds an image to the collection for a specific compass direction.
+     *
+     * @param compassDirection the compass direction
+     * @param image            the bitmap image to add
+     */
+    public void addImage(CompassDirection compassDirection, Bitmap image) {
+        directionToImageMap
+                .computeIfAbsent(compassDirection, k -> new ArrayList<>())
+                .add(image);
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        directionToImageMap.forEach(
-                (direction, images) -> imageBoard.placeImageSeriesBottom(
-                        ImageTransformer.normalizeImageSeries(images),
-                        "images",
-                        direction.name().toUpperCase()));
+        directionToImageMap.forEach((direction, images) -> imageBoard.placeImageSeriesBottom(
+                ImageTransformer.normalizeImageSeries(images),
+                "images",
+                direction.name().toUpperCase()));
 
         imageBoard.placeImagesAsRow(
                 shadowImages.entrySet().stream()
@@ -73,26 +82,51 @@ public class AnimalImageCollection {
                                 ))
                         .toList()));
 
-        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
+        imageBoard.writeBoard(directory, String.format("image-atlas-%s", name.toLowerCase()), palette);
     }
 
+    /**
+     * Adds a list of images to the collection for a specific compass direction.
+     *
+     * @param compassDirection the compass direction
+     * @param images           the list of bitmap images to add
+     */
     public void addImages(CompassDirection compassDirection, List<Bitmap> images) {
-        this.directionToImageMap.get(compassDirection).addAll(images);
+        directionToImageMap
+                .computeIfAbsent(compassDirection, k -> new ArrayList<>())
+                .addAll(images);
     }
 
+    /**
+     * Adds a shadow image to the collection for a specific compass direction.
+     *
+     * @param compassDirection the compass direction
+     * @param image            the bitmap image to add
+     */
     public void addShadowImage(CompassDirection compassDirection, Bitmap image) {
         shadowImages.put(compassDirection, image);
     }
 
+    /**
+     * Adds a cargo image to the collection for a specific material.
+     *
+     * @param material the material
+     * @param image    the bitmap image to add
+     */
     public void addCargoImage(Material material, Bitmap image) {
         cargoImages.put(material, image);
     }
 
+    /**
+     * Adds a nation-specific cargo image to the collection.
+     *
+     * @param nation   the nation
+     * @param material the material
+     * @param image    the bitmap image to add
+     */
     public void addNationSpecificCargoImage(Nation nation, Material material, Bitmap image) {
-        if (!nationCargoImages.containsKey(nation)) {
-            nationCargoImages.put(nation, new EnumMap<>(Material.class));
-        }
-
-        nationCargoImages.get(nation).put(material, image);
+        nationCargoImages
+                .computeIfAbsent(nation, k -> new EnumMap<>(Material.class))
+                .put(material, image);
     }
 }

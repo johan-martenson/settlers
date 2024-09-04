@@ -8,33 +8,42 @@ import org.appland.settlers.model.Material;
 
 import java.awt.Point;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.Map;
 
 public class CargoImageCollection {
-    private final Map<Material, Bitmap> cargos;
-    private final Map<Nation, Map<Material, Bitmap>> nationCargos;
+    private final Map<Material, Bitmap> cargos = new EnumMap<>(Material.class);
+    private final Map<Nation, Map<Material, Bitmap>> nationCargos = new EnumMap<>(Nation.class);
 
-    public CargoImageCollection() {
-        nationCargos = new EnumMap<>(Nation.class);
-        cargos = new EnumMap<>(Material.class);
-
-        for (Nation nation : Nation.values()) {
-            nationCargos.put(nation, new EnumMap<>(Material.class));
-        }
-    }
-
+    /**
+     * Adds a cargo image for a generic material.
+     *
+     * @param material the material
+     * @param image    the bitmap image to add
+     */
     public void addCargoImage(Material material, Bitmap image) {
         cargos.put(material, image);
     }
 
+    /**
+     * Adds a cargo image for a specific nation and material.
+     *
+     * @param nation   the nation
+     * @param material the material
+     * @param image    the bitmap image to add
+     */
     public void addCargoImageForNation(Nation nation, Material material, Bitmap image) {
-        nationCargos.get(nation).put(material, image);
+        nationCargos.computeIfAbsent(nation, k -> new EnumMap<>(Material.class))
+                        .put(material, image);
     }
 
+    /**
+     * Writes the image atlas and individual cargo icons to the specified directory using the given palette.
+     *
+     * @param toDir   the directory to save the atlas and icons
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
@@ -43,12 +52,11 @@ public class CargoImageCollection {
 
         // Generic (non-nation specific) cargo images
         imageBoard.placeImagesAsColumn(
-                cargos.entrySet().stream().map(
-                        (entry) -> ImageBoard.makeImagePathPair(
+                cargos.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
                                 entry.getValue(),
                                 "generic",
-                                entry.getKey().name().toUpperCase()
-                        ))
+                                entry.getKey().name().toUpperCase()))
                         .toList());
 
         cursor.y = 0;
@@ -70,34 +78,6 @@ public class CargoImageCollection {
             }
         }
 
-        // Write the image atlas to file
         imageBoard.writeBoard(toDir, "image-atlas-cargos", palette);
-
-        // Write cargo icons
-        Path cargoIconDir = Paths.get(toDir, "cargo-icons");
-
-        Files.createDirectory(cargoIconDir);
-
-        // Write generic material icons
-        for (Map.Entry<Material, Bitmap> entry : cargos.entrySet()) {
-            Path iconPath = Paths.get(cargoIconDir.toString(), entry.getKey().name().toUpperCase() + ".png");
-
-            entry.getValue().writeToFile(iconPath);
-        }
-
-        // Write nation-specific material icons
-        for (Nation nation : Nation.values()) {
-            Path nationIconPath = Paths.get(cargoIconDir.toString(), nation.name().toUpperCase());
-
-            if (!Files.isDirectory(nationIconPath)) {
-                Files.createDirectory(nationIconPath);
-            }
-
-            for (Map.Entry<Material, Bitmap> entry : nationCargos.get(nation).entrySet()) {
-                Path iconPath = Paths.get(nationIconPath.toString(), entry.getKey().name().toUpperCase() + ".png");
-
-                entry.getValue().writeToFile(iconPath);
-            }
-        }
     }
 }

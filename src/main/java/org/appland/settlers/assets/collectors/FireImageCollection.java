@@ -14,21 +14,21 @@ import java.util.List;
 import java.util.Map;
 
 public class FireImageCollection {
-    private final Map<FireSize, List<Bitmap>> fireMap;
-    private final Map<Size, Bitmap> burntDownMap;
-    private final Map<FireSize, List<Bitmap>> fireShadowMap;
+    private final Map<FireSize, List<Bitmap>> fireMap = new EnumMap<>(FireSize.class);
+    private final Map<Size, Bitmap> burntDownMap = new EnumMap<>(Size.class);
+    private final Map<FireSize, List<Bitmap>> fireShadowMap = new EnumMap<>(FireSize.class);
 
-    public FireImageCollection() {
-        fireMap = new EnumMap<>(FireSize.class);
-        fireShadowMap = new EnumMap<>(FireSize.class);
-        burntDownMap = new EnumMap<>(Size.class);
-    }
-
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        Arrays.stream(FireSize.values())
-                .forEach(fireSize -> {
+        Arrays.stream(FireSize.values()).forEach(fireSize -> {
                     imageBoard.placeImageSeriesBottom(
                             ImageTransformer.normalizeImageSeries(fireMap.get(fireSize)),
                             "fires",
@@ -49,22 +49,39 @@ public class FireImageCollection {
                         .map(entry -> ImageBoard.makeImagePathPair(
                                         entry.getValue(),
                                         "burntDown",
-                                        entry.getKey().name().toUpperCase()
-                                )
-                        )
+                                        entry.getKey().name().toUpperCase()))
                         .toList());
 
         imageBoard.writeBoard(directory, "image-atlas-fire", palette);
     }
 
+    /**
+     * Adds images for a specific fire size.
+     *
+     * @param fireSize                    the size of the fire
+     * @param imagesFromResourceLocations the list of bitmap images
+     */
     public void addImagesForFire(FireSize fireSize, List<Bitmap> imagesFromResourceLocations) {
         this.fireMap.put(fireSize, imagesFromResourceLocations);
     }
 
+    /**
+     * Adds a burnt-down image for a specific size.
+     *
+     * @param size  the size
+     * @param image the bitmap image to add
+     */
     public void addBurntDownImage(Size size, Bitmap image) {
         this.burntDownMap.put(size, image);
     }
 
+    /**
+     * Adds images and their shadows for a specific fire size.
+     *
+     * @param fireSize    the size of the fire
+     * @param images      the list of bitmap images
+     * @param shadowImages the list of shadow images
+     */
     public void addImagesForFireWithShadow(FireSize fireSize, List<Bitmap> images, List<Bitmap> shadowImages) {
         this.fireMap.put(fireSize, images);
         this.fireShadowMap.put(fireSize, shadowImages);

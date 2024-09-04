@@ -13,42 +13,54 @@ import java.util.List;
 import java.util.Map;
 
 public class BorderImageCollector {
-    private final Map<Nation, BorderForNation> borderMap;
+    private final Map<Nation, BorderForNation> borderMap = new EnumMap<>(Nation.class);
 
-    public BorderImageCollector() {
-        borderMap = new EnumMap<>(Nation.class);
-
-        for (Nation nation : Nation.values()) {
-            borderMap.put(nation, new BorderForNation());
-        }
+    /**
+     * Adds a summer border image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the image to be added
+     */
+    public void addSummerBorderImage(Nation nation, PlayerBitmap image) {
+        borderMap.computeIfAbsent(nation, k -> new BorderForNation()).setSummerBorder(image);
     }
 
-    public void addLandBorderImage(Nation nation, PlayerBitmap image) {
-        borderMap.get(nation).setLandBorder(image);
+    /**
+     * Adds a winter border image for a specific nation.
+     *
+     * @param nation the nation
+     * @param image  the image to be added
+     */
+    public void addWinterBorderImage(Nation nation, PlayerBitmap image) {
+        borderMap.computeIfAbsent(nation, k -> new BorderForNation()).setCoastBorder(image);
     }
 
-    public void addWaterBorderImage(Nation nation, PlayerBitmap image) {
-        borderMap.get(nation).setCoastBorder(image);
-    }
-
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param toDir   the directory to save the atlas
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
-        Arrays.stream(Nation.values()).forEach(nation -> Arrays.stream(PlayerColor.values())
-                .forEach(playerColor -> imageBoard.placeImagesAsRow(
-                        List.of(
-                                ImageBoard.makeImagePathPair(
-                                        borderMap.get(nation).landBorder.getBitmapForPlayer(playerColor),
-                                        nation.name().toUpperCase(),
-                                        playerColor.name().toUpperCase(),
-                                        "landBorder"
-                                ),
-                                ImageBoard.makeImagePathPair(
-                                        borderMap.get(nation).coastBorder.getBitmapForPlayer(playerColor),
-                                        nation.name().toUpperCase(),
-                                        playerColor.name().toUpperCase(),
-                                        "coastBorder"
-                                )))));
+        Arrays.stream(Nation.values())
+                .forEach(nation -> Arrays.stream(PlayerColor.values())
+                        .forEach(playerColor -> imageBoard.placeImagesAsRow(
+                                List.of(
+                                        ImageBoard.makeImagePathPair(
+                                                borderMap.get(nation).landBorder.getBitmapForPlayer(playerColor),
+                                                nation.name().toUpperCase(),
+                                                playerColor.name().toUpperCase(),
+                                                "summerBorder"
+                                        ),
+                                        ImageBoard.makeImagePathPair(
+                                                borderMap.get(nation).coastBorder.getBitmapForPlayer(playerColor),
+                                                nation.name().toUpperCase(),
+                                                playerColor.name().toUpperCase(),
+                                                "winterBorder"
+                                        )))));
 
         imageBoard.writeBoard(toDir, "image-atlas-border", palette);
     }
@@ -57,7 +69,7 @@ public class BorderImageCollector {
         private PlayerBitmap landBorder;
         private PlayerBitmap coastBorder;
 
-        public void setLandBorder(PlayerBitmap image) {
+        public void setSummerBorder(PlayerBitmap image) {
             landBorder = image;
         }
 

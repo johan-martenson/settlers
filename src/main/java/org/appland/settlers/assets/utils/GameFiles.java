@@ -12,7 +12,7 @@ public class GameFiles {
             var missing = Set.of(missingList);
 
             var underConstruction = !missing.contains(Missing.NO_UNDER_CONSTRUCTION);
-            var underConstructionShadow = underConstruction & !missing.contains(Missing.NO_UNDER_CONSTRUCTION_SHADOW);
+            var underConstructionShadow = underConstruction && !missing.contains(Missing.NO_UNDER_CONSTRUCTION_SHADOW);
             var openDoor = !missing.contains(Missing.NO_OPEN_DOOR);
 
             return new House(name, index, underConstruction, underConstructionShadow, openDoor);

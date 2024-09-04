@@ -12,10 +12,25 @@ public class Palette {
     public static final int DEFAULT_TRANSPARENT_INDEX = 0;
     public static final RGBColor TRANSPARENT_COLOR = new RGBColor((byte)0xff, (byte)0, (byte)0x8f);
 
+    private static final int PALETTE_MAX_SIZE = 256;
+
     private final byte[] colors;
 
     private int transparentIndex;
     private String name;
+
+    private static boolean debug = false;
+
+    /**
+     * Prints debug information if debugging is enabled.
+     *
+     * @param debugString the debug message to print
+     */
+    private static void debugPrint(String debugString) {
+        if (debug) {
+            System.out.println(debugString);
+        }
+    }
 
     public Palette(byte[] colors) { // uint 8 x 3
         this.colors = colors;
@@ -41,6 +56,33 @@ public class Palette {
 
         palette.setDefaultTransparentIdx();
 
+        return palette;
+    }
+
+    /**
+     * Loads the palette from the stream. Stream data must be encoded as BGRA and the palette is read as BGR,
+     * i.e. the alpha channel is ignored.
+     *
+     * @param streamReader the stream reader
+     * @param numberColorsUsed the number of colors used
+     * @return the loaded palette
+     * @throws IOException if an error occurs while reading the palette
+     */
+    public static Palette loadFromBgra(StreamReader streamReader, long numberColorsUsed) throws IOException {
+        debugPrint("    - Loading palette");
+
+        long adjustedColors = Math.min(numberColorsUsed, PALETTE_MAX_SIZE);
+        byte[] paletteColors = new byte[PALETTE_MAX_SIZE * 3];
+
+        for (int i = 0; i < adjustedColors; i++) {
+            paletteColors[i * 3] = streamReader.getInt8();     // red
+            paletteColors[i * 3 + 1] = streamReader.getInt8(); // green
+            paletteColors[i * 3 + 2] = streamReader.getInt8(); // blue
+            streamReader.getInt8();                            // alpha, not used
+        }
+
+        Palette palette = new Palette(paletteColors);
+        palette.setDefaultTransparentIdx();
         return palette;
     }
 

@@ -27,48 +27,48 @@ import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
 
 public class WorkerImageCollection {
     private final String name;
-    private final Map<Nation, Map<CompassDirection, List<Bitmap>>> nationSpecificImages;
-    private final Map<Nation, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> nationSpecificImagesWithPlayerColor;
-    private final Map<CompassDirection, List<Bitmap>> shadowImages;
-    private final Map<Material, Map<CompassDirection, List<Bitmap>>> cargoImages;
-    private final Map<CompassDirection, List<Bitmap>> imagesWithoutCargo;
-    private final Map<CompassDirection, List<Bitmap>> bodyImages;
-    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesPerPlayer;
-    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesWithPlayerColor;
-    private final Map<WorkerAction, Map<PlayerColor, List<Bitmap>>> actionsByPlayer;
-    private final Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> actionsWithDirectionByPlayer;
-    private final Map<Nation, Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>>> nationSpecificActionsWithDirectionByPlayer;
+    private final Map<Nation, Map<CompassDirection, List<Bitmap>>> nationSpecificImages = new EnumMap<>(Nation.class);
+    private final Map<Nation, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> nationSpecificImagesWithPlayerColor = new EnumMap<>(Nation.class);
+    private final Map<CompassDirection, List<Bitmap>> shadowImages = new EnumMap<>(CompassDirection.class);
+    private final Map<Material, Map<CompassDirection, List<Bitmap>>> cargoImages = new EnumMap<>(Material.class);
+    private final Map<CompassDirection, List<Bitmap>> imagesWithoutCargo = new EnumMap<>(CompassDirection.class);
+    private final Map<CompassDirection, List<Bitmap>> bodyImages = new EnumMap<>(CompassDirection.class);
+    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesPerPlayer = new EnumMap<>(CompassDirection.class);
+    private final Map<CompassDirection, Map<PlayerColor, List<Bitmap>>> imagesWithPlayerColor = new EnumMap<>(CompassDirection.class);
+    private final Map<WorkerAction, Map<PlayerColor, List<Bitmap>>> actionsByPlayer = new EnumMap<>(WorkerAction.class);
+    private final Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>> actionsWithDirectionByPlayer = new EnumMap<>(WorkerAction.class);
+    private final Map<Nation, Map<WorkerAction, Map<CompassDirection, Map<PlayerColor, List<Bitmap>>>>> nationSpecificActionsWithDirectionByPlayer = new EnumMap<>(Nation.class);
 
+    /**
+     * Constructs a WorkerImageCollection with a specific name.
+     *
+     * @param name the name of the collection
+     */
     public WorkerImageCollection(String name) {
         this.name = name;
-
-        nationSpecificImages = new EnumMap<>(Nation.class);
-        imagesWithoutCargo = new EnumMap<>(CompassDirection.class);
-        shadowImages = new EnumMap<>(CompassDirection.class);
-        cargoImages = new EnumMap<>(Material.class);
-        bodyImages = new EnumMap<>(CompassDirection.class);
-        imagesPerPlayer = new EnumMap<>(CompassDirection.class);
-        actionsByPlayer = new EnumMap<>(WorkerAction.class);
-        actionsWithDirectionByPlayer = new EnumMap<>(WorkerAction.class);
-        nationSpecificActionsWithDirectionByPlayer = new EnumMap<>(Nation.class);
-        nationSpecificImagesWithPlayerColor = new EnumMap<>(Nation.class);
-        imagesWithPlayerColor = new EnumMap<>(CompassDirection.class);
     }
 
+    /**
+     * Adds a nation-specific image for a particular direction.
+     *
+     * @param nation            the nation
+     * @param compassDirection  the direction
+     * @param workerImage       the image to add
+     */
     public void addNationSpecificImage(Nation nation, CompassDirection compassDirection, Bitmap workerImage) {
-        if (!nationSpecificImages.containsKey(nation)) {
-            nationSpecificImages.put(nation, new EnumMap<>(CompassDirection.class));
-        }
-
-        Map<CompassDirection, List<Bitmap>> directions = nationSpecificImages.get(nation);
-
-        if (!directions.containsKey(compassDirection)) {
-            directions.put(compassDirection, new ArrayList<>());
-        }
-
-        nationSpecificImages.get(nation).get(compassDirection).add(workerImage);
+        nationSpecificImages
+                .computeIfAbsent(nation, k -> new EnumMap<>(CompassDirection.class))
+                .computeIfAbsent(compassDirection, k -> new ArrayList<>())
+                .add(workerImage);
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
@@ -76,8 +76,8 @@ public class WorkerImageCollection {
         //   - common / fullImagesByPlayer / <direction> / <player color>
 
         // Write walking animations where the worker isn't carrying anything and that are not nation-specific
-        imagesPerPlayer.forEach((direction, playerMap) -> playerMap
-                .forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
+        imagesPerPlayer.forEach((direction, playerMap) ->
+                playerMap.forEach((playerColor, images) -> imageBoard.placeImageSeriesBottom(
                         ImageTransformer.normalizeImageSeries(images),
                         "common",
                         "fullImagesByPlayer",
@@ -85,8 +85,8 @@ public class WorkerImageCollection {
                         playerColor.name().toUpperCase())));
 
         if (imagesPerPlayer.isEmpty() && !bodyImages.isEmpty()) {
-            bodyImages.forEach((direction, images) -> Arrays.stream(PlayerColor.values())
-                    .forEach((playerColor -> imageBoard.placeImageSeriesBottom(
+            bodyImages.forEach((direction, images) ->
+                    Arrays.stream(PlayerColor.values()).forEach((playerColor -> imageBoard.placeImageSeriesBottom(
                             ImageTransformer.drawForPlayer(playerColor, images),
                             "common",
                             "bodyImagesByPlayer",
@@ -166,30 +166,39 @@ public class WorkerImageCollection {
         nationSpecificImagesWithPlayerColor.forEach((nation, directionMap) -> {
                     int width = imageBoard.getCurrentWidth();
 
-                    directionMap.forEach(
-                            (direction, playerColorMap) -> playerColorMap.forEach(
-                                    (playerColor, images) -> imageBoard.placeImageSeriesBottomRightOf(width, ImageTransformer.normalizeImageSeries(images),
-                                            "nationSpecific",
-                                            "fullImagesByPlayer",
-                                            nation.name().toUpperCase(),
-                                            direction.name().toUpperCase(),
-                                            playerColor.name().toUpperCase())));
+                    directionMap.forEach((direction, playerColorMap) -> playerColorMap.forEach(
+                            (playerColor, images) -> imageBoard.placeImageSeriesBottomRightOf(width, ImageTransformer.normalizeImageSeries(images),
+                                    "nationSpecific",
+                                    "fullImagesByPlayer",
+                                    nation.name().toUpperCase(),
+                                    direction.name().toUpperCase(),
+                                    playerColor.name().toUpperCase())));
                 }
         );
 
-        imageBoard.writeBoard(directory, "image-atlas-" + name.toLowerCase(), palette);
+        imageBoard.writeBoard(directory, String.format("image-atlas-%s", name.toLowerCase()), palette);
     }
 
+    /**
+     * Adds shadow images for a specific direction.
+     *
+     * @param compassDirection the direction
+     * @param images           the list of shadow images
+     */
     public void addShadowImages(CompassDirection compassDirection, List<Bitmap> images) {
         shadowImages.put(compassDirection, images);
     }
 
+    /**
+     * Reads cargo images from a BOB resource for a specific material and body type.
+     *
+     * @param material the material
+     * @param bodyType the body type
+     * @param bobId    the BOB ID
+     * @param jobsBob  the BOB resource
+     */
     public void readCargoImagesFromBob(Material material, Courier.BodyType bodyType, int bobId, Bob jobsBob) {
-        int fatOffset = 0;
-
-        if (bodyType == FAT) {
-            fatOffset = 1;
-        }
+        int fatOffset = (bodyType == FAT) ? 1 : 0;
 
         cargoImages.put(material, new EnumMap<>(CompassDirection.class));
 
@@ -207,12 +216,15 @@ public class WorkerImageCollection {
         }
     }
 
+    /**
+     * Reads head images without cargo from a BOB resource for a specific body type.
+     *
+     * @param bodyType the body type
+     * @param bobId    the BOB ID
+     * @param jobsBob  the BOB resource
+     */
     public void readHeadImagesWithoutCargoFromBob(Courier.BodyType bodyType, int bobId, Bob jobsBob) {
-        int fatOffset = 0;
-
-        if (bodyType == FAT) {
-            fatOffset = 1;
-        }
+        int fatOffset = (bodyType == FAT) ? 1 : 0;
 
         for (CompassDirection compassDirection : CompassDirection.values()) {
             List<Bitmap> cargoImagesForDirection = new ArrayList<>();
@@ -228,12 +240,14 @@ public class WorkerImageCollection {
         }
     }
 
+    /**
+     * Merges body and head images into a single image for each direction and player color.
+     *
+     * @param palette the palette to use for the images
+     */
     public void mergeBodyAndHeadImages(Palette palette) {
-        for (Map.Entry<CompassDirection, List<Bitmap>> entry : bodyImages.entrySet()) {
-            CompassDirection direction = entry.getKey();
-            List<Bitmap> bodyImagesForDirection = entry.getValue();
+        bodyImages.forEach((direction, bodyImagesForDirection) -> {
             List<Bitmap> headImagesForDirection = imagesWithoutCargo.get(direction);
-
             List<Bitmap> mergedBodyAndHeadImagesForDirection = new ArrayList<>();
 
             // Merge the head images with the body images
@@ -241,9 +255,7 @@ public class WorkerImageCollection {
                 Bitmap bodyImage = bodyImagesForDirection.get(i);
                 Bitmap headImage = headImagesForDirection.get(i);
 
-                List<Bitmap> imageList = new ArrayList<>();
-                imageList.add(bodyImage);
-                imageList.add(headImage);
+                var imageList = List.of(bodyImage, headImage);
 
                 NormalizedImageList normalizedImageList = new NormalizedImageList(imageList);
                 List<Bitmap> normalizedImages = normalizedImageList.getNormalizedImages();
@@ -300,16 +312,21 @@ public class WorkerImageCollection {
             for (var playerColor : PlayerColor.values()) {
                 imagesPerPlayer.get(direction).put(playerColor, ImageTransformer.drawForPlayer(playerColor, mergedBodyAndHeadImagesForDirection));
             }
-        }
+        });
     }
 
+    /**
+     * Reads body images from a BOB resource for a specific body type.
+     *
+     * @param bodyType  the body type
+     * @param carrierBob the BOB resource
+     */
     public void readBodyImagesFromBob(Courier.BodyType bodyType, Bob carrierBob) {
         for (CompassDirection direction : CompassDirection.values()) {
             List<Bitmap> bodyImagesForDirection = new ArrayList<>();
 
             for (int animationIndex = 0; animationIndex < 8; animationIndex++) {
                 PlayerBitmap body = carrierBob.getBody(bodyType == FAT, direction.ordinal(), animationIndex);
-
                 bodyImagesForDirection.add(body);
             }
 
@@ -317,6 +334,12 @@ public class WorkerImageCollection {
         }
     }
 
+    /**
+     * Adds an animation for a specific action and player color.
+     *
+     * @param action the worker action
+     * @param images the list of player bitmap images
+     */
     public void addAnimation(WorkerAction action, List<PlayerBitmap> images) {
         actionsByPlayer.put(action, new EnumMap<>(PlayerColor.class));
 
@@ -325,14 +348,17 @@ public class WorkerImageCollection {
         }
     }
 
+    /**
+     * Adds a work animation in a specific direction for a specific action.
+     *
+     * @param action    the worker action
+     * @param direction the compass direction
+     * @param images    the list of bitmap images
+     */
     public void addWorkAnimationInDirection(WorkerAction action, CompassDirection direction, List<Bitmap> images) {
-        if (!actionsWithDirectionByPlayer.containsKey(action)) {
-            actionsWithDirectionByPlayer.put(action, new EnumMap<>(CompassDirection.class));
-        }
-
-        if (!actionsWithDirectionByPlayer.get(action).containsKey(direction)) {
-            actionsWithDirectionByPlayer.get(action).put(direction, new EnumMap<>(PlayerColor.class));
-        }
+        actionsWithDirectionByPlayer
+                .computeIfAbsent(action, k -> new EnumMap<>(CompassDirection.class))
+                .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class));
 
         Arrays.stream(PlayerColor.values()).forEach(
             playerColor -> actionsWithDirectionByPlayer.get(action).get(direction).put(
@@ -341,18 +367,19 @@ public class WorkerImageCollection {
             ));
     }
 
+    /**
+     * Adds a nation-specific animation in a specific direction for a specific action and player color.
+     *
+     * @param nation    the nation
+     * @param direction the compass direction
+     * @param action    the worker action
+     * @param images    the list of player bitmap images
+     */
     public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection direction, WorkerAction action, List<PlayerBitmap> images) {
-        if (!nationSpecificActionsWithDirectionByPlayer.containsKey(nation)) {
-            nationSpecificActionsWithDirectionByPlayer.put(nation, new EnumMap<>(WorkerAction.class));
-        }
-
-        if (!nationSpecificActionsWithDirectionByPlayer.get(nation).containsKey(action)) {
-            nationSpecificActionsWithDirectionByPlayer.get(nation).put(action, new EnumMap<>(CompassDirection.class));
-        }
-
-        if (!nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).containsKey(direction)) {
-            nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).put(direction, new EnumMap<>(PlayerColor.class));
-        }
+        nationSpecificActionsWithDirectionByPlayer
+                .computeIfAbsent(nation, k -> new EnumMap<>(WorkerAction.class))
+                .computeIfAbsent(action, k -> new EnumMap<>(CompassDirection.class))
+                .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class));
 
         Arrays.stream(PlayerColor.values()).forEach(
                 playerColor -> nationSpecificActionsWithDirectionByPlayer.get(nation).get(action).get(direction).put(
@@ -361,10 +388,15 @@ public class WorkerImageCollection {
         );
     }
 
+    /**
+     * Adds an image for a specific direction and player color.
+     *
+     * @param direction the compass direction
+     * @param image     the bitmap image
+     */
     public void addImage(CompassDirection direction, Bitmap image) {
-        if (!imagesPerPlayer.containsKey(direction)) {
-            imagesPerPlayer.put(direction, new EnumMap<>(PlayerColor.class));
-        }
+        imagesPerPlayer
+                .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class));
 
         for (var playerColor : PlayerColor.values()) {
             if (!imagesPerPlayer.get(direction).containsKey(playerColor)) {
@@ -375,32 +407,34 @@ public class WorkerImageCollection {
         }
     }
 
+    /**
+     * Adds a nation-specific image with player color for a specific direction.
+     *
+     * @param nation       the nation
+     * @param playerColor  the player color
+     * @param direction    the compass direction
+     * @param image        the bitmap image
+     */
     public void addNationSpecificImageWithPlayerColor(Nation nation, PlayerColor playerColor, CompassDirection direction, Bitmap image) {
-        if (!nationSpecificImagesWithPlayerColor.containsKey(nation)) {
-            nationSpecificImagesWithPlayerColor.put(nation, new EnumMap<>(CompassDirection.class));
-        }
-
-        if (!nationSpecificImagesWithPlayerColor.get(nation).containsKey(direction)) {
-            nationSpecificImagesWithPlayerColor.get(nation).put(direction, new EnumMap<>(PlayerColor.class));
-        }
-
-        if (!nationSpecificImagesWithPlayerColor.get(nation).get(direction).containsKey(playerColor)) {
-            nationSpecificImagesWithPlayerColor.get(nation).get(direction).put(playerColor, new ArrayList<>());
-        }
-
-        nationSpecificImagesWithPlayerColor.get(nation).get(direction).get(playerColor).add(image);
+        nationSpecificImagesWithPlayerColor
+                .computeIfAbsent(nation, k -> new EnumMap<>(CompassDirection.class))
+                .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class))
+                .computeIfAbsent(playerColor, k -> new ArrayList<>())
+                .add(image);
     }
 
+    /**
+     * Adds an image with player color for a specific direction.
+     *
+     * @param playerColor  the player color
+     * @param direction    the compass direction
+     * @param image        the bitmap image
+     */
     public void addImageWithPlayerColor(PlayerColor playerColor, CompassDirection direction, Bitmap image) {
-        if (!imagesWithPlayerColor.containsKey(direction)) {
-            imagesWithPlayerColor.put(direction, new EnumMap<>(PlayerColor.class));
-        }
-
-        if (!imagesWithPlayerColor.get(direction).containsKey(playerColor)) {
-            imagesWithPlayerColor.get(direction).put(playerColor, new ArrayList<>());
-        }
-
-        imagesWithPlayerColor.get(direction).get(playerColor).add(image);
+        imagesWithPlayerColor
+                .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class))
+                .computeIfAbsent(playerColor, k -> new ArrayList<>())
+                .add(image);
     }
 
     public void addNationSpecificAnimationInDirectionWithPlayerColor(Nation nation, CompassDirection direction, WorkerAction action, List<Bitmap> images) {

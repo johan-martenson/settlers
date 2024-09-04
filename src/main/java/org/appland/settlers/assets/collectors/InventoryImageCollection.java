@@ -14,27 +14,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryImageCollection {
+    private final Map<Material, Bitmap> icons = new HashMap<>();
+    private final Map<Nation, Map<Material, Bitmap>> nationIcons = new HashMap<>();
 
-    private final Map<Material, Bitmap> icons;
-    private final Map<Nation, Map<Material, Bitmap>> nationIcons;
-
-    public InventoryImageCollection() {
-        icons = new HashMap<>();
-        nationIcons = new HashMap<>();
-    }
-
+    /**
+     * Adds a generic icon for the specified material.
+     *
+     * @param material the material
+     * @param image    the bitmap image to add
+     */
     public void addIcon(Material material, Bitmap image) {
         this.icons.put(material, image);
     }
 
+    /**
+     * Adds a nation-specific icon for the specified material and nation.
+     *
+     * @param material the material
+     * @param nation   the nation
+     * @param image    the bitmap image to add
+     */
     public void addNationSpecificIcon(Material material, Nation nation, Bitmap image) {
-        if (!this.nationIcons.containsKey(nation)) {
-            this.nationIcons.put(nation, new HashMap<>());
-        }
-
-        this.nationIcons.get(nation).put(material, image);
+        nationIcons.computeIfAbsent(nation, k -> new HashMap<>()).put(material, image);
     }
 
+    /**
+     * Writes the image atlas and inventory icons to the specified directory using the given palette.
+     *
+     * @param directory the directory to save the atlas and icons
+     * @param palette   the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String directory, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
@@ -43,12 +53,12 @@ public class InventoryImageCollection {
                 "generic",
                 material.name().toUpperCase()));
 
-        nationIcons.forEach((nation, materialMap) -> materialMap
-                        .forEach((material, image) -> imageBoard.placeImageBottom(
-                                image,
-                                "nationSpecific",
-                                nation.name().toUpperCase(),
-                                material.name().toUpperCase())));
+        nationIcons.forEach((nation, materialMap) -> materialMap.forEach((material, image) ->
+                imageBoard.placeImageBottom(
+                        image,
+                        "nationSpecific",
+                        nation.name().toUpperCase(),
+                        material.name().toUpperCase())));
 
         imageBoard.writeBoard(directory, "image-atlas-inventory-icons", palette);
 
@@ -60,22 +70,17 @@ public class InventoryImageCollection {
         // Write generic inventory icons
         for (var entry : icons.entrySet()) {
             entry.getValue().writeToFile(
-                    Paths.get(inventoryIconDir.toString(), entry.getKey().name().toUpperCase() + ".png")
-            );
+                    inventoryIconDir.resolve(String.format("%s.png", entry.getKey().name().toUpperCase())));
         }
 
         // Write nation-specific inventory icons
         for (var entry : nationIcons.entrySet()) {
-            Path nationSpecificPath = Paths.get(inventoryIconDir.toString(), entry.getKey().name().toUpperCase());
-
-            if (!Files.isDirectory(nationSpecificPath)) {
-                Files.createDirectory(nationSpecificPath);
-            }
+            var nationSpecificPath = inventoryIconDir.resolve(entry.getKey().name().toUpperCase());
+            Files.createDirectories(nationSpecificPath);
 
             for (var materialBitmapEntry : entry.getValue().entrySet()) {
                 materialBitmapEntry.getValue().writeToFile(
-                        Paths.get(nationSpecificPath.toString(), materialBitmapEntry.getKey().name().toUpperCase() + ".png")
-                );
+                        nationSpecificPath.resolve(String.format("%s.png", materialBitmapEntry.getKey().name().toUpperCase())));
             }
         }
     }

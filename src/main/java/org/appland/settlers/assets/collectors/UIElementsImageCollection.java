@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 public class UIElementsImageCollection {
-    private final Map<Size, Bitmap> hoverAvailableBuilding;
-    private final Map<Size, Bitmap> availableBuilding;
-    private final Map<UiIcon, Bitmap> uiElements;
+    private final Map<Size, Bitmap> hoverAvailableBuilding = new EnumMap<>(Size.class);
+    private final Map<Size, Bitmap> availableBuilding = new EnumMap<>(Size.class);
+    private final Map<UiIcon, Bitmap> uiElements = new EnumMap<>(UiIcon.class);
 
     private Bitmap selectedPointImage;
     private Bitmap hoverPointImage;
@@ -25,57 +25,109 @@ public class UIElementsImageCollection {
     private Bitmap availableMine;
     private Bitmap availableHarbor;
 
-    public UIElementsImageCollection() {
-        hoverAvailableBuilding = new EnumMap<>(Size.class);
-        availableBuilding = new EnumMap<>(Size.class);
-        uiElements = new EnumMap<>(UiIcon.class);
-    }
-
+    /**
+     * Adds the selected point image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addSelectedPointImage(Bitmap image) {
         this.selectedPointImage = image;
     }
 
+    /**
+     * Adds the hover point image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addHoverPoint(Bitmap image) {
         this.hoverPointImage = image;
     }
 
+    /**
+     * Adds the hover available flag image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addHoverAvailableFlag(Bitmap image) {
         this.hoverAvailableFlag = image;
     }
 
+    /**
+     * Adds the hover available mine image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addHoverAvailableMine(Bitmap image) {
         this.hoverAvailableMine = image;
     }
 
+    /**
+     * Adds the hover available building image for a specific size.
+     *
+     * @param size  the size of the building
+     * @param image the bitmap image to add
+     */
     public void addHoverAvailableBuilding(Size size, Bitmap image) {
         this.hoverAvailableBuilding.put(size, image);
     }
 
+    /**
+     * Adds the hover available harbor image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addHoverAvailableHarbor(Bitmap image) {
         this.hoverAvailableHarbor = image;
     }
 
+    /**
+     * Adds the available flag image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addAvailableFlag(Bitmap image) {
         this.availableFlag = image;
     }
 
+    /**
+     * Adds the available mine image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addAvailableMine(Bitmap image) {
         this.availableMine = image;
     }
 
+    /**
+     * Adds the available building image for a specific size.
+     *
+     * @param size  the size of the building
+     * @param image the bitmap image to add
+     */
     public void addAvailableBuilding(Size size, Bitmap image) {
         this.availableBuilding.put(size, image);
     }
 
+    /**
+     * Adds the available harbor image.
+     *
+     * @param image the bitmap image to add
+     */
     public void addAvailableHarbor(Bitmap image) {
         this.availableHarbor = image;
     }
 
+    /**
+     * Writes the image atlas to the specified directory using the given palette.
+     *
+     * @param toDir   the directory to save the atlas
+     * @param palette the palette to use for the images
+     * @throws IOException if an I/O error occurs
+     */
     public void writeImageAtlas(String toDir, Palette palette) throws IOException {
         ImageBoard imageBoard = new ImageBoard();
 
         imageBoard.placeImageRightOf(selectedPointImage, "selectedPoint");
-
         imageBoard.placeImageRightOf(hoverPointImage, "hoverPoint");
 
         imageBoard.placeImagesAsRow(
@@ -112,6 +164,12 @@ public class UIElementsImageCollection {
         imageBoard.writeBoard(toDir, "image-atlas-ui-elements", palette);
     }
 
+    /**
+     * Adds a UI element image associated with a specific icon.
+     *
+     * @param uiIcon the UI icon
+     * @param image  the bitmap image to add
+     */
     public void addUiElement(UiIcon uiIcon, Bitmap image) {
         uiElements.put(uiIcon, image);
     }

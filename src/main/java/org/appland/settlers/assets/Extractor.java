@@ -26,6 +26,7 @@ import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
 import org.appland.settlers.assets.gamefiles.CbobRomBobsLst;
+import org.appland.settlers.assets.gamefiles.ImageAndShadowIndex;
 import org.appland.settlers.assets.gamefiles.IoLst;
 import org.appland.settlers.assets.gamefiles.JapZLst;
 import org.appland.settlers.assets.gamefiles.JobsBob;
@@ -47,7 +48,6 @@ import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.resources.WaveFile;
-import org.appland.settlers.assets.utils.ImageTransformer;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
@@ -66,7 +66,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -308,17 +307,17 @@ public class Extractor {
 
         BorderImageCollector borderImageCollector = new BorderImageCollector();
 
-        borderImageCollector.addLandBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addSummerBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWinterBorderImage(AFRICANS, getPlayerImageAt(mbobAfrBobsLst, MbobAfrBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addSummerBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWinterBorderImage(JAPANESE, getPlayerImageAt(mbobJapBobsLst, MbobJapBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addSummerBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWinterBorderImage(ROMANS, getPlayerImageAt(mbobRomBobsLst, MbobRomBobsLst.COAST_BORDER_ICON));
 
-        borderImageCollector.addLandBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.LAND_BORDER_ICON));
-        borderImageCollector.addWaterBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.COAST_BORDER_ICON));
+        borderImageCollector.addSummerBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.LAND_BORDER_ICON));
+        borderImageCollector.addWinterBorderImage(VIKINGS, getPlayerImageAt(mbobVikBobsLst, MbobVikBobsLst.COAST_BORDER_ICON));
 
         borderImageCollector.writeImageAtlas(toDir, defaultPalette);
     }
@@ -625,29 +624,6 @@ public class Extractor {
         privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_STAND_ASIDE_WEST, 7));
         privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_EAST, 7));
         privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_JUMP_BACK_WEST, 7));
-
-        Arrays.stream(PlayerColor.values()).forEach(
-                playerColor -> {
-                    privateWorkerImageCollector.addNationSpecificAnimationInDirectionWithPlayerColor(
-                            ROMANS,
-                            WEST,
-                            GET_HIT,
-                            ImageTransformer.makeGetHitAnimation(
-                                    getPlayerImageAt(
-                                            cbobRomBobsLst,
-                                            CbobRomBobsLst.PRIVATE_SHIELD_UP_WEST).getBitmapForPlayer(playerColor)));
-
-                    privateWorkerImageCollector.addNationSpecificAnimationInDirectionWithPlayerColor(
-                            ROMANS,
-                            EAST,
-                            GET_HIT,
-                            ImageTransformer.makeGetHitAnimation(
-                                    getPlayerImageAt(
-                                            cbobRomBobsLst,
-                                            CbobRomBobsLst.PRIVATE_SHIELD_UP_EAST).getBitmapForPlayer(playerColor)));
-                }
-        );
-
 
         privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST, 8));
         privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST, 8));
@@ -1679,7 +1655,7 @@ public class Extractor {
         donkeyImageCollection.writeImageAtlas(natureDir + "/animals/", defaultPalette);
 
         // Extract decorative elements
-        var decorations = Map.ofEntries(
+        var decorationsWithShadows = Map.ofEntries(
                 Map.entry(DecorationType.MINI_BROWN_MUSHROOM, MapBobs0Lst.MINI_BROWN_MUSHROOM_AND_SHADOW),
                 Map.entry(DecorationType.TOADSTOOL, MapBobs0Lst.TOADSTOOL_AND_SHADOW),
                 Map.entry(DecorationType.MINI_STONE, MapBobs0Lst.MINI_STONE_AND_SHADOW),
@@ -1704,7 +1680,6 @@ public class Extractor {
                 Map.entry(DecorationType.PORTAL, MapBobs0Lst.PORTAL_AND_SHADOW),
                 Map.entry(DecorationType.SHINING_PORTAL, MapBobs0Lst.SHINING_PORTAL_AND_SHADOW),
                 Map.entry(DecorationType.BROWN_MUSHROOM, MapBobs0Lst.BROWN_MUSHROOM_AND_SHADOW),
-                Map.entry(DecorationType.MINI_STONE_WITH_GRASS, MapBobs0Lst.MINI_STONE_WITH_GRASS_AND_SHADOW),
                 Map.entry(DecorationType.SMALL_STONE_WITH_GRASS, MapBobs0Lst.SMALL_STONE_WITH_GRASS_AND_SHADOW),
                 Map.entry(DecorationType.SOME_SMALL_STONES_1, MapBobs0Lst.SOME_SMALL_STONES_1_AND_SHADOW),
                 Map.entry(DecorationType.SOME_SMALL_STONES_2, MapBobs0Lst.SOME_SMALL_STONES_2_AND_SHADOW),
@@ -1716,12 +1691,21 @@ public class Extractor {
                 Map.entry(DecorationType.TREE_STUB, MapBobs0Lst.TREE_STUB_AND_SHADOW)
         );
 
+        var decorationsWithoutShadows = Map.of(
+                DecorationType.MINI_STONE_WITH_GRASS, MapBobs0Lst.MINI_STONE_WITH_GRASS_AND_SHADOW
+        );
+
         DecorativeImageCollection decorativeImageCollection = new DecorativeImageCollection();
 
-        decorations.forEach((decorationType, imageAndShadowIndex) -> {
+        decorationsWithShadows.forEach((decorationType, imageAndShadowIndex) -> {
             var image = getImageAt(mapBobs0Lst, imageAndShadowIndex.image());
             var shadow = getImageAt(mapBobs0Lst, imageAndShadowIndex.shadow());
             decorativeImageCollection.addDecorationImageWithShadow(decorationType, image, shadow);
+        });
+
+        decorationsWithoutShadows.forEach((decoration, imageIndex) -> {
+            var image = getImageAt(mapBobs0Lst, imageIndex.image());
+            decorativeImageCollection.addDecorationImage(decoration, image);
         });
 
         decorativeImageCollection.writeImageAtlas(toDir, defaultPalette);
