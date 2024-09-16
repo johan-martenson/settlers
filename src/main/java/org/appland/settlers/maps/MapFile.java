@@ -116,7 +116,7 @@ public class MapFile {
         // Ignore for now
     }
 
-    List<MapFilePoint> getMapFilePoints() {
+    public List<MapFilePoint> getMapFilePoints() {
         return pointList;
     }
 
@@ -128,7 +128,7 @@ public class MapFile {
         return maxNumberOfPlayers;
     }
 
-    TerrainType getTerrainType() {
+    public TerrainType getTerrainType() {
         return terrainType;
     }
 

@@ -1,5 +1,8 @@
 package org.appland.settlers.assets;
 
+/**
+ * Represents different types of cargo that a carrier can transport.
+ */
 public enum CarrierCargo {
     BEER,
     TONGS,
@@ -34,6 +37,6 @@ public enum CarrierCargo {
     IRONORE,
     COAL,
     MEAT,
-    HAM/*,
-    SHIELDJAPANESE*/
+    HAM,
+    SHIELDJAPANESE
 }

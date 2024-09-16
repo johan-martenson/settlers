@@ -3,36 +3,52 @@ package org.appland.settlers.assets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles the management and retrieval of rendered animations for different nations and compass directions.
+ */
 public class RenderedWorker {
-    private final JobType job;
-    private final Map<AnimationKey, StackedBitmaps[]> animationMap;
+    private final JobType jobType;
+    private final Map<AnimationKey, StackedBitmaps[]> animations = new HashMap<>();
 
-    public RenderedWorker(JobType job) {
-        this.job = job;
-        animationMap = new HashMap<>();
+    /**
+     * Constructs a RenderedWorker with the specified job type.
+     *
+     * @param jobType The job type associated with this worker.
+     */
+    public RenderedWorker(JobType jobType) {
+        this.jobType = jobType;
     }
 
-    public void setAnimationStep(Nation nation, CompassDirection compassDirection, StackedBitmaps bitmaps, int animationStep) {
+    /**
+     * Sets the animation step for a given nation and compass direction.
+     *
+     * @param nation The nation for which the animation is being set.
+     * @param compassDirection The compass direction for which the animation is being set.
+     * @param bitmaps The stacked bitmaps for the animation step.
+     * @param animationStep The step in the animation sequence.
+     */
+    public void addAnimationStep(Nation nation, CompassDirection compassDirection, StackedBitmaps bitmaps, int animationStep) {
         AnimationKey animationKey = new AnimationKey(nation, compassDirection);
 
-        if (!animationMap.containsKey(animationKey)) {
-            animationMap.put(animationKey, new StackedBitmaps[8]);
-        }
-
-        StackedBitmaps[] animation = animationMap.get(animationKey);
-
-        animation[animationStep] = bitmaps;
+        animations.computeIfAbsent(animationKey, k -> new StackedBitmaps[8])[animationStep] = bitmaps;
     }
 
+    /**
+     * Retrieves the animation for a given nation and compass direction.
+     *
+     * @param nation The nation for which the animation is requested.
+     * @param compassDirection The compass direction for which the animation is requested.
+     * @return The array of stacked bitmaps representing the animation.
+     */
     public StackedBitmaps[] getAnimation(Nation nation, CompassDirection compassDirection) {
-        return animationMap.get(new AnimationKey(nation, compassDirection));
+        return animations.get(new AnimationKey(nation, compassDirection));
     }
 
     @Override
     public String toString() {
         return "RenderedWorker{" +
-                "job=" + job +
-                ", animationMap=" + animationMap +
+                "job=" + jobType +
+                ", animationMap=" + animations +
                 '}';
     }
 }

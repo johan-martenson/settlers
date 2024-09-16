@@ -55,7 +55,7 @@ public class SoundLoader {
 
         String header = streamReader.getUint8ArrayAsString(4);
 
-        debugPrint(Utils.bytesToHex(header.getBytes()));
+        debugPrint(Utils.convertBytesToHex(header.getBytes()));
 
         SoundType soundType = null;
 

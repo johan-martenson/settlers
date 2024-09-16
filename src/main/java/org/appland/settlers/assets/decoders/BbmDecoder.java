@@ -71,7 +71,7 @@ public class BbmDecoder {
                         throw new InvalidFormatException(String.format("Length must match %d. Not %d", PALETTE_LENGTH, length));
                     }
 
-                    Palette palette = Palette.load(streamReader, false);
+                    Palette palette = Palette.loadPalette(streamReader, false);
                     int lastSeparator = filename.lastIndexOf("/");
 
                     palette.setName(String.format("%s(%d)", filename.substring(lastSeparator + 1), i));

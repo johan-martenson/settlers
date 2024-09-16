@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,63 +18,65 @@ import java.util.Stack;
 
 import static java.nio.ByteOrder.BIG_ENDIAN;
 
+/**
+ * DatLoader is responsible for loading and parsing binary data chunks from a file or byte stream.
+ */
 public class DatLoader {
-    static final Set<String> HAS_CHILDREN = new HashSet<>();
-    private static final Set<String> TYPE_ID_ONLY = new HashSet<>();
+    static final Set<String> HAS_CHILDREN = Set.of("FORM", "CAT ", "LIST");
+    private static final Set<String> TYPE_ID_ONLY = Set.of("XDIR", "XMID");
 
-    static {
-        HAS_CHILDREN.add("FORM");
-        HAS_CHILDREN.add("CAT ");
-        HAS_CHILDREN.add("LIST");
-
-        TYPE_ID_ONLY.add("XDIR");
-        TYPE_ID_ONLY.add("XMID");
-    }
-
+    // Debug flag for verbose output
     private boolean debug = false;
 
+    /**
+     * Loads and parses a file containing data chunks.
+     *
+     * @param assetFilename the file to load
+     * @throws IOException if an I/O error occurs
+     */
     public void load(String assetFilename) throws IOException {
+        try (StreamReader streamReader = new StreamReader(Files.newInputStream(Path.of(assetFilename)), ByteOrder.LITTLE_ENDIAN)) {
+            List<Chunk> chunks = new ArrayList<>();
 
-        StreamReader streamReader = new StreamReader(Files.newInputStream(Path.of(assetFilename)), ByteOrder.LITTLE_ENDIAN);
+            while (!streamReader.isEof()) {
+                chunks.add(loadChunkFromStream(streamReader));
+            }
 
-        List<Chunk> chunks = new ArrayList<>();
+            streamReader.getInputStream().close();
 
-        while (!streamReader.isEof()) {
-            Chunk chunk = loadChunkFromStream(streamReader);
+            if (debug) {
+                System.out.println("All chunks loaded");
+                System.out.println(".....");
 
-            chunks.add(chunk);
+                printChunks(chunks);
+            }
         }
+    }
 
-        streamReader.getInputStream().close();
-
-        System.out.println("All chunks loaded");
-
-        System.out.println(".....");
-
+    // Prints all loaded chunks in a hierarchical structure
+    private void printChunks(List<Chunk> chunks) {
         Stack<Chunk> toPrint = new Stack<>();
         Map<Chunk, Integer> depth = new HashMap<>();
 
-        Collections.reverse(chunks);
+        Collections.reverse(chunks); // Reverse for correct order
 
         chunks.forEach(chunk -> {
             toPrint.push(chunk);
             depth.put(chunk, 0);
         });
 
+        // Process and print each chunk and its children
         while (!toPrint.isEmpty()) {
             Chunk chunk = toPrint.pop();
             int chunkDepth = depth.get(chunk);
 
-            for (int i = 0; i < chunkDepth; i++) {
-                System.out.print(" ");
-            }
+            // Indentation for nested chunks
+            System.out.printf("%s%s (%d)%n", " ".repeat(chunkDepth), chunk.getTypeId(), chunk.getTotalSize());
 
-            System.out.printf("%s (%d)%n", chunk.getTypeId(), chunk.getTotalSize());
+            List<Chunk> children = new ArrayList<>(chunk.getChildren());
+            Collections.reverse(children); // Reverse for correct order
 
-            List<Chunk> children = chunk.getChildren();
-
-            Collections.reverse(children);
-
+            // Add children to the stack
             children.forEach(child -> {
                 toPrint.push(child);
                 depth.put(child, chunkDepth + 1);
@@ -84,7 +85,6 @@ public class DatLoader {
     }
 
     private Chunk loadChunkFromByteArray(byte[] data, int offset) {
-
         ByteBuffer byteBuffer = ByteBuffer.wrap(data, offset + 4, data.length - offset - 4);
 
         // Get the type id
@@ -105,7 +105,6 @@ public class DatLoader {
 
             // Handle chunks that can contain content
         } else {
-
             if (debug) {
                 System.out.println("Has content");
             }
@@ -113,17 +112,15 @@ public class DatLoader {
             // Get the size of the data (as uint32)
             long contentSize = (long) byteBuffer.order(BIG_ENDIAN).getInt() & 0xffffffffL;
 
-            // Make sure data starts at an even address
-            if ((contentSize & 1) != 0) {
-                contentSize = contentSize + 1;
-            }
+            // Align to even size
+            contentSize += (contentSize & 1) != 0 ? 1 : 0;
 
             if (debug) {
                 System.out.printf("Defined size of data: %d%n", contentSize);
             }
 
-            byte[] content = new byte[(int)contentSize];
-            byteBuffer.get(content, 0, (int)contentSize);
+            byte[] content = new byte[(int) contentSize];
+            byteBuffer.get(content, 0, (int) contentSize);
 
             if (debug) {
                 System.out.printf("Actual size of data: %d%n", content.length);
@@ -164,7 +161,6 @@ public class DatLoader {
 
         if (debug) {
             System.out.println("\nNew chunk. (stream)");
-
             System.out.printf("Type id: %s%n", typeId);
         }
 
@@ -176,7 +172,6 @@ public class DatLoader {
 
         // Handle chunks that can contain content
         } else {
-
             if (debug) {
                 System.out.println("Has content");
             }
@@ -186,16 +181,14 @@ public class DatLoader {
             long contentSize = (long)streamReader.getInt32() & 0xffffffffL;
             streamReader.popByteOrder();
 
-            // Make sure data starts at an even address
-            if ((contentSize & 1) != 0) {
-                contentSize = contentSize + 1;
-            }
+            // Align to even size
+            contentSize += (contentSize & 1) != 0 ? 1 : 0;
 
             if (debug) {
                 System.out.printf("Defined size of data: %d%n", contentSize);
             }
 
-            byte[] content = streamReader.getUint8ArrayAsBytes((int)contentSize);
+            byte[] content = streamReader.getUint8ArrayAsBytes((int) contentSize);
 
             if (debug) {
                 System.out.printf("Actual size of data: %d%n", content.length);
@@ -211,10 +204,9 @@ public class DatLoader {
 
             while (bytesRead < chunk.getContent().length) {
                 Chunk childChunk = loadChunkFromByteArray(chunk.getContent(), (int)bytesRead);
-
                 chunk.addChild(childChunk);
+                bytesRead += childChunk.getTotalSize();
 
-                bytesRead = bytesRead + childChunk.getTotalSize();
             }
         }
 

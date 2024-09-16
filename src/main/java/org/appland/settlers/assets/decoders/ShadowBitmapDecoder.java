@@ -19,9 +19,17 @@ public class ShadowBitmapDecoder {
         }
     }
 
+    /**
+     * Loads a shadow bitmap from the provided stream, using the given palette.
+     *
+     * @param streamReader The ByteReader to read data from
+     * @param palette The Palette to apply
+     * @return The decoded Bitmap
+     * @throws IOException If an I/O error occurs
+     */
     public static Bitmap loadBitmapShadowFromStream(ByteReader streamReader, Palette palette) throws IOException {
 
-        /* Read header */
+        // Read header
         short nx = streamReader.getInt16();
         short ny = streamReader.getInt16();
         long unknown1 = streamReader.getUint32();
@@ -36,7 +44,7 @@ public class ShadowBitmapDecoder {
 
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
 
-        short grayIndex = palette.getIndexForColor(255, 255, 255);
+        short grayIndex = (short) palette.getIndexForColor(255, 255, 255);
 
         debugPrint(" - Width: " + width);
         debugPrint(" - Height: " + height);
@@ -47,11 +55,9 @@ public class ShadowBitmapDecoder {
         }
 
         long position = height * 2L;
-        Bitmap bitmap = new Bitmap(width, height, palette, TextureFormat.BGRA);
+        Bitmap bitmap = new Bitmap(width, height, nx, ny, palette, TextureFormat.BGRA);
 
-        bitmap.setNx(nx);
-        bitmap.setNy(ny);
-
+        // Process the pixel data row by row
         for (int y = 0; y < height; y++) {
             int x = 0;
 
@@ -63,15 +69,14 @@ public class ShadowBitmapDecoder {
                 }
 
                 count = data[(int)position++];
-
-                x = x + count;
+                x += count; // Skip transparent pixels
             }
 
             if (position >= data.length) {
                 throw new RuntimeException("Exceeded data size");
             }
 
-            position = position + 1;
+            position += 1; // Move to next row
         }
 
         return bitmap;

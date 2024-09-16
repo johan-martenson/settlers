@@ -38,6 +38,7 @@ import org.appland.settlers.model.statistics.ProductionDataPoint;
 import org.appland.settlers.model.statistics.ProductionDataSeries;
 import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.rest.GameTicker;
+import org.appland.settlers.utils.JsonUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -79,7 +80,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     );
 
     private final Map<Player, Session> playerToSession;
-    private final JsonUtils utils;
+    private final JsonUtils jsonUtils;
     private final JSONParser parser;
     private final IdManager idManager = IdManager.idManager;
     private final GameTicker gameTicker = GameTicker.GAME_TICKER;
@@ -90,7 +91,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
 
-        utils = new JsonUtils(idManager);
+        jsonUtils = new JsonUtils(idManager);
         parser = new JSONParser();
         playerToSession = new HashMap<>();
 
@@ -103,7 +104,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
         sendToPlayer(new JSONObject(Map.of(
                         "type", "NEW_CHAT_MESSAGES",
-                        "chatMessage", utils.chatMessageToPlayerToJson(chatMessage, player)
+                        "chatMessage", jsonUtils.chatMessageToPlayerToJson(chatMessage, player)
                 )),
                 player);
     }
@@ -117,7 +118,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         chatRoomListeners.get(roomId).forEach(session -> sendToSession(session,
                 new JSONObject(Map.of(
                         "type", "NEW_CHAT_MESSAGES",
-                        "chatMessage", utils.chatMessageToRoomToJson(chatMessage, roomId)
+                        "chatMessage", jsonUtils.chatMessageToRoomToJson(chatMessage, roomId)
                 ))));
     }
 
@@ -130,14 +131,14 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             gameInfoListeners.get(gameResource).forEach(session -> sendToSession(session,
                     new JSONObject(Map.of(
                             "type", "GAME_INFO_CHANGED",
-                            "gameInformation", utils.gameToJson(gameResource)
+                            "gameInformation", jsonUtils.gameToJson(gameResource)
                     ))));
         }
 
         gameListListeners.forEach(session -> sendToSession(session,
                 new JSONObject(Map.of(
                         "type", "GAME_LIST_CHANGED",
-                        "games", utils.gamesToJson(GAME_RESOURCES.getGames())
+                        "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
                 ))));
     }
 
@@ -149,7 +150,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         gameListListeners.forEach(session -> sendToSession(session,
                 new JSONObject(Map.of(
                         "type", "GAME_LIST_CHANGED",
-                        "games", utils.gamesToJson(games)
+                        "games", jsonUtils.gamesToJson(games)
                 ))));
 
         if (!gameListListeners.isEmpty()) {
@@ -180,7 +181,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "priority", utils.transportPriorityToJson(player.getTransportPriorities())
+                                "priority", jsonUtils.transportPriorityToJson(player.getTransportPriorities())
                         )));
             }
             case GET_PRODUCTION_STATISTICS -> {
@@ -260,11 +261,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "terrain", utils.mapFileTerrainToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
+                                "terrain", jsonUtils.mapFileTerrainToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
                         )));
             }
             case SET_TRANSPORT_PRIORITY -> {
-                var category = utils.jsonToTransportCategory((String) jsonBody.get("category"));
+                var category = jsonUtils.jsonToTransportCategory((String) jsonBody.get("category"));
                 int priority = ((Long) jsonBody.get("priority")).intValue();
 
                 synchronized (map) {
@@ -300,12 +301,12 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 GAME_RESOURCES.removeGame(game);
             }
             case FIND_NEW_ROAD -> {
-                var start = utils.jsonToPoint((JSONObject) jsonBody.get("from"));
-                var goal = utils.jsonToPoint((JSONObject) jsonBody.get("to"));
+                var start = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("from"));
+                var goal = jsonUtils.jsonToPoint((JSONObject) jsonBody.get("to"));
                 Set<Point> avoid = null;
 
                 if (jsonBody.containsKey("avoid")) {
-                    avoid = utils.jsonToPointsSet((JSONArray) jsonBody.get("avoid"));
+                    avoid = jsonUtils.jsonToPointsSet((JSONArray) jsonBody.get("avoid"));
                 }
 
                 List<Point> possibleRoad;
@@ -319,7 +320,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
                                     "roadIsPossible", true,
-                                    "possibleRoad", utils.pointsToJson(possibleRoad),
+                                    "possibleRoad", jsonUtils.pointsToJson(possibleRoad),
                                     "closesRoad", map.isFlagAtPoint(goal) || (map.isRoadAtPoint(goal) && map.isAvailableFlagPoint(player, goal))
                             )));
                 }
@@ -342,7 +343,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "chatHistory", utils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
+                                "chatHistory", jsonUtils.chatMessagesToRoomToJson(ChatManager.getChatHistoryForRoom(roomId), roomId)
                         )));
             }
             case LISTEN_TO_CHAT_MESSAGES -> {
@@ -378,7 +379,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "gameInformation", utils.gameToJson(gameToSet)
+                                "gameInformation", jsonUtils.gameToJson(gameToSet)
                         )));
             }
             case SET_SELF_PLAYER -> {
@@ -389,7 +390,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "playerInformation", utils.playerToJson(playerToSet)
+                                "playerInformation", jsonUtils.playerToJson(playerToSet)
                         )));
             }
             case LISTEN_TO_GAME_LIST -> {
@@ -426,7 +427,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "gameInformation", utils.gameToJson(game)
+                                "gameInformation", jsonUtils.gameToJson(game)
                         )));
             }
             case START_MONITORING_GAME -> {
@@ -438,7 +439,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "playerView", utils.playerViewToJson(map, player, game)
+                                    "playerView", jsonUtils.playerViewToJson(map, player, game)
                             )));
                 } else {
                     sendToSession(session,
@@ -455,11 +456,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case CREATE_GAME -> {
-                var newGame = new GameResource(utils);
+                var newGame = new GameResource(jsonUtils);
 
                 if (jsonBody.containsKey("players")) {
                     newGame.setPlayers(
-                            utils.jsonToPlayers((JSONArray) jsonBody.get("players"))
+                            jsonUtils.jsonToPlayers((JSONArray) jsonBody.get("players"))
                     );
                 }
 
@@ -472,21 +473,21 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                 sendToSession(session, new JSONObject(Map.of(
                         "requestId", jsonBody.get("requestId"),
-                        "gameInformation", utils.gameToJson(newGame)
+                        "gameInformation", jsonUtils.gameToJson(newGame)
                 )));
             }
             case GET_MAPS -> {
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "maps", utils.mapFilesToJson(MapsResource.mapsResource.getMaps())
+                                "maps", jsonUtils.mapFilesToJson(MapsResource.mapsResource.getMaps())
                         )));
             }
             case GET_GAMES -> {
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "games", utils.gamesToJson(GAME_RESOURCES.getGames())
+                                "games", jsonUtils.gamesToJson(GAME_RESOURCES.getGames())
                         )));
             }
             case UPDATE_PLAYER -> {
@@ -504,7 +505,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "playerInformation", utils.playerToJson(playerToUpdate))
+                                    "playerInformation", jsonUtils.playerToJson(playerToUpdate))
                             ));
                 }
             }
@@ -527,7 +528,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "playerInformation", utils.playerToJson(newPlayer))
+                                "playerInformation", jsonUtils.playerToJson(newPlayer))
                         ));
             }
             case ADD_PLAYER_TO_GAME -> {
@@ -544,7 +545,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", utils.gameToJson(gameToAddPlayerTo)
+                                    "gameInformation", jsonUtils.gameToJson(gameToAddPlayerTo)
                             )));
                 }
             }
@@ -558,7 +559,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", utils.gameToJson(game)
+                                    "gameInformation", jsonUtils.gameToJson(game)
                             )));
                 }
             }
@@ -589,7 +590,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                     sendToSession(session,
                             new JSONObject(Map.of(
                                     "requestId", jsonBody.get("requestId"),
-                                    "gameInformation", utils.gameToJson(game)
+                                    "gameInformation", jsonUtils.gameToJson(game)
                             )));
                 } else {
                     sendToSession(session,
@@ -613,7 +614,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 synchronized (map) {
                     sendToSession(session, new JSONObject(Map.of(
                             "requestId", jsonBody.get("requestId"),
-                            "flag", utils.flagToDebugJson(flag)
+                            "flag", jsonUtils.flagToDebugJson(flag)
                     )));
                 }
             }
@@ -893,7 +894,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                         jsonPlayerViewChanges.put("changedBuildings", jsonUpdatedBuildings);
 
-                        jsonUpdatedBuildings.add(utils.houseToJson(building, player));
+                        jsonUpdatedBuildings.add(jsonUtils.houseToJson(building, player));
                     }
                 } else if (object instanceof Flag flag) {
                     synchronized (map) {
@@ -903,7 +904,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                         jsonPlayerViewChanges.put("changedFlags", jsonUpdatedFlags);
 
-                        jsonUpdatedFlags.add(utils.flagToJson(flag));
+                        jsonUpdatedFlags.add(jsonUtils.flagToJson(flag));
                     }
                 }
 
@@ -946,11 +947,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case INFORMATION_ON_POINTS -> {
                 JSONArray jsonPointsInformation = new JSONArray();
 
-                List<Point> points = utils.jsonToPoints((JSONArray) jsonBody.get("points"));
+                List<Point> points = jsonUtils.jsonToPoints((JSONArray) jsonBody.get("points"));
 
                 synchronized (map) {
                     for (Point point : points) {
-                        jsonPointsInformation.add(utils.pointToDetailedJson(point, player, map));
+                        jsonPointsInformation.add(jsonUtils.pointToDetailedJson(point, player, map));
                     }
                 }
 
@@ -966,8 +967,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             sendToSession(session,
                                     new JSONObject(Map.of(
                                             "requestId", jsonBody.get("requestId"),
-                                            "gameInformation", utils.gameToJson(game),
-                                            "playerView", utils.playerViewToJson(map, player, game)
+                                            "gameInformation", jsonUtils.gameToJson(game),
+                                            "playerView", jsonUtils.playerViewToJson(map, player, game)
                                     )));
                         }
                     }
@@ -976,7 +977,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                             sendToSession(session,
                                     new JSONObject(Map.of(
                                             "requestId", jsonBody.get("requestId"),
-                                            "gameInformation", utils.gameToJson(game)
+                                            "gameInformation", jsonUtils.gameToJson(game)
                                     )));
                         }
                     }
@@ -984,7 +985,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case CALL_SCOUT -> {
                 JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
-                Point point = utils.jsonToPoint(jsonPoint);
+                Point point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
                     Flag flag = map.getFlagAtPoint(point);
@@ -994,7 +995,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case CALL_GEOLOGIST -> {
                 JSONObject jsonPoint = (JSONObject) jsonBody.get("point");
-                Point point = utils.jsonToPoint(jsonPoint);
+                Point point = jsonUtils.jsonToPoint(jsonPoint);
 
                 synchronized (map) {
                     Flag flag = map.getFlagAtPoint(point);
@@ -1003,8 +1004,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 }
             }
             case PLACE_BUILDING -> {
-                Point point = utils.jsonToPoint(jsonBody);
-                Building building = utils.buildingFactory(jsonBody, player);
+                Point point = jsonUtils.jsonToPoint(jsonBody);
+                Building building = jsonUtils.buildingFactory(jsonBody, player);
 
                 synchronized (map) {
                     try {
@@ -1016,7 +1017,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case PLACE_ROAD -> {
                 JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
-                List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
+                List<Point> roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
                 synchronized (map) {
                     try {
@@ -1028,7 +1029,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             }
             case PLACE_FLAG -> {
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
-                Point flagPoint = utils.jsonToPoint(jsonFlag);
+                Point flagPoint = jsonUtils.jsonToPoint(jsonFlag);
 
                 synchronized (map) {
                     try {
@@ -1044,9 +1045,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 JSONObject jsonFlag = (JSONObject) jsonBody.get("flag");
                 JSONArray jsonRoadPoints = (JSONArray) jsonBody.get("road");
 
-                Point flagPoint = utils.jsonToPoint(jsonFlag);
+                Point flagPoint = jsonUtils.jsonToPoint(jsonFlag);
 
-                List<Point> roadPoints = utils.jsonToPoints(jsonRoadPoints);
+                List<Point> roadPoints = jsonUtils.jsonToPoints(jsonRoadPoints);
 
                 // Handle the case where the last point overlaps with the flag point
                 Point lastPoint = roadPoints.getLast();
@@ -1212,7 +1213,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             if (session != null) {
                 sendToSession(session, new JSONObject(Map.of(
                         "type", "PLAYER_VIEW_CHANGED",
-                        "playerViewChanges", utils.gameMonitoringEventToJson(gameChangesList, player)
+                        "playerViewChanges", jsonUtils.gameMonitoringEventToJson(gameChangesList, player)
                 )));
             }
         } catch (Exception e) {

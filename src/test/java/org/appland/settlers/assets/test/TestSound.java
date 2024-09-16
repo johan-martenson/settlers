@@ -84,7 +84,7 @@ public class TestSound {
         assertEquals(midiFile.getHeaderSize(), 6);
         assertEquals(midiFile.getFormat(), 1);
         assertEquals(midiFile.getNumberTracks(), 6);
-        assertEquals(midiFile.getPpqs(), 480);
+        assertEquals(midiFile.getPulsePerQuarter(), 480);
 
         List<MidiTrack> trackList = midiFile.getTracks();
 

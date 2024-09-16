@@ -20,9 +20,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static java.lang.String.format;
 import static org.appland.settlers.assets.TextureFormat.BGRA;
 import static org.appland.settlers.assets.TextureFormat.PALETTED;
 
+/**
+ * Represents a bitmap image that can be manipulated and saved.
+ */
 public class Bitmap {
     protected final int height;
     protected final int width;
@@ -36,10 +40,28 @@ public class Bitmap {
     int nx;
     int ny;
 
+    /**
+     * Creates a Bitmap with the specified width, height, palette, and format.
+     *
+     * @param width The width of the bitmap.
+     * @param height The height of the bitmap.
+     * @param palette The color palette to be used.
+     * @param format The texture format.
+     */
     public Bitmap(int width, int height, Palette palette, TextureFormat format) {
         this(width, height, 0, 0, palette, format);
     }
 
+    /**
+     * Creates a Bitmap with the specified dimensions, origin, palette, and format.
+     *
+     * @param width The width of the bitmap.
+     * @param height The height of the bitmap.
+     * @param nx The x-coordinate of the origin.
+     * @param ny The y-coordinate of the origin.
+     * @param palette The color palette to be used.
+     * @param format The texture format.
+     */
     public Bitmap(int width, int height, int nx, int ny, Palette palette, TextureFormat format) {
         this.width = width;
         this.height = height;
@@ -55,7 +77,7 @@ public class Bitmap {
         }
     }
 
-    public void setPixelByColorIndex(int x, int y, short colorIndex) { // uint 16, uint 16, uint 8
+    public void setPixelByColorIndex(int x, int y, short colorIndex) {
         switch (format) {
             case PALETTED -> imageData[(y * width + x)] = (byte)(colorIndex & 0xFF);
             case BGRA -> {
@@ -77,7 +99,7 @@ public class Bitmap {
                 imageData[(y * width + x) * 3 + 1] = colorRGB.green();
                 imageData[(y * width + x) * 3 + 2] = colorRGB.red();
             }
-            case ORIGINAL -> throw new RuntimeException("Cannot set pixel in format " + format);
+            case ORIGINAL -> throw new RuntimeException(format("Cannot set pixel in format %s", format));
         }
     }
 
@@ -94,21 +116,18 @@ public class Bitmap {
     }
 
     public void writeToFile(String filename) throws IOException {
-
         if (debug) {
-            System.out.println(width);
-            System.out.println(height);
-            System.out.println(width * height * 4);
-            System.out.println(imageData.length);
+            System.out.printf("""
+ - Dimensions: %d x %d
+ - Data size (*4): %d
+ - Data length: %d
+""", width, height, width * height * 4, imageData.length);
         }
 
         WritableRaster raster;
         ColorModel colorModel;
 
         if (format == PALETTED) {
-            int samplesPerPixel = 4;
-            int[] bandOffsets = {0, 1, 2, 3};
-
             var rgbArray = new byte[width * height * 4];
 
             for (int x = 0; x < width; x++) {
@@ -123,6 +142,9 @@ public class Bitmap {
                 }
             }
 
+            int samplesPerPixel = 4;
+            int[] bandOffsets = {0, 1, 2, 3};
+
             DataBuffer buffer = new DataBufferByte(rgbArray, rgbArray.length);
             raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
             colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
@@ -134,7 +156,7 @@ public class Bitmap {
             raster = Raster.createInterleavedRaster(buffer, width, height, samplesPerPixel * width, samplesPerPixel, bandOffsets, null);
             colorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
         } else {
-            throw new RuntimeException("Can't write file with format " + format.name());
+            throw new RuntimeException(format("Can't write file with format %s", format.name()));
         }
 
         BufferedImage image = new BufferedImage(colorModel, raster, colorModel.isAlphaPremultiplied(), null);
@@ -196,7 +218,7 @@ public class Bitmap {
             case BGRA -> imageData[(y * width + x) * 4];
             case BGR -> imageData[(y * width + x) * 3];
             case PALETTED -> palette.getBlueAsByte(imageData[y * width + x]);
-            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+            case ORIGINAL -> throw new RuntimeException(format("Can't manage format %s", format));
         };
     }
 
@@ -205,7 +227,7 @@ public class Bitmap {
             case BGRA -> imageData[(y * width + x) * 4 + 1];
             case BGR -> imageData[(y * width + x) * 3 + 1];
             case PALETTED -> palette.getGreenAsByte(imageData[y * width + x]);
-            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+            case ORIGINAL -> throw new RuntimeException(format("Can't manage format %s", format));
         };
     }
 
@@ -214,7 +236,7 @@ public class Bitmap {
             case BGRA -> imageData[(y * width + x) * 4 + 2];
             case BGR -> imageData[(y * width + x) * 3 + 2];
             case PALETTED -> palette.getRedAsByte(imageData[y * width + x]);
-            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+            case ORIGINAL -> throw new RuntimeException(format("Can't manage format %s", format));
         };
     }
 
@@ -222,32 +244,25 @@ public class Bitmap {
         return switch (format) {
             case BGRA -> imageData[(y * width + x) * 4 + 3];
             case PALETTED, BGR -> (byte)0xFF;
-            case ORIGINAL -> throw new RuntimeException("Can't manage format " + format);
+            case ORIGINAL -> throw new RuntimeException(format("Can't manage format %s", format));
         };
     }
 
     public Bitmap getSubBitmap(int x0, int y0, int x1, int y1) {
         int subImageWidth = x1 - x0;
         int subImageHeight = y1 - y0;
-
         byte[] subImage = new byte[subImageWidth * subImageHeight * 4];
 
         for (int y = 0; y < subImageHeight; y++) {
             for (int x = 0; x < subImageWidth; x++) {
-                byte blue = getBlueAsByte(x0 + x, y0 + y);
-                byte green = getGreenAsByte(x0 + x, y0 + y);
-                byte red = getRedAsByte(x0 + x, y0 + y);
-                byte alpha = getAlphaAsByte(x0 + x, y0 + y);
-
-                subImage[(y * subImageWidth + x) * 4] = blue;
-                subImage[(y * subImageWidth + x) * 4 + 1] = green;
-                subImage[(y * subImageWidth + x) * 4 + 2] = red;
-                subImage[(y * subImageWidth + x) * 4 + 3] = alpha;
+                subImage[(y * subImageWidth + x) * 4] = getBlueAsByte(x0 + x, y0 + y);
+                subImage[(y * subImageWidth + x) * 4 + 1] = getGreenAsByte(x0 + x, y0 + y);
+                subImage[(y * subImageWidth + x) * 4 + 2] = getRedAsByte(x0 + x, y0 + y);
+                subImage[(y * subImageWidth + x) * 4 + 3] = getAlphaAsByte(x0 + x, y0 + y);
             }
         }
 
         Bitmap subBitmap = new Bitmap(subImageWidth, subImageHeight, palette, TextureFormat.BGRA);
-
         subBitmap.setImageDataFromBuffer(subImage);
 
         return subBitmap;
@@ -329,95 +344,83 @@ public class Bitmap {
 
     public Area getVisibleArea() {
 
-        int firstVisibleY;
-        int firstVisibleX;
-        int visibleWidth;
-        int visibleHeight;
-
         // Find first non-transparent pixel from top
-        firstVisibleY = -1;
-        for(int y = 0; y < height; y++) {
-
-            int x;
-            for(x = 0; x < width; x++) {
-                if(!isTransparent(x, y)) {
+        int firstVisibleY = -1;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (!isTransparent(x, y)) {
                     firstVisibleY = y;
                     break;
                 }
             }
 
-            if(x != width) {
+            if (firstVisibleY != -1) {
                 break;
             }
         }
 
         // No non-transparent pixels in whole image
-        if(firstVisibleY < 0) {
+        if (firstVisibleY == -1) {
             return new Area(0, 0, 0, 0);
         }
 
         // Find first non-transparent pixel from bottom
         int lastVisibleY = firstVisibleY;
-        for(int y = height - 1; y > firstVisibleY; y--) {
-
-            int x;
-            for(x = 0; x < width; x++) {
-                if(!isTransparent(x, y)) {
+        for (int y = height - 1; y > firstVisibleY; y--) {
+            for (int x = 0; x < width; x++) {
+                if (!isTransparent(x, y)) {
                     lastVisibleY = y;
                     break;
                 }
             }
 
-            if(x != width) {
+            if (lastVisibleY != firstVisibleY) {
                 break;
             }
         }
 
         // Find first non-transparent pixel from left
-        firstVisibleX = 0;
-        for(int x = 0; x < width; x++) {
-
-            int y;
-            for(y = firstVisibleY; y <= lastVisibleY; y++) {
-                if(!isTransparent(x, y)) {
+        int firstVisibleX = 0;
+        for (int x = 0; x < width; x++) {
+            for (int y = firstVisibleY; y <= lastVisibleY; y++) {
+                if (!isTransparent(x, y)) {
                     firstVisibleX = x;
                     break;
                 }
             }
 
-            if(y != lastVisibleY + 1) {
+            if (firstVisibleX != 0) {
                 break;
             }
         }
 
         // Find first non-transparent pixel from right
         int lastVisibleX = firstVisibleX;
-        for(int x = width - 1; x > firstVisibleX; x--) {
-
-            int y;
-            for(y = firstVisibleY; y <= lastVisibleY; y++) {
-                if(!isTransparent(x, y)) {
+        for (int x = width - 1; x > firstVisibleX; x--) {
+            for (int y = firstVisibleY; y <= lastVisibleY; y++) {
+                if (!isTransparent(x, y)) {
                     lastVisibleX = x;
                     break;
                 }
             }
 
-            if(y != lastVisibleY + 1) {
+            if (lastVisibleX != firstVisibleX) {
                 break;
             }
         }
 
-        visibleWidth = lastVisibleX + 1 - firstVisibleX;
-        visibleHeight = lastVisibleY + 1 - firstVisibleY;
-
-        return new Area(firstVisibleX, firstVisibleY, visibleWidth, visibleHeight);
+        return new Area(
+                firstVisibleX,
+                firstVisibleY,
+                lastVisibleX + 1 - firstVisibleX,
+                lastVisibleY + 1 - firstVisibleY
+        );
     }
 
     public Point getOrigin() {
         Area visibleArea = getVisibleArea();
-
-        int originX = this.nx - visibleArea.x;
-        int originY = this.ny - visibleArea.y;
+        int originX = this.nx - visibleArea.x();
+        int originY = this.ny - visibleArea.y();
 
         return new Point(originX, originY);
     }

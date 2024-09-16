@@ -1,19 +1,19 @@
 package org.appland.settlers.maps;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.PlayerType;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Headquarter;
+import org.appland.settlers.rest.resource.IdManager;
+import org.appland.settlers.utils.JsonUtils;
+import org.appland.settlers.utils.PrintUtils;
 import org.jline.terminal.TerminalBuilder;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 
@@ -28,14 +28,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
-import static java.lang.String.format;
-
+/**
+ * Inspector class to analyze and extract information about maps and other game data.
+ */
 public class Inspector {
 
-    /* Define command line options */
     @Option(name = "--info", usage = "Print information about the map")
     private boolean printInfo = false;
 
@@ -87,34 +85,29 @@ public class Inspector {
     @Option(name = "--place-players", usage = "When used, a headquarters will be placed on each starting point")
     private boolean placePlayers = false;
 
-    /* Regular fields */
     private static final List<PlayerColor> COLORS = Arrays.stream(PlayerColor.values()).toList();
 
-    private final MapLoader mapLoader;
+    private final MapLoader  mapLoader = new MapLoader();
+    private final JsonUtils  jsonUtils;
+    private final PrintUtils printUtils = new PrintUtils();
 
-    private MapFile mapFile;
-    private int     consoleHeight;
-    private int     consoleWidth;
-    private GameMap map;
+    private MapFile   mapFile;
+    private int       consoleHeight;
+    private int       consoleWidth;
+    private GameMap   map;
 
     /**
-     * Run the inspector
-     *
-     * @param args
-     * @throws Exception
+     * Main method to run the inspector with command line arguments.
      */
     public static void main(String[] args) throws Exception {
-        Inspector inspector = new Inspector();
-        CmdLineParser parser = new CmdLineParser(inspector);
-
+        var inspector = new Inspector();
+        var parser = new CmdLineParser(inspector);
         parser.parseArgument(args);
 
-        /* Load the map directly if a map filename is given */
         if (inspector.isFileSelected()) {
             inspector.loadMapFile(mapFilename, inspector.placePlayers);
         }
 
-        /* Print information about points surrounding points of type if chosen */
         if (inspector.isPointsSurroundingTypeSelected()) {
             InformationType informationType = InformationType.fromString(inspector.informationAroundType);
 
@@ -125,37 +118,30 @@ public class Inspector {
             }
         }
 
-        /* Print map info if selected */
         if (inspector.isPrintInfoSelected()) {
-            inspector.printMapInfo();
+            inspector.printUtils.printMapInfo(inspector.mapFile);
         }
 
-        /* Print the map from the file */
         if (inspector.isPrintMapFromFileChosen()) {
-            inspector.printMapFile();
+            inspector.printUtils.printMapFile(inspector.mapFile, inspector.consoleWidth, inspector.debug);
         }
 
-        /* Compare the available buildings */
         if (inspector.isCompareAvailableBuildingsChosen()) {
             inspector.compareAvailableBuildingPoints();
         }
 
-        /* Print the starting points if selected */
         if (inspector.isPrintStartingPointsChosen()) {
-            inspector.printStartingPointsFromGameMap();
+            inspector.printUtils.printStartingPointsFromGameMap(inspector.mapLoader.convertMapFileToGameMap(inspector.mapFile));
         }
 
-        /* Print detailed information about a given point if selected */
         if (inspector.isPrintPointInformationChosen()) {
             inspector.printPointInformation(new Point(inspector.infoPoint));
         }
 
-        /* Dump spots */
         if (inspector.isDumpSpotsChosen()) {
-            inspector.printSpotList();
+            inspector.printUtils.printMapFilePointList(inspector.mapFile);
         }
 
-        /* Write to json */
         if (inspector.isToJsonChosen()) {
             inspector.writeToJson();
         }
@@ -165,111 +151,45 @@ public class Inspector {
         }
     }
 
-    private void printInfoOnHarborPoints() {
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            if (mapFilePoint.isPossiblePlaceForHarbor()) {
-                Point point = mapFilePoint.getGamePointPosition();
-
-                Set<Vegetation> closeTiles = new HashSet<>(map.getSurroundingTiles(point));
-                Set<Vegetation> closeToFlagTiles = new HashSet<>(map.getSurroundingTiles(point.downRight()));
-                Set<Vegetation> oneStepAwayTiles = new HashSet<>();
-
-                Point pointLeft = point.left();
-                Point pointUpLeft = point.upLeft();
-                Point pointUpRight = point.upRight();
-                Point pointRight = point.right();
-                Point pointDownRight = point.downRight();
-                Point pointDownLeft = point.downLeft();
-
-                oneStepAwayTiles.add(map.getVegetationUpLeft(pointLeft));
-                oneStepAwayTiles.add(map.getVegetationAbove(pointLeft));
-                oneStepAwayTiles.add(map.getVegetationUpLeft(pointUpLeft));
-                oneStepAwayTiles.add(map.getVegetationAbove(pointUpLeft));
-                oneStepAwayTiles.add(map.getVegetationUpLeft(pointUpRight));
-                oneStepAwayTiles.add(map.getVegetationAbove(pointUpRight));
-                oneStepAwayTiles.add(map.getVegetationUpRight(pointUpRight));
-                oneStepAwayTiles.add(map.getVegetationDownRight(pointUpRight));
-                oneStepAwayTiles.add(map.getVegetationUpRight(pointRight));
-                oneStepAwayTiles.add(map.getVegetationDownRight(pointRight));
-                oneStepAwayTiles.add(map.getVegetationBelow(pointRight));
-                oneStepAwayTiles.add(map.getVegetationDownRight(pointDownRight));
-                oneStepAwayTiles.add(map.getVegetationBelow(pointDownRight));
-                oneStepAwayTiles.add(map.getVegetationDownRight(pointDownLeft));
-                oneStepAwayTiles.add(map.getVegetationBelow(pointDownLeft));
-                oneStepAwayTiles.add(map.getVegetationDownLeft(pointDownLeft));
-                oneStepAwayTiles.add(map.getVegetationUpLeft(pointDownLeft));
-                oneStepAwayTiles.add(map.getVegetationDownLeft(pointLeft));
-
-                System.out.println(" +");
-                System.out.printf("Close tiles: %s%n", closeTiles);
-                System.out.printf("Close to flag tiles: %s%n", closeToFlagTiles);
-                System.out.printf("One step away tiles: %s%n", oneStepAwayTiles);
-            }
-        }
+    private void writeToJson() throws IOException, InvalidMapException, SettlersMapLoadingException {
+        var mapFile = mapLoader.loadMapFromFile(mapFilename);
+        Files.writeString(Path.of(toJson), jsonUtils.mapFileToDetailedJson(mapFile).toJSONString());
     }
 
-    private void writeToJson() throws IOException, InvalidMapException, SettlersMapLoadingException {
-        MapFile mapFile = mapLoader.loadMapFromFile(mapFilename);
+    private void printInfoOnHarborPoints() {
+        mapFile.getMapFilePoints().stream()
+                .filter(MapFilePoint::isPossiblePlaceForHarbor)
+                .forEach(mapFilePoint -> {
+                    var point = mapFilePoint.getGamePointPosition();
+                    var closeTiles = new HashSet<>(map.getSurroundingTiles(point));
+                    var closeToFlagTiles = new HashSet<>(map.getSurroundingTiles(point.downRight()));
 
-        JSONObject jsonMap = new JSONObject();
+                    var oneStepAwayTiles = new HashSet<>(List.of(
+                            map.getVegetationUpLeft(point.left()),
+                            map.getVegetationAbove(point.left()),
+                            map.getVegetationUpLeft(point.upLeft()),
+                            map.getVegetationAbove(point.upLeft()),
+                            map.getVegetationUpLeft(point.upRight()),
+                            map.getVegetationAbove(point.upRight()),
+                            map.getVegetationUpRight(point.upRight()),
+                            map.getVegetationDownRight(point.upRight()),
+                            map.getVegetationUpRight(point.right()),
+                            map.getVegetationDownRight(point.right()),
+                            map.getVegetationBelow(point.right()),
+                            map.getVegetationDownRight(point.downRight()),
+                            map.getVegetationBelow(point.downRight()),
+                            map.getVegetationDownRight(point.downLeft()),
+                            map.getVegetationBelow(point.downLeft()),
+                            map.getVegetationDownLeft(point.downLeft()),
+                            map.getVegetationUpLeft(point.downLeft()),
+                            map.getVegetationDownLeft(point.left())
+                    ));
 
-        jsonMap.put("title", mapFile.getTitle());
-        jsonMap.put("author", mapFile.getAuthor());
-        jsonMap.put("width", mapFile.getWidth());
-        jsonMap.put("height", mapFile.getHeight());
-        jsonMap.put("maxNumberPlayers", mapFile.getMaxNumberOfPlayers());
-        jsonMap.put("terrain", mapFile.getTerrainType().name().toUpperCase());
-
-        JSONArray jsonStartingPoints = new JSONArray();
-
-        jsonMap.put("startingPoints", jsonStartingPoints);
-
-        for (Point point : mapFile.getGamePointStartingPoints()) {
-            JSONObject jsonPoint = new JSONObject();
-
-            jsonPoint.put("x", point.x);
-            jsonPoint.put("y", point.y);
-
-            jsonStartingPoints.add(jsonPoint);
-        }
-
-        JSONArray jsonMapPoints = new JSONArray();
-
-        jsonMap.put("points", jsonMapPoints);
-
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            JSONObject jsonMapFilePoint = new JSONObject();
-
-            Point gamePoint = mapFilePoint.getGamePointPosition();
-
-            jsonMapFilePoint.put("x", gamePoint.x);
-            jsonMapFilePoint.put("y", gamePoint.y);
-            jsonMapFilePoint.put("height", mapFilePoint.getHeight());
-
-            jsonMapFilePoint.put("vegetationBelow", mapFilePoint.getVegetationBelow().name().toUpperCase());
-            jsonMapFilePoint.put("vegetationDownRight", mapFilePoint.getVegetationDownRight().name().toUpperCase());
-
-            jsonMapFilePoint.put("vegetationBelowAsInt", mapFilePoint.getVegetationBelow().ordinal());
-            jsonMapFilePoint.put("vegetationDownRightAsInt", mapFilePoint.getVegetationDownRight().ordinal());
-
-            if (mapFilePoint.hasStone()) {
-                jsonMapFilePoint.put("stone", mapFilePoint.getStoneAmount());
-            }
-
-            if (mapFilePoint.hasTree()) {
-                jsonMapFilePoint.put("tree", mapFilePoint.getTreeType().name().toUpperCase());
-                jsonMapFilePoint.put("treeAsInt", mapFilePoint.getTreeType().ordinal());
-            }
-
-            if (mapFilePoint.getBuildableSite() != null) {
-                jsonMapFilePoint.put("canBuild", mapFilePoint.getBuildableSite().name().toUpperCase());
-                jsonMapFilePoint.put("canBuildAsInt", mapFilePoint.getBuildableSite().ordinal());
-            }
-
-            jsonMapPoints.add(jsonMapFilePoint);
-        }
-
-        Files.writeString(Paths.get(toJson), jsonMap.toJSONString());
+                    System.out.println(" +");
+                    System.out.printf("Close tiles: %s%n", closeTiles);
+                    System.out.printf("Close to flag tiles: %s%n", closeToFlagTiles);
+                    System.out.printf("One step away tiles: %s%n", oneStepAwayTiles);
+                });
     }
 
     private boolean isToJsonChosen() {
@@ -277,28 +197,16 @@ public class Inspector {
     }
 
     private void printPointsSurroundingPointTypeInAllFiles(String dir, InformationType informationType) throws IOException, InvalidMapException, SettlersMapLoadingException {
+        var mapFiles = new ArrayList<MapFile>();
 
-        List<MapFile> mapFiles = new ArrayList<>();
+        var paths = Files.find(Paths.get(dir), Integer.MAX_VALUE,
+                        (path, basicFileAttributes) -> path.toFile().getName().matches(".*.SWD") || path.toFile().getName().matches(".*.WLD"))
+                .toList();
 
-        /* List all maps */
-        List<Path> paths = Files.find(Paths.get(dir),
-                Integer.MAX_VALUE,
-                (path, basicFileAttributes) -> path.toFile().getName().matches(".*.SWD") ||
-                        path.toFile().getName().matches(".*.WLD")
-        ).toList();
-
-        /* Print information for points surrounding points of the selected type */
-        for (Path path : paths) {
-
-            if (Files.isDirectory(path)) {
-                continue;
+        for (var path : paths) {
+            if (!Files.isDirectory(path)) {
+                mapFiles.add(mapLoader.loadMapFromFile(path.toString()));
             }
-
-            String filename = path.toString();
-
-            MapFile mapFile = mapLoader.loadMapFromFile(filename);
-
-            mapFiles.add(mapFile);
         }
 
         printPointsSurroundingPointTypeInMapFiles(mapFiles, informationType);
@@ -313,40 +221,36 @@ public class Inspector {
     }
 
     private void printPointsSurroundingPointTypeInMapFiles(List<MapFile> mapFiles, InformationType informationType) {
-        Map<BuildableSite, Integer> availableConstructionCenter = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionLeft = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionUpLeft = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionUpRight = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionRight = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionDownRight = new EnumMap<>(BuildableSite.class);
-        Map<BuildableSite, Integer> availableConstructionDownLeft = new EnumMap<>(BuildableSite.class);
+        var availableConstructionCenter = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionLeft = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionUpLeft = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionUpRight = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionRight = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionDownRight = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
+        var availableConstructionDownLeft = new EnumMap<BuildableSite, Integer>(BuildableSite.class);
 
-        Map<Texture, Integer> vegetationUpLeft = new EnumMap<>(Texture.class);
-        Map<Texture, Integer> vegetationAbove = new EnumMap<>(Texture.class);
-        Map<Texture, Integer> vegetationUpRight = new EnumMap<>(Texture.class);
-        Map<Texture, Integer> vegetationDownRight = new EnumMap<>(Texture.class);
-        Map<Texture, Integer> vegetationBelow = new EnumMap<>(Texture.class);
-        Map<Texture, Integer> vegetationDownLeft = new EnumMap<>(Texture.class);
+        var vegetationUpLeft = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationAbove = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationUpRight = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationDownRight = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationBelow = new EnumMap<Texture, Integer>(Texture.class);
+        var vegetationDownLeft = new EnumMap<Texture, Integer>(Texture.class);
 
         int measuredPoints = 0;
 
-        for (MapFile mapFile : mapFiles) {
-
-            for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-
-                /* Filter points that don't match the requested information */
+        for (var mapFile : mapFiles) {
+            for (var mapFilePoint : mapFile.getMapFilePoints()) {
                 if (informationType == InformationType.DEAD_TREE && !mapFilePoint.hasDeadTree()) {
                     continue;
                 }
 
-                Point point = mapFilePoint.getGamePointPosition();
-
-                MapFilePoint mapFilePointLeft = mapFile.getMapFilePoint(point.left());
-                MapFilePoint mapFilePointUpLeft = mapFile.getMapFilePoint(point.upLeft());
-                MapFilePoint mapFilePointUpRight = mapFile.getMapFilePoint(point.upRight());
-                MapFilePoint mapFilePointRight = mapFile.getMapFilePoint(point.right());
-                MapFilePoint mapFilePointDownRight = mapFile.getMapFilePoint(point.downRight());
-                MapFilePoint mapFilePointDownLeft = mapFile.getMapFilePoint(point.downLeft());
+                var point = mapFilePoint.getGamePointPosition();
+                var mapFilePointLeft = mapFile.getMapFilePoint(point.left());
+                var mapFilePointUpLeft = mapFile.getMapFilePoint(point.upLeft());
+                var mapFilePointUpRight = mapFile.getMapFilePoint(point.upRight());
+                var mapFilePointRight = mapFile.getMapFilePoint(point.right());
+                var mapFilePointDownRight = mapFile.getMapFilePoint(point.downRight());
+                var mapFilePointDownLeft = mapFile.getMapFilePoint(point.downLeft());
 
                 incrementInMap(availableConstructionCenter, mapFilePoint.getBuildableSite());
                 incrementInMap(availableConstructionLeft, mapFilePointLeft.getBuildableSite());
@@ -363,32 +267,30 @@ public class Inspector {
                 incrementInMap(vegetationBelow, mapFilePoint.getVegetationBelow());
                 incrementInMap(vegetationDownLeft, mapFilePointLeft.getVegetationDownRight());
 
-                measuredPoints = measuredPoints + 1;
+                measuredPoints++;
             }
         }
 
         System.out.println();
         System.out.println("Surrounding available construction");
 
-        System.out.println(" - Center: " + availableConstructionCenter);
-        System.out.println(" - Left: " + availableConstructionLeft);
-        System.out.println(" - Up-left: " + availableConstructionUpLeft);
-        System.out.println(" - Up-right: " + availableConstructionUpRight);
-        System.out.println(" - Right: " + availableConstructionRight);
-        System.out.println(" - Down-right: " + availableConstructionDownRight);
-        System.out.println(" - Down-left: " + availableConstructionDownLeft);
+        System.out.printf(" - Center: %s%n", availableConstructionCenter);
+        System.out.printf(" - Left: %s%n", availableConstructionLeft);
+        System.out.printf(" - Up-left: %s%n", availableConstructionUpLeft);
+        System.out.printf(" - Up-right: %s%n", availableConstructionUpRight);
+        System.out.printf(" - Right: %s%n", availableConstructionRight);
+        System.out.printf(" - Down-right: %s%n", availableConstructionDownRight);
+        System.out.printf(" - Down-left: %s%n", availableConstructionDownLeft);
 
         System.out.println();
         System.out.println("Surrounding vegetation");
-
-        System.out.println(" - Up-left: " + vegetationUpLeft);
-        System.out.println(" - Above: " + vegetationAbove);
-        System.out.println(" - Up-right: " + vegetationUpRight);
-        System.out.println(" - Down-rRight: " + vegetationDownRight);
-        System.out.println(" - Below: " + vegetationBelow);
-        System.out.println(" - Down-left: " + vegetationDownLeft);
-
-        System.out.println("(" + measuredPoints + " points measured)");
+        System.out.printf(" - Up-left: %s%n", vegetationUpLeft);
+        System.out.printf(" - Above: %s%n", vegetationAbove);
+        System.out.printf(" - Up-right: %s%n", vegetationUpRight);
+        System.out.printf(" - Down-rRight: %s%n", vegetationDownRight);
+        System.out.printf(" - Below: %s%n", vegetationBelow);
+        System.out.printf(" - Down-left: %s%n", vegetationDownLeft);
+        System.out.printf("(%d points measured)%n", measuredPoints);
     }
 
     private boolean isFileSelected() {
@@ -399,65 +301,8 @@ public class Inspector {
         return this.informationAroundType != null && (this.informationAroundType.equals("dead-tree") || this.informationAroundType.equals("possible-shipyard"));
     }
 
-    private void printMapInfo() {
-        System.out.println();
-        System.out.println("About the map:");
-        System.out.println(" - Title: " + mapFile.getTitle());
-        System.out.println(" - Author: " + mapFile.getAuthor());
-        System.out.println(" - Width: " + mapFile.getWidth());
-        System.out.println(" - Height: " + mapFile.getHeight());
-        System.out.println(" - Max number of players: " + mapFile.getMaxNumberOfPlayers());
-    }
-
     private boolean isPrintInfoSelected() {
         return printInfo;
-    }
-
-    private void printSpotList() {
-
-        System.out.println();
-        System.out.println("All spots in the map file");
-
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-            Point point = mapFilePoint.getGamePointPosition();
-
-            MapFilePoint spotLeft = mapFile.getMapFilePoint(point.left());
-            MapFilePoint spotUpLeft = mapFile.getMapFilePoint(point.upLeft());
-            MapFilePoint spotDownLeft = mapFile.getMapFilePoint(point.downLeft());
-            MapFilePoint spotRight = mapFile.getMapFilePoint(point.right());
-            MapFilePoint spotUpRight = mapFile.getMapFilePoint(point.upRight());
-            MapFilePoint spotDownRight = mapFile.getMapFilePoint(point.downRight());
-
-            System.out.print(" - " + point + " available: " + mapFilePoint.getBuildableSite() +
-                    ", height: " + mapFilePoint.getHeight() +
-                    ", height differences:");
-
-            if (spotLeft != null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotLeft.getHeight()));
-            }
-
-            if (spotUpLeft != null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotUpLeft.getHeight()));
-            }
-
-            if (spotDownLeft!= null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotDownLeft.getHeight()));
-            }
-
-            if (spotRight != null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotRight.getHeight()));
-            }
-
-            if (spotUpRight != null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotUpRight.getHeight()));
-            }
-
-            if (spotDownRight!= null) {
-                System.out.print(" " + (mapFilePoint.getHeight() - spotDownRight.getHeight()));
-            }
-
-            System.out.println();
-        }
     }
 
     private boolean isDumpSpotsChosen() {
@@ -468,48 +313,26 @@ public class Inspector {
         return renderMapFile;
     }
 
-    /**
-     * Returns true if the user has chosen to compare available buildings
-     *
-     * @return
-     */
     private boolean isCompareAvailableBuildingsChosen() {
         return compareAvailableBuildings;
     }
 
-    /**
-     * Returns true if the user has chosen to print the starting points
-     *
-     * @return
-     */
     private boolean isPrintStartingPointsChosen() {
         return printStartingPoints;
     }
 
-    /**
-     * Returns true if the user has chosen to print detailed information about a selected point
-     *
-     * @return
-     */
     private boolean isPrintPointInformationChosen() {
         return infoPoint != null;
     }
 
-    /**
-     * Creates a new Inspector instance
-     *
-     * @throws IOException
-     */
     public Inspector() throws IOException {
-        mapLoader = new MapLoader();
-
         mapLoader.debug = debug;
 
         consoleWidth = TerminalBuilder.terminal().getWidth();
         consoleHeight = TerminalBuilder.terminal().getHeight();
 
         if (debug) {
-            System.out.println("Detected console dimensions: " + consoleWidth + "x" + consoleHeight);
+            System.out.printf("Detected console dimensions: %dx%d%n", consoleWidth, consoleHeight);
         }
 
         if (widthOverride != -1) {
@@ -521,22 +344,25 @@ public class Inspector {
         }
 
         if (debug) {
-            System.out.println("Using dimensions: " + consoleWidth + "x" + consoleHeight);
+            System.out.printf("Using dimensions: %dx%d%n", consoleWidth, consoleHeight);
         }
+
+        jsonUtils = new JsonUtils(new IdManager());
     }
 
     /**
      * Loads the given file, creates a MapFile instance based on it, and converts it to a GameMap instance
      *
-     * @param mapFilename
-     * @throws Exception
+     * @param mapFilename  The filename of the map to load
+     * @param placePlayers If true players will also be placed
+     * @throws Exception If map loading fails
      */
     private void loadMapFile(String mapFilename, boolean placePlayers) throws Exception {
         mapFile = mapLoader.loadMapFromFile(mapFilename);
         map = mapLoader.convertMapFileToGameMap(mapFile);
 
-        System.out.println("Max players: " + mapFile.getMaxNumberOfPlayers());
-        System.out.println("Starting positions: " + mapFile.getGamePointStartingPoints());
+        System.out.printf("Max players: %d%n", mapFile.getMaxNumberOfPlayers());
+        System.out.printf("Starting positions: %s%n", mapFile.getGamePointStartingPoints());
 
         List<Point> startingPoints = map.getStartingPoints();
         List<Player> players = new ArrayList<>();
@@ -547,11 +373,9 @@ public class Inspector {
         map.setPlayers(players);
 
         if (placePlayers) {
-
             if (mapFile.getGamePointStartingPoints().isEmpty()) {
                 System.out.println("No starting points found in map file");
             } else {
-
                 for (int i = 0; i < startingPoints.size(); i++) {
                     Point point = startingPoints.get(i);
                     Player player = players.get(i);
@@ -561,7 +385,7 @@ public class Inspector {
 
                         System.out.println(point + ": OK");
                     } catch (InvalidUserActionException e) {
-                        System.out.printf("%s: Not OK (exception is %s)%n", point, e);
+                        System.out.printf("%s: Not OK (exception is %s) %n", point, e);
                     }
                 }
             }
@@ -569,380 +393,93 @@ public class Inspector {
     }
 
     /**
-     * Renders the map file to stdout with the starting points highlighted
-     */
-    private void printMapFile() {
-
-        String[][] mapFileRender = renderMapFileToStringArray(mapFile, mapFile.getGamePointStartingPoints());
-
-        /* Print the render of the map file */
-        StringBuilder sb = new StringBuilder();
-        for (String[] row : mapFileRender) {
-
-            int index = 0;
-            for (String character : row) {
-
-                if (index == consoleWidth) {
-                    break;
-                }
-
-                index++;
-
-                sb.append(Objects.requireNonNullElse(character, " "));
-            }
-        }
-
-        System.out.println(sb);
-    }
-
-    /**
-     * Prints the starting points from the GameMap instance
-     */
-    private void printStartingPointsFromGameMap() {
-
-        System.out.println();
-        System.out.println("Starting points: ");
-
-        for (Point point : map.getStartingPoints()) {
-            System.out.println(" - " + point);
-        }
-    }
-
-    /**
      * Prints detailed information about the given point
      *
-     * @param infoPoint
+     * @param point The point to print information about
      */
-    private void printPointInformation(Point infoPoint) {
-
+    private void printPointInformation(Point point) {
         System.out.println();
-        System.out.println("Detailed information about " + infoPoint);
+        System.out.printf("Detailed information about %s%n", infoPoint);
 
-        /* Print information about the point read from the MapFile */
-        MapFilePoint spot = mapFile.getMapFilePoint(infoPoint);
-        System.out.println();
-        System.out.println("Map file");
-
-        if (spot.hasTree()) {
-            System.out.println(" - Tree");
-        }
-
-        if (spot.hasStone()) {
-            System.out.println(" - Stone");
-        }
-
-        if (spot.getBuildableSite() != null) {
-            System.out.println(" - Can build: " + spot.getBuildableSite());
-        }
-
-        System.out.println(" - Surrounding terrain:");
-        System.out.println("   -- Above 1: " +
-                mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.up()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.up()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.upRight().upRight()).getVegetationBelow());
-        System.out.println("   -- Above 2: " +
-                mapFile.getMapFilePoint(infoPoint.upLeft().left()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.upLeft()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.upLeft()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.upRight()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.upRight()).getVegetationDownRight());
-        System.out.println("   -- Below 1: " +
-                mapFile.getMapFilePoint(infoPoint.left()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.left()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.right()).getVegetationBelow());
-        System.out.println("   -- Below 2: " +
-                mapFile.getMapFilePoint(infoPoint.left().downLeft()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.downLeft()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.downLeft()).getVegetationDownRight() + " " +
-                mapFile.getMapFilePoint(infoPoint.downRight()).getVegetationBelow() + " " +
-                mapFile.getMapFilePoint(infoPoint.downRight()).getVegetationDownRight());
-
-        System.out.println(" - Surrounding available buildings:");
-        System.out.println("   -- Above 1: " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.up()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight().upRight()).getBuildableSite()));
-        System.out.println("   -- Above 2:           " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.upLeft()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.upRight()).getBuildableSite()));
-        System.out.println("   -- Same:    " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.left()).getBuildableSite()) + " " +
-                format("%-20s", "POINT") + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.right()).getBuildableSite()));
-        System.out.println("   -- Below 1:           " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight()).getBuildableSite()));
-        System.out.println("   -- Below 2: " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.downLeft().downLeft()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.down()).getBuildableSite()) + " " +
-                format("%-20s", mapFile.getMapFilePoint(infoPoint.downRight().downRight()).getBuildableSite()));
-
-        System.out.println(" - Surrounding stones and trees:");
-        System.out.println("   -- Above 1: " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.upLeft().upLeft()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.up()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.upRight().upRight()));
-        System.out.println("   -- Above 2:    " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.upLeft()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.upRight()));
-        System.out.println("   -- Same:    " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.left()) + " " +
-                "POINT" + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.right()));
-        System.out.println("   -- Below 1:    " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.downLeft()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.downRight()));
-        System.out.println("   -- Below 2: " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.downLeft().downLeft()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.down()) + " " +
-                treeOrStoneOrNoneString(mapFile, infoPoint.downRight().downRight()));
-
-        System.out.println(" - Surrounding heights:");
-        System.out.println("   -- Above 1: " +
-                mapFile.getMapFilePoint(infoPoint.upLeft().upLeft()).getHeight() + " " +
-                        mapFile.getMapFilePoint(infoPoint.up()).getHeight() + " " +
-                        mapFile.getMapFilePoint(infoPoint.upRight().upRight()).getHeight());
-        System.out.println("   -- Above 2:   " +
-                mapFile.getMapFilePoint(infoPoint.upLeft()).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint.upRight()).getHeight());
-        System.out.println("   -- Same:    " +
-                mapFile.getMapFilePoint(infoPoint.left()).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint.right()).getHeight());
-        System.out.println("   -- Below 1:   " +
-                mapFile.getMapFilePoint(infoPoint.downLeft()).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint.downRight()).getHeight());
-        System.out.println("   -- Below 2: " +
-                mapFile.getMapFilePoint(infoPoint.downLeft().downLeft()).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint.down()).getHeight() + " " +
-                mapFile.getMapFilePoint(infoPoint.downRight().downRight()).getHeight());
-
-        System.out.println();
-
-
-        /* Print the information about the point read from the GameMap */
-        System.out.println();
-        System.out.println("Game map");
-        if (map.isTreeAtPoint(infoPoint)) {
-            System.out.println(" - Tree");
-        }
-
-        if (spot.hasStone()) {
-            System.out.println(" - Stone");
-        }
-
-        Player player = null;
-
-        for (Player p : map.getPlayers()) {
-            if (p.getLandInPoints().contains(infoPoint)) {
-                player = p;
-
-                break;
-            }
-        }
-
-        Map<Point, Size> availableHousePoints = map.getAvailableHousePoints(player);
-        if (player != null) {
-            System.out.println(" - Can build: " + map.getAvailableHousePoints(player).get(infoPoint));
-        }
-
-        System.out.println(" - Surrounding terrain:");
-        System.out.println("   -- Above 1: " +
-                map.getVegetationUpLeft(infoPoint.up()) + " " +
-                map.getVegetationAbove(infoPoint.up()) + " " +
-                map.getVegetationUpRight(infoPoint.up()));
-        System.out.println("   -- Above 2: " +
-                map.getVegetationDownLeft(infoPoint.up()) + " " +
-                map.getVegetationBelow(infoPoint.up()) + " " +
-                map.getVegetationDownRight(infoPoint.up()));
-        System.out.println("   -- Above 3: " +
-                map.getVegetationUpLeft(infoPoint) + " " +
-                map.getVegetationAbove(infoPoint) + " " +
-                map.getVegetationUpRight(infoPoint));
-        System.out.println("   -- Below 1: " +
-                map.getVegetationDownLeft(infoPoint) + " " +
-                map.getVegetationBelow(infoPoint) + " " +
-                map.getVegetationDownRight(infoPoint));
-        System.out.println("   -- Below 2: " +
-                map.getVegetationUpLeft(infoPoint.down()) + " " +
-                map.getVegetationAbove(infoPoint.down()) + " " +
-                map.getVegetationUpRight(infoPoint.down()));
-        System.out.println("   -- Below 3: " +
-                map.getVegetationDownLeft(infoPoint.down()) + " " +
-                map.getVegetationBelow(infoPoint.down()) + " " +
-                map.getVegetationDownRight(infoPoint.down()));
-
-        System.out.println(" - Surrounding available buildings:");
-        System.out.println("   -- Above 1: " +
-                format("%-20s", availableHousePoints.get(infoPoint.upLeft().upLeft())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.up())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.upRight().upRight())));
-        System.out.println("   -- Above 2:           " +
-                format("%-20s", availableHousePoints.get(infoPoint.upLeft())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.upRight())));
-        System.out.println("   -- Same:    " +
-                format("%-20s", availableHousePoints.get(infoPoint.left())) + " " +
-                format("%-20s", "POINT") + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.right())));
-        System.out.println("   -- Below 1:           " +
-                format("%-20s", availableHousePoints.get(infoPoint.downLeft())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.downRight())));
-        System.out.println("   -- Below 2: " +
-                format("%-20s", availableHousePoints.get(infoPoint.downLeft().downLeft())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.down())) + " " +
-                format("%-20s", availableHousePoints.get(infoPoint.downRight().downRight())));
-
-        /* Print the closest border point */
-        int distance = getDistanceToBorder(infoPoint, player);
-
-        System.out.println(" - Distance to border: " + distance);
-
-        /* Print the distance to the headquarters */
-        System.out.println(" - Distance headquarter: " + distanceInGame(infoPoint, getHeadquarterForPlayer(player).getPosition()));
-
-        System.out.println();
-    }
-
-    private String treeOrStoneOrNoneString(MapFile mapFile, Point point) {
         MapFilePoint mapFilePoint = mapFile.getMapFilePoint(point);
 
-        if (mapFilePoint.hasTree()) {
-            return "tree ";
-        } else if (mapFilePoint.hasStone()) {
-            return "stone";
-        } else {
-            return "  x  ";
+        System.out.println();
+        System.out.println("Map file point:");
+        printUtils.printMapFilePoint(mapFilePoint);
+        printUtils.printSurroundingTerrainFromMapFile(point, mapFile);
+        printUtils.printSurroundingAvailableBuildingsFromMapFile(point, mapFile);
+        printUtils.printSurroundingStonesAndTreesFromMapFile(point, mapFile);
+        printUtils.printSurroundingHeightsFromMapFile(point, mapFile);
+
+        System.out.println();
+        System.out.println("Game map");
+        printUtils.printGameMapPoint(point, map);
+
+        var player = map.getPlayers().stream()
+                .filter(p -> p.getLandInPoints().contains(point))
+                .findFirst()
+                .orElse(null);
+
+        printUtils.printSurroundingTerrainFromGameMap(point, map);
+
+        if (player != null) {
+            var availableHousePoints = map.getAvailableHousePoints(player);
+            System.out.println(" - Can build: " + map.getAvailableHousePoints(player).get(point));
+            printUtils.printSurroundingAvailableBuildingsFromGameMap(point, availableHousePoints);
+            System.out.println(" - Distance to border: " + GameUtils.getDistanceToBorder(point, player));
         }
+
+        System.out.println(" - Distance headquarter: " + GameUtils.distanceInGameSteps(point, GameUtils.getHeadquarterForPlayer(player).getPosition()));
+
+        System.out.println();
     }
 
     /**
-     * Returns the distance to the closest border point for the given point
-     *
-     * @param infoPoint
-     * @param player
-     * @return
-     */
-    private int getDistanceToBorder(Point infoPoint, Player player) {
-        int distance = Integer.MAX_VALUE;
-        for (Point point : player.getBorderPoints()) {
-
-            int tmpDistance = distanceInGame(point, infoPoint);
-
-            if (tmpDistance < distance) {
-                distance = tmpDistance;
-            }
-        }
-
-        return distance;
-    }
-
-    /**
-     * Returns the headquarters for the given player
-     *
-     * @param player
-     * @return
-     */
-    private Headquarter getHeadquarterForPlayer(Player player) {
-        for (Building building : player.getBuildings()) {
-            if (building instanceof Headquarter) {
-                return (Headquarter) building;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns the distance when traveling between the two points following in-game rules
-     *
-     * @param point
-     * @param infoPoint
-     * @return
-     */
-    private int distanceInGame(Point point, Point infoPoint) {
-        int distanceY = Math.abs(infoPoint.y - point.y);
-        int distanceX = Math.abs(infoPoint.x - point.x);
-
-        int distance = distanceY;
-
-        if (distanceX > distanceY) {
-            distance += distanceX - distanceY;
-        }
-
-        return distance;
-    }
-
-    /**
-     * Compared the available points to build on in a map file and what the game calculates
-     *
-     * @return
-     * @throws Exception
+     * Compares the available building points in the map file and what the game calculates.
      */
     private void compareAvailableBuildingPoints() throws Exception {
-
         System.out.println("Available starting points in MapFile and in GameMap");
         System.out.println();
 
-        /* Use the first player to compare building points for */
-        Player player = map.getPlayers().getFirst();
+        var player = map.getPlayers().getFirst();
 
         if (debug) {
-            System.out.println("Starting point for player from MapFile: " + new Point(mapFile.getGamePointStartingPoints().getFirst()));
-            System.out.println("Starting point for player from GameMap: " + map.getStartingPoints().getFirst());
+            System.out.printf("Starting point for player from MapFile: %s%n", new Point(mapFile.getGamePointStartingPoints().getFirst()));
+            System.out.printf("Starting point for player from GameMap: %s%n", map.getStartingPoints().getFirst());
         }
 
-        /* Place a headquarters for the player to get the game to calculate available buildings points within the
-        * border
-        * */
         map.placeBuilding(new Headquarter(player), map.getStartingPoints().getFirst());
 
-        /* Compare the available building points calculated in the game with the corresponding points in the MapFile */
-        Map<Point, Size> availablePoints = map.getAvailableHousePoints(player);
+        // Compare the available building points calculated in the game with the corresponding points in the MapFile
+        var availablePoints = map.getAvailableHousePoints(player);
 
-        Map<Point, AvailableBuildingComparison> matched    = new HashMap<>();
-        Map<Point, AvailableBuildingComparison> mismatched = new HashMap<>();
+        var matched = new HashMap<Point, AvailableBuildingComparison>();
+        var mismatched = new HashMap<Point, AvailableBuildingComparison>();
 
-        for (Map.Entry<Point, Size> entry : availablePoints.entrySet()) {
-            Point point = entry.getKey();
-            Size size = entry.getValue();
-
-            MapFilePoint mapFilePoint = mapFile.getMapFilePoint(point);
+        availablePoints.forEach((point, size) -> {
+            var mapFilePoint = mapFile.getMapFilePoint(point);
 
             if (!availablePoints.containsKey(point)) {
-                continue;
+                return;
             }
 
-            AvailableBuildingComparison comparison = new AvailableBuildingComparison(
-                    size,
-                    map.isAvailableFlagPoint(player, point),
-                    mapFilePoint.getBuildableSite());
+            var comparison = new AvailableBuildingComparison(size, map.isAvailableFlagPoint(player, point), mapFilePoint.getBuildableSite());
 
-            /* Collect matches and mismatches */
             if (comparison.matches()) {
                 matched.put(point, comparison);
             } else {
                 mismatched.put(point, comparison);
             }
+        });
 
-        }
-
-        /* Print the matches */
+        // Print the matches
         System.out.println();
         System.out.println("Matches: ");
+        matched.forEach((point, comparison) ->
+                System.out.printf(" - %s: %s, %s%n", point, comparison.getAvailableInMap(), comparison.availableInFile()));
 
-        for (Map.Entry<Point, AvailableBuildingComparison> pointAndComparison : matched.entrySet()) {
-            Point point = pointAndComparison.getKey();
-            AvailableBuildingComparison comparison = pointAndComparison.getValue();
-
-            System.out.println(" - " + point + ": " + comparison.getAvailableInMap() + ", " + comparison.availableInFile());
-        }
-
-        /* Print the point that didn't match */
-        Headquarter headquarter = getHeadquarterForPlayer(player);
+        // Print the points that didn't match
+        var headquarter = GameUtils.getHeadquarterForPlayer(player);
 
         System.out.println();
         System.out.println("Mismatched: ");
@@ -953,10 +490,10 @@ public class Inspector {
             Point point = pointAndComparison.getKey();
             AvailableBuildingComparison comparison = pointAndComparison.getValue();
 
-            int distanceToBorder = getDistanceToBorder(point, player);
-            int distanceToHeadquarter = distanceInGame(point, headquarter.getPosition());
+            int distanceToBorder = GameUtils.getDistanceToBorder(point, player);
+            int distanceToHeadquarter = GameUtils.distanceInGameSteps(point, headquarter.getPosition());
 
-            /* Filter comparisons where the point is too close to the border or the headquarters */
+            // Filter comparisons where the point is too close to the border or the headquarters
             if (filterUnreliableComparisons && isComparisonUnreliable(distanceToBorder, distanceToHeadquarter)) {
                 filtered++;
 
@@ -971,139 +508,73 @@ public class Inspector {
             MapFilePoint spotUpRight = mapFile.getMapFilePoint(point.upRight());
             MapFilePoint spotDownRight = mapFile.getMapFilePoint(point.downRight());
 
-            System.out.println(" - " + point + " - game: " + comparison.availableInGame + ", file: " + comparison.availableInFile() +
-                    ", distance to border: " + distanceToBorder +
-                    ", distance to headquarter: " + distanceToHeadquarter +
-                    ", height differences: " + (spot.getHeight() - spotLeft.getHeight()) +
-                    ", " + (spot.getHeight() - spotUpLeft.getHeight()) +
-                    ", " + (spot.getHeight() - spotUpRight.getHeight()) +
-                    ", " + (spot.getHeight() - spotRight.getHeight()) +
-                    ", " + (spot.getHeight() - spotDownRight.getHeight()) +
-                    ", " + (spot.getHeight() - spotDownLeft.getHeight()));
+            System.out.printf("- %s - game: %s, file: %s, distance to border: %d, distance to headquarter: %d, height differences: %d, %d, %d, %d, %d, %d",
+                    point,
+                    comparison.availableInGame(),
+                    comparison.availableInFile(),
+                    distanceToBorder,
+                    distanceToHeadquarter,
+                    (spot.getHeight() - spotLeft.getHeight()),
+                    (spot.getHeight() - spotUpLeft.getHeight()),
+                    (spot.getHeight() - spotUpRight.getHeight()),
+                    (spot.getHeight() - spotRight.getHeight()),
+                    (spot.getHeight() - spotDownRight.getHeight()),
+                    (spot.getHeight() - spotDownLeft.getHeight())
+            );
 
             if (comparison.availableInFile() == BuildableSite.OCCUPIED_BY_TREE) {
-
                 if (!map.isTreeAtPoint(point)) {
                     System.out.println("   -- Tree in file but not on map: " + point);
                 } else {
-                    System.out.println("   -- Tree availableInGame on map: " /*+ map.getTreeAtPoint(point)*/);
+                    System.out.println("   -- Tree available in game on map: " + map.getTreeAtPoint(point));
                 }
             }
         }
 
         System.out.println();
-        System.out.println("Comparison summary:");
-        System.out.println(" - Matching: " + matched.size());
-        System.out.println(" - Mismatched: " + mismatched.size());
-        System.out.println(" - Filtered: " + filtered);
+        System.out.printf("""
+        Comparison summary:
+         - Matching: %d
+         - Mismatched: %d
+         - Filtered: %d
+        """,
+                matched.size(),
+                mismatched.size(),
+                filtered
+        );
     }
 
     private boolean isComparisonUnreliable(int distanceToBorder, int distanceToHeadquarter) {
         return distanceToBorder < 4 || distanceToHeadquarter < 4;
     }
 
-    /**
-     * Renders the MapFile instance to a String array. If highlights are included they will be shown on top of the
-     * rendered map
-     *
-     * @param mapFile
-     * @param highlights
-     * @return
-     */
-    private String[][] renderMapFileToStringArray(MapFile mapFile, List<Point> highlights) {
-        int maxWidth = mapFile.getWidth() * 2 + 2;
-        int maxHeight = mapFile.getHeight() + 1;
-
-        if (debug) {
-            System.out.println("Width: " + maxWidth + ", height: " + maxHeight);
+    private record AvailableBuildingComparison(Size availableInGame, boolean availableFlagInGame, BuildableSite availableInFile) {
+        public boolean matches() {
+            return switch (availableInGame) {
+                case LARGE -> availableInFile == BuildableSite.CASTLE;
+                case MEDIUM -> availableInFile == BuildableSite.HOUSE;
+                case SMALL -> availableInFile == BuildableSite.HUT;
+                case null -> availableFlagInGame && (availableInFile == BuildableSite.FLAG || availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN);
+            };
         }
 
-        String[][] bfr = new String[maxHeight][maxWidth * 2];
-
-        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
-
-            int x = mapFilePoint.getGamePointPosition().x;
-            int y = mapFilePoint.getGamePointPosition().y;
-
-            /* Skip points that will not appear on screen */
-            if (x >= maxWidth || y >= maxHeight) {
-                continue;
-            }
-
-            /* Draw water */
-            if (Texture.isWater(mapFilePoint.getVegetationBelow()) && y > 0) {
-                bfr[y - 1][x] = " ";
-            } else if (y > 0 && bfr[y - 1][x] == null) {
-                bfr[y - 1][x] = ".";
-            }
-
-            if (y > 0 && x < maxWidth - 2 && Texture.isWater(mapFilePoint.getVegetationDownRight())) {
-                bfr[y - 1][x + 1] = " ";
-            } else if (y > 0 && x < maxWidth - 2 && bfr[y - 1][x + 1] == null) {
-                bfr[y - 1][x + 1] = ".";
-            }
-
-            /* Place stones */
-            if (mapFilePoint.hasStone()) {
-                bfr[y][x] = "O";
-            }
-
-            /* Place trees */
-            if (mapFilePoint.hasTree()) {
-                bfr[y][x] = "T";
-            }
+        public Size getAvailableInMap() {
+            return availableInGame;
         }
-
-        if (highlights != null) {
-            for (java.awt.Point highlight : highlights) {
-                bfr[highlight.y - 1][highlight.x - 1] = "*";
-                bfr[highlight.y - 1][highlight.x + 1] = "*";
-                bfr[highlight.y + 1][highlight.x - 1] = "*";
-                bfr[highlight.y + 1][highlight.x + 1] = "*";
-                bfr[highlight.y + 1][highlight.x] = "*";
-                bfr[highlight.y - 1][highlight.x] = "*";
-                bfr[highlight.y][highlight.x - 1] = "*";
-                bfr[highlight.y][highlight.x + 1] = "*";
-
-                bfr[highlight.y][highlight.x] = "X";
-            }
-        }
-
-        return bfr;
     }
 
-    private record AvailableBuildingComparison(Size availableInGame, boolean availableFlagInGame,
-                                               BuildableSite availableInFile) {
-
-        public boolean matches() {
-                return (availableInGame == Size.LARGE && availableInFile == BuildableSite.CASTLE) ||
-                        (availableInGame == Size.MEDIUM && availableInFile == BuildableSite.HOUSE) ||
-                        (availableInGame == Size.SMALL && availableInFile == BuildableSite.HUT) ||
-                        (availableFlagInGame && availableInGame == null &&
-                                (availableInFile == BuildableSite.FLAG ||
-                                        availableInFile == BuildableSite.FLAG_NEXT_TO_INACCESSIBLE_TERRAIN));
-            }
-
-            public Size getAvailableInMap() {
-                return availableInGame;
-            }
-        }
-
     private <T> void incrementInMap(Map<T, Integer> map, T item) {
-        int amount = map.getOrDefault(item, 0);
-
-        map.put(item, amount + 1);
+        map.put(item, map.getOrDefault(item, 0) + 1);
     }
 
     private enum InformationType {
         POSSIBLE_SHIPYARD, DEAD_TREE;
 
-        public static InformationType fromString(String informationAroundType) {
-            if (informationAroundType.equals("dead-tree")) {
-                return InformationType.DEAD_TREE;
-            }
-
-            return null;
+        public static InformationType fromString(String type) {
+            return switch (type) {
+                case "dead-tree" -> DEAD_TREE;
+                default -> null;
+            };
         }
     }
 }

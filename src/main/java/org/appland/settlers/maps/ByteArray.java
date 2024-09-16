@@ -35,8 +35,6 @@ public class ByteArray {
             indexOfZero = length;
         }
 
-        String string = new String(stringAsBytes, 0, indexOfZero, StandardCharsets.US_ASCII);
-
-        return string;
+        return new String(stringAsBytes, 0, indexOfZero, StandardCharsets.US_ASCII);
     }
 }

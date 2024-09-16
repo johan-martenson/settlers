@@ -16,7 +16,7 @@ import org.appland.settlers.model.Tree.TreeType;
  *
  * @author johan
  */
-class MapFilePoint {
+public class MapFilePoint {
     private static final short DEAD_TREE = 0x1F;
     private static final short NATURE_DECORATION_1 = 0xC8;
     private static final short NATURE_DECORATION_2 = 0xC9;
@@ -59,7 +59,7 @@ class MapFilePoint {
         textureDown = texture;
     }
 
-    Texture getVegetationBelow() {
+    public Texture getVegetationBelow() {
         return textureDown;
     }
 
@@ -67,7 +67,7 @@ class MapFilePoint {
         textureDownRight = texture;
     }
 
-    Texture getVegetationDownRight() {
+    public Texture getVegetationDownRight() {
         return textureDownRight;
     }
 
@@ -132,7 +132,7 @@ class MapFilePoint {
         }
     }
 
-    boolean hasStone() {
+    public boolean hasStone() {
         return type == GRANITE_OBJECT_TYPE;
     }
 
@@ -140,11 +140,11 @@ class MapFilePoint {
         return variant == 0 ? Stone.StoneType.STONE_1 : Stone.StoneType.STONE_2;
     }
 
-    short getStoneAmount() {
+    public short getStoneAmount() {
         return objectProperties;
     }
 
-    boolean hasTree() {
+    public boolean hasTree() {
         return type == TREE_OBJECT_TYPE;
     }
 
@@ -156,7 +156,7 @@ class MapFilePoint {
         return Translator.DEFAULT_OBJECT_PROPERTY_TO_DECORATION_MAP.get((int)objectProperties);
     }
 
-    TreeType getTreeType() {
+    public TreeType getTreeType() {
         int id = (variant << 2) | ((objectProperties >> 6) & 0x03);
 
         return TreeTranslator.DEFAULT_ID_TO_TREE_TYPE_MAP.get(id);

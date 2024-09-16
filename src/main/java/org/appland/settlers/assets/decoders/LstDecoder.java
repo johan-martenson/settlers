@@ -38,72 +38,45 @@ public class LstDecoder {
     }
 
     /**
-     * File format (little endian)
-     *  - header: unsigned 16bits
-     *      - 0xFDE7 == Text file, German or English
-     *      - 0x4E20 == Valid LST file
-     *  - size of data: unsigned 32bits (integer) --- number of items?
-     *  - unsigned 32 bits x size of data
-     *      - is item used: signed 16 bits
-     *          - 1: is used
-     *      - resource type: signed 16bits
-     *          - Sound: 1 (assume start at 1!)
-     *          - Bitmap run length encoding: 2
-     *          - Font: 3
-     *          - Bitmap player: 4
-     *          - Palette: 5
-     *          - Bob: 6 ????
-     *          - Bitmap shadow: 7
-     *          - Map: 8
-     *          - Text: 9
-     *          - Raw: 10 ???
-     *          - Map header: 11
-     *          ... (extensions if any)
+     * Loads the LST file and decodes the resources within it.
      *
+     * @param filename       the LST filename
+     * @param defaultPalette the default palette used for images
+     * @return a list of decoded game resources
+     * @throws IOException                  if an I/O error occurs
+     * @throws UnknownResourceTypeException if the resource type is unknown
+     * @throws InvalidFormatException       if the file format is invalid
      */
     public static List<GameResource> loadLstFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
         List<GameResource> gameResources = new ArrayList<>();
 
-        ByteArrayReader streamReader = new ByteArrayReader(
-                Files.newInputStream(Paths.get(filename)).readAllBytes(),
-                LITTLE_ENDIAN
-        );
+        ByteArrayReader streamReader = new ByteArrayReader(Files.newInputStream(Paths.get(filename)).readAllBytes(), LITTLE_ENDIAN);
 
         Palette palette = defaultPalette;
-
         int header = streamReader.getUint16();
 
         debugPrint(format("Header is: %s", Integer.toHexString(header)));
 
         switch (header) {
-
-            /* Load text file */
-            case 0xFDE7:
-                gameResources.add(new TextResource(TextDecoder.loadTextFromStream(streamReader)));
-                break;
-
-            /* Load BOB file (?) */
-            case 0x01F6:
-                gameResources.add(new BobResource(BobDecoder.loadBobFromStream(streamReader, palette)));
-                break;
-
-            /* Load BOB file */
-            case 0x4E20:
+            case 0xFDE7 -> // Load text file
+                    gameResources.add(new TextResource(TextDecoder.loadTextFromStream(streamReader)));
+            case 0x01F6 -> // Load BOB file
+                    gameResources.add(new BobResource(BobDecoder.loadBobFromStream(streamReader, palette)));
+            case 0x4E20 -> { // Load LST BOB file
                 debugPrint(" - Header is valid for LST bob file");
 
                 long numberItems = streamReader.getUint32();
 
                 debugPrint(" - Contains number of items: " + numberItems);
 
-                /* Loop through and read each item */
+                // Loop through and read each item
                 int hits = 0;
 
                 for (long i = 0; i < numberItems; i++) {
                     short used = streamReader.getInt16();
 
-                    /* Filter un-used items */
+                    // Filter unused items
                     if (used != 1) {
-
                         debugPrint(" - Filter un-used item");
 
                         continue;
@@ -112,15 +85,14 @@ public class LstDecoder {
                     debugPrint(format("HIT: %d - %d", i, hits));
                     hits = hits + 1;
 
-                    /* Find what type of resource it is */
+                    // Load the resource type
                     int type = streamReader.getInt16();
-
                     ResourceType resourceType = ResourceType.fromInt(type);
 
                     debugPrint(" - Resource type number: " + type);
                     debugPrint(" - Resource type: " + resourceType);
 
-                    /* Load the resource */
+                    // Load the resource based on the type
                     var gameResource = switch (resourceType) {
                         case SOUND -> SoundLoader.loadSoundFromStream(streamReader);
                         case BITMAP_RLE -> new BitmapRLEResource(BitmapRleDecoder.loadBitmapRLEFromStream(streamReader, palette));
@@ -141,10 +113,8 @@ public class LstDecoder {
 
                     gameResources.add(gameResource);
                 }
-                break;
-
-            default:
-                throw new RuntimeException("Can't handle unknown header type: " + Integer.toHexString(header));
+            }
+            default -> throw new RuntimeException("Can't handle unknown header type: " + Integer.toHexString(header));
         }
 
         return gameResources;

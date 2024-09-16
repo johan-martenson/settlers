@@ -25,13 +25,23 @@ public class WaveDecoder {
         }
     }
 
+    /**
+     * Loads a wave sound from a stream.
+     *
+     * @param streamReader The byte reader stream to load data from
+     * @param length       The length of the wave data
+     * @param hasHeader    Flag indicating if the wave file has a header
+     * @return A WaveFile object representing the wave data
+     * @throws InvalidFormatException If the format of the wave file is invalid
+     * @throws IOException            If an I/O error occurs
+     */
     public static WaveFile loadWaveSoundFromStream(ByteReader streamReader, long length, boolean hasHeader) throws InvalidFormatException, IOException {
         debugPrint("   - Loading wave sound");
         debugPrint("      - Length: " + length);
         debugPrint("      - Has header: " + hasHeader);
 
         if (hasHeader && length < WAVE_HEADER_SIZE) { //
-            throw new InvalidFormatException("Length must be larger than header size. Was " + length);
+            throw new InvalidFormatException(String.format("Length must be larger than header size. Was %d", length));
         }
 
         WaveFile waveFile;
@@ -49,17 +59,19 @@ public class WaveDecoder {
             String dataId = streamReader.getUint8ArrayAsString(4);
             long dataSize = streamReader.getUint32();
 
-            debugPrint("      - Read wave header");
-            debugPrint("         - Format id: " + formatId);
-            debugPrint("         - Format size: " + formatSize);
-            debugPrint("         - Format tag: " + formatTag);
-            debugPrint("         - Number of channels: " + numberChannels);
-            debugPrint("         - Samples per sec: " + samplesPerSec);
-            debugPrint("         - Bytes per sec: " + bytesPerSec);
-            debugPrint("         - Frame size: " + frameSize);
-            debugPrint("         - Bits per sample: " + bitsPerSample);
-            debugPrint("         - Data id: " + dataId);
-            debugPrint("         - Data size: " + dataSize);
+            debugPrint(String.format("""
+                        Read wave header:
+                           - Format id: %s
+                           - Format size: %d
+                           - Format tag: %d
+                           - Number of channels: %d
+                           - Samples per sec: %d
+                           - Bytes per sec: %d
+                           - Frame size: %d
+                           - Bits per sample: %d
+                           - Data id: %s
+                           - Data size: %d""",
+                    formatId, formatSize, formatTag, numberChannels, samplesPerSec, bytesPerSec, frameSize, bitsPerSample, dataId, dataSize));
 
             waveFile = new WaveFile(
                     formatId,

@@ -17,6 +17,16 @@ import static org.appland.settlers.assets.ResourceType.NONE;
 
 public class FontDecoder {
 
+    /**
+     * Loads a font from the provided byte stream, associating each character with a PlayerBitmap.
+     *
+     * @param streamReader the byte reader for reading the stream data
+     * @param palette      the palette to apply to the bitmaps
+     * @return a map of Unicode character codes to PlayerBitmap objects
+     * @throws IOException                  if an I/O error occurs
+     * @throws UnknownResourceTypeException if an unknown resource type is encountered
+     * @throws InvalidFormatException       if the format of the data is invalid
+     */
     public static Map<String, PlayerBitmap> loadFontFromStream(ByteReader streamReader, Palette palette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
         streamReader.pushByteOrder(LITTLE_ENDIAN);
 
@@ -25,34 +35,31 @@ public class FontDecoder {
 
         boolean isUnicode = dx == 255 && dy == 255;
 
-        long numberChars;
+        long numberChars = isUnicode ? streamReader.getUint32() : 256;
 
         if (isUnicode) {
-            numberChars = streamReader.getUint32();
             dx = streamReader.getUint8();
             dy = streamReader.getUint8();
-        } else {
-            numberChars = 256;
         }
 
-        /* Read the letters */
         Map<String, PlayerBitmap> letterMap = new HashMap<>();
+
+        // Load the characters into the letter map
         for (long i = 32; i < numberChars; ++i) {
             short bobType = streamReader.getInt16();
 
-            ResourceType resourceType1 = ResourceType.fromInt(bobType);
+            ResourceType resourceType = ResourceType.fromInt(bobType);
 
-            if (resourceType1 == NONE) {
+            if (resourceType == NONE) {
                 continue;
             }
 
-            if (resourceType1 != BITMAP_PLAYER) {
-                throw new InvalidFormatException("Can only read player bitmap for fonts. Not " + resourceType1);
+            if (resourceType != BITMAP_PLAYER) {
+                throw new InvalidFormatException(String.format("Expected BITMAP_PLAYER but found %s", resourceType));
             }
 
             var letterBitmap = PlayerBitmapDecoder.loadPlayerBitmapFromStream(streamReader, palette);
-
-            letterMap.put("U+" + Integer.toHexString((int)i), letterBitmap);
+            letterMap.put("U+%04X" + Integer.toHexString((int)i), letterBitmap);
         }
 
         streamReader.popByteOrder();

@@ -16,13 +16,24 @@ import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.assets.Utils.getImageAt;
 
 public class BuildingsExtractor {
-    public static void extract(String fromDir, String toDir, Palette palette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
+
+    /**
+     * Extracts buildings and their construction states for different nations and writes them into an image atlas.
+     *
+     * @param fromDir The directory containing the source LST files
+     * @param toDir The directory to write the resulting image atlas
+     * @param palette The color palette to apply to the images
+     * @throws UnknownResourceTypeException If an unknown resource type is encountered
+     * @throws IOException If an I/O error occurs during file operations
+     * @throws InvalidFormatException If the format of the LST files is invalid
+     */
+    public static void extractBuildingAssets(String fromDir, String toDir, Palette palette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
         BuildingsImageCollection buildingsImageCollection = new BuildingsImageCollection();
 
-        var romYLst = LstDecoder.loadLstFile(fromDir + "/" + RomYLst.FILENAME, palette);
-        var japYLst = LstDecoder.loadLstFile(fromDir + "/" + JapYLst.FILENAME, palette);
-        var afrYLst = LstDecoder.loadLstFile(fromDir + "/" + AfrYLst.FILENAME, palette);
-        var vikYLst = LstDecoder.loadLstFile(fromDir + "/" + VikYLst.FILENAME, palette);
+        var romYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, RomYLst.FILENAME), palette);
+        var japYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, JapYLst.FILENAME), palette);
+        var afrYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, AfrYLst.FILENAME), palette);
+        var vikYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, VikYLst.FILENAME), palette);
 
         // Load roman buildings
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.HEADQUARTER);

@@ -23,29 +23,38 @@ public class MidiDecoder {
 
     private static boolean debug = false;
 
+    /**
+     * Prints debug messages if debugging is enabled.
+     * @param debugString the message to print
+     */
     private static void debugPrint(String debugString) {
         if (debug) {
             System.out.println(debugString);
         }
     }
 
+    /**
+     * Loads an XMIDI file from the given filename.
+     *
+     * @param filename the file to load
+     * @return the loaded XMidiFile
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidFormatException if the file format is invalid
+     */
     public static XMidiFile loadSoundXMidiFile(String filename) throws IOException, InvalidFormatException {
         StreamReader streamReader = new StreamReader(new FileInputStream(filename), LITTLE_ENDIAN);
 
         // Read header
         String headerId = streamReader.getUint8ArrayAsString(4);
-
         if (!headerId.equals("FORM")) {
-            throw new InvalidFormatException("Header must match 'FORM'. Not " + headerId);
+            throw new InvalidFormatException(String.format("Header must match 'FORM'. Not %s", headerId));
         }
 
         debugPrint("FORM");
 
         // Read headerSize as big endian
         streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
-
         long headerSize = streamReader.getUint32();
-
         streamReader.popByteOrder();
 
         if ((headerSize & 1) != 0) {
@@ -55,45 +64,37 @@ public class MidiDecoder {
         // Manage XMID and XDIR separately
         int numberTracks;
         String chunkId = streamReader.getUint8ArrayAsString(4);
-
         debugPrint(chunkId);
 
-        if (chunkId.equals("XMID")) {
-            numberTracks = 1;
-        } else if (chunkId.equals("XDIR")) {
-            chunkId = streamReader.getUint8ArrayAsString(4);
+        switch (chunkId) {
+            case "XMID" -> numberTracks = 1;
+            case "XDIR" -> {
+                chunkId = streamReader.getUint8ArrayAsString(4);
+                if (!chunkId.equals("INFO")) {
+                    throw new InvalidFormatException(String.format("Must match 'INFO'. Not %s", chunkId));
+                }
+                debugPrint(chunkId);
 
-            if (!chunkId.equals("INFO")) {
-                throw new InvalidFormatException("Must match 'INFO'. Not " + chunkId);
+                streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
+                long chunkLength = streamReader.getUint32();
+                streamReader.popByteOrder();
+
+                if ((chunkLength & 1) != 0) {
+                    chunkLength++;
+                }
+
+                if (chunkLength != SIZE_NUMBER_TRACKS) {
+                    throw new InvalidFormatException(String.format("Must match size of number tracks (2). Not %d", chunkLength));
+                }
+
+                numberTracks = streamReader.getUint16();
             }
-
-            debugPrint(chunkId);
-
-            // Read chunk length as big endian! -- test
-            streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
-
-            long chunkLength = streamReader.getUint32();
-
-            streamReader.popByteOrder();
-
-            if ((chunkLength & 1) != 0) {
-                chunkLength = chunkLength + 1;
-            }
-
-            if (chunkLength != SIZE_NUMBER_TRACKS) {
-                throw new InvalidFormatException("Must match size of number tracks (2). Not " + chunkLength);
-            }
-
-            // Read the next field as big endian!
-            numberTracks = streamReader.getUint16();
-        } else {
-            throw new InvalidFormatException("Must match 'XMID' or 'XDIR'. Not " + chunkId);
+            default -> throw new InvalidFormatException(String.format("Must match 'XMID' or 'XDIR'. Not %s", chunkId));
         }
 
         chunkId = streamReader.getUint8ArrayAsString(4);
-
         if (!chunkId.equals("CAT ")) {
-            throw new InvalidFormatException("Must match 'CAT '. Not " + chunkId);
+            throw new InvalidFormatException(String.format("Must match 'CAT '. Not %s", chunkId));
         }
 
         debugPrint(chunkId);
@@ -102,13 +103,11 @@ public class MidiDecoder {
         streamReader.skip(4);
 
         chunkId = streamReader.getUint8ArrayAsString(4);
-
         if (!chunkId.equals("XMID")) {
             throw new InvalidFormatException("Must match 'XMID'. Not " + chunkId);
         }
 
         debugPrint(chunkId);
-
         debugPrint(" - Read header");
         debugPrint("    - Header id: " + headerId);
         debugPrint("    - Header size: " + headerSize);
@@ -116,15 +115,11 @@ public class MidiDecoder {
 
         // Read tracks
         List<XMidiTrack> trackList = new ArrayList<>();
-
         for (long i = 0; i < numberTracks; i++) {
-
             debugPrint(" - Reading track: " + i);
 
             XMidiTrack xMidiTrack = new XMidiTrack();
-
             chunkId = streamReader.getUint8ArrayAsString(4);
-
             if (!chunkId.equals("FORM")) {
                 throw new InvalidFormatException("Must match 'FORM'. Not " + chunkId);
             }
@@ -132,49 +127,39 @@ public class MidiDecoder {
             debugPrint(" - " + chunkId);
 
             long chunkLength = streamReader.getUint32();
-
             if ((chunkLength & 1) != 0) {
-                chunkLength = chunkLength + 1;
+                chunkLength++;
             }
 
             chunkId = streamReader.getUint8ArrayAsString(4);
-
             if (!chunkId.equals("XMID")) {
-                throw new InvalidFormatException("Must match 'XMID'. Not " + chunkId);
+                throw new InvalidFormatException(String.format("Must match 'XMID'. Not %s", chunkId));
             }
 
             debugPrint(" - " + chunkId);
 
             chunkId = streamReader.getUint8ArrayAsString(4);
-
             debugPrint(" - " + chunkId);
 
             // Read timbres, if any
             if (chunkId.equals("TIMB")) {
-
-                // Read chunk length and number of timbres as big endian! (chunk length added because of spec)
                 streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
-
                 chunkLength = streamReader.getUint32();
-
                 if ((chunkLength & 1) != 0) {
                     chunkLength = chunkLength + 1;
                 }
-
                 streamReader.popByteOrder();
 
                 int numberTimbres = streamReader.getUint16();
-
                 debugPrint(" Number of timbres: " + numberTimbres);
                 debugPrint(" Chunk length: " + chunkLength);
 
                 if (numberTimbres * 2L + 2 != chunkLength) {
-                    throw new InvalidFormatException("Chunk length must match number timbres (" + numberTimbres + ") * 2 + 2. Not " + chunkLength);
+                    throw new InvalidFormatException(String.format("Chunk length must match number timbres (%d) * 2 + 2. Not %d", numberTimbres, chunkLength));
                 }
 
                 // Read timbres
                 for (int j = 0; j < numberTimbres; j++) {
-
                     debugPrint("Read timbre pair!");
 
                     short patch = streamReader.getUint8();
@@ -187,34 +172,29 @@ public class MidiDecoder {
                 }
 
                 chunkId = streamReader.getUint8ArrayAsString(4);
-
                 debugPrint(" - Next section: " + chunkId);
             }
 
             // Read EVTN section
             if (!chunkId.equals("EVNT")) {
-                throw new InvalidFormatException("Must match 'EVNT'. Not " + chunkId);
+                throw new InvalidFormatException(String.format("Must match 'EVNT'. Not %s", chunkId));
             }
 
             debugPrint(" - Read EVTN section");
 
             // Read the length as big endian!
             streamReader.pushByteOrder(ByteOrder.BIG_ENDIAN);
-
             chunkLength = streamReader.getUint32();
-
             streamReader.popByteOrder();
 
             if ((chunkLength & 1) != 0) {
-                chunkLength = chunkLength + 1;
+                chunkLength++;
             }
 
             debugPrint("   - Length is: " + chunkLength);
 
             byte[] trackData = new byte[(int) chunkLength];
-
             streamReader.read(trackData, 0, (int) chunkLength);
-
             xMidiTrack.setData(trackData);
 
             trackList.add(xMidiTrack);
@@ -224,7 +204,6 @@ public class MidiDecoder {
     }
 
     public static List<XMidiTrack> loadXMidiSoundFromStream(ByteReader streamReader, long length, boolean isDir) throws IOException, InvalidFormatException {
-
         String chunk0Header = streamReader.getUint8ArrayAsString(4);
 
         // The first chunk must be a form

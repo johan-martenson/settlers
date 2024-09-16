@@ -6,6 +6,7 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerChangeListener;
+import org.appland.settlers.utils.JsonUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,6 @@ public class GameResource implements PlayerChangeListener {
     public GameStatus status;
 
     private final List<Player> players;
-    private final JsonUtils utils;
     private final Map<Player, ComputerPlayer> computerPlayers;
     private final Collection<GameResourceListener> listeners = new HashSet<>();
 
@@ -43,8 +43,6 @@ public class GameResource implements PlayerChangeListener {
 
     GameResource(JsonUtils utils) {
         players = new ArrayList<>();
-
-        this.utils = utils;
 
         computerPlayers = new HashMap<>();
 
@@ -74,7 +72,7 @@ public class GameResource implements PlayerChangeListener {
         notifyListeners();
     }
 
-    List<Player> getPlayers() {
+    public List<Player> getPlayers() {
         return players;
     }
 
@@ -92,7 +90,7 @@ public class GameResource implements PlayerChangeListener {
         notifyListeners();
     }
 
-    MapFile getMapFile() {
+    public MapFile getMapFile() {
         return mapFile;
     }
 
@@ -102,7 +100,7 @@ public class GameResource implements PlayerChangeListener {
         notifyListeners();
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -110,7 +108,7 @@ public class GameResource implements PlayerChangeListener {
         return name != null;
     }
 
-    ResourceLevel getResources() {
+    public ResourceLevel getResources() {
         return this.resourceLevel;
     }
 

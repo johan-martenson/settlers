@@ -15,7 +15,7 @@ public class IdManager {
         ids = 0;
     }
 
-    String getId(Object o) {
+    public String getId(Object o) {
         synchronized (objectToId) {
             if (!objectToId.containsKey(o)) {
                 ids++;
@@ -28,7 +28,7 @@ public class IdManager {
         return Integer.toString(objectToId.get(o));
     }
 
-    Object getObject(String id) {
+    public Object getObject(String id) {
         int numberId = Integer.parseInt(id);
 
         return idToObject.get(numberId);
@@ -44,7 +44,7 @@ public class IdManager {
         idToObject.remove(id);
     }
 
-    void updateObject(Object oldObject, Object updatedObject) {
+    public void updateObject(Object oldObject, Object updatedObject) {
         int id = objectToId.get(oldObject);
 
         objectToId.remove(oldObject);

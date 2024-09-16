@@ -1,8 +1,9 @@
-package org.appland.settlers.rest.resource;
+package org.appland.settlers.utils;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
 import org.appland.settlers.maps.MapFile;
+import org.appland.settlers.maps.MapFilePoint;
 import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
@@ -79,6 +80,8 @@ import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
+import org.appland.settlers.rest.resource.GameResource;
+import org.appland.settlers.rest.resource.IdManager;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -96,11 +99,11 @@ import java.util.logging.Logger;
 
 import static org.appland.settlers.model.messages.Message.MessageType.*;
 
-class JsonUtils {
+public class JsonUtils {
     private final IdManager idManager;
     private final MapLoader mapLoader;
 
-    JsonUtils(IdManager idManager) {
+    public JsonUtils(IdManager idManager) {
         this.idManager = idManager;
 
         mapLoader = new MapLoader();
@@ -114,11 +117,11 @@ class JsonUtils {
         ));
     }
 
-    JSONArray gamesToJson(Collection<GameResource> games) {
+    public JSONArray gamesToJson(Collection<GameResource> games) {
         return toJsonArray(games, this::gameToJson);
     }
 
-    JSONArray chatMessagesToRoomToJson(Collection<ChatManager.ChatMessage> chatMessages, String roomId) {
+    public JSONArray chatMessagesToRoomToJson(Collection<ChatManager.ChatMessage> chatMessages, String roomId) {
         return toJsonArray(chatMessages, chatMessage -> new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
                 "from", chatMessage.from().getName(),
@@ -136,7 +139,7 @@ class JsonUtils {
         ));
     }
 
-    JSONObject gameToJson(GameResource gameResource) {
+    public JSONObject gameToJson(GameResource gameResource) {
         var jsonGame = new JSONObject(Map.of(
                 "id", idManager.getId(gameResource),
                 "name", gameResource.getName(),
@@ -191,18 +194,18 @@ class JsonUtils {
         return jsonPlayer;
     }
 
-    JSONArray pointsToJson(Collection<Point> points) {
+    public JSONArray pointsToJson(Collection<Point> points) {
         return toJsonArray(points, this::pointToJson);
     }
 
-    JSONObject pointToJson(Point point) {
+    public JSONObject pointToJson(Point point) {
         return new JSONObject(Map.of(
                 "x", point.x,
                 "y", point.y
         ));
     }
 
-    List<Player> jsonToPlayers(JSONArray jsonPlayers) {
+    public List<Player> jsonToPlayers(JSONArray jsonPlayers) {
         List<Player> players = new ArrayList<>();
 
         if (jsonPlayers != null) {
@@ -261,7 +264,7 @@ class JsonUtils {
         ));
     }
 
-    JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
+    public JSONObject pointToDetailedJson(Point point, Player player, GameMap map) throws InvalidUserActionException {
         JSONObject jsonPointInfo = pointToJson(point);
 
         if (player.getDiscoveredLand().contains(point)) {
@@ -333,7 +336,7 @@ class JsonUtils {
         return "";
     }
 
-    JSONObject houseToJson(Building building, Player player) throws InvalidUserActionException {
+    public JSONObject houseToJson(Building building, Player player) throws InvalidUserActionException {
         JSONObject jsonResources = new JSONObject();
 
         for (Material material : Material.values()) {
@@ -434,11 +437,11 @@ class JsonUtils {
         return points;
     }
 
-    List<Point> jsonToPoints(JSONArray jsonPoints) {
+    public List<Point> jsonToPoints(JSONArray jsonPoints) {
         return jsonArrayToList(jsonPoints, this::jsonToPoint);
     }
 
-    Point jsonToPoint(JSONObject point) {
+    public Point jsonToPoint(JSONObject point) {
         Object xObject = point.get("x");
         Object yObject = point.get("y");
 
@@ -558,7 +561,7 @@ class JsonUtils {
         };
     }
 
-    JSONObject flagToJson(Flag flag) {
+    public JSONObject flagToJson(Flag flag) {
         var jsonFlag = new JSONObject(Map.of(
                 "id", idManager.getId(flag),
                 "x", flag.getPosition().x,
@@ -633,7 +636,7 @@ class JsonUtils {
         ));
     }
 
-    JSONObject playerToJson(Player player) {
+    public JSONObject playerToJson(Player player) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(player),
                 "name", player.getName(),
@@ -642,7 +645,7 @@ class JsonUtils {
         ));
     }
 
-    JSONArray mapFilesToJson(Collection<MapFile> mapFiles) {
+    public JSONArray mapFilesToJson(Collection<MapFile> mapFiles) {
         return toJsonArray(mapFiles, this::mapFileToJson);
     }
 
@@ -668,7 +671,7 @@ class JsonUtils {
         return jsonHouses;
     }
 
-    JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
+    public JSONObject mapFileTerrainToJson(MapFile mapFile) throws Exception {
         GameMap map = mapLoader.convertMapFileToGameMap(mapFile);
 
         return terrainToJson(map);
@@ -1540,5 +1543,54 @@ class JsonUtils {
 
     public TransportCategory jsonToTransportCategory(String material) {
         return TransportCategory.valueOf(material);
+    }
+
+    public JSONObject mapFileToDetailedJson(MapFile mapFile) {
+        JSONArray jsonStartingPoints = new JSONArray();
+        JSONArray jsonMapPoints = new JSONArray();
+
+        JSONObject jsonMap = new JSONObject(Map.of(
+                "title", mapFile.getTitle(),
+                "author", mapFile.getAuthor(),
+                "width", mapFile.getWidth(),
+                "maxNumberPlayers", mapFile.getMaxNumberOfPlayers(),
+                "terrain", mapFile.getTerrainType().name().toUpperCase(),
+                "startingPoints", jsonStartingPoints,
+                "points", jsonMapPoints
+        ));
+
+        mapFile.getGamePointStartingPoints().forEach(point -> jsonStartingPoints.add(pointToJson(point)));
+
+        for (MapFilePoint mapFilePoint : mapFile.getMapFilePoints()) {
+            Point gamePoint = mapFilePoint.getGamePointPosition();
+
+            var jsonMapFilePoint = new JSONObject(Map.of(
+                    "x", gamePoint.x,
+                    "y", gamePoint.y,
+                    "height", mapFilePoint.getHeight(),
+                    "vegetationBelow", mapFilePoint.getVegetationBelow().name().toUpperCase(),
+                    "vegetationDownRight", mapFilePoint.getVegetationDownRight().name().toUpperCase(),
+                    "vegetationBelowAsInt", mapFilePoint.getVegetationBelow().ordinal(),
+                    "vegetationDownRightAsInt", mapFilePoint.getVegetationDownRight().ordinal()
+            ));
+
+            if (mapFilePoint.hasStone()) {
+                jsonMapFilePoint.put("stone", mapFilePoint.getStoneAmount());
+            }
+
+            if (mapFilePoint.hasTree()) {
+                jsonMapFilePoint.put("tree", mapFilePoint.getTreeType().name().toUpperCase());
+                jsonMapFilePoint.put("treeAsInt", mapFilePoint.getTreeType().ordinal());
+            }
+
+            if (mapFilePoint.getBuildableSite() != null) {
+                jsonMapFilePoint.put("canBuild", mapFilePoint.getBuildableSite().name().toUpperCase());
+                jsonMapFilePoint.put("canBuildAsInt", mapFilePoint.getBuildableSite().ordinal());
+            }
+
+            jsonMapPoints.add(jsonMapFilePoint);
+        }
+
+        return jsonMap;
     }
 }

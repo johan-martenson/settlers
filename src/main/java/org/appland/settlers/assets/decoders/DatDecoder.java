@@ -28,15 +28,29 @@ public class DatDecoder {
 
     private static boolean debug = true;
 
+    /**
+     * Prints debug information if the debug mode is active.
+     *
+     * @param debugString String to print.
+     */
     private static void debugPrint(String debugString) {
         if (debug) {
             System.out.println(debugString);
         }
     }
 
+    /**
+     * Loads a DAT file and its associated IDX file if available, returning a list of game resources.
+     *
+     * @param filename       The filename of the DAT file.
+     * @param defaultPalette The default color palette for rendering.
+     * @return List of GameResource objects.
+     * @throws IOException                  In case of file access issues.
+     * @throws UnknownResourceTypeException If an unknown resource type is encountered.
+     * @throws InvalidFormatException       If the file format is invalid.
+     */
     public static List<GameResource> loadDatFile(String filename, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
-
-        System.out.println("Loading DAT file");
+        debugPrint("Loading DAT file");
 
         String baseFile = filename.substring(0, filename.length() - 4);
 
@@ -76,58 +90,60 @@ public class DatDecoder {
             }
 
             ResourceType resourceType = ResourceType.fromInt(datBobtype);
-
             GameResource gameResource = loadType(datReader, resourceType, defaultPalette);
 
             List<GameResource> result = new ArrayList<>();
-
             result.add(gameResource);
 
             return result;
         }
 
-        // Also read the IDX file if it exists
-        StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
-        StreamReader idxReader = new StreamReader(new FileInputStream(idxFilename), LITTLE_ENDIAN);
+        // Read from both DAT and IDX files if the IDX file exists
+        try (StreamReader datReader = new StreamReader(new FileInputStream(datFilename), LITTLE_ENDIAN);
+             StreamReader idxReader = new StreamReader(new FileInputStream(idxFilename), LITTLE_ENDIAN)) {
+            long count = idxReader.getUint32();
+            List<GameResource> gameResourceList = new ArrayList<>();
 
-        long count = idxReader.getUint32();
+            for (long i = 0; i < count; i++) {
+                String name = idxReader.getUint8ArrayAsString(16);
+                long offset = idxReader.getUint32();
+                String unknown = idxReader.getUint8ArrayAsString(6);
+                int idxBobType = idxReader.getInt16();
 
-        List<GameResource> gameResourceList = new ArrayList<>();
+                datReader.setPosition(offset);
+                short datBobtype = datReader.getInt16();
 
-        for (long i = 0; i < count; i++) {
-            String name = idxReader.getUint8ArrayAsString(16);
-            long offset = idxReader.getUint32();
-            String unknown = idxReader.getUint8ArrayAsString(6);
-            int idxBobType = idxReader.getInt16();
+                if (idxBobType != datBobtype) {
+                    debugPrint("Seems like an invalid item??");
+                    debugPrint(idxFilename);
+                    debugPrint(datFilename);
+                    debugPrint("" + i);
 
-            datReader.setPosition(offset);
+                    continue;
+                }
 
-            short datBobtype = datReader.getInt16();
-
-            if (idxBobType != datBobtype) {
-
-                debugPrint("Seems like an invalid item??");
-                debugPrint(idxFilename);
-                debugPrint(datFilename);
-                debugPrint("" + i);
-
-                continue;
+                ResourceType resourceType = ResourceType.fromInt(datBobtype);
+                var gameResource = loadType(datReader, resourceType, defaultPalette);
+                gameResource.setName(name);
+                gameResourceList.add(gameResource);
             }
 
-            ResourceType resourceType = ResourceType.fromInt(datBobtype);
-
-            var gameResource = loadType(datReader, resourceType, defaultPalette);
-
-            gameResource.setName(name);
-
-            gameResourceList.add(gameResource);
+            return gameResourceList;
         }
-
-        return gameResourceList;
     }
 
+    /**
+     * Loads a specific type of game resource based on the resource type.
+     *
+     * @param streamReader The StreamReader for reading the data.
+     * @param resourceType The type of the resource.
+     * @param palette      The palette used for rendering.
+     * @return The decoded GameResource.
+     * @throws IOException                  In case of file access issues.
+     * @throws InvalidFormatException       If the format is invalid.
+     * @throws UnknownResourceTypeException If the resource type is unknown.
+     */
     public static GameResource loadType(StreamReader streamReader, ResourceType resourceType, Palette palette) throws IOException, InvalidFormatException, UnknownResourceTypeException {
-
         return switch (resourceType) {
             case BITMAP_PLAYER -> new PlayerBitmapResource(PlayerBitmapDecoder.loadPlayerBitmapFromStream(streamReader, palette));
             case FONT -> new FontResource(FontDecoder.loadFontFromStream(streamReader, palette));
@@ -136,7 +152,7 @@ public class DatDecoder {
             case SOUND -> new WaveGameResource(WaveDecoder.loadWaveSoundFromStream(streamReader, 5, false));
             case PALETTE -> new PaletteResource(PaletteDecoder.loadPaletteFromStream(streamReader, true));
             case BOB -> new BobResource(BobDecoder.loadBobFromStream(streamReader, palette));
-            default -> throw new RuntimeException("Not implemented yet. " + resourceType);
+            default -> throw new RuntimeException(String.format("Resource type %s not implemented.", resourceType));
         };
     }
 }

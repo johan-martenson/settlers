@@ -54,12 +54,6 @@ public class BitmapRleDecoder {
         // Load the image data
         byte[] data = streamReader.getUint8ArrayAsBytes((int)length);
 
-        // Create the BitmapRLE object with the loaded data
-        BitmapRLE bitmap = new BitmapRLE(width, height, data, palette, length, TextureFormat.BGRA);
-
-        bitmap.setNx(nx);
-        bitmap.setNy(ny);
-
-        return bitmap;
+        return new BitmapRLE(width, height, nx, ny, data, palette, length, TextureFormat.BGRA);
     }
 }

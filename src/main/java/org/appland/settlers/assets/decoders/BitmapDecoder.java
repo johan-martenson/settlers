@@ -167,8 +167,8 @@ public class BitmapDecoder {
             bitmap.setSize(size);
             bitmap.setXPixelsPerM(xPixelsPerMeter);
             bitmap.setYPixelsPerM(yPixelsPerMeter);
-            bitmap.setColorUsed((int) numberColorsUsed);
-            bitmap.setColorImp(numberImportantColors);
+            bitmap.setColorsUsed((int) numberColorsUsed);
+            bitmap.setImportantColors(numberImportantColors);
 
             int targetBytesPerPixel = 1;
 
@@ -200,7 +200,7 @@ public class BitmapDecoder {
                             byte green = tmpBuffer[x * 3 + 1];
                             byte red = tmpBuffer[x * 3 + 2];
 
-                            byte transparency = palette.isTransparentColor(red, blue, green) ? 0 : TRANSPARENT_BYTE;
+                            byte transparency = palette.isColorTransparent(red, blue, green) ? 0 : TRANSPARENT_BYTE;
                             bitmap.setPixelValue(x, y, red, green, blue, transparency);
                         }
                     } else {
@@ -230,7 +230,7 @@ public class BitmapDecoder {
                             byte green = tmpBuffer[x * 3 + 1];
                             byte red = tmpBuffer[x * 3 + 2];
 
-                            byte transparency = palette.isTransparentColor(red, blue, green) ? 0 : TRANSPARENT_BYTE;
+                            byte transparency = palette.isColorTransparent(red, blue, green) ? 0 : TRANSPARENT_BYTE;
                             bitmap.setPixelValue(x, y, red, green, blue, transparency);
                         }
                     }

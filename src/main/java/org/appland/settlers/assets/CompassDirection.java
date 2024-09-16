@@ -1,5 +1,8 @@
 package org.appland.settlers.assets;
 
+/**
+ * Enum representing compass directions used in settlers 2
+ */
 public enum CompassDirection {
     EAST,
     SOUTH_EAST,

@@ -4,25 +4,32 @@ import org.appland.settlers.utils.ByteReader;
 
 import java.io.IOException;
 
-public class ColorBlock {
+import static java.lang.String.format;
+
+/**
+ * Represents a color block that contains an ID, size, and pixel data.
+ */
+public record ColorBlock(int id, int size, byte[] pixels) {
     private static final int COLOR_BLOCK_HEADER = 0x01F5;
 
-    public int id;
-    public int size;
-    public byte[] pixels;
-
+    /**
+     * Reads a ColorBlock from a ByteReader stream.
+     *
+     * @param streamReader the stream reader to read from
+     * @return the ColorBlock read from the stream
+     * @throws IOException             if an IO error occurs
+     * @throws InvalidFormatException  if the color block header is invalid
+     */
     public static ColorBlock readColorBlockFromStream(ByteReader streamReader) throws IOException, InvalidFormatException {
-        ColorBlock colorBlock = new ColorBlock();
+        var id = streamReader.getUint16();
+        var size = streamReader.getUint16();
 
-        colorBlock.id = streamReader.getUint16();
-        colorBlock.size = streamReader.getUint16();
-
-        if (colorBlock.id != COLOR_BLOCK_HEADER) {
-            throw new InvalidFormatException("Header must match 0x01F5. Not " + colorBlock.id);
+        if (id != COLOR_BLOCK_HEADER) {
+            throw new InvalidFormatException(format("Header must match 0x01F5. Not %d", id));
         }
 
-        colorBlock.pixels = streamReader.getUint8ArrayAsBytes(colorBlock.size);
+        var pixels = streamReader.getUint8ArrayAsBytes(size);
 
-        return colorBlock;
+        return new ColorBlock(id, size, pixels);
     }
 }

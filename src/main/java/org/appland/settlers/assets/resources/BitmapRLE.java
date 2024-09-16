@@ -17,14 +17,16 @@ public class BitmapRLE extends Bitmap {
      *
      * @param width   the width of the bitmap
      * @param height  the height of the bitmap
+     * @param nx      the horizontal drawing offset
+     * @param ny      the vertical drawing offset
      * @param data    the byte data containing image information
      * @param palette the color palette
      * @param length  the length of the image data
      * @param format  the texture format (PALETTED or BGRA)
      * @throws InvalidFormatException if the format or data size is invalid
      */
-    public BitmapRLE(int width, int height, byte[] data, Palette palette, long length, TextureFormat format) throws InvalidFormatException {
-        super(width, height, palette, format);
+    public BitmapRLE(int width, int height, int nx, int ny, byte[] data, Palette palette, long length, TextureFormat format) throws InvalidFormatException {
+        super(width, height, nx, ny, palette, format);
 
         this.palette = palette;
         ByteBuffer byteBufferData = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
@@ -82,7 +84,21 @@ public class BitmapRLE extends Bitmap {
             if (position != length) {
                 throw new InvalidFormatException("Should have reached the end!");
             }
-        }
+        }    }
+
+    /**
+     * Constructor to create a BitmapRLE object.
+     *
+     * @param width   the width of the bitmap
+     * @param height  the height of the bitmap
+     * @param data    the byte data containing image information
+     * @param palette the color palette
+     * @param length  the length of the image data
+     * @param format  the texture format (PALETTED or BGRA)
+     * @throws InvalidFormatException if the format or data size is invalid
+     */
+    public BitmapRLE(int width, int height, byte[] data, Palette palette, long length, TextureFormat format) throws InvalidFormatException {
+        this(width, height, 0, 0, data, palette, length, format);
     }
 
     @Override

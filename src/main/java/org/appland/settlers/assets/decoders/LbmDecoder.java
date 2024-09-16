@@ -4,9 +4,9 @@ import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.InvalidFormatException;
 import org.appland.settlers.assets.LBMGameResource;
 import org.appland.settlers.assets.TextureFormat;
-import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.AnimatedLBMFile;
 import org.appland.settlers.assets.resources.Palette;
-import org.appland.settlers.assets.resources.PaletteAnim;
+import org.appland.settlers.assets.resources.AnimatedPalette;
 import org.appland.settlers.utils.StreamReader;
 
 import java.io.FileInputStream;
@@ -24,172 +24,158 @@ public class LbmDecoder {
         }
     }
 
+    /**
+     * Loads an LBM file from the given filename and palette.
+     *
+     * @param filename       the name of the LBM file
+     * @param defaultPalette the default palette to use
+     * @return a GameResource representing the LBM file
+     * @throws IOException            if an I/O error occurs
+     * @throws InvalidFormatException if the file format is invalid
+     */
     public static GameResource loadLBMFile(String filename, Palette defaultPalette) throws IOException, InvalidFormatException {
-        StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN);
+        try (StreamReader streamReader = new StreamReader(new FileInputStream(filename), ByteOrder.BIG_ENDIAN)) {
+            String header = streamReader.getUint8ArrayAsString(4);
+            long length = streamReader.getUint32();
+            String pbm = streamReader.getUint8ArrayAsString(4);
 
-        String header = streamReader.getUint8ArrayAsString(4);
-        long length = streamReader.getUint32();
-        String pbm = streamReader.getUint8ArrayAsString(4);
-
-        /* Check that the header is valid */
-        if (!header.equals("FORM") || !pbm.equals("PBM ")) {
-            throw new InvalidFormatException("Must match 'FORM' or 'PBM'. Not " + header);
-        }
-
-        int width = 0;
-        int height = 0;
-        int transClr = 0;
-        short compression = 0;
-        short mask = 0;
-        boolean headerRead = false;
-
-        LBMFile lbmFile = null;
-        Palette palette = null;
-
-        /* Read sections of the file until it's done */
-        List<PaletteAnim> paletteAnimList = new ArrayList<>();
-
-        while (!streamReader.isEof()) {
-
-            /* Read next chunk */
-            String chunkId = streamReader.getUint8ArrayAsString(4);
-            long chunkLength = streamReader.getUint32();
-
-            if ((chunkLength & 1) == 1) {
-                chunkLength = chunkLength + 1;
+            // Check that the header is valid
+            if (!header.equals("FORM") || !pbm.equals("PBM ")) {
+                throw new InvalidFormatException(String.format("Must match 'FORM' or 'PBM'. Not %s", header));
             }
 
-            /* Read bitmap header */
-            switch (chunkId) {
-                case "BMHD" -> {
+            int width = 0;
+            int height = 0;
+            int transClr = 0;
+            short compression = 0;
+            short mask = 0;
+            boolean headerRead = false;
 
-                    if (headerRead) { // || !bitmap
-                        throw new InvalidFormatException("Must read header");
-                    }
+            AnimatedLBMFile lbmFile = null;
+            Palette palette = null;
 
-                    width = streamReader.getUint16();
-                    height = streamReader.getUint16();
-                    int xOrig = streamReader.getUint16();
-                    int yOrig = streamReader.getUint16();
-                    short numPlanes = streamReader.getUint8();
-                    mask = streamReader.getUint8();
-                    compression = streamReader.getUint8();
-                    short pad = streamReader.getUint8();
-                    transClr = streamReader.getUint16();
-                    short xAspect = streamReader.getUint8();
-                    short yAspect = streamReader.getUint8();
-                    int pageW = streamReader.getUint16();
-                    int pageH = streamReader.getUint16();
+            // Read sections of the file until done
+            List<AnimatedPalette> animatedPaletteList = new ArrayList<>();
 
-                    if (numPlanes != 8 || (mask != 0 && mask != 2)) {
-                        throw new InvalidFormatException("Planes and maks combination is not valid. Number planes: " + numPlanes + ", mask: " + mask);
-                    }
+            while (!streamReader.isEof()) {
+                String chunkId = streamReader.getUint8ArrayAsString(4);
+                long chunkLength = streamReader.getUint32();
 
-                    if (compression > 1) {
-                        throw new InvalidFormatException("Compression must not be greater than 1. Is " + compression);
-                    }
-
-                    lbmFile = new LBMFile(width, height, defaultPalette, TextureFormat.BGRA);
-
-                    headerRead = true;
+                if ((chunkLength & 1) == 1) {
+                    chunkLength++;
                 }
-                case "CRNG" -> {
-                    PaletteAnim paletteAnim = PaletteAnim.load(streamReader);
 
-                    paletteAnimList.add(paletteAnim);
-                }
-                case "CMAP" -> {
+                switch (chunkId) {
+                    case "BMHD" -> {
 
-                    if (chunkLength != 256 * 3) {
-                        throw new InvalidFormatException("Chunk length must be 256 * 3. Not " + chunkLength);
-                    }
-
-                    palette = Palette.load(streamReader, false);
-
-                    if (mask == 2 && transClr < 256) {
-                        palette.setTransparentIndex(transClr);
-                    } else {
-                        palette.setTransparentIndex(0);
-                    }
-                }
-                case "BODY" -> {
-
-                    if (!headerRead) {
-                        throw new InvalidFormatException("Header is not read.");
-                    }
-
-                    // if bitmap == null, invalid format palette missing
-
-                    if (compression == 0) {
-                        if (chunkLength != (long) width * height) {
-                            throw new InvalidFormatException("Length must match width x height (" + width + "x" + height + ". Not " + chunkLength);
+                        if (headerRead) {
+                            throw new InvalidFormatException("Should only read the header once.");
                         }
 
-                        for (int y = 0; y < height; y++) {
-                            for (int x = 0; x < width; x++) {
-                                short color = streamReader.getUint8();
+                        width = streamReader.getUint16();
+                        height = streamReader.getUint16();
+                        int xOrig = streamReader.getUint16();
+                        int yOrig = streamReader.getUint16();
+                        short numPlanes = streamReader.getUint8();
+                        mask = streamReader.getUint8();
+                        compression = streamReader.getUint8();
+                        short pad = streamReader.getUint8();
+                        transClr = streamReader.getUint16();
+                        short xAspect = streamReader.getUint8();
+                        short yAspect = streamReader.getUint8();
+                        int pageW = streamReader.getUint16();
+                        int pageH = streamReader.getUint16();
 
-                                lbmFile.setPixelByColorIndex(x, y, color);
-                            }
+                        if (numPlanes != 8 || (mask != 0 && mask != 2)) {
+                            throw new InvalidFormatException(String.format("Invalid planes and mask combination. Planes: %d, Mask: %d", numPlanes, mask));
                         }
-                    } else {
-                        int x = 0;
-                        int y = 0;
 
-                        while (chunkLength > 0) {
-                            byte compressionType = streamReader.getInt8();
+                        if (compression > 1) {
+                            throw new InvalidFormatException(String.format("Invalid compression: %d", compression));
+                        }
 
-                            chunkLength = chunkLength - 1;
+                        lbmFile = new AnimatedLBMFile(width, height, defaultPalette, TextureFormat.BGRA);
+                        headerRead = true;
+                    }
+                    case "CRNG" -> animatedPaletteList.add(AnimatedPalette.load(streamReader));
+                    case "CMAP" -> {
+                        if (chunkLength != 256 * 3) {
+                            throw new InvalidFormatException(String.format("Invalid chunk length: %d", chunkLength));
+                        }
 
-                            if (chunkLength == 0) {
-                                continue;
+                        palette = Palette.loadPalette(streamReader, false);
+                        palette.setTransparentIndex(mask == 2 && transClr < 256 ? transClr : 0);
+                    }
+                    case "BODY" -> {
+                        if (!headerRead) {
+                            throw new InvalidFormatException("Header is not read.");
+                        }
+
+                        if (compression == 0) {
+                            if (chunkLength != (long) width * height) {
+                                throw new InvalidFormatException(String.format("Invalid length: %d", chunkLength));
                             }
 
-                            if (compressionType > 0) {
-                                int count = 1 + compressionType;
+                            for (int y = 0; y < height; y++) {
+                                for (int x = 0; x < width; x++) {
+                                    lbmFile.setPixelByColorIndex(x, y, streamReader.getUint8());
+                                }
+                            }
+                        } else {
+                            int x = 0;
+                            int y = 0;
 
-                                for (short j = 0; j < count; j++) {
+                            while (chunkLength > 0) {
+                                byte compressionType = streamReader.getInt8();
+                                chunkLength--;
+
+                                if (chunkLength == 0) {
+                                    continue;
+                                }
+
+                                if (compressionType > 0) {
+                                    int count = 1 + compressionType;
+
+                                    for (short j = 0; j < count; j++) {
+                                        short color = streamReader.getUint8();
+                                        chunkLength--;
+
+                                        lbmFile.setPixelByColorIndex(x++, y, color);
+
+                                        if (x >= width) {
+                                            y = y + 1;
+                                            x = 0;
+                                        }
+                                    }
+                                } else {
+                                    int count = 1 - compressionType;
                                     short color = streamReader.getUint8();
+                                    chunkLength--;
 
-                                    chunkLength = chunkLength - 1;
+                                    for (int j = 0; j < count; j++) {
+                                        lbmFile.setPixelByColorIndex(x++, y, color);
 
-                                    lbmFile.setPixelByColorIndex(x++, y, color);
-
-                                    if (x >= width) {
-                                        y = y + 1;
-                                        x = 0;
-                                    }
-                                }
-                            } else {
-                                int count = 1 - compressionType;
-
-                                short color = streamReader.getUint8();
-
-                                chunkLength = chunkLength - 1;
-
-                                for (int j = 0; j < count; j++) {
-                                    lbmFile.setPixelByColorIndex(x++, y, color);
-
-                                    if (x >= width) {
-                                        y = y + 1;
-                                        x = 0;
+                                        if (x >= width) {
+                                            y = y + 1;
+                                            x = 0;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    default -> streamReader.skip((int) chunkLength);
                 }
-                default -> streamReader.skip((int) chunkLength);
             }
+
+            lbmFile.setPaletteAnimations(animatedPaletteList);
+            lbmFile.setLength(length);
+
+            if (palette != null) {
+                lbmFile.setPalette(palette);
+            }
+
+            return new LBMGameResource(lbmFile);
         }
-
-        lbmFile.setAnimPalettes(paletteAnimList);
-        lbmFile.setLength(length);
-
-        if (palette != null) {
-            lbmFile.setPalette(palette);
-        }
-
-        return new LBMGameResource(lbmFile);
     }
 }

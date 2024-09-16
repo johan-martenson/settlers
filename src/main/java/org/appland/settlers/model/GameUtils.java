@@ -38,6 +38,7 @@ import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.GoldMine;
 import org.appland.settlers.model.buildings.GraniteMine;
 import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.IronMine;
 import org.appland.settlers.model.buildings.Metalworks;
 import org.appland.settlers.model.buildings.Mill;
@@ -136,6 +137,43 @@ public class GameUtils {
      */
     public static boolean allMapsEmpty(Map<?, ?>... maps) {
         return Arrays.stream(maps).allMatch(Map::isEmpty);
+    }
+
+    /**
+     * Returns the headquarters for the given player
+     *
+     * @param player
+     * @return
+     */
+    public static Headquarter getHeadquarterForPlayer(Player player) {
+        for (Building building : player.getBuildings()) {
+            if (building instanceof Headquarter) {
+                return (Headquarter) building;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the distance to the closest border point for the given point
+     *
+     * @param infoPoint
+     * @param player
+     * @return
+     */
+    public static int getDistanceToBorder(Point infoPoint, Player player) {
+        int distance = Integer.MAX_VALUE;
+        for (Point point : player.getBorderPoints()) {
+
+            int tmpDistance = distanceInGameSteps(point, infoPoint);
+
+            if (tmpDistance < distance) {
+                distance = tmpDistance;
+            }
+        }
+
+        return distance;
     }
 
     /**

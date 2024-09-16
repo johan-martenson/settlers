@@ -28,11 +28,11 @@ public class NormalizedImageList {
         for (Bitmap image : images) {
             Area visibleArea = image.getVisibleArea();
 
-            maxWidthBeforeNx = Math.max(maxWidthBeforeNx, image.getNx() - visibleArea.x);
-            maxWidthAfterNx = Math.max(maxWidthAfterNx, visibleArea.width - image.getNx() + visibleArea.x);
+            maxWidthBeforeNx = Math.max(maxWidthBeforeNx, image.getNx() - visibleArea.x());
+            maxWidthAfterNx = Math.max(maxWidthAfterNx, visibleArea.width() - image.getNx() + visibleArea.x());
 
-            maxHeightBelowNy = Math.max(maxHeightBelowNy, image.getNy() - visibleArea.y);
-            maxHeightAboveNy = Math.max(maxHeightAboveNy, visibleArea.height - image.getNy() + visibleArea.y);
+            maxHeightBelowNy = Math.max(maxHeightBelowNy, image.getNy() - visibleArea.y());
+            maxHeightAboveNy = Math.max(maxHeightAboveNy, visibleArea.height() - image.getNy() + visibleArea.y());
         }
 
         this.width = maxWidthBeforeNx + maxWidthAfterNx;

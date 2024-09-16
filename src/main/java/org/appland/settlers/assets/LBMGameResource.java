@@ -1,11 +1,11 @@
 package org.appland.settlers.assets;
 
-import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.AnimatedLBMFile;
 
 public class LBMGameResource extends GameResource {
-    private final LBMFile lbmFile;
+    private final AnimatedLBMFile lbmFile;
 
-    public LBMGameResource(LBMFile lbmFile) {
+    public LBMGameResource(AnimatedLBMFile lbmFile) {
         this.lbmFile = lbmFile;
     }
 
@@ -14,7 +14,7 @@ public class LBMGameResource extends GameResource {
         return GameResourceType.LBM_RESOURCE;
     }
 
-    public LBMFile getLbmFile() {
+    public AnimatedLBMFile getLbmFile() {
         return lbmFile;
     }
 }

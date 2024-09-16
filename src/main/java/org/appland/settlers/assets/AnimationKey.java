@@ -2,40 +2,38 @@ package org.appland.settlers.assets;
 
 import java.util.Objects;
 
-public class AnimationKey {
-    private final Nation nation;
-    private final CompassDirection compassDirection;
+/**
+ * Represents a key for an animation, combining a nation and compass direction.
+ */
+public record AnimationKey(Nation nation, CompassDirection compassDirection) {
 
-    public AnimationKey(Nation nation, CompassDirection compassDirection) {
-        this.nation = nation;
-        this.compassDirection = compassDirection;
-    }
-
+    /**
+     * Checks if this AnimationKey is equal to another object.
+     *
+     * @param o The object to compare with.
+     * @return true if the other object is an AnimationKey and has the same nation and compass direction.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
-            return true;
+            return true; // Check if the object is the same instance
         }
 
-        if (o == null || getClass() != o.getClass()) {
-            return false;
+        if (!(o instanceof AnimationKey that)) {
+            return false; // Check if the object is of the same type
         }
 
-        AnimationKey that = (AnimationKey) o;
-
+        // Check if both the nation and compass direction match
         return nation == that.nation && compassDirection == that.compassDirection;
     }
 
+    /**
+     * Computes the hash code based on the nation and compass direction.
+     *
+     * @return The computed hash code.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(nation, compassDirection);
-    }
-
-    @Override
-    public String toString() {
-        return "AnimationKey{" +
-                "nation=" + nation +
-                ", direction=" + compassDirection +
-                '}';
     }
 }

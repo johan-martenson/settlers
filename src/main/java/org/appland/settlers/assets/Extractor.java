@@ -19,14 +19,13 @@ import org.appland.settlers.assets.decoders.BobDecoder;
 import org.appland.settlers.assets.decoders.LbmDecoder;
 import org.appland.settlers.assets.decoders.LstDecoder;
 import org.appland.settlers.assets.decoders.PaletteDecoder;
-import org.appland.settlers.assets.extractors.BackgroundExtractor;
+import org.appland.settlers.assets.extractors.BackgroundImageExtractor;
 import org.appland.settlers.assets.extractors.BuildingsExtractor;
 import org.appland.settlers.assets.extractors.CursorExtractor;
 import org.appland.settlers.assets.gamefiles.AfrZLst;
 import org.appland.settlers.assets.gamefiles.BootBobsLst;
 import org.appland.settlers.assets.gamefiles.CarrierBob;
 import org.appland.settlers.assets.gamefiles.CbobRomBobsLst;
-import org.appland.settlers.assets.gamefiles.ImageAndShadowIndex;
 import org.appland.settlers.assets.gamefiles.IoLst;
 import org.appland.settlers.assets.gamefiles.JapZLst;
 import org.appland.settlers.assets.gamefiles.JobsBob;
@@ -147,7 +146,7 @@ public class Extractor {
 
         CursorExtractor.extractCursors(fromDir, toDir, extractor.defaultPalette);
 
-        BackgroundExtractor.extractBackgrounds(fromDir, toDir, extractor.defaultPalette);
+        BackgroundImageExtractor.extractBackgroundImages(fromDir, toDir, extractor.defaultPalette);
     }
 
     // TODO: extract icons from IO.DAT
@@ -490,17 +489,20 @@ public class Extractor {
                                 maxOrigin.x = Math.max(maxOrigin.x, bitmapOrigin.x);
                                 maxOrigin.y = Math.max(maxOrigin.y, bitmapOrigin.y);
 
-                                maxPosition.x = Math.max(maxPosition.x, bitmapVisibleArea.width - bitmapOrigin.x);
-                                maxPosition.y = Math.max(maxPosition.y, bitmapVisibleArea.height - bitmapOrigin.y);
+                                maxPosition.x = Math.max(maxPosition.x, bitmapVisibleArea.width() - bitmapOrigin.x);
+                                maxPosition.y = Math.max(maxPosition.y, bitmapVisibleArea.height() - bitmapOrigin.y);
                             }
 
                             for (var playerColor : PlayerColor.values()) {
 
                                 /* Create a bitmap to merge both body and head into */
-                                Bitmap merged = new Bitmap(maxOrigin.x + maxPosition.x, maxOrigin.y + maxPosition.y, defaultPalette, TextureFormat.BGRA);
-
-                                merged.setNx(maxOrigin.x);
-                                merged.setNy(maxOrigin.y);
+                                Bitmap merged = new Bitmap(
+                                        maxOrigin.x + maxPosition.x,
+                                        maxOrigin.y + maxPosition.y,
+                                        maxOrigin.x,
+                                        maxOrigin.y,
+                                        defaultPalette,
+                                        TextureFormat.BGRA);
 
                                 /* Draw the body */
                                 Area bodyVisibleArea = body.getVisibleArea();
@@ -1806,7 +1808,7 @@ public class Extractor {
 
         writeFilesFromMap(romYLst, imagesToFileMap);
 
-        BuildingsExtractor.extract(fromDir, toDir, defaultPalette);
+        BuildingsExtractor.extractBuildingAssets(fromDir, toDir, defaultPalette);
     }
 
     private void writeFilesFromMap(List<GameResource> gameResourceList, Map<Integer, String> imagesToFileMap) throws IOException {

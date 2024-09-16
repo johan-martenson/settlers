@@ -11,9 +11,9 @@ import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.BitmapFile;
 import org.appland.settlers.assets.resources.BitmapRLE;
 import org.appland.settlers.assets.resources.BitmapRaw;
-import org.appland.settlers.assets.resources.LBMFile;
+import org.appland.settlers.assets.resources.AnimatedLBMFile;
 import org.appland.settlers.assets.resources.Palette;
-import org.appland.settlers.assets.resources.PaletteAnim;
+import org.appland.settlers.assets.resources.AnimatedPalette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.junit.Test;
 
@@ -49,8 +49,8 @@ public class TestLoadingImages {
         assertEquals(bitmap.getHeight(), 63);
         assertEquals(bitmap.getSourceBitsPerPixel(), 8);
         assertEquals(bitmap.getBytesPerPixel(), 4);
-        assertEquals(bitmap.getColorUsed(), 256);
-        assertEquals(bitmap.getColorImp(), 0);
+        assertEquals(bitmap.getColorsUsed(), 256);
+        assertEquals(bitmap.getImportantColors(), 0);
         assertEquals(bitmap.getPlanes(), 1);
         assertEquals(bitmap.getXPixelsPerM(), 2834);
         assertEquals(bitmap.getYPixelsPerM(), 2834);
@@ -80,8 +80,8 @@ public class TestLoadingImages {
         assertEquals(bitmap.getSize(), 0);
         assertEquals(bitmap.getXPixelsPerM(), 2834);
         assertEquals(bitmap.getYPixelsPerM(), 2834);
-        assertEquals(bitmap.getColorUsed(), 16777216);
-        assertEquals(bitmap.getColorImp(), 0);
+        assertEquals(bitmap.getColorsUsed(), 16777216);
+        assertEquals(bitmap.getImportantColors(), 0);
     }
 
     private Palette createFakePalette() {
@@ -136,7 +136,7 @@ public class TestLoadingImages {
 
         LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
 
-        LBMFile lbmFile = lbmGameResource.getLbmFile();
+        AnimatedLBMFile lbmFile = lbmGameResource.getLbmFile();
 
         assertNotNull(lbmFile);
 
@@ -146,11 +146,11 @@ public class TestLoadingImages {
         assertEquals(lbmFile.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());
-        assertNotNull(lbmFile.getPaletteAnimList());
+        assertNotNull(lbmFile.getPaletteAnimations());
 
-        List<PaletteAnim> paletteAnimList = lbmFile.getPaletteAnimList();
+        List<AnimatedPalette> animatedPaletteList = lbmFile.getPaletteAnimations();
 
-        assertEquals(paletteAnimList.size(), 0);
+        assertEquals(animatedPaletteList.size(), 0);
     }
 
     @Test
@@ -232,7 +232,7 @@ public class TestLoadingImages {
 
         LBMGameResource lbmGameResource = (LBMGameResource) gameResource;
 
-        LBMFile lbmFile = lbmGameResource.getLbmFile();
+        AnimatedLBMFile lbmFile = lbmGameResource.getLbmFile();
 
         assertEquals(lbmFile.getWidth(), 256);
         assertEquals(lbmFile.getHeight(), 256);
@@ -240,11 +240,11 @@ public class TestLoadingImages {
         assertEquals(lbmFile.getFormat(), TextureFormat.BGRA);
 
         assertNotNull(lbmFile.getPalette());
-        assertNotNull(lbmFile.getPaletteAnimList());
+        assertNotNull(lbmFile.getPaletteAnimations());
 
-        List<PaletteAnim> paletteAnimList = lbmFile.getPaletteAnimList();
+        List<AnimatedPalette> animatedPaletteList = lbmFile.getPaletteAnimations();
 
-        assertEquals(paletteAnimList.size(), 16);
+        assertEquals(animatedPaletteList.size(), 16);
     }
 
     @Test

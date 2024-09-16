@@ -4,13 +4,14 @@ package org.appland.settlers.utils;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class DataOutputStreamLittleEndian {
-    private DataOutputStream systemStream;
+public class DataOutputStreamLittleEndian implements AutoCloseable {
+    private final DataOutputStream systemStream;
 
     public DataOutputStreamLittleEndian(DataOutputStream systemStream) {
         this.systemStream = systemStream;
     }
 
+    @Override
     public void close() throws IOException {
         this.systemStream.close();
     }
