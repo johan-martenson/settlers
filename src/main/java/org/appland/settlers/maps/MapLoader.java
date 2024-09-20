@@ -122,7 +122,7 @@ public class MapLoader {
 
         System.out.printf(" - Width x height: %d x %d%n", mapFile.getWidth(), mapFile.getHeight());
         System.out.printf(" - Terrain type: %s%n", mapFile.getTerrainType().name().toLowerCase());
-        System.out.printf(" - Unlimited play: %b%n", mapFile.isUnlimitedPlay());
+        System.out.printf(" - Unlimited play: %b%n", mapFile.isUnlimitedPlayEnabled());
         System.out.printf(" - Title type: %s%n", mapFile.getTitleType());
         System.out.printf(" - File header: %s%n", mapFile.getHeaderType().name().toLowerCase());
     }
@@ -231,7 +231,7 @@ public class MapLoader {
         } else {
             mapFile.disableUnlimitedPlay();
         }
-        printlnIfDebug(String.format(" -- Unlimited play: %b", mapFile.isPlayUnlimited()));
+        printlnIfDebug(String.format(" -- Unlimited play: %b", mapFile.isUnlimitedPlayEnabled()));
 
         // Read player faces
         List<PlayerFace> playerFaces = new ArrayList<>();
@@ -331,7 +331,7 @@ public class MapLoader {
         for (int i = 0; i < subBlockSize; i++) {
             MapFilePoint spot = new MapFilePoint();
             spot.setHeight(streamReader.getUint8());
-            mapFile.addSpot(spot);
+            mapFile.addMapFilePoint(spot);
         }
         printlnIfDebug(" -- Loaded heights");
 
@@ -364,7 +364,7 @@ public class MapLoader {
 
         // Read the below texture for each point on the map
         for (int i = 0; i < subBlockSize; i++) {
-            MapFilePoint mapFilePoint = mapFile.getSpot(i);
+            MapFilePoint mapFilePoint = mapFile.getMapFilePoint(i);
             short belowTextureShort = streamReader.getUint8();
             Texture texture = Texture.textureFromUint8(belowTextureShort);
             mapFilePoint.setVegetationBelow(texture);
@@ -391,7 +391,7 @@ public class MapLoader {
         // Read textures
         for (int i = 0; i < subBlockSize; i++) {
             Texture texture = Texture.textureFromUint8(streamReader.getUint8());
-            mapFile.getSpot(i).setVegetationDownRight(texture);
+            mapFile.getMapFilePoint(i).setVegetationDownRight(texture);
         }
 
         // Read the fourth sub block fileHeader with roads
@@ -423,7 +423,7 @@ public class MapLoader {
 
         // Read object properties
         for (int i = 0; i < subBlockSize; i++) {
-            mapFile.getSpot(i).setObjectProperties(streamReader.getUint8());
+            mapFile.getMapFilePoint(i).setObjectProperties(streamReader.getUint8());
         }
 
         // Read object types
@@ -441,7 +441,7 @@ public class MapLoader {
 
         // Read object types
         for (int i = 0; i < subBlockSize; i++) {
-            mapFile.getSpot(i).setObjectType(streamReader.getUint8());
+            mapFile.getMapFilePoint(i).setObjectType(streamReader.getUint8());
         }
 
         // Read animals
@@ -461,7 +461,7 @@ public class MapLoader {
         for (int i = 0; i < subBlockSize; i++) {
             Animal animal = Animal.animalFromInt(streamReader.getUint8());
             if (animal.isWildAnimal()) {
-                mapFile.getSpot(i).setAnimal(animal);
+                mapFile.getMapFilePoint(i).setAnimal(animal);
             }
         }
 
@@ -497,7 +497,7 @@ public class MapLoader {
         // Read the buildable sites
         for (int i = 0; i < subBlockSize; i++) {
             BuildableSite buildableSite = BuildableSite.buildableSiteFromInt(streamReader.getUint8());
-            mapFile.getSpot(i).setBuildableSite(buildableSite);
+            mapFile.getMapFilePoint(i).setBuildableSite(buildableSite);
         }
 
         // Skip tenth block with unknown data
@@ -548,7 +548,7 @@ public class MapLoader {
         // Read the resources block
         for (int i = 0; i < subBlockSize; i++) {
             Resource resource = Resource.resourceFromInt(streamReader.getUint8());
-            mapFile.getSpot(i).setResource(resource);
+            mapFile.getMapFilePoint(i).setResource(resource);
         }
 
         // Skip gouraud shading block
@@ -608,7 +608,7 @@ public class MapLoader {
         List<Player> players = new ArrayList<>();
         List<PlayerColor> colors = Arrays.stream(PlayerColor.values()).toList();
 
-        for (int i = 0; i < mapFile.maxNumberOfPlayers; i++) {
+        for (int i = 0; i < mapFile.getMaxNumberOfPlayers(); i++) {
             players.add(new Player(String.format("Player %d", i), colors.get(i), Nation.ROMANS, PlayerType.HUMAN));
         }
 

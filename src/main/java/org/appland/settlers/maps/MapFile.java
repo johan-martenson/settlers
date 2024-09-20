@@ -16,140 +16,223 @@ import java.util.Map;
 import static org.appland.settlers.maps.Utils.isEven;
 
 /**
- *
- * @author johan
+ * Class representing a map file used in the game. Handles map properties and translation between file points and game points.
  */
 public class MapFile {
 
     private static final String FILE_HEADER_V1 = "WORLD_V1.0";
-    /* Map properties */
-    private final List<Point> startingPositions;
-    private final List<PlayerFace> playerFaces;
-    private final List<UniqueMass> masses;
-    private final List<MapFilePoint> pointList;
-    private final List<java.awt.Point> fileStartingPoints;
-    private final Map<Point, MapFilePoint> gamePointToMapFilePointMap;
-    private final Map<java.awt.Point, MapFilePoint> mapFilePointToGamePointMap;
 
-    int         width;
-    int         height;
-    int         maxNumberOfPlayers;
-    TerrainType terrainType;
-    String      author;
-    boolean     unlimitedPlay;
-    private     String title;
-    private     MapTitleType mapTitleType;
+    private final List<Point> startingPositions = new ArrayList<>();
+    private final List<PlayerFace> playerFaces = new ArrayList<>();
+    private final List<UniqueMass> masses = new ArrayList<>();
+    private final List<MapFilePoint> mapFilePoints = new ArrayList<>();
+    private final List<java.awt.Point> fileStartingPoints = new ArrayList<>();
+    private final Map<Point, MapFilePoint> gamePointToMapFilePointMap = new HashMap<>();
+    private final Map<java.awt.Point, MapFilePoint> mapFilePointToGamePointMap = new HashMap<>();
+
+    private int width = -1;
+    private int height = -1;
+    private int maxNumberOfPlayers = -1;
+    private TerrainType terrainType;
+    private String author;
+    private boolean isUnlimitedPlayEnabled;
+    private String title;
+    private MapTitleType mapTitleType;
     private HeaderType headerType;
 
-    public MapFile() {
-        width                      = -1;
-        height                     = -1;
-        maxNumberOfPlayers         = -1;
-        startingPositions          = new ArrayList<>();
-        playerFaces                = new ArrayList<>();
-        masses                     = new ArrayList<>();
-        pointList                  = new ArrayList<>();
-        fileStartingPoints         = new ArrayList<>();
-        mapFilePointToGamePointMap = new HashMap<>();
-        gamePointToMapFilePointMap = new HashMap<>();
-    }
-
+    /**
+     * Sets the title of the map.
+     *
+     * @param title the title to set
+     */
     void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Returns the title of the map.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the terrain type of the map.
+     *
+     * @param terrainType the terrain type to set
+     */
     void setTerrainType(TerrainType terrainType) {
         this.terrainType = terrainType;
     }
 
+    /**
+     * Sets the maximum number of players for the map.
+     *
+     * @param numberOfPlayers the maximum number of players
+     */
     void setMaxNumberOfPlayers(int numberOfPlayers) {
         this.maxNumberOfPlayers = numberOfPlayers;
     }
 
+    /**
+     * Sets the author of the map.
+     *
+     * @param author the author's name
+     */
     void setAuthor(String author) {
         this.author = author;
     }
 
+    /**
+     * Adds a starting position in the map file.
+     *
+     * @param startingPoint the starting position
+     */
     void addStartingPosition(java.awt.Point startingPoint) {
         fileStartingPoints.add(startingPoint);
     }
 
+    /**
+     * Enables unlimited play for the map.
+     */
     void enableUnlimitedPlay() {
-        unlimitedPlay = true;
+        isUnlimitedPlayEnabled = true;
     }
 
+    /**
+     * Disables unlimited play for the map.
+     */
     void disableUnlimitedPlay() {
-        unlimitedPlay = false;
+        isUnlimitedPlayEnabled = false;
     }
 
+    /**
+     * Sets player faces for the map.
+     *
+     * @param playerFaces list of player faces
+     */
     void setPlayerFaces(List<PlayerFace> playerFaces) {
         this.playerFaces.clear();
-
         this.playerFaces.addAll(playerFaces);
     }
 
+    /**
+     * Sets the width of the map.
+     *
+     * @param width the width of the map
+     */
     void setWidth(int width) {
         this.width = width;
     }
 
+    /**
+     * Returns the width of the map.
+     *
+     * @return the map width
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Sets the height of the map.
+     *
+     * @param height the height of the map
+     */
     void setHeight(int height) {
         this.height = height;
     }
 
+    /**
+     * Returns the height of the map.
+     *
+     * @return the map height
+     */
     public int getHeight() {
         return height;
     }
 
-    void addSpot(MapFilePoint spot) {
-        pointList.add(spot);
+    /**
+     * Adds a map point to the list of points.
+     *
+     * @param mapFilePoint the map point to add
+     */
+    void addMapFilePoint(MapFilePoint mapFilePoint) {
+        mapFilePoints.add(mapFilePoint);
     }
 
     void addMassStartingPoint(java.awt.Point position) {
         // Ignore for now
     }
 
+    /**
+     * Returns the list of all points in the map file.
+     *
+     * @return the list of points
+     */
     public List<MapFilePoint> getMapFilePoints() {
-        return pointList;
+        return mapFilePoints;
     }
 
+    /**
+     * Returns the list of game starting points after converting from map file points.
+     *
+     * @return the list of game starting points
+     */
     public List<Point> getGamePointStartingPoints() {
         return startingPositions;
     }
 
+    /**
+     * Returns the maximum number of players allowed for the map.
+     *
+     * @return maximum number of players
+     */
     public int getMaxNumberOfPlayers() {
         return maxNumberOfPlayers;
     }
 
+    /**
+     * Returns the terrain type of the map.
+     *
+     * @return terrain type
+     */
     public TerrainType getTerrainType() {
         return terrainType;
     }
 
+    /**
+     * Returns the author of the map.
+     *
+     * @return author's name
+     */
     public String getAuthor() {
         return author;
     }
 
-    public boolean isPlayUnlimited() {
-        return unlimitedPlay;
-    }
-
+    /**
+     * Returns the list of player faces used in the map.
+     *
+     * @return list of player faces
+     */
     public List<PlayerFace> getPlayerFaces() {
         return playerFaces;
     }
 
-    public MapFilePoint getSpot(int i) {
-        return pointList.get(i);
+    /**
+     * Returns a MapFile point by its index in the list.
+     *
+     * @param i the index of the MapFile point
+     * @return the map point
+     */
+    public MapFilePoint getMapFilePoint(int i) {
+        return mapFilePoints.get(i);
     }
 
     /**
-     * Map file positions to game points
+     * Maps file points to game points based on the map layout and dimensions.
      *
      * The spots in the map file are saved according to the pattern:
      *
@@ -175,27 +258,13 @@ public class MapFile {
      */
     public void mapFilePointsToGamePoints() {
         int rowLength = width;
-
-        /* Set initial values */
         int rowIndex = 1;
-        int mapFileY = 1; // FIXME: are mapfile coordinates starting at 1 or 0?
+        int mapFileY = 1;
         int mapFileX = 1;
-        int gamePointX;
-        int gamePointY;
+        int gamePointY = isEven(height) ? height : height - 1;
+        int gamePointX = isEven(gamePointY) ? 0 : 1;
 
-        /* Start game point x at 0 if height is even, otherwise 1 */
-        if (isEven(height)) {
-            gamePointY = height;
-            gamePointX = 0;
-        } else {
-            gamePointY = height - 1;
-            gamePointX = 1;
-        }
-
-        /* Go through each map file point and calculate its coordinates in mapfile coordinates and game points */
-        for (MapFilePoint mapFilePoint : pointList) {
-
-            /* Store mapping from game point and map file coordinates to the map file point */
+        for (MapFilePoint mapFilePoint : mapFilePoints) {
             Point gamePoint = new Point(gamePointX, gamePointY);
             java.awt.Point mapFilePosition = new java.awt.Point(mapFileX, mapFileY);
 
@@ -204,36 +273,27 @@ public class MapFile {
 
             mapFilePoint.setPositionAsGamePoint(gamePoint);
 
-            /* Go to next row if the current row is done */
             if (rowIndex == rowLength) {
                 rowIndex = 1;
-
-                mapFileY = mapFileY + 1;
-                gamePointY = gamePointY - 1;
-
+                mapFileY++;
+                gamePointY--;
                 mapFileX = 1;
-
-                if (isEven(gamePointY)) {
-                    gamePointX = 0;
-                } else {
-                    gamePointX = 1;
-                }
-
-            /* Go to next place in the row */
+                gamePointX = isEven(gamePointY) ? 0 : 1;
             } else {
-                rowIndex = rowIndex + 1;
-
-                mapFileX = mapFileX + 1;
-                gamePointX = gamePointX + 2;
+                rowIndex++;
+                mapFileX++;
+                gamePointX += 2;
             }
         }
     }
 
+    /**
+     * Translates file starting points to game points.
+     *
+     * @throws InvalidMapException if a starting point is outside the map
+     */
     void translateFileStartingPointsToGamePoints() throws InvalidMapException {
-
-        for (java.awt.Point point : fileStartingPoints) {
-
-            /* Filter invalid starting points - this can exist e.g. on mission maps */
+        for (var point : fileStartingPoints) {
             if (!mapFilePointToGamePointMap.containsKey(point)) {
                 continue;
             }
@@ -245,48 +305,88 @@ public class MapFile {
                 System.out.println(mapFilePointToGamePointMap.get(point));
             }
 
-            MapFilePoint spot = mapFilePointToGamePointMap.get(point);
-
-            if (spot == null) {
-                throw new InvalidMapException("The starting point " + point + " is outside of the map.");
+            MapFilePoint mapFilePoint = mapFilePointToGamePointMap.get(point);
+            if (mapFilePoint == null) {
+                throw new InvalidMapException(String.format("The starting point %s is outside of the map.", point));
             }
 
-            startingPositions.add(new Point(spot.getGamePointPosition()));
+            startingPositions.add(new Point(mapFilePoint.getGamePointPosition()));
         }
     }
 
+    /**
+     * Returns the map point corresponding to a given game point.
+     *
+     * @param point the game point
+     * @return the corresponding map point
+     */
     public MapFilePoint getMapFilePoint(Point point) {
         return gamePointToMapFilePointMap.get(point);
     }
 
+    /**
+     * Sets the map title type.
+     *
+     * @param titleType the title type to set
+     */
     public void setTitleType(MapTitleType titleType) {
         this.mapTitleType = titleType;
     }
 
+    /**
+     * Returns the map title type.
+     *
+     * @return the map title type as a string
+     */
     public String getTitleType() {
         return mapTitleType.name();
     }
 
-    public boolean isUnlimitedPlay() {
-        return unlimitedPlay;
+    /**
+     * Returns whether unlimited play is enabled.
+     *
+     * @return true if unlimited play is enabled, false otherwise
+     */
+    public boolean isUnlimitedPlayEnabled() {
+        return isUnlimitedPlayEnabled;
     }
 
+    /**
+     * Returns the header type of the map.
+     *
+     * @return the header type
+     */
     public HeaderType getHeaderType() {
         return headerType;
     }
 
+    /**
+     * Sets the header type based on the file header string.
+     *
+     * @param fileHeader the file header
+     * @throws RuntimeException if the header type is not supported
+     */
     public void setHeader(String fileHeader) {
-        if (FILE_HEADER_V1.equals(fileHeader)) {
-            headerType = HeaderType.V1;
-        } else {
-            throw new RuntimeException("Can't handle header type: " + fileHeader);
-        }
+        headerType = switch (fileHeader) {
+            case FILE_HEADER_V1 -> HeaderType.V1;
+            default -> throw new RuntimeException("Can't handle header type: " + fileHeader);
+        };
     }
 
+    /**
+     * Returns the list of starting points from the file.
+     *
+     * @return list of file starting points
+     */
     public List<java.awt.Point> getStartingPoints() {
         return fileStartingPoints;
     }
 
+    /**
+     * Returns the dimensions of the map.
+     *
+     * @return the map's dimensions as a Dimension object
+     */
     public Dimension getDimension() {
         return new Dimension(width, height);
     }
