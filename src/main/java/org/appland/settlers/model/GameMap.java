@@ -1055,12 +1055,7 @@ public class GameMap {
     }
 
     private Road placeDriveWay(Building building) {
-        List<Point> wayPoints = new ArrayList<>();
-
-        wayPoints.add(building.getPosition());
-        wayPoints.add(building.getFlag().getPosition());
-
-        Road road = doPlaceRoad(building.getPlayer(), wayPoints);
+        Road road = doPlaceRoad(building.getPlayer(), List.of(building.getPosition(), building.getFlag().getPosition()));
 
         road.setDriveway();
 

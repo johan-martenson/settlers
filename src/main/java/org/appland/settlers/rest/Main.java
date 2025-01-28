@@ -71,11 +71,13 @@ public class Main {
         // Add jakarta.websocket support
         JakartaWebSocketServletContainerInitializer.configure(servletContextHandler, (context, container) ->
         {
-            container.setDefaultMaxSessionIdleTimeout(30_000);
+            container.setDefaultMaxSessionIdleTimeout(1800_000); // 30 minutes
 
             ServerEndpointConfig echoConfig = ServerEndpointConfig.Builder.create(WebsocketApi.class, "/ws/api").build();
             container.addEndpoint(echoConfig);
         });
+
+        servletContextHandler.getSessionHandler().setMaxInactiveInterval(1800); // 30 minutes in seconds
 
         // Add file server for the assets
         // add special pathspec of "/alt/" content mapped to the altPath

@@ -8,16 +8,16 @@ package org.appland.settlers.computer.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.computer.ComputerPlayer;
 import org.appland.settlers.computer.ConstructionPreparationPlayer;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerType;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.ForesterHut;
-import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.buildings.Headquarter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
-import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.buildings.Woodcutter;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
@@ -27,10 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -345,7 +342,7 @@ public class TestConstructionPreparationPlayer {
 
         /* Place stone */
         Point point1 = new Point(15, 17);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
 
         /* Create the computer player */
         ComputerPlayer computerPlayer = new ConstructionPreparationPlayer(player0, map);
@@ -354,8 +351,23 @@ public class TestConstructionPreparationPlayer {
         Point point0 = new Point(10, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Fast forward until player builds quarry */
+        /* Fast-forward until player builds quarry */
         Quarry quarry = Utils.waitForComputerPlayerToPlaceBuilding(computerPlayer, Quarry.class);
+
+        // Wait for the quarry to get constructed and occupied
+        assertNotNull(map.findWayWithExistingRoads(headquarter0.getPosition(), quarry.getPosition()));
+
+        for (int i = 0; i < 20_000; i++) {
+            if (quarry.isReady() && quarry.getWorker() != null) {
+                break;
+            }
+
+            computerPlayer.turn();
+            map.stepTime();
+        }
+
+        assertTrue(quarry.isReady());
+        assertNotNull(quarry.getWorker());
 
         /* Get the road from the quarry before it's destroyed */
         List<Point> points = map.findWayWithExistingRoads(headquarter0.getFlag().getPosition(), quarry.getFlag().getPosition());
@@ -364,7 +376,6 @@ public class TestConstructionPreparationPlayer {
         Set<Point> otherRoads = new HashSet<>();
 
         for (Building b : player0.getBuildings()) {
-
             if (b.equals(quarry)) {
                 continue;
             }
@@ -373,7 +384,11 @@ public class TestConstructionPreparationPlayer {
                 continue;
             }
 
-            otherRoads.addAll(map.findWayWithExistingRoads(headquarter0.getPosition(), b.getPosition()));
+            var path = map.findWayWithExistingRoads(headquarter0.getPosition(), b.getPosition());
+
+            if (path != null) {
+                otherRoads.addAll(path);
+            }
         }
 
         /* Wait for the stone to run out */

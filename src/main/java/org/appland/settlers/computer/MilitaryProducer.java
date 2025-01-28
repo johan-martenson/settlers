@@ -83,14 +83,14 @@ public class MilitaryProducer implements ComputerPlayer {
         } else if (state == State.NEEDS_IRON_SMELTER) {
 
             /* Determine if there already are iron smelters built */
-            if (Utils.buildingTypeExists(controlledPlayer.getBuildings(), IronSmelter.class)) {
-        	    ironSmelters.addAll(Utils.getBuildingsOfType(controlledPlayer.getBuildings(), IronSmelter.class));
+            if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), IronSmelter.class)) {
+                ironSmelters.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), IronSmelter.class));
 
         	    state = State.WAITING_FOR_IRON_SMELTER;
             } else {
 
                 /* Find a spot for the iron smelter */
-            	Point ironSmelterPoint = Utils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+                Point ironSmelterPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (ironSmelterPoint == null) {
             		return;
@@ -102,29 +102,28 @@ public class MilitaryProducer implements ComputerPlayer {
             	ironSmelters.add(ironSmelter);
 
             	/* Connect the iron smelter with the headquarter */
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, ironSmelter.getFlag().getPosition(), headquarter);
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, ironSmelter.getFlag().getPosition(), headquarter);
 
                 /* Fill the road with flags */
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_IRON_SMELTER;
             }
         } else if (state == State.WAITING_FOR_IRON_SMELTER) {
-
-        	if (Utils.buildingsAreReady(ironSmelters)) {
+            if (GamePlayUtils.buildingsAreReady(ironSmelters)) {
         		state = State.NEEDS_ARMORY;
         	}
         } else if (state == State.NEEDS_ARMORY) {
 
             /* Determine if there already are armories built */
-            if (Utils.buildingTypeExists(controlledPlayer.getBuildings(), Armory.class)) {
-        	    armories.addAll(Utils.getBuildingsOfType(controlledPlayer.getBuildings(), Armory.class));
+            if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Armory.class)) {
+                armories.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Armory.class));
 
         	    state = State.WAITING_FOR_IRON_SMELTER;
             } else {
 
                 /* Find a spot for the armory */
-            	Point armoryPoint = Utils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+                Point armoryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (armoryPoint == null) {
             		return;
@@ -135,30 +134,29 @@ public class MilitaryProducer implements ComputerPlayer {
 
             	armories.add(armory);
 
-            	/* Connect the armory with the headquarter */
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, armory.getFlag().getPosition(), headquarter);
+                /* Connect the armory with the headquarters */
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, armory.getFlag().getPosition(), headquarter);
 
                 /* Fill the road with flags */
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_ARMORY;
             }
         } else if (state == State.WAITING_FOR_ARMORY) {
-
-        	if (Utils.buildingsAreReady(armories)) {
+            if (GamePlayUtils.buildingsAreReady(armories)) {
         		state = State.NEEDS_FARM;
         	}
         } else if (state == State.NEEDS_FARM) {
 
             /* Determine if there are already existing farm */
-            if (Utils.buildingTypeExists(controlledPlayer.getBuildings(), Farm.class)) {
-                farms.addAll(Utils.getBuildingsOfType(controlledPlayer.getBuildings(), Farm.class));
+            if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Farm.class)) {
+                farms.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Farm.class));
 
                 state = State.WAITING_FOR_FARM;
             } else {
 
                 /* Find a spot for the farm */
-                Point farmSpot = Utils.findPointForBuildingCloseToPoint(headquarter.getPosition(), LARGE, controlledPlayer, map);
+                Point farmSpot = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), LARGE, controlledPlayer, map);
 
                 if (farmSpot == null) {
                     return;
@@ -169,29 +167,29 @@ public class MilitaryProducer implements ComputerPlayer {
 
                 farms.add(farm);
 
-                /* Connect the farm with the headquarter */
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, farm.getFlag().getPosition(), headquarter);
+                /* Connect the farm with the headquarters */
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, farm.getFlag().getPosition(), headquarter);
 
                 /* Fill the road with flags */
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_FARM;
             }
         } else if (state == State.WAITING_FOR_FARM) {
-            if (Utils.buildingsAreReady(farms)) {
+            if (GamePlayUtils.buildingsAreReady(farms)) {
                 state = State.NEEDS_WELL;
             }
         } else if (state == State.NEEDS_WELL) {
 
             /* Determine if there already are wells built */
-            if (Utils.buildingTypeExists(controlledPlayer.getBuildings(), Well.class)) {
-                wells.addAll(Utils.getBuildingsOfType(controlledPlayer.getBuildings(), Well.class));
+            if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Well.class)) {
+                wells.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Well.class));
 
                 state = State.WAITING_FOR_WELL;
             } else {
 
                 /* Find a spot for the brewery */
-                Point wellPoint = Utils.findPointForBuildingCloseToPoint(headquarter.getPosition(), SMALL, controlledPlayer, map);
+                Point wellPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), SMALL, controlledPlayer, map);
 
                 if (wellPoint == null) {
                     return;
@@ -202,29 +200,29 @@ public class MilitaryProducer implements ComputerPlayer {
 
                 wells.add(well);
 
-                /* Connect the well with the headquarter */
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, well.getFlag().getPosition(), headquarter);
+                /* Connect the well with the headquarters */
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, well.getFlag().getPosition(), headquarter);
 
                 /* Fill the road with flags */
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_WELL;
             }
         } else if (state == State.WAITING_FOR_WELL) {
-            if (Utils.buildingsAreReady(wells)) {
+            if (GamePlayUtils.buildingsAreReady(wells)) {
                 state = State.NEEDS_BREWERY;
             }
         } else if (state == State.NEEDS_BREWERY) {
 
             /* Determine if there already are breweries built */
-            if (Utils.buildingTypeExists(controlledPlayer.getBuildings(), Brewery.class)) {
-        	    breweries.addAll(Utils.getBuildingsOfType(controlledPlayer.getBuildings(), Brewery.class));
+            if (GamePlayUtils.buildingTypeExists(controlledPlayer.getBuildings(), Brewery.class)) {
+        	    breweries.addAll(GamePlayUtils.getBuildingsOfType(controlledPlayer.getBuildings(), Brewery.class));
 
         	    state = State.WAITING_FOR_BREWERY;
             } else {
 
                 /* Find a spot for the brewery */
-            	Point breweryPoint = Utils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
+            	Point breweryPoint = GamePlayUtils.findPointForBuildingCloseToPoint(headquarter.getPosition(), MEDIUM, controlledPlayer, map);
 
             	if (breweryPoint == null) {
                     return;
@@ -235,16 +233,16 @@ public class MilitaryProducer implements ComputerPlayer {
 
             	breweries.add(brewery);
 
-            	/* Connect the brewery with the headquarter */
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, brewery.getFlag().getPosition(), headquarter);
+            	/* Connect the brewery with the headquarters */
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, brewery.getFlag().getPosition(), headquarter);
 
                 /* Fill the road with flags */
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 state = State.WAITING_FOR_BREWERY;
             }
         } else if (state == State.WAITING_FOR_BREWERY) {
-            if (Utils.buildingsAreReady(breweries)) {
+            if (GamePlayUtils.buildingsAreReady(breweries)) {
             	state = State.DONE;
             }
         }
@@ -261,10 +259,10 @@ public class MilitaryProducer implements ComputerPlayer {
     }
 
     boolean productionDone() {
-        return Utils.listContainsAtLeastOneReadyBuilding(ironSmelters) &&
-               Utils.listContainsAtLeastOneReadyBuilding(armories)     &&
-               Utils.listContainsAtLeastOneReadyBuilding(breweries)    &&
-               Utils.listContainsAtLeastOneReadyBuilding(farms)        &&
-               Utils.listContainsAtLeastOneReadyBuilding(wells);
+        return GamePlayUtils.listContainsAtLeastOneReadyBuilding(ironSmelters) &&
+               GamePlayUtils.listContainsAtLeastOneReadyBuilding(armories)     &&
+               GamePlayUtils.listContainsAtLeastOneReadyBuilding(breweries)    &&
+               GamePlayUtils.listContainsAtLeastOneReadyBuilding(farms)        &&
+               GamePlayUtils.listContainsAtLeastOneReadyBuilding(wells);
     }
 }

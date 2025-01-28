@@ -20,68 +20,74 @@ import java.util.List;
 import static org.appland.settlers.model.Size.SMALL;
 
 /**
- *
- * @author johan
+ * Manages construction preparation tasks for the player, including setting up woodcutters, sawmills, and quarries.
  */
 public class ConstructionPreparationPlayer implements ComputerPlayer {
     private static final int PERIODIC_STONES_CHECK = 100;
     private static final int STONE_RECHECK_COUNTER_MAX = 10000;
 
+    private final Player player;
+
     private ForesterHut foresterHut;
-    private Woodcutter  woodcutter0;
-    private Woodcutter  woodcutter1;
+    private Woodcutter woodcutter0;
+    private Woodcutter woodcutter1;
     private Headquarter headquarter;
-    private Sawmill     sawmill;
-    private Quarry      quarry;
-    private int         stoneRecheckCounter;
-    private GameMap     map;
-    private boolean     hasStonesOnLand;
+    private Sawmill sawmill;
+    private Quarry quarry;
+    private int stoneRecheckCounter = 0;
+    private GameMap map;
+    private boolean hasStonesOnLand = true;
 
-    private final Player    player;
-
-
-    public ConstructionPreparationPlayer(Player p, GameMap m) {
-        player = p;
-        map    = m;
-
-        stoneRecheckCounter = 0;
-        hasStonesOnLand = true;
+    /**
+     * Constructs a ConstructionPreparationPlayer to manage the building process for the specified player and game map.
+     *
+     * @param player The player for whom the buildings are managed.
+     * @param map    The game map.
+     */
+    public ConstructionPreparationPlayer(Player player, GameMap map) {
+        this.player = player;
+        this.map = map;
     }
 
+    /**
+     * Executes one turn of actions for constructing necessary buildings and maintaining resources.
+     *
+     * @throws Exception If an error occurs during the turn.
+     */
     @Override
     public void turn() throws Exception {
 
-        /* Find the headquarter if needed */
+        /* Find the headquarters if needed */
         if (headquarter == null) {
-            headquarter = Utils.findHeadquarter(player);
+            headquarter = GamePlayUtils.findHeadquarter(player);
         }
 
         /* Construct a forester */
         if (noForester()) {
 
             /* Place a forester hut */
-            foresterHut = Utils.placeBuilding(player, headquarter, new ForesterHut(player));
-            System.out.println(" - Built forester at " + foresterHut.getPosition());
+            foresterHut = GamePlayUtils.placeBuilding(player, headquarter, new ForesterHut(player));
+            System.out.printf(" - Built forester at %s%n", foresterHut.getPosition());
         } else if (woodCuttersNotPlaced()) {
 
             /* Place the woodcutter */
-            if (!Utils.buildingInPlace(woodcutter0)) {
-                woodcutter0 = Utils.placeBuilding(player, foresterHut, new Woodcutter(player));
+            if (!GamePlayUtils.buildingInPlace(woodcutter0)) {
+                woodcutter0 = GamePlayUtils.placeBuilding(player, foresterHut, new Woodcutter(player));
 
-                System.out.println(" - Built woodcutter at " + woodcutter0.getPosition());
+                System.out.printf(" - Built woodcutter at %s%n", woodcutter0.getPosition());
             }
 
             /* Place the woodcutter */
-            if (!Utils.buildingInPlace(woodcutter1)) {
-                woodcutter1 = Utils.placeBuilding(player, foresterHut, new Woodcutter(player));
+            if (!GamePlayUtils.buildingInPlace(woodcutter1)) {
+                woodcutter1 = GamePlayUtils.placeBuilding(player, foresterHut, new Woodcutter(player));
 
-                System.out.println(" - Built woodcutter at " + woodcutter1.getPosition());
+                System.out.printf(" - Built woodcutter at %s%n", woodcutter1.getPosition());
             }
 
         } else if (noSawmill()) {
 
             /* Place the sawmill */
-            sawmill = Utils.placeBuilding(player, headquarter, new Sawmill(player));
+            sawmill = GamePlayUtils.placeBuilding(player, headquarter, new Sawmill(player));
             System.out.println(" - Built sawmill at " + sawmill.getPosition());
         } else if (noQuarry()) {
 
@@ -96,7 +102,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             }
 
             /* Find spot close to stone to place quarry */
-            List<Point> points = Utils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
+            List<Point> points = GamePlayUtils.findAvailableHousePointsWithinRadius(map, player, stonePoint, SMALL, 5);
 
             /* Return null if there are no available places */
             if (points.isEmpty()) {
@@ -108,13 +114,13 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             quarry = map.placeBuilding(new Quarry(player), points.getFirst());
             System.out.println(" - Built quarry at " + quarry.getPosition());
 
-            /* Connect the quarry to the headquarter */
-            Road road = Utils.connectPointToBuilding(player, map, quarry.getFlag().getPosition(), headquarter);
+            /* Connect the quarry to the headquarters */
+            Road road = GamePlayUtils.connectPointToBuilding(player, map, quarry.getFlag().getPosition(), headquarter);
 
             /* Place flags on the road where possible */
             if (road != null) {
                 System.out.println(" - Connected the quarry: " + road.getWayPoints());
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
             }
         } else if (quarryDone() && quarry.isOutOfNaturalResources()) {
             System.out.println(" - No more stone in quarry");
@@ -122,7 +128,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
             quarry.tearDown();
 
             /* Remove the part of the road that is used only by the quarry */
-            Utils.removeRoadWithoutAffectingOthers(map, quarry.getFlag());
+            GamePlayUtils.removeRoadWithoutAffectingOthers(map, quarry.getFlag());
 
             quarry = null;
         }
@@ -157,7 +163,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
         }
 
         if (stoneRecheckCounter % PERIODIC_STONES_CHECK == 0) {
-            hasStonesOnLand = Utils.hasStoneWithinArea(map, player);
+            hasStonesOnLand = GamePlayUtils.hasStoneWithinArea(map, player);
         }
 
         return foresterDone()    &&
@@ -168,37 +174,37 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
     }
 
     private boolean foresterDone() {
-        return Utils.buildingDone(foresterHut);
+        return GamePlayUtils.buildingDone(foresterHut);
     }
 
     private boolean noForester() {
-        return !Utils.buildingInPlace(foresterHut);
+        return !GamePlayUtils.buildingInPlace(foresterHut);
     }
 
     private boolean woodCuttersNotPlaced() {
-        return !Utils.buildingInPlace(woodcutter0) ||
-               !Utils.buildingInPlace(woodcutter1);
+        return !GamePlayUtils.buildingInPlace(woodcutter0) ||
+               !GamePlayUtils.buildingInPlace(woodcutter1);
     }
 
     private boolean woodcuttersDone() {
-        return Utils.buildingDone(woodcutter0) &&
-               Utils.buildingDone(woodcutter1);
+        return GamePlayUtils.buildingDone(woodcutter0) &&
+               GamePlayUtils.buildingDone(woodcutter1);
     }
 
     private boolean noSawmill() {
-        return !Utils.buildingInPlace(sawmill);
+        return !GamePlayUtils.buildingInPlace(sawmill);
     }
 
     private boolean sawmillDone() {
-        return Utils.buildingDone(sawmill);
+        return GamePlayUtils.buildingDone(sawmill);
     }
 
     private boolean noQuarry() {
-        return !Utils.buildingInPlace(quarry);
+        return !GamePlayUtils.buildingInPlace(quarry);
     }
 
     private boolean quarryDone() {
-        return Utils.buildingDone(quarry);
+        return GamePlayUtils.buildingDone(quarry);
     }
 
     public boolean plankProductionWorking() {
@@ -215,13 +221,13 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
         }
 
         if (stoneRecheckCounter % PERIODIC_STONES_CHECK == 0) {
-            hasStonesOnLand = Utils.hasStoneWithinArea(map, player);
+            hasStonesOnLand = GamePlayUtils.hasStoneWithinArea(map, player);
         }
 
         return quarryDone() && !quarry.isOutOfNaturalResources();
     }
 
     public boolean hasAccessToStone() {
-        return Utils.hasStoneWithinArea(map, player);
+        return GamePlayUtils.hasStoneWithinArea(map, player);
     }
 }

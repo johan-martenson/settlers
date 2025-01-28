@@ -345,11 +345,9 @@ public class Soldier extends Worker {
 
                     /* Pick the next waiting attacker */
                     opponent = buildingToDefend.pickWaitingAttacker();
+                    opponent.reserveForFight(this);
 
                     state = WALKING_TO_FIGHT_TO_DEFEND;
-
-                    /* Notify the attacker so it doesn't move */
-                    opponent.reserveForFight(this);
 
                     /* Walk to the attacker */
                     setOffroadTarget(opponent.getPosition());
@@ -508,7 +506,6 @@ public class Soldier extends Worker {
 
                     /* Fight the next waiting attacker */
                     opponent = buildingToDefend.pickWaitingAttacker();
-
                     opponent.reserveForFight(this);
 
                     /* Walk to fight the opponent */
@@ -641,18 +638,37 @@ public class Soldier extends Worker {
         /* Register in the building's defense */
         building.registerDefender(this);
 
-        /* Get the opponent */
+        // Get the primary attacker (the one that will walk to the building's flag and fight there)
         opponent = buildingToDefend.getPrimaryAttacker();
 
-        buildingToDefend.removeWaitingAttacker(opponent);
+        // Make sure the primary attacker is not already fighting or reserved for a fight by another defender
+        if (opponent.isWaitingForFight() || (!opponent.isFighting() && !opponent.isReservedForFight())) {
+            buildingToDefend.removeWaitingAttacker(opponent);
 
-        opponent.reserveForFight(this);
+            opponent.reserveForFight(this);
 
-        /* Fight the attacker */
-        state = WALKING_TO_FIGHT_TO_DEFEND;
+            /* Fight the attacker */
+            state = WALKING_TO_FIGHT_TO_DEFEND;
 
-        /* Walk to the flag */
-        setOffroadTarget(buildingToDefend.getFlag().getPosition());
+            /* Walk to the flag */
+            setOffroadTarget(buildingToDefend.getFlag().getPosition());
+        } else {
+
+            // Re-deploy the soldier if there is no one to defend against
+            building.deploySoldier(this);
+            System.out.println("Main attacker is not waiting. Instead: " + opponent.state);
+        }
+
+        /* TODO:
+              - If there is an attacker waiting at the flag, reserve it and walk to fight
+              - Otherwise, if there is another attacker waiting, pick it and walk to fight
+              - If there is a non-primary attacker walking to fight, reserve it and meet up to fight
+              - Otherwise stay inside (?)
+         */
+    }
+
+    public boolean isWaitingForFight() {
+        return state == WAITING_FOR_DEFENDING_OPPONENT;
     }
 
     public void defendOtherBuilding(Building building) {
@@ -808,10 +824,14 @@ public class Soldier extends Worker {
     private void prepareForFight(Soldier soldier) {
 
         /* Tell the building that this soldier is not waiting anymore as the fight is starting */
-        if (state == ATTACKING || state == WAITING_FOR_DEFENDING_OPPONENT) {
+        if (state == WAITING_FOR_DEFENDING_OPPONENT || state == RESERVED_BY_DEFENDING_OPPONENT) {
+            System.out.println(buildingToAttack.getWaitingAttackers());
             buildingToAttack.removeWaitingAttacker(this);
-        } else if (state == DEFENDING || state == WAITING_TO_DEFEND) {
+            System.out.println(buildingToAttack.getWaitingAttackers());
+        } else if (state == WAITING_TO_DEFEND) {
             buildingToDefend.removeWaitingDefender(this);
+        } else {
+            throw new InvalidGameLogicException("OTHER STATE WHEN STARTING TO WALK APART TO FIGHT: " + state);
         }
 
         /* Remember the opponent */
@@ -833,6 +853,8 @@ public class Soldier extends Worker {
     private void reserveForFight(Soldier soldier) {
 
         /* A defender has decided to fight this attacker so wait for it instead of looking for a new fight */
+        buildingToAttack.removeWaitingAttacker(this);
+
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
 
         opponent = soldier;

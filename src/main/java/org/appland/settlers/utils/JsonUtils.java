@@ -1508,6 +1508,7 @@ public class JsonUtils {
 
     public JSONObject chatMessageToPlayerToJson(ChatManager.ChatMessage chatMessage, Player player) {
         return new JSONObject(Map.of(
+                "id", idManager.getId(chatMessage),
                 "from", idManager.getId(chatMessage.from()),
                 "text", chatMessage.text(),
                 "toPlayerId", idManager.getId(player),
@@ -1525,6 +1526,7 @@ public class JsonUtils {
 
     public JSONObject chatMessageToRoomToJson(ChatManager.ChatMessage chatMessage, String roomId) {
         return new JSONObject(Map.of(
+                "id", idManager.getId(chatMessage),
                 "fromPlayerId", idManager.getId(chatMessage.from()),
                 "fromName", chatMessage.from().getName(),
                 "text", chatMessage.text(),

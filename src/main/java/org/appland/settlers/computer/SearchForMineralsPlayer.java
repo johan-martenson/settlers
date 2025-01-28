@@ -155,10 +155,10 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
                             flag = map.placeFlag(controlledPlayer, flagPoint);
 
                             /* Build a road that connects with the headquarter */
-                            Road road = Utils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
+                            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, flagPoint, headquarter);
 
                             /* Fill the road with flags */
-                            Utils.fillRoadWithFlags(map, road);
+                            GamePlayUtils.fillRoadWithFlags(map, road);
                         } else {
                             unreachablePoints.add(p);
                         }
@@ -279,7 +279,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             }
 
             Point hqFlagPoint = headquarter.getFlag().getPosition();
-            Point connectPoint = Utils.findConnectionToDestinationOrExistingRoad(controlledPlayer, map, p, hqFlagPoint);
+            Point connectPoint = GamePlayUtils.findConnectionToDestinationOrExistingRoad(controlledPlayer, map, p, hqFlagPoint);
 
             if (connectPoint != null) {
                 return p;
@@ -320,9 +320,9 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
             };
 
             if (activeMines.get(type) == 0) {
-                Road road = Utils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);
+                Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, p.downRight(), headquarter);
 
-                Utils.fillRoadWithFlags(map, road);
+                GamePlayUtils.fillRoadWithFlags(map, road);
 
                 activeMines.put(type, 1);
             }

@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -42,13 +43,13 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
-    private static final int TIME_TO_PROMOTE_SOLDIER               = 100;
-    private static final int TIME_TO_BUILD_SMALL_HOUSE             = 100;
-    private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 150;
-    private static final int TIME_TO_BUILD_LARGE_HOUSE             = 200;
-    private static final int TIME_TO_BURN_DOWN                     = 49;
+    private static final int TIME_TO_PROMOTE_SOLDIER = 100;
+    private static final int TIME_TO_BUILD_SMALL_HOUSE = 100;
+    private static final int TIME_TO_BUILD_MEDIUM_HOUSE = 150;
+    private static final int TIME_TO_BUILD_LARGE_HOUSE = 200;
+    private static final int TIME_TO_BURN_DOWN = 49;
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
-    private static final int TIME_TO_UPGRADE                       = 99;
+    private static final int TIME_TO_UPGRADE = 99;
 
     private final Map<Material, Integer> materialsToBuildHouse = getMaterialsToBuildHouse();
     private final Map<Material, Integer> totalAmountNeededForProduction = getMaterialNeededForProduction();
@@ -61,7 +62,7 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> requiredGoodsForProduction = initRequiredGoodsForProduction();
 
     private final List<Soldier> attackers = new LinkedList<>();
-    private final List<Soldier> waitingAttackers = new LinkedList<>();
+    private final Set<Soldier> waitingAttackers = new HashSet<>();
     private final Set<Soldier> defenders = new HashSet<>();
     private final Countdown countdown = new Countdown();
     private final Countdown upgradeCountdown = new Countdown();
@@ -270,7 +271,8 @@ public class Building implements EndPoint {
                 // Give each type of building a chance to add extra logic when the building has become occupied
                 onBuildingOccupied();
             }
-            default -> throw new InvalidGameLogicException(String.format("Can't assign %s to building in state %s", worker, state));
+            default ->
+                    throw new InvalidGameLogicException(String.format("Can't assign %s to building in state %s", worker, state));
         }
     }
 
@@ -384,19 +386,10 @@ public class Building implements EndPoint {
     private String buildingToString() {
         StringBuilder stringBuilder = new StringBuilder(String.format(" at %s with ", flag));
 
-        boolean hasReceivedMaterial = false;
-        for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
-            if (pair.getValue() != 0) {
-                stringBuilder.append(pair.getKey()).append(": ").append(pair.getValue());
-
-                hasReceivedMaterial = true;
-            }
-        }
-
-        if (hasReceivedMaterial) {
+        if (receivedMaterial.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)) {
             stringBuilder.append("in queue and ");
         } else {
-            stringBuilder.append("nothing in queue and ");
+            stringBuilder.append("nothing in queue and");
         }
 
         return stringBuilder.toString();
@@ -434,7 +427,7 @@ public class Building implements EndPoint {
             if (getNumberOfHostedSoldiers() > 0) {
 
                 /* Send out a defender to the flag if needed */
-                if (isAttackerAtFlag() && ownDefender == null) {
+                if (isAttackerAtFlagWaitingForFight() && ownDefender == null) {
 
                     /* Retrieve a defender locally */
                     ownDefender = retrieveHostedSoldier();
@@ -621,12 +614,11 @@ public class Building implements EndPoint {
 
     // FIXME: HOTSPOT - allocations
     private Map<Material, Integer> getMaterialsToBuildHouse() {
-        HouseSize houseSize              = getClass().getAnnotation(HouseSize.class);
-        Material[] materialsArray        = houseSize.material();
+        HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
+        Material[] materialsArray = houseSize.material();
         Map<Material, Integer> materials = new EnumMap<>(Material.class);
 
         for (Material material : materialsArray) {
-
             int amount = materials.getOrDefault(material, 0);
             materials.put(material, amount + 1);
         }
@@ -901,12 +893,15 @@ public class Building implements EndPoint {
         }
     }
 
-    public List<Soldier> getWaitingAttackers() {
+    public Set<Soldier> getWaitingAttackers() {
         return waitingAttackers;
     }
 
     public Soldier pickWaitingAttacker() {
-        return waitingAttackers.removeFirst();
+        var attacker = waitingAttackers.iterator().next();
+        waitingAttackers.remove(attacker);
+
+        return attacker;
     }
 
     public List<Soldier> getAttackers() {
@@ -917,19 +912,10 @@ public class Building implements EndPoint {
         return !attackers.isEmpty();
     }
 
-    private boolean isAttackerAtFlag() {
-
-        /* Return false if there is no primary attacker */
-        if (primaryAttacker == null) {
-            return false;
-        }
-
-        /* Return false if the primary attacker is not at the flag yet */
-        if (!primaryAttacker.getPosition().equals(getFlag().getPosition())) {
-            return false;
-        }
-
-        return true;
+    private boolean isAttackerAtFlagWaitingForFight() {
+        return primaryAttacker != null &&
+                Objects.equals(primaryAttacker.getPosition(), getFlag().getPosition()) &&
+                primaryAttacker.isWaitingForFight();
     }
 
     public Soldier getPrimaryAttacker() {
@@ -973,15 +959,15 @@ public class Building implements EndPoint {
 
     /**
      * Returns the total amount needed for the given material
-     *
+     * <p>
      * Considers:
-     *  - Building planned, under construction, unoccupied/occupied
-     *
+     * - Building planned, under construction, unoccupied/occupied
+     * <p>
      * Does not consider:
-     *  - Current inventory
-     *  - Whether promotions are enabled/disabled
-     *  - Whether production is paused/resumed
-     *
+     * - Current inventory
+     * - Whether promotions are enabled/disabled
+     * - Whether production is paused/resumed
+     * <p>
      * NOTE: Will not return valid response when called for ready Storehouse or for Headquarters
      *
      * @param material to find the total need for
@@ -1120,7 +1106,7 @@ public class Building implements EndPoint {
         UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
 
         int planksNeeded = upgradeCost.planks();
-        int stoneNeeded   = upgradeCost.stones();
+        int stoneNeeded = upgradeCost.stones();
 
         /* Get available resources */
         int plankAvailable = receivedMaterial.getOrDefault(PLANK, 0);
@@ -1189,11 +1175,10 @@ public class Building implements EndPoint {
     public Material[] getProducedMaterial() {
         Production production = getClass().getAnnotation(Production.class);
 
-        if (production == null) {
-            return new Material[] {};
-        }
+        return production == null ?
+                new Material[]{} :
+                getClass().getAnnotation(Production.class).output();
 
-        return getClass().getAnnotation(Production.class).output();
     }
 
     private Map<Material, Integer> getMaterialNeededForProduction() {
@@ -1216,13 +1201,14 @@ public class Building implements EndPoint {
 
     /**
      * Returns the set of materials the building needs. Does not consider:
-     *  - Current inventory
-     *  - Whether production is enabled/disabled
-     *  - Whether in case of military building evacuations are ordered
-     *
+     * - Current inventory
+     * - Whether production is enabled/disabled
+     * - Whether in case of military building evacuations are ordered
+     * <p>
      * NOTE: It does not return material needed because of upgrade if the building is military and is being upgraded
-     *
+     * <p>
      * NOTE: It does consider whether max amount of coins are already stored. This is most likely a bug
+     *
      * @return the set of materials the building type needs
      */
     public Collection<Material> getTypesOfMaterialNeeded() {
@@ -1368,7 +1354,7 @@ public class Building implements EndPoint {
                     .filter(building ->
                             (building instanceof Headquarter headquarter &&
                                     headquarter.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)) ||
-                            building.getHostedSoldiers().size() > 1)
+                                    building.getHostedSoldiers().size() > 1)
                     .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
                     .forEach(building -> {
                         var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredStrength(building.getHostedSoldiers(), player.getDefenseStrength());

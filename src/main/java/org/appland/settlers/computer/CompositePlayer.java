@@ -33,82 +33,83 @@ import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 
 /**
- *
- * @author johan
+ * CompositePlayer controls the overall behavior of a computer player, coordinating different aspects like resource production, military management, and expansion.
  */
 public class CompositePlayer implements ComputerPlayer {
-    private final Player player;
-    private final ConstructionPreparationPlayer constructionPlayer;
-    private final SearchForMineralsPlayer       mineralsPlayer;
-    private final FoodProducer                  foodPlayer;
-    private final CoinProducer                  coinPlayer;
-    private final MilitaryProducer              militaryProducer;
-    private final ExpandLandPlayer              expandingPlayer;
-    private final AttackPlayer                  attackingPlayer;
-    private final Countdown                     countdown;
-    private final Group collectEachStepTimeGroup;
-    private final Stats stats;
-
-    private GameMap map;
-    private ComputerPlayer previousPlayer;
-    private ComputerPlayer currentPlayer;
-    private int counter;
     private static final int PERIODIC_ENEMY_SCAN = 100;
     private static final int PERIODIC_SCAN_FOR_NEW_MINERALS = 30;
     private static final int PERIODIC_TRANSPORT_PRIORITY_REVIEW = 200;
-    private static final int COUNTER_MAX         = 1000;
-    private static final int ATTACK_FOLLOW_UP    = 20;
+    private static final int COUNTER_MAX = 1000;
+    private static final int ATTACK_FOLLOW_UP = 20;
     private static final int TIME_TO_WAIT_FOR_PROMOTED_SOLDIERS = 200;
     private static final int PERIODIC_LAKE_SCAN = 40;
     private static final String AGGREGATED_EACH_STEP_TIME_GROUP = "COLLECT_EACH_TURN";
 
+    private final Player player;
+    private final ConstructionPreparationPlayer constructionPlayer;
+    private final SearchForMineralsPlayer mineralsPlayer;
+    private final FoodProducer foodPlayer;
+    private final CoinProducer coinPlayer;
+    private final MilitaryProducer militaryProducer;
+    private final ExpandLandPlayer expandingPlayer;
+    private final AttackPlayer attackingPlayer;
+    private final Countdown countdown;
+    private final Group collectEachStepTimeGroup;
+    private final Stats stats;
+    private GameMap map;
+    private ComputerPlayer previousPlayer;
+    private ComputerPlayer currentPlayer;
+    private int counter = 0;
+
+    /**
+     * Constructs a CompositePlayer to manage different aspects of gameplay for the specified player and game map.
+     *
+     * @param player The player controlled by this CompositePlayer.
+     * @param map    The game map.
+     */
     public CompositePlayer(Player player, GameMap map) {
         this.player = player;
-        this.map    = map;
-        counter     = 0;
-        countdown   = new Countdown();
+        this.map = map;
 
-        /* Set up statistics collection */
+        countdown = new Countdown();
         stats = new Stats();
-
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
 
-        /* Instantiate each computer player */
+        // Initialize the individual components of the composite player
         constructionPlayer = new ConstructionPreparationPlayer(player, map);
-        mineralsPlayer     = new SearchForMineralsPlayer(player, map);
-        foodPlayer         = new FoodProducer(player, map);
-        coinPlayer         = new CoinProducer(player, map);
-        militaryProducer   = new MilitaryProducer(player, map);
-        expandingPlayer    = new ExpandLandPlayer(player, map, stats);
-        attackingPlayer    = new AttackPlayer(player, map);
+        mineralsPlayer = new SearchForMineralsPlayer(player, map);
+        foodPlayer = new FoodProducer(player, map);
+        coinPlayer = new CoinProducer(player, map);
+        militaryProducer = new MilitaryProducer(player, map);
+        expandingPlayer = new ExpandLandPlayer(player, map, stats);
+        attackingPlayer = new AttackPlayer(player, map);
 
-        /* Configure the players */
+        // Set up specific behaviors
         expandingPlayer.setExpandTowardEnemies(true);
         expandingPlayer.waitForBuildingsToGetCompletelyOccupied(true);
     }
 
-    public Stats getStats() {
-        return stats;
-    }
-
+    /**
+     * Executes one turn of actions for the composite player, delegating to appropriate sub-players and adjusting transport priorities.
+     *
+     * @throws Exception If an error occurs during the turn.
+     */
     @Override
     public void turn() throws Exception {
-
         Duration duration = stats.measureOneShotDuration("CompositePlayer.turn");
 
-        /* Keep track of how many times the method is run to support periodic tasks */
+        // Periodic tasks management
         if (counter > COUNTER_MAX) {
             counter = 0;
         } else {
             counter++;
         }
 
-        /* Remember the previous player to detect player changes */
+        // Remember the previous player to detect player changes
         previousPlayer = currentPlayer;
 
-        /* Tweak transport priority regularly */
+        // Tweak transport priority regularly
         if (counter % PERIODIC_TRANSPORT_PRIORITY_REVIEW == 0) {
-
             player.setFoodQuota(CoalMine.class, 1);
             player.setFoodQuota(GoldMine.class, 1);
             player.setFoodQuota(IronMine.class, 1);
@@ -156,7 +157,6 @@ public class CompositePlayer implements ComputerPlayer {
 
         /* Ensure stones are collected. Explore land directly if there are no stones available */
         } else if (!constructionPlayer.stoneProductionWorking()) {
-
             if (constructionPlayer.hasAccessToStone()) {
                 constructionPlayer.turn();
 
@@ -238,7 +238,6 @@ public class CompositePlayer implements ComputerPlayer {
 
         /* Look for enemies to attack */
         } else if (expandingPlayer.hasNewBuildings() || counter % PERIODIC_ENEMY_SCAN == 0) {
-
             expandingPlayer.clearNewBuildings();
 
             /* Wait with attack if there is gold available but not enough promotions yet */
@@ -259,7 +258,7 @@ public class CompositePlayer implements ComputerPlayer {
             }
 
             /* Look for enemies close by to attack */
-            Building enemyBuilding = Utils.getCloseEnemyBuilding(player);
+            Building enemyBuilding = GamePlayUtils.getCloseEnemyBuilding(player);
 
             duration.after("Look for enemy buildings to attack");
 
@@ -283,7 +282,6 @@ public class CompositePlayer implements ComputerPlayer {
 
         /* Expand the land if there is nothing else to do */
         } else {
-
             expandingPlayer.turn();
 
             currentPlayer = expandingPlayer;
@@ -321,7 +319,6 @@ public class CompositePlayer implements ComputerPlayer {
     private void tuneTransportPriorities() throws InvalidUserActionException {
 
         /* Create a baseline for materials that tend to overflow */
-
         player.setTransportPriority(0, TransportCategory.GOLD);
         player.setTransportPriority(1, TransportCategory.WEAPONS);
         player.setTransportPriority(2, TransportCategory.IRON_BAR);
@@ -410,5 +407,9 @@ public class CompositePlayer implements ComputerPlayer {
                 }
             }
         }
+    }
+
+    public Stats getStats() {
+        return stats;
     }
 }

@@ -170,7 +170,6 @@ public class Utils {
         assertNotNull(map);
 
         for (int i = 0; i < 100000; i++) {
-
             if (Objects.equals(worker.getPosition(), target)) {
                 break;
             }
@@ -3117,6 +3116,10 @@ public class Utils {
         assertFalse(building.isDoorClosed());
     }
 
+    public static void clearSoldiersFromInventory(Storehouse storehouse) {
+        clearInventory(storehouse, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -3568,7 +3571,6 @@ public class Utils {
         GameMap map = computerPlayer.getControlledPlayer().getMap();
 
         for (int i = 0; i < 20000; i++) {
-
             computerPlayer.turn();
 
             if (!map.isStoneAtPoint(stone.getPosition())) {

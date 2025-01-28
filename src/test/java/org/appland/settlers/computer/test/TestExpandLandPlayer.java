@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.appland.settlers.computer.Utils.getDistanceToOwnBorder;
+import static org.appland.settlers.computer.GamePlayUtils.getDistanceToOwnBorder;
 import static org.appland.settlers.model.Material.*;
 import static org.junit.Assert.*;
 
@@ -448,11 +448,13 @@ public class TestExpandLandPlayer {
         assertFalse(barracks0.isReady());
 
         /* Remove a road */
-        Collection<Road> roads = map.getRoadsFromFlag(barracks0.getFlag());
+        Collection<Road> roads = new ArrayList<>(map.getRoadsFromFlag(barracks0.getFlag()));
 
         roads.remove(map.getRoad(barracks0.getPosition(), barracks0.getFlag().getPosition()));
 
-        map.removeRoad(roads.iterator().next());
+        var roadToRemove = roads.iterator().next();
+
+        map.removeRoad(roadToRemove);
 
         assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(barracks0, headquarter));
 

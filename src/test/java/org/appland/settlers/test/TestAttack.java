@@ -1678,9 +1678,9 @@ public class TestAttack {
 
         assertEquals(defender.getPosition(), attacker.getPosition());
 
-        /* Wait for the attacker to win the fight and verify that no additional defender goes out from the barracks */
+        /* Wait for the attacker to win the fight */
         for (int i = 0; i < 1000; i++) {
-            if (!map.getWorkers().contains(defender)) {
+            if (defender.isDead()) {
                 break;
             }
 
@@ -1690,9 +1690,22 @@ public class TestAttack {
             map.stepTime();
         }
 
-        assertFalse(map.getWorkers().contains(defender));
+        map.stepTime();
+
+        assertTrue(barracks1.isUnderAttack());
+        assertTrue(defender.isDead());
+        assertFalse(attacker.isFighting());
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
+
+        // Wait for the attacker to walk back to walk back to the flag
+        assertTrue(attacker.isWalkingBackToFixedPointAfterFight());
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         /* Verify that a new defender goes out from the barracks */
+        assertTrue(barracks1.isUnderAttack());
+
         map.stepTime();
 
         Soldier nextDefender = Utils.waitForSoldierOutsideBuilding(player1);
@@ -2763,6 +2776,10 @@ public class TestAttack {
         Soldier firstAttacker = Utils.getMainAttacker(barracks1, attackers);
 
         assertNotNull(firstAttacker);
+        assertTrue(firstAttacker.isTraveling());
+        assertEquals(firstAttacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getFlag().getPosition());
 
         /* Find the defender */
         Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
@@ -6317,6 +6334,18 @@ public class TestAttack {
             /* Verify that soldiers are not doing any fighting actions while they are not fighting */
             Stream.concat(attackers.stream(), defenders.stream())
                     .filter(soldier -> !soldier.isFighting() || soldier.isDead())
+                    .peek(soldier -> {
+                        System.out.println();
+                        System.out.println("Peek:");
+                        System.out.println(soldier);
+                        System.out.println("Fighting? " + soldier.isFighting());
+                        System.out.println("Is dead? " + soldier.isDead());
+                        System.out.println("Is hitting? " + soldier.isHitting());
+                        System.out.println("Is getting hit? " + soldier.isGettingHit());
+                        System.out.println("Is standing aside? " + soldier.isStandingAside());
+                        System.out.println("Is jumping back? " + soldier.isJumpingBack());
+                        System.out.println("Is on map? " + map.getWorkers().contains(soldier));
+                    })
                     .forEach(soldier -> {
                         assertFalse(soldier.isHitting());
                         assertFalse(soldier.isGettingHit());

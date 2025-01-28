@@ -806,22 +806,22 @@ public class GameUtils {
      */
     static class PointAndCost implements Comparable<PointAndCost> {
         private final Point point;
-        private final int estimatedFullCostThroughPoint;
+        private final int cost;
 
-        PointAndCost(Point point, int estimatedFullCostThroughPoint) {
+        PointAndCost(Point point, int cost) {
             this.point = point;
-            this.estimatedFullCostThroughPoint = estimatedFullCostThroughPoint;
+            this.cost = cost;
         }
 
         // TODO: align with implementation of equals to make them consistent!
         @Override
         public int compareTo(PointAndCost pointAndCost) {
-            return Integer.compare(this.estimatedFullCostThroughPoint, pointAndCost.estimatedFullCostThroughPoint);
+            return Integer.compare(this.cost, pointAndCost.cost);
         }
 
         @Override
         public String toString() {
-            return String.format("Point: %s, cost: %d", point, estimatedFullCostThroughPoint);
+            return String.format("Point: %s, cost: %d", point, cost);
         }
     }
 
@@ -1285,81 +1285,43 @@ public class GameUtils {
     /**
      * Determines if two points with flags or buildings are connected by roads.
      *
-     * @param startEndPoint Flag or building to start from.
-     * @param goalEndPoint  Flag or building to reach.
-     * @param map           The instance of the map.
+     * @param start Flag or building to start from.
+     * @param end   Flag or building to reach.
+     * @param map   The instance of the map.
      * @return True if the start and end are connected, false otherwise.
      */
-    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint, GameMap map) {
-        Set<Point>          evaluated        = new HashSet<>();
-        Map<Point, Integer> costToGetToPoint = new HashMap<>();
-        int                 bestCaseCost;
+    public static boolean areBuildingsOrFlagsConnected(EndPoint start, EndPoint end, GameMap map) {
+        return areBuildingsOrFlagsConnected(start.getPosition(), end.getPosition(), map);
+    }
 
-        PriorityQueue<PointAndCost> toEvaluatePriorityQueue = new PriorityQueue<>();
+    public static boolean areBuildingsOrFlagsConnected(Point start, Point end, GameMap map) {
+        var search = new PriorityQueue<PointAndCost>();
+        var cost = new HashMap<Point, Integer>();
 
-        /* Define starting parameters */
-        Point start = startEndPoint.getPosition();
-        Point goal = goalEndPoint.getPosition();
+        search.add(new PointAndCost(start, distanceInGameSteps(start, end)));
+        cost.put(start, 0);
 
-        bestCaseCost = distanceInGameSteps(start, goal);
-        costToGetToPoint.put(start, 0);
+        while (!search.isEmpty()) {
+            var current = search.poll();
 
-        PointAndCost startingPointAndCost = new PointAndCost(start, bestCaseCost);
-
-        toEvaluatePriorityQueue.add(startingPointAndCost);
-
-        /* Declare variables outside the loop to keep memory churn down */
-        PointAndCost currentPoint;
-        int newCostToGetToPoint;
-
-        while (!toEvaluatePriorityQueue.isEmpty()) {
-
-            /* Find the point to evaluate with the lowest estimated full cost */
-            currentPoint = toEvaluatePriorityQueue.poll();
-
-            /* Handle if the goal is reached */
-            if (goal.equals(currentPoint.point)) {
+            if (current.point == end) {
                 return true;
             }
 
-            /* Do not re-evaluate the same point */
-            evaluated.add(currentPoint.point);
+            for (var road : map.getMapPoint(current.point).getConnectedRoads()) {
+                var neighbor = road.getOtherPoint(current.point);
+                var tentative_cost = cost.get(current.point);
 
-            /* Evaluate each direct neighbor */
-            MapPoint mapPoint = map.getMapPoint(currentPoint.point);
-            for (Road road : mapPoint.getConnectedRoads()) {
-
-                Point neighbor = road.getOtherPoint(currentPoint.point);
-
-                /* Skip already evaluated points */
-                if (evaluated.contains(neighbor)) {
-                    continue;
-                }
-
-                /* Calculate the real cost to reach the neighbor from the start */
-                newCostToGetToPoint = costToGetToPoint.get(currentPoint.point) + road.getWayPoints().size() - 1;
-
-                /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
-                int currentCostToGetToPoint = costToGetToPoint.getOrDefault(neighbor, Integer.MAX_VALUE);
-
-                if (newCostToGetToPoint < currentCostToGetToPoint) {
-
-                    /* Remember the cost to reach the neighbor */
-                    costToGetToPoint.put(neighbor, newCostToGetToPoint);
-
-                    /* Remember the estimated full cost to go via the neighbor */
-                    int estimatedFullCostThroughPoint = newCostToGetToPoint + distanceInGameSteps(neighbor, goal);
-
-                    /* Add the neighbor to the evaluation list */
-                    PointAndCost neighborPointAndCost = new PointAndCost(neighbor, estimatedFullCostThroughPoint);
-
-                    toEvaluatePriorityQueue.add(neighborPointAndCost);
+                if (tentative_cost < cost.getOrDefault(neighbor, Integer.MAX_VALUE)) {
+                    cost.put(neighbor, tentative_cost);
+                    search.add(new PointAndCost(neighbor, tentative_cost));
                 }
             }
         }
 
         return false;
     }
+
 
     /**
      * Finds the closest storehouse off-road for a given player from a specified point.

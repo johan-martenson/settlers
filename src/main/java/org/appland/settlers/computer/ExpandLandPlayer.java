@@ -65,8 +65,8 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
     public ExpandLandPlayer(Player player, GameMap map, Stats stats) {
         this.player = player;
-        this.map    = map;
-        this.stats  = stats;
+        this.map = map;
+        this.stats = stats;
 
         collectEachTurnGroup = stats.createVariableGroupIfAbsent("COLLECT_EACH_TURN");
 
@@ -85,10 +85,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
     @Override
     public void turn() throws Exception {
-
         Duration duration = stats.measureOneShotDuration("ExpandLandPlayer.turn");
-
-        State stateBefore = state;
 
         if (counter % MAINTENANCE_PERIOD == 0) {
             evacuateWherePossible(player);
@@ -110,14 +107,13 @@ public class ExpandLandPlayer implements ComputerPlayer {
         if (state == State.INITIAL_STATE) {
 
             /* Find headquarter */
-            headquarter = Utils.findHeadquarter(player);
+            headquarter = GamePlayUtils.findHeadquarter(player);
 
             /* Change the state to ready to build */
             state = State.READY_FOR_CONSTRUCTION;
 
             duration.after("Find headquarter");
         } else if (state == State.READY_FOR_CONSTRUCTION) {
-
             if (waitUntilOccupied && !militaryBuildingsFullyOccupied(player)) {
                 state = State.WAITING_FOR_BUILDINGS_TO_GET_OCCUPIED;
 
@@ -140,20 +136,19 @@ public class ExpandLandPlayer implements ComputerPlayer {
             unfinishedBarracks = map.placeBuilding(new Barracks(player), site);
 
             /* Connect the barracks with the headquarters */
-            Road road = Utils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
+            Road road = GamePlayUtils.connectPointToBuilding(player, map, unfinishedBarracks.getFlag().getPosition(), headquarter);
 
             if (!map.getRoads().contains(road)) {
                 System.out.println("\nBarracks at " + site + " is not connected!");
             }
 
             /* Place flags where possible */
-            Utils.fillRoadWithFlags(map, road);
+            GamePlayUtils.fillRoadWithFlags(map, road);
 
             /* Change state to wait for the barracks to be ready and occupied */
             state = State.WAITING_FOR_CONSTRUCTION;
 
             duration.after("Build new barracks");
-
         } else if (state == State.WAITING_FOR_CONSTRUCTION) {
 
             /* Build a new barracks if this barracks was destroyed */
@@ -167,12 +162,11 @@ public class ExpandLandPlayer implements ComputerPlayer {
 
                 /* Disable promotions if the barracks is not close to the enemy */
                 if (unfinishedBarracks.isPromotionEnabled() &&
-                    Utils.distanceToKnownEnemiesWithinRange(unfinishedBarracks, 20) > 9) {
+                    GamePlayUtils.distanceToKnownEnemiesWithinRange(unfinishedBarracks, 20) > 9) {
 
                     if (unfinishedBarracks.isPromotionEnabled()) {
                         unfinishedBarracks.disablePromotions();
                     }
-
                 } else {
 
                     /* Upgrade barracks close to the enemy */
@@ -209,7 +203,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
         } else if (state == State.BUILDING_NOT_CONNECTED) {
 
             /* Try to repair the connection */
-            Utils.repairConnection(map, player, unfinishedBarracks.getFlag(), headquarter.getFlag());
+            GamePlayUtils.repairConnection(map, player, unfinishedBarracks.getFlag(), headquarter.getFlag());
 
             /* Wait for the building to get constructed if the repair worked */
             if (map.areFlagsOrBuildingsConnectedViaRoads(headquarter, unfinishedBarracks)) {
@@ -260,8 +254,8 @@ public class ExpandLandPlayer implements ComputerPlayer {
         Set<Point> candidates = new HashSet<>();
         Set<Point> investigated = new HashSet<>();
 
-        Set<Building> ownMilitaryBuildings = Utils.getMilitaryBuildingsForPlayer(player);
-        Set<Building> enemyMilitaryBuildings = Utils.getDiscoveredEnemyMilitaryBuildingsForPlayer(player);
+        Set<Building> ownMilitaryBuildings = GamePlayUtils.getMilitaryBuildingsForPlayer(player);
+        Set<Building> enemyMilitaryBuildings = GamePlayUtils.getDiscoveredEnemyMilitaryBuildingsForPlayer(player);
         Set<Flag> flagsReachableFromHeadquarter = GameUtils.findFlagsReachableFromPoint(player, headquarter.getPosition());
 
         /* Score the candidates and pick the one with the best score */
@@ -530,21 +524,18 @@ public class ExpandLandPlayer implements ComputerPlayer {
             /* Connect the building to the headquarters if it's not already done */
             try {
                 if (!map.areFlagsOrBuildingsConnectedViaRoads(headquarter, building)) {
-                    Road road = Utils.connectPointToBuilding(player, map, building.getFlag().getPosition(), headquarter);
+                    Road road = GamePlayUtils.connectPointToBuilding(player, map, building.getFlag().getPosition(), headquarter);
 
                     if (road != null) {
-                        Utils.fillRoadWithFlags(map, road);
+                        GamePlayUtils.fillRoadWithFlags(map, road);
                     } else {
                         System.out.println("Could not place road for newly registered barracks at " + building.getPosition());
                     }
                 }
-            } catch (Exception e) {
-
-            }
+            } catch (Exception e) { }
 
             /* Disable promotions if the barracks is not close to the enemy */
-            if (Utils.distanceToKnownEnemiesWithinRange(building, 20) > 9) {
-
+            if (GamePlayUtils.distanceToKnownEnemiesWithinRange(building, 20) > 9) {
                 if (building.isPromotionEnabled()) {
                     building.disablePromotions();
                 }

@@ -2234,4 +2234,83 @@ public class TestMisc {
         assertEquals(road1.getCourier().getPosition(), shipyard.getPosition());
         assertEquals(shipyard.getAmount(PLANK), 1);
     }
+
+    @Test
+    public void testAddingDefenderDoesNotInterruptOngoingFight() throws InvalidUserActionException {
+
+        // Create game
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(60, 68);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        var point1 = new Point(30, 68);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Remove all soldiers for player 1 to prevent it from populating its barracks
+        Utils.setReservedSoldiers(headquarter0, 0, 0, 0, 0, 0);
+        Utils.setReservedSoldiers(headquarter1, 0, 0, 0, 0, 0);
+
+        Utils.clearSoldiersFromInventory(headquarter0);
+        Utils.clearSoldiersFromInventory(headquarter1);
+
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 2);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 2);
+
+        // Place and connect barracks to get attacked
+        var point2 = new Point(44, 68);
+        var barracks = map.placeBuilding(new Barracks(player1), point2);
+
+        var road = map.placeAutoSelectedRoad(player1, barracks.getFlag(), headquarter1.getFlag());
+
+        // Wait for the barracks to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(barracks);
+
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks);
+
+        // Evacuate the barracks
+        barracks.evacuate();
+
+        // Player 0 attacks player 1's barracks
+        player0.attack(barracks, 1, AttackStrength.STRONG);
+
+        // Wait for the attacker to reach the barracks and start fighting with a defender from player 1's headquarters
+        var attacker = Utils.waitForSoldierOutsideBuilding(player0);
+
+        assertEquals(attacker.getTarget(), barracks.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks.getFlag().getPosition());
+
+        Utils.waitForSoldierToBeFighting(attacker, map);
+
+        var defenderFighting = attacker.getOpponent();
+
+        // Add a defender to the barracks and verify that it doesn't interrupt the fighting
+        barracks.cancelEvacuation();
+
+        var newDefender = new Soldier(player1, PRIVATE_RANK, map);
+
+        map.placeWorker(newDefender, barracks.getFlag());
+
+        newDefender.setTargetBuilding(barracks);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, newDefender, barracks.getPosition());
+
+        assertTrue(newDefender.isInsideBuilding());
+
+        for (int i = 0; i < 20; i++) {
+            assertTrue(attacker.isFighting());
+            assertEquals(attacker.getOpponent(), defenderFighting);
+            assertTrue(newDefender.isInsideBuilding());
+            assertFalse(newDefender.isFighting());
+
+            map.stepTime();
+        }
+    }
 }

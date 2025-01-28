@@ -74,19 +74,23 @@ public class MapPoint {
     }
 
     void addConnectingRoad(Road road) {
-        Point previous = null;
 
-        /* Find connected neighbors */
-        for (Point roadPoint : road.getWayPoints()) {
-            if (roadPoint.equals(this.point) && previous != null) {
-                connectedNeighbors.add(previous);
+        // Store connected neighbors
+        for (int i = 0; i < road.getWayPoints().size(); i++) {
+            var roadPoint = road.getWayPoints().get(i);
+
+            if (roadPoint.equals(this.point)) {
+                if (i > 0) {
+                    connectedNeighbors.add(road.getWayPoints().get(i - 1));
+                }
+
+                if (i < road.getWayPoints().size() - 1) {
+                    connectedNeighbors.add(road.getWayPoints().get(i + 1));
+                }
+
+                // A road can't have any duplicate points
+                break;
             }
-
-            if (previous != null && previous.equals(this.point)) {
-                connectedNeighbors.add(roadPoint);
-            }
-
-            previous = roadPoint;
         }
 
         connectedRoads.add(road);

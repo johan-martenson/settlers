@@ -107,10 +107,10 @@ public class FoodProducer implements ComputerPlayer {
             fisheries.add(fishery);
 
             /* Connect the fishery with the headquarter */
-            Road road = Utils.connectPointToBuilding(controlledPlayer, map, fishery.getFlag().getPosition(), headquarter);
+            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, fishery.getFlag().getPosition(), headquarter);
 
             /* Fill the road with flags */
-            Utils.fillRoadWithFlags(map, road);
+            GamePlayUtils.fillRoadWithFlags(map, road);
 
             state = State.WAITING_FOR_FISHERY;
         } else if (state == State.BUILD_HUNTER_HUT) {
@@ -128,10 +128,10 @@ public class FoodProducer implements ComputerPlayer {
             hunterHuts.add(hunterHut);
 
             /* Connect the hunter hut with the headquarter */
-            Road road = Utils.connectPointToBuilding(controlledPlayer, map, hunterHut.getFlag().getPosition(), headquarter);
+            Road road = GamePlayUtils.connectPointToBuilding(controlledPlayer, map, hunterHut.getFlag().getPosition(), headquarter);
 
             /* Fill the road with flags */
-            Utils.fillRoadWithFlags(map, road);
+            GamePlayUtils.fillRoadWithFlags(map, road);
 
             state = State.WAITING_FOR_HUNTER_HUT;
         } else if (state == State.WAITING_FOR_FISHERY) {
@@ -161,22 +161,22 @@ public class FoodProducer implements ComputerPlayer {
                 state = State.NEEDS_BREAD;
             }
         } else if (state == State.NEEDS_BREAD) {
-            if (!Utils.buildingInPlace(farm)) {
+            if (!GamePlayUtils.buildingInPlace(farm)) {
 
                 /* Place a farm */
-                farm = Utils.placeBuilding(controlledPlayer, headquarter, new Farm(controlledPlayer));
-            } else if (Utils.buildingDone(farm) && !Utils.buildingInPlace(well)) {
+                farm = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Farm(controlledPlayer));
+            } else if (GamePlayUtils.buildingDone(farm) && !GamePlayUtils.buildingInPlace(well)) {
 
                 /* Place a well */
-                well = Utils.placeBuilding(controlledPlayer, headquarter, new Well(controlledPlayer));
-            } else if (Utils.buildingDone(well) && !Utils.buildingInPlace(mill)) {
+                well = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Well(controlledPlayer));
+            } else if (GamePlayUtils.buildingDone(well) && !GamePlayUtils.buildingInPlace(mill)) {
 
                 /* Place a mill */
-                mill = Utils.placeBuilding(controlledPlayer, headquarter, new Mill(controlledPlayer));
-            } else if (Utils.buildingDone(mill) && !Utils.buildingInPlace(bakery)) {
+                mill = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Mill(controlledPlayer));
+            } else if (GamePlayUtils.buildingDone(mill) && !GamePlayUtils.buildingInPlace(bakery)) {
 
                 /* Place bakery */
-                bakery = Utils.placeBuilding(controlledPlayer, headquarter, new Bakery(controlledPlayer));
+                bakery = GamePlayUtils.placeBuilding(controlledPlayer, headquarter, new Bakery(controlledPlayer));
             }
         }
     }
@@ -242,16 +242,16 @@ public class FoodProducer implements ComputerPlayer {
 
     boolean basicFoodProductionDone() {
 
-        return (Utils.listContainsAtLeastOneReadyBuilding(fisheries) || noPlaceForFishery) &&
-                Utils.listContainsAtLeastOneReadyBuilding(hunterHuts);
+        return (GamePlayUtils.listContainsAtLeastOneReadyBuilding(fisheries) || noPlaceForFishery) &&
+                GamePlayUtils.listContainsAtLeastOneReadyBuilding(hunterHuts);
     }
 
     boolean fullFoodProductionDone() {
         return basicFoodProductionDone() &&
-               Utils.buildingDone(farm)  &&
-               Utils.buildingDone(mill)  &&
-               Utils.buildingDone(well)  &&
-               Utils.buildingDone(bakery);
+               GamePlayUtils.buildingDone(farm)  &&
+               GamePlayUtils.buildingDone(mill)  &&
+               GamePlayUtils.buildingDone(well)  &&
+               GamePlayUtils.buildingDone(bakery);
     }
 
     void scanForNewLakes() {

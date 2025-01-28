@@ -62,7 +62,7 @@ public class AttackPlayer implements ComputerPlayer {
         switch (state) {
             case INITIAL_STATE -> state = State.LOOK_FOR_BUILDINGS_TO_ATTACK;
             case LOOK_FOR_BUILDINGS_TO_ATTACK -> {
-                List<Building> visibleOpponentBuildings = Utils.findVisibleOpponentBuildings(map, player);
+                List<Building> visibleOpponentBuildings = GamePlayUtils.findVisibleOpponentBuildings(map, player);
 
                 Building buildingToAttack = findBuildingToAttack(visibleOpponentBuildings);
 
