@@ -36,7 +36,7 @@ public class XMidiTrack {
      * @return The first timbre or null if none exist.
      */
     public Timbre getFirstTimbre() {
-        return timbres.isEmpty() ? null : timbres.get(0); // Get the first timbre
+        return timbres.isEmpty() ? null : timbres.getFirst(); // Get the first timbre
     }
 
     /**
@@ -45,7 +45,7 @@ public class XMidiTrack {
      * @return The last timbre or null if none exist.
      */
     public Timbre getLastTimbre() {
-        return timbres.isEmpty() ? null : timbres.get(timbres.size() - 1); // Get the last timbre
+        return timbres.isEmpty() ? null : timbres.getLast(); // Get the last timbre
     }
 
     /**

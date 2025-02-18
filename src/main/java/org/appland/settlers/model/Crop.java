@@ -15,7 +15,7 @@ import static org.appland.settlers.model.Material.WHEAT;
  */
 public class Crop {
 
-    private CropType type;
+    private final CropType type;
 
     public enum GrowthState {
         JUST_PLANTED,

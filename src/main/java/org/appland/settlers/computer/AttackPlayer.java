@@ -122,9 +122,8 @@ public class AttackPlayer implements ComputerPlayer {
      *
      * @param visibleOpponentBuildings The list of visible opponent buildings
      * @return The building selected to attack or null if none found
-     * @throws Exception If an error occurs during the selection
      */
-    private Building findBuildingToAttack(List<Building> visibleOpponentBuildings) throws Exception {
+    private Building findBuildingToAttack(List<Building> visibleOpponentBuildings) {
         return visibleOpponentBuildings.stream()
                 .filter(Building::isMilitaryBuilding) // Only military buildings
                 .filter(Building::isReady)

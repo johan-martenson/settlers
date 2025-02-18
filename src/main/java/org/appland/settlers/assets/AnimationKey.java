@@ -19,12 +19,12 @@ public record AnimationKey(Nation nation, CompassDirection compassDirection) {
             return true; // Check if the object is the same instance
         }
 
-        if (!(o instanceof AnimationKey that)) {
+        if (!(o instanceof AnimationKey(Nation nation1, CompassDirection direction))) {
             return false; // Check if the object is of the same type
         }
 
         // Check if both the nation and compass direction match
-        return nation == that.nation && compassDirection == that.compassDirection;
+        return nation == nation1 && compassDirection == direction;
     }
 
     /**

@@ -1,5 +1,11 @@
 package org.appland.settlers.rest.resource;
 
+import jakarta.websocket.EndpointConfig;
+import jakarta.websocket.OnClose;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnMessage;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.chat.ChatManager;
@@ -44,13 +50,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import jakarta.websocket.EndpointConfig;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnMessage;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -79,9 +78,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             SHIELD
     );
 
-    private final Map<Player, Session> playerToSession;
-    private final JsonUtils jsonUtils;
-    private final JSONParser parser;
+    private final Map<Player, Session> playerToSession = new HashMap<>();
+    private final JsonUtils jsonUtils = new JsonUtils(IdManager.idManager);
+    private final JSONParser parser = new JSONParser();
     private final IdManager idManager = IdManager.idManager;
     private final GameTicker gameTicker = GameTicker.GAME_TICKER;
     private final Collection<Session> gameListListeners = new HashSet<>();
@@ -90,10 +89,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
-
-        jsonUtils = new JsonUtils(idManager);
-        parser = new JSONParser();
-        playerToSession = new HashMap<>();
 
         GAME_RESOURCES.addAddedAndRemovedGamesListener(this);
     }
@@ -494,8 +489,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var playerId = (String) jsonBody.get("playerId");
                 var playerToUpdate = (Player) idManager.getObject(playerId);
                 var name = (String) jsonBody.get("name");
-                var playerColor = (PlayerColor) PlayerColor.valueOf((String) jsonBody.get("color"));
-                var nation = (Nation) Nation.valueOf((String) jsonBody.get("nation"));
+                var playerColor = PlayerColor.valueOf((String) jsonBody.get("color"));
+                var nation = Nation.valueOf((String) jsonBody.get("nation"));
 
                 synchronized (playerToUpdate) {
                     playerToUpdate.setName(name);
@@ -1189,7 +1184,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     }
 
     @OnOpen
-    public void onOpen(Session session, EndpointConfig config) throws IOException {
+    public void onOpen(Session session, EndpointConfig config) {
         System.out.println();
         System.out.println("Websocket session opened");
     }

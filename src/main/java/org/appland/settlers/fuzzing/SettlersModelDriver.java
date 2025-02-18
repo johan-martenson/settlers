@@ -125,14 +125,6 @@ public class SettlersModelDriver {
         /* Create game map */
         List<Player> players = new ArrayList<>();
 
-        //MapLoader mapLoader = new MapLoader();
-        //MapFile mapFile = null;
-        //try {
-            //mapFile = mapLoader.loadMapFromFile(MAP_FILENAME);
-        //} catch (InvalidMapException e) {
-            //e.printStackTrace();
-        //}
-
         for (int i = 0; i < mapFile.getStartingPoints().size(); i++) {
             players.add(new Player("Player " + i, PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN));
         }

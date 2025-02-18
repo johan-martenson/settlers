@@ -436,8 +436,4 @@ public class WorkerImageCollection {
                 .computeIfAbsent(playerColor, k -> new ArrayList<>())
                 .add(image);
     }
-
-    public void addNationSpecificAnimationInDirectionWithPlayerColor(Nation nation, CompassDirection direction, WorkerAction action, List<Bitmap> images) {
-
-    }
 }

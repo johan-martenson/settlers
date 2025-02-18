@@ -40,12 +40,12 @@ public class ShipImageCollection {
         images.forEach((direction, imageAndShadow) -> imageBoard.placeImagesAsRow(
                 List.of(
                         ImageBoard.makeImagePathPair(
-                                imageAndShadow.image,
+                                imageAndShadow.image(),
                                 "ready",
                                 direction.name().toUpperCase(),
                                 "image"),
                         ImageBoard.makeImagePathPair(
-                                imageAndShadow.shadowImage,
+                                imageAndShadow.shadowImage(),
                                 "ready",
                                 direction.name().toUpperCase(),
                                 "shadowImage")
@@ -56,12 +56,12 @@ public class ShipImageCollection {
                 (progress, imageAndShadow) -> imageBoard.placeImagesAsRow(
                 List.of(
                         ImageBoard.makeImagePathPair(
-                                imageAndShadow.image,
+                                imageAndShadow.image(),
                                 "underConstruction",
                                 progress.name().toUpperCase(),
                                 "image"),
                         ImageBoard.makeImagePathPair(
-                                imageAndShadow.shadowImage,
+                                imageAndShadow.shadowImage(),
                                 "underConstruction",
                                 progress.name().toUpperCase(),
                                 "shadowImage")

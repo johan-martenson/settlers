@@ -596,7 +596,7 @@ public class Extractor {
         WorkerImageCollection officerWorkerImageCollector = workerImageCollectors.get(JobType.OFFICER);
         WorkerImageCollection generalWorkerImageCollector = workerImageCollectors.get(JobType.GENERAL);
 
-        Bob bob = ((BobResource) jobsBobList.getFirst()).getBob();
+        Bob bob = jobsBobResource.getBob();
 
         woodcutterImageCollector.readCargoImagesFromBob(
                 WOOD,

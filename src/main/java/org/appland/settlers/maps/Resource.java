@@ -6,22 +6,13 @@
 package org.appland.settlers.maps;
 
 /**
- *
  * @author johan
  */
-class Resource {
+record Resource(ResourceType type, int amount) {
     private static final int COAL_OFFSET = 64; // 0x40
     private static final int IRON_OFFSET = 72; // 0x48
     private static final int GOLD_OFFSET = 80; // 0x50
     private static final int GRANITE_OFFSET = 88; // 0x58
-
-    final ResourceType type;
-    final int amount;
-
-    public Resource(ResourceType type, int amount) {
-        this.type = type;
-        this.amount = amount;
-    }
 
     public static Resource resourceFromInt(int i) {
         ResourceType type = ResourceType.resourceTypeFromInt(i);

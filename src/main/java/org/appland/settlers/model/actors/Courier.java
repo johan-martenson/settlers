@@ -292,7 +292,7 @@ public class Courier extends Worker {
     @Override
     protected void onArrival() {
         switch (state) {
-            case WALKING_TO_ROAD -> state = IDLE_AT_ROAD;
+            case WALKING_TO_ROAD, RETURNING_TO_IDLE_SPOT -> state = IDLE_AT_ROAD;
             case GOING_TO_FLAG_TO_PICK_UP_CARGO -> {
                 Flag flag = map.getFlagAtPoint(getPosition());
                 Cargo cargoToPickUp = findCargoToCarry(flag);
@@ -355,7 +355,6 @@ public class Courier extends Worker {
                     setTarget(idlePoint);
                 }
             }
-            case RETURNING_TO_IDLE_SPOT -> state = IDLE_AT_ROAD;
             case RETURNING_TO_STORAGE -> {
                 Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 

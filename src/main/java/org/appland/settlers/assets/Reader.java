@@ -56,7 +56,7 @@ public class Reader {
 
     private Palette palette;
 
-    public static void main(String[] args) throws CmdLineException, IOException, UnknownResourceTypeException, InvalidFormatException {
+    public static void main(String[] args) throws CmdLineException, IOException, InvalidFormatException {
         Reader reader = new Reader();
         CmdLineParser parser = new CmdLineParser(reader);
 

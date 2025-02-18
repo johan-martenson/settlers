@@ -518,9 +518,7 @@ public class Soldier extends Worker {
                     setOffroadTarget(opponent.getPosition());
                 }
             }
-            case WALKING_TO_DEFEND -> {
-                state = WAITING_TO_DEFEND;
-            }
+            case WALKING_TO_DEFEND -> state = WAITING_TO_DEFEND;
         }
     }
 

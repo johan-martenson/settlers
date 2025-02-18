@@ -103,16 +103,16 @@ public class MapFilePoint {
     }
 
     boolean hasMineral() {
-        return resource != null && resource.type != null &&
-               (resource.type == ResourceType.COAL     ||
-                resource.type == ResourceType.GOLD     ||
-                resource.type == ResourceType.IRON_ORE ||
-                resource.type == ResourceType.GRANITE) &&
-                resource.amount > 0;
+        return resource != null && resource.type() != null &&
+               (resource.type() == ResourceType.COAL     ||
+                resource.type() == ResourceType.GOLD     ||
+                resource.type() == ResourceType.IRON_ORE ||
+                resource.type() == ResourceType.GRANITE) &&
+                resource.amount() > 0;
     }
 
     ResourceType getMineralType() {
-        return resource.type;
+        return resource.type();
     }
 
     Size getMineralQuantity() {
@@ -123,9 +123,9 @@ public class MapFilePoint {
         *
         * */
 
-        if (resource.amount > 4) {
+        if (resource.amount() > 4) {
             return Size.LARGE;
-        } else if (resource.amount > 2) {
+        } else if (resource.amount() > 2) {
             return Size.MEDIUM;
         } else {
             return Size.SMALL;

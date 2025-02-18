@@ -508,20 +508,6 @@ public class Player {
                         .forEach(material -> result.put(
                                 material,
                                 result.getOrDefault(material, 0) + building.getAmount(material))));
-/*
-        for (Building building : getBuildings()) {
-            if (!building.isStorehouse()) {
-                continue;
-            }
-
-            for (Material material : values()) {
-                if (!result.containsKey(material)) {
-                    result.put(material, 0);
-                }
-
-                result.put(material,result.getOrDefault(material, 0) + building.getAmount(material));
-            }
-        }*/
 
         return result;
     }
@@ -900,11 +886,9 @@ public class Player {
             // Find discovered workers
             map.getWorkers().stream()
                     .filter(worker -> !worker.getPlayer().equals(this))
-                    .forEach(worker -> {
-                        newDiscoveredLand.stream()
-                                .filter(point -> worker.getPosition().equals(point))
-                                .forEach(point -> newWorkers.add(worker));
-                    });
+                    .forEach(worker -> newDiscoveredLand.stream()
+                            .filter(point -> worker.getPosition().equals(point))
+                            .forEach(point -> newWorkers.add(worker)));
         }
 
         // Handle changes in available construction
