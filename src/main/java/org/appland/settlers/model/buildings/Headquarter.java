@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 
@@ -146,7 +147,26 @@ public class Headquarter extends Storehouse {
 
     @Override
     public String toString() {
-        return String.format("Headquarter with inventory %s", inventory);
+        return format("Headquarter with inventory %s", mapToString(inventory));
+    }
+
+    private <K> String mapToString(Map<K, Integer> map) {
+        StringBuilder s = new StringBuilder("{");
+
+        var first = true;
+
+        for (var entry : map.entrySet()) {
+            if (entry.getValue() != 0) {
+                if (first) {
+                    first = false;
+                    s.append(format("%s=%s", entry.getKey(), entry.getValue()));
+                } else {
+                    s.append(format(", %s=%s", entry.getKey(), entry.getValue()));
+                }
+            }
+        }
+
+        return s.toString();
     }
 
     @Override
@@ -238,13 +258,20 @@ public class Headquarter extends Storehouse {
 
     @Override
     public Soldier retrieveHostedSoldier() {
-        if (isInStock(PRIVATE)) {
-            Soldier defender = (Soldier) retrieveWorker(PRIVATE);
-            getMap().placeWorker(defender, this);
-            defender.setHome(this);
-            defender.setPosition(getPosition());
+        // TODO: when defending, should pick soldier based on chosen defense strength.
+        // This method is also used when upgrading the building and moving soldiers
 
-            return defender;
+        for (var rank : Soldier.Rank.values()) {
+            var material = rank.toMaterial();
+
+            if (isInStock(material)) {
+                Soldier defender = (Soldier) retrieveWorker(material);
+                getMap().placeWorker(defender, this);
+                defender.setHome(this);
+                defender.setPosition(getPosition());
+
+                return defender;
+            }
         }
 
         throw new InvalidGameLogicException("Can't retrieve soldier!");

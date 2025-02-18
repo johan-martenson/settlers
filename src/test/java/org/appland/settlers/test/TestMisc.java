@@ -2274,10 +2274,17 @@ public class TestMisc {
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks);
 
-        // Evacuate the barracks
+        // Evacuate the barracks and wait for the soldiers to go back to the headquarters
         barracks.evacuate();
 
+        Utils.waitForInventoryToContain(headquarter1, GENERAL, 2);
+
+        // Make player 1 defend as much as possible from surrounding buildings
+        player1.setDefenseFromSurroundingBuildings(10);
+
         // Player 0 attacks player 1's barracks
+        assertEquals(headquarter1.getAmount(GENERAL), 2);
+
         player0.attack(barracks, 1, AttackStrength.STRONG);
 
         // Wait for the attacker to reach the barracks and start fighting with a defender from player 1's headquarters

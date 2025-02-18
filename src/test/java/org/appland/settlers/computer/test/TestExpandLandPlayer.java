@@ -540,11 +540,10 @@ public class TestExpandLandPlayer {
         player0.setDefenseStrength(0);
         player0.setDefenseFromSurroundingBuildings(0);
 
-        player1.canAttack(barracksToAttack);
+        assertTrue(player1.canAttack(barracksToAttack));
 
         player1.attack(barracksToAttack, 5, AttackStrength.STRONG);
 
-        /* Wait for player 1 to capture the barracks */
         assertEquals(barracksToAttack.getPlayer(), player0);
         assertTrue(barracksToAttack.isReady());
 

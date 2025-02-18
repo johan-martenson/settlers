@@ -634,7 +634,7 @@ public class TestForesterHut {
         /* Let the forester plant six trees and keep track of where they are planted */
         List<Point> treeLocations = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 10; i++) {
 
             /* Wait for the forester to leave the house */
             Utils.waitForWorkerToBeOutside(forester, map);
@@ -664,8 +664,8 @@ public class TestForesterHut {
             totalY = totalY + point.y;
         }
 
-        double averageX = totalX / (double) 6;
-        double averageY = totalY / (double) 6;
+        double averageX = totalX / (double) 10;
+        double averageY = totalY / (double) 10;
 
         assertTrue(Math.abs(foresterHut.getPosition().x - averageX) < 4);
         assertTrue(Math.abs(foresterHut.getPosition().y - averageY) < 4);

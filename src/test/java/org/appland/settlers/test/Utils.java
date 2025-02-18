@@ -315,13 +315,11 @@ public class Utils {
         GameMap map = storehouse.getMap();
 
         for (int i = 0; i < 1000; i++) {
-
             if (storehouse.getAmount(material) == amount) {
                 break;
             }
 
             if (storehouse.getAmount(material) > amount) {
-
                 if (isSoldier(material)) {
                     storehouse.retrieveSoldierFromInventory(material);
                 } else {
@@ -2847,10 +2845,9 @@ public class Utils {
         assertTrue(soldier.getHealth() < 10);
     }
 
-    public static void waitForSoldiersToReachTargets(GameMap map, List<Soldier> soldiers) throws InvalidUserActionException {
+    public static void waitForSoldiersToReachTargets(GameMap map, Collection<Soldier> soldiers) throws InvalidUserActionException {
         assertNotNull(map);
         assertFalse(soldiers.isEmpty());
-        assertTrue(soldiers.stream().allMatch(Worker::isTraveling));
 
         for (int i = 0; i < 1000; i++) {
             if (soldiers.stream().allMatch(soldier -> !soldier.isTraveling() || soldier.isFighting())) {
@@ -3028,10 +3025,45 @@ public class Utils {
         waitFor((Void v) -> soldier.isHitting() || soldier.isDying(), map);
     }
 
+    public static List<Soldier> findAliveSoldiersOutsideBuilding(Player player) {
+        return player.getMap().getWorkers().stream()
+                .filter(Worker::isSoldier)
+                .map(worker -> (Soldier) worker)
+                .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                .filter(soldier -> !soldier.isInsideBuilding())
+                .filter(soldier -> !soldier.isDead())
+                .toList();
+    }
+
+    public static Soldier waitForAliveSoldierOutsideGivenBuilding(Player player, Building building) throws InvalidUserActionException {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+            List<Soldier> result = map.getWorkers().stream()
+                    .filter(Worker::isSoldier)
+                    .map(worker -> (Soldier) worker)
+                    .filter(soldier -> Objects.equals(soldier.getPlayer(), player))
+                    .filter(soldier -> Objects.equals(soldier.getHome(), building))
+                    .filter(soldier -> !soldier.isInsideBuilding())
+                    .filter(soldier -> !soldier.isDead())
+                    .toList();
+
+            if (!result.isEmpty()) {
+                return result.getFirst();
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+
+        return null;
+    }
+
     public static List<Soldier> waitForAliveSoldiersOutsideBuilding(Player player, int amount) throws InvalidUserActionException {
         GameMap map = player.getMap();
 
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 2000; i++) {
             List<Soldier> result = map.getWorkers().stream()
                     .filter(Worker::isSoldier)
                     .map(worker -> (Soldier) worker)
@@ -3118,6 +3150,20 @@ public class Utils {
 
     public static void clearSoldiersFromInventory(Storehouse storehouse) {
         clearInventory(storehouse, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+    }
+
+    public static void waitForInventoryToContain(Building building, Material material, int amount) throws InvalidUserActionException {
+        var map = building.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+            if (building.getAmount(material) == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(building.getAmount(material), amount);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

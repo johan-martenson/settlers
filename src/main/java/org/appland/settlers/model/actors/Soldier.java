@@ -296,13 +296,11 @@ public class Soldier extends Worker {
             }
             case WAITING_TO_DEFEND -> {
 
-                /* Go home if there are no more attackers */
+                // Go home or to storage if there are no more attackers
                 if (buildingToDefend.getAttackers().isEmpty()) {
-
-                    /* Return home or to storage */
                     returnAfterAttackIsOver();
 
-                    /* Look for an attacker at the flag if this is the soldiers own building */
+                // Look for an attacker at the flag if this is the soldiers own building
                 } else if (getHome().equals(buildingToDefend)) {
 
                     /* Get the attacker at the flag */
@@ -340,29 +338,38 @@ public class Soldier extends Worker {
                     /* Walk half a point away */
                     walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
 
-                    /* Fight the next attacker if this is a remote defender and there are attackers waiting */
-                } else if (!buildingToDefend.getWaitingAttackers().isEmpty()) {
+                // Fight the next attacker if this is a remote defender and there are attackers waiting
+                } else if (!buildingToDefend.getWaitingSecondaryAttackers().isEmpty()) {
 
                     /* Pick the next waiting attacker */
-                    opponent = buildingToDefend.pickWaitingAttacker();
+                    opponent = buildingToDefend.pickWaitingSecondaryAttacker();
+
                     opponent.reserveForFight(this);
 
                     state = WALKING_TO_FIGHT_TO_DEFEND;
 
                     /* Walk to the attacker */
                     setOffroadTarget(opponent.getPosition());
+
+                // Go to the primary attacker if it exists and there is no-one in the attacked building to defend
+                } else if (!buildingToDefend.hasOwnDefender() &&
+                        buildingToDefend.getNumberOfHostedSoldiers() == 0 &&
+                        buildingToDefend.getPrimaryAttacker() != null &&
+                        buildingToDefend.getPrimaryAttacker().isWaitingForFight()) {
+                    opponent = buildingToDefend.getPrimaryAttacker();
+
+                    opponent.reserveForFight(this);
+
+                    state = WALKING_TO_FIGHT_TO_DEFEND;
+
+                    setOffroadTarget(buildingToDefend.getFlag().getPosition());
                 }
             }
             case WALKING_TO_FIGHT_TO_DEFEND -> {
                 if (!opponent.isTraveling()) {
-
-                    /* Tell the attacker that the fight is about to start */
                     opponent.prepareForFight(this);
-
-                    /* Walk apart from the attacker before starting the fight */
                     state = State.WALKING_APART_TO_DEFEND;
 
-                    /* Walk half a point away */
                     walkHalfWayOffroadTo(getPosition().right(), OffroadOption.CAN_END_ON_STONE);
                 }
             }
@@ -377,13 +384,11 @@ public class Soldier extends Worker {
     protected void onArrival() throws InvalidUserActionException {
         switch (state) {
             case WALKING_TO_TARGET -> {
-                /* Get the building at the position */
+                // Deploy military in building
                 Building building = map.getBuildingAtPoint(getPosition());
-
-                /* Deploy military in building */
                 enterBuilding(building);
 
-                /* The building may have sent us back immediately, otherwise become deployed */
+                // The building may have sent us back immediately, otherwise become deployed
                 if (state == WALKING_TO_TARGET) {
                     state = DEPLOYED;
                 }
@@ -423,8 +428,6 @@ public class Soldier extends Worker {
                     state = WAITING_FOR_DEFENDING_OPPONENT;
                 }
             }
-
-            /* Capture the building */
             case WALKING_TO_TAKE_OVER_BUILDING -> {
                 if (buildingToAttack.isReady()) {
 
@@ -506,6 +509,7 @@ public class Soldier extends Worker {
 
                     /* Fight the next waiting attacker */
                     opponent = buildingToDefend.pickWaitingAttacker();
+
                     opponent.reserveForFight(this);
 
                     /* Walk to fight the opponent */
@@ -514,7 +518,9 @@ public class Soldier extends Worker {
                     setOffroadTarget(opponent.getPosition());
                 }
             }
-            case WALKING_TO_DEFEND -> state = WAITING_TO_DEFEND;
+            case WALKING_TO_DEFEND -> {
+                state = WAITING_TO_DEFEND;
+            }
         }
     }
 
@@ -569,7 +575,7 @@ public class Soldier extends Worker {
 
         Set<Point> taken = Stream.concat(
                         buildingToAttack.getAttackers().stream(),
-                        buildingToAttack.getDefenders().stream()
+                        buildingToAttack.getRemoteDefenders().stream()
                 )
                 .filter(worker -> !Objects.equals(worker, this))
                 .filter(Worker::isSoldier)
@@ -636,7 +642,7 @@ public class Soldier extends Worker {
         buildingToDefend = building;
 
         /* Register in the building's defense */
-        building.registerDefender(this);
+        building.registerRemoteDefender(this);
 
         // Get the primary attacker (the one that will walk to the building's flag and fight there)
         opponent = buildingToDefend.getPrimaryAttacker();
@@ -656,7 +662,6 @@ public class Soldier extends Worker {
 
             // Re-deploy the soldier if there is no one to defend against
             building.deploySoldier(this);
-            System.out.println("Main attacker is not waiting. Instead: " + opponent.state);
         }
 
         /* TODO:
@@ -675,23 +680,34 @@ public class Soldier extends Worker {
         buildingToDefend = building;
 
         /* Register in the building's defense */
-        building.registerDefender(this);
+        building.registerRemoteDefender(this);
 
         getHome().retrieveHostedSoldier(this);
 
-        /* Fight an attacker if there are attackers waiting for opponents */
+        // Fight an attacker if there are attackers waiting for opponents
         if (!building.getWaitingAttackers().isEmpty()) {
 
-            /* Get a waiting attacker */
-            opponent = building.pickWaitingAttacker();
-            building.removeWaitingAttacker(opponent);
+            // If the building has its own defender, leave the primary attacker for it to handle
+            if (building.hasOwnDefender() || building.getNumberOfHostedSoldiers() != 0) {
+                var optionalOpponent = building.getWaitingAttackers().stream()
+                        .filter(soldier -> !soldier.getPosition().equals(building.getFlag().getPosition()) &&
+                                !soldier.getTarget().equals(building.getFlag().getPosition())
+                        ).findFirst();
 
-            opponent.reserveForFight(this);
+                optionalOpponent.ifPresent(soldier -> opponent = soldier);
+            } else {
+                opponent = building.getWaitingAttackers().iterator().next();
+            }
 
-            /* Fight the attacker */
-            state = WALKING_TO_FIGHT_TO_DEFEND;
+            if (opponent != null) {
+                building.removeWaitingAttacker(opponent);
+                opponent.reserveForFight(this);
 
-            setOffroadTarget(opponent.getPosition());
+                /* Fight the attacker */
+                state = WALKING_TO_FIGHT_TO_DEFEND;
+
+                setOffroadTarget(opponent.getPosition());
+            }
 
             /* Walk to a point close to the building and wait for an attacker to fight */
         } else {
@@ -700,7 +716,7 @@ public class Soldier extends Worker {
             state = WALKING_TO_DEFEND;
 
             Set<Point> taken = Stream.concat(
-                            buildingToDefend.getDefenders().stream(),
+                            buildingToDefend.getRemoteDefenders().stream(),
                             buildingToDefend.getAttackers().stream())
                     .filter(Worker::isSoldier)
                     .filter(soldier -> !soldier.isInsideBuilding())
@@ -825,9 +841,7 @@ public class Soldier extends Worker {
 
         /* Tell the building that this soldier is not waiting anymore as the fight is starting */
         if (state == WAITING_FOR_DEFENDING_OPPONENT || state == RESERVED_BY_DEFENDING_OPPONENT) {
-            System.out.println(buildingToAttack.getWaitingAttackers());
             buildingToAttack.removeWaitingAttacker(this);
-            System.out.println(buildingToAttack.getWaitingAttackers());
         } else if (state == WAITING_TO_DEFEND) {
             buildingToDefend.removeWaitingDefender(this);
         } else {

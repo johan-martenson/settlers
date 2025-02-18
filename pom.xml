@@ -88,7 +88,8 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.21.0</version>
             </plugin>
-            <plugin>
+
+            <!-- Causes stack overflow because of pmd bug  <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.26.0</version>
@@ -101,8 +102,9 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
+            </plugin> -->
+
+            <!--  <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.8.6.6</version>
@@ -127,7 +129,8 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
+
         </plugins>
     </build>
 

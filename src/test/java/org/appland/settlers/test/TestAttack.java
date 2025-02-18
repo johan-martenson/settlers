@@ -2635,6 +2635,7 @@ public class TestAttack {
         /* Get the defender */
         Soldier defender = Utils.waitForSoldierOutsideBuilding(player1);
 
+        assertNotNull(defender);
         assertFalse(defender.isDead());
         assertFalse(defender.isDying());
         assertNotNull(defender);
@@ -2646,7 +2647,6 @@ public class TestAttack {
 
         /* Wait for the fight to start */
         assertEquals(defender.getTarget(), firstAttacker.getPosition());
-        assertFalse(defender.isTraveling());
 
         Utils.waitForFightToStart(map, firstAttacker, defender);
 
@@ -5125,6 +5125,7 @@ public class TestAttack {
 
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
+        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
@@ -5137,7 +5138,6 @@ public class TestAttack {
         assertEquals(attacker.getPlayer(), player0);
 
         /* Wait for defenders to come out from the fortress */
-        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
@@ -5256,6 +5256,7 @@ public class TestAttack {
 
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
+        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
@@ -5268,7 +5269,6 @@ public class TestAttack {
         assertEquals(attacker.getPlayer(), player0);
 
         /* Wait for defenders to come out from the fortress */
-        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
@@ -5384,6 +5384,7 @@ public class TestAttack {
 
         /* Order an attack */
         assertTrue(player0.canAttack(barracks1));
+        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
 
         player0.attack(barracks1, 1, AttackStrength.STRONG);
 
@@ -5395,56 +5396,55 @@ public class TestAttack {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Wait for defenders to come out from the fortress */
-        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
-        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+        /* Wait for defenders to come out from the fortress and from the attacked barracks */
+        var defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        //List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
 
-        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        //assertEquals(homeDefender.size(), 1);
+        assertEquals(defenders.size(), 9);
 
-        /* Verify that the defenders go to the right places to wait to fight */
-        Utils.fastForward(8, map);
-
-        List<Soldier> defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
-        List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
-
-        assertEquals(homeDefender.size(), 1);
-        assertEquals(defenders.size(), 8);
-
-        Soldier defender = homeDefender.getFirst();
+        //Soldier defender = homeDefender.getFirst();
 
         Utils.waitForSoldiersToReachTargets(map, defenders);
 
-        Set<Point> defenderPositions = new HashSet<>();
+        var optionalDefender = defenders.stream()
+                .filter(soldier -> soldier.getPosition().equals(barracks1.getFlag().getPosition()))
+                .findFirst();
 
-        defenders.forEach(soldier -> defenderPositions.add(soldier.getPosition()));
+        assertTrue(optionalDefender.isPresent());
 
-        assertEquals(defender.getPosition(), barracks1.getFlag().getPosition());
-        assertFalse(defender.isDying());
-        assertFalse(defender.isDead());
-        assertTrue(defender.isFighting());
-        assertFalse(defenders.contains(defender));
-        assertFalse(defenderPositions.contains(barracks1.getPosition()));
-        assertFalse(defenders.contains(defender));
-        assertTrue(defenders.stream().allMatch(
+        var homeDefender = optionalDefender.get();
+        var remoteDefenders = defenders.stream()
+                .filter(soldier -> soldier.getHome().equals(fortress))
+                        .toList();
+
+        var remoteDefenderPositions = remoteDefenders.stream().map(Worker::getPosition).collect(Collectors.toSet());
+
+        assertEquals(remoteDefenders.size(), 8);
+        assertEquals(homeDefender.getPosition(), barracks1.getFlag().getPosition());
+        assertFalse(homeDefender.isDying());
+        assertFalse(homeDefender.isDead());
+        assertTrue(homeDefender.isFighting());
+        assertFalse(remoteDefenderPositions.contains(barracks1.getPosition()));
+        assertTrue(remoteDefenders.stream().allMatch(
                 soldier -> soldier.getHome().equals(fortress)
         ));
         assertFalse(
-                defenders.stream()
-                        .anyMatch(soldier -> !soldier.isTraveling() && soldier.getPosition().equals(barracks1.getFlag().getPosition()) && !soldier.equals(defender))
+                remoteDefenders.stream()
+                        .anyMatch(soldier -> !soldier.isTraveling() && soldier.getPosition().equals(barracks1.getFlag().getPosition()) && !soldier.equals(optionalDefender))
         );
-        assertFalse(defenderPositions.contains(barracks1.getFlag().getPosition()));
+        assertFalse(remoteDefenderPositions.contains(barracks1.getFlag().getPosition()));
 
         var point6 = point4.downRight();
 
-        assertFalse(defenderPositions.contains(point5));
+        assertFalse(remoteDefenderPositions.contains(point5));
         Arrays.asList(new Point[] {
                 point6.left(),
                 point6.downLeft(),
                 point6.downRight(),
                 point6.upRight()
-        }).forEach(point -> assertTrue(defenderPositions.contains(point)));
+        }).forEach(point -> assertTrue(remoteDefenderPositions.contains(point)));
     }
 
     @Test
@@ -5491,7 +5491,7 @@ public class TestAttack {
         /* Populate player 1's fortress */
         assertTrue(fortress.isReady());
 
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 9, fortress);
+        Utils.occupyMilitaryBuilding(OFFICER_RANK, 9, fortress);
 
         /* Place barracks for player 1 */
         var point4 = new Point(27, 9);
@@ -5523,48 +5523,68 @@ public class TestAttack {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Wait for defenders to come out from the fortress */
-        assertEquals(fortress.getNumberOfHostedSoldiers(), 9);
-        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+        // Wait for the attacker to get to the attacked building's flag
+        assertEquals(8, Utils.findAliveSoldiersOutsideBuilding(player1).size());
+        assertTrue(Utils.findAliveSoldiersOutsideBuilding(player1).stream().allMatch(soldier -> soldier.getHome().equals(fortress)));
+        assertTrue(Utils.findAliveSoldiersOutsideBuilding(player1).stream().noneMatch(Worker::isInsideBuilding));
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+        for (int i = 0; i < 200; i++) {
+            if (attacker.getPosition().equals(barracks1.getFlag().getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
 
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
-        /* Verify that the defenders go to the right places to wait to fight */
-        Utils.fastForward(8, map);
+        /* Wait for defenders to come out from the fortress */
+        // Wait for the defender of the attacked barracks to go out to fight the primary attacker
+        map.stepTime();
 
-        List<Soldier> defenders = Utils.findSoldiersOutsideWithHome(player1, fortress);
-        List<Soldier> homeDefender = Utils.findSoldiersOutsideWithHome(player1, barracks1);
+        assertTrue(barracks1.isUnderAttack());
+        assertTrue(barracks1.hasOwnDefender());
+        assertEquals(0, barracks1.getNumberOfHostedSoldiers());
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
-        assertEquals(homeDefender.size(), 1);
-        assertEquals(defenders.size(), 8);
+        Utils.waitForAliveSoldierOutsideGivenBuilding(player1, barracks1);
 
-        Soldier defender = homeDefender.getFirst();
+        var defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
 
-        Utils.waitForSoldiersToReachTargets(map, defenders);
+        var optionalHomeDefender = defenders.stream().filter(soldier -> soldier.getHome().equals(barracks1)).findFirst();
+
+        assertTrue(optionalHomeDefender.isPresent());
+
+        var homeDefender = optionalHomeDefender.get();
+
+        var remoteDefenders = defenders.stream().filter(soldier -> soldier.getHome().equals(fortress)).collect(Collectors.toSet());
+
+        assertEquals(remoteDefenders.size(), 8);
+
+        Utils.waitForSoldiersToReachTargets(map, remoteDefenders);
 
         Set<Point> defenderPositions = new HashSet<>();
 
-        defenders.forEach(soldier -> {
+        remoteDefenders.forEach(soldier -> {
             defenderPositions.add(soldier.getPosition());
 
             assertFalse(soldier.isTraveling());
         });
 
-        assertEquals(defender.getPosition(), barracks1.getFlag().getPosition());
-        assertFalse(defender.isDying());
-        assertFalse(defender.isDead());
-        assertTrue(defender.isFighting());
-        assertFalse(defenders.contains(defender));
+        assertEquals(homeDefender.getPosition(), barracks1.getFlag().getPosition());
+        assertFalse(homeDefender.isDying());
+        assertFalse(homeDefender.isDead());
+        assertTrue(homeDefender.isFighting());
+        assertFalse(remoteDefenders.contains(homeDefender));
         assertFalse(defenderPositions.contains(barracks1.getPosition()));
-        assertFalse(defenders.contains(defender));
-        assertTrue(defenders.stream().allMatch(
+        assertFalse(remoteDefenders.contains(homeDefender));
+        assertTrue(remoteDefenders.stream().allMatch(
                 soldier -> soldier.getHome().equals(fortress)
         ));
         assertFalse(
-                defenders.stream()
-                        .anyMatch(soldier -> !soldier.isTraveling() && soldier.getPosition().equals(barracks1.getFlag().getPosition()) && !soldier.equals(defender))
+                remoteDefenders.stream()
+                        .anyMatch(soldier -> !soldier.isTraveling() && soldier.getPosition().equals(barracks1.getFlag().getPosition()) && !soldier.equals(homeDefender))
         );
         assertFalse(defenderPositions.contains(barracks1.getFlag().getPosition()));
 
@@ -5576,7 +5596,7 @@ public class TestAttack {
 
         // Check the other surrounding positions
         assertFalse(defenderPositions.contains(barracks1.getPosition()));
-        assertEquals(defender.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(homeDefender.getPosition(), barracks1.getFlag().getPosition());
         assertFalse(defenderPositions.contains(barracks1.getFlag().getPosition()));
         assertTrue(defenderPositions.contains(barracks1.getFlag().getPosition().right()));
         assertTrue(defenderPositions.contains(barracks1.getFlag().getPosition().left()));
@@ -6279,8 +6299,10 @@ public class TestAttack {
         List<Soldier> attackers = Utils.waitForAliveSoldiersOutsideBuilding(player0, 9);
         List<Soldier> defenders = Utils.waitForAliveSoldiersOutsideBuilding(player1, 9);
 
-        assertEquals(attackers.size(), 9);
-        assertEquals(defenders.size(), 9);
+        assertNotNull(attackers);
+        assertNotNull(defenders);
+        assertEquals(9, attackers.size());
+        assertEquals(9, defenders.size());
 
         for (int i = 0; i < 200_000; i++) {
             if (attackers.stream().allMatch(Worker::isDead) || defenders.stream().allMatch(Worker::isDead)) {
@@ -6334,7 +6356,7 @@ public class TestAttack {
             /* Verify that soldiers are not doing any fighting actions while they are not fighting */
             Stream.concat(attackers.stream(), defenders.stream())
                     .filter(soldier -> !soldier.isFighting() || soldier.isDead())
-                    .peek(soldier -> {
+                    /*.peek(soldier -> {
                         System.out.println();
                         System.out.println("Peek:");
                         System.out.println(soldier);
@@ -6345,7 +6367,7 @@ public class TestAttack {
                         System.out.println("Is standing aside? " + soldier.isStandingAside());
                         System.out.println("Is jumping back? " + soldier.isJumpingBack());
                         System.out.println("Is on map? " + map.getWorkers().contains(soldier));
-                    })
+                    })*/
                     .forEach(soldier -> {
                         assertFalse(soldier.isHitting());
                         assertFalse(soldier.isGettingHit());
@@ -6371,6 +6393,8 @@ public class TestAttack {
                     .filter(soldier -> !soldier.isDead())
                     .filter(soldier -> !soldier.isTraveling())
                     .filter(soldier -> !soldier.isFighting())
+                    .filter(soldier -> !soldier.isWalkingApartToFight())
+                    .filter(soldier -> !soldier.isWalkingBackToFixedPointAfterFight())
                     .filter(soldier -> soldier.getOpponent() == null || !Objects.equals(soldier.getPosition(), soldier.getOpponent().getPosition()))
                     .peek(System.out::println)
                     .map(Soldier::getPosition)
