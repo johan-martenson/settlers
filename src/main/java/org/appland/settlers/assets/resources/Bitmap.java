@@ -30,7 +30,7 @@ import static org.appland.settlers.assets.TextureFormat.PALETTED;
 public class Bitmap {
     protected final int height;
     protected final int width;
-    private final TextureFormat format;
+    protected final TextureFormat format;
 
     protected byte[] imageData; // uint 8
 
@@ -190,6 +190,29 @@ public class Bitmap {
                 this.imageData[(y * width + x) * 3 + 2] = red;
             }
             default -> throw new RuntimeException("Can't set pixel value for format: " + format);
+        }
+    }
+
+    /**
+     * Makes this bitmap transparent
+     */
+    public void makeTransparent() {
+        switch (format) {
+            case BGRA -> {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        setPixelValue(x, y, (byte) 0, (byte)0, (byte)0, (byte)0);
+                    }
+                }
+            }
+            case PALETTED -> {
+                for (int y = 0; y < height; y++) {
+                    for (int x = 0; x < width; x++) {
+                        setPixelByColorIndex(x, y, (short)palette.getTransparentIndex());
+                    }
+                }
+            }
+            default -> throw new RuntimeException("Can't make transparent for format: " + format);
         }
     }
 
@@ -427,7 +450,7 @@ public class Bitmap {
 
     public boolean isTransparent(int x, int y) {
         return switch (format) {
-            case PALETTED -> imageData[y * width + x] == palette.getTransparentIndex();
+            case PALETTED -> imageData[y * width + x] == palette.getTransparentIndexAsByte();
             case BGRA -> getAlphaAsByte(x, y) == 0;
             default -> false;
         };

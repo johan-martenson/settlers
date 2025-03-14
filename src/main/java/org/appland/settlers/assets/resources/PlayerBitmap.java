@@ -30,6 +30,9 @@ public class PlayerBitmap extends Bitmap {
         super(width, height, nx, ny, palette, format);
 
         playerTexture = new Bitmap(width, height, palette, TextureFormat.PALETTED);
+
+        // Ensure the overlay is transparent by default
+        playerTexture.makeTransparent();
     }
 
     /**

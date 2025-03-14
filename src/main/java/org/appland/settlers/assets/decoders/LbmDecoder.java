@@ -46,7 +46,7 @@ public class LbmDecoder {
 
             int width = 0;
             int height = 0;
-            int transClr = 0;
+            int transparentColor = 0;
             short compression = 0;
             short mask = 0;
             boolean headerRead = false;
@@ -80,7 +80,7 @@ public class LbmDecoder {
                         mask = streamReader.getUint8();
                         compression = streamReader.getUint8();
                         short pad = streamReader.getUint8();
-                        transClr = streamReader.getUint16();
+                        transparentColor = streamReader.getUint16();
                         short xAspect = streamReader.getUint8();
                         short yAspect = streamReader.getUint8();
                         int pageW = streamReader.getUint16();
@@ -104,7 +104,14 @@ public class LbmDecoder {
                         }
 
                         palette = Palette.loadPalette(streamReader, false);
-                        palette.setTransparentIndex(mask == 2 && transClr < 256 ? transClr : 0);
+
+                        if (mask == 2 && transparentColor < 256) {
+                            palette.setTransparentIndex(transparentColor);
+                        } else {
+                            palette.setTransparentIndex(0);
+                        }
+
+                        lbmFile.setPalette(palette);
                     }
                     case "BODY" -> {
                         if (!headerRead) {

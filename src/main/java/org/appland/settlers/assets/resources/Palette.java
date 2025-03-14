@@ -215,10 +215,10 @@ public class Palette {
     /**
      * Sets the transparent color index.
      *
-     * @param transClr The new transparent color index.
+     * @param transparentColorIndex The new transparent color index.
      */
-    public void setTransparentIndex(int transClr) {
-        transparentIndex = transClr;
+    public void setTransparentIndex(int transparentColorIndex) {
+        this.transparentIndex = transparentColorIndex;
     }
 
     /**
@@ -267,5 +267,13 @@ public class Palette {
      */
     public byte getRedAsByte(byte imageDatum) {
         return  colors[imageDatum * 3];
+    }
+
+    /**
+     * Gets the transparent index of the palette as a byte. I.e., with the upper bits truncated
+     * @return The transparent index
+     */
+    public byte getTransparentIndexAsByte() {
+        return (byte)(transparentIndex & 0xFF);
     }
 }

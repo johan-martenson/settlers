@@ -6,12 +6,15 @@ import org.appland.settlers.maps.MapLoader;
 import org.appland.settlers.rest.resource.MapsResource;
 import org.appland.settlers.rest.resource.WebsocketApi;
 import org.eclipse.jetty.ee10.servlet.DefaultServlet;
+import org.eclipse.jetty.ee10.servlet.ResourceServlet;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.ee10.websocket.jakarta.server.config.JakartaWebSocketServletContainerInitializer;
 import org.eclipse.jetty.server.Server;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -83,10 +86,17 @@ public class Main {
         // add special pathspec of "/alt/" content mapped to the altPath
         Path altPath = Paths.get("assets").toRealPath();
 
-        System.out.printf("Serving files from %s", altPath);
+        System.out.printf("Serving files from %s%n", altPath);
 
-        ServletHolder holderAlt = new ServletHolder("static-alt", DefaultServlet.class);
-        holderAlt.setInitParameter("resourceBase", altPath.toUri().toASCIIString());
+        ServletHolder holderAlt = new ServletHolder("static-alt", ResourceServlet.class);
+        // Use the String representation of the URL
+        try {
+            URL url = altPath.toUri().toURL();
+            holderAlt.setInitParameter("baseResource", url.toString());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
         holderAlt.setInitParameter("dirAllowed", "true");
         holderAlt.setInitParameter("pathInfoOnly", "true");
         servletContextHandler.addServlet(holderAlt, "/assets/*");

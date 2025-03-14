@@ -35,7 +35,7 @@ public class AfrYLst {
     public static final GameFiles.House WELL = GameFiles.House.make("Well", 188, GameFiles.Missing.NO_OPEN_DOOR);
     public static final GameFiles.House SHIPYARD = GameFiles.House.make("Shipyard", 192, GameFiles.Missing.NO_OPEN_DOOR);
     public static final GameFiles.House FARM = new GameFiles.House("Farm", 196);
-    public static final GameFiles.House DONKEY_BREEDER = new GameFiles.House("DonkeyBreeder", 201);
+    public static final GameFiles.House DONKEY_BREEDER = new GameFiles.House("DonkeyFarm", 201);
     public static final GameFiles.House HARBOR = GameFiles.House.make("Harbor", 206, GameFiles.Missing.NO_OPEN_DOOR);
 
     public static final int CONSTRUCTION_PLANNED = 210;

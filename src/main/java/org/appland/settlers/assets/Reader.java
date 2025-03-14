@@ -265,12 +265,18 @@ public class Reader {
                     case PALETTE_RESOURCE -> createBitmapFromPalette(((PaletteResource) gameResource).getPalette()).writeToFile(outFile);
                     case PLAYER_BITMAP_RESOURCE -> {
                         PlayerBitmap playerBitmap = ((PlayerBitmapResource) gameResource).getBitmap();
+
+                        // Write the underlay only
                         playerBitmap.writeToFile(outFile);
+
+                        // Write a version of the combined image once per player color
                         for (var playerColor : PlayerColor.values()) {
                             playerBitmap.getBitmapForPlayer(playerColor).writeToFile(
                                     format("%s/%s-%d (%s).png", dirToWrite, filenameWithoutPath, i, playerColor.name())
                             );
                         }
+
+                        // Write the mask
                         playerBitmap.getTextureBitmap().writeToFile(format("%s/%s-%d (mask).png", dirToWrite, filenameWithoutPath, i));
                     }
                     case WAVE_SOUND -> ((WaveGameResource) gameResource).getWaveFile().writeToFile(outSoundFile);
@@ -393,7 +399,7 @@ public class Reader {
         int lastSeparator = filename.lastIndexOf("/");
         String filenameWithoutPath = filename.substring(lastSeparator + 1);
 
-        String fileSuffix = filenameWithoutPath.substring(filename.lastIndexOf('.') + 1);
+        String fileSuffix = filename.substring(filename.lastIndexOf('.') + 1);
 
         System.out.printf("Asset filename and path: %s", filename);
         System.out.printf("Asset filename: %s", filenameWithoutPath);
