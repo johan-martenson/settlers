@@ -1,0 +1,61 @@
+Single soldier from military building attacks
+=============================================
+
+
+
+
+Building defends against attack
+===============================
+0. Other player starts attack
+1. One or several soldiers starts walking to the attacked building
+2. The building discovers that it's under attack when the soldiers are walking
+   towards it.
+3. The building requests support from neigboring military buildings
+4. When an attacker reaches the buildings flag, a defending soldier walks out to fight
+5. When the fight is done:
+  - 5.A. Attacker won.
+       - 5.A.a. There are remaining defenders in the building
+       - 5.A.b. There are no remaining defenders in the building
+           - 5.A.b.a. There are no more remote defenders
+               1. The attacker walks to the building and takes it over
+               2. Other remaining attackers also go to the building
+           - 5.A.b.b. There are more remote defenders
+               1. The attacker waits at the flag for a defender to fight
+               2. They fight
+               3. Go to 5
+  - 5.B. Defender won:
+       - 5.B.a. There are attackers waiting to fight.
+           - 1. Defender waits at flag to fight
+           - 2. Attacker goes to the defender
+           - 3. They fight
+           - 4. Go to 5
+       - 5.B.b. There are no more attackers waiting to fight.
+           - 5.B.b. Defender goes back to the building and enters it
+
+Building state
+--------------
+- Attackers          -  All attackers - waiting/fighting, incl. main attacker at flag
+- Primary attacker   -  Attacker at the flag
+- Remote defenders   -  Defenders from other buildings
+- Own defender       -  Defender sent out by the building
+
+Invariants:
+- Attackers: alive, fighting/walking/waiting, hitting/standing aside/getting hit/etc. only when fighting
+- Main attacker: may be null, part of attackers, alive, at flag or walking halfway to fight or walking back from fight
+- Remote defenders: all soldiers are alive. Waiting, walking, or fighting. Does not contain building's own defender
+
+Building step time
+------------------
+1. Am I under attack?
+  NO: do nothing
+  YES:
+    1. If the attack is new: send we're under attack notification
+    2. If I need more defenders: request remote defenders
+    3. Is there an attacker by the flag?
+      a. Do I have my own defender?
+        YES: do nothing
+        NO: send out my own defender if I have one
+
+
+Other military building helps defend
+====================================
