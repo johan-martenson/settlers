@@ -16,6 +16,7 @@ import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
@@ -128,6 +129,18 @@ public class Utils {
 
             map.stepTime();
         }
+    }
+
+    public static void waitForWoodcutterToStartCuttingTree(WoodcutterWorker woodcutterWorker, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 10_000; i++) {
+            if (woodcutterWorker.isCuttingTree()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(woodcutterWorker.isCuttingTree());
     }
 
     public static void waitForSoldierToBeFighting(Soldier soldier, GameMap map) throws InvalidUserActionException {
@@ -3166,10 +3179,11 @@ public class Utils {
         assertEquals(building.getAmount(material), amount);
     }
 
-    public static class GameViewMonitor implements PlayerGameViewMonitor {
+    public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
 
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;
+        private final List<StatisticsUpdatedEvent> statisticsEvents = new ArrayList<>();
 
         public GameViewMonitor() {
             gameChanges = new ArrayList<>();
@@ -3380,7 +3394,28 @@ public class Utils {
         public void clearEvents() {
             this.gameChanges.clear();
         }
+
+        public List<StatisticsUpdatedEvent> getStatisticsEvents() {
+            return statisticsEvents;
+        }
+
+        public void clearStatisticsEvents() {
+            statisticsEvents.clear();
+        }
+
+        @Override
+        public void buildingStatisticsChanged(Building building) {
+            System.out.println("Adding event to list");
+
+            statisticsEvents.add(new StatisticsUpdatedEvent(StatisticsChangeType.BUILDINGS_CHANGED));
+        }
     }
+
+    public enum StatisticsChangeType {
+        BUILDINGS_CHANGED
+    }
+
+    public record StatisticsUpdatedEvent(StatisticsChangeType changetype) { }
 
     private static GameChangesList copyGameChangesList(GameChangesList gameChangesList) {
         return new GameChangesList(gameChangesList.time(),

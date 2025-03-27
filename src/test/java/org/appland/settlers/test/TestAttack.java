@@ -6390,6 +6390,7 @@ public class TestAttack {
 
             /* Verify that no soldiers wait on the same point */
             var soldierPositions = Stream.concat(attackers.stream(), defenders.stream())
+                    .filter(soldier -> !soldier.isDying())
                     .filter(soldier -> !soldier.isDead())
                     .filter(soldier -> !soldier.isTraveling())
                     .filter(soldier -> !soldier.isFighting())

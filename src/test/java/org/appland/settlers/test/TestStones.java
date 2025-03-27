@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.assets.StoneAmount.*;
+import static org.appland.settlers.model.StoneAmount.*;
 import static org.junit.Assert.assertEquals;
 
 public class TestStones {

@@ -12,7 +12,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.model.statistics.ProductionDataPoint;
+import org.appland.settlers.model.statistics.DataPoint;
 import org.appland.settlers.model.statistics.ProductionDataSeries;
 import org.appland.settlers.model.statistics.StatisticsManager;
 import org.junit.Test;
@@ -66,7 +66,7 @@ public class TestProductionStatistics {
         assertNotNull(woodProductionDataSeries);
 
         /* Verify that there is only one measurement point and that it is 0 for all players */
-        List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
+        List<DataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
         assertEquals(0, dataPoints.getFirst().getValues()[0]);
@@ -92,7 +92,7 @@ public class TestProductionStatistics {
         ProductionDataSeries woodProductionDataSeries = statisticsManager.getProductionStatisticsForMaterial(WOOD);
 
         /* Verify that the time is 0 for the first and only measurement */
-        List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
+        List<DataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
         assertEquals(0, (int)dataPoints.getFirst().getTime());
@@ -130,7 +130,7 @@ public class TestProductionStatistics {
         assertNotNull(woodProductionDataSeries);
 
         /* Verify that there are three values in the measurement point, one for each player */
-        List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
+        List<DataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.getFirst().getValues().length, 3);
     }
@@ -166,7 +166,7 @@ public class TestProductionStatistics {
 
         assertNotNull(woodProductionDataSeriesAtStart);
 
-        List<ProductionDataPoint> dataPointsAtStart =  woodProductionDataSeriesAtStart.getProductionDataPoints();
+        List<DataPoint> dataPointsAtStart =  woodProductionDataSeriesAtStart.getProductionDataPoints();
 
         assertEquals(dataPointsAtStart.size(), 1);
         assertEquals(dataPointsAtStart.getFirst().getValues().length, 3);
@@ -178,7 +178,7 @@ public class TestProductionStatistics {
 
         assertNotNull(woodProductionDataSeriesLater);
 
-        List<ProductionDataPoint> dataPointsLater =  woodProductionDataSeriesAtStart.getProductionDataPoints();
+        List<DataPoint> dataPointsLater =  woodProductionDataSeriesAtStart.getProductionDataPoints();
 
         assertTrue(dataPointsLater.size() > 1);
     }
@@ -214,13 +214,13 @@ public class TestProductionStatistics {
         /* Get the wood production data series at time start */
         ProductionDataSeries woodProductionDataSeriesAtStart = statisticsManager.getProductionStatisticsForMaterial(WOOD);
 
-        List<ProductionDataPoint> dataPointsAtStart =  woodProductionDataSeriesAtStart.getProductionDataPoints();
+        List<DataPoint> dataPointsAtStart =  woodProductionDataSeriesAtStart.getProductionDataPoints();
 
         /* Place woodcutter hut */
         Point point04 = new Point(9, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point04);
 
-        /* Connect the woodcutter hut to the headquarter */
+        /* Connect the woodcutter hut to the headquarters */
         Road road01 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Place a tree close to the woodcutter */
@@ -243,13 +243,12 @@ public class TestProductionStatistics {
 
         assertNotNull(woodCargo);
 
-        /* Wait for the wood to get stored in the headquarter */
+        /* Wait for the wood to get stored in the headquarters */
         Utils.waitForCargoToReachTarget(map, woodCargo);
 
         /* Verify that the collected wood production statistics contains the wood within 1000 game steps */
         boolean woodStatisticsReported = false;
         for (int i = 0; i < 5000; i++) {
-
             nrDataPoints = statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().size();
 
             if (statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().get(nrDataPoints - 1).getValues()[0] == 1) {
@@ -301,7 +300,7 @@ public class TestProductionStatistics {
 
         assertNotNull(woodProductionDataSeries);
 
-        List<ProductionDataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
+        List<DataPoint> dataPoints =  woodProductionDataSeries.getProductionDataPoints();
 
         assertEquals(dataPoints.size(), 1);
         assertEquals(dataPoints.getFirst().getValues().length, 3);

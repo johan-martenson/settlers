@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import org.appland.settlers.assets.StoneAmount;
-
 /**
  *
  * @author johan

@@ -80,6 +80,7 @@ import org.appland.settlers.model.messages.StoreHouseIsReadyMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.messages.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.messages.UnderAttackMessage;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.rest.resource.GameResource;
 import org.appland.settlers.rest.resource.IdManager;
 import org.json.simple.JSONArray;
@@ -632,7 +633,9 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(crop),
                 "state", crop.getGrowthState().name().toUpperCase(),
-                "type", crop.getType().name().toUpperCase()
+                "type", crop.getType().name().toUpperCase(),
+                "x", crop.getPosition().x,
+                "y", crop.getPosition().y
         ));
     }
 
@@ -1594,5 +1597,107 @@ public class JsonUtils {
         }
 
         return jsonMap;
+    }
+
+
+    public JSONObject statisticsToJson(long currentTime, List<Player> players, StatisticsManager statisticsManager) {
+        JSONArray jsonStatistics = new JSONArray();
+
+        for (Player player : players) {
+            JSONObject playerNode = new JSONObject(Map.of(
+                    "id", idManager.getId(player),
+                    "productionStatistics", productionStatisticsForPlayerToJson(player, statisticsManager),
+                    "buildingStatistics", buildingStatisticsForPlayerToJson(player, statisticsManager),
+                    "general", generalStatisticsForPlayerToJson(player, statisticsManager)
+            ));
+
+            jsonStatistics.add(playerNode);
+        }
+
+        return new JSONObject(Map.of(
+                "currentTime", currentTime,
+                "players", jsonStatistics
+        ));
+    }
+
+    private JSONObject generalStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        return new JSONObject(Map.of(
+                "houses", new JSONArray(),
+                "workers", new JSONArray(),
+                "goods", new JSONArray(),
+                "military", new JSONArray(),
+                "coins", new JSONArray(),
+                "production", new JSONArray(),
+                "killedEnemies", new JSONArray(),
+                "land", landStatisticsForPlayerToJson(player, statisticsManager)
+        ));
+    }
+
+    private JSONObject productionStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        var jsonProductionStatisticsForPlayer = new JSONObject();
+        var playerIndex = player.getMap().getPlayers().indexOf(player);
+
+        for (Material material : Material.values()) {
+            var dataSeries = statisticsManager.getProductionStatisticsForMaterial(material);
+
+            if (dataSeries == null) {
+                continue;
+            }
+
+            var jsonStatisticsForMaterial = new JSONArray();
+
+            for (var measurement : dataSeries.getProductionDataPoints()) {
+                var jsonMeasurement = new JSONArray();
+
+                jsonMeasurement.add(measurement.getTime());
+                jsonMeasurement.add(measurement.getValues()[playerIndex]);
+                jsonStatisticsForMaterial.add(jsonMeasurement);
+            }
+
+            jsonProductionStatisticsForPlayer.put(material.name(), jsonStatisticsForMaterial);
+        }
+
+        return jsonProductionStatisticsForPlayer;
+    }
+
+    private JSONArray landStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        var jsonLandStatisticsForPlayer = new JSONArray();
+        var playerIndex = player.getMap().getPlayers().indexOf(player);
+
+        for (var measurement : statisticsManager.getLandStatistics().getDataPoints()) {
+            var jsonMeasurement = new JSONArray();
+
+            jsonMeasurement.add(measurement.getTime());
+            jsonMeasurement.add(measurement.getValues()[playerIndex]);
+
+            jsonLandStatisticsForPlayer.add(jsonMeasurement);
+        }
+
+        return jsonLandStatisticsForPlayer;
+    }
+
+    private JSONObject buildingStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        var jsonBuildingStatisticsForPlayer = new JSONObject();
+        var playerIndex = player.getMap().getPlayers().indexOf(player);
+
+        for (var buildingTypeAndStatistics : statisticsManager.getBuildingStatistics().get(player).entrySet()) {
+            var buildingType = buildingTypeAndStatistics.getKey();
+            var buildingStatistics = buildingTypeAndStatistics.getValue();
+
+            var jsonBuildingStatistics = new JSONArray();
+
+            for (var measurement : buildingStatistics.getMeasurements()) {
+                var jsonMeasurement = new JSONArray();
+
+                jsonMeasurement.add(measurement.time());
+                jsonMeasurement.add(measurement.value());
+
+                jsonBuildingStatistics.add(jsonMeasurement);
+            }
+
+            jsonBuildingStatisticsForPlayer.put(buildingType.getSimpleName(), jsonBuildingStatistics);
+        }
+
+        return jsonBuildingStatisticsForPlayer;
     }
 }

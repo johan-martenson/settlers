@@ -1,6 +1,6 @@
 package org.appland.settlers.assets.collectors;
 
-import org.appland.settlers.assets.StoneAmount;
+import org.appland.settlers.model.StoneAmount;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;

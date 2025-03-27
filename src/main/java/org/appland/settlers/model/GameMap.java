@@ -188,6 +188,8 @@ public class GameMap {
 
     public void reportBuildingConstructed(Building building) {
         changedBuildings.add(building);
+
+        statisticsManager.houseAdded(building, time);
     }
 
     /**
@@ -1007,6 +1009,13 @@ public class GameMap {
         /* This iterates over a set and the order may be non-deterministic */
         updatedLands.forEach((player, lands) -> {
             player.setLands(lands, buildingCausedUpdate, cause);
+
+            statisticsManager.getGeneralStatistics(player)
+                    .land()
+                    .report(time,
+                            lands.stream()
+                                .mapToInt(land -> land.getPointsInLand().size())
+                                .sum());
             playersToUpdate.remove(player);
         });
 
@@ -3014,6 +3023,10 @@ public class GameMap {
 
     private <T extends Building> void reportPlacedBuilding(T house) {
         newBuildings.add(house);
+
+        if (house.isReady()) {
+            statisticsManager.houseAdded(house, time);
+        }
     }
 
     private void reportPlacedFlag(Flag flag) {
@@ -3026,6 +3039,10 @@ public class GameMap {
 
     public void reportTornDownBuilding(Building building) {
         changedBuildings.add(building);
+
+        if (building.isBurningDown()) {
+            statisticsManager.houseRemoved(building, time);
+        }
     }
 
     public void reportBuildingBurnedDown(Building building) {

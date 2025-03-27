@@ -1,4 +1,4 @@
-package org.appland.settlers.assets;
+package org.appland.settlers.model;
 
 public enum StoneAmount {
     MINI,

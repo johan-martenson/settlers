@@ -52,6 +52,7 @@ import org.appland.settlers.model.DecorationType;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.PlayerColor;
+import org.appland.settlers.model.StoneAmount;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 import org.json.simple.JSONArray;

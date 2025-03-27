@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.StoneAmount;
+import org.appland.settlers.model.StoneAmount;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;

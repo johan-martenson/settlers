@@ -6,18 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductionDataSeries {
-    private final List<ProductionDataPoint> dataPoints;
+    private final List<DataPoint> dataPoints;
 
     public ProductionDataSeries() {
         dataPoints = new ArrayList<>();
     }
 
-    public List<ProductionDataPoint> getProductionDataPoints() {
+    public List<DataPoint> getProductionDataPoints() {
         return dataPoints;
     }
 
     public void addMeasurement(long time, int[] measurement) {
-        dataPoints.add(new ProductionDataPoint(time, measurement));
+        dataPoints.add(new DataPoint(time, measurement));
     }
 
     public void setInitialZeroMeasurementForPlayers(List<Player> players) {

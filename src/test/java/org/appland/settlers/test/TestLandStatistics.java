@@ -39,8 +39,8 @@ public class TestLandStatistics {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarters */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Get the statistics manager instance */
         StatisticsManager statisticsManager = map.getStatisticsManager();
@@ -49,6 +49,7 @@ public class TestLandStatistics {
         LandStatistics landStatistics = statisticsManager.getLandStatistics();
 
         assertNotNull(landStatistics);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getLandInPoints().size());
     }
 
     @Test
@@ -114,8 +115,11 @@ public class TestLandStatistics {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarters */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        Point point1 = new Point(30, 30);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Get the statistics manager instance */
         StatisticsManager statisticsManager = map.getStatisticsManager();
@@ -126,8 +130,10 @@ public class TestLandStatistics {
         List<LandDataPoint> landDataPoints = landStatistics.getDataPoints();
 
         assertNotNull(landDataPoints);
-        assertEquals(landDataPoints.size(), 1);
+        assertEquals(landDataPoints.size(), 2);
         assertEquals(landDataPoints.getFirst().getValues().length, 2);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getFirst().value(), player1.getLandInPoints().size());
     }
 
 
@@ -227,6 +233,15 @@ public class TestLandStatistics {
 
         int numberMeasurements = landStatistics.getDataPoints().size();
 
+        var statisticsManager = map.getStatisticsManager();
+
+        System.out.println(statisticsManager.getGeneralStatistics(player0).land().getMeasurements());
+
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
+
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
         int lastIndex = landStatistics.getDataPoints().size() - 1;
@@ -235,6 +250,9 @@ public class TestLandStatistics {
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getValues()[0] > landStatistics.getDataPoints().get(lastIndex - 1).getValues()[0]);
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getValues()[1] < landStatistics.getDataPoints().get(lastIndex - 1).getValues()[1]);
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getTime() > landStatistics.getDataPoints().get(lastIndex - 1).getTime());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
     }
-
 }

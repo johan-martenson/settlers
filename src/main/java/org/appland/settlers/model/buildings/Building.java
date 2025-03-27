@@ -692,13 +692,11 @@ public class Building implements EndPoint {
         }
 
         if (isMilitaryBuilding()) {
-
             if (isPromotionEnabled() && maxCoins > getAmount(COIN)) {
                 return true;
             }
 
             if (isUpgrading()) {
-
                 if (getTotalAmountNeededForUpgrade(PLANK) > getAmount(PLANK)) {
                     return true;
                 }

@@ -13,6 +13,7 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
+import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -21,6 +22,7 @@ import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
@@ -38,11 +40,6 @@ import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.messages.Message;
-import org.appland.settlers.model.statistics.LandDataPoint;
-import org.appland.settlers.model.statistics.LandStatistics;
-import org.appland.settlers.model.statistics.ProductionDataPoint;
-import org.appland.settlers.model.statistics.ProductionDataSeries;
-import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.rest.GameTicker;
 import org.appland.settlers.utils.JsonUtils;
 import org.json.simple.JSONArray;
@@ -67,7 +64,7 @@ import static org.appland.settlers.rest.resource.GameUtils.startGame;
 public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
-        ChatManager.ChatListener {
+        ChatManager.ChatListener, StatisticsListener {
     public static final List<Material> PRODUCTION_STATISTICS_MATERIALS = Arrays.asList(
             WOOD,
             STONE,
@@ -86,6 +83,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     private final Collection<Session> gameListListeners = new HashSet<>();
     private final Map<GameResource, Collection<Session>> gameInfoListeners = new HashMap<>();
     private final Map<String, Collection<Session>> chatRoomListeners = new HashMap<>();
+    private final Map<GameMap, Set<Session>> statisticsListeners = new HashMap<>();
 
     public WebsocketApi() {
         System.out.println("CREATED NEW WEBSOCKET MONITOR");
@@ -179,78 +177,33 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                                 "priority", jsonUtils.transportPriorityToJson(player.getTransportPriorities())
                         )));
             }
-            case GET_PRODUCTION_STATISTICS -> {
-                JSONObject jsonProductionStatisticsForAllMaterials = new JSONObject();
-                StatisticsManager statisticsManager = map.getStatisticsManager();
+            case LISTEN_TO_STATISTICS -> {
+                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                System.out.println("Listen to statistics for player " + playerForStatistics);
+                map.getStatisticsManager().addListener(this);
 
-                for (Material material : PRODUCTION_STATISTICS_MATERIALS) {
-                    synchronized (map) {
-                        ProductionDataSeries materialProductionDataSeries = statisticsManager.getProductionStatisticsForMaterial(material);
-
-                        /* Set the meta data for the report for this material */
-                        JSONArray jsonMaterialStatisticsDataSeries = new JSONArray();
-
-                        /* Add the statistics for this material to the array */
-                        jsonProductionStatisticsForAllMaterials.put(material.name().toUpperCase(), jsonMaterialStatisticsDataSeries);
-
-                        for (ProductionDataPoint dataPoint : materialProductionDataSeries.getProductionDataPoints()) {
-
-                            JSONObject jsonMaterialMeasurementPoint = new JSONObject();
-
-                            /* Set measurement 0 */
-                            jsonMaterialMeasurementPoint.put("time", dataPoint.getTime());
-
-                            JSONArray jsonMaterialMeasurementPointValues = new JSONArray();
-
-                            int[] values = dataPoint.getValues();
-
-                            for (int value : values) {
-                                jsonMaterialMeasurementPointValues.add(value);
-                            }
-
-                            jsonMaterialMeasurementPoint.put("values", jsonMaterialMeasurementPointValues);
-
-                            /* Add the data point to the data series */
-                            jsonMaterialStatisticsDataSeries.add(jsonMaterialMeasurementPoint);
-                        }
-                    }
-                }
-
-                sendToSession(session,
-                        new JSONObject(Map.of(
-                                "requestId", jsonBody.get("requestId"),
-                                "productionStatistics", jsonProductionStatisticsForAllMaterials
-                        )));
+                statisticsListeners.computeIfAbsent(map, k -> new HashSet<>()).add(session);
             }
+            case STOP_LISTENING_TO_STATISTICS -> {
+                var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
+                System.out.println("Stop listening to statistics for player " + playerForStatistics);
 
-            case GET_LAND_STATISTICS -> {
-                JSONArray jsonLandStatisticsDataSeries = new JSONArray();
+                var listeners = statisticsListeners.get(map);
 
-                synchronized (map) {
-                    LandStatistics landStatistics = map.getStatisticsManager().getLandStatistics();
-
-                    for (LandDataPoint landDataPoint : landStatistics.getDataPoints()) {
-                        JSONObject jsonLandMeasurement = new JSONObject();
-
-                        jsonLandMeasurement.put("time", landDataPoint.getTime());
-
-                        JSONArray jsonLandValues = new JSONArray();
-                        for (int landSize : landDataPoint.getValues()) {
-                            jsonLandValues.add(landSize);
-                        }
-
-                        jsonLandMeasurement.put("values", jsonLandValues);
-
-                        jsonLandStatisticsDataSeries.add(jsonLandMeasurement);
-                    }
+                if (listeners != null) {
+                    listeners.remove(session);
                 }
-
+            }
+            case GET_STATISTICS -> {
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "currentTime", map.getCurrentTime(),
-                                "landStatistics", jsonLandStatisticsDataSeries
-                                )));
+                                "statistics", jsonUtils.statisticsToJson(
+                                        map.getCurrentTime(),
+                                        map.getPlayers(),
+                                        map.getStatisticsManager()
+                                )
+                        )));
             }
             case GET_TERRAIN -> {
                 sendToSession(session,
@@ -1133,12 +1086,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     private void sendAmountReplyToPlayer(int amount, Player player, JSONObject jsonMessage) {
         long requestId = (Long) jsonMessage.get("requestId");
 
-        JSONObject jsonResponse = new JSONObject();
-
-        jsonResponse.put("amount", amount);
-        jsonResponse.put("requestId", requestId);
-
-        sendToPlayer(jsonResponse, player);
+        sendToPlayer(new JSONObject(Map.of(
+                "requestId", requestId,
+                "amount", amount
+        )), player);
     }
 
     private void sendToPlayer(JSONObject jsonMessage, Player player) {
@@ -1147,7 +1098,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("ON CLOSE");
+        System.out.println(">> Websocket session closed.");
 
         /* Remove the closed session */
         gameListListeners.remove(session);
@@ -1164,7 +1115,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     @OnError
     public void onError(Session session, Throwable throwable) {
-        System.out.println("ON ERROR: " + throwable);
+        System.out.println(">> Error in websocket session: " + throwable);
         System.out.println(throwable.getCause());
         System.out.println(Arrays.asList(throwable.getCause().getStackTrace()));
         System.out.println(throwable.getMessage());
@@ -1186,7 +1137,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
     @OnOpen
     public void onOpen(Session session, EndpointConfig config) {
         System.out.println();
-        System.out.println("Websocket session opened");
+        System.out.println(">> Websocket session opened.");
     }
 
     void sendToSession(Session session, JSONObject jsonObject) {
@@ -1215,5 +1166,19 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             System.out.println("Exception while sending updates to frontend: " + e);
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void buildingStatisticsChanged(Building building) {
+        var map = building.getMap();
+        var statisticsManager = map.getStatisticsManager();
+
+        statisticsListeners.get(map).forEach(session -> sendToSession(
+                session,
+                new JSONObject(Map.of(
+                        "type", "STATISTICS_CHANGED",
+                        "statistics", jsonUtils.statisticsToJson(map.getCurrentTime(), map.getPlayers(), statisticsManager)
+                ))
+        ));
     }
 }
