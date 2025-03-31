@@ -12,6 +12,7 @@ import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.policy.InitialState;
+import org.appland.settlers.rest.resource.ResourceLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,12 +21,213 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
+import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
+    private static final Map<Material, Integer> LOW_RESOURCES = Map.ofEntries(
+            entry(SHIELD, 0),
+            entry(SWORD, 0),
+
+            entry(PRIVATE, 14), // Should be 13 and 1 in reserve
+            entry(PRIVATE_FIRST_CLASS, 0),
+            entry(SERGEANT, 0),
+            entry(OFFICER, 0),
+            entry(GENERAL, 0),
+
+            entry(WOOD, 12),
+            entry(PLANK, 22),
+            entry(STONE, 34),
+            entry(WHEAT, 0),
+            entry(FISH, 2),
+            entry(MEAT, 3),
+            entry(BREAD, 4),
+            entry(WATER, 0),
+            entry(BEER, 0),
+            entry(GOLD, 0),
+            entry(COAL, 8),
+            entry(IRON, 8),
+            entry(IRON_BAR, 0),
+            entry(COIN, 0),
+            entry(PIG, 0),
+            entry(DONKEY, 4),
+
+            entry(FORESTER, 2),
+            entry(WOODCUTTER_WORKER, 4),
+            entry(STONEMASON, 2),
+            entry(FARMER, 0),
+            entry(SAWMILL_WORKER, 2),
+            entry(WELL_WORKER, 0),
+            entry(MILLER, 0),
+            entry(BAKER, 0),
+            entry(STOREHOUSE_WORKER, 0),
+            entry(FISHERMAN, 0),
+            entry(IRON_FOUNDER, 0),
+            entry(BREWER, 0),
+            entry(MINTER, 0),
+            entry(PIG_BREEDER, 0),
+            entry(BUTCHER, 0),
+            entry(DONKEY_BREEDER, 0),
+            entry(AXE, 3),
+            entry(SAW, 1),
+            entry(PICK_AXE, 1),
+            entry(HAMMER, 8),
+            entry(SHOVEL, 2),
+            entry(CRUCIBLE, 2),
+            entry(FISHING_ROD, 3),
+            entry(SCYTHE, 4),
+            entry(CLEAVER, 1),
+            entry(ROLLING_PIN, 1),
+            entry(BOW, 1),
+            entry(BOAT, 6),
+            entry(BUILDER, 5),
+            entry(PLANER, 3),
+            entry(HUNTER, 1),
+            entry(MINER, 5),
+            entry(ARMORER, 2),
+            entry(METALWORKER, 1),
+            entry(SHIPWRIGHT, 0),
+            entry(GEOLOGIST, 3),
+            entry(SCOUT, 1)
+    );
+
+    private static final Map<Material, Integer> MEDIUM_RESOURCES = Map.ofEntries(
+            entry(PRIVATE, 51), // Should be 13 and 1 in reserve
+            entry(PRIVATE_FIRST_CLASS, 0),
+            entry(SERGEANT, 0),
+            entry(OFFICER, 0),
+            entry(GENERAL, 0),
+
+            entry(WOOD, 24),
+            entry(PLANK, 44),
+            entry(STONE, 68),
+            entry(WHEAT, 0),
+            entry(FISH, 4),
+            entry(MEAT, 6),
+            entry(BREAD, 8),
+            entry(WATER, 0),
+            entry(BEER, 0),
+            entry(GOLD, 0),
+            entry(COAL, 16),
+            entry(IRON, 16),
+            entry(IRON_BAR, 0),
+            entry(COIN, 0),
+            entry(TONGS, 0),
+            entry(AXE, 6),
+            entry(SAW, 2),
+            entry(PICK_AXE, 2),
+            entry(HAMMER, 16),
+            entry(SHOVEL, 4),
+            entry(CRUCIBLE, 4),
+            entry(FISHING_ROD, 6),
+            entry(SCYTHE, 8),
+            entry(CLEAVER, 2),
+            entry(ROLLING_PIN, 2),
+            entry(BOW, 2),
+            entry(SHIELD, 0),
+            entry(SWORD, 0),
+            entry(BOAT, 12),
+
+            entry(PIG, 0),
+
+            entry(BUILDER, 10),
+            entry(PLANER, 6),
+            entry(WOODCUTTER_WORKER, 8),
+            entry(FORESTER, 4),
+            entry(STONEMASON, 4),
+            entry(FISHERMAN, 0),
+            entry(HUNTER, 2),
+            entry(SAWMILL_WORKER, 4),
+            entry(FARMER, 0),
+            entry(PIG_BREEDER, 0),
+            entry(DONKEY_BREEDER, 0),
+            entry(MILLER, 0),
+            entry(BAKER, 0),
+            entry(BUTCHER, 0),
+            entry(BREWER, 0),
+            entry(MINER, 10),
+            entry(IRON_FOUNDER, 0),
+            entry(WELL_WORKER, 0),
+            entry(STOREHOUSE_WORKER, 0),
+            entry(ARMORER, 4),
+            entry(MINTER, 0),
+            entry(METALWORKER, 2),
+            entry(SHIPWRIGHT, 0),
+            entry(GEOLOGIST, 6),
+            entry(SCOUT, 2),
+            entry(DONKEY, 8)
+    );
+
+    private static final Map<Material, Integer> HIGH_RESOURCES = Map.ofEntries(
+            entry(PRIVATE, 103), // Should be 102 and 1 in reserve
+            entry(PRIVATE_FIRST_CLASS, 0),
+            entry(SERGEANT, 0),
+            entry(OFFICER, 0),
+            entry(GENERAL, 0),
+
+            entry(WOOD, 48),
+            entry(PLANK, 88),
+            entry(STONE, 136),
+            entry(WHEAT, 0),
+            entry(FISH, 8),
+            entry(MEAT, 12),
+            entry(BREAD, 16),
+            entry(WATER, 0),
+            entry(BEER, 0),
+            entry(GOLD, 0),
+            entry(COAL, 32),
+            entry(IRON, 32),
+            entry(IRON_BAR, 0),
+            entry(COIN, 0),
+            entry(TONGS, 0),
+            entry(AXE, 12),
+            entry(SAW, 4),
+            entry(PICK_AXE, 4),
+            entry(HAMMER, 32),
+            entry(SHOVEL, 8),
+            entry(CRUCIBLE, 8),
+            entry(FISHING_ROD, 12),
+            entry(SCYTHE, 16),
+            entry(CLEAVER, 4),
+            entry(ROLLING_PIN, 4),
+            entry(BOW, 4),
+            entry(SHIELD, 0),
+            entry(SWORD, 0),
+            entry(BOAT, 24),
+
+            entry(PIG, 0),
+
+            entry(BUILDER, 20),
+            entry(PLANER, 12),
+            entry(WOODCUTTER_WORKER, 16),
+            entry(FORESTER, 8),
+            entry(STONEMASON, 8),
+            entry(FISHERMAN, 0),
+            entry(HUNTER, 4),
+            entry(SAWMILL_WORKER, 8),
+            entry(FARMER, 0),
+            entry(PIG_BREEDER, 0),
+            entry(DONKEY_BREEDER, 0),
+            entry(MILLER, 0),
+            entry(BAKER, 0),
+            entry(BUTCHER, 0),
+            entry(BREWER, 0),
+            entry(MINER, 20),
+            entry(IRON_FOUNDER, 0),
+            entry(WELL_WORKER, 0),
+            entry(STOREHOUSE_WORKER, 0),
+            entry(ARMORER, 8),
+            entry(MINTER, 0),
+            entry(METALWORKER, 4),
+            entry(SHIPWRIGHT, 0),
+            entry(GEOLOGIST, 12),
+            entry(SCOUT, 4),
+            entry(DONKEY, 16)
+    );
+
     private final Map<Soldier.Rank, Integer> wantedReservedSoldiers = new HashMap<>();
     private final Map<Soldier.Rank, Integer> actualReservedSoldiers;
 
@@ -91,6 +293,14 @@ public class Headquarter extends Storehouse {
         getMap().placeWorker(storageWorker, this);
         storageWorker.enterBuilding(this);
         assignWorker(storageWorker);
+    }
+
+    public void setInitialResources(ResourceLevel resourceLevel) {
+        switch (resourceLevel) {
+            case LOW -> inventory.putAll(LOW_RESOURCES);
+            case MEDIUM -> inventory.putAll(MEDIUM_RESOURCES);
+            case HIGH -> inventory.putAll(HIGH_RESOURCES);
+        }
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {

@@ -6409,6 +6409,12 @@ public class TestAttack {
         var allAttackersDead = attackers.stream().allMatch(Worker::isDead);
         var allDefendersDead = defenders.stream().allMatch(Worker::isDead);
 
+        System.out.println("Alive attackers: " + attackers.stream().filter(attacker -> !attacker.isDead()));
+        System.out.println("Alive defenders: " + defenders.stream().filter(defender -> !defender.isDead()));
+
+        System.out.println("All attackers dead: " + allAttackersDead);
+        System.out.println("All defenders dead: " + allDefendersDead);
+
         assertTrue(allAttackersDead || allDefendersDead);
         assertFalse(allAttackersDead && allDefendersDead);
 

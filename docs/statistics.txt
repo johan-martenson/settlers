@@ -1,0 +1,40 @@
+General statistics
+==================
+
+Size of country
+Buildings
+Inhabitants
+Merchandise
+Military strength
+Gold (coins)
+Productivity
+Vanquished enemies
+
+15 min, 1 h, 4 h, 16 h
+
+
+Merchandise
+===========
+
+Wood
+Plank
+Stone
+Food
+Water
+Beer
+Coal
+Iron ore
+Gold
+Iron (bar)
+Coin
+Tools
+Weapons
+Boats
+
+15 min, 1 h, 4 h, 16 h
+
+
+Buildings
+=========
+
+For each: completed / under construction

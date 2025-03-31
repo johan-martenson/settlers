@@ -583,10 +583,8 @@ public class TestBuilder {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndWellIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(12, 6);
@@ -596,7 +594,7 @@ public class TestBuilder {
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place road to connect the storehouse with the headquarter */
+        /* Place road to connect the storehouse with the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         /* Wait for the builder of the storehouse */
@@ -614,10 +612,10 @@ public class TestBuilder {
         Point point2 = new Point(18, 6);
         Well well0 = map.placeBuilding(new Well(player0), point2);
 
-        /* Place road to connect the headquarter with the well */
+        /* Place road to connect the headquarters with the well */
         Road road1 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        /* Add a lot of planks and stones to the headquarters */
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 

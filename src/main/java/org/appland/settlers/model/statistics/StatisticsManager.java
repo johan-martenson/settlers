@@ -50,7 +50,9 @@ public class StatisticsManager {
     public GeneralStatistics getGeneralStatistics(Player player) {
         return generalStatistics.computeIfAbsent(player, p -> new GeneralStatistics(
                 new CumulativeDataSeries("Total houses"),
-                new SnapshotDataSeries("Land")));
+                new SnapshotDataSeries("Land"),
+                new CumulativeDataSeries("Produced coins", 0),
+                new CumulativeDataSeries("Soldiers")));
     }
 
     public ProductionDataSeries getProductionStatisticsForMaterial(Material material) {

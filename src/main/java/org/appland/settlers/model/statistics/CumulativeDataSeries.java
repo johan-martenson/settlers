@@ -11,6 +11,16 @@ public class CumulativeDataSeries {
         this.name = name;
     }
 
+    public CumulativeDataSeries(String name, int initialAmount) {
+        this(name);
+
+        measurements.add(new Measurement(1, initialAmount));
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public List<Measurement> getMeasurements() {
         return measurements;
     }

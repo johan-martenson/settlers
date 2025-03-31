@@ -23,6 +23,7 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.rest.resource.ResourceLevel;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -50,10 +51,8 @@ public class TestHeadquarter {
     public void testInitialInventory() throws Exception {
 
         /* Start single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
         /* Place headquarters */
         Point point0 = new Point(5, 5);
@@ -95,6 +94,234 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(GENERAL), 0);
 
         // TODO: add all other material
+    }
+
+    @Test
+    public void testSetInventoryToLow() throws InvalidUserActionException {
+
+        // Start single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
+
+        // Place headquarters
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Set the inventory to low
+        headquarter0.setInitialResources(ResourceLevel.LOW);
+
+        // Verify that the resources are correct
+        assertEquals(headquarter0.getAmount(WOOD), 12);
+        assertEquals(headquarter0.getAmount(PLANK), 22);
+        assertEquals(headquarter0.getAmount(STONE), 34);
+        assertEquals(headquarter0.getAmount(PIG), 0);
+        assertEquals(headquarter0.getAmount(WHEAT), 0);
+        assertEquals(headquarter0.getAmount(FISH), 2);
+        assertEquals(headquarter0.getAmount(MEAT), 3);
+        assertEquals(headquarter0.getAmount(BREAD), 4);
+        assertEquals(headquarter0.getAmount(WATER), 0);
+        assertEquals(headquarter0.getAmount(BEER), 0);
+        assertEquals(headquarter0.getAmount(COAL), 8);
+        assertEquals(headquarter0.getAmount(IRON), 8);
+        assertEquals(headquarter0.getAmount(GOLD), 0);
+        assertEquals(headquarter0.getAmount(IRON_BAR), 0);
+        assertEquals(headquarter0.getAmount(COIN), 0);
+        assertEquals(headquarter0.getAmount(TONGS), 0);
+        assertEquals(headquarter0.getAmount(AXE), 3);
+        assertEquals(headquarter0.getAmount(SAW), 1);
+        assertEquals(headquarter0.getAmount(PICK_AXE), 1);
+        assertEquals(headquarter0.getAmount(HAMMER), 8);
+        assertEquals(headquarter0.getAmount(SHOVEL), 2);
+        assertEquals(headquarter0.getAmount(CRUCIBLE), 2);
+        assertEquals(headquarter0.getAmount(FISHING_ROD), 3);
+        assertEquals(headquarter0.getAmount(SCYTHE), 4);
+        assertEquals(headquarter0.getAmount(CLEAVER), 1);
+        assertEquals(headquarter0.getAmount(ROLLING_PIN), 1);
+        assertEquals(headquarter0.getAmount(BOW), 1);
+        assertEquals(headquarter0.getAmount(SWORD), 0);
+        assertEquals(headquarter0.getAmount(SHIELD), 0);
+        assertEquals(headquarter0.getAmount(BOAT), 6);
+        assertEquals(headquarter0.getAmount(BUILDER), 5);
+        assertEquals(headquarter0.getAmount(PLANER), 3);
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 4);
+        assertEquals(headquarter0.getAmount(FORESTER), 2);
+        assertEquals(headquarter0.getAmount(STONEMASON), 2);
+        assertEquals(headquarter0.getAmount(FISHERMAN), 0);
+        assertEquals(headquarter0.getAmount(HUNTER), 1);
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 2);
+        assertEquals(headquarter0.getAmount(FARMER), 0);
+        assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(MILLER), 0);
+        assertEquals(headquarter0.getAmount(BAKER), 0);
+        assertEquals(headquarter0.getAmount(BUTCHER), 0);
+        assertEquals(headquarter0.getAmount(BREWER), 0);
+        assertEquals(headquarter0.getAmount(MINER), 5);
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), 0);
+        assertEquals(headquarter0.getAmount(ARMORER), 2);
+        assertEquals(headquarter0.getAmount(MINTER), 0);
+        assertEquals(headquarter0.getAmount(METALWORKER), 1);
+        assertEquals(headquarter0.getAmount(SHIPWRIGHT), 0);
+        assertEquals(headquarter0.getAmount(GEOLOGIST), 3);
+        assertEquals(headquarter0.getAmount(SCOUT), 1);
+        assertEquals(headquarter0.getAmount(DONKEY), 4);
+        assertEquals(headquarter0.getAmount(PRIVATE), 14);
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+        assertEquals(headquarter0.getAmount(OFFICER), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
+    }
+
+    @Test
+    public void testSetInventoryToMedium() throws InvalidUserActionException {
+
+        // Start single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
+
+        // Place headquarters
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Set the inventory to low
+        headquarter0.setInitialResources(ResourceLevel.MEDIUM);
+
+        // Verify that the resources are correct
+        assertEquals(headquarter0.getAmount(WOOD), 24);
+        assertEquals(headquarter0.getAmount(PLANK), 44);
+        assertEquals(headquarter0.getAmount(STONE), 68);
+        assertEquals(headquarter0.getAmount(PIG), 0);
+        assertEquals(headquarter0.getAmount(WHEAT), 0);
+        assertEquals(headquarter0.getAmount(FISH), 4);
+        assertEquals(headquarter0.getAmount(MEAT), 6);
+        assertEquals(headquarter0.getAmount(BREAD), 8);
+        assertEquals(headquarter0.getAmount(WATER), 0);
+        assertEquals(headquarter0.getAmount(BEER), 0);
+        assertEquals(headquarter0.getAmount(COAL), 16);
+        assertEquals(headquarter0.getAmount(IRON), 16);
+        assertEquals(headquarter0.getAmount(GOLD), 0);
+        assertEquals(headquarter0.getAmount(IRON_BAR), 0);
+        assertEquals(headquarter0.getAmount(COIN), 0);
+        assertEquals(headquarter0.getAmount(TONGS), 0);
+        assertEquals(headquarter0.getAmount(AXE), 6);
+        assertEquals(headquarter0.getAmount(SAW), 2);
+        assertEquals(headquarter0.getAmount(PICK_AXE), 2);
+        assertEquals(headquarter0.getAmount(HAMMER), 16);
+        assertEquals(headquarter0.getAmount(SHOVEL), 4);
+        assertEquals(headquarter0.getAmount(CRUCIBLE), 4);
+        assertEquals(headquarter0.getAmount(FISHING_ROD), 6);
+        assertEquals(headquarter0.getAmount(SCYTHE), 8);
+        assertEquals(headquarter0.getAmount(CLEAVER), 2);
+        assertEquals(headquarter0.getAmount(ROLLING_PIN), 2);
+        assertEquals(headquarter0.getAmount(BOW), 2);
+        assertEquals(headquarter0.getAmount(SWORD), 0);
+        assertEquals(headquarter0.getAmount(SHIELD), 0);
+        assertEquals(headquarter0.getAmount(BOAT), 12);
+        assertEquals(headquarter0.getAmount(BUILDER), 10);
+        assertEquals(headquarter0.getAmount(PLANER), 6);
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 8);
+        assertEquals(headquarter0.getAmount(FORESTER), 4);
+        assertEquals(headquarter0.getAmount(STONEMASON), 4);
+        assertEquals(headquarter0.getAmount(FISHERMAN), 0);
+        assertEquals(headquarter0.getAmount(HUNTER), 2);
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 4);
+        assertEquals(headquarter0.getAmount(FARMER), 0);
+        assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(MILLER), 0);
+        assertEquals(headquarter0.getAmount(BAKER), 0);
+        assertEquals(headquarter0.getAmount(BUTCHER), 0);
+        assertEquals(headquarter0.getAmount(BREWER), 0);
+        assertEquals(headquarter0.getAmount(MINER), 10);
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), 0);
+        assertEquals(headquarter0.getAmount(ARMORER), 4);
+        assertEquals(headquarter0.getAmount(MINTER), 0);
+        assertEquals(headquarter0.getAmount(METALWORKER), 2);
+        assertEquals(headquarter0.getAmount(SHIPWRIGHT), 0);
+        assertEquals(headquarter0.getAmount(GEOLOGIST), 6);
+        assertEquals(headquarter0.getAmount(SCOUT), 2);
+        assertEquals(headquarter0.getAmount(DONKEY), 8);
+        assertEquals(headquarter0.getAmount(PRIVATE), 51); // Should be 50 + 1 in reserve
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+        assertEquals(headquarter0.getAmount(OFFICER), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
+    }
+
+    @Test
+    public void testSetInventoryToHigh() throws InvalidUserActionException {
+
+        // Start single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
+
+        // Place headquarters
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Set the inventory to low
+        headquarter0.setInitialResources(ResourceLevel.HIGH);
+
+        // Verify that the resources are correct
+        assertEquals(headquarter0.getAmount(WOOD), 48);
+        assertEquals(headquarter0.getAmount(PLANK), 88);
+        assertEquals(headquarter0.getAmount(STONE), 136);
+        assertEquals(headquarter0.getAmount(PIG), 0);
+        assertEquals(headquarter0.getAmount(WHEAT), 0);
+        assertEquals(headquarter0.getAmount(FISH), 8);
+        assertEquals(headquarter0.getAmount(MEAT), 12);
+        assertEquals(headquarter0.getAmount(BREAD), 16);
+        assertEquals(headquarter0.getAmount(WATER), 0);
+        assertEquals(headquarter0.getAmount(BEER), 0);
+        assertEquals(headquarter0.getAmount(COAL), 32);
+        assertEquals(headquarter0.getAmount(IRON), 32);
+        assertEquals(headquarter0.getAmount(GOLD), 0);
+        assertEquals(headquarter0.getAmount(IRON_BAR), 0);
+        assertEquals(headquarter0.getAmount(COIN), 0);
+        assertEquals(headquarter0.getAmount(TONGS), 0);
+        assertEquals(headquarter0.getAmount(AXE), 12);
+        assertEquals(headquarter0.getAmount(SAW), 4);
+        assertEquals(headquarter0.getAmount(PICK_AXE), 4);
+        assertEquals(headquarter0.getAmount(HAMMER), 32);
+        assertEquals(headquarter0.getAmount(SHOVEL), 8);
+        assertEquals(headquarter0.getAmount(CRUCIBLE), 8);
+        assertEquals(headquarter0.getAmount(FISHING_ROD), 12);
+        assertEquals(headquarter0.getAmount(SCYTHE), 16);
+        assertEquals(headquarter0.getAmount(CLEAVER), 4);
+        assertEquals(headquarter0.getAmount(ROLLING_PIN), 4);
+        assertEquals(headquarter0.getAmount(BOW), 4);
+        assertEquals(headquarter0.getAmount(SWORD), 0);
+        assertEquals(headquarter0.getAmount(SHIELD), 0);
+        assertEquals(headquarter0.getAmount(BOAT), 24);
+        assertEquals(headquarter0.getAmount(BUILDER), 20);
+        assertEquals(headquarter0.getAmount(PLANER), 12);
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 16);
+        assertEquals(headquarter0.getAmount(FORESTER), 8);
+        assertEquals(headquarter0.getAmount(STONEMASON), 8);
+        assertEquals(headquarter0.getAmount(FISHERMAN), 0);
+        assertEquals(headquarter0.getAmount(HUNTER), 4);
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 8);
+        assertEquals(headquarter0.getAmount(FARMER), 0);
+        assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
+        assertEquals(headquarter0.getAmount(MILLER), 0);
+        assertEquals(headquarter0.getAmount(BAKER), 0);
+        assertEquals(headquarter0.getAmount(BUTCHER), 0);
+        assertEquals(headquarter0.getAmount(BREWER), 0);
+        assertEquals(headquarter0.getAmount(MINER), 20);
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), 0);
+        assertEquals(headquarter0.getAmount(ARMORER), 8);
+        assertEquals(headquarter0.getAmount(MINTER), 0);
+        assertEquals(headquarter0.getAmount(METALWORKER), 4);
+        assertEquals(headquarter0.getAmount(SHIPWRIGHT), 0);
+        assertEquals(headquarter0.getAmount(GEOLOGIST), 12);
+        assertEquals(headquarter0.getAmount(SCOUT), 4);
+        assertEquals(headquarter0.getAmount(DONKEY), 16);
+        assertEquals(headquarter0.getAmount(PRIVATE), 103); // Should be 102 + 1 in reserve
+        assertEquals(headquarter0.getAmount(PRIVATE_FIRST_CLASS), 0);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+        assertEquals(headquarter0.getAmount(OFFICER), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
     }
 
     @Test

@@ -199,7 +199,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
                                 "statistics", jsonUtils.statisticsToJson(
-                                        map.getCurrentTime(),
+                                        map.getTime(),
                                         map.getPlayers(),
                                         map.getStatisticsManager()
                                 )
@@ -1177,7 +1177,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 session,
                 new JSONObject(Map.of(
                         "type", "STATISTICS_CHANGED",
-                        "statistics", jsonUtils.statisticsToJson(map.getCurrentTime(), map.getPlayers(), statisticsManager)
+                        "statistics", jsonUtils.statisticsToJson(map.getTime(), map.getPlayers(), statisticsManager)
                 ))
         ));
     }

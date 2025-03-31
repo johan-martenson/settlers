@@ -1,4 +1,4 @@
-package org.appland.settlers.test;
+package org.appland.settlers.test.statistics;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.AttackStrength;
@@ -14,6 +14,7 @@ import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.statistics.LandDataPoint;
 import org.appland.settlers.model.statistics.LandStatistics;
 import org.appland.settlers.model.statistics.StatisticsManager;
+import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class TestLandStatistics {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Verify that it's possible to get the current time for the game */
-        assertTrue(map.getCurrentTime() > -1);
+        assertTrue(map.getTime() > -1);
     }
 
     @Test
@@ -87,13 +88,13 @@ public class TestLandStatistics {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Verify that the current time increases each time the game is stepped */
-        long currentTime = map.getCurrentTime();
+        long currentTime = map.getTime();
 
         for (int i = 0; i < 100; i++) {
 
             map.stepTime();
 
-            long newCurrentTime = map.getCurrentTime();
+            long newCurrentTime = map.getTime();
 
             assertEquals(newCurrentTime, currentTime + 1);
 

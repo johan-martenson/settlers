@@ -6,6 +6,7 @@ import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Harbor;
+import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.utils.Duration;
 import org.appland.settlers.utils.Group;
@@ -32,7 +33,7 @@ import static org.appland.settlers.model.BorderCheck.MUST_PLACE_INSIDE_BORDER;
 import static org.appland.settlers.model.Flag.FlagType.MAIN;
 import static org.appland.settlers.model.Flag.FlagType.MARINE;
 import static org.appland.settlers.model.GameUtils.*;
-import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.Vegetation.*;
 import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP;
@@ -3013,7 +3014,7 @@ public class GameMap {
         return statisticsManager;
     }
 
-    public long getCurrentTime() {
+    public long getTime() {
         return time;
     }
 
@@ -3026,6 +3027,15 @@ public class GameMap {
 
         if (house.isReady()) {
             statisticsManager.houseAdded(house, time);
+
+            if (house instanceof Headquarter headquarter) {
+                statisticsManager.getGeneralStatistics(house.getPlayer()).soldiers().report(time,
+                    headquarter.getAmount(PRIVATE) +
+                          headquarter.getAmount(PRIVATE_FIRST_CLASS) +
+                          headquarter.getAmount(SERGEANT) +
+                          headquarter.getAmount(OFFICER) +
+                          headquarter.getAmount(GENERAL));
+            }
         }
     }
 
@@ -3039,10 +3049,6 @@ public class GameMap {
 
     public void reportTornDownBuilding(Building building) {
         changedBuildings.add(building);
-
-        if (building.isBurningDown()) {
-            statisticsManager.houseRemoved(building, time);
-        }
     }
 
     public void reportBuildingBurnedDown(Building building) {
@@ -3326,7 +3332,7 @@ public class GameMap {
 
         /* The building and the flag can't be completely surrounded by water */
         // TODO: check for all types of non-buildable terrain as well
-        if (getSurroundingTiles(point).contains(WATER)) {
+        if (getSurroundingTiles(point).contains(Vegetation.WATER)) {
             throw new InvalidUserActionException(String.format("Can't mark a possible point at %s for harbor without access to land", point));
         }
 
@@ -3356,32 +3362,32 @@ public class GameMap {
             Vegetation vegetationDownLeft = getVegetationDownLeft(point);
 
             Point pointLeft = point.left();
-            if (isWithinMap(pointLeft) && (vegetationUpLeft == WATER || vegetationDownLeft == WATER)) {
+            if (isWithinMap(pointLeft) && (vegetationUpLeft == Vegetation.WATER || vegetationDownLeft == Vegetation.WATER)) {
                 possibleConnections.add(pointLeft);
             }
 
             Point pointUpLeft = point.upLeft();
-            if (isWithinMap(pointUpLeft) && (vegetationUpLeft == WATER || vegetationAbove == WATER)) {
+            if (isWithinMap(pointUpLeft) && (vegetationUpLeft == Vegetation.WATER || vegetationAbove == Vegetation.WATER)) {
                 possibleConnections.add(pointUpLeft);
             }
 
             Point pointUpRight = point.upRight();
-            if (isWithinMap(pointUpRight) && (vegetationAbove == WATER || vegetationUpRight == WATER)) {
+            if (isWithinMap(pointUpRight) && (vegetationAbove == Vegetation.WATER || vegetationUpRight == Vegetation.WATER)) {
                 possibleConnections.add(pointUpRight);
             }
 
             Point pointRight = point.right();
-            if (isWithinMap(pointRight) && (vegetationUpRight == WATER || vegetationDownRight == WATER)) {
+            if (isWithinMap(pointRight) && (vegetationUpRight == Vegetation.WATER || vegetationDownRight == Vegetation.WATER)) {
                 possibleConnections.add(pointRight);
             }
 
             Point pointDownRight = point.downRight();
-            if (isWithinMap(pointDownRight) && (vegetationDownRight == WATER || vegetationBelow == WATER)) {
+            if (isWithinMap(pointDownRight) && (vegetationDownRight == Vegetation.WATER || vegetationBelow == Vegetation.WATER)) {
                 possibleConnections.add(pointDownRight);
             }
 
             Point pointDownLeft = point.downLeft();
-            if (isWithinMap(pointDownLeft) && (vegetationBelow == WATER || vegetationDownLeft == WATER)) {
+            if (isWithinMap(pointDownLeft) && (vegetationBelow == Vegetation.WATER || vegetationDownLeft == Vegetation.WATER)) {
                 possibleConnections.add(pointDownLeft);
             }
 

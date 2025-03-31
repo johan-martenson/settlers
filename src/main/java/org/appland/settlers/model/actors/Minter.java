@@ -85,6 +85,7 @@ public class Minter extends Worker {
                     /* Report that the minter produced a coin */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
+                    map.getStatisticsManager().getGeneralStatistics(player).coins().increase(map.getTime());
 
                     /* Handle transportation */
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {

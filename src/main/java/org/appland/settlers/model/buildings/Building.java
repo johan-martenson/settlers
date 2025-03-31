@@ -582,6 +582,8 @@ public class Building implements EndPoint {
         ownDefender = null;
 
         /* Change building state */
+        var stateWhenTornDown = state;
+
         if (state != State.PLANNED) {
             state = State.BURNING;
         }
@@ -620,6 +622,10 @@ public class Building implements EndPoint {
             map.reportBuildingRemoved(this);
         } else {
             map.reportTornDownBuilding(this);
+        }
+
+        if (stateWhenTornDown == State.UNOCCUPIED || stateWhenTornDown == State.OCCUPIED) {
+            map.getStatisticsManager().houseRemoved(this, map.getTime());
         }
 
         player.reportBuildingTornDown(this);

@@ -1,0 +1,31 @@
+Small building:
+ - Up-left
+ - Halfway to left
+ - Up-right
+ - Halfway to right
+
+
+New "recording" for small building
+ - Gray block:
+   - Go to flag
+   - Go up-right (of flag)
+   - Go to flag
+   - Go up-right (of flag)
+   - Go to flag (just above)
+   - Go little left
+   - Go down-left, close to mid of flag and left
+   - Go back up-right until just below building
+   - Go right
+   - Go up-right (of flag)
+   - Go down-left to flag almost all the way
+   - Go left until directly below building
+   - Go right
+   - ...
+   - Hammer at up-right from flag
+   - Go half-way back-to flag
+   - Hammer half-way between flag and up-right
+   - Hammer at up-right from flag
+   - Hammer half-way between flag and up-right
+   - Hammer at building
+   - Hammer half-way left from building
+   - Hammer at half-way down-left from building

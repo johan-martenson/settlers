@@ -692,7 +692,7 @@ public class Utils {
         assertFalse(map.getBuildings().contains(building));
     }
 
-    static void waitForFightToStart(GameMap map, Soldier attacker, Soldier defender) throws InvalidUserActionException {
+    public static void waitForFightToStart(GameMap map, Soldier attacker, Soldier defender) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (attacker.isFighting() && defender.isFighting()) {
                 break;
@@ -707,7 +707,7 @@ public class Utils {
         assertEquals(attacker.getOpponent(), defender);
     }
 
-    static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {
+    public static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {
         GameMap map = building.getMap();
         Soldier firstAttacker = null;
 

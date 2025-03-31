@@ -1,0 +1,203 @@
+Low
+===
+Wood 12
+Plank 22
+Stone 34
+Pig 0
+Wheat 0
+Fish 2
+Meat 3
+Bread 4
+Water 0
+Beer 0
+Coal 8
+Iron (ore) 8
+Gold 0
+Iron (bar) 0
+Coin 0
+Tongs 0
+Axe 3
+Saw 1
+Pick-axe 1
+Hammer 8
+Shovel 2
+Crucible (bowl...) 2
+Rod and line 3
+Scythe 4
+Cleaver 1
+Rolling pin 1
+Bow 1
+Sword 0
+Shield 0
+Boat 6
+
+Helper 100
+Builder 5
+Planer 3
+Woodcutter 4
+Forester 2
+Stonemason 2
+Fisher(-man) 0
+Hunter 1
+Carpenter 2
+Farmer 0
+Pig breeder 0
+Donkey breeder 0
+Miller 0
+Baker 0
+Butcher 0
+Brewer 0
+Miner 5
+Iron founder 0
+Armorer 2
+Minter 0
+Metalworker 1
+Shipwright 0
+Geologist 3
+Scout 1
+Donkey 4
+Privates Privates first class 13
+Sergeant
+Officer
+General
+
+Reserve: 1 private
+
+
+Medium
+======
+
+Wood 24
+Plank 44
+Stone 68
+Pig 0
+Wheat 0
+Fish 4
+Meat 6
+Bread 8
+Water 0
+Beer 0
+Coal 16
+Iron (ore) 16
+Gold 0
+Iron (bar) 0
+Coin 0
+Tongs 0
+Axe 6
+Saw 2
+Pick-axe 2
+Hammer 16
+Shovel 4
+Crucible (bowl...) 4
+Rod and line 6
+Scythe 8
+Cleaver 2
+Rolling pin 2
+Bow 2
+Sword 0
+Shield 0
+Boat 12
+
+Helper 100
+Builder 10
+Planer 6
+Woodcutter 8
+Forester 4
+Stonemason 4
+Fisher(-man) 0
+Hunter 2
+Carpenter 4
+Farmer 0
+Pig breeder 0
+Donkey breeder 0
+Miller 0
+Baker 0
+Butcher 0
+Brewer 0
+Miner 10
+Iron founder 0
+Armorer 4
+Minter 0
+Metalworker 2
+Shipwright 0
+Geologist 6
+Scout 2
+Donkey 8
+Privates Privates first class 51
+Sergeant
+Officer
+General
+
+Reserve: 1 private
+
+
+
+
+High
+====
+
+Wood 48
+Plank 88
+Stone 136
+Pig 0
+Wheat 0
+Fish 8
+Meat 12
+Bread 16
+Water 0
+Beer 0
+Coal 32
+Iron (ore) 32
+Gold 0
+Iron (bar) 0
+Coin 0
+Tongs 0
+Axe 12
+Saw 4
+Pick-axe 4
+Hammer 32
+Shovel 8
+Crucible (bowl...) 8
+Rod and line 12
+Scythe 16
+Cleaver 4
+Rolling pin 4
+Bow 4
+Sword 0
+Shield 0
+Boat 24
+
+Helper 100
+Builder 20
+Planer 12
+Woodcutter 16
+Forester 8
+Stonemason 8
+Fisher(-man) 0
+Hunter 4
+Carpenter 8
+Farmer 0
+Pig breeder 0
+Donkey breeder 0
+Miller 0
+Baker 0
+Butcher 0
+Brewer 0
+Miner 20
+Iron founder 0
+Armorer 8
+Minter 0
+Metalworker 4
+Shipwright 0
+Geologist 12
+Scout 4
+Donkey 16
+Privates Privates first class 103
+Sergeant
+Officer
+General
+
+Reserve: 1 private
+
+
+Geologist: 6
