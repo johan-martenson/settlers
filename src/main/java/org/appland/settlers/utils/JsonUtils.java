@@ -1622,7 +1622,7 @@ public class JsonUtils {
 
     private JSONObject generalStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return new JSONObject(Map.of(
-                "houses", new JSONArray(),
+                "houses", totalHousesStatisticsForPlayerToJson(player, statisticsManager),
                 "workers", new JSONArray(),
                 "goods", new JSONArray(),
                 "military", new JSONArray(),
@@ -1660,6 +1660,21 @@ public class JsonUtils {
         return jsonProductionStatisticsForPlayer;
     }
 
+    private JSONArray totalHousesStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        var jsonHouseStatisticsForPlayer = new JSONArray();
+
+        for (var measurement : statisticsManager.getGeneralStatistics(player).totalAmountBuildings().getMeasurements()) {
+            var jsonMeasurement = new JSONArray();
+
+            jsonMeasurement.add(measurement.time());
+            jsonMeasurement.add(measurement.value());
+
+            jsonHouseStatisticsForPlayer.add(jsonMeasurement);
+        }
+
+        return jsonHouseStatisticsForPlayer;
+    }
+
     private JSONArray landStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         var jsonLandStatisticsForPlayer = new JSONArray();
         var playerIndex = player.getMap().getPlayers().indexOf(player);
@@ -1678,7 +1693,6 @@ public class JsonUtils {
 
     private JSONObject buildingStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         var jsonBuildingStatisticsForPlayer = new JSONObject();
-        var playerIndex = player.getMap().getPlayers().indexOf(player);
 
         for (var buildingTypeAndStatistics : statisticsManager.getBuildingStatistics().get(player).entrySet()) {
             var buildingType = buildingTypeAndStatistics.getKey();

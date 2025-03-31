@@ -727,7 +727,7 @@ public class Utils {
         return firstAttacker;
     }
 
-    static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
+    public static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
         GameMap map = catapult.getMap();
 
         Projectile projectile = null;
@@ -751,7 +751,7 @@ public class Utils {
         return projectile;
     }
 
-    static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidUserActionException {
+    public static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws InvalidUserActionException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -3174,6 +3174,18 @@ public class Utils {
             }
 
             map.stepTime();
+        }
+
+        assertEquals(building.getAmount(material), amount);
+    }
+
+    public static void waitForBuildingToHave(Building building, Material material, int amount) throws InvalidUserActionException {
+        for (int i = 0; i < 10_000; i++) {
+            if (building.getAmount(material) == amount) {
+                break;
+            }
+
+            building.getMap().stepTime();
         }
 
         assertEquals(building.getAmount(material), amount);

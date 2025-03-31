@@ -499,16 +499,20 @@ public class Headquarter extends Storehouse {
 
         int privatesToDraft = GameUtils.min(swords, shields, beer);
         int privatesInReserve = actualReservedSoldiers.get(PRIVATE_RANK);
-        int wantedPrivatesInReserve = wantedReservedSoldiers.get(PRIVATE_RANK);
+        int wantedPrivatesInReserve = wantedReservedSoldiers.getOrDefault(PRIVATE_RANK, 0);
         int privatesToEnterReserve = Math.min(wantedPrivatesInReserve - privatesInReserve, privatesToDraft);
         int privatesToEnterInventory = privatesToDraft - privatesToEnterReserve;
 
         actualReservedSoldiers.put(PRIVATE_RANK, privatesToEnterReserve);
         inventory.merge(PRIVATE, privatesToEnterInventory, Integer::sum);
-
         inventory.merge(BEER, -privatesToDraft, Integer::sum);
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
+
+        getMap().getStatisticsManager().getGeneralStatistics(getPlayer()).soldiers().increase(
+                getMap().getTime(),
+                privatesToDraft
+        );
     }
 
     public boolean hasAny(Material... materials) {
