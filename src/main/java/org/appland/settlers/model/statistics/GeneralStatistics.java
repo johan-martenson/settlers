@@ -4,5 +4,6 @@ public record GeneralStatistics(
         CumulativeDataSeries totalAmountBuildings,
         SnapshotDataSeries land,
         CumulativeDataSeries coins,
-        CumulativeDataSeries soldiers
+        CumulativeDataSeries soldiers,
+        CumulativeDataSeries workers
 ) {}

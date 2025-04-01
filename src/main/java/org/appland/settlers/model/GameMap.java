@@ -3035,6 +3035,8 @@ public class GameMap {
                           headquarter.getAmount(SERGEANT) +
                           headquarter.getAmount(OFFICER) +
                           headquarter.getAmount(GENERAL));
+
+                statisticsManager.getGeneralStatistics(house.getPlayer()).workers().report(time, GameUtils.countWorkersInInventory(headquarter));
             }
         }
     }

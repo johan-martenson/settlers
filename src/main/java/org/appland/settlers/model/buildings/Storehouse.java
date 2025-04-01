@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import static java.util.Map.entry;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.MEDIUM;
 
@@ -34,22 +35,22 @@ import static org.appland.settlers.model.Size.MEDIUM;
 public class Storehouse extends Building {
     private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
     private static final Map<Material, Material> WORKER_TO_TOOL_MAP = Map.ofEntries(
-            Map.entry(WOODCUTTER_WORKER, AXE),
-            Map.entry(FORESTER, SHOVEL),
-            Map.entry(STONEMASON, PICK_AXE),
-            Map.entry(FISHERMAN, FISHING_ROD),
-            Map.entry(HUNTER, BOW),
-            Map.entry(SCOUT, BOW),
-            Map.entry(SAWMILL_WORKER, SAW),
-            Map.entry(BUTCHER, CLEAVER),
-            Map.entry(BAKER, ROLLING_PIN),
-            Map.entry(IRON_FOUNDER, CRUCIBLE),
-            Map.entry(ARMORER, TONGS),
-            Map.entry(MINTER, CRUCIBLE),
-            Map.entry(MINER, PICK_AXE),
-            Map.entry(FARMER, SCYTHE),
-            Map.entry(BUILDER, HAMMER),
-            Map.entry(SHIPWRIGHT, HAMMER)
+            entry(WOODCUTTER_WORKER, AXE),
+            entry(FORESTER, SHOVEL),
+            entry(STONEMASON, PICK_AXE),
+            entry(FISHERMAN, FISHING_ROD),
+            entry(HUNTER, BOW),
+            entry(SCOUT, BOW),
+            entry(SAWMILL_WORKER, SAW),
+            entry(BUTCHER, CLEAVER),
+            entry(BAKER, ROLLING_PIN),
+            entry(IRON_FOUNDER, CRUCIBLE),
+            entry(ARMORER, TONGS),
+            entry(MINTER, CRUCIBLE),
+            entry(MINER, PICK_AXE),
+            entry(FARMER, SCYTHE),
+            entry(BUILDER, HAMMER),
+            entry(SHIPWRIGHT, HAMMER)
     );
 
     private final Countdown draftCountdown = new Countdown();
@@ -332,6 +333,8 @@ public class Storehouse extends Building {
             if (hasAtLeastOne(tool)) {
                 inventory.merge(tool, -1, Integer::sum);
                 inventory.merge(workerType, 1, Integer::sum);
+
+                getMap().getStatisticsManager().getGeneralStatistics(getPlayer()).workers().increase(getMap().getTime());
             } else if (workerType != WELL_WORKER) {
                 throw new InvalidGameLogicException(String.format("There are no %s to retrieve", workerType));
             }

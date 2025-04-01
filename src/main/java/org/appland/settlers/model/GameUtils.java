@@ -1755,4 +1755,31 @@ public class GameUtils {
                     String.format("Can't retrieve worker of type %s", material));
         };
     }
+
+    public static int countWorkersInInventory(Storehouse storehouse) {
+        return storehouse.getAmount(BUILDER) +
+                storehouse.getAmount(PLANER) +
+                storehouse.getAmount(WOODCUTTER_WORKER) +
+                storehouse.getAmount(FORESTER) +
+                storehouse.getAmount(STONEMASON) +
+                storehouse.getAmount(FISHERMAN) +
+                storehouse.getAmount(HUNTER) +
+                storehouse.getAmount(SAWMILL_WORKER) +
+                storehouse.getAmount(FARMER) +
+                storehouse.getAmount(PIG_BREEDER) +
+                storehouse.getAmount(DONKEY_BREEDER) +
+                storehouse.getAmount(MILLER) +
+                storehouse.getAmount(BAKER) +
+                storehouse.getAmount(BUTCHER) +
+                storehouse.getAmount(BREWER) +
+                storehouse.getAmount(MINER) +
+                storehouse.getAmount(IRON_FOUNDER) +
+                storehouse.getAmount(ARMORER) +
+                storehouse.getAmount(MINTER) +
+                storehouse.getAmount(METALWORKER) +
+                storehouse.getAmount(SHIPWRIGHT) +
+                storehouse.getAmount(GEOLOGIST) +
+                storehouse.getAmount(SCOUT) +
+                storehouse.getAmount(DONKEY);
+    }
 }

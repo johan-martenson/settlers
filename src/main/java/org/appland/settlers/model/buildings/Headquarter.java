@@ -229,14 +229,13 @@ public class Headquarter extends Storehouse {
     );
 
     private final Map<Soldier.Rank, Integer> wantedReservedSoldiers = new HashMap<>();
-    private final Map<Soldier.Rank, Integer> actualReservedSoldiers;
+    private final Map<Soldier.Rank, Integer> actualReservedSoldiers = new HashMap<>();
 
     public Headquarter(Player player) {
         super(player);
 
         setHeadquarterDefaultInventory(inventory);
         setConstructionReady();
-        actualReservedSoldiers = new HashMap<>();
 
         Arrays.stream(Soldier.Rank.values()).forEach(rank -> actualReservedSoldiers.put(rank, 0));
     }
@@ -301,6 +300,11 @@ public class Headquarter extends Storehouse {
             case MEDIUM -> inventory.putAll(MEDIUM_RESOURCES);
             case HIGH -> inventory.putAll(HIGH_RESOURCES);
         }
+
+        getMap().getStatisticsManager()
+                .getGeneralStatistics(getPlayer())
+                .workers()
+                .report(getMap().getTime(), GameUtils.countWorkersInInventory(this));
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {

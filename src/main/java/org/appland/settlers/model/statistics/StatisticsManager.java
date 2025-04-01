@@ -52,7 +52,8 @@ public class StatisticsManager {
                 new CumulativeDataSeries("Total houses"),
                 new SnapshotDataSeries("Land"),
                 new CumulativeDataSeries("Produced coins", 0),
-                new CumulativeDataSeries("Soldiers")));
+                new CumulativeDataSeries("Soldiers"),
+                new CumulativeDataSeries("Workers")));
     }
 
     public ProductionDataSeries getProductionStatisticsForMaterial(Material material) {

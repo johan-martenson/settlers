@@ -10,7 +10,6 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Worker;
@@ -250,33 +249,33 @@ public class TestMilitaryStrength {
     @Test
     public void testMilitaryStrengthIsUpdatedWhenSoldierDiesFromCatapult() throws Exception {
 
-        /* Create new game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        // Create new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
 
-        GameMap map = new GameMap(List.of(player0, player1), 100, 100);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place barracks */
-        Point point2 = new Point(35, 5);
+        // Place barracks
+        var point2 = new Point(35, 5);
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         // Finish construction of the barracks.
         Utils.constructHouse(barracks0);
 
-        // Occupy the barracks.
+        // Occupy the barracks with 2 soldiers.
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
-        /* Place catapult */
-        Point point3 = new Point(21, 5);
-        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+        // Place catapult
+        var point3 = new Point(21, 5);
+        var catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult);
@@ -288,7 +287,7 @@ public class TestMilitaryStrength {
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
-        /* Remove all the stones in the headquarters */
+        // Remove all the stones in the headquarters
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Verify that the military strength is updated when the catapult kills a soldier.
@@ -298,13 +297,13 @@ public class TestMilitaryStrength {
 
         for (int i = 0; i < 100; i++) {
 
-            /* Deliver stone to the catapult */
+            // Deliver stone to the catapult
             catapult.putCargo(new Cargo(STONE, map));
 
-            /* Wait for the catapult to throw a projectile */
-            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
+            // Wait for the catapult to throw a projectile
+            var projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
-            /* Wait for the projectile to reach its target */
+            // Wait for the projectile to reach its target
             assertEquals(barracks0.getHostedSoldiers().size(), 2);
             assertEquals(generalStatistics.soldiers().getMeasurements().getLast().value(), soldiersBeforeHit);
 
@@ -319,7 +318,4 @@ public class TestMilitaryStrength {
         assertEquals(barracks0.getHostedSoldiers().size(), 1);
         assertEquals(generalStatistics.soldiers().getMeasurements().getLast().value(), soldiersBeforeHit - 1);
     }
-
-
-    // Test when storehouse is lost -- requires creating a new settlement so the soldier can't walk back to the headquarters.
 }
