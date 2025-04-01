@@ -104,12 +104,10 @@ import static org.appland.settlers.model.messages.Message.MessageType.*;
 
 public class JsonUtils {
     private final IdManager idManager;
-    private final MapLoader mapLoader;
+    private final MapLoader mapLoader = new MapLoader();
 
     public JsonUtils(IdManager idManager) {
         this.idManager = idManager;
-
-        mapLoader = new MapLoader();
     }
 
     public static JSONObject decorationToJson(DecorationType decorationType, Point point) {
@@ -829,7 +827,7 @@ public class JsonUtils {
         }
 
         if (!gameChangesList.newBuildings().isEmpty()) {
-            jsonMonitoringEvents.put("newBuildings", newBuildingsToJson(gameChangesList.newBuildings(), player));
+            jsonMonitoringEvents.put("newBuildings", housesToJson(gameChangesList.newBuildings(), player));
         }
 
         if (!gameChangesList.newFlags().isEmpty()) {
@@ -861,7 +859,7 @@ public class JsonUtils {
         }
 
         if (!allChangedBuildings.isEmpty()) {
-            jsonMonitoringEvents.put("changedBuildings", changedBuildingsToJson(allChangedBuildings, player));
+            jsonMonitoringEvents.put("changedBuildings", housesToJson(allChangedBuildings, player));
         }
 
         if (!gameChangesList.changedFlags().isEmpty()) {
@@ -1092,10 +1090,7 @@ public class JsonUtils {
     }
 
     private JSONObject buildingToPoint(Building building) {
-        return new JSONObject(Map.of(
-                "x", building.getPosition().x,
-                "y", building.getPosition().y
-        ));
+        return pointToJson(building.getPosition());
     }
 
     private JSONObject treeConservationProgramDeactivatedMessageToJson(TreeConservationProgramDeactivatedMessage message) {
@@ -1117,7 +1112,7 @@ public class JsonUtils {
 
         synchronized (map) {
             for (Point point : changedAvailableConstruction) {
-                JSONObject jsonPointAndAvailableConstruction = new JSONObject();
+                JSONObject jsonPointAndAvailableConstruction = pointToJson(point);
                 JSONArray jsonAvailableConstruction = new JSONArray();
 
                 if (map.isAvailableFlagPoint(player, point)) {
@@ -1135,8 +1130,6 @@ public class JsonUtils {
                 }
 
                 jsonPointAndAvailableConstruction.put("available", jsonAvailableConstruction);
-                jsonPointAndAvailableConstruction.put("x", point.x);
-                jsonPointAndAvailableConstruction.put("y", point.y);
 
                 jsonChangedAvailableConstruction.add(jsonPointAndAvailableConstruction);
             }
@@ -1196,10 +1189,6 @@ public class JsonUtils {
         return toJsonArray(trees, this::treeToJson);
     }
 
-    private JSONArray changedBuildingsToJson(Collection<Building> changedBuildings, Player player) throws InvalidUserActionException {
-        return housesToJson(changedBuildings, player);
-    }
-
     private JSONArray removedRoadsToJson(List<Road> removedRoads) {
         return toJsonArray(removedRoads, idManager::getId);
     }
@@ -1252,16 +1241,6 @@ public class JsonUtils {
         }
 
         return jsonResult;
-    }
-
-    private JSONArray newBuildingsToJson(List<Building> newBuildings, Player player) throws InvalidUserActionException {
-        JSONArray jsonNewBuildings = new JSONArray();
-
-        for (Building building : newBuildings) {
-            jsonNewBuildings.add(houseToJson(building, player));
-        }
-
-        return jsonNewBuildings;
     }
 
     private JSONArray workersWithNewTargetsToJson(List<Worker> workersWithNewTargets) {
