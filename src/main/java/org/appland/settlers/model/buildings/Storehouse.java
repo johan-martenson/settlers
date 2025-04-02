@@ -64,7 +64,7 @@ public class Storehouse extends Building {
     }
 
     void draftMilitary() {
-        int privatesToDraft = GameUtils.min(
+        var privatesToDraft = GameUtils.min(
                 inventory.getOrDefault(SWORD, 0),
                 inventory.getOrDefault(SHIELD, 0),
                 inventory.getOrDefault(BEER, 0)
@@ -82,7 +82,7 @@ public class Storehouse extends Building {
     public void stepTime() {
         super.stepTime();
 
-        // Handle draft with delay
+        // Handle draft with delay.
         if (isDraftPossible(inventory)) {
             if (draftCountdown.hasReachedZero()) {
                 draftMilitary();
@@ -94,7 +94,7 @@ public class Storehouse extends Building {
             }
         }
 
-        boolean sentOutWorker = assignNewWorkerToUnoccupiedPlaces();
+        var sentOutWorker = assignNewWorkerToUnoccupiedPlaces();
 
         if (!sentOutWorker) {
             sentOutWorker = materialToPushOut.stream()
@@ -111,7 +111,7 @@ public class Storehouse extends Building {
                     .orElse(false);
         }
 
-        /* Send workers needed in other storehouses */
+        // Send workers needed in other storehouses.
         if (!sentOutWorker) {
             Material.WORKERS.stream()
                     .filter(worker -> getAmount(worker) > 0)
@@ -161,12 +161,12 @@ public class Storehouse extends Building {
 
     private boolean assignGeologists() {
 
-        /* Leave if there are no scouts in this storage */
+        // Leave if there are no scouts in this storage.
         if (!hasAtLeastOne(GEOLOGIST)) {
             return false;
         }
 
-        /* Go through the flags and look for flags waiting for geologists */
+        // Go through the flags and look for flags waiting for geologists.
         return getMap().getFlags().stream()
                 .filter(Flag::needsGeologist)
                 .filter(flag -> getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition()))
@@ -184,7 +184,7 @@ public class Storehouse extends Building {
 
     private boolean assignScouts() {
 
-        /* Leave if there are no scouts in this storage */
+        // Leave if there are no scouts in this storage.
         if (!hasAtLeastOne(SCOUT)) {
             if (hasAtLeastOne(BOW)) {
                 inventory.merge(BOW, -1, Integer::sum);
@@ -194,7 +194,7 @@ public class Storehouse extends Building {
             }
         }
 
-        /* Go through flags and look for flags that are waiting for scouts */
+        // Go through flags and look for flags that are waiting for scouts.
         return getMap().getFlags().stream()
                 .filter(Flag::needsScout)
                 .filter(flag -> getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition()))
@@ -273,7 +273,7 @@ public class Storehouse extends Building {
                     .filter(road -> road.getPlayer().equals(getPlayer()) && road.needsCourier())
                     .filter(road -> {
                         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
-                        return equals(storehouse); // Ensure the current storehouse is the closest
+                        return equals(storehouse); // Ensure the current storehouse is the closest.
                     })
                     .findFirst()
                     .map(road -> {
@@ -328,7 +328,7 @@ public class Storehouse extends Building {
 
     public Worker retrieveWorker(Material workerType) {
         if (!hasAtLeastOne(workerType)) {
-            Material tool = WORKER_TO_TOOL_MAP.get(workerType);
+            var tool = WORKER_TO_TOOL_MAP.get(workerType);
 
             if (hasAtLeastOne(tool)) {
                 inventory.merge(tool, -1, Integer::sum);

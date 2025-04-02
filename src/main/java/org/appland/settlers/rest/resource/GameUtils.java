@@ -6,6 +6,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.rest.GameTicker;
@@ -64,25 +65,9 @@ public class GameUtils {
 
     public static void adjustResources(GameMap map, ResourceLevel resources) {
         for (Player player : map.getPlayers()) {
-            Headquarter headquarter = (Headquarter)player.getBuildings().getFirst();
+            Headquarter headquarter = (Headquarter) player.getBuildings().getFirst();
 
-            if (resources == ResourceLevel.LOW) {
-                headquarter.retrieve(Material.STONE);
-                headquarter.retrieve(Material.STONE);
-                headquarter.retrieve(Material.STONE);
-
-                headquarter.retrieve(Material.PLANK);
-                headquarter.retrieve(Material.PLANK);
-                headquarter.retrieve(Material.PLANK);
-
-                headquarter.retrieve(Material.WOOD);
-                headquarter.retrieve(Material.WOOD);
-                headquarter.retrieve(Material.WOOD);
-            } else if (resources == ResourceLevel.HIGH) {
-                deliver(Material.STONE, 3, headquarter);
-                deliver(Material.PLANK, 3, headquarter);
-                deliver(Material.WOOD, 3, headquarter);
-            }
+            headquarter.setInitialResources(resources);
         }
     }
 

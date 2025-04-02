@@ -6,6 +6,7 @@ import org.appland.settlers.maps.MapFile;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerChangeListener;
+import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.appland.settlers.rest.resource.GameUtils.gamePlaceholderToGame;
-import static org.appland.settlers.rest.resource.ResourceLevel.MEDIUM;
+import static org.appland.settlers.model.ResourceLevel.MEDIUM;
 
 public class GameResource implements PlayerChangeListener {
     public GameStatus status;

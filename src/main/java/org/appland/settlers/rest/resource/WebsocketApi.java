@@ -15,14 +15,13 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
@@ -40,6 +39,7 @@ import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Mint;
 import org.appland.settlers.model.buildings.PigFarm;
 import org.appland.settlers.model.messages.Message;
+import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.rest.GameTicker;
 import org.appland.settlers.utils.JsonUtils;
 import org.json.simple.JSONArray;
@@ -56,7 +56,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.rest.resource.GameResources.GAME_RESOURCES;
 import static org.appland.settlers.rest.resource.GameUtils.startGame;
 
@@ -65,15 +64,6 @@ public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
         ChatManager.ChatListener, StatisticsListener {
-    public static final List<Material> PRODUCTION_STATISTICS_MATERIALS = Arrays.asList(
-            WOOD,
-            STONE,
-            PLANK,
-            COIN,
-            GOLD,
-            SWORD,
-            SHIELD
-    );
 
     private final Map<Player, Session> playerToSession = new HashMap<>();
     private final JsonUtils jsonUtils = new JsonUtils(IdManager.idManager);
@@ -283,7 +273,9 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 var attackers = ((Long) jsonBody.get("attackers")).intValue();
                 var attackStrength = AttackStrength.valueOf((String) jsonBody.get("attackType"));
 
-                player.attack(house, attackers, attackStrength);
+                synchronized (map) {
+                    player.attack(house, attackers, attackStrength);
+                }
             }
             case GET_CHAT_HISTORY_FOR_ROOM -> {
                 var roomId = (String) jsonBody.get("roomId");

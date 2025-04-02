@@ -12,7 +12,7 @@ import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorehouseWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.policy.InitialState;
-import org.appland.settlers.rest.resource.ResourceLevel;
+import org.appland.settlers.model.ResourceLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

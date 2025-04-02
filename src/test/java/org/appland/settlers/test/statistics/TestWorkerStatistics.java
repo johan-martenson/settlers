@@ -11,7 +11,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.rest.resource.ResourceLevel;
+import org.appland.settlers.model.ResourceLevel;
 import org.junit.Test;
 
 import java.util.List;
@@ -119,4 +119,5 @@ public class TestWorkerStatistics {
         assertEquals(workerStatistics.getMeasurements().getLast().value(), workersBefore + 1);
     }
 
+    // Test worker dies, e.g. when headquarters is destroyed
 }

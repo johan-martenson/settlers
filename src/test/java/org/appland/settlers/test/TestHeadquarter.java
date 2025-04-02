@@ -23,7 +23,7 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
-import org.appland.settlers.rest.resource.ResourceLevel;
+import org.appland.settlers.model.ResourceLevel;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1596,10 +1596,10 @@ public class JsonUtils {
     private JSONObject generalStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return new JSONObject(Map.of(
                 "houses", totalHousesStatisticsForPlayerToJson(player, statisticsManager),
-                "workers", new JSONArray(),
+                "workers", workerStatisticsForPlayerToJson(player, statisticsManager),
                 "goods", new JSONArray(),
                 "military", militaryStrengthStatisticsForPlayerToJson(player, statisticsManager),
-                "coins", new JSONArray(),
+                "coins", coinStatisticsForPlayerToJson(player, statisticsManager),
                 "production", new JSONArray(),
                 "killedEnemies", new JSONArray(),
                 "land", landStatisticsForPlayerToJson(player, statisticsManager)
@@ -1645,6 +1645,18 @@ public class JsonUtils {
     private JSONArray militaryStrengthStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
                 statisticsManager.getGeneralStatistics(player).soldiers().getMeasurements(),
+                this::measurementToJson);
+    }
+
+    private JSONArray coinStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        return toJsonArray(
+                statisticsManager.getGeneralStatistics(player).coins().getMeasurements(),
+                this::measurementToJson);
+    }
+
+    private JSONArray workerStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        return toJsonArray(
+                statisticsManager.getGeneralStatistics(player).workers().getMeasurements(),
                 this::measurementToJson);
     }
 
