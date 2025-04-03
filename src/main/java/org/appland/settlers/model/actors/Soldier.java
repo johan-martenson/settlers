@@ -246,7 +246,7 @@ public class Soldier extends Worker {
                         // Remember that this military is dead
                         state = State.DEAD;
 
-                        map.getStatisticsManager().getGeneralStatistics(player).soldiers().decrease(map.getTime());
+                        map.getStatisticsManager().soldierDied(player, map.getTime());
 
                         fightState = null;
 

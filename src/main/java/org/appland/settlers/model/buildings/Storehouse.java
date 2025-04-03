@@ -75,7 +75,7 @@ public class Storehouse extends Building {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        getMap().getStatisticsManager().getGeneralStatistics(getPlayer()).soldiers().increase(getMap().getTime());
+        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), 1);
     }
 
     @Override
@@ -334,7 +334,7 @@ public class Storehouse extends Building {
                 inventory.merge(tool, -1, Integer::sum);
                 inventory.merge(workerType, 1, Integer::sum);
 
-                getMap().getStatisticsManager().getGeneralStatistics(getPlayer()).workers().increase(getMap().getTime());
+                getMap().getStatisticsManager().workerCreated(getPlayer(), getMap().getTime());
             } else if (workerType != WELL_WORKER) {
                 throw new InvalidGameLogicException(String.format("There are no %s to retrieve", workerType));
             }

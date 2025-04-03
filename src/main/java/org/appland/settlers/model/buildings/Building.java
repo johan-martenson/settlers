@@ -1096,7 +1096,7 @@ public class Building implements EndPoint {
         if (getNumberOfHostedSoldiers() > 0) {
             hostedSoldiers.removeFirst();
 
-            map.getStatisticsManager().getGeneralStatistics(player).soldiers().decrease(map.getTime());
+            map.getStatisticsManager().soldierDied(player, map.getTime());
         } else {
             tearDown();
         }

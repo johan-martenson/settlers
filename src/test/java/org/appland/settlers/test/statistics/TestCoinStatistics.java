@@ -185,4 +185,67 @@ public class TestCoinStatistics {
         assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
         assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
     }
+
+    @Test
+    public void testListenToCoinStatistics() throws InvalidUserActionException {
+
+        // Create a single player game.
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter.
+        var headquarterPoint = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), headquarterPoint);
+
+        // Place mint.
+        var mintPoint = new Point(7, 9);
+        var mint = map.placeBuilding(new Mint(player0), mintPoint);
+
+        // Connect the mint with the headquarters.
+        var road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        // Finish construction of the mint.
+        Utils.constructHouse(mint);
+
+        // Populate the mint.
+        var minter = Utils.occupyBuilding(new Minter(player0, map), mint);
+
+        assertTrue(minter.isInsideBuilding());
+        assertEquals(minter.getHome(), mint);
+        assertEquals(mint.getWorker(), minter);
+
+        // Deliver gold and coal to the mint
+        mint.putCargo(new Cargo(GOLD, map));
+        mint.putCargo(new Cargo(COAL, map));
+
+        // Start listening to statistics updates
+        var monitor = new Utils.GameViewMonitor();
+
+        map.getStatisticsManager().addListener(monitor);
+
+        // Verify that the statistics for coins are updated when one is produced.
+        var statisticsManager = map.getStatisticsManager();
+
+        for (int i = 0; i < 149; i++) {
+            map.stepTime();
+
+            assertTrue(mint.getFlag().getStackedCargo().isEmpty());
+            assertNull(minter.getCargo());
+        }
+
+        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 0);
+        assertEquals(monitor.getStatisticsEvents().size(), 0);
+
+        map.stepTime();
+
+        assertNotNull(minter.getCargo());
+        assertEquals(minter.getCargo().getMaterial(), COIN);
+        assertTrue(mint.getFlag().getStackedCargo().isEmpty());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(monitor.getStatisticsEvents().size(), 1);
+    }
 }

@@ -27,7 +27,7 @@ import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.junit.Assert.*;
 
-public class TestMilitaryStrength {
+public class TestMilitaryStrengthStatistics {
 
     @Test
     public void testInitialMilitaryStrength() throws InvalidUserActionException {

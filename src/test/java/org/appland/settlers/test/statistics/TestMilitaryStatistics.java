@@ -98,4 +98,66 @@ public class TestMilitaryStatistics {
         assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
         assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
     }
+
+    @Test
+    public void testListenToMilitaryStatistics() throws InvalidUserActionException {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage, connect it to the headquarters, and wait for it to get constructed and occupied  */
+        Point point1 = new Point(10, 10);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
+
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse0.getFlag(), headquarter.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(storehouse0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse0);
+
+        // Control the amount of soldiers and promotion in the storehouse
+        int numberOfPrivates = storehouse0.getAmount(PRIVATE);
+
+        Utils.adjustInventoryTo(storehouse0, BEER, 1);
+        Utils.adjustInventoryTo(storehouse0, SWORD, 2);
+        Utils.adjustInventoryTo(storehouse0, SHIELD, 3);
+
+        // Start monitoring statistics
+        var monitor = new Utils.GameViewMonitor();
+
+        map.getStatisticsManager().addListener(monitor);
+
+        // Verify that a monitoring event is sent when a soldier is drafted
+        var statisticsManager = map.getStatisticsManager();
+
+        var soldiersBeforeCreation = statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast();
+
+        assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates);
+        assertEquals(storehouse0.getAmount(Material.BEER), 1);
+        assertEquals(storehouse0.getAmount(Material.SWORD), 2);
+        assertEquals(storehouse0.getAmount(Material.SHIELD), 3);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 1);
+        assertEquals(monitor.getStatisticsEvents().size(), 0);
+
+        var soldiersBeforeDraft = statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value();
+
+        Utils.waitForBuildingToHave(storehouse0, PRIVATE, numberOfPrivates + 1);
+
+        assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates + 1);
+        assertEquals(storehouse0.getAmount(Material.BEER), 0);
+        assertEquals(storehouse0.getAmount(Material.SWORD), 1);
+        assertEquals(storehouse0.getAmount(Material.SHIELD), 2);
+        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
+        assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 2);
+        assertEquals(monitor.getStatisticsEvents().size(), 1);
+    }
 }

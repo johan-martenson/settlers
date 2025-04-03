@@ -3421,10 +3421,15 @@ public class Utils {
 
             statisticsEvents.add(new StatisticsUpdatedEvent(StatisticsChangeType.BUILDINGS_CHANGED));
         }
+
+        @Override
+        public void generalStatisticsChanged(Player player) {
+            statisticsEvents.add(new StatisticsUpdatedEvent(StatisticsChangeType.GENERAL_STATISTICS_CHANGED));
+        }
     }
 
     public enum StatisticsChangeType {
-        BUILDINGS_CHANGED
+        GENERAL_STATISTICS_CHANGED, BUILDINGS_CHANGED
     }
 
     public record StatisticsUpdatedEvent(StatisticsChangeType changetype) { }

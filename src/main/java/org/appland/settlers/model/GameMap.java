@@ -1011,12 +1011,11 @@ public class GameMap {
         updatedLands.forEach((player, lands) -> {
             player.setLands(lands, buildingCausedUpdate, cause);
 
-            statisticsManager.getGeneralStatistics(player)
-                    .land()
-                    .report(time,
-                            lands.stream()
-                                .mapToInt(land -> land.getPointsInLand().size())
-                                .sum());
+            statisticsManager.landUpdated(
+                    player,
+                    time, lands.stream()
+                    .mapToInt(land -> land.getPointsInLand().size())
+                    .sum());
             playersToUpdate.remove(player);
         });
 

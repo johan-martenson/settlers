@@ -63,7 +63,8 @@ import static org.appland.settlers.rest.resource.GameUtils.startGame;
 public class WebsocketApi implements PlayerGameViewMonitor,
         GameResources.GameListListener,
         GameResource.GameResourceListener,
-        ChatManager.ChatListener, StatisticsListener {
+        ChatManager.ChatListener,
+        StatisticsListener {
 
     private final Map<Player, Session> playerToSession = new HashMap<>();
     private final JsonUtils jsonUtils = new JsonUtils(IdManager.idManager);
@@ -1162,6 +1163,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
     @Override
     public void buildingStatisticsChanged(Building building) {
+        System.out.println(" >> BUILDING STATISTICS CHANGED");
+
         var map = building.getMap();
         var statisticsManager = map.getStatisticsManager();
 
@@ -1172,5 +1175,20 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         "statistics", jsonUtils.statisticsToJson(map.getTime(), map.getPlayers(), statisticsManager)
                 ))
         ));
+    }
+
+    @Override
+    public void generalStatisticsChanged(Player player) {
+        System.out.println(" >> GENERAL STATISTICS CHANGED");
+
+        var map = player.getMap();
+        var statisticsManager = map.getStatisticsManager();
+
+        statisticsListeners.get(map).forEach(session -> sendToSession(
+                session,
+                new JSONObject(Map.of(
+                        "type", "STATISTICS_CHANGED",
+                        "statistics", jsonUtils.statisticsToJson(map.getTime(), map.getPlayers(), statisticsManager)
+                ))));
     }
 }

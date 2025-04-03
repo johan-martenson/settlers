@@ -513,10 +513,7 @@ public class Headquarter extends Storehouse {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        getMap().getStatisticsManager().getGeneralStatistics(getPlayer()).soldiers().increase(
-                getMap().getTime(),
-                privatesToDraft
-        );
+        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), privatesToDraft);
     }
 
     public boolean hasAny(Material... materials) {

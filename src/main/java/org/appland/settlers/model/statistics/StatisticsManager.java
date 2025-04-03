@@ -130,7 +130,35 @@ public class StatisticsManager {
         listeners.forEach(listener -> listener.buildingStatisticsChanged(house));
     }
 
+    public void coinProduced(Player player, long time) {
+        getGeneralStatistics(player).coins().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
+    public void soldiersDrafted(Player player, long time, int amount) {
+        getGeneralStatistics(player).soldiers().increase(time, amount);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
     public void addListener(StatisticsListener monitor) {
         listeners.add(monitor);
+    }
+
+    public void workerCreated(Player player, long time) {
+        getGeneralStatistics(player).workers().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
+    public void soldierDied(Player player, long time) {
+        getGeneralStatistics(player).soldiers().decrease(time);
+    }
+
+    public void landUpdated(Player player, long time, int amount) {
+        getGeneralStatistics(player).land().report(time, amount);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 }
