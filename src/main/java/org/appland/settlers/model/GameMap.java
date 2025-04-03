@@ -3028,12 +3028,12 @@ public class GameMap {
             statisticsManager.houseAdded(house, time);
 
             if (house instanceof Headquarter headquarter) {
-                statisticsManager.getGeneralStatistics(house.getPlayer()).soldiers().report(time,
-                    headquarter.getAmount(PRIVATE) +
-                          headquarter.getAmount(PRIVATE_FIRST_CLASS) +
-                          headquarter.getAmount(SERGEANT) +
-                          headquarter.getAmount(OFFICER) +
-                          headquarter.getAmount(GENERAL));
+                statisticsManager.soldiersAtStart(house.getPlayer(), time,
+                        headquarter.getAmount(PRIVATE) +
+                        headquarter.getAmount(PRIVATE_FIRST_CLASS) +
+                        headquarter.getAmount(SERGEANT) +
+                        headquarter.getAmount(OFFICER) +
+                        headquarter.getAmount(GENERAL));
 
                 statisticsManager.getGeneralStatistics(house.getPlayer()).workers().report(time, GameUtils.countWorkersInInventory(headquarter));
             }

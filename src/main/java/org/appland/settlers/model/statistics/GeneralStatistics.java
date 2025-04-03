@@ -5,5 +5,6 @@ public record GeneralStatistics(
         SnapshotDataSeries land,
         CumulativeDataSeries coins,
         CumulativeDataSeries soldiers,
-        CumulativeDataSeries workers
-) {}
+        CumulativeDataSeries workers,
+        CumulativeDataSeries killedEnemies
+) { }

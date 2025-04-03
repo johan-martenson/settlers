@@ -53,7 +53,8 @@ public class StatisticsManager {
                 new SnapshotDataSeries("Land"),
                 new CumulativeDataSeries("Produced coins", 0),
                 new CumulativeDataSeries("Soldiers"),
-                new CumulativeDataSeries("Workers")));
+                new CumulativeDataSeries("Workers"),
+                new CumulativeDataSeries("Killed enemies", 0)));
     }
 
     public ProductionDataSeries getProductionStatisticsForMaterial(Material material) {
@@ -152,13 +153,21 @@ public class StatisticsManager {
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
-    public void soldierDied(Player player, long time) {
+    public void soldierDied(Player player, Player enemyPlayer, long time) {
         getGeneralStatistics(player).soldiers().decrease(time);
+        getGeneralStatistics(enemyPlayer).killedEnemies().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+        listeners.forEach(listener -> listener.generalStatisticsChanged(enemyPlayer));
     }
 
     public void landUpdated(Player player, long time, int amount) {
         getGeneralStatistics(player).land().report(time, amount);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
+    public void soldiersAtStart(Player player, long time, int amount) {
+        getGeneralStatistics(player).soldiers().report(time, amount);
     }
 }
