@@ -195,30 +195,44 @@ public class StatisticsManager {
 
     public void treeCutDown(Player player, long time) {
         getMerchandiseStatistics(player).wood().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void plankProduced(Player player, long time) {
         getMerchandiseStatistics(player).plank().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void stoneProduced(Player player, long time) {
         getMerchandiseStatistics(player).stone().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void fishProduced(Player player, long time) {
         getMerchandiseStatistics(player).food().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void meatProduced(Player player, long time) {
         getMerchandiseStatistics(player).food().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void waterProduced(Player player, long time) {
         getMerchandiseStatistics(player).water().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void beerProduced(Player player, long time) {
         getMerchandiseStatistics(player).beer().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void mined(Player player, long time, Material mineral) {
@@ -230,21 +244,31 @@ public class StatisticsManager {
             case GOLD -> merchandiseStatistics.gold().increase(time);
             case STONE -> merchandiseStatistics.stone().increase(time);
         }
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void ironBarProduced(Player player, long time) {
         getMerchandiseStatistics(player).ironBar().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void toolProduced(Player player, long time) {
         getMerchandiseStatistics(player).tools().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void weaponProduced(Player player, long time) {
         getMerchandiseStatistics(player).weapons().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void boatProduced(Player player, long time) {
         getMerchandiseStatistics(player).boats().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 }
