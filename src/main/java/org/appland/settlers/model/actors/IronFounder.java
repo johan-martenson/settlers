@@ -85,6 +85,8 @@ public class IronFounder extends Worker {
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
 
+                    map.getStatisticsManager().ironBarProduced(player, map.getTime());
+
                     /* Handle the transportation */
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
                         Cargo cargo = new Cargo(IRON_BAR, map);

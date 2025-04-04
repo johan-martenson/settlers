@@ -6,7 +6,6 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
@@ -14,6 +13,7 @@ import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.*;
@@ -90,77 +90,82 @@ public class Miner extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == RESTING_IN_HOUSE) {
-            if (countdown.hasReachedZero()) {
-                if (hasFood()) {
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (countdown.hasReachedZero()) {
+                    if (hasFood()) {
+                        state = State.MINING;
+                        countdown.countFrom(TIME_TO_MINE);
 
-                    /* Start mining when the rest is over and there is food available */
-                    state = MINING;
-                    countdown.countFrom(TIME_TO_MINE);
-
-                    /* Note that the next production cycle starts */
-                    productivityMeasurer.nextProductivityCycle();
-                } else {
-
-                    /* Report that the miner wasn't able to start mining because of missing food */
-                    productivityMeasurer.reportUnproductivity();
-                }
-            } else {
-                countdown.step();
-            }
-        } else if (state == MINING) {
-            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
-                if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
-                    consumeFood();
-
-                    /* Report the production */
-                    productivityMeasurer.reportProductivity();
-
-                    /* Handle transportation */
-                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                        Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
-
-                        setCargo(cargo);
-
-                        /* Go out to delivery the cargo to the flag */
-                        setTarget(getHome().getFlag().getPosition());
-
-                        state = GOING_OUT_TO_FLAG;
-
-                        getHome().getFlag().promiseCargo(getCargo());
+                        /* Note that the next production cycle starts */
+                        productivityMeasurer.nextProductivityCycle();
                     } else {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
+
+                        /* Report that the miner wasn't able to start mining because of missing food */
+                        productivityMeasurer.reportUnproductivity();
                     }
                 } else {
-
-                    /* Report that there is no more ore available in the mine */
-                    getHome().reportNoMoreNaturalResources();
-
-                    getPlayer().reportNoMoreResourcesForBuilding(getHome());
-
-                    state = State.NO_MORE_RESOURCES;
+                    countdown.step();
                 }
-            } else if (getHome().isProductionEnabled()) {
-                countdown.step();
             }
-        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+            case MINING -> {
+                if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
+                    if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
+                        consumeFood();
 
-                setCargo(cargo);
+                        /* Report the production */
+                        productivityMeasurer.reportProductivity();
 
-                /* Go out to delivery the cargo to the flag */
-                setTarget(getHome().getFlag().getPosition());
+                        map.getStatisticsManager().mined(player, map.getTime(), mineral);
 
-                state = GOING_OUT_TO_FLAG;
+                        /* Handle transportation */
+                        if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                            Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
 
-                getHome().getFlag().promiseCargo(getCargo());
+                            setCargo(cargo);
+
+                            /* Go out to delivery the cargo to the flag */
+                            setTarget(getHome().getFlag().getPosition());
+
+                            state = State.GOING_OUT_TO_FLAG;
+
+                            getHome().getFlag().promiseCargo(getCargo());
+                        } else {
+                            state = State.WAITING_FOR_SPACE_ON_FLAG;
+                        }
+                    } else {
+
+                        /* Report that there is no more ore available in the mine */
+                        getHome().reportNoMoreNaturalResources();
+
+                        getPlayer().reportNoMoreResourcesForBuilding(getHome());
+
+                        state = State.NO_MORE_RESOURCES;
+                    }
+                } else if (getHome().isProductionEnabled()) {
+                    countdown.step();
+                }
             }
-        } else if (state == State.DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+            case WAITING_FOR_SPACE_ON_FLAG -> {
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+
+                    setCargo(cargo);
+
+                    /* Go out to delivery the cargo to the flag */
+                    setTarget(getHome().getFlag().getPosition());
+
+                    state = State.GOING_OUT_TO_FLAG;
+
+                    getHome().getFlag().promiseCargo(getCargo());
+                }
+            }
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }

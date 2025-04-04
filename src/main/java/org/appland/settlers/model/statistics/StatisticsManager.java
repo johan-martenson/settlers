@@ -40,6 +40,7 @@ public class StatisticsManager {
     private final Map<Player, Map<Class<? extends Building>, CumulativeDataSeries>> buildingStatistics = new HashMap<>();
     private final Set<StatisticsListener> listeners = new HashSet<>();
     private final Map<Player, GeneralStatistics> generalStatistics = new HashMap<>();
+    private final Map<Player, MerchandiseStatistics> merchandiseStatistics = new HashMap<>();
 
     public StatisticsManager() {
         for (Material material : PRODUCTION_STATISTICS_MATERIALS) {
@@ -133,6 +134,9 @@ public class StatisticsManager {
 
     public void coinProduced(Player player, long time) {
         getGeneralStatistics(player).coins().increase(time);
+        getMerchandiseStatistics(player).coin().increase(time);
+
+        // TODO: should consolidate and only measure coins once
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
@@ -169,5 +173,78 @@ public class StatisticsManager {
 
     public void soldiersAtStart(Player player, long time, int amount) {
         getGeneralStatistics(player).soldiers().report(time, amount);
+    }
+
+    public MerchandiseStatistics getMerchandiseStatistics(Player player) {
+        return merchandiseStatistics.computeIfAbsent(player, k -> new MerchandiseStatistics(
+                new CumulativeDataSeries("Wood", 0),
+                new CumulativeDataSeries("Plank", 0),
+                new CumulativeDataSeries("Stone", 0),
+                new CumulativeDataSeries("Food", 0),
+                new CumulativeDataSeries("Water", 0),
+                new CumulativeDataSeries("Beer", 0),
+                new CumulativeDataSeries("Coal", 0),
+                new CumulativeDataSeries("Iron", 0),
+                new CumulativeDataSeries("Gold", 0),
+                new CumulativeDataSeries("Iron bar", 0),
+                new CumulativeDataSeries("Coin", 0),
+                new CumulativeDataSeries("Tools", 0),
+                new CumulativeDataSeries("Weapons", 0),
+                new CumulativeDataSeries("Boats", 0)));
+    }
+
+    public void treeCutDown(Player player, long time) {
+        getMerchandiseStatistics(player).wood().increase(time);
+    }
+
+    public void plankProduced(Player player, long time) {
+        getMerchandiseStatistics(player).plank().increase(time);
+    }
+
+    public void stoneProduced(Player player, long time) {
+        getMerchandiseStatistics(player).stone().increase(time);
+    }
+
+    public void fishProduced(Player player, long time) {
+        getMerchandiseStatistics(player).food().increase(time);
+    }
+
+    public void meatProduced(Player player, long time) {
+        getMerchandiseStatistics(player).food().increase(time);
+    }
+
+    public void waterProduced(Player player, long time) {
+        getMerchandiseStatistics(player).water().increase(time);
+    }
+
+    public void beerProduced(Player player, long time) {
+        getMerchandiseStatistics(player).beer().increase(time);
+    }
+
+    public void mined(Player player, long time, Material mineral) {
+        var merchandiseStatistics = getMerchandiseStatistics(player);
+
+        switch (mineral) {
+            case COAL -> merchandiseStatistics.coal().increase(time);
+            case IRON -> merchandiseStatistics.iron().increase(time);
+            case GOLD -> merchandiseStatistics.gold().increase(time);
+            case STONE -> merchandiseStatistics.stone().increase(time);
+        }
+    }
+
+    public void ironBarProduced(Player player, long time) {
+        getMerchandiseStatistics(player).ironBar().increase(time);
+    }
+
+    public void toolProduced(Player player, long time) {
+        getMerchandiseStatistics(player).tools().increase(time);
+    }
+
+    public void weaponProduced(Player player, long time) {
+        getMerchandiseStatistics(player).weapons().increase(time);
+    }
+
+    public void boatProduced(Player player, long time) {
+        getMerchandiseStatistics(player).boats().increase(time);
     }
 }

@@ -131,6 +131,8 @@ public class Fisherman extends Worker {
                     /* Report that the fisherman produced a fish */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
+
+                    map.getStatisticsManager().fishProduced(player, map.getTime());
                 }
             } else {
                 countdown.step();

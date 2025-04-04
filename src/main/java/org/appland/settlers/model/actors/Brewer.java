@@ -40,7 +40,11 @@ public class Brewer extends Worker {
         BREWING_BEER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
     public Brewer(Player player, GameMap map) {
@@ -62,71 +66,76 @@ public class Brewer extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == RESTING_IN_HOUSE) {
-            if (countdown.hasReachedZero()) {
-                state = BREWING_BEER;
-                countdown.countFrom(PRODUCTION_TIME);
-
-                productivityMeasurer.nextProductivityCycle();
-            } else {
-                countdown.step();
-            }
-        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = new Cargo(BEER, map);
-
-                setCargo(cargo);
-
-                /* Go place the beer at the flag */
-                state = State.GOING_TO_FLAG_WITH_CARGO;
-
-                setTarget(getHome().getFlag().getPosition());
-
-                getHome().getFlag().promiseCargo(getCargo());
-            }
-
-        } else if (state == BREWING_BEER) {
-            if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero()) {
+                    state = BREWING_BEER;
+                    countdown.countFrom(PRODUCTION_TIME);
 
-                    /* Consume the ingredients */
-                    getHome().consumeOne(WATER);
-                    getHome().consumeOne(WHEAT);
-
-                    /* Report the production */
-                    productivityMeasurer.reportProductivity();
-
-                    /* Handle transportation of the produced beer */
-                    if (!getHome().getFlag().hasPlaceForMoreCargo()) {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
-                    } else {
-                        Cargo cargo = new Cargo(BEER, map);
-
-                        setCargo(cargo);
-
-                        /* Go place the beer at the flag */
-                        state = GOING_TO_FLAG_WITH_CARGO;
-
-                        setTarget(getHome().getFlag().getPosition());
-
-                        getHome().getFlag().promiseCargo(getCargo());
-                    }
+                    productivityMeasurer.nextProductivityCycle();
                 } else {
                     countdown.step();
                 }
-            } else {
+            }
+            case WAITING_FOR_SPACE_ON_FLAG -> {
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = new Cargo(BEER, map);
 
-                /* Report the that the brewer was unproductive */
-                productivityMeasurer.reportUnproductivity();
+                    setCargo(cargo);
+
+                    /* Go place the beer at the flag */
+                    state = State.GOING_TO_FLAG_WITH_CARGO;
+
+                    setTarget(getHome().getFlag().getPosition());
+
+                    getHome().getFlag().promiseCargo(getCargo());
+                }
             }
-        } else if (state == DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+            case BREWING_BEER -> {
+                if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
+                    if (countdown.hasReachedZero()) {
+
+                        /* Consume the ingredients */
+                        getHome().consumeOne(WATER);
+                        getHome().consumeOne(WHEAT);
+
+                        /* Report the production */
+                        productivityMeasurer.reportProductivity();
+
+                        map.getStatisticsManager().beerProduced(player, map.getTime());
+
+                        /* Handle transportation of the produced beer */
+                        if (!getHome().getFlag().hasPlaceForMoreCargo()) {
+                            state = WAITING_FOR_SPACE_ON_FLAG;
+                        } else {
+                            Cargo cargo = new Cargo(BEER, map);
+
+                            setCargo(cargo);
+
+                            /* Go place the beer at the flag */
+                            state = GOING_TO_FLAG_WITH_CARGO;
+
+                            setTarget(getHome().getFlag().getPosition());
+
+                            getHome().getFlag().promiseCargo(getCargo());
+                        }
+                    } else {
+                        countdown.step();
+                    }
+                } else {
+
+                    /* Report the that the brewer was unproductive */
+                    productivityMeasurer.reportUnproductivity();
+                }
             }
-        }
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
+            }
+    }
     }
 
     @Override

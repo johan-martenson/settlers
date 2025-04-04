@@ -508,7 +508,7 @@ public class TestMint {
     }
 
     @Test
-    public void testMinterLeavesBreadAtTheFlag() throws Exception {
+    public void testMinterLeavesCoinAtTheFlag() throws Exception {
 
         /* Create a single player game */
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);

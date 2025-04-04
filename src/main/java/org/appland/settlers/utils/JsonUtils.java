@@ -1579,7 +1579,7 @@ public class JsonUtils {
     }
 
 
-    public JSONObject statisticsToJson(long currentTime, List<Player> players, StatisticsManager statisticsManager) {
+    public JSONObject statisticsToJson(long currentTime, Player ownPlayer, List<Player> players, StatisticsManager statisticsManager) {
         var jsonPlayerStatistics = toJsonArray(players, player -> new JSONObject(Map.of(
                 "id", idManager.getId(player),
                 "productionStatistics", productionStatisticsForPlayerToJson(player, statisticsManager),
@@ -1589,7 +1589,27 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "currentTime", currentTime,
-                "players", jsonPlayerStatistics
+                "players", jsonPlayerStatistics,
+                "merchandise", merchandiseToJson(ownPlayer, statisticsManager)
+        ));
+    }
+
+    private JSONObject merchandiseToJson(Player player, StatisticsManager statisticsManager) {
+        return new JSONObject(Map.ofEntries(
+                entry("WOOD", new JSONArray()),
+                entry("PLANK", new JSONArray()),
+                entry("STONE", new JSONArray()),
+                entry("FOOD", new JSONArray()),
+                entry("WATER", new JSONArray()),
+                entry("BEER", new JSONArray()),
+                entry("COAL", new JSONArray()),
+                entry("IRON", new JSONArray()),
+                entry("GOLD", new JSONArray()),
+                entry("IRON_BAR", new JSONArray()),
+                entry("COIN", new JSONArray()),
+                entry("TOOLS", new JSONArray()),
+                entry("WEAPONS", new JSONArray()),
+                entry("BOAT", new JSONArray())
         ));
     }
 
@@ -1601,7 +1621,7 @@ public class JsonUtils {
                 "military", militaryStrengthStatisticsForPlayerToJson(player, statisticsManager),
                 "coins", coinStatisticsForPlayerToJson(player, statisticsManager),
                 "production", new JSONArray(),
-                "killedEnemies", new JSONArray(),
+                "killedEnemies", killedEnemiesStatisticsForPlayerToJson(player, statisticsManager),
                 "land", landStatisticsForPlayerToJson(player, statisticsManager)
         ));
     }
@@ -1645,6 +1665,12 @@ public class JsonUtils {
     private JSONArray militaryStrengthStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
                 statisticsManager.getGeneralStatistics(player).soldiers().getMeasurements(),
+                this::measurementToJson);
+    }
+
+    private JSONArray killedEnemiesStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        return toJsonArray(
+                statisticsManager.getGeneralStatistics(player).killedEnemies().getMeasurements(),
                 this::measurementToJson);
     }
 

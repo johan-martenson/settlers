@@ -153,6 +153,8 @@ public class Shipwright extends Worker {
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
 
+                    map.getStatisticsManager().boatProduced(player, map.getTime());
+
                     /* Consume the planks */
                     getHome().consumeOne(PLANK);
                     getHome().consumeOne(PLANK);

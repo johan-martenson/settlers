@@ -158,6 +158,8 @@ public class Metalworker extends Worker {
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
 
+                    map.getStatisticsManager().toolProduced(player, map.getTime());
+
                     /* Handle transportation of the produced tool */
                     if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;

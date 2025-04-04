@@ -81,6 +81,8 @@ public class SawmillWorker extends Worker {
                         /* Report the production */
                         productivityMeasurer.reportProductivity();
 
+                        map.getStatisticsManager().plankProduced(player, map.getTime());
+
                         /* Handle transportation */
                         if (getHome().getFlag().hasPlaceForMoreCargo()) {
                             Cargo cargo = new Cargo(PLANK, map);

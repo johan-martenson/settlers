@@ -140,6 +140,8 @@ public class Stonemason extends Worker {
 
                     setCargo(new Cargo(STONE, map));
                     state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+
+                    map.getStatisticsManager().stoneProduced(player, map.getTime());
                 } else {
                     state = State.GOING_BACK_TO_HOUSE;
                 }

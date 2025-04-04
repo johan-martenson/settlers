@@ -87,6 +87,8 @@ public class WellWorker extends Worker {
                 productivityMeasurer.reportProductivity();
                 productivityMeasurer.nextProductivityCycle();
 
+                map.getStatisticsManager().waterProduced(player, map.getTime());
+
                 /* Handle transportation */
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
                     Cargo cargo = new Cargo(WATER, map);

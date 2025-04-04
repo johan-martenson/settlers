@@ -207,6 +207,8 @@ public class Hunter extends Worker {
             /* Report that the hunter felled a wild animal */
             productivityMeasurer.reportProductivity();
             productivityMeasurer.nextProductivityCycle();
+
+            map.getStatisticsManager().meatProduced(player, map.getTime());
         } else if (state == State.GOING_TO_FLAG_TO_LEAVE_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 

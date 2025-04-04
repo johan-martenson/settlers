@@ -84,6 +84,8 @@ public class Butcher extends Worker {
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
 
+                    map.getStatisticsManager().meatProduced(player, map.getTime());
+
                     /* Handle transportation */
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
                         Cargo cargo = new Cargo(MEAT, map);

@@ -126,6 +126,8 @@ public class WoodcutterWorker extends Worker {
 
                         productivityMeasurer.nextProductivityCycle();
 
+                        map.getStatisticsManager().treeCutDown(player, map.getTime());
+
                         state = State.WAITING_FOR_TREE_TO_FALL;
                     } else {
                         state = State.GOING_BACK_TO_HOUSE;

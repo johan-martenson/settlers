@@ -107,6 +107,8 @@ public class Armorer extends Worker {
                         getHome().consumeOne(IRON_BAR);
                         getHome().consumeOne(COAL);
 
+                        map.getStatisticsManager().weaponProduced(player, map.getTime());
+
                         // Handle transportation
                         if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                             state = WAITING_FOR_SPACE_ON_FLAG;

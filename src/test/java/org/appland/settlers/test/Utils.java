@@ -422,6 +422,7 @@ public class Utils {
     }
 
     public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws InvalidUserActionException {
+        assertTrue(materials.length > 0);
 
         Set<Material> setOfMaterials = new HashSet<>(Arrays.asList(materials));
 
@@ -452,7 +453,6 @@ public class Utils {
     }
 
     public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws InvalidUserActionException {
-
         for (int i = 0; i < 300; i++) {
             if (worker.getCargo() != null) {
                 break;
@@ -781,7 +781,7 @@ public class Utils {
         return map.getWildAnimals().getFirst();
     }
 
-    static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidUserActionException {
+    public static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws InvalidUserActionException {
         WildAnimal animal = null;
 
         for (int i = 0; i < 5000; i++) {
@@ -866,7 +866,7 @@ public class Utils {
         assertEquals(building.getAmount(material), amount);
     }
 
-    static void deliverCargo(Building building, Material material) {
+    public static void deliverCargo(Building building, Material material) {
         GameMap map = building.getMap();
         Cargo cargo = new Cargo(material, map);
 
@@ -3189,6 +3189,18 @@ public class Utils {
         }
 
         assertEquals(building.getAmount(material), amount);
+    }
+
+    public static void waitForFishermanToStartFishing(Fisherman fisherman, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            if (fisherman.isFishing()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(fisherman.isFishing());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
