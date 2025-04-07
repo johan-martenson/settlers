@@ -225,7 +225,7 @@ public class TestSawmill {
     public void testHeadquarterHasAtLeastOneSawmillWorkerAtStart() {
         Headquarter headquarter = new Headquarter(null);
 
-        assertTrue(headquarter.getAmount(SAWMILL_WORKER) >= 1);
+        assertTrue(headquarter.getAmount(CARPENTER) >= 1);
     }
 
     @Test
@@ -314,7 +314,7 @@ public class TestSawmill {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Remove all sawmill workers from the headquarter and add a saw */
-        Utils.adjustInventoryTo(headquarter, SAWMILL_WORKER, 0);
+        Utils.adjustInventoryTo(headquarter, CARPENTER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SAW, 1);
 
         /* Place sawmill */
@@ -998,12 +998,12 @@ public class TestSawmill {
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+        int amount = headquarter0.getAmount(CARPENTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
@@ -1602,12 +1602,12 @@ public class TestSawmill {
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), storehouse0.getPosition());
 
-        int amount = storehouse0.getAmount(SAWMILL_WORKER);
+        int amount = storehouse0.getAmount(CARPENTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storehouse0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(storehouse0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(storehouse0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
@@ -1655,12 +1655,12 @@ public class TestSawmill {
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+        int amount = headquarter0.getAmount(CARPENTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
@@ -1711,12 +1711,12 @@ public class TestSawmill {
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+        int amount = headquarter0.getAmount(CARPENTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
@@ -1758,12 +1758,12 @@ public class TestSawmill {
         assertFalse(sawmillWorker.isInsideBuilding());
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+        int amount = headquarter0.getAmount(CARPENTER);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(headquarter0.getAmount(CARPENTER), amount + 1);
     }
 
     @Test
@@ -2352,7 +2352,7 @@ public class TestSawmill {
         assertEquals(sawmill0.getWorker(), sawmillWorker0);
 
         /* Verify that the worker goes to the storage when the sawmill is torn down */
-        headquarter0.blockDeliveryOfMaterial(SAWMILL_WORKER);
+        headquarter0.blockDeliveryOfMaterial(CARPENTER);
 
         sawmill0.tearDown();
 
@@ -2416,7 +2416,7 @@ public class TestSawmill {
         assertEquals(sawmill0.getWorker(), sawmillWorker0);
 
         /* Verify that the worker goes to the storage off-road when the sawmill is torn down */
-        headquarter0.blockDeliveryOfMaterial(SAWMILL_WORKER);
+        headquarter0.blockDeliveryOfMaterial(CARPENTER);
 
         sawmill0.tearDown();
 
@@ -2449,16 +2449,16 @@ public class TestSawmill {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that worker goes out and in continuously when sent out without being blocked */
-        Utils.adjustInventoryTo(headquarter0, SAWMILL_WORKER, 1);
+        Utils.adjustInventoryTo(headquarter0, CARPENTER, 1);
 
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 1);
+        assertEquals(headquarter0.getAmount(CARPENTER), 1);
 
-        headquarter0.pushOutAll(SAWMILL_WORKER);
+        headquarter0.pushOutAll(CARPENTER);
 
         for (int i = 0; i < 10; i++) {
             Worker worker = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
-            assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 0);
+            assertEquals(headquarter0.getAmount(CARPENTER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
             assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
@@ -2487,10 +2487,10 @@ public class TestSawmill {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that worker goes out and in continuously when sent out without being blocked */
-        Utils.adjustInventoryTo(headquarter0, SAWMILL_WORKER, 1);
+        Utils.adjustInventoryTo(headquarter0, CARPENTER, 1);
 
-        headquarter0.blockDeliveryOfMaterial(SAWMILL_WORKER);
-        headquarter0.pushOutAll(SAWMILL_WORKER);
+        headquarter0.blockDeliveryOfMaterial(CARPENTER);
+        headquarter0.pushOutAll(CARPENTER);
 
         Worker worker = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
@@ -2548,7 +2548,7 @@ public class TestSawmill {
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
            blocked in the headquarter
         */
-        headquarter0.blockDeliveryOfMaterial(SAWMILL_WORKER);
+        headquarter0.blockDeliveryOfMaterial(CARPENTER);
 
         Worker worker = sawmill0.getWorker();
 
@@ -2615,7 +2615,7 @@ public class TestSawmill {
         /* Verify that the sawmill worker goes away and dies when the house has been torn down and storage is not possible */
         assertEquals(carpenter.getTarget(), sawmill0.getPosition());
 
-        headquarter0.blockDeliveryOfMaterial(SAWMILL_WORKER);
+        headquarter0.blockDeliveryOfMaterial(CARPENTER);
 
         sawmill0.tearDown();
 

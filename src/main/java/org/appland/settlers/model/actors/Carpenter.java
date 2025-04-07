@@ -173,7 +173,7 @@ public class Carpenter extends Worker {
                 storehouse.depositWorker(this);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SAWMILL_WORKER);
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, CARPENTER);
 
                 if (storehouse != null) {
                     state = RETURNING_TO_STORAGE;
@@ -206,14 +206,14 @@ public class Carpenter extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SAWMILL_WORKER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, CARPENTER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SAWMILL_WORKER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), CARPENTER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;

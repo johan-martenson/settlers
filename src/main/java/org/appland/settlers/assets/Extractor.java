@@ -1195,7 +1195,7 @@ public class Extractor {
         inventoryImageCollection.addIcon(WOODCUTTER_WORKER, getImageAt(mapBobsLst, MapBobsLst.WOODCUTTER_ICON));
         inventoryImageCollection.addIcon(FISHERMAN, getImageAt(mapBobsLst, MapBobsLst.FISHERMAN_ICON));
         inventoryImageCollection.addIcon(FORESTER, getImageAt(mapBobsLst, MapBobsLst.FORESTER_ICON));
-        inventoryImageCollection.addIcon(SAWMILL_WORKER, getImageAt(mapBobsLst, MapBobsLst.SAWMILL_WORKER_ICON));
+        inventoryImageCollection.addIcon(CARPENTER, getImageAt(mapBobsLst, MapBobsLst.SAWMILL_WORKER_ICON));
         inventoryImageCollection.addIcon(STONEMASON, getImageAt(mapBobsLst, MapBobsLst.STONEMASON_ICON));
         inventoryImageCollection.addIcon(HUNTER, getImageAt(mapBobsLst, MapBobsLst.HUNTER_ICON));
         inventoryImageCollection.addIcon(FARMER, getImageAt(mapBobsLst, MapBobsLst.FARMER_ICON));

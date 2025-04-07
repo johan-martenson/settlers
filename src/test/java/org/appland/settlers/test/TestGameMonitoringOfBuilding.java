@@ -841,7 +841,7 @@ public class TestGameMonitoringOfBuilding {
 
         /* Remove all wood and sawmill workers from the headquarters */
         Utils.adjustInventoryTo(headquarter0, WOOD, 0);
-        Utils.adjustInventoryTo(headquarter0, SAWMILL_WORKER, 0);
+        Utils.adjustInventoryTo(headquarter0, CARPENTER, 0);
 
         /* Place sawmill, connect it to the headquarters, and construct it */
         Point point1 = new Point(9, 5);

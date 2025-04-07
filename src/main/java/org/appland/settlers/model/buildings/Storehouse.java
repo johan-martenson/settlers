@@ -41,7 +41,7 @@ public class Storehouse extends Building {
             entry(FISHERMAN, FISHING_ROD),
             entry(HUNTER, BOW),
             entry(SCOUT, BOW),
-            entry(SAWMILL_WORKER, SAW),
+            entry(CARPENTER, SAW),
             entry(BUTCHER, CLEAVER),
             entry(BAKER, ROLLING_PIN),
             entry(IRON_FOUNDER, CRUCIBLE),

@@ -1731,7 +1731,7 @@ public class GameUtils {
             case WOODCUTTER_WORKER -> new WoodcutterWorker(player, map);
             case STONEMASON -> new Stonemason(player, map);
             case FARMER -> new Farmer(player, map);
-            case SAWMILL_WORKER -> new Carpenter(player, map);
+            case CARPENTER -> new Carpenter(player, map);
             case WELL_WORKER -> new WellWorker(player, map);
             case MILLER -> new Miller(player, map);
             case BAKER -> new Baker(player, map);
@@ -1772,7 +1772,7 @@ public class GameUtils {
                 storehouse.getAmount(STONEMASON) +
                 storehouse.getAmount(FISHERMAN) +
                 storehouse.getAmount(HUNTER) +
-                storehouse.getAmount(SAWMILL_WORKER) +
+                storehouse.getAmount(CARPENTER) +
                 storehouse.getAmount(FARMER) +
                 storehouse.getAmount(PIG_BREEDER) +
                 storehouse.getAmount(DONKEY_BREEDER) +

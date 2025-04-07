@@ -76,7 +76,7 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(IRON_BAR), 16);
         assertEquals(headquarter0.getAmount(COIN), 0);
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 6);
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 2);
+        assertEquals(headquarter0.getAmount(CARPENTER), 2);
         assertEquals(headquarter0.getAmount(MINER), 2);
         assertEquals(headquarter0.getAmount(FORESTER), 4);
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), 4);
@@ -148,7 +148,7 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(STONEMASON), 2);
         assertEquals(headquarter0.getAmount(FISHERMAN), 0);
         assertEquals(headquarter0.getAmount(HUNTER), 1);
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 2);
+        assertEquals(headquarter0.getAmount(CARPENTER), 2);
         assertEquals(headquarter0.getAmount(FARMER), 0);
         assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
@@ -224,7 +224,7 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(STONEMASON), 4);
         assertEquals(headquarter0.getAmount(FISHERMAN), 0);
         assertEquals(headquarter0.getAmount(HUNTER), 2);
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 4);
+        assertEquals(headquarter0.getAmount(CARPENTER), 4);
         assertEquals(headquarter0.getAmount(FARMER), 0);
         assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
@@ -300,7 +300,7 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(STONEMASON), 8);
         assertEquals(headquarter0.getAmount(FISHERMAN), 0);
         assertEquals(headquarter0.getAmount(HUNTER), 4);
-        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), 8);
+        assertEquals(headquarter0.getAmount(CARPENTER), 8);
         assertEquals(headquarter0.getAmount(FARMER), 0);
         assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);

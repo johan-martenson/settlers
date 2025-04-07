@@ -64,7 +64,7 @@ public enum Material {
     WOODCUTTER_WORKER,
     STONEMASON,
     FARMER,
-    SAWMILL_WORKER,
+    CARPENTER,
     WELL_WORKER,
     MILLER,
     BAKER,
@@ -142,7 +142,7 @@ public enum Material {
             WOODCUTTER_WORKER,
             STONEMASON,
             FARMER,
-            SAWMILL_WORKER,
+            CARPENTER,
             WELL_WORKER,
             MILLER,
             BAKER,
@@ -214,7 +214,7 @@ public enum Material {
             case WoodcutterWorker woodcutterWorker -> WOODCUTTER_WORKER;
             case StorehouseWorker storehouseWorker -> STOREHOUSE_WORKER;
             case Butcher butcher -> BUTCHER;
-            case Carpenter carpenter -> SAWMILL_WORKER;
+            case Carpenter carpenter -> CARPENTER;
             case Stonemason stonemason -> STONEMASON;
             case PigBreeder pigBreeder -> PIG_BREEDER;
             case Minter minter -> MINTER;

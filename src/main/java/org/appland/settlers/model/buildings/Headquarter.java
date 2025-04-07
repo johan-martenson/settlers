@@ -59,7 +59,7 @@ public class Headquarter extends Storehouse {
             entry(WOODCUTTER_WORKER, 4),
             entry(STONEMASON, 2),
             entry(FARMER, 0),
-            entry(SAWMILL_WORKER, 2),
+            entry(CARPENTER, 2),
             entry(WELL_WORKER, 0),
             entry(MILLER, 0),
             entry(BAKER, 0),
@@ -140,7 +140,7 @@ public class Headquarter extends Storehouse {
             entry(STONEMASON, 4),
             entry(FISHERMAN, 0),
             entry(HUNTER, 2),
-            entry(SAWMILL_WORKER, 4),
+            entry(CARPENTER, 4),
             entry(FARMER, 0),
             entry(PIG_BREEDER, 0),
             entry(DONKEY_BREEDER, 0),
@@ -207,7 +207,7 @@ public class Headquarter extends Storehouse {
             entry(STONEMASON, 8),
             entry(FISHERMAN, 0),
             entry(HUNTER, 4),
-            entry(SAWMILL_WORKER, 8),
+            entry(CARPENTER, 8),
             entry(FARMER, 0),
             entry(PIG_BREEDER, 0),
             entry(DONKEY_BREEDER, 0),
@@ -337,7 +337,7 @@ public class Headquarter extends Storehouse {
         inventory.put(WOODCUTTER_WORKER, InitialState.STORAGE_INITIAL_WOODCUTTER_WORKER);
         inventory.put(STONEMASON, InitialState.STORAGE_INITIAL_STONEMASON);
         inventory.put(FARMER, InitialState.STORAGE_INITIAL_FARMER);
-        inventory.put(SAWMILL_WORKER, InitialState.STORAGE_INITIAL_SAWMILL_WORKER);
+        inventory.put(CARPENTER, InitialState.STORAGE_INITIAL_SAWMILL_WORKER);
         inventory.put(WELL_WORKER, InitialState.STORAGE_INITIAL_WELL_WORKER);
         inventory.put(MILLER, InitialState.STORAGE_INITIAL_MILLER);
         inventory.put(BAKER, InitialState.STORAGE_INITIAL_BAKER);
