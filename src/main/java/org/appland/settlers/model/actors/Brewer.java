@@ -6,14 +6,13 @@
 
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.*;
@@ -27,12 +26,12 @@ import static org.appland.settlers.model.actors.Brewer.State.*;
 public class Brewer extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int PRODUCTION_TIME = 49;
-    private static final int RESTING_TIME    = 99;
+    private static final int RESTING_TIME = 99;
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
     private final ProductivityMeasurer productivityMeasurer;
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -49,9 +48,6 @@ public class Brewer extends Worker {
 
     public Brewer(Player player, GameMap map) {
         super(player, map);
-
-        countdown = new Countdown();
-        state = State.WALKING_TO_TARGET;
 
         productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
     }
@@ -79,11 +75,10 @@ public class Brewer extends Worker {
             }
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                    Cargo cargo = new Cargo(BEER, map);
-
+                    var cargo = new Cargo(BEER, map);
                     setCargo(cargo);
 
-                    /* Go place the beer at the flag */
+                    // Go place the beer at the flag
                     state = State.GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
@@ -108,11 +103,10 @@ public class Brewer extends Worker {
                         if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         } else {
-                            Cargo cargo = new Cargo(BEER, map);
-
+                            var cargo = new Cargo(BEER, map);
                             setCargo(cargo);
 
-                            /* Go place the beer at the flag */
+                            // Go place the beer at the flag
                             state = GOING_TO_FLAG_WITH_CARGO;
 
                             setTarget(getHome().getFlag().getPosition());
@@ -124,7 +118,7 @@ public class Brewer extends Worker {
                     }
                 } else {
 
-                    /* Report the that the brewer was unproductive */
+                    // Report the that the brewer was unproductive
                     productivityMeasurer.reportUnproductivity();
                 }
             }
@@ -135,59 +129,61 @@ public class Brewer extends Worker {
                     countdown.step();
                 }
             }
-    }
+        }
     }
 
     @Override
     protected void onArrival() {
-        if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = map.getFlagAtPoint(getPosition());
+        switch (state) {
+            case GOING_TO_FLAG_WITH_CARGO -> {
+                var cargo = getCargo();
+                cargo.setPosition(getPosition());
+                cargo.transportToStorage();
 
-            Cargo cargo = getCargo();
+                var flag = map.getFlagAtPoint(getPosition());
+                flag.putCargo(getCargo());
 
-            cargo.setPosition(getPosition());
-            cargo.transportToStorage();
+                setCargo(null);
 
-            flag.putCargo(getCargo());
+                state = GOING_BACK_TO_HOUSE;
 
-            setCargo(null);
-
-            state = GOING_BACK_TO_HOUSE;
-
-            returnHome();
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
-
-            state = RESTING_IN_HOUSE;
-
-            countdown.countFrom(RESTING_TIME);
-        } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
-
-            if (storehouse != null) {
-
-                state = RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                returnHome();
             }
-        } else if (state == GOING_TO_DIE) {
-            setDead();
+            case GOING_BACK_TO_HOUSE -> {
+                enterBuilding(getHome());
 
-            state = DEAD;
+                state = RESTING_IN_HOUSE;
 
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+                countdown.countFrom(RESTING_TIME);
+            }
+            case RETURNING_TO_STORAGE -> {
+                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                storehouse.depositWorker(this);
+            }
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+
+                // Go to the closest storage
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
+
+                if (storehouse != null) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = GOING_TO_DIE;
+
+                    Point point = findPlaceToDie();
+
+                    setOffroadTarget(point);
+                }
+            }
+            case GOING_TO_DIE -> {
+                setDead();
+
+                state = DEAD;
+
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
     }
 
@@ -220,12 +216,12 @@ public class Brewer extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter upon arrival */
+            // Don't try to enter upon arrival
             clearTargetBuilding();
 
             /* Go back to the storage */
@@ -236,7 +232,7 @@ public class Brewer extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

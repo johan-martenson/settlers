@@ -246,14 +246,10 @@ public class BuildingsImageCollection {
                 offset += 1;
             }
 
-            System.out.println("Adding open door with offset " + offset + " for " + house.name());
-
             addOpenDoorForBuilding(nation, house.name(), getImageAt(lstFile, house.index() + offset));
         }
 
         if (house.name().equals("Headquarter")) {
-            System.out.println(house);
-
             System.out.println(this.buildingMap.get(nation).get(house.name()));
         }
     }

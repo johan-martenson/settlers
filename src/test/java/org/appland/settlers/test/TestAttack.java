@@ -4762,7 +4762,7 @@ public class TestAttack {
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         /* Wait for the attacker to beat the first defender */
-        Utils.waitForMilitaryToStartFighting(map, defender);
+        Utils.waitForSoldierToStartFighting(map, defender);
 
         assertEquals(guardHouse0.getHostedSoldiers().size(), 2);
 
@@ -4773,7 +4773,7 @@ public class TestAttack {
 
         assertEquals(guardHouse0.getHostedSoldiers().size(), 1);
 
-        Utils.waitForMilitaryToStartFighting(map, defender2);
+        Utils.waitForSoldierToStartFighting(map, defender2);
 
         Utils.waitForSoldierToBeDying(defender2, map);
 
@@ -4784,7 +4784,7 @@ public class TestAttack {
 
         assertEquals(guardHouse0.getHostedSoldiers().size(), 0);
 
-        Utils.waitForMilitaryToStartFighting(map, defender3);
+        Utils.waitForSoldierToStartFighting(map, defender3);
 
         Utils.waitForSoldierToBeDying(defender3, map);
 

@@ -56,11 +56,9 @@ public class Armorer extends Worker {
     }
 
     private Material getNextWeapon(Material current) {
-        if (current == SWORD) {
-            return SHIELD;
-        } else {
-            return SWORD;
-        }
+        return current == SWORD
+                ? SHIELD
+                : SWORD;
     }
 
     @Override
@@ -87,7 +85,6 @@ public class Armorer extends Worker {
             case WAITING_FOR_SPACE_ON_FLAG -> {
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
                     var cargo = new Cargo(nextWeapon, map);
-
                     setCargo(cargo);
 
                     nextWeapon = getNextWeapon(nextWeapon);
@@ -114,7 +111,6 @@ public class Armorer extends Worker {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         } else {
                             var cargo = new Cargo(nextWeapon, map);
-
                             setCargo(cargo);
 
                             nextWeapon = getNextWeapon(nextWeapon);
@@ -178,7 +174,7 @@ public class Armorer extends Worker {
                 storehouse.depositWorker(this);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
-                /* Go to the closest storage */
+                // Go to the closest storage.
                 var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
 
                 if (Objects.nonNull(storehouse)) {
@@ -240,7 +236,7 @@ public class Armorer extends Worker {
                 map.isFlagAtPoint(getPosition()) &&
                 !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the armory upon arrival */
+            // Don't try to enter the armory upon arrival.
             clearTargetBuilding();
 
             /* Go back to the storage */

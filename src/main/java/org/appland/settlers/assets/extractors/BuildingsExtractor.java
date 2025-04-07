@@ -31,7 +31,7 @@ public class BuildingsExtractor {
      * @throws InvalidFormatException If the format of the LST files is invalid
      */
     public static void extractBuildingAssets(String fromDir, String toDir, Palette palette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
-        BuildingsImageCollection buildingsImageCollection = new BuildingsImageCollection();
+        var buildingsImageCollection = new BuildingsImageCollection();
 
         var romYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, RomYLst.FILENAME), palette);
         var japYLst = LstDecoder.loadLstFile(String.format("%s/%s", fromDir, JapYLst.FILENAME), palette);
@@ -80,7 +80,7 @@ public class BuildingsExtractor {
         var millWithSails = ImageUtils.mergeImages(mill, sails);
         var millWithSailsShadow = ImageUtils.mergeImages(millShadow, sailsShadow);
 
-        // Add the mill image
+        // Add the mill image to the collector
         buildingsImageCollection.addBuildingForNation(ROMANS, RomYLst.MILL.name(), millWithSails);
         buildingsImageCollection.addBuildingShadowForNation(ROMANS, RomYLst.MILL.name(), millWithSailsShadow);
         buildingsImageCollection.addBuildingUnderConstructionForNation(
