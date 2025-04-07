@@ -19,7 +19,7 @@ import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
@@ -98,7 +98,7 @@ public enum Material {
     METALWORKER,
     BUILDER,
     HAMMER,
-    SHIPWRIGHT, BOAT, PLANER;
+    SHIPWRIGHT, BOAT, PLANER, HELPER;
 
     public static final Set<? extends Material> TRANSPORTABLE_GOODS = EnumSet.copyOf(Arrays.asList(
             SWORD,
@@ -214,7 +214,7 @@ public enum Material {
             case WoodcutterWorker woodcutterWorker -> WOODCUTTER_WORKER;
             case StorehouseWorker storehouseWorker -> STOREHOUSE_WORKER;
             case Butcher butcher -> BUTCHER;
-            case SawmillWorker sawmillWorker -> SAWMILL_WORKER;
+            case Carpenter carpenter -> SAWMILL_WORKER;
             case Stonemason stonemason -> STONEMASON;
             case PigBreeder pigBreeder -> PIG_BREEDER;
             case Minter minter -> MINTER;

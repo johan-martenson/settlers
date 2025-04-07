@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 import static org.appland.settlers.assets.Utils.getImageAt;
 
 public class BuildingsImageCollection {
-
     private final Map<Nation, Map<String, BuildingImages>> buildingMap = new EnumMap<>(Nation.class);
     private final Map<Nation, SpecialImages> specialImagesMap = new EnumMap<>(Nation.class);
 

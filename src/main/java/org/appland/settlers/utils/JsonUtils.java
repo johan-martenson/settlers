@@ -434,14 +434,15 @@ public class JsonUtils {
         return jsonArrayToList(jsonPoints, this::jsonToPoint);
     }
 
+    public int jsonToInt(Object jsonValue) {
+        return jsonValue instanceof String ? Integer.parseInt((String) jsonValue) : ((Long) jsonValue).intValue();
+    }
+
     public Point jsonToPoint(JSONObject point) {
-        Object xObject = point.get("x");
-        Object yObject = point.get("y");
-
-        int x = xObject instanceof String ? Integer.parseInt((String) xObject) : ((Long) xObject).intValue();
-        int y = yObject instanceof String ? Integer.parseInt((String) yObject) : ((Long) yObject).intValue();
-
-        return new Point(x, y);
+        return new Point(
+                jsonToInt(point.get("x")),
+                jsonToInt(point.get("y"))
+        );
     }
 
     public Building buildingFactory(JSONObject jsonHouse, Player player) {
@@ -640,11 +641,7 @@ public class JsonUtils {
         ));
     }
 
-    public JSONArray mapFilesToJson(Collection<MapFile> mapFiles) {
-        return toJsonArray(mapFiles, this::mapFileToJson);
-    }
-
-    JSONObject mapFileToJson(MapFile mapFile) {
+    public JSONObject mapFileToJson(MapFile mapFile) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(mapFile),
                 "name", mapFile.getTitle(),
@@ -678,6 +675,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(buildingLostMessage),
                 "type", "BUILDING_LOST",
+                "isRead", buildingLostMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -690,6 +688,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(buildingCapturedMessage),
                 "type", "BUILDING_CAPTURED",
+                "isRead", buildingCapturedMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -702,6 +701,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(storeHouseIsReadyMessage),
                 "type", "STORE_HOUSE_IS_READY",
+                "isRead", storeHouseIsReadyMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -714,6 +714,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(militaryBuildingReadyMessage),
                 "type", MILITARY_BUILDING_READY.toString(),
+                "isRead", militaryBuildingReadyMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getClass().getSimpleName(),
                 "point", buildingToPoint(building)
@@ -726,6 +727,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(noMoreResourcesMessage),
                 "type", NO_MORE_RESOURCES.toString(),
+                "isRead", noMoreResourcesMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -738,6 +740,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(militaryBuildingOccupiedMessage),
                 "type", MILITARY_BUILDING_OCCUPIED.toString(),
+                "isRead", militaryBuildingOccupiedMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -750,6 +753,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(underAttackMessage),
                 "type", UNDER_ATTACK.toString(),
+                "isRead", underAttackMessage.isRead(),
                 "houseId", idManager.getId(building),
                 "houseType", building.getSimpleName(),
                 "point", buildingToPoint(building)
@@ -762,6 +766,7 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "id", idManager.getId(geologistFindMessage),
                 "type", GEOLOGIST_FIND.toString(),
+                "isRead", geologistFindMessage.isRead(),
                 "point", jsonGeologistFindPoint,
                 "material", geologistFindMessage.material().toString()
         ));
@@ -931,6 +936,10 @@ public class JsonUtils {
             jsonMonitoringEvents.put("newMessages", messagesToJson(gameChangesList.newMessages()));
         }
 
+        if (!gameChangesList.readMessages().isEmpty()) {
+            jsonMonitoringEvents.put("readMessages", messagesToJson(gameChangesList.readMessages()));
+        }
+
         if (!gameChangesList.removedMessages().isEmpty()) {
             jsonMonitoringEvents.put("removedMessages", removedMessagesToJson(gameChangesList.removedMessages()));
         }
@@ -1009,7 +1018,7 @@ public class JsonUtils {
         return toJsonArray(stones, this::stoneToJson);
     }
 
-    private JSONArray messagesToJson(List<Message> newGameMessages) {
+    private JSONArray messagesToJson(Collection<Message> newGameMessages) {
         return toJsonArray(newGameMessages, message ->
                 switch (message.getMessageType()) {
                     case MILITARY_BUILDING_OCCUPIED -> militaryBuildingOccupiedMessageToJson((MilitaryBuildingOccupiedMessage) message);
@@ -1034,6 +1043,7 @@ public class JsonUtils {
     private JSONObject gameEndedMessageToJson(GameEndedMessage message) {
         return new JSONObject(Map.of(
                 "type", GAME_ENDED.name().toUpperCase(),
+                "isRead", message.isRead(),
                 "winnerPlayerId", idManager.getId(message.winner())
         ));
     }
@@ -1043,6 +1053,7 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "type", SHIP_HAS_REACHED_DESTINATION.name().toUpperCase(),
+                "isRead", message.isRead(),
                 "shipId", idManager.getId(ship),
                 "point", pointToJson(ship.getPosition())
         ));
@@ -1053,6 +1064,7 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "type", SHIP_READY_FOR_EXPEDITION.name().toUpperCase(),
+                "isRead", message.isRead(),
                 "shipId", idManager.getId(ship),
                 "point", pointToJson(ship.getPosition())
         ));
@@ -1063,6 +1075,7 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "type", BOMBARDED_BY_CATAPULT.name().toUpperCase(),
+                "isRead", message.isRead(),
                 "houseType", building.getSimpleName().toUpperCase(),
                 "houseId", idManager.getId(building),
                 "point", buildingToPoint(building)
@@ -1074,6 +1087,7 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "type", HARBOR_IS_FINISHED.name().toUpperCase(),
+                "isRead", message.isRead(),
                 "houseId", idManager.getId(harbor),
                 "point", buildingToPoint(harbor)
         ));
@@ -1084,6 +1098,7 @@ public class JsonUtils {
 
         return new JSONObject(Map.of(
                 "type", MILITARY_BUILDING_CAUSED_LOST_LAND.toString(),
+                "isRead", message.isRead(),
                 "houseId", idManager.getId(building),
                 "point", buildingToPoint(building)
         ));
@@ -1095,14 +1110,16 @@ public class JsonUtils {
 
     private JSONObject treeConservationProgramDeactivatedMessageToJson(TreeConservationProgramDeactivatedMessage message) {
         return new JSONObject(Map.of(
-                "type", TREE_CONSERVATION_PROGRAM_DEACTIVATED.toString()
-        ));
+                "type", TREE_CONSERVATION_PROGRAM_DEACTIVATED.toString(),
+                "isRead", message.isRead()
+                ));
     }
 
     private JSONObject treeConservationProgramActivatedMessageToJson(TreeConservationProgramActivatedMessage message) {
         return new JSONObject(Map.of(
-                "type", TREE_CONSERVATION_PROGRAM_ACTIVATED.toString()
-        ));
+                "type", TREE_CONSERVATION_PROGRAM_ACTIVATED.toString(),
+                "isRead", message.isRead()
+                ));
     }
 
     private JSONArray availableConstructionChangesToJson(Collection<Point> changedAvailableConstruction, Player player) {
@@ -1229,7 +1246,7 @@ public class JsonUtils {
         return jsonResult;
     }
 
-    private <T> JSONArray toJsonArray(Iterable<T> fromList, Function<T, Object> mapFunction) {
+    public <T> JSONArray toJsonArray(Iterable<T> fromList, Function<T, Object> mapFunction) {
         JSONArray jsonResult = new JSONArray();
 
         if (fromList == null) {
@@ -1595,21 +1612,23 @@ public class JsonUtils {
     }
 
     private JSONObject merchandiseToJson(Player player, StatisticsManager statisticsManager) {
+        var mer = statisticsManager.getMerchandiseStatistics(player);
+
         return new JSONObject(Map.ofEntries(
-                entry("WOOD", new JSONArray()),
-                entry("PLANK", new JSONArray()),
-                entry("STONE", new JSONArray()),
-                entry("FOOD", new JSONArray()),
-                entry("WATER", new JSONArray()),
-                entry("BEER", new JSONArray()),
-                entry("COAL", new JSONArray()),
-                entry("IRON", new JSONArray()),
-                entry("GOLD", new JSONArray()),
-                entry("IRON_BAR", new JSONArray()),
-                entry("COIN", new JSONArray()),
-                entry("TOOLS", new JSONArray()),
-                entry("WEAPONS", new JSONArray()),
-                entry("BOAT", new JSONArray())
+                entry("WOOD", toJsonArray(mer.wood().getMeasurements(), this::measurementToJson)),
+                entry("PLANK", toJsonArray(mer.plank().getMeasurements(), this::measurementToJson)),
+                entry("STONE", toJsonArray(mer.stone().getMeasurements(), this::measurementToJson)),
+                entry("FOOD", toJsonArray(mer.food().getMeasurements(), this::measurementToJson)),
+                entry("WATER", toJsonArray(mer.water().getMeasurements(), this::measurementToJson)),
+                entry("BEER", toJsonArray(mer.beer().getMeasurements(), this::measurementToJson)),
+                entry("COAL", toJsonArray(mer.coal().getMeasurements(), this::measurementToJson)),
+                entry("IRON", toJsonArray(mer.iron().getMeasurements(), this::measurementToJson)),
+                entry("GOLD", toJsonArray(mer.gold().getMeasurements(), this::measurementToJson)),
+                entry("IRON_BAR", toJsonArray(mer.ironBar().getMeasurements(), this::measurementToJson)),
+                entry("COIN", toJsonArray(mer.coin().getMeasurements(), this::measurementToJson)),
+                entry("TOOLS", toJsonArray(mer.tools().getMeasurements(), this::measurementToJson)),
+                entry("WEAPONS", toJsonArray(mer.weapons().getMeasurements(), this::measurementToJson)),
+                entry("BOAT", toJsonArray(mer.boats().getMeasurements(), this::measurementToJson))
         ));
     }
 

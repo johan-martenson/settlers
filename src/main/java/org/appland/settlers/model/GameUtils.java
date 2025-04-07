@@ -20,7 +20,7 @@ import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
@@ -64,6 +64,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.*;
+import static java.lang.String.format;
 import static org.appland.settlers.model.Direction.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.*;
@@ -821,7 +822,7 @@ public class GameUtils {
 
         @Override
         public String toString() {
-            return String.format("Point: %s, cost: %d", point, cost);
+            return format("Point: %s, cost: %d", point, cost);
         }
     }
 
@@ -1717,13 +1718,20 @@ public class GameUtils {
         return ranks;
     }
 
-    public static Worker materialToWorker(Material material, Player player, GameMap map) {
+    public static Worker createWorker(Material material, Building building, Player player, GameMap map) {
+        if (material == HELPER) {
+            return switch (building) {
+                case Mill mill -> new Miller(player, map);
+                default -> throw new InvalidGameLogicException(format("Can't create helper for %s", building));
+            };
+        }
+
         return switch (material) {
             case FORESTER -> new Forester(player, map);
             case WOODCUTTER_WORKER -> new WoodcutterWorker(player, map);
             case STONEMASON -> new Stonemason(player, map);
             case FARMER -> new Farmer(player, map);
-            case SAWMILL_WORKER -> new SawmillWorker(player, map);
+            case SAWMILL_WORKER -> new Carpenter(player, map);
             case WELL_WORKER -> new WellWorker(player, map);
             case MILLER -> new Miller(player, map);
             case BAKER -> new Baker(player, map);
@@ -1752,7 +1760,7 @@ public class GameUtils {
             case BUILDER -> new Builder(player, map);
             case SHIPWRIGHT -> new Shipwright(player, map);
             default -> throw new InvalidGameLogicException(
-                    String.format("Can't retrieve worker of type %s", material));
+                    format("Can't retrieve worker of type %s", material));
         };
     }
 

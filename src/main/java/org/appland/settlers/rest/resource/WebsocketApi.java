@@ -422,7 +422,7 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 sendToSession(session,
                         new JSONObject(Map.of(
                                 "requestId", jsonBody.get("requestId"),
-                                "maps", jsonUtils.mapFilesToJson(MapsResource.mapsResource.getMaps())
+                                "maps", jsonUtils.toJsonArray(MapsResource.mapsResource.getMaps(), jsonUtils::mapFileToJson)
                         )));
             }
             case GET_GAMES -> {
@@ -1072,6 +1072,11 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                 } catch (InvalidUserActionException e) {
                     throw new RuntimeException(e);
                 }
+            }
+            case MARK_GAME_MESSAGES_READ -> {
+                ((JSONArray)jsonBody.get("messageIds"))
+                        .stream().map(messageId -> idManager.getObject((String) messageId))
+                        .forEach(readMessage -> player.markMessageAsRead((Message) readMessage));
             }
             default -> throw new RuntimeException("Message contains unknown command: " + message);
         }

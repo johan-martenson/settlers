@@ -75,6 +75,7 @@ import java.util.Map.Entry;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.assets.Utils.*;
+import static org.appland.settlers.assets.utils.ImageUtils.writeImageResourceToFile;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.*;
 import static org.appland.settlers.model.Stone.StoneType.STONE_1;
@@ -471,7 +472,6 @@ public class Extractor {
                         Point maxOrigin = new Point(0, 0);
 
                         if (!frame.getBitmaps().isEmpty()) {
-
                             maxOrigin.x = Integer.MIN_VALUE;
                             maxOrigin.y = Integer.MIN_VALUE;
 
@@ -1817,25 +1817,7 @@ public class Extractor {
             GameResource gameResource = gameResourceList.get(entry.getKey());
             String outFilename = entry.getValue();
 
-            switch (gameResource.getType()) {
-                case BITMAP_RLE:
-                    BitmapRLEResource headquarterRLEBitmapResource = (BitmapRLEResource) gameResource;
-                    headquarterRLEBitmapResource.getBitmap().writeToFile(outFilename);
-                    break;
-
-                case PLAYER_BITMAP_RESOURCE:
-                    PlayerBitmapResource playerBitmapResource = (PlayerBitmapResource) gameResource;
-                    playerBitmapResource.getBitmap().writeToFile(outFilename);
-                    break;
-
-                case BITMAP_RESOURCE:
-                    BitmapResource bitmapResource = (BitmapResource) gameResource;
-                    bitmapResource.getBitmap().writeToFile(outFilename);
-                    break;
-
-                default:
-                    throw new RuntimeException("CANNOT HANDLE " + gameResource.getClass());
-            }
+            writeImageResourceToFile(gameResource, outFilename);
         }
     }
 }

@@ -12,15 +12,17 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.actors.Baker;
 import org.appland.settlers.model.actors.Butcher;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Hunter;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.WoodcutterWorker;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
+import org.appland.settlers.model.buildings.Bakery;
 import org.appland.settlers.model.buildings.Brewery;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.CoalMine;
@@ -400,7 +402,7 @@ public class TestMerchandise {
 
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
         Utils.waitForBuildingToBeConstructed(sawmill);
-        var sawmillWorker0 = (SawmillWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+        var sawmillWorker0 = (Carpenter) Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);
@@ -590,6 +592,51 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, hunter, MEAT);
+
+        assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
+        assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getLast().value(), 1);
+    }
+
+    @Test
+    public void testMerchandiseStatisticsWhenBreadIsProduced() throws InvalidUserActionException {
+
+        /* Create new single player game */
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        /* Place headquarter */
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        var point3 = new Point(7, 9);
+        var bakery = map.placeBuilding(new Bakery(player0), point3);
+
+        /* Connect the bakery with the headquarters */
+        var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        // Wait for the bakery to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(bakery);
+
+        var baker = (Baker) Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker);
+
+        /* Deliver ingredients to the bakery */
+        bakery.putCargo(new Cargo(Material.WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
+
+        // Verify that merchandise statistics are updated when the bakery produces a bread
+        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+
+        assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
@@ -1124,7 +1171,7 @@ public class TestMerchandise {
 
         var road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
         Utils.waitForBuildingToBeConstructed(sawmill);
-        var sawmillWorker0 = (SawmillWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+        var sawmillWorker0 = (Carpenter) Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);
@@ -1254,6 +1301,64 @@ public class TestMerchandise {
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
         assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getLast().value(), 1);
+    }
+
+    @Test
+    public void testListeningToMerchandiseStatisticsWhenBreadIsProduced() throws InvalidUserActionException {
+
+        /* Create new single player game */
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        /* Place headquarter */
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        var point3 = new Point(7, 9);
+        var bakery = map.placeBuilding(new Bakery(player0), point3);
+
+        /* Connect the bakery with the headquarters */
+        var road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        // Wait for the bakery to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(bakery);
+
+        var baker = (Baker) Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker);
+
+        /* Deliver ingredients to the bakery */
+        bakery.putCargo(new Cargo(Material.WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
+
+        // Start monitoring statistics
+        var monitor = new Utils.GameViewMonitor();
+
+        map.getStatisticsManager().addListener(monitor);
+
+        // Verify that the listener gets an event when bread is produced
+        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+
+        assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().value(), 0);
+        assertEquals(monitor.getStatisticsEvents().size(), 0);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, baker, BREAD);
+
+        assertEquals(merchandiseStatistics.food().getMeasurements().size(), 2);
+        assertTrue(merchandiseStatistics.food().getMeasurements().getLast().time() > 1);
+        assertEquals(merchandiseStatistics.food().getMeasurements().getLast().value(), 1);
+        assertEquals(monitor.getStatisticsEvents().size(), 1);
+
+        // Verify that the event is only sent once
+        map.stepTime();
+        map.stepTime();
+
+        assertEquals(monitor.getStatisticsEvents().size(), 1);
     }
 
     @Test

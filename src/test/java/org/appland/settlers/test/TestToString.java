@@ -21,7 +21,7 @@ import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.actors.Soldier;
@@ -688,16 +688,16 @@ public class TestToString {
         assertTrue(sawmill.needsWorker());
 
         /* Wait for a sawmill worker to start walking to the sawmill */
-        SawmillWorker sawmillWorker = Utils.waitForWorkerOutsideBuilding(SawmillWorker.class, player0);
+        Carpenter carpenter = Utils.waitForWorkerOutsideBuilding(Carpenter.class, player0);
 
         /* Verify that the toString() method is correct */
-        assertTrue(sawmillWorker.isExactlyAtPoint());
-        assertEquals(sawmillWorker.toString(), "Sawmill worker (5, 5)");
+        assertTrue(carpenter.isExactlyAtPoint());
+        assertEquals(carpenter.toString(), "Sawmill worker (5, 5)");
 
         map.stepTime();
 
-        assertFalse(sawmillWorker.isExactlyAtPoint());
-        assertEquals(sawmillWorker.toString(), "Sawmill worker (5, 5) - (6, 4)");
+        assertFalse(carpenter.isExactlyAtPoint());
+        assertEquals(carpenter.toString(), "Sawmill worker (5, 5) - (6, 4)");
     }
 
     @Test

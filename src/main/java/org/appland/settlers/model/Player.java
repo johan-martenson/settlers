@@ -139,6 +139,7 @@ public class Player {
     private final Set<Stone> changedStones = new HashSet<>();
     private final Set<Tree> newFallingTrees = new HashSet<>();
     private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
+    private final Set<Message> readMessages = new HashSet<>();
 
     public Player(String name, PlayerColor color, Nation nation, PlayerType playerType) {
         this.name = name;
@@ -998,7 +999,8 @@ public class Player {
                 removedMessages,
                 changedStones,
                 newFallingTrees,
-                transportPriorityChanged);
+                transportPriorityChanged,
+                readMessages);
 
         /* Send the event to all monitors */
         gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
@@ -1045,6 +1047,7 @@ public class Player {
         removedMessages.clear();
         changedStones.clear();
         newFallingTrees.clear();
+        readMessages.clear();
         transportPriorityChanged = false;
     }
 
@@ -1722,5 +1725,13 @@ public class Player {
 
     public void removePlayerChangeListener(PlayerChangeListener playerChangeListener) {
         playerChangeListeners.remove(playerChangeListener);
+    }
+
+    public void markMessageAsRead(Message message) {
+        if (!message.isRead()) {
+            readMessages.add(message);
+        }
+
+        message.isRead = true;
     }
 }

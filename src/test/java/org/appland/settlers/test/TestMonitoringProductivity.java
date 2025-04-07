@@ -24,7 +24,7 @@ import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
 import org.appland.settlers.model.actors.PigBreeder;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WellWorker;
 import org.appland.settlers.model.actors.WoodcutterWorker;
@@ -2288,7 +2288,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(sawmill);
 
         /* Populate the sawmill */
-        Worker sawmillWorker0 = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill);
+        Worker sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);
@@ -2344,7 +2344,7 @@ public class TestMonitoringProductivity {
         Utils.constructHouse(sawmill);
 
         /* Populate the sawmill */
-        Worker sawmillWorker0 = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill);
+        Worker sawmillWorker0 = Utils.occupyBuilding(new Carpenter(player0, map), sawmill);
 
         assertTrue(sawmillWorker0.isInsideBuilding());
         assertEquals(sawmillWorker0.getHome(), sawmill);

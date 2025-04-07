@@ -102,7 +102,7 @@ public class Storehouse extends Building {
                     .filter(Material::isWorker)
                     .findFirst()
                     .map(material -> {
-                        Worker worker = retrieveWorker(material);
+                        Worker worker = retrieveWorker(material, null);
                         getMap().placeWorker(worker, this);
                         worker.goToOtherStorage(this);
 
@@ -122,7 +122,7 @@ public class Storehouse extends Building {
                             .filter(storehouse -> storehouse.needsMaterial(workerType)) // Filter storehouses that don't need the worker
                             .findFirst() // Find the first suitable storehouse
                             .ifPresent(storehouse -> {
-                                Worker worker = retrieveWorker(workerType);
+                                Worker worker = retrieveWorker(workerType, null);
                                 getMap().placeWorker(worker, this);
                                 worker.goToStorehouse((Storehouse) storehouse);
                                 storehouse.promiseDelivery(workerType);
@@ -150,7 +150,7 @@ public class Storehouse extends Building {
                 })
                 .findFirst()
                 .map(building -> {
-                    Worker builder = retrieveWorker(BUILDER);
+                    Worker builder = retrieveWorker(BUILDER, null);
                     getMap().placeWorker(builder, this);
                     builder.setTargetBuilding(building);
                     building.promiseBuilder((Builder) builder);
@@ -173,7 +173,7 @@ public class Storehouse extends Building {
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
-                    Geologist geologist = (Geologist) retrieveWorker(GEOLOGIST);
+                    Geologist geologist = (Geologist) retrieveWorker(GEOLOGIST, null);
                     getMap().placeWorker(geologist, this);
                     geologist.setTarget(flag.getPosition());
                     flag.geologistSent();
@@ -201,7 +201,7 @@ public class Storehouse extends Building {
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
-                    Scout scout = (Scout) retrieveWorker(SCOUT);
+                    Scout scout = (Scout) retrieveWorker(SCOUT, null);
                     getMap().placeWorker(scout, this);
                     scout.setTarget(flag.getPosition());
                     flag.scoutSent();
@@ -230,11 +230,13 @@ public class Storehouse extends Building {
                         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
                         return storehouse == null || equals(storehouse) || !storehouse.hasMilitary();
                     } else if (building.needsWorker()) {
-                        Material material = building.getWorkerType();
-                        Material toolForWorker = WORKER_TO_TOOL_MAP.get(material);
+                        var material = building.getWorkerType();
+                        var toolForWorker = WORKER_TO_TOOL_MAP.get(material);
 
-                        boolean hasWorker = hasAtLeastOne(material);
-                        boolean canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker)) || material == WELL_WORKER;
+                        var hasWorker = hasAtLeastOne(material);
+                        var canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker))
+                                || material == WELL_WORKER
+                                || material == HELPER;
 
                         if (!hasWorker && !canMakeWorker) {
                             return false;
@@ -244,7 +246,7 @@ public class Storehouse extends Building {
                             return false;
                         }
 
-                        Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+                        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
                         return storehouse == null || equals(storehouse) || !storehouse.hasAtLeastOne(material);
                     }
 
@@ -258,7 +260,7 @@ public class Storehouse extends Building {
                         military.setTargetBuilding(building);
                         building.promiseSoldier(military);
                     } else if (building.needsWorker()) {
-                        Worker worker = retrieveWorker(building.getWorkerType());
+                        Worker worker = retrieveWorker(building.getWorkerType(), building);
                         getMap().placeWorker(worker, this);
                         worker.setTargetBuilding(building);
                         building.promiseWorker(worker);
@@ -326,8 +328,8 @@ public class Storehouse extends Building {
         getPlayer().reportChangedInventory(this);
     }
 
-    public Worker retrieveWorker(Material workerType) {
-        if (!hasAtLeastOne(workerType)) {
+    public Worker retrieveWorker(Material workerType, Building building) {
+        if (workerType != HELPER && !hasAtLeastOne(workerType)) {
             var tool = WORKER_TO_TOOL_MAP.get(workerType);
 
             if (hasAtLeastOne(tool)) {
@@ -340,7 +342,7 @@ public class Storehouse extends Building {
             }
         }
 
-        Worker worker = GameUtils.materialToWorker(workerType, getPlayer(), getMap());
+        var worker = GameUtils.createWorker(workerType, building, getPlayer(), getMap());
         worker.setPosition(getFlag().getPosition());
         retrieveOneFromInventory(workerType);
 

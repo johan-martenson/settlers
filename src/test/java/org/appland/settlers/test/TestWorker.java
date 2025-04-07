@@ -16,7 +16,7 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Building;
@@ -58,7 +58,7 @@ public class TestWorker {
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Occupy the sawmill */
-        SawmillWorker worker = new SawmillWorker(player0, map);
+        Carpenter worker = new Carpenter(player0, map);
         map.placeWorker(worker, sawmill.getFlag());
 
         /* Verify that the worker cannot enter the sawmill when standing at the flag */

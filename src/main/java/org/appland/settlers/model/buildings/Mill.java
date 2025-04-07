@@ -8,11 +8,7 @@ package org.appland.settlers.model.buildings;
 
 import org.appland.settlers.model.Player;
 
-import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Size.MEDIUM;
 
 /**
@@ -21,7 +17,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  */
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
 @Production(requiredGoods = {WHEAT, WHEAT, WHEAT, WHEAT, WHEAT, WHEAT}, output = FLOUR)
-@RequiresWorker(workerType = MILLER)
+@RequiresWorker(workerType = HELPER)
 public class Mill extends Building {
 
     public Mill(Player player0) {

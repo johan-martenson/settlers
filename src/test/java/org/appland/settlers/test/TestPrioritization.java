@@ -24,7 +24,7 @@ import org.appland.settlers.model.actors.IronFounder;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Miner;
 import org.appland.settlers.model.actors.Minter;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Armory;
 import org.appland.settlers.model.buildings.Bakery;
@@ -2153,7 +2153,7 @@ public class TestPrioritization {
         /* Utils occupy the constructed buildings */
         Utils.occupyBuilding(new Minter(player0, map), mint0);
         Utils.occupyBuilding(new Baker(player0, map), bakery0);
-        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
+        Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
         Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         /* Connect the buildings with the headquarter */

@@ -5,6 +5,7 @@ import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
@@ -68,7 +69,6 @@ public class TestMessages {
      * TODO:
      *  - We are being bombarded by a catapult
      *  - Game ended with draw
-     *
      */
 
     @Test
@@ -188,7 +188,7 @@ public class TestMessages {
         Soldier military = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
-                military = (Soldier)worker;
+                military = (Soldier) worker;
             }
         }
 
@@ -443,7 +443,7 @@ public class TestMessages {
 
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
-                geologist = (Geologist)worker;
+                geologist = (Geologist) worker;
             }
         }
 
@@ -514,7 +514,7 @@ public class TestMessages {
 
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
-                geologist = (Geologist)worker;
+                geologist = (Geologist) worker;
             }
         }
 
@@ -691,7 +691,7 @@ public class TestMessages {
 
         /* Verify that the attacker takes over the building */
         assertEquals(attacker.getTarget(), barracks1.getPosition());
-        assertTrue(player0.getMessages().size() >=  2);
+        assertTrue(player0.getMessages().size() >= 2);
         assertTrue(player1.getMessages().size() >= 3);
 
         int amountMessagesForPlayer0Before = player0.getMessages().size();
@@ -884,7 +884,7 @@ public class TestMessages {
         assertEquals(message.building(), mine);
 
         /* Verify that no more messages are sent */
-        for (int i = 0; i < 500; i++){
+        for (int i = 0; i < 500; i++) {
             map.stepTime();
 
             assertEquals(player0.getMessages().size(), 1);
@@ -1178,7 +1178,7 @@ public class TestMessages {
         Soldier military = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
-                military = (Soldier)worker;
+                military = (Soldier) worker;
             }
         }
 
@@ -1240,7 +1240,7 @@ public class TestMessages {
         Soldier military = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Soldier) {
-                military = (Soldier)worker;
+                military = (Soldier) worker;
             }
         }
 
@@ -1723,5 +1723,146 @@ public class TestMessages {
         }
 
         assertEquals(numberOfBombardedByCatapultMessages, 1);
+    }
+
+    @Test
+    public void testNewMessageIsUnread() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point21 = new Point(5, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place barracks */
+        Point point22 = new Point(5, 23);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Verify that the message sent when the barracks is constructed is unread */
+        assertTrue(player0.getMessages().isEmpty());
+
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        assertEquals(player0.getMessages().size(), 1);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertTrue(player0.getMessages().getFirst() instanceof MilitaryBuildingReadyMessage);
+
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) player0.getMessages().getFirst();
+
+        assertEquals(message.building(), barracks0);
+        assertFalse(message.isRead());
+    }
+
+    @Test
+    public void testMarkMessageAsRead() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point21 = new Point(5, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place barracks */
+        Point point22 = new Point(5, 23);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        // Wait for the barracks to get constructed and receive a message
+        assertTrue(player0.getMessages().isEmpty());
+
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        assertEquals(player0.getMessages().size(), 1);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
+        assertTrue(player0.getMessages().getFirst() instanceof MilitaryBuildingReadyMessage);
+
+        MilitaryBuildingReadyMessage message = (MilitaryBuildingReadyMessage) player0.getMessages().getFirst();
+
+        assertEquals(message.building(), barracks0);
+        assertFalse(message.isRead());
+
+        // Verify that the message can be marked as read
+        player0.markMessageAsRead(message);
+
+        assertTrue(message.isRead());
+    }
+
+    @Test
+    public void testMessageSentWhenMessageIsRead() throws InvalidUserActionException {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarters */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place storage */
+        Point point22 = new Point(6, 12);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
+
+        /* Set the amount of planks to the limit for the tree conservation program */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
+
+        /* Try to build a building that doesn't get resources */
+        Point point2 = new Point(10, 6);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Connect the armory to the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* A message is sent */
+        assertTrue(player0.getMessages().isEmpty());
+
+        Utils.waitForNewMessage(player0);
+
+        assertEquals(player0.getMessages().size(), 1);
+        assertEquals(player0.getMessages().getFirst().getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
+        assertTrue(player0.getMessages().getFirst() instanceof TreeConservationProgramActivatedMessage);
+
+        TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) player0.getMessages().getFirst();
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+
+        player0.monitorGameView(monitor);
+
+        /* Verify that a monitoring event is sent when the message is marked as read */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        player0.markMessageAsRead(message);
+
+        map.stepTime();
+
+        assertEquals(monitor.getEvents().size(), 1);
+        assertEquals(monitor.getLastEvent().readMessages().size(), 1);
+        assertEquals(monitor.getLastEvent().readMessages().iterator().next(), message);
+
+        // Verify that the event is only sent once
+        map.stepTime();
+
+        assertEquals(monitor.getEvents().size(), 1);
+        assertEquals(monitor.getLastEvent().readMessages().size(), 1);
+        assertEquals(monitor.getLastEvent().readMessages().iterator().next(), message);
     }
 }

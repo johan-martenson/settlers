@@ -108,6 +108,8 @@ public class Baker extends Worker {
                     /* Report production of the bread */
                     productivityMeasurer.reportProductivity();
 
+                    map.getStatisticsManager().breadProduced(player, map.getTime());
+
                     /* Handle the transportation of the produced bread */
                     if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;

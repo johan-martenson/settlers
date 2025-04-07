@@ -18,14 +18,14 @@ import org.appland.settlers.model.buildings.Storehouse;
 
 import static java.lang.String.format;
 import static org.appland.settlers.model.Material.*;
-import static org.appland.settlers.model.actors.SawmillWorker.State.*;
+import static org.appland.settlers.model.actors.Carpenter.State.*;
 
 /**
  *
  * @author johan
  */
 @Walker(speed = 10)
-public class SawmillWorker extends Worker {
+public class Carpenter extends Worker {
     private static final int PRODUCTION_TIME = 49;
     private static final int RESTING_TIME    = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
@@ -43,10 +43,12 @@ public class SawmillWorker extends Worker {
         GOING_BACK_TO_HOUSE,
         WAITING_FOR_SPACE_ON_FLAG,
         GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
-        GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
-    public SawmillWorker(Player player, GameMap map) {
+    public Carpenter(Player player, GameMap map) {
         super(player, map);
     }
 

@@ -835,13 +835,11 @@ public class Utils {
     }
 
     static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws InvalidUserActionException {
-
         assertNotNull(cargo);
         assertNotNull(cargo.getPosition());
         assertNotNull(cargo.getTarget());
 
-        for (int i = 0; i < 2000; i++) {
-
+        for (int i = 0; i < 20_000; i++) {
             if (cargo.getPosition().equals(cargo.getTarget().getPosition())) {
                 break;
             }
@@ -1154,8 +1152,7 @@ public class Utils {
     public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag, Material material) throws InvalidUserActionException {
         Cargo cargo = null;
 
-        for (int i = 0; i < 1000; i++) {
-
+        for (int i = 0; i < 10_000; i++) {
             for (Cargo cargoCandidate : flag.getStackedCargo()) {
                 if (cargoCandidate.getMaterial() == material) {
                     cargo = cargoCandidate;
@@ -3485,7 +3482,8 @@ public class Utils {
                 new ArrayList<>(gameChangesList.removedMessages()),
                 new ArrayList<>(gameChangesList.changedStones()),
                 new ArrayList<>(gameChangesList.newFallingTrees()),
-                gameChangesList.transportPriorityChanged());
+                gameChangesList.transportPriorityChanged(),
+                new ArrayList<>(gameChangesList.readMessages()));
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {

@@ -17,7 +17,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
-import org.appland.settlers.model.actors.SawmillWorker;
+import org.appland.settlers.model.actors.Carpenter;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Quarry;
@@ -100,7 +100,7 @@ public class TestScenarios {
         assertEquals(headquarter0.getAmount(STONE), 10);
 
         /* Assign worker to the sawmill */
-        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
+        Utils.occupyBuilding(new Carpenter(player0, map), sawmill0);
 
         /* Let the couriers reach their targeted roads */
         Utils.waitForCouriersToBeIdle(map, courier0, courier1, courier2);

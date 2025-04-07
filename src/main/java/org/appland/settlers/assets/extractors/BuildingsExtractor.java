@@ -1,5 +1,7 @@
 package org.appland.settlers.assets.extractors;
 
+import org.appland.settlers.assets.BitmapRLEResource;
+import org.appland.settlers.assets.BitmapResource;
 import org.appland.settlers.assets.InvalidFormatException;
 import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.collectors.BuildingsImageCollection;
@@ -9,6 +11,7 @@ import org.appland.settlers.assets.gamefiles.JapYLst;
 import org.appland.settlers.assets.gamefiles.RomYLst;
 import org.appland.settlers.assets.gamefiles.VikYLst;
 import org.appland.settlers.assets.resources.Palette;
+import org.appland.settlers.assets.utils.ImageUtils;
 
 import java.io.IOException;
 
@@ -59,7 +62,6 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.IRON_SMELTER);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.PIG_FARM);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.STOREHOUSE);
-        buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.MILL);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.BAKERY);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.SAWMILL);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.MINT);
@@ -68,6 +70,31 @@ public class BuildingsExtractor {
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.FARM);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.DONKEY_BREEDER);
         buildingsImageCollection.addImagesForBuilding(romYLst, ROMANS, RomYLst.HARBOR);
+
+        // Compose the static mill image
+        var mill = ((BitmapRLEResource) romYLst.get(RomYLst.MILL.index())).getBitmap();
+        var millShadow = ((BitmapResource) romYLst.get(RomYLst.MILL.index() + 1)).getBitmap();
+        var sails = ((BitmapRLEResource) romYLst.get(RomYLst.MILL.index() + 48)).getBitmap();
+        var sailsShadow = ((BitmapResource) romYLst.get(RomYLst.MILL.index() + 49)).getBitmap();
+
+        var millWithSails = ImageUtils.mergeImages(mill, sails);
+        var millWithSailsShadow = ImageUtils.mergeImages(millShadow, sailsShadow);
+
+        // Add the mill image
+        buildingsImageCollection.addBuildingForNation(ROMANS, RomYLst.MILL.name(), millWithSails);
+        buildingsImageCollection.addBuildingShadowForNation(ROMANS, RomYLst.MILL.name(), millWithSailsShadow);
+        buildingsImageCollection.addBuildingUnderConstructionForNation(
+                ROMANS,
+                RomYLst.MILL.name(),
+                getImageAt(romYLst, RomYLst.MILL.index() + 2));
+        buildingsImageCollection.addBuildingUnderConstructionShadowForNation(ROMANS, RomYLst.MILL.name(), getImageAt(romYLst, RomYLst.MILL.index() + 3));
+        buildingsImageCollection.addOpenDoorForBuilding(ROMANS, RomYLst.MILL.name(), getImageAt(romYLst, RomYLst.MILL.index() + 4));
+
+        millWithSails.writeToFile("mill-with-sails.png");
+
+        /**
+         * TODO: animate the mill. use it for all nations.
+         */
 
         buildingsImageCollection.addConstructionPlanned(ROMANS, getImageAt(romYLst, RomYLst.CONSTRUCTION_PLANNED));
         buildingsImageCollection.addConstructionPlannedShadow(ROMANS, getImageAt(romYLst, RomYLst.CONSTRUCTION_PLANNED_SHADOW));

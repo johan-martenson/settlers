@@ -10,6 +10,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.actors.Brewer;
 import org.appland.settlers.model.actors.DonkeyBreeder;
+import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.PigBreeder;
 import org.appland.settlers.model.actors.Worker;
@@ -747,69 +748,70 @@ public class TestWheatPrioritization {
     @Test
     public void testOtherConsumersGetWheatWithFullyStockedMill() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place donkey farm */
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        // Place donkey farm
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
-        /* Place mill */
-        Point point2 = new Point(10, 14);
-        Building mill0 = map.placeBuilding(new Mill(player0), point2);
+        // Place mill
+        var point2 = new Point(10, 14);
+        var mill0 = map.placeBuilding(new Mill(player0), point2);
 
-        /* Place pig farm */
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        // Place pig farm
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
-        /* Finish construction of the wheat consumers */
+        // Finish construction of the wheat consumers
         Utils.constructHouse(donkeyFarm0);
         Utils.constructHouse(mill0);
         Utils.constructHouse(pigFarm0);
 
-        /* Occupy the buildings except for the mill */
+        // Occupy the buildings except for the mill
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
         Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0);
 
-        /* Set the quota to even distribution */
+        // Set the quota to even distribution
         player0.setFoodQuota(Mill.class, 1);
         player0.setFoodQuota(DonkeyFarm.class, 1);
         player0.setFoodQuota(PigFarm.class, 1);
 
-        /* Make sure the headquarters has no wheat */
+        // Make sure the headquarters has no wheat
         Utils.adjustInventoryTo(headquarter0, WHEAT, 0);
 
-        /* Make sure the headquarters has no miller so the mill will not get occupied */
+        // Make sure the headquarters has no miller so the mill will not get occupied
         Utils.adjustInventoryTo(headquarter0, MILLER, 0);
 
-        /* Fill the stock in the mill so it doesn't need anything */
+        // Fill the stock in the mill so it doesn't need anything and stop production so it won't consume any wheat
         Utils.deliverCargos(mill0, WHEAT, 6);
+
+        mill0.stopProduction();
 
         assertEquals(mill0.getAmount(WHEAT), 6);
         assertFalse(mill0.needsMaterial(WHEAT));
+        assertFalse(mill0.isProductionEnabled());
 
-        /* Attach the wheat consumers to the headquarters */
+        // Attach the wheat consumers to the headquarters
         map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
 
-        /* Verify that the storage worker isn't carrying something when the game starts */
+        // Verify that the storage worker isn't carrying something when the game starts
         assertNull(headquarter0.getWorker().getCargo());
 
-        /* Verify that the other consumers get wheat when the mill is already fully stocked and does not consume its resources */
+        // Verify that the other consumers get wheat when the mill is already fully stocked and does not consume its resources
         Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
+        var carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
-            /* Give all consumers the other materials they need for production */
+            // Give all consumers the other materials they need for production
             if (donkeyFarm0.getAmount(WATER) == 0) {
                 donkeyFarm0.putCargo(new Cargo(WATER, map));
             }
@@ -818,14 +820,14 @@ public class TestWheatPrioritization {
                 pigFarm0.putCargo(new Cargo(WATER, map));
             }
 
-            /* Add one wheat to the headquarters */
+            // Add one wheat to the headquarters
             Utils.adjustInventoryTo(headquarter0, WHEAT, 1);
 
-            /* Wait for the storage worker to pick up a wheat cargo */
+            // Wait for the storage worker to pick up a wheat cargo
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WHEAT);
 
-            /* Keep track of where the wheat cargos end up */
-            Building targetBuilding = carrier.getCargo().getTarget();
+            // Keep track of where the wheat cargos end up
+            var targetBuilding = carrier.getCargo().getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
@@ -834,15 +836,15 @@ public class TestWheatPrioritization {
             int amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
-            /* Wait for the wheat to reach the mine */
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            // Wait for the wheat to reach the consumer
+            var cargo = carrier.getCargo();
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(WHEAT), 1);
 
-            /* Exit after four delivered wheat cargos */
+            // Exit after four delivered wheat cargos
             int sum = 0;
 
             for (Integer amountInBuilding : wheatAllocation.values()) {
@@ -854,7 +856,7 @@ public class TestWheatPrioritization {
             }
         }
 
-        assertEquals(wheatAllocation.keySet().size(), 2);
+        assertEquals(wheatAllocation.size(), 2);
         assertEquals((int)wheatAllocation.get(donkeyFarm0), 2);
         assertEquals((int)wheatAllocation.get(pigFarm0), 2);
     }
@@ -1764,7 +1766,7 @@ public class TestWheatPrioritization {
             }
         }
 
-        assertEquals(wheatAllocation.keySet().size(), 3);
+        assertEquals(wheatAllocation.size(), 3);
         assertEquals((int)wheatAllocation.get(pigFarm0), 2);
         assertEquals((int)wheatAllocation.get(donkeyFarm0), 2);
         assertEquals((int)wheatAllocation.get(brewery), 2);
@@ -1773,69 +1775,75 @@ public class TestWheatPrioritization {
     @Test
     public void testOtherConsumersGetWheatWithFullyStockedMillFromFarm() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(15, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place donkey farm */
-        Point point1 = new Point(6, 10);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+        // Place donkey farm
+        var point1 = new Point(6, 10);
+        var donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
-        /* Place mill */
-        Point point2 = new Point(10, 14);
-        Building mill0 = map.placeBuilding(new Mill(player0), point2);
+        // Place mill
+        var point2 = new Point(10, 14);
+        var mill0 = map.placeBuilding(new Mill(player0), point2);
 
-        /* Place pig farm */
-        Point point3 = new Point(10, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
+        // Place pig farm
+        var point3 = new Point(10, 6);
+        var pigFarm0 = map.placeBuilding(new PigFarm(player0), point3);
 
-        /* Finish construction of the wheat consumers */
-        Utils.constructHouse(donkeyFarm0);
-        Utils.constructHouse(mill0);
-        Utils.constructHouse(pigFarm0);
+        // Place farm
+        var point4 = new Point(7, 15);
+        var farm = map.placeBuilding(new Farm(player0), point4);
 
-        /* Occupy the buildings except for the mill */
+        // Finish construction of the wheat consumers and the farm
+        Utils.constructHouses(donkeyFarm0, mill0, pigFarm0, farm);
+
+        // Occupy the buildings except for the mill
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
         Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0);
+        var farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
-        /* Set the quota to even distribution */
+        // Set the quota to even distribution
         player0.setFoodQuota(Mill.class, 1);
         player0.setFoodQuota(DonkeyFarm.class, 1);
         player0.setFoodQuota(PigFarm.class, 1);
 
-        /* Make sure the headquarters has no wheat */
+        // Make sure the headquarters has no wheat and will not receive any
         Utils.adjustInventoryTo(headquarter0, WHEAT, 0);
+        headquarter0.blockDeliveryOfMaterial(WHEAT);
 
-        /* Make sure the headquarters has no miller so the mill will not get occupied */
-        Utils.adjustInventoryTo(headquarter0, MILLER, 0);
+        assertTrue(headquarter0.isDeliveryBlocked(WHEAT));
 
-        /* Fill the stock in the mill so it doesn't need anything */
+        // Stop production in the mill so it won't consume any wheat
+        mill0.stopProduction();
+
+        assertFalse(mill0.isProductionEnabled());
+
+        // Fill the stock in the mill so it doesn't need anything
         Utils.deliverCargos(mill0, WHEAT, 6);
 
         assertEquals(mill0.getAmount(WHEAT), 6);
         assertFalse(mill0.needsMaterial(WHEAT));
 
-        /* Attach the wheat consumers to the headquarters */
-        map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
-        map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
-        map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+        // Attach the wheat consumers to the farm, and the farm with the headquarters
+        map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), farm.getFlag());
+        map.placeAutoSelectedRoad(player0, mill0.getFlag(), farm.getFlag());
+        map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), farm.getFlag());
 
-        /* Verify that the storage worker isn't carrying something when the game starts */
+        // Verify that the storage worker isn't carrying something when the game starts
         assertNull(headquarter0.getWorker().getCargo());
 
-        /* Verify that the other consumers get wheat when the mill is already fully stocked and does not consume its resources */
+        // Verify that the other consumers get wheat when the mill is already fully stocked and does not consume its resources
         Map<Building, Integer> wheatAllocation = new HashMap<>();
-        Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
 
-            /* Give all consumers the other materials they need for production */
+            // Give all consumers the other materials they need for production
             if (donkeyFarm0.getAmount(WATER) == 0) {
                 donkeyFarm0.putCargo(new Cargo(WATER, map));
             }
@@ -1844,32 +1852,29 @@ public class TestWheatPrioritization {
                 pigFarm0.putCargo(new Cargo(WATER, map));
             }
 
-            /* Add one wheat to the headquarters */
-            Utils.adjustInventoryTo(headquarter0, WHEAT, 1);
+            // Wait for the farm's flag to have a wheat cargo
+            var cargo = Utils.waitForFlagToHaveCargoWaiting(map, farm.getFlag(), WHEAT);
 
-            /* Wait for the storage worker to pick up a wheat cargo */
-            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, WHEAT);
 
-            /* Keep track of where the wheat cargos end up */
-            Building targetBuilding = carrier.getCargo().getTarget();
+            // Keep track of where the wheat cargos end up
+            var targetBuilding = cargo.getTarget();
 
             if (!wheatAllocation.containsKey(targetBuilding)) {
                 wheatAllocation.put(targetBuilding, 0);
             }
 
-            int amount = wheatAllocation.get(targetBuilding);
+            var amount = wheatAllocation.get(targetBuilding);
             wheatAllocation.put(targetBuilding, amount + 1);
 
-            /* Wait for the wheat to reach the mine */
-            Cargo cargo = carrier.getCargo();
-            Building target = cargo.getTarget();
+            // Wait for the wheat to reach the consumer
+            var target = cargo.getTarget();
 
             Utils.waitForCargoToReachTarget(map, cargo);
 
             assertEquals(target.getAmount(WHEAT), 1);
 
-            /* Exit after four delivered wheat cargos */
-            int sum = 0;
+            // Exit after four delivered wheat cargos
+            var sum = 0;
 
             for (Integer amountInBuilding : wheatAllocation.values()) {
                 sum += amountInBuilding;
@@ -1880,7 +1885,7 @@ public class TestWheatPrioritization {
             }
         }
 
-        assertEquals(wheatAllocation.keySet().size(), 2);
+        assertEquals(wheatAllocation.size(), 2);
         assertEquals((int)wheatAllocation.get(donkeyFarm0), 2);
         assertEquals((int)wheatAllocation.get(pigFarm0), 2);
     }

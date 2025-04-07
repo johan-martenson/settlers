@@ -48,7 +48,8 @@ public record GameChangesList(
         Collection<Message> removedMessages,
         Collection<Stone> changedStones,
         Collection<Tree> newFallingTrees,
-        boolean transportPriorityChanged
+        boolean transportPriorityChanged,
+        Collection<Message> readMessages
 ) {
     @Override
     public String toString() {
@@ -92,6 +93,7 @@ public record GameChangesList(
                 (isNonEmpty(changedStones) ? ", changedStones=" + changedStones : "") +
                 (isNonEmpty(newFallingTrees) ? ", newFallingTrees=" + newFallingTrees : "") +
                 (transportPriorityChanged ? ", transportPriorityChanged" : "") +
+                (isNonEmpty(readMessages) ? ", readMessages=" + readMessages : "") +
                 '}';
     }
 

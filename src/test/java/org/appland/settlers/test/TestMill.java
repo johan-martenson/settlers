@@ -235,25 +235,23 @@ public class TestMill {
     public void testMillerIsAssignedToFinishedHouse() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
 
-        GameMap map = new GameMap(players, 20, 20);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mill */
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         /* Connect the mill with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
-        /* Finish the mill */
-        Utils.constructHouse(mill);
+        /* Wait for the mill to get constructed */
+        Utils.waitForBuildingToBeConstructed(mill);
 
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
@@ -932,6 +930,27 @@ public class TestMill {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(FLOUR), amount + 1);
+    }
+
+    @Test
+    public void testMillNeedsHelper() throws InvalidUserActionException {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place mill */
+        Point point26 = new Point(8, 8);
+        Mill mill0 = map.placeBuilding(new Mill(player0), point26);
+
+        // Verify that the mill needs a helper
+        assertEquals(mill0.getWorkerType(), Material.HELPER);
     }
 
     @Test

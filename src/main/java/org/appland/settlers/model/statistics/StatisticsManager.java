@@ -271,4 +271,10 @@ public class StatisticsManager {
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
+
+    public void breadProduced(Player player, long time) {
+        getMerchandiseStatistics(player).food().increase(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
 }

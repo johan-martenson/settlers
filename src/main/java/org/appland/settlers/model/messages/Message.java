@@ -1,8 +1,9 @@
 package org.appland.settlers.model.messages;
 
-public interface Message {
+public abstract class Message {
+    public boolean isRead = false;
 
-    enum MessageType {
+    public enum MessageType {
         MILITARY_BUILDING_READY,
         MILITARY_BUILDING_OCCUPIED,
         UNDER_ATTACK,
@@ -21,5 +22,9 @@ public interface Message {
         SHIP_READY_FOR_EXPEDITION
     }
 
-    MessageType getMessageType();
+    public abstract MessageType getMessageType();
+
+    public boolean isRead() {
+        return isRead;
+    }
 }

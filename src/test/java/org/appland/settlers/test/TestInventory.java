@@ -149,9 +149,12 @@ public class TestInventory {
     @Test
     public void testDepositRetrieveWorkers() {
         storehouse.depositWorker(new Forester(null, null));
+
         assertEquals(storehouse.getAmount(FORESTER), 1);
         assertTrue(storehouse.isInStock(FORESTER));
-        storehouse.retrieveWorker(FORESTER);
+
+        storehouse.retrieveWorker(FORESTER, null);
+
         assertEquals(storehouse.getAmount(FORESTER), 0);
         assertFalse(storehouse.isInStock(FORESTER));
     }
