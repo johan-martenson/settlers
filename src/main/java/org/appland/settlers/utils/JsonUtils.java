@@ -374,6 +374,7 @@ public class JsonUtils {
                 jsonProduces.add(material.name().toUpperCase());
             }
 
+            jsonHouse.put("isWorking", building.isWorking());
             jsonHouse.put("productionEnabled", building.isProductionEnabled());
         }
 

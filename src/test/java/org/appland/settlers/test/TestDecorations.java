@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 
 public class TestDecorations {
 
-    static final Set<DecorationType> CANNOT_BUILD_ON_DECORATIONS = EnumSet.of(
+    public static final Set<DecorationType> CANNOT_BUILD_ON_DECORATIONS = EnumSet.of(
             CACTUS_1,
             CACTUS_2,
             SNOWMAN,
@@ -47,7 +47,7 @@ public class TestDecorations {
             SHINING_PORTAL
     );
 
-    static final Set<DecorationType> PURE_DECORATIONS = EnumSet.of(
+    public static final Set<DecorationType> PURE_DECORATIONS = EnumSet.of(
             MINI_BROWN_MUSHROOM,
             TOADSTOOL,
             MINI_STONE,

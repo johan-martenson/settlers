@@ -716,5 +716,9 @@ public abstract class Worker {
     public Direction getDirection() {
         return direction;
     }
+
+    public boolean isWorking() {
+        return false;
+    }
 }
 

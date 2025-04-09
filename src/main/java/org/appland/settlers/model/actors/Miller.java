@@ -25,7 +25,6 @@ import static org.appland.settlers.model.actors.Miller.State.*;
  */
 @Walker(speed = 10)
 public class Miller extends Worker {
-
     protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -71,6 +70,8 @@ public class Miller extends Worker {
             if (countdown.hasReachedZero()) {
                 state = State.GRINDING_WHEAT;
 
+                player.reportChangedBuilding(getHome());
+
                 countdown.countFrom(PRODUCTION_TIME);
             } else {
                 countdown.step();
@@ -94,6 +95,8 @@ public class Miller extends Worker {
 
                     /* Consume the wheat */
                     getHome().consumeOne(WHEAT);
+
+                    player.reportChangedBuilding(getHome());
 
                     /* Go out to the flag to deliver the flour */
                     if (getHome().getFlag().hasPlaceForMoreCargo()) {
@@ -253,5 +256,10 @@ public class Miller extends Worker {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    @Override
+    public boolean isWorking() {
+        return state == GRINDING_WHEAT;
     }
 }

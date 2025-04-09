@@ -16,6 +16,7 @@ import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
@@ -796,7 +797,7 @@ public class Utils {
         assertTrue(hunter.getPosition().distance(animal.getPosition()) <= distance);
     }
 
-    static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws InvalidUserActionException {
+    public static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws InvalidUserActionException {
         for (int j = 0; j < 2000; j++) {
             if (worker.getCargo() == null) {
                 break;
@@ -861,7 +862,7 @@ public class Utils {
         return null;
     }
 
-    static void waitForCropToGetReady(GameMap map, Crop crop) throws InvalidUserActionException {
+    public static void waitForCropToGetReady(GameMap map, Crop crop) throws InvalidUserActionException {
         for (int i = 0; i < 1000; i++) {
             if (crop.getGrowthState() == FULL_GROWN) {
                 break;
@@ -873,7 +874,7 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidUserActionException {
+    public static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws InvalidUserActionException {
         waitForFarmerToStartPlanting(map, farmer0);
 
         Point position = farmer0.getPosition();
@@ -963,7 +964,7 @@ public class Utils {
         return map.getBuildingAtPoint(building.getPosition());
     }
 
-    static void waitForBuildingToBurnDown(Building building) throws InvalidUserActionException {
+    public static void waitForBuildingToBurnDown(Building building) throws InvalidUserActionException {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
@@ -3094,6 +3095,18 @@ public class Utils {
         assertTrue(fisherman.isFishing());
     }
 
+    public static void waitForMillerToStopProducingFlour(Miller miller, GameMap map) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (!miller.isWorking()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(miller.isWorking());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;
@@ -3427,14 +3440,14 @@ public class Utils {
         }
     }
 
-    static List<WorkerAction> getMonitoredWorkerActionsForWorker(Worker worker, GameViewMonitor monitor) {
+    public static List<WorkerAction> getMonitoredWorkerActionsForWorker(Worker worker, GameViewMonitor monitor) {
         return monitor.getEvents().stream()
                 .filter(gameChangesList -> gameChangesList.workersWithStartedActions().containsKey(worker))
                 .map(gameChangesList -> gameChangesList.workersWithStartedActions().get(worker))
                 .collect(Collectors.toList());
     }
 
-    static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
+    public static int countMonitoredWorkerActionForWorker(Worker worker, WorkerAction workerAction, GameViewMonitor monitor) {
         int count = 0;
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {

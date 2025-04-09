@@ -466,25 +466,22 @@ public class TestMill {
     public void testMillProducesFlour() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mill */
-        Point point1 = new Point(12, 8);
-        Mill mill = map.placeBuilding(new Mill(player0), point1);
+        var point1 = new Point(12, 8);
+        var mill = map.placeBuilding(new Mill(player0), point1);
 
         /* Connect the mill with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         /* Place courier */
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
@@ -492,28 +489,36 @@ public class TestMill {
         Utils.constructHouse(mill);
 
         /* Deliver wheat to the mill */
-        Cargo cargo = new Cargo(WHEAT, map);
-
+        var cargo = new Cargo(WHEAT, map);
         mill.putCargo(cargo);
 
         /* Put the worker in the mill */
-        Miller miller = new Miller(player0, map);
+        var miller = new Miller(player0, map);
 
         Utils.occupyBuilding(miller, mill);
 
         assertTrue(miller.isInsideBuilding());
 
         /* Let the worker rest */
-        Utils.fastForward(100, map);
+        for (int i = 0; i < 100; i++) {
+            assertFalse(mill.isWorking());
+
+            map.stepTime();
+        }
 
         /* Verify that it the worker produces flour at the right time */
         for (int i = 0; i < 50; i++) {
             assertNull(miller.getCargo());
+            assertTrue(mill.isWorking());
+
             map.stepTime();
         }
 
         assertNotNull(miller.getCargo());
         assertEquals(miller.getCargo().getMaterial(), FLOUR);
+
+        // Verify that the mill is not working anymore
+        assertFalse(mill.isWorking());
     }
 
     @Test

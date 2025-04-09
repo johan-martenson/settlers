@@ -1,4 +1,4 @@
-package org.appland.settlers.test;
+package org.appland.settlers.test.monitoring;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
@@ -29,6 +29,7 @@ import org.appland.settlers.model.buildings.Quarry;
 import org.appland.settlers.model.buildings.Sawmill;
 import org.appland.settlers.model.buildings.WatchTower;
 import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -351,7 +351,6 @@ public class ImageBoard {
     private record ImageOnBoard(Bitmap image, int x, int y, String... metadata) { }
 
     private static class ImageSeries {
-
         private final List<Bitmap> images;
         private final int x;
         private final int y;
@@ -395,12 +394,14 @@ public class ImageBoard {
         return Math.max(
                 images.values().stream()
                         .mapToInt(imageOnBoard -> imageOnBoard.image().getWidth() + imageOnBoard.x())
-                        .max().orElse(0),
+                        .max()
+                        .orElse(0),
                 imageSeries.values().stream()
                         .mapToInt(series -> (series.layoutDirection == LayoutDirection.ROW)
                                 ? series.width * series.images.size() + series.x
                                 : series.width + series.x)
-                        .max().orElse(0)
+                        .max()
+                        .orElse(0)
         );
     }
 
@@ -414,7 +415,8 @@ public class ImageBoard {
         int currentHeight = images.values().stream()
                 .filter(imageOnBoard -> imageOnBoard.x() + imageOnBoard.image().getWidth() > right)
                 .mapToInt(imageOnBoard -> imageOnBoard.image().getHeight() + imageOnBoard.y())
-                .max().orElse(0);
+                .max()
+                .orElse(0);
 
         int imageSeriesHeight = imageSeries.values().stream()
                 .filter(series -> (series.layoutDirection == LayoutDirection.ROW)
@@ -423,7 +425,8 @@ public class ImageBoard {
                 .mapToInt(series -> (series.layoutDirection == LayoutDirection.ROW)
                         ? series.height + series.y
                         : series.height * series.images.size() + series.y)
-                .max().orElse(0);
+                .max()
+                .orElse(0);
 
         return Math.max(currentHeight, imageSeriesHeight);
     }
@@ -436,13 +439,15 @@ public class ImageBoard {
     public int getCurrentHeight() {
         int currentHeight = images.values().stream()
                 .mapToInt(imageOnBoard -> imageOnBoard.image().getHeight() + imageOnBoard.y())
-                .max().orElse(0);
+                .max()
+                .orElse(0);
 
         int imageSeriesHeight = imageSeries.values().stream()
                 .mapToInt(series -> (series.layoutDirection == LayoutDirection.ROW)
                         ? series.height + series.y
                         : series.height * series.images.size() + series.y)
-                .max().orElse(0);
+                .max()
+                .orElse(0);
 
         return Math.max(currentHeight, imageSeriesHeight);
     }

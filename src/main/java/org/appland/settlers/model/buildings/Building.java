@@ -1425,4 +1425,8 @@ public class Building implements EndPoint {
 
         return primaryAttacker;
     }
+
+    public boolean isWorking() {
+        return worker != null && worker.isWorking();
+    }
 }

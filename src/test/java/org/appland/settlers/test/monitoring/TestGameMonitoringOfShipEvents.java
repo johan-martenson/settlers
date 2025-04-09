@@ -1,4 +1,4 @@
-package org.appland.settlers.test;
+package org.appland.settlers.test.monitoring;
 
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.PlayerType;
@@ -16,6 +16,7 @@ import org.appland.settlers.model.actors.Shipwright;
 import org.appland.settlers.model.buildings.Harbor;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Shipyard;
+import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;

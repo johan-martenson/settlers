@@ -116,7 +116,7 @@ public class GameMap {
     private final Set<Stone> changedStones = new HashSet<>();
     private final Set<Tree> treesToRemove = new HashSet<>();
 
-    private Player winner;
+    private Player winner = null;
     private long time = 1;
     private boolean winnerReported = false;
     private boolean isBorderUpdated = false;
@@ -161,9 +161,6 @@ public class GameMap {
         if (!allPlayersHaveUniqueColor()) {
             throw new InvalidUserActionException("Each player must have a unique color");
         }
-
-        /* There is no winner when the game starts */
-        winner = null;
 
         /* Prepare for collecting statistics on execution */
         collectEachStepTimeGroup = stats.createVariableGroupIfAbsent(AGGREGATED_EACH_STEP_TIME_GROUP);
@@ -425,7 +422,7 @@ public class GameMap {
         int playersWithBuildings = (int) players.stream()
                 .filter(Player::isAlive)
                 .count();
-        Player playerWithBuildings = players.stream()
+        var playerWithBuildings = players.stream()
                 .filter(Player::isAlive)
                 .findFirst()
                 .orElse(null);
@@ -471,11 +468,9 @@ public class GameMap {
                 continue;
             }
 
-            newFallingTrees.forEach(tree -> {
-                if (player.getDiscoveredLand().contains(tree.getPosition())) {
-                    player.reportNewFallingTree(tree);
-                }
-            });
+            newFallingTrees.stream()
+                    .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
+                    .forEach(player::reportNewFallingTree);
 
             addedDecorations.forEach((point, decoration) -> {
                 if (player.getDiscoveredLand().contains(point)) {
@@ -483,147 +478,101 @@ public class GameMap {
                 }
             });
 
-            changedStones.forEach(stone -> {
-                if (player.getDiscoveredLand().contains(stone.getPosition())) {
-                    player.reportChangedStone(stone);
-                }
-            });
+            changedStones.stream()
+                    .filter(stone -> player.getDiscoveredLand().contains(stone.getPosition()))
+                    .forEach(player::reportChangedStone);
 
             if (isBorderUpdated) {
                 player.reportChangedBorders(changedBorders);
             }
 
-            changedFlags.forEach(flag -> {
-                if (player.getDiscoveredLand().contains(flag.getPosition())) {
-                    player.reportChangedFlag(flag);
-                }
-            });
+            changedFlags.stream()
+                    .filter(flag -> player.getDiscoveredLand().contains(flag.getPosition()))
+                    .forEach(player::reportChangedFlag);
 
-            workersWithNewTargets.forEach(worker -> {
-                if (player.getDiscoveredLand().contains(worker.getPosition())) {
-                    player.reportWorkerWithNewTarget(worker);
-                }
-            });
+            workersWithNewTargets.stream()
+                    .filter(worker -> player.getDiscoveredLand().contains(worker.getPosition()))
+                    .forEach(player::reportWorkerWithNewTarget);
 
-            removedWorkers.forEach(worker -> {
-                if (player.getDiscoveredLand().contains(worker.getPosition())) {
-                    player.reportRemovedWorker(worker);
-                }
-            });
+            removedWorkers.stream()
+                    .filter(worker -> player.getDiscoveredLand().contains(worker.getPosition()))
+                    .forEach(player::reportRemovedWorker);
 
-            changedBuildings.forEach(building -> {
-                if (player.getDiscoveredLand().contains(building.getPosition())) {
-                    player.reportChangedBuilding(building);
-                }
-            });
+            changedBuildings.stream()
+                    .filter(building -> player.getDiscoveredLand().contains(building.getPosition()))
+                    .forEach(player::reportChangedBuilding);
 
-            removedBuildings.forEach(building -> {
-                if (player.getDiscoveredLand().contains(building.getPosition())) {
-                    player.reportRemovedBuilding(building);
-                }
-            });
+            removedBuildings.stream()
+                    .filter(building -> player.getDiscoveredLand().contains(building.getPosition()))
+                    .forEach(player::reportRemovedBuilding);
 
-            newFlags.forEach(flag -> {
-                if (player.getDiscoveredLand().contains(flag.getPosition())) {
-                    player.reportNewFlag(flag);
-                }
-            });
+            newFlags.stream()
+                    .filter(flag -> player.getDiscoveredLand().contains(flag.getPosition()))
+                    .forEach(player::reportNewFlag);
 
-            removedFlags.forEach(flag -> {
-                if (player.getDiscoveredLand().contains(flag.getPosition())) {
-                    player.reportRemovedFlag(flag);
-                }
-            });
+            removedFlags.stream()
+                    .filter(flag -> player.getDiscoveredLand().contains(flag.getPosition()))
+                    .forEach(player::reportRemovedFlag);
 
-            newRoads.forEach(road -> {
-                if (setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
-                    player.reportNewRoad(road);
-                }
-            });
+            newRoads.stream()
+                    .filter(road -> setContainsAny(player.getDiscoveredLand(), road.getWayPoints()))
+                    .forEach(player::reportNewRoad);
 
-            removedRoads.forEach(road -> {
-                if (setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
-                    player.reportRemovedRoad(road);
-                }
-            });
+            removedRoads.stream()
+                    .filter(road -> setContainsAny(player.getDiscoveredLand(), road.getWayPoints()))
+                    .forEach(player::reportRemovedRoad);
 
-            newBuildings.forEach(building -> {
-                if (player.getDiscoveredLand().contains(building.getPosition())) {
-                    player.reportNewBuilding(building);
-                }
-            });
+            newBuildings.stream()
+                    .filter(building -> player.getDiscoveredLand().contains(building.getPosition()))
+                    .forEach(player:: reportNewBuilding);
 
-            newTrees.forEach(tree -> {
-                if (player.getDiscoveredLand().contains(tree.getPosition())) {
-                    player.reportNewTree(tree);
-                }
-            });
+            newTrees.stream()
+                    .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
+                    .forEach(player::reportNewTree);
 
-            removedTrees.forEach(tree -> {
-                if (player.getDiscoveredLand().contains(tree.getPosition())) {
-                    player.reportRemovedTree(tree);
-                }
-            });
+            removedTrees.stream()
+                    .filter(tree -> player.getDiscoveredLand().contains(tree.getPosition()))
+                    .forEach(player::reportRemovedTree);
 
-            removedDeadTrees.forEach(point -> {
-                if (player.getDiscoveredLand().contains(point)) {
-                    player.reportRemovedDeadTree(point);
-                }
-            });
+            removedDeadTrees.stream()
+                    .filter(point -> player.getDiscoveredLand().contains(point))
+                    .forEach(player::reportRemovedDeadTree);
 
-            removedStones.forEach(stone -> {
-                if (player.getDiscoveredLand().contains(stone.getPosition())) {
-                    player.reportRemovedStone(stone);
-                }
-            });
+            removedStones.stream()
+                    .filter(stone -> player.getDiscoveredLand().contains(stone.getPosition()))
+                    .forEach(player::reportRemovedStone);
 
-            newSigns.forEach(sign -> {
-                if (player.getDiscoveredLand().contains(sign.getPosition())) {
-                    player.reportNewSign(sign);
-                }
-            });
+            newSigns.stream()
+                    .filter(sign -> player.getDiscoveredLand().contains(sign.getPosition()))
+                    .forEach(player::reportNewSign);
 
-            removedSigns.forEach(sign -> {
-                if (player.getDiscoveredLand().contains(sign.getPosition())) {
-                    player.reportRemovedSign(sign);
-                }
-            });
+            removedSigns.stream()
+                    .filter(sign -> player.getDiscoveredLand().contains(sign.getPosition()))
+                    .forEach(player::reportRemovedSign);
 
-            newCrops.forEach(crop -> {
-                if (player.getDiscoveredLand().contains(crop.getPosition())) {
-                    player.reportNewCrop(crop);
-                }
-            });
+            newCrops.stream()
+                    .filter(crop -> player.getDiscoveredLand().contains(crop.getPosition()))
+                    .forEach(player::reportNewCrop);
 
-            removedCrops.forEach(crop -> {
-                if (player.getDiscoveredLand().contains(crop.getPosition())) {
-                    player.reportRemovedCrop(crop);
-                }
-            });
+            removedCrops.stream()
+                    .filter(crop -> player.getDiscoveredLand().contains(crop.getPosition()))
+                    .forEach(player::reportRemovedCrop);
 
-            promotedRoads.forEach(promotedRoad -> {
-                if (setContainsAny(player.getDiscoveredLand(), promotedRoad.getWayPoints())) {
-                    player.reportPromotedRoad(promotedRoad);
-                }
-            });
+            promotedRoads.stream()
+                    .filter(road -> setContainsAny(player.getDiscoveredLand(), road.getWayPoints()))
+                    .forEach(player::reportPromotedRoad);
 
-            newShips.forEach(ship -> {
-                if (player.getDiscoveredLand().contains(ship.getPosition())) {
-                    player.reportNewShip(ship);
-                }
-            });
+            newShips.stream()
+                    .filter(ship -> player.getDiscoveredLand().contains(ship.getPosition()))
+                    .forEach(player::reportNewShip);
 
-            finishedShips.forEach(ship -> {
-                if (player.getDiscoveredLand().contains(ship.getPosition())) {
-                    player.reportFinishedShip(ship);
-                }
-            });
+            finishedShips.stream()
+                    .filter(ship -> player.getDiscoveredLand().contains(ship.getPosition()))
+                    .forEach(player::reportFinishedShip);
 
-            shipsWithNewTargets.forEach(ship -> {
-                if (player.getDiscoveredLand().contains(ship.getPosition())) {
-                    player.reportShipWithNewTarget(ship);
-                }
-            });
+            shipsWithNewTargets.stream()
+                    .filter(ship -> player.getDiscoveredLand().contains(ship.getPosition()))
+                    .forEach(player::reportShipWithNewTarget);
 
             workersWithStartedActions.forEach((worker, action) -> {
                 if (player.getDiscoveredLand().contains(worker.getPosition())) {
@@ -631,23 +580,18 @@ public class GameMap {
                 }
             });
 
-            harvestedCrops.forEach(crop -> {
-                if (player.getDiscoveredLand().contains(crop.getPosition())) {
-                    player.reportHarvestedCrop(crop);
-                }
-            });
+            harvestedCrops.stream()
+                    .filter(crop -> player.getDiscoveredLand().contains(crop.getPosition()))
+                    .forEach(player::reportHarvestedCrop);
 
-            removedDecorations.forEach(point -> {
-                if (player.getDiscoveredLand().contains(point)) {
-                    player.reportRemovedDecoration(point);
-                }
-            });
+            removedDecorations.stream()
+                    .filter(point -> player.getDiscoveredLand().contains(point))
+                    .forEach(player::reportRemovedDecoration);
 
-            upgradedBuildings.forEach(newAndOldBuilding -> {
-                if (player.getDiscoveredLand().contains(newAndOldBuilding.newBuilding.getPosition())) {
-                    player.reportUpgradedBuilding(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding);
-                }
-            });
+
+            upgradedBuildings.stream()
+                    .filter(newAndOldBuilding -> player.getDiscoveredLand().contains(newAndOldBuilding.newBuilding.getPosition()))
+                    .forEach(newAndOldBuilding -> player.reportUpgradedBuilding(newAndOldBuilding.oldBuilding, newAndOldBuilding.newBuilding));
 
             player.sendMonitoringEvents(time);
         }
@@ -1065,7 +1009,6 @@ public class GameMap {
 
     private Road placeDriveWay(Building building) {
         Road road = doPlaceRoad(building.getPlayer(), List.of(building.getPosition(), building.getFlag().getPosition()));
-
         road.setDriveway();
 
         return road;
@@ -2054,10 +1997,7 @@ public class GameMap {
         Tree tree = mapPoint.getTree();
 
         mapPoint.removeTree();
-
         trees.remove(tree);
-
-        /* Report that the tree was removed */
         removedTrees.add(tree);
     }
 
@@ -2102,8 +2042,6 @@ public class GameMap {
 
         mapPoint.setCrop(crop);
         crops.add(crop);
-
-        /* Report that a new crop was planted */
         newCrops.add(crop);
 
         return crop;
@@ -2258,13 +2196,9 @@ public class GameMap {
 
     private void removeFlagWithoutSideEffects(Flag flag) {
         MapPoint mapPoint = getMapPoint(flag.getPosition());
-
-        /* Remove the flag */
         mapPoint.removeFlag();
 
-        /* Report the removed flag */
         reportRemovedFlag(flag);
-
         flags.remove(flag);
     }
 
@@ -2286,8 +2220,6 @@ public class GameMap {
      * @return The amount of fish at the given point
      */
     public int getAmountFishAtPoint(Point point) {
-
-        /* Return zero if the point is not next to any water */
         if (!isNextToAnyWater(point)) {
             return 0;
         }
@@ -2322,7 +2254,6 @@ public class GameMap {
      */
     public Cargo mineMineralAtPoint(Material mineral, Point point) {
         MapPoint mapPoint = getMapPoint(point);
-
         mapPoint.mineMineral();
 
         return new Cargo(mineral, this);
@@ -2365,13 +2296,12 @@ public class GameMap {
      * @return The placed sign
      */
     public Sign placeSign(Material mineral, Size amount, Point point) {
-        MapPoint mapPoint = getMapPoint(point);
         Sign sign = new Sign(mineral, amount, point, this);
 
+        MapPoint mapPoint = getMapPoint(point);
         mapPoint.setSign(sign);
-        signs.add(sign);
 
-        /* Report that the sign is placed */
+        signs.add(sign);
         newSigns.add(sign);
 
         return sign;
@@ -2406,21 +2336,17 @@ public class GameMap {
 
     void removeSignWithinStepTime(Sign sign) {
         MapPoint mapPoint = getMapPoint(sign.getPosition());
-
         mapPoint.setSign(null);
-        signsToRemove.add(sign);
 
-        /* Report that this sign will be removed */
+        signsToRemove.add(sign);
         removedSigns.add(sign);
     }
 
     private void removeSign(Sign sign) {
         MapPoint mapPoint = getMapPoint(sign.getPosition());
-
         mapPoint.setSign(null);
-        signs.remove(sign);
 
-        /* Report that the sign was removed */
+        signs.remove(sign);
         removedSigns.add(sign);
     }
 
@@ -2433,7 +2359,6 @@ public class GameMap {
 
     public void removeBuilding(Building building) {
         MapPoint mapPoint = getMapPoint(building.getPosition());
-
         mapPoint.removeBuilding();
 
         /* Remove planned buildings directly, otherwise add to list and remove in next stepTime() */
@@ -2821,12 +2746,7 @@ public class GameMap {
      * @return The placed wild animal
      */
     public WildAnimal placeWildAnimal(Point point) {
-        WildAnimal animal = new WildAnimal(this);
-
-        animal.setPosition(point);
-        wildAnimals.add(animal);
-
-        return animal;
+        return placeWildAnimal(point, WildAnimal.Type.FOX);
     }
 
     /**
@@ -2891,11 +2811,9 @@ public class GameMap {
     }
 
     void removeCropWithinStepTime(Crop crop) {
-        cropsToRemove.add(crop);
-
         getMapPoint(crop.getPosition()).setCrop(null);
 
-        /* Report that the crop was removed */
+        cropsToRemove.add(crop);
         removedCrops.add(crop);
     }
 
@@ -3070,7 +2988,6 @@ public class GameMap {
 
     public void setMineralAmount(Point point, Material mineral, Size amount) {
         MapPoint mapPoint = getMapPoint(point);
-
         mapPoint.setMineralAmount(mineral, amount);
     }
 
@@ -3159,7 +3076,6 @@ public class GameMap {
         Vegetation vegetationDownRight = getVegetationDownRight(point);
         Vegetation vegetationBelow = getVegetationBelow(point);
         Vegetation vegetationDownLeft = getVegetationDownLeft(point);
-
 
         if (vegetationUpLeft != null) {
             result.add(vegetationUpLeft);
@@ -3429,12 +3345,10 @@ public class GameMap {
     }
 
     private void removeDecorationAtPoint(Point point) {
-        MapPoint mapPoint = getMapPoint(point);
-
+        var mapPoint = getMapPoint(point);
         mapPoint.removeDecoration();
 
         decorations.remove(point);
-
         removedDecorations.add(point);
     }
 

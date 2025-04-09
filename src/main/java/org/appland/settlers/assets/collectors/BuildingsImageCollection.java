@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.appland.settlers.assets.Utils.getImageAt;
+import static org.appland.settlers.assets.utils.ImageTransformer.normalizeImageSeries;
 
 public class BuildingsImageCollection {
     private final Map<Nation, Map<String, BuildingImages>> buildingMap = new EnumMap<>(Nation.class);
@@ -81,48 +82,72 @@ public class BuildingsImageCollection {
         buildingMap.forEach((nation, buildings) -> {
             int right = imageBoard.getCurrentWidth();
 
-            buildings.forEach((building, buildingImages) -> imageBoard.placeImagesAtBottomRightOf(
-                            Stream.of(
-                                    ImageBoard.makeImagePathPair(
-                                            buildingImages.buildingReadyImage,
-                                            "buildings",
-                                            nation.name().toUpperCase(),
-                                            building,
-                                            "ready"
-                                    ),
-                                    ImageBoard.makeImagePathPair(
-                                            buildingImages.buildingReadyShadowImage,
-                                            "buildings",
-                                            nation.name().toUpperCase(),
-                                            building,
-                                            "readyShadow"
-                                    ),
-                                    ImageBoard.makeImagePathPair(
-                                            buildingImages.buildingUnderConstruction,
-                                            "buildings",
-                                            nation.name().toUpperCase(),
-                                            building,
-                                            "underConstruction"
-                                    ),
-                                    ImageBoard.makeImagePathPair(
-                                            buildingImages.buildingUnderConstructionShadowImage,
-                                            "buildings",
-                                            nation.name().toUpperCase(),
-                                            building,
-                                            "underConstructionShadow"
-                                    ),
-                                    ImageBoard.makeImagePathPair(
-                                            buildingImages.openDoorImage,
-                                            "buildings",
-                                            nation.name().toUpperCase(),
-                                            building,
-                                            "openDoor"
-                                    )
-                            )
-                            .filter(imagePathPair -> imagePathPair.image() != null)
-                            .toList(),
-                            right
-                    ));
+            buildings.forEach((building, buildingImages) -> {
+                imageBoard.placeImagesAtBottomRightOf(
+                        Stream.of(
+                                        ImageBoard.makeImagePathPair(
+                                                buildingImages.buildingReadyImage,
+                                                "buildings",
+                                                nation.name().toUpperCase(),
+                                                building,
+                                                "ready"
+                                        ),
+                                        ImageBoard.makeImagePathPair(
+                                                buildingImages.buildingReadyShadowImage,
+                                                "buildings",
+                                                nation.name().toUpperCase(),
+                                                building,
+                                                "readyShadow"
+                                        ),
+                                        ImageBoard.makeImagePathPair(
+                                                buildingImages.buildingUnderConstruction,
+                                                "buildings",
+                                                nation.name().toUpperCase(),
+                                                building,
+                                                "underConstruction"
+                                        ),
+                                        ImageBoard.makeImagePathPair(
+                                                buildingImages.buildingUnderConstructionShadowImage,
+                                                "buildings",
+                                                nation.name().toUpperCase(),
+                                                building,
+                                                "underConstructionShadow"
+                                        ),
+                                        ImageBoard.makeImagePathPair(
+                                                buildingImages.openDoorImage,
+                                                "buildings",
+                                                nation.name().toUpperCase(),
+                                                building,
+                                                "openDoor"
+                                        )
+                                )
+                                .filter(imagePathPair -> imagePathPair.image() != null)
+                                .toList(),
+                        right
+                );
+
+                if (buildingImages.workingAnimation != null) {
+                    imageBoard.placeImageSeriesBottomRightOf(
+                            right,
+                            normalizeImageSeries(buildingImages.workingAnimation),
+                            "buildings",
+                            nation.name().toUpperCase(),
+                            building,
+                            "workingAnimation"
+                    );
+                }
+
+                if (buildingImages.workingAnimationShadow != null) {
+                    imageBoard.placeImageSeriesBottomRightOf(
+                            right,
+                            normalizeImageSeries(buildingImages.workingAnimationShadow),
+                            "buildings",
+                            nation.name().toUpperCase(),
+                            building,
+                            "workingAnimationShadow"
+                    );
+                }
+            });
 
             imageBoard.placeImagesAtBottomRightOf(
                     List.of(
@@ -254,17 +279,26 @@ public class BuildingsImageCollection {
         }
     }
 
+    public void addBuildingWorkingAnimationWithShadow(Nation nation, String building, List<Bitmap> animation, List<Bitmap> animationShadow) {
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(building, k -> new BuildingImages())
+                .addWorkingAnimationWithShadow(animation, animationShadow);
+    }
+
+    public void addBuildingWorkingAnimation(Nation nation, String name, List<Bitmap> animation) {
+        buildingMap.computeIfAbsent(nation, k -> new HashMap<>())
+                .computeIfAbsent(name, k -> new BuildingImages())
+                .addWorkingAnimation(animation);
+    }
+
     private static class BuildingImages {
-        private Bitmap buildingReadyImage;
-        private Bitmap buildingUnderConstruction;
+        private Bitmap buildingReadyImage = null;
+        private Bitmap buildingUnderConstruction = null;
         private Bitmap buildingReadyShadowImage;
         private Bitmap buildingUnderConstructionShadowImage;
         private Bitmap openDoorImage;
-
-        BuildingImages() {
-            this.buildingReadyImage = null;
-            this.buildingUnderConstruction = null;
-        }
+        private List<Bitmap> workingAnimation;
+        private List<Bitmap> workingAnimationShadow;
 
         public void addReadyBuildingImage(Bitmap image) {
             this.buildingReadyImage = image;
@@ -286,6 +320,11 @@ public class BuildingsImageCollection {
             openDoorImage = image;
         }
 
+        public void addWorkingAnimationWithShadow(List<Bitmap> animation, List<Bitmap> animationShadow) {
+            workingAnimation = animation;
+            workingAnimationShadow = animationShadow;
+        }
+
         @Override
         public String toString() {
             return "BuildingImages{" +
@@ -294,7 +333,13 @@ public class BuildingsImageCollection {
                     ", buildingReadyShadowImage=" + buildingReadyShadowImage +
                     ", buildingUnderConstructionShadowImage=" + buildingUnderConstructionShadowImage +
                     ", openDoorImage=" + openDoorImage +
+                    ", workingAnimation" + workingAnimation +
+                    ", workingAnimationShadow" + workingAnimationShadow +
                     '}';
+        }
+
+        public void addWorkingAnimation(List<Bitmap> animation) {
+            workingAnimation = animation;
         }
     }
 

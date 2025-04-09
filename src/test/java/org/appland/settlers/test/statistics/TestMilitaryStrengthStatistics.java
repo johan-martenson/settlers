@@ -12,7 +12,6 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.actors.CatapultWorker;
 import org.appland.settlers.model.actors.Soldier;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Headquarter;
@@ -189,7 +188,7 @@ public class TestMilitaryStrengthStatistics {
         // Find the military that was chosen to attack.
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -253,16 +252,16 @@ public class TestMilitaryStrengthStatistics {
         var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place barracks
         var point2 = new Point(35, 5);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+        var barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         // Finish construction of the barracks.
         Utils.constructHouse(barracks0);
@@ -278,7 +277,7 @@ public class TestMilitaryStrengthStatistics {
         Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
+        var catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
@@ -369,7 +368,7 @@ public class TestMilitaryStrengthStatistics {
         // Find the military that was chosen to attack.
         map.stepTime();
 
-        Soldier attacker = Utils.findSoldierOutsideBuilding(player0);
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);

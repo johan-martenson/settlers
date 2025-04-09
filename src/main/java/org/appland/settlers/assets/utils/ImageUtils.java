@@ -1,6 +1,7 @@
 package org.appland.settlers.assets.utils;
 
 import org.appland.settlers.assets.BitmapRLEResource;
+import org.appland.settlers.assets.BitmapRawResource;
 import org.appland.settlers.assets.BitmapResource;
 import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.PlayerBitmapResource;
@@ -9,6 +10,8 @@ import org.appland.settlers.assets.resources.Bitmap;
 
 import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.max;
 
@@ -89,5 +92,44 @@ public class ImageUtils {
                 overVisibleArea.getDimension());
 
         return merged;
+    }
+
+    public static Bitmap getBitmapFromResource(GameResource imageResource) {
+        return switch (imageResource) {
+            case BitmapResource bitmapResource -> bitmapResource.getBitmap();
+            case BitmapRLEResource bitmapRLEResource -> bitmapRLEResource.getBitmap();
+            case BitmapRawResource bitmapRawResource -> bitmapRawResource.getBitmap();
+            case PlayerBitmapResource playerBitmapResource -> playerBitmapResource.getBitmap();
+            default -> throw new RuntimeException("CANNOT HANDLE " + imageResource.getClass());
+        };
+    }
+
+    public static List<Bitmap> readAnimationFromResourceList(List<GameResource> resources, int index, int count) {
+        return resources.subList(index, index + count).stream().map(ImageUtils::getBitmapFromResource).toList();
+    }
+
+    public static List<Bitmap> readAnimationFromResourceList(List<GameResource> resources, int index, int count, int stride) {
+        var animation = new ArrayList<Bitmap>();
+
+        for (int i = index; i < index + count; i += stride) {
+            animation.add(getBitmapFromResource(resources.get(i)));
+        }
+
+        return animation;
+    }
+
+
+    public static List<Bitmap> composeBuildingAnimation(List<GameResource> gameResources, int baseIndex, int overlayIndex, int frames, int stride) {
+        var animation = new ArrayList<Bitmap>();
+        var staticImage = ImageUtils.getBitmapFromResource(gameResources.get(baseIndex));
+
+        for (int i = 0; i < frames; i++) {
+            var overlayAnimation = ImageUtils.getBitmapFromResource(gameResources.get(overlayIndex + stride * i));
+            var merged = ImageUtils.mergeImages(staticImage, overlayAnimation);
+
+            animation.add(merged);
+        }
+
+        return animation;
     }
 }
