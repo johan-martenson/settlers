@@ -211,7 +211,7 @@ public class GamePlayUtils {
      */
     public static List<Building> findVisibleOpponentBuildings(GameMap map, Player player) {
         Set<Point> visibleLand = new HashSet<>(player.getDiscoveredLand());
-        visibleLand.removeAll(player.getLandInPoints());
+        visibleLand.removeAll(player.getOwnedLand());
 
         return map.getBuildings().stream()
                 .filter(b -> visibleLand.contains(b.getPosition()))
@@ -343,7 +343,7 @@ public class GamePlayUtils {
      * @return The best point for building, or null if none found.
      */
     public static Point findPointForBuildingCloseToPoint(Point point, Size neededSize, Player controlledPlayer, GameMap map) {
-        return controlledPlayer.getLandInPoints().stream()
+        return controlledPlayer.getOwnedLand().stream()
                 .filter(p -> {
                     Size availableSize = map.isAvailableHousePoint(controlledPlayer, p);
                     return availableSize != null && availableSize.contains(neededSize);
@@ -371,7 +371,7 @@ public class GamePlayUtils {
      * @return True if there is stone within the player's area, false otherwise.
      */
     public static boolean hasStoneWithinArea(GameMap map, Player player) {
-        return player.getLandInPoints().stream().anyMatch(map::isStoneAtPoint);
+        return player.getOwnedLand().stream().anyMatch(map::isStoneAtPoint);
     }
 
     /**
@@ -442,9 +442,9 @@ public class GamePlayUtils {
      */
     public static int distanceToKnownEnemiesWithinRange(GameMap map, Player player, Point point, int range) {
         return map.getPointsWithinRadius(point, range).stream()
-                .filter(p -> player.getDiscoveredLand().contains(p) && !player.getLandInPoints().contains(p))
+                .filter(p -> player.getDiscoveredLand().contains(p) && !player.getOwnedLand().contains(p))
                 .filter(p -> map.getPlayers().stream()
-                        .anyMatch(otherPlayer -> !player.equals(otherPlayer) && otherPlayer.getLandInPoints().contains(p)))
+                        .anyMatch(otherPlayer -> !player.equals(otherPlayer) && otherPlayer.getOwnedLand().contains(p)))
                 .mapToInt(p -> (int) point.distance(p))
                 .min()
                 .orElse(Integer.MAX_VALUE);

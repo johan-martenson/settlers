@@ -65,7 +65,7 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
-    private PlayerType  playerType = PlayerType.HUMAN;
+    private PlayerType  playerType;
     private GameMap     map;
     private PlayerColor color;
     private Nation      nation;
@@ -234,7 +234,7 @@ public class Player {
         return ownedLand.contains(point);
     }
 
-    public Set<Point> getLandInPoints() {
+    public Set<Point> getOwnedLand() {
         return ownedLand;
     }
 
@@ -275,24 +275,23 @@ public class Player {
 
     public void attack(Building buildingToAttack, int nrAttackers, AttackStrength strength) throws InvalidUserActionException {
 
-        /* Can only attack military buildings */
+        // Check that the attack is allowed
         if (!buildingToAttack.isMilitaryBuilding()) {
             throw new InvalidUserActionException("Cannot attack non-military building %s".formatted(buildingToAttack));
         }
 
-        /* A player cannot attack himself */
         if (buildingToAttack.getPlayer().equals(this)) {
             throw new InvalidUserActionException("Can only attack other players");
         }
 
-        /* Find all eligible buildings to attack from */
+        // Find buildings that can support the attack
         List<Building> eligibleBuildings = getBuildings().stream()
                 .filter(building -> building.isMilitaryBuilding()
                         && building.canAttack(buildingToAttack)
                         && building.getNumberOfHostedSoldiers() >= 2)
                 .toList();
 
-        /* Collect all eligible soldiers */
+        // Find soldiers that can do the attack
         List<Soldier> availableAttackers = new ArrayList<>();
 
         for (Building building : eligibleBuildings) {

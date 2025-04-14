@@ -28,5 +28,6 @@ public enum WorkerAction {
     JUMP_SKIP_ROPE,
     STAND_ASIDE,
     HIT,
-    SHIELD_UP, TOUCH_NOSE
+    SHIELD_UP,
+    TOUCH_NOSE
 }

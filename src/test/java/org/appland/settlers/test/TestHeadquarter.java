@@ -715,7 +715,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the discovered land is only inside the map */
-        for (Point point : player0.getLandInPoints()) {
+        for (Point point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }

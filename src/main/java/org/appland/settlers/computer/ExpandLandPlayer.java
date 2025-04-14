@@ -301,7 +301,7 @@ public class ExpandLandPlayer implements ComputerPlayer {
                 investigated.add(point);
 
                 /* Filter points the player doesn't own */
-                if (!player.getLandInPoints().contains(point)) {
+                if (!player.getOwnedLand().contains(point)) {
 
                     innerDuration.after("Exit on land owned filter");
 

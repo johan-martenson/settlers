@@ -477,11 +477,11 @@ public class Utils {
     }
 
     public static void verifyPointIsWithinBorder(Player player, Point point) {
-        assertTrue(player.getLandInPoints().contains(point));
+        assertTrue(player.getOwnedLand().contains(point));
     }
 
     public static void verifyPointIsNotWithinBorder(Player player, Point point) {
-        assertFalse(player.getLandInPoints().contains(point));
+        assertFalse(player.getOwnedLand().contains(point));
     }
 
     public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws InvalidUserActionException {

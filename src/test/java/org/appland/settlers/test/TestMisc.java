@@ -799,8 +799,8 @@ public class TestMisc {
         assertEquals(barracks1.getPlayer(), player0);
         assertFalse(map.getRoads().contains(road0));
         assertFalse(map.getRoads().contains(road2));
-        assertTrue(player0.getLandInPoints().contains(barracks2.getPosition()));
-        assertTrue(player0.getLandInPoints().contains(barracks2.getFlag().getPosition()));
+        assertTrue(player0.getOwnedLand().contains(barracks2.getPosition()));
+        assertTrue(player0.getOwnedLand().contains(barracks2.getFlag().getPosition()));
         assertFalse(player1.isWithinBorder(barracks2.getPosition()));
         assertTrue(barracks2.isBurningDown());
     }
@@ -1084,7 +1084,7 @@ public class TestMisc {
         /* Verify that the border is updated to include the captured building and that it's not in player 1's border anymore */
         assertTrue(map.getBuildings().contains(woodcutter0));
         assertTrue(woodcutter0.isDestroyed());
-        assertTrue(player0.getLandInPoints().contains(woodcutter0.getPosition()));
+        assertTrue(player0.getOwnedLand().contains(woodcutter0.getPosition()));
 
         Utils.verifyPointIsWithinBorder(player0, barracks1.getPosition());
         Utils.verifyPointIsNotWithinBorder(player1, barracks1.getPosition());

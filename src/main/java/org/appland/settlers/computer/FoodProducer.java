@@ -194,7 +194,7 @@ public class FoodProducer implements ComputerPlayer {
     private Point findPointForFishery() {
 
         /* Look for water */
-        for (Point point : controlledPlayer.getLandInPoints()) {
+        for (Point point : controlledPlayer.getOwnedLand()) {
 
             /* Filter non-water points */
             if (!map.isInWater(point)) {
@@ -222,7 +222,7 @@ public class FoodProducer implements ComputerPlayer {
         Point site = null;
         double distance = Double.MAX_VALUE;
 
-        for (Point point : controlledPlayer.getLandInPoints()) {
+        for (Point point : controlledPlayer.getOwnedLand()) {
 
             /* Filter out points where it's not possible to build */
             if (map.isAvailableHousePoint(controlledPlayer, point) == null) {

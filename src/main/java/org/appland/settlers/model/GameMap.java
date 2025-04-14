@@ -880,16 +880,15 @@ public class GameMap {
                 continue;
             }
 
-            Player player = building.getPlayer();
+            var player = building.getPlayer();
 
             pointsInLand.clear();
-
+            localCleared.clear();
+            borders.clear();
             toInvestigate.clear();
+
             toInvestigate.add(root);
 
-            localCleared.clear();
-
-            borders.clear();
 
             /* Investigate each un-broken landmass */
             while (!toInvestigate.isEmpty()) {
@@ -1433,7 +1432,7 @@ public class GameMap {
      * @return A list of all the places on the map where the player can place a flag
      */
     public Collection<Point> getAvailableFlagPoints(Player player) {
-        return player.getLandInPoints().stream()
+        return player.getOwnedLand().stream()
                 .filter(point -> isAvailableFlagPoint(player, point))
                 .collect(Collectors.toSet());
     }
@@ -1531,7 +1530,7 @@ public class GameMap {
         Map<Point, Size> housePoints = new HashMap<>();
 
         /* This iterates over a set and the order is non-deterministic */
-        for (Point point : player.getLandInPoints()) {
+        for (Point point : player.getOwnedLand()) {
             Size availableHouse = isAvailableHousePoint(player, point);
 
             if (availableHouse != null) {
@@ -2710,7 +2709,7 @@ public class GameMap {
      * @return List of available mine points
      */
     public List<Point> getAvailableMinePoints(Player player) {
-        return player.getLandInPoints().stream()
+        return player.getOwnedLand().stream()
                 .filter(point -> isAvailableMinePoint(player, point))
                 .collect(Collectors.toList());
     }

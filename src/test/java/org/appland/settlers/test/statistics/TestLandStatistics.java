@@ -51,7 +51,7 @@ public class TestLandStatistics {
         LandStatistics landStatistics = statisticsManager.getLandStatistics();
 
         assertNotNull(landStatistics);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getOwnedLand().size());
     }
 
     @Test
@@ -134,8 +134,8 @@ public class TestLandStatistics {
         assertNotNull(landDataPoints);
         assertEquals(landDataPoints.size(), 2);
         assertEquals(landDataPoints.getFirst().getValues().length, 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getLandInPoints().size());
-        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getFirst().value(), player1.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getFirst().value(), player0.getOwnedLand().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getFirst().value(), player1.getOwnedLand().size());
     }
 
     @Test
@@ -239,9 +239,9 @@ public class TestLandStatistics {
         System.out.println(statisticsManager.getGeneralStatistics(player0).land().getMeasurements());
 
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
@@ -252,9 +252,9 @@ public class TestLandStatistics {
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getValues()[1] < landStatistics.getDataPoints().get(lastIndex - 1).getValues()[1]);
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getTime() > landStatistics.getDataPoints().get(lastIndex - 1).getTime());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
     }
 
     @Test
@@ -362,9 +362,9 @@ public class TestLandStatistics {
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
@@ -376,8 +376,8 @@ public class TestLandStatistics {
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getValues()[1] < landStatistics.getDataPoints().get(lastIndex - 1).getValues()[1]);
         assertTrue(landStatistics.getDataPoints().get(lastIndex).getTime() > landStatistics.getDataPoints().get(lastIndex - 1).getTime());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().getLast().value(), player0.getOwnedLand().size());
         assertEquals(statisticsManager.getGeneralStatistics(player0).land().getMeasurements().size(), 3);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getLandInPoints().size());
+        assertEquals(statisticsManager.getGeneralStatistics(player1).land().getMeasurements().getLast().value(), player1.getOwnedLand().size());
     }
 }

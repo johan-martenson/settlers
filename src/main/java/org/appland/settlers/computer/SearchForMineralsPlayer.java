@@ -249,7 +249,7 @@ public class SearchForMineralsPlayer implements ComputerPlayer {
 
     private void lookForNewPointsToHandle() {
         /* Look for any new points to handle */
-        for (Point point : controlledPlayer.getLandInPoints()) {
+        for (Point point : controlledPlayer.getOwnedLand()) {
 
             if (concludedPoints.contains(point)) {
                 continue;

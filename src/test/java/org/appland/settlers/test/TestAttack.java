@@ -3761,7 +3761,7 @@ public class TestAttack {
 
         /* Place barracks close to the new border */
         Point point4 = new Point(34, 18);
-        assertTrue(player1.getLandInPoints().contains(point4));
+        assertTrue(player1.getOwnedLand().contains(point4));
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point4);
 
         /* Finish construction of the barracks */
@@ -3962,7 +3962,7 @@ public class TestAttack {
         assertTrue(player1.getBorderPoints().isEmpty());
 
         /* Verify that player 1 has no land */
-        assertTrue(player1.getLandInPoints().isEmpty());
+        assertTrue(player1.getOwnedLand().isEmpty());
     }
 
     @Test

@@ -171,7 +171,10 @@ public class WebsocketApi implements PlayerGameViewMonitor,
             case LISTEN_TO_STATISTICS -> {
                 var playerForStatistics = (Player) idManager.getObject((String) jsonBody.get("playerId"));
                 System.out.println("Listen to statistics for player " + playerForStatistics);
-                map.getStatisticsManager().addListener(this);
+
+                synchronized (map) {
+                    map.getStatisticsManager().addListener(this);
+                }
 
                 statisticsListeners.computeIfAbsent(map, k -> new HashSet<>()).add(session);
             }
@@ -183,6 +186,8 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                 if (listeners != null) {
                     listeners.remove(session);
+
+                    // TODO: Should stop listening...
                 }
             }
             case GET_STATISTICS -> {

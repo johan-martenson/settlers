@@ -94,7 +94,7 @@ public class StatisticsManager {
         int amountPlayer = players.size();
 
         for (int i = 0; i < amountPlayer; i++) {
-            measurement[i] = players.get(i).getLandInPoints().size();
+            measurement[i] = players.get(i).getOwnedLand().size();
         }
 
         landStatistics.addMeasurement(time, measurement);

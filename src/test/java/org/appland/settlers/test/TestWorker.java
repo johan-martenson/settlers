@@ -260,8 +260,8 @@ public class TestWorker {
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
-        assertFalse(player0.getLandInPoints().contains(barracks1.getPosition()));
-        assertFalse(player0.getLandInPoints().contains(barracks1.getFlag().getPosition()));
+        assertFalse(player0.getOwnedLand().contains(barracks1.getPosition()));
+        assertFalse(player0.getOwnedLand().contains(barracks1.getFlag().getPosition()));
         assertTrue(barracks1.isReady());
 
         /* Populate player 1's barracks */

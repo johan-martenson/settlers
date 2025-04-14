@@ -5699,7 +5699,7 @@ public class TestGameMonitoring {
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
+        Utils.fastForwardUntilWorkerProducesCargo(map, road0.getCourier());
 
         /* Wait for the courier for the short road to be one step away from the middle flag */
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());

@@ -145,7 +145,7 @@ public class ConstructionPreparationPlayer implements ComputerPlayer {
     }
 
     private Point findStoneWithinBorder() {
-        for (Point point : player.getLandInPoints()) {
+        for (Point point : player.getOwnedLand()) {
             if (map.isStoneAtPoint(point)) {
                 return point;
             }

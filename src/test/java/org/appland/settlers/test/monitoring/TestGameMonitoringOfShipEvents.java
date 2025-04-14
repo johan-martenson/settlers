@@ -448,7 +448,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Place shipyard */
         Point point3 = new Point(24, 8);
 
-        assertTrue(player0.getLandInPoints().contains(point3));
+        assertTrue(player0.getOwnedLand().contains(point3));
         assertTrue(player0.isWithinBorder(point3));
 
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);
@@ -611,7 +611,7 @@ public class TestGameMonitoringOfShipEvents {
         /* Place shipyard */
         Point point3 = new Point(24, 8);
 
-        assertTrue(player0.getLandInPoints().contains(point3));
+        assertTrue(player0.getOwnedLand().contains(point3));
         assertTrue(player0.isWithinBorder(point3));
 
         Shipyard shipyard = map.placeBuilding(new Shipyard(player0), point3);

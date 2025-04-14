@@ -589,7 +589,7 @@ public class TestCatapult {
             if (barracks0.getNumberOfHostedSoldiers() == 0) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-                assertFalse(player1.getLandInPoints().contains(point3));
+                assertFalse(player1.getOwnedLand().contains(point3));
             }
 
             /* Deliver stone to the catapult */

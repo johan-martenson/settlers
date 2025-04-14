@@ -124,7 +124,7 @@ public class CoinProducer implements ComputerPlayer {
      * @return A point where the mint can be placed, or null if no suitable point is found.
      */
     private Point findPointForMint() {
-        return controlledPlayer.getLandInPoints().stream()
+        return controlledPlayer.getOwnedLand().stream()
                 .filter(point -> map.isAvailableHousePoint(controlledPlayer, point) != null && map.isAvailableHousePoint(controlledPlayer, point) != SMALL)
                 .min((p1, p2) -> Double.compare(p1.distance(headquarter.getPosition()), p2.distance(headquarter.getPosition())))
                 .orElse(null);

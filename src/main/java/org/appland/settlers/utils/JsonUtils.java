@@ -125,7 +125,7 @@ public class JsonUtils {
     public JSONArray chatMessagesToRoomToJson(Collection<ChatManager.ChatMessage> chatMessages, String roomId) {
         return toJsonArray(chatMessages, chatMessage -> new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
-                "from", chatMessage.from().getName(),
+                "fromName", chatMessage.from().getName(),
                 "toRoomId", roomId,
                 "text", chatMessage.text(),
                 "time", simpleTimeToJson(chatMessage.time())
@@ -1332,14 +1332,13 @@ public class JsonUtils {
     }
 
     public JSONObject playerViewToJson(GameMap map, Player player, GameResource gameResource) throws InvalidUserActionException {
-        var jsonHouses                = new JSONArray();
+        var jsonHouses = new JSONArray();
         var jsonAvailableConstruction = new JSONObject();
-        var jsonDecorations           = new JSONArray();
+        var jsonDecorations = new JSONArray();
 
         synchronized (map) {
             Set<Point> discoveredLand = player.getDiscoveredLand();
 
-            // Fill in houses
             for (Building building : map.getBuildings()) {
                 if (!discoveredLand.contains(building.getPosition())) {
                     continue;
@@ -1512,7 +1511,7 @@ public class JsonUtils {
     public JSONObject chatMessageToPlayerToJson(ChatManager.ChatMessage chatMessage, Player player) {
         return new JSONObject(Map.of(
                 "id", idManager.getId(chatMessage),
-                "from", idManager.getId(chatMessage.from()),
+                "fromName", idManager.getId(chatMessage.from()),
                 "text", chatMessage.text(),
                 "toPlayerId", idManager.getId(player),
                 "time", timeToJson(chatMessage.time())
@@ -1600,7 +1599,6 @@ public class JsonUtils {
     public JSONObject statisticsToJson(long currentTime, Player ownPlayer, List<Player> players, StatisticsManager statisticsManager) {
         var jsonPlayerStatistics = toJsonArray(players, player -> new JSONObject(Map.of(
                 "id", idManager.getId(player),
-                "productionStatistics", productionStatisticsForPlayerToJson(player, statisticsManager),
                 "buildingStatistics", buildingStatisticsForPlayerToJson(player, statisticsManager),
                 "general", generalStatisticsForPlayerToJson(player, statisticsManager)
         )));
@@ -1644,33 +1642,6 @@ public class JsonUtils {
                 "killedEnemies", killedEnemiesStatisticsForPlayerToJson(player, statisticsManager),
                 "land", landStatisticsForPlayerToJson(player, statisticsManager)
         ));
-    }
-
-    private JSONObject productionStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
-        var jsonProductionStatisticsForPlayer = new JSONObject();
-        var playerIndex = player.getMap().getPlayers().indexOf(player);
-
-        for (Material material : Material.values()) {
-            var dataSeries = statisticsManager.getProductionStatisticsForMaterial(material);
-
-            if (dataSeries == null) {
-                continue;
-            }
-
-            var jsonStatisticsForMaterial = new JSONArray();
-
-            for (var measurement : dataSeries.getProductionDataPoints()) {
-                var jsonMeasurement = new JSONArray();
-
-                jsonMeasurement.add(measurement.getTime());
-                jsonMeasurement.add(measurement.getValues()[playerIndex]);
-                jsonStatisticsForMaterial.add(jsonMeasurement);
-            }
-
-            jsonProductionStatisticsForPlayer.put(material.name(), jsonStatisticsForMaterial);
-        }
-
-        return jsonProductionStatisticsForPlayer;
     }
 
     private JSONArray measurementToJson(Measurement measurement) {

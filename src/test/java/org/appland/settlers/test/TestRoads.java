@@ -472,7 +472,7 @@ public class TestRoads {
         map.placeFlag(player0, start);
         map.placeFlag(player0, end);
 
-        assertTrue(player0.getLandInPoints().contains(start));
+        assertTrue(player0.getOwnedLand().contains(start));
 
         try {
             map.placeRoad(player0, start, middlePoint, end);

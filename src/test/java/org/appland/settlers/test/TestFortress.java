@@ -1373,7 +1373,7 @@ public class TestFortress {
         for (Point point : watchTowerHexagonBorder) {
 
             /* Ignore points that are within the player's land */
-            if (player0.getLandInPoints().contains(point)) {
+            if (player0.getOwnedLand().contains(point)) {
                 continue;
             }
 
@@ -1553,7 +1553,7 @@ public class TestFortress {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that the discovered land is only inside the map */
-        for (Point point : player0.getLandInPoints()) {
+        for (Point point : player0.getOwnedLand()) {
             assertTrue(point.x >= 0);
             assertTrue(point.y >= 0);
         }

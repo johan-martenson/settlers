@@ -416,7 +416,7 @@ public class Inspector {
         printUtils.printGameMapPoint(point, map);
 
         var player = map.getPlayers().stream()
-                .filter(p -> p.getLandInPoints().contains(point))
+                .filter(p -> p.getOwnedLand().contains(point))
                 .findFirst()
                 .orElse(null);
 

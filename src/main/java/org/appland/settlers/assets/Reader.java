@@ -12,7 +12,6 @@ import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
 import org.appland.settlers.assets.resources.WaveFile;
-import org.appland.settlers.model.PlayerColor;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
@@ -270,14 +269,14 @@ public class Reader {
                         playerBitmap.writeToFile(outFile);
 
                         // Write a version of the combined image once per player color
-                        for (var playerColor : PlayerColor.values()) {
+                        /*for (var playerColor : PlayerColor.values()) {
                             playerBitmap.getBitmapForPlayer(playerColor).writeToFile(
                                     format("%s/%s-%d (%s).png", dirToWrite, filenameWithoutPath, i, playerColor.name())
                             );
-                        }
+                        }*/
 
                         // Write the mask
-                        playerBitmap.getTextureBitmap().writeToFile(format("%s/%s-%d (mask).png", dirToWrite, filenameWithoutPath, i));
+                        //playerBitmap.getTextureBitmap().writeToFile(format("%s/%s-%d (mask).png", dirToWrite, filenameWithoutPath, i));
                     }
                     case WAVE_SOUND -> ((WaveGameResource) gameResource).getWaveFile().writeToFile(outSoundFile);
                     case BOB_RESOURCE -> {

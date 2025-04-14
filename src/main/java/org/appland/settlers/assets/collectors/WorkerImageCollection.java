@@ -1,14 +1,17 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.CompassDirection;
+import org.appland.settlers.assets.GameResource;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
+import org.appland.settlers.assets.utils.Animation;
 import org.appland.settlers.assets.utils.ImageBoard;
 import org.appland.settlers.assets.utils.ImageTransformer;
+import org.appland.settlers.assets.utils.ImageUtils;
 import org.appland.settlers.assets.utils.NormalizedImageList;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.PlayerColor;
@@ -150,6 +153,7 @@ public class WorkerImageCollection {
                         playerColor.name().toUpperCase())));
 
         // Write actions that are specific per nation and per direction (if any)
+        System.out.println(nationSpecificActionsWithDirectionByPlayer);
         nationSpecificActionsWithDirectionByPlayer.forEach((nation, actionMap) -> actionMap
                 .forEach((action, directionMap) -> directionMap
                         .forEach((direction, playerColorMap) -> playerColorMap
@@ -435,5 +439,15 @@ public class WorkerImageCollection {
                 .computeIfAbsent(direction, k -> new EnumMap<>(PlayerColor.class))
                 .computeIfAbsent(playerColor, k -> new ArrayList<>())
                 .add(image);
+    }
+
+    public void addNationSpecificAnimationInDirection(Nation nation, CompassDirection compassDirection, WorkerAction workerAction, List<GameResource> resources, Animation animation) {
+        List<PlayerBitmap> images = new ArrayList<>();
+
+        for (int i = animation.index(); i < animation.index() + animation.length(); i++) {
+            images.add((PlayerBitmap) ImageUtils.getBitmapFromResource(resources.get(i)));
+        }
+
+        addNationSpecificAnimationInDirection(nation, compassDirection, workerAction, images);
     }
 }

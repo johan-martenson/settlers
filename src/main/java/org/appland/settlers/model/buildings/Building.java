@@ -1303,11 +1303,12 @@ public class Building implements EndPoint {
     }
 
     public String getSimpleName() {
-        String className = getClass().getSimpleName();
+        return getClass().getSimpleName();
+        /*String className = getClass().getSimpleName();
         String nameWithSpaces = className.replace("_", " ");
         String nameLowerCase = nameWithSpaces.toLowerCase();
 
-        return nameLowerCase.substring(0, 1).toUpperCase() + nameLowerCase.substring(1);
+        return nameLowerCase.substring(0, 1).toUpperCase() + nameLowerCase.substring(1);*/
     }
 
     public boolean isStorehouse() {
