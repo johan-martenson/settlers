@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static hqx.Hqx_2x.hq2x_32_rb;
+import static hqx.Hqx_4x.hq4x_32_rb;
 import static java.lang.Math.max;
 
 public class ImageUtils {
@@ -118,7 +120,6 @@ public class ImageUtils {
         return animation;
     }
 
-
     public static List<Bitmap> composeBuildingAnimation(List<GameResource> gameResources, int baseIndex, int overlayIndex, int frames, int stride) {
         var animation = new ArrayList<Bitmap>();
         var staticImage = ImageUtils.getBitmapFromResource(gameResources.get(baseIndex));
@@ -131,5 +132,59 @@ public class ImageUtils {
         }
 
         return animation;
+    }
+
+    public static Bitmap scaleTo2x(Bitmap bitmap) {
+        var scaledArgb = new int[bitmap.getWidth() * bitmap.getHeight() * 4];
+
+        hq2x_32_rb(bgraToArgb(bitmap.getImageData()), scaledArgb, bitmap.getWidth(), bitmap.getHeight());
+
+        var out = new Bitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, 0, 0, bitmap.getPalette(), TextureFormat.BGRA);
+
+        out.setImageDataFromBuffer(argbToBgra(scaledArgb));
+
+        return out;
+    }
+
+    public static Bitmap scaleTo4x(Bitmap bitmap) {
+        var scaledArgb = new int[bitmap.getWidth() * bitmap.getHeight() * 4];
+
+        hq4x_32_rb(bgraToArgb(bitmap.getImageData()), scaledArgb, bitmap.getWidth(), bitmap.getHeight());
+
+        var out = new Bitmap(bitmap.getWidth() * 2, bitmap.getHeight() * 2, 0, 0, bitmap.getPalette(), TextureFormat.BGRA);
+
+        out.setImageDataFromBuffer(argbToBgra(scaledArgb));
+
+        return out;
+    }
+
+    public static int[] bgraToArgb(byte[] bgra) {
+        int pixelCount = bgra.length / 4;
+        int[] argb = new int[pixelCount];
+
+        for (int i = 0, j = 0; i < pixelCount; i++) {
+            int b = bgra[j++] & 0xFF;
+            int g = bgra[j++] & 0xFF;
+            int r = bgra[j++] & 0xFF;
+            int a = bgra[j++] & 0xFF;
+
+            argb[i] = (a << 24) | (r << 16) | (g << 8) | b;
+        }
+
+        return argb;
+    }
+
+    public static byte[] argbToBgra(int[] argb) {
+        byte[] bgra = new byte[argb.length * 4];
+
+        for (int i = 0, j = 0; i < argb.length; i++) {
+            int pixel = argb[i];
+            bgra[j++] = (byte)(pixel & 0xFF);        // B
+            bgra[j++] = (byte)((pixel >> 8) & 0xFF);  // G
+            bgra[j++] = (byte)((pixel >> 16) & 0xFF); // R
+            bgra[j++] = (byte)((pixel >> 24) & 0xFF); // A
+        }
+
+        return bgra;
     }
 }

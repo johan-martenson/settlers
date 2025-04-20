@@ -1,9 +1,11 @@
 package org.appland.settlers.assets.collectors;
 
 import org.appland.settlers.assets.UiIcon;
+import org.appland.settlers.assets.gamefiles.IoDat;
 import org.appland.settlers.assets.resources.Bitmap;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageBoard;
+import org.appland.settlers.assets.utils.ImageUtils;
 import org.appland.settlers.model.Size;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ public class UIElementsImageCollection {
     private final Map<Size, Bitmap> hoverAvailableBuilding = new EnumMap<>(Size.class);
     private final Map<Size, Bitmap> availableBuilding = new EnumMap<>(Size.class);
     private final Map<UiIcon, Bitmap> uiElements = new EnumMap<>(UiIcon.class);
+    private final Map<IoDat, Bitmap> ioImages = new EnumMap<>(IoDat.class);
 
     private Bitmap selectedPointImage;
     private Bitmap hoverPointImage;
@@ -155,9 +158,19 @@ public class UIElementsImageCollection {
         imageBoard.placeImagesAsRow(
                 uiElements.entrySet().stream()
                         .map(entry -> ImageBoard.makeImagePathPair(
-                                entry.getValue(),
+                                ImageUtils.scaleTo2x(entry.getValue()),
                                 "icons",
                                 entry.getKey().name().toUpperCase()))
+                        .toList()
+        );
+
+        imageBoard.placeImagesAsRow(
+                ioImages.entrySet().stream()
+                        .map(entry -> ImageBoard.makeImagePathPair(
+                                        ImageUtils.scaleTo2x(entry.getValue()),
+                                "icons",
+                                entry.getKey().name().toUpperCase()
+                        ))
                         .toList()
         );
 
@@ -172,5 +185,9 @@ public class UIElementsImageCollection {
      */
     public void addUiElement(UiIcon uiIcon, Bitmap image) {
         uiElements.put(uiIcon, image);
+    }
+
+    public void addIcon(IoDat icon, Bitmap image) {
+        ioImages.put(icon, image);
     }
 }
