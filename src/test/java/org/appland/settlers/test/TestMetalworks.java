@@ -551,7 +551,7 @@ public class TestMetalworks {
 
         Material tool = metalworks.getFlag().getStackedCargo().getFirst().getMaterial();
 
-        assertTrue(Material.isTool(tool));
+        assertTrue(tool.isTool());
 
         /* Wait for the courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());

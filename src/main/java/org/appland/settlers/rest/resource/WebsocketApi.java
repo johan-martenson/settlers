@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerGameViewMonitor;
@@ -282,6 +283,22 @@ public class WebsocketApi implements PlayerGameViewMonitor,
 
                 synchronized (map) {
                     player.attack(house, attackers, attackStrength);
+                }
+            }
+            case SET_TOOL_PRODUCTION_PRIORITY -> {
+                var tool = Material.valueOf((String) jsonBody.get("tool"));
+                var prio = ((Long) jsonBody.get("priority")).intValue();
+
+                synchronized (map) {
+                    player.setProductionQuotaForTool(tool, prio);
+                }
+            }
+            case GET_TOOL_PRODUCTION_PRIORITIES -> {
+                synchronized (map) {
+                    sendToSession(session, new JSONObject(Map.of(
+                            "requestId", jsonBody.get("requestId"),
+                            "toolPriorities", jsonUtils.toolQuotasToJson(player)
+                    )));
                 }
             }
             case GET_CHAT_HISTORY_FOR_ROOM -> {

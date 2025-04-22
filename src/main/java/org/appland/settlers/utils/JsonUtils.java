@@ -100,6 +100,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.Map.entry;
+import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.messages.Message.MessageType.*;
 
 public class JsonUtils {
@@ -945,6 +946,10 @@ public class JsonUtils {
             jsonMonitoringEvents.put("removedMessages", removedMessagesToJson(gameChangesList.removedMessages()));
         }
 
+        if (!gameChangesList.toolQuotaChanged().isEmpty()) {
+            jsonMonitoringEvents.put("changedToolQuotas", toolQuotasToJson(player));
+        }
+
         return jsonMonitoringEvents;
     }
 
@@ -1712,5 +1717,21 @@ public class JsonUtils {
         }
 
         return jsonBuildingStatisticsForPlayer;
+    }
+
+    public JSONObject toolQuotasToJson(Player player) {
+        return new JSONObject(Map.ofEntries(
+                entry(AXE, player.getProductionQuotaForTool(AXE)),
+                entry(SHOVEL, player.getProductionQuotaForTool(SHOVEL)),
+                entry(PICK_AXE, player.getProductionQuotaForTool(PICK_AXE)),
+                entry(FISHING_ROD, player.getProductionQuotaForTool(FISHING_ROD)),
+                entry(BOW, player.getProductionQuotaForTool(BOW)),
+                entry(SAW, player.getProductionQuotaForTool(SAW)),
+                entry(CLEAVER, player.getProductionQuotaForTool(CLEAVER)),
+                entry(ROLLING_PIN, player.getProductionQuotaForTool(ROLLING_PIN)),
+                entry(CRUCIBLE, player.getProductionQuotaForTool(CRUCIBLE)),
+                entry(TONGS, player.getProductionQuotaForTool(TONGS)),
+                entry(SCYTHE, player.getProductionQuotaForTool(SCYTHE))
+        ));
     }
 }

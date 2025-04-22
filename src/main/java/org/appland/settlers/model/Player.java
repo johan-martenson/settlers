@@ -140,6 +140,7 @@ public class Player {
     private final Set<Tree> newFallingTrees = new HashSet<>();
     private final Collection<PlayerChangeListener> playerChangeListeners = new HashSet<>();
     private final Set<Message> readMessages = new HashSet<>();
+    private final Set<Material> toolQuotasChanged = new HashSet<>();
 
     public Player(String name, PlayerColor color, Nation nation, PlayerType playerType) {
         this.name = name;
@@ -818,9 +819,8 @@ public class Player {
                 changedBuildings, removedBuildings, newTrees, removedTrees, removedStones, newSigns,
                 removedSigns, newCrops, removedCrops, newDiscoveredLand, addedBorder, removedBorder,
                 workersWithNewTargets, changedBorders, newStones, newMessages, promotedRoads, changedFlags,
-                removedDeadTrees, harvestedCrops, newShips,
-                finishedShips, shipsWithNewTargets,
-                removedDecorations, upgradedBuildings, changedAvailableConstruction) &&
+                removedDeadTrees, harvestedCrops, newShips, finishedShips, shipsWithNewTargets,
+                removedDecorations, upgradedBuildings, changedAvailableConstruction, toolQuotasChanged) &&
             GameUtils.allMapsEmpty(workersWithStartedActions, newDecorations) &&
             !transportPriorityChanged) {
             return;
@@ -999,7 +999,8 @@ public class Player {
                 changedStones,
                 newFallingTrees,
                 transportPriorityChanged,
-                readMessages);
+                readMessages,
+                toolQuotasChanged);
 
         /* Send the event to all monitors */
         gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
@@ -1048,6 +1049,7 @@ public class Player {
         newFallingTrees.clear();
         readMessages.clear();
         transportPriorityChanged = false;
+        toolQuotasChanged.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1342,7 +1344,6 @@ public class Player {
     }
 
     public void setProductionQuotaForTool(Material tool, int quota) throws InvalidUserActionException {
-
         if (quota > MAX_PRODUCTION_QUOTA) {
             throw new InvalidUserActionException("Cannot set quota %d above max quota at %d".formatted(quota, MAX_PRODUCTION_QUOTA));
         }
@@ -1351,8 +1352,12 @@ public class Player {
             throw new InvalidUserActionException("Cannot set quota %d below min quota at %d".formatted(quota, MIN_PRODUCTION_QUOTA));
         }
 
-        if (!isTool(tool)) {
+        if (!tool.isTool()) {
             throw new InvalidUserActionException("Cannot set quota for material that is not a tool: %s".formatted(tool));
+        }
+
+        if (quota != getProductionQuotaForTool(tool)) {
+            toolQuotasChanged.add(tool);
         }
 
         toolProductionQuotas.put(tool, quota);
@@ -1369,7 +1374,6 @@ public class Player {
     public void reportRemovedDeadTree(Point point) {
         removedDeadTrees.add(point);
     }
-
 
     public void reportShipReadyForExpedition(Ship ship) {
         ShipReadyForExpeditionMessage message = new ShipReadyForExpeditionMessage(ship);

@@ -202,8 +202,8 @@ public enum Material {
         return MINERALS;
     }
 
-    public static boolean isTool(Material tool) {
-        return TOOLS_SET.contains(tool);
+    public boolean isTool() {
+        return TOOLS_SET.contains(this);
     }
 
     public static Material workerToMaterial(Worker worker) {

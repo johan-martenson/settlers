@@ -3389,7 +3389,8 @@ public class Utils {
                 new ArrayList<>(gameChangesList.changedStones()),
                 new ArrayList<>(gameChangesList.newFallingTrees()),
                 gameChangesList.transportPriorityChanged(),
-                new ArrayList<>(gameChangesList.readMessages()));
+                new ArrayList<>(gameChangesList.readMessages()),
+                new HashSet<>(gameChangesList.toolQuotaChanged()));
     }
 
     static Set<Point> getAreaInsideHexagon(int radius, Point position) {

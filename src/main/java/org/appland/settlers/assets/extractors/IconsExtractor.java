@@ -77,7 +77,30 @@ public class IconsExtractor {
             IoDat.SHIP_AND_ANCHOR,
             IoDat.HOUSE_ON_MAP,
             IoDat.WEAPONS_MOVING,
-            IoDat.FOOD
+            IoDat.FOOD,
+            IoDat.SAW_AND_MINUS,
+            IoDat.SAW_AND_PLUS,
+            IoDat.AXE_AND_MINUS,
+            IoDat.AXE_AND_PLUS,
+            IoDat.SHOVEL_AND_MINUS,
+            IoDat.SHOVEL_AND_PLUS,
+            IoDat.PICK_AXE_AND_MINUS,
+            IoDat.PICK_AXE_AND_PLUS,
+            IoDat.LINE_AND_HOOK_AND_MINUS,
+            IoDat.LINE_AND_HOOK_AND_PLUS,
+            IoDat.BOW_AND_MINUS,
+            IoDat.BOW_AND_PLUS,
+            IoDat.CLEAVER_AND_MINUS,
+            IoDat.CLEAVER_AND_PLUS,
+            IoDat.ROLLING_PIN_AND_MINUS,
+            IoDat.ROLLING_PIN_AND_PLUS,
+            IoDat.CRUCIBLE_AND_MINUS,
+            IoDat.CRUCIBLE_AND_PLUS,
+            IoDat.TONGS_AND_MINUS,
+            IoDat.TONGS_AND_PLUS,
+            IoDat.SCYTHE_AND_MINUS,
+            IoDat.SCYTHE_AND_PLUS
+
 
     );
 

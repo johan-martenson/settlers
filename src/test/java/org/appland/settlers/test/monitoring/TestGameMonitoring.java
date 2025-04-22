@@ -66,28 +66,25 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventsWhenNothingHappens() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        // Set up monitoring subscription for the player
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that only wild animal events are sent when nothing happens */
+        // Verify that only wild animal events are sent when nothing happens
         Utils.fastForward(200, map);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
-
-            for (Worker worker : gameChangesList.workersWithNewTargets()) {
+        for (var gameChangesList : monitor.getEvents()) {
+            for (var worker : gameChangesList.workersWithNewTargets()) {
                 assertTrue(worker instanceof WildAnimal);
             }
 
@@ -114,33 +111,31 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFlagIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
-        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        // Set up monitoring subscription for the player
+        var monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify an event is sent when a flag is placed */
+        // Verify an event is sent when a flag is placed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newFlags().size(), 1);

@@ -8,6 +8,7 @@ import org.appland.settlers.model.messages.Message;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public record GameChangesList(
         long time,
@@ -49,7 +50,8 @@ public record GameChangesList(
         Collection<Stone> changedStones,
         Collection<Tree> newFallingTrees,
         boolean transportPriorityChanged,
-        Collection<Message> readMessages
+        Collection<Message> readMessages,
+        Set<Material> toolQuotaChanged
 ) {
     @Override
     public String toString() {
