@@ -24,7 +24,6 @@ import static org.appland.settlers.model.actors.DonkeyBreeder.State.*;
  */
 @Walker (speed = 10)
 public class DonkeyBreeder extends Worker {
-
     private static final int TIME_TO_REST           = 99;
     private static final int TIME_TO_FEED           = 19;
     private static final int TIME_TO_PREPARE_DONKEY = 19;
@@ -135,6 +134,8 @@ public class DonkeyBreeder extends Worker {
                 /* Report that the worker was productive */
                 productivityMeasurer.reportProductivity();
                 productivityMeasurer.nextProductivityCycle();
+
+                map.getStatisticsManager().donkeyGrown(player, map.getTime());
 
                 /* Rest in the house before creating the next donkey */
                 state = RESTING_IN_HOUSE;

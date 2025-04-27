@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
@@ -83,7 +77,7 @@ public class Armorer extends Worker {
                 }
             }
             case WAITING_FOR_SPACE_ON_FLAG -> {
-                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                if (home.getFlag().hasPlaceForMoreCargo()) {
                     var cargo = new Cargo(nextWeapon, map);
                     setCargo(cargo);
 
@@ -91,23 +85,23 @@ public class Armorer extends Worker {
 
                     state = GOING_TO_FLAG_WITH_CARGO;
 
-                    setTarget(getHome().getFlag().getPosition());
+                    setTarget(home.getFlag().getPosition());
 
-                    getHome().getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(getCargo());
                 }
             }
             case PRODUCING_WEAPON -> {
-                if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
+                if (home.getAmount(IRON_BAR) > 0 && home.getAmount(COAL) > 0 && home.isProductionEnabled()) {
                     if (countdown.hasReachedZero()) {
 
                         // Produce the weapon
-                        getHome().consumeOne(IRON_BAR);
-                        getHome().consumeOne(COAL);
+                        home.consumeOne(IRON_BAR);
+                        home.consumeOne(COAL);
 
                         map.getStatisticsManager().weaponProduced(player, map.getTime());
 
                         // Handle transportation
-                        if (!getHome().getFlag().hasPlaceForMoreCargo()) {
+                        if (!home.getFlag().hasPlaceForMoreCargo()) {
                             state = WAITING_FOR_SPACE_ON_FLAG;
                         } else {
                             var cargo = new Cargo(nextWeapon, map);
@@ -117,9 +111,9 @@ public class Armorer extends Worker {
 
                             state = GOING_TO_FLAG_WITH_CARGO;
 
-                            setTarget(getHome().getFlag().getPosition());
+                            setTarget(home.getFlag().getPosition());
 
-                            getHome().getFlag().promiseCargo(getCargo());
+                            home.getFlag().promiseCargo(getCargo());
                         }
                     } else {
                         countdown.step();
@@ -147,10 +141,10 @@ public class Armorer extends Worker {
     protected void onArrival() {
         switch (state) {
             case GOING_TO_FLAG_WITH_CARGO -> {
-                var flag = map.getFlagAtPoint(getPosition());
+                var flag = map.getFlagAtPoint(position);
                 var cargo = getCargo();
 
-                cargo.setPosition(getPosition());
+                cargo.setPosition(position);
                 cargo.transportToStorage();
 
                 flag.putCargo(getCargo());
@@ -162,20 +156,20 @@ public class Armorer extends Worker {
                 returnHome();
             }
             case GOING_BACK_TO_HOUSE -> {
-                enterBuilding(getHome());
+                enterBuilding(home);
 
                 state = RESTING_IN_HOUSE;
 
                 countdown.countFrom(RESTING_TIME);
             }
             case RETURNING_TO_STORAGE -> {
-                var storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
 
                 storehouse.depositWorker(this);
             }
             case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
                 // Go to the closest storage.
-                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, ARMORER);
 
                 if (Objects.nonNull(storehouse)) {
                     state = RETURNING_TO_STORAGE;
@@ -198,14 +192,14 @@ public class Armorer extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, ARMORER);
 
         if (Objects.nonNull(storage)) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), ARMORER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), ARMORER);
 
             if (Objects.nonNull(storage)) {
                 state = RETURNING_TO_STORAGE;
@@ -214,7 +208,7 @@ public class Armorer extends Worker {
             } else {
                 Point point = findPlaceToDie();
 
-                setOffroadTarget(point, getPosition().downRight());
+                setOffroadTarget(point, position.downRight());
 
                 state = GOING_TO_DIE;
             }
@@ -224,8 +218,8 @@ public class Armorer extends Worker {
     @Override
     public String toString() {
         return isExactlyAtPoint()
-                ? String.format("Armorer %s", getPosition())
-                : String.format("Armorer %s - %s", getPosition(), getNextPoint());
+                ? String.format("Armorer %s", position)
+                : String.format("Armorer %s - %s", position, getNextPoint());
     }
 
     @Override
@@ -233,8 +227,8 @@ public class Armorer extends Worker {
 
         // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-                map.isFlagAtPoint(getPosition()) &&
-                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                map.isFlagAtPoint(position) &&
+                !map.arePointsConnectedByRoads(position, getTarget())) {
 
             // Don't try to enter the armory upon arrival.
             clearTargetBuilding();

@@ -70,6 +70,8 @@ public class CatapultWorker extends Worker {
                         /* Consume the stone */
                         getHome().consumeOne(STONE);
 
+                        map.getStatisticsManager().stoneThrown((Catapult) getHome(), map.getTime());
+
                         /* Rest again */
                         countdown.countFrom(RESTING_TIME);
                     }

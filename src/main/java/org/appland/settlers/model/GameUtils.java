@@ -143,8 +143,6 @@ public class GameUtils {
     /**
      * Returns the headquarters for the given player
      *
-     * @param player
-     * @return
      */
     public static Headquarter getHeadquarterForPlayer(Player player) {
         for (Building building : player.getBuildings()) {
@@ -159,9 +157,6 @@ public class GameUtils {
     /**
      * Returns the distance to the closest border point for the given point
      *
-     * @param infoPoint
-     * @param player
-     * @return
      */
     public static int getDistanceToBorder(Point infoPoint, Player player) {
         int distance = Integer.MAX_VALUE;
@@ -175,6 +170,10 @@ public class GameUtils {
         }
 
         return distance;
+    }
+
+    public static int countGoodsInInventory(Storehouse storage) {
+        return Material.GOODS.stream().mapToInt(storage::getAmount).sum();
     }
 
     /**

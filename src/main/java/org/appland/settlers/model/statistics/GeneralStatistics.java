@@ -6,5 +6,6 @@ public record GeneralStatistics(
         CumulativeDataSeries coins,
         CumulativeDataSeries soldiers,
         CumulativeDataSeries workers,
-        CumulativeDataSeries killedEnemies
+        CumulativeDataSeries killedEnemies,
+        CumulativeDataSeries goods
 ) { }

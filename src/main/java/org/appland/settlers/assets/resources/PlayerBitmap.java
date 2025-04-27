@@ -215,6 +215,6 @@ public class PlayerBitmap extends Bitmap {
         TRANSPARENT,
         COLOR,
         PLAYER_COLOR,
-        COMPRESSED;
+        COMPRESSED
     }
 }

@@ -233,21 +233,21 @@ public class MapFile {
 
     /**
      * Maps file points to game points based on the map layout and dimensions.
-     *
+     * <p>
      * The spots in the map file are saved according to the pattern:
-     *
+     * <p>
      *   00  01  02  03
      * 04  05  06  07
      *   08  09  0A  0B
      * 0C  0D  0E  0F
-     *
+     * <p>
      * While points in the game are structured as:
-     *
+     * <p>
      *
      * 0,2       2, 2
      *      1,1       3,1
      * 0,0       2,0
-     *
+     * <p>
      * With cropping:
      *  - Every second row starts at x = -1
      *  - Width in gamemap becomes width_in_file x 2 - 2

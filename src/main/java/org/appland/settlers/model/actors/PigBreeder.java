@@ -112,6 +112,8 @@ public class PigBreeder extends Worker {
                 productivityMeasurer.reportProductivity();
                 productivityMeasurer.nextProductivityCycle();
 
+                map.getStatisticsManager().pigGrown(player, map.getTime());
+
                 /* Handle transportation */
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
                     Cargo cargo = new Cargo(PIG, map);

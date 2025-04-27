@@ -65,7 +65,7 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
-    private PlayerType  playerType;
+    private final PlayerType  playerType;
     private GameMap     map;
     private PlayerColor color;
     private Nation      nation;

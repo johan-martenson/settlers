@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.buildings.Building;
@@ -22,15 +16,15 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Tree.TREE_TYPES_THAT_CAN_BE_CUT_DOWN;
 
-/**
+/*
  *
  * @author johan
  */
 @Walker(speed = 10)
 public class WoodcutterWorker extends Worker {
-    private static final int TIME_TO_REST     = 99;
+    private static final int TIME_TO_REST = 99;
     private static final int TIME_TO_CUT_TREE = 49;
-    private static final int RANGE            = 9;
+    private static final int RANGE = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown = new Countdown();
@@ -110,6 +104,8 @@ public class WoodcutterWorker extends Worker {
                 if (!map.isTreeAtPoint(getPosition())) {
                     setCargo(new Cargo(WOOD, map));
 
+                    map.getStatisticsManager().treeCutDown(player, map.getTime());
+
                     state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 
                     returnHomeOffroad();
@@ -118,15 +114,13 @@ public class WoodcutterWorker extends Worker {
             case CUTTING_TREE -> {
                 if (countdown.hasReachedZero()) {
 
-                    /* Remove the tree if it's still in place */
+                    // Remove the tree if it's still in place
                     if (map.isTreeAtPoint(getPosition()) && !map.getTreeAtPoint(getPosition()).isFalling()) {
                         map.getTreeAtPoint(getPosition()).fallDown();
 
                         productivityMeasurer.reportProductivity();
 
                         productivityMeasurer.nextProductivityCycle();
-
-                        map.getStatisticsManager().treeCutDown(player, map.getTime());
 
                         state = State.WAITING_FOR_TREE_TO_FALL;
                     } else {
@@ -218,7 +212,7 @@ public class WoodcutterWorker extends Worker {
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Go to the closest storage */
+            // Go to the closest storage
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WOODCUTTER_WORKER);
 
             if (storehouse != null) {
@@ -280,13 +274,13 @@ public class WoodcutterWorker extends Worker {
 
                 if (map.isFlagAtPoint(getPosition())) {
 
-                    /* Return to storage if the planned path no longer exists */
+                    // Return to storage if the planned path no longer exists
                     if (!map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-                        /* Don't try to enter the woodcutter upon arrival */
+                        // Don't try to enter the woodcutter upon arrival
                         clearTargetBuilding();
 
-                        /* Go back to the storage */
+                        // Go back to the storage
                         returnToStorage();
                     } else if (getTarget().equals(upLeft)) {
                         var house = map.getBuildingAtPoint(upLeft);

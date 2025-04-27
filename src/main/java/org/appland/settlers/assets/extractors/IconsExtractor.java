@@ -99,9 +99,14 @@ public class IconsExtractor {
             IoDat.TONGS_AND_MINUS,
             IoDat.TONGS_AND_PLUS,
             IoDat.SCYTHE_AND_MINUS,
-            IoDat.SCYTHE_AND_PLUS
-
-
+            IoDat.SCYTHE_AND_PLUS,
+            IoDat.PLUS,
+            IoDat.MINUS,
+            IoDat.TWO_SWORDS,
+            IoDat.UP_ARROW,
+            IoDat.DOWN_ARROW,
+            IoDat.ARROW_TO_TOP,
+            IoDat.ARROW_TO_BOTTOM
     );
 
     public static void extractIcons(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {

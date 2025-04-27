@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
@@ -17,7 +12,6 @@ import org.appland.settlers.model.actors.WildAnimal;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,17 +29,14 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalsAppearSpontaneously() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Verify that wild animals appear spontaneously */
+        // Verify that wild animals appear spontaneously
         int animalsAtStart = map.getWildAnimals().size();
 
         for (int i = 0; i < 500; i++) {
-
             if (map.getWildAnimals().size() > animalsAtStart) {
                 break;
             }
@@ -59,22 +50,19 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalMovesSometimes() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
+        // Wait for an animal to appear
+        var animal = Utils.waitForAnimalToAppear(map);
 
-        /* Wait for an animal to appear */
-        WildAnimal animal = Utils.waitForAnimalToAppear(map);
-
-        /* Verify that the animal moves sometimes */
-        Point origin = animal.getPosition();
+        // Verify that the animal moves sometimes
+        var origin = animal.getPosition();
 
         for (int i = 0; i < 500; i++) {
 
-            /* Break if the animal has moved */
+            // Break if the animal has moved
             if (!origin.equals(animal.getPosition())) {
                 break;
             }
@@ -88,22 +76,20 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalDoesNotGetStuck() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Wait for an animal to appear */
-        WildAnimal animal = Utils.waitForAnimalToAppear(map);
+        // Wait for an animal to appear
+        var animal = Utils.waitForAnimalToAppear(map);
 
-        /* Verify that the animal moves sometimes */
-        Point oldPlace = animal.getPosition();
+        // Verify that the animal moves sometimes
+        var oldPlace = animal.getPosition();
         int timeInSamePlace = 0;
 
         for (int i = 0; i < 1000; i++) {
 
-            /* Check if the animal has moved */
+            // Check if the animal has moved
             if (!oldPlace.equals(animal.getPosition())) {
                 timeInSamePlace = 0;
                 oldPlace = animal.getPosition();
@@ -120,13 +106,11 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalsAreCreatedAcrossTheMap() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
 
-        /* Verify that animals are created across the map */
+        // Verify that animals are created across the map
         int minX = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
         int minY = Integer.MAX_VALUE;
@@ -136,17 +120,17 @@ public class TestWildAnimal {
 
         for (int i = 0; i < 5000; i++) {
 
-            /* Find min and max of newly created animals */
+            // Find min and max of newly created animals
             for (WildAnimal worker : map.getWildAnimals()) {
 
-                /* Filter already handled animals */
+                // Filter already handled animals
                 if (currentAnimals.contains(worker)) {
                     continue;
                 }
 
-                Point point = worker.getPosition();
+                var point = worker.getPosition();
 
-                /* Update min and max */
+                // Update min and max
                 if (point.x < minX) {
                     minX = point.x;
                 }
@@ -163,7 +147,7 @@ public class TestWildAnimal {
                     maxY = point.y;
                 }
 
-                /* Remember that this animal has been handled */
+                // Remember that this animal has been handled
                 currentAnimals.add(worker);
             }
 
@@ -179,19 +163,17 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalsStayAliveUnlessKilled() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
 
-        /* Wait for a wild animal to appear */
-        WildAnimal animal = Utils.waitForAnimalToAppear(map);
+        // Wait for a wild animal to appear
+        var animal = Utils.waitForAnimalToAppear(map);
 
-        /* Verify that the animal stays alive */
+        // Verify that the animal stays alive
         for (int i = 0; i < 20000; i++) {
 
-            /* Find min and max of newly created animals */
+            // Find min and max of newly created animals
             assertTrue(map.getWildAnimals().contains(animal));
 
             map.stepTime();
@@ -202,23 +184,21 @@ public class TestWildAnimal {
     @Test
     public void testWildAnimalWithNowhereToGoStandsStill() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Fill the map with stones except for one single point */
-        Point point0 = new Point(20, 20);
-        Point point1 = new Point(23, 23);
+        // Fill the map with stones except for one single point
+        var point0 = new Point(20, 20);
+        var point1 = new Point(23, 23);
 
         for (int i = 1; i < 40; i++) {
             for (int j = 1; j < 40; j++) {
-
                 if ((i + j) % 2 != 0) {
                     continue;
                 }
-                Point pointCurrent = new Point(i, j);
+
+                var pointCurrent = new Point(i, j);
 
                 if (point0.equals(pointCurrent) || point1.equals(pointCurrent)) {
                     continue;
@@ -228,7 +208,7 @@ public class TestWildAnimal {
             }
         }
 
-        /* Wait for a wild animal to appear in the single available spot */
+        // Wait for a wild animal to appear in the single available spot
         for (int i = 0; i < 1000; i++) {
 
             if (!map.getWildAnimals().isEmpty() &&
@@ -241,7 +221,7 @@ public class TestWildAnimal {
 
         assertTrue(map.getWildAnimals().size() > 0);
 
-        /* Verify that the wild animal stays in the spot because it has nowhere to go */
+        // Verify that the wild animal stays in the spot because it has nowhere to go
         WildAnimal wildAnimal0 = map.getWildAnimals().getFirst();
 
         assertNotNull(wildAnimal0);
@@ -258,16 +238,14 @@ public class TestWildAnimal {
     @Test
     public void testCannotPlaceWildAnimalOnWater() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to water */
+        // Set the whole map to water
         Utils.fillMapWithVegetation(map, WATER);
 
-        /* Verify that no wild animals appear */
+        // Verify that no wild animals appear
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -278,16 +256,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnGrass() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to grass */
+        // Set the whole map to grass
         Utils.fillMapWithVegetation(map, MEADOW_1);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -303,16 +279,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnSwamp() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to swamp */
+        // Set the whole map to swamp
         Utils.fillMapWithVegetation(map, SWAMP);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -328,16 +302,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnMountain() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to mountain */
+        // Set the whole map to mountain
         Utils.fillMapWithVegetation(map, MOUNTAIN_1);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -353,16 +325,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnSavannah() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to savannah */
+        // Set the whole map to savannah
         Utils.fillMapWithVegetation(map, SAVANNAH);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -378,16 +348,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnSnow() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to snow */
+        // Set the whole map to snow
         Utils.fillMapWithVegetation(map, SNOW);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -403,16 +371,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnDesert() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to desert */
+        // Set the whole map to desert
         Utils.fillMapWithVegetation(map, DESERT_1);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -428,16 +394,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnSteppe() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to steppe */
+        // Set the whole map to steppe
         Utils.fillMapWithVegetation(map, STEPPE);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -453,16 +417,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnMountainMeadow() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to mountain meadow */
+        // Set the whole map to mountain meadow
         Utils.fillMapWithVegetation(map, MOUNTAIN_MEADOW);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -478,16 +440,14 @@ public class TestWildAnimal {
     @Test
     public void testCanPlaceWildAnimalOnBuildableMountain() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to buildable mountain */
+        // Set the whole map to buildable mountain
         Utils.fillMapWithVegetation(map, BUILDABLE_MOUNTAIN);
 
-        /* Verify that wild animals appear */
+        // Verify that wild animals appear
         boolean sawWildAnimal = false;
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
@@ -503,16 +463,14 @@ public class TestWildAnimal {
     @Test
     public void testCannotPlaceWildAnimalOnDeepWater() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to deep water */
+        // Set the whole map to deep water
         Utils.fillMapWithVegetation(map, WATER_2);
 
-        /* Verify that no wild animals appear */
+        // Verify that no wild animals appear
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -523,16 +481,14 @@ public class TestWildAnimal {
     @Test
     public void testCannotPlaceWildAnimalOnLava() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Set the whole map to lava */
+        // Set the whole map to lava
         Utils.fillMapWithVegetation(map, LAVA_1);
 
-        /* Verify that no wild animals appear */
+        // Verify that no wild animals appear
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -543,42 +499,38 @@ public class TestWildAnimal {
     /*
      * This tests that wild animals are not placed on any points that are so close to the edge of the map that one of
      * the tiles next to the point they are placed on is missing
-     *
      */
+    
     @Test
     public void testWildAnimalsDoesNotAppearTooCloseToTheEdge() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
-
-        /* Fill all points that are on the map and surrounded by valid tiles with stones */
+        // Fill all points that are on the map and surrounded by valid tiles with stones
         for (int x = 1; x < 20; x++) {
             for (int y = 1; y < 20; y++) {
 
-                /* Filter invalid points */
+                // Filter invalid points
                 if ((x + y) % 2 != 0) {
 
                     continue;
                 }
 
-                Point point = new Point(x, y);
+                var point = new Point(x, y);
 
-                /* Filter points that are next to at least one invalid/undefined tile */
+                // Filter points that are next to at least one invalid/undefined tile
                 if (map.getSurroundingTiles(point).size() != 6) {
                     continue;
                 }
 
-                /* Place stone because this is a regular point */
+                // Place stone because this is a regular point
                 map.placeStone(point, Stone.StoneType.STONE_1, 7);
             }
         }
 
-        /* Verify that no wild animals appear because there are no suitable points */
+        // Verify that no wild animals appear because there are no suitable points
         for (int i = 0; i < 1000; i++) {
 
             assertEquals(map.getWildAnimals().size(), 0);
@@ -604,17 +556,14 @@ public class TestWildAnimal {
     @Test
     public void testGetTypeOfWildAnimal() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
+        // Wait for an animal to appear
+        var animal = Utils.waitForAnimalToAppear(map);
 
-        /* Wait for an animal to appear */
-        WildAnimal animal = Utils.waitForAnimalToAppear(map);
-
-        /* Verify that it's possible to get the type of the wild animal */
+        // Verify that it's possible to get the type of the wild animal
         WildAnimal.Type type = animal.getType();
 
         assertNotNull(type);
@@ -623,16 +572,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceRabbit() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a rabbit on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, RABBIT);
+        // Verify that it's possible to place a rabbit on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, RABBIT);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), RABBIT);
@@ -641,16 +587,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceFox() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a fox on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, FOX);
+        // Verify that it's possible to place a fox on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, FOX);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), FOX);
@@ -659,16 +602,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceStag() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a stag on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, STAG);
+        // Verify that it's possible to place a stag on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, STAG);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), STAG);
@@ -677,16 +617,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceDeer() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a deer on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, DEER);
+        // Verify that it's possible to place a deer on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, DEER);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), DEER);
@@ -695,16 +632,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceDuck() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a duck on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, DUCK);
+        // Verify that it's possible to place a duck on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, DUCK);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), DUCK);
@@ -713,16 +647,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceSheep() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a sheep on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, SHEEP);
+        // Verify that it's possible to place a sheep on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, SHEEP);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), SHEEP);
@@ -731,16 +662,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceDeer2() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a deer_2 on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, DEER_2);
+        // Verify that it's possible to place a deer_2 on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, DEER_2);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), DEER_2);
@@ -749,16 +677,13 @@ public class TestWildAnimal {
     @Test
     public void testPlaceDuck2() throws InvalidUserActionException {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Verify that it's possible to place a duck_2 on the map */
-        Point point0 = new Point(20, 20);
-        WildAnimal animal = map.placeWildAnimal(point0, DUCK_2);
+        // Verify that it's possible to place a duck_2 on the map
+        var point0 = new Point(20, 20);
+        var animal = map.placeWildAnimal(point0, DUCK_2);
 
         assertNotNull(animal);
         assertEquals(animal.getType(), DUCK_2);

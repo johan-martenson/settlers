@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Vegetation;
+import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.WATER;
@@ -27,19 +20,16 @@ import static org.appland.settlers.model.Material.WELL_WORKER;
 @Walker(speed = 10)
 public class WellWorker extends Worker {
     private static final int PRODUCTION_TIME = 49;
-    private static final int RESTING_TIME    = 99;
+    private static final int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
     private final ProductivityMeasurer productivityMeasurer;
 
-    private State  state;
+    private State state = State.WALKING_TO_TARGET;
 
     public WellWorker(Player player, GameMap map) {
         super(player, map);
-
-        countdown = new Countdown();
-        state     = State.WALKING_TO_TARGET;
 
         productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME, null);
     }
@@ -68,63 +58,58 @@ public class WellWorker extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == State.RESTING_IN_HOUSE) {
-            if (countdown.hasReachedZero() && getHome().isProductionEnabled() && isWaterInGround()) {
-                state = State.DRAWING_WATER;
-
-                countdown.countFrom(PRODUCTION_TIME);
-            } else if (getHome().isProductionEnabled()) {
-                countdown.step();
-            } else {
-
-                /* Report that the well worker couldn't do his job */
-                productivityMeasurer.reportUnproductivity();
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (countdown.hasReachedZero() && home.isProductionEnabled() && isWaterInGround()) {
+                    state = State.DRAWING_WATER;
+                    countdown.countFrom(PRODUCTION_TIME);
+                } else if (home.isProductionEnabled()) {
+                    countdown.step();
+                } else {
+                    productivityMeasurer.reportUnproductivity();
+                }
             }
-        } else if (state == State.DRAWING_WATER) {
-            if (countdown.hasReachedZero()) {
 
-                /* Report that the well worker produced water */
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
+            case DRAWING_WATER -> {
+                if (countdown.hasReachedZero()) {
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
+                    map.getStatisticsManager().waterProduced(player, map.getTime());
 
-                map.getStatisticsManager().waterProduced(player, map.getTime());
+                    if (home.getFlag().hasPlaceForMoreCargo()) {
+                        var cargo = new Cargo(WATER, map);
+                        setCargo(cargo);
 
-                /* Handle transportation */
-                if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                    Cargo cargo = new Cargo(WATER, map);
+                        setTarget(home.getFlag().getPosition());
+                        state = State.GOING_TO_FLAG_WITH_CARGO;
 
+                        home.getFlag().promiseCargo(cargo);
+                    } else {
+                        state = State.WAITING_FOR_SPACE_ON_FLAG;
+                    }
+                } else {
+                    countdown.step();
+                }
+            }
+
+            case WAITING_FOR_SPACE_ON_FLAG -> {
+                if (home.getFlag().hasPlaceForMoreCargo()) {
+                    var cargo = new Cargo(WATER, map);
                     setCargo(cargo);
 
-                    /* Go out to the flag to deliver the water */
-                    setTarget(getHome().getFlag().getPosition());
-
+                    setTarget(home.getFlag().getPosition());
                     state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                    getHome().getFlag().promiseCargo(getCargo());
-                } else {
-                    state = WellWorker.State.WAITING_FOR_SPACE_ON_FLAG;
+                    home.getFlag().promiseCargo(cargo);
                 }
-            } else {
-                countdown.step();
             }
-        } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = new Cargo(WATER, map);
 
-                setCargo(cargo);
-
-                /* Go out to the flag to deliver the water */
-                setTarget(getHome().getFlag().getPosition());
-
-                state = State.GOING_TO_FLAG_WITH_CARGO;
-
-                getHome().getFlag().promiseCargo(getCargo());
-            }
-        } else if (state == State.DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
@@ -143,65 +128,65 @@ public class WellWorker extends Worker {
 
     @Override
     protected void onArrival() {
-        if (state == State.GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = getHome().getFlag();
-            Cargo cargo = getCargo();
+        switch (state) {
+            case GOING_TO_FLAG_WITH_CARGO -> {
+                var flag = home.getFlag();
+                var cargo = getCargo();
 
-            cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isReceiverForWater);
+                cargo.setPosition(position);
+                cargo.transportToReceivingBuilding(this::isReceiverForWater);
 
-            flag.putCargo(getCargo());
+                flag.putCargo(cargo);
 
-            setCargo(null);
+                setCargo(null);
+                returnHome();
 
-            returnHome();
-
-            state = State.GOING_BACK_TO_HOUSE;
-        } else if (state == State.GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
-
-            state = State.RESTING_IN_HOUSE;
-            countdown.countFrom(RESTING_TIME);
-        } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WELL_WORKER);
-
-            if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = State.GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                state = State.GOING_BACK_TO_HOUSE;
             }
-        } else if (state == State.GOING_TO_DIE) {
-            setDead();
 
-            state = State.DEAD;
+            case GOING_BACK_TO_HOUSE -> {
+                enterBuilding(home);
 
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+                state = State.RESTING_IN_HOUSE;
+                countdown.countFrom(RESTING_TIME);
+            }
+
+            case RETURNING_TO_STORAGE -> {
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                storehouse.depositWorker(this);
+            }
+
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WELL_WORKER);
+
+                if (storehouse != null) {
+                    state = State.RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = State.GOING_TO_DIE;
+                    var point = findPlaceToDie();
+                    setOffroadTarget(point);
+                }
+            }
+
+            case GOING_TO_DIE -> {
+                setDead();
+                state = State.DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WELL_WORKER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, WELL_WORKER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), WELL_WORKER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), WELL_WORKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
@@ -210,7 +195,7 @@ public class WellWorker extends Worker {
             } else {
                 Point point = findPlaceToDie();
 
-                setOffroadTarget(point, getPosition().downRight());
+                setOffroadTarget(point, position.downRight());
 
                 state = State.GOING_TO_DIE;
             }
@@ -220,15 +205,15 @@ public class WellWorker extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Don't try to enter the well upon arrival */
+            // Don't try to enter the well upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -236,16 +221,14 @@ public class WellWorker extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     private boolean isWaterInGround() {
-
-        /* The well worker can't produce water in a desert */
-        return !map.isSurroundedBy(getHome().getPosition(), Vegetation.BUILDABLE_MOUNTAIN);
+        return !map.isSurroundedBy(home.getPosition(), Vegetation.BUILDABLE_MOUNTAIN);
     }
 
     @Override

@@ -1006,9 +1006,6 @@ public class SettlersModelDriver {
      *
      * DELETE_BUILDING_AT_POINT POINT.X POINT.Y
      *
-     * @param map
-     * @param arguments
-     * @throws Exception
      */
     private static void deleteBuilding(GameMap map, ArgumentsHandler arguments) throws Exception {
         Building building;
@@ -1039,8 +1036,6 @@ public class SettlersModelDriver {
      *
      * RAISE_BUILDING PLAYER_ID TYPE POINT.X POINT.Y
      *                    1      2     3       3
-     * @param map
-     * @param arguments
      */
     private static void raiseBuilding(GameMap map, ArgumentsHandler arguments) throws Exception {
         Building building;
@@ -1130,9 +1125,6 @@ public class SettlersModelDriver {
      *
      * RAISE_FLAG PLAYER_ID POINT.X POINT.Y
      *
-     * @param map
-     * @param arguments
-     * @throws Exception
      */
     private static void raiseFlag(GameMap map, ArgumentsHandler arguments) throws Exception {
         Player player;
@@ -1159,8 +1151,6 @@ public class SettlersModelDriver {
     /**
      *
      * DELETE_ROAD ROAD_ID
-     * @param map
-     * @param arguments
      */
     private static void deleteRoadAtPoint(GameMap map, ArgumentsHandler arguments) throws Exception {
 
@@ -1199,8 +1189,6 @@ public class SettlersModelDriver {
      *                      |       --- 3 char int
      *                       -- 1 char int
      *
-     * @param map
-     * @param arguments
      */
     private static void buildRoadAutomatic(GameMap map, ArgumentsHandler arguments) throws InvalidUserActionException, SettlersModelDriverException {
 

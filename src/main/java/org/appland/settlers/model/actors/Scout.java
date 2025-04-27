@@ -291,7 +291,6 @@ public class Scout extends Worker {
     }
 
     record EntityAndScore<T>(T entity, double score) {
-
         public String toString() {
                 return entity + ", " + score;
             }

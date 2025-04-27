@@ -34,7 +34,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -44,6 +43,20 @@ import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
+    public record PlanksAndStones(int planks, int stones) {
+        public boolean contains(Material material) {
+            return (material == PLANK && planks > 0) || (material == STONE && stones > 0);
+        }
+
+        public int getAmount(Material material) {
+            return switch (material) {
+                case PLANK -> planks;
+                case STONE -> stones;
+                default -> 0;
+            };
+        }
+    }
+
     private static final int TIME_TO_PROMOTE_SOLDIER = 100;
     private static final int TIME_TO_BUILD_SMALL_HOUSE = 100;
     private static final int TIME_TO_BUILD_MEDIUM_HOUSE = 150;
@@ -52,7 +65,9 @@ public class Building implements EndPoint {
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
     private static final int TIME_TO_UPGRADE = 99;
 
-    private final Map<Material, Integer> materialsToBuildHouse = getMaterialsToBuildHouse();
+    private final PlanksAndStones materialsToBuildHouse = getMaterialsToBuildHouse();
+
+    //private final Map<Material, Integer> materialsToBuildHouse = getMaterialsToBuildHouse();
     private final Map<Material, Integer> totalAmountNeededForProduction = getMaterialNeededForProduction();
     private final int maxHostedSoldiers = initMaxHostedSoldiers();
     private final int defenceRadius = initDefenceRadius();
@@ -87,7 +102,7 @@ public class Building implements EndPoint {
     private long generation;
     private GameMap map = null;
     private Player player;
-    private State state;
+    public State state;
     private Worker worker = null;
     private Worker promisedWorker = null;
     private Point position = null;
@@ -327,9 +342,7 @@ public class Building implements EndPoint {
 
         switch (state) {
             case PLANNED, UNDER_CONSTRUCTION -> {
-                var materialsNeeded = getMaterialsToBuildHouse();
-
-                if (!materialsNeeded.containsKey(cargo.getMaterial())) {
+                if (!materialsToBuildHouse.contains(material)) {
                     throw new InvalidMaterialException(material);
                 }
 
@@ -638,28 +651,28 @@ public class Building implements EndPoint {
     }
 
     private void consumeConstructionMaterial() {
-        Map<Material, Integer> materialToConsume = getMaterialsToBuildHouse();
+        receivedMaterial.merge(PLANK, materialsToBuildHouse.planks(), (currentValue, newValues) -> currentValue - newValues);
+        receivedMaterial.merge(STONE, materialsToBuildHouse.stones(), (currentValue, newValues) -> currentValue - newValues);
 
-        for (Entry<Material, Integer> pair : materialToConsume.entrySet()) {
-            int cost = pair.getValue();
-            int before = receivedMaterial.getOrDefault(pair.getKey(), 0);
-
-            receivedMaterial.put(pair.getKey(), before - cost);
-        }
+        map.getStatisticsManager().buildingConstructed(this, map.getTime());
     }
 
     // FIXME: HOTSPOT - allocations
-    private Map<Material, Integer> getMaterialsToBuildHouse() {
-        HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
-        Material[] materialsArray = houseSize.material();
-        Map<Material, Integer> materials = new EnumMap<>(Material.class);
+    private PlanksAndStones getMaterialsToBuildHouse() {
+        HouseSize houseSize = this.getClass().getAnnotation(HouseSize.class);
 
-        for (Material material : materialsArray) {
-            int amount = materials.getOrDefault(material, 0);
-            materials.put(material, amount + 1);
+        int planks = 0;
+        int stones = 0;
+
+        for (Material material : houseSize.material()) {
+            if (material == PLANK) {
+                planks++;
+            } else if (material == STONE) {
+                stones++;
+            }
         }
 
-        return materials;
+        return new PlanksAndStones(planks, stones);
     }
 
     private int getConstructionCountdown() {
@@ -673,19 +686,8 @@ public class Building implements EndPoint {
     }
 
     private boolean isMaterialForConstructionAvailable() {
-        Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
-
-        /* Check if the required amount is available for each required material */
-        for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
-            Material material = entry.getKey();
-
-            /* Return false if there is missing material */
-            if (receivedMaterial.getOrDefault(material, 0) < entry.getValue()) {
-                return false;
-            }
-        }
-
-        return true;
+        return receivedMaterial.getOrDefault(PLANK, 0) >= materialsToBuildHouse.planks() &&
+                receivedMaterial.getOrDefault(STONE, 0) >= materialsToBuildHouse.stones();
     }
 
     private boolean isAccepted(Material material) {
@@ -1019,7 +1021,7 @@ public class Building implements EndPoint {
         switch (state) {
             case PLANNED:
             case UNDER_CONSTRUCTION:
-                return materialsToBuildHouse.getOrDefault(material, 0);
+                return materialsToBuildHouse.getAmount(material);
 
             case UNOCCUPIED:
             case OCCUPIED:
@@ -1043,11 +1045,11 @@ public class Building implements EndPoint {
     private int getLackingAmountWithProjected(Material material) {
         return switch (state) {
             case State.UNDER_CONSTRUCTION, State.PLANNED -> {
-                if (!materialsToBuildHouse.containsKey(material)) {
+                if (!materialsToBuildHouse.contains(material)) {
                     yield 0;
                 }
 
-                int total = materialsToBuildHouse.get(material);
+                int total = materialsToBuildHouse.getAmount(material);
                 int promised = promisedDeliveries.getOrDefault(material, 0);
                 int received = receivedMaterial.getOrDefault(material, 0);
 
@@ -1429,5 +1431,9 @@ public class Building implements EndPoint {
 
     public boolean isWorking() {
         return worker != null && worker.isWorking();
+    }
+
+    public PlanksAndStones getMaterialNeededForConstruction() {
+        return materialsToBuildHouse;
     }
 }

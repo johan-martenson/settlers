@@ -2,7 +2,7 @@ package org.appland.settlers.assets.gamefiles;
 
 /**
      * Layout of data in MAPBOBS.LST
-     *
+     * <p>
      * 0     Palette
      * 1     Selected point
      * 2     Building road?? Maybe when clicked down on step in road when building?
@@ -75,9 +75,9 @@ package org.appland.settlers.assets.gamefiles;
      * 163     Tree small shadow type ?
      * 164     Tree medium shadow type ?
      * 165-168 Tree falling animation shadow type ?
-     *
+     * <p>
      * 169-281 More tree shadows -- figure out which ones belong to which tree
-     *
+     * <p>
      * 282     ??
      * 283     Mushroom
      * 284     Mini decorative stone
@@ -118,39 +118,39 @@ package org.appland.settlers.assets.gamefiles;
      * 325     Grass - decorative
      * 326     Small skeleton
      * 327     Smaller skeleton
-     *
+     * <p>
      * 328-332 ???
      * 333-371 Unknown shadows???
-     *
+     * <p>
      * 372-374     Iron sign, small-medium-large, up-right
      * 375-377     Gold sign, small-medium-large, up-right
      * 378-380     Coal sign, small-medium-large, up-right
      * 381-383     Granite sign, small-medium-large, up-right
      * 384         Water sign, large(?), up-right
      * 385         Nothing found sign, up-right
-     *
+     * <p>
      * 386-418     Unknown shadows???
-     *
+     * <p>
      * 419-426     Small fire animation
-     *
+     * <p>
      * 475-482     Ice bear walking animation, right
      * 483-490     Ice bear walking animation, down-right
      * 491-498     Ice bear walking animation, down-left
      * 499-506     Ice bear walking animation, left
      * 507-514     Ice bear walking animation, up-left
      * 515-522     Ice bear walking animation, up-right
-     *
+     * <p>
      * 523         Dead animal???
-     *
+     * <p>
      * 524         ??
-     *
+     * <p>
      * 525-536     Rabbit running animation, right
      * 537-548     Rabbit running animation, left
      * 549-554     Rabbit running animation, up-left
      * 555-561     Rabbit running animation, up-right
-     *
+     * <p>
      * 562-600     More rabbits??
-     *
+     * <p>
      * 601-606     Fox running animation, right
      * 607-612     Fox running animation, down-right
      * 613-618     Fox running animation, down-left
@@ -159,7 +159,7 @@ package org.appland.settlers.assets.gamefiles;
      * 631-636     Fox running animation, up-right
      * 637         Fox killed
      * 638-643     Fox shadows
-     *
+     * <p>
      * 644-651     Deer running animation, right
      * 652-659     Deer running animation, down-right
      * 660-667     Deer running animation, down-left
@@ -168,7 +168,7 @@ package org.appland.settlers.assets.gamefiles;
      * 684-691     Deer running animation, up-right
      * 692         Deer killed
      * 693-698     Deer shadows
-     *
+     * <p>
      * 699-706     Rain deer running animation, right
      * 707-714     Rain deer running animation, down-right
      * 715-722     Rain deer running animation, down-left
@@ -177,29 +177,29 @@ package org.appland.settlers.assets.gamefiles;
      * 739-746     Rain deer running animation, up-right
      * 747         Rain deer killed
      * 748-753     Rain deer shadows
-     *
+     * <p>
      * 754-        Duck, east, south-east, south-west, west, north-west, north-east,
-     *
+     * <p>
      * 761-808     Horse animated ...
-     *
+     * <p>
      * 812-817     Donkey bags ...
-     *
+     * <p>
      * 818-829     Sheep animated ...
-     *
+     * <p>
      * 832-843     Pig animated ...
-     *
+     * <p>
      * 844-891     Smaller pig (?) animated
-     *
+     * <p>
      * ...
-     *
+     * <p>
      * 895-927     Tools and materials - small for workers to cary around
-     *
+     * <p>
      * 928-964     Tools and materials - for drawing in house information views - needs/has/produces
-     *
+     * <p>
      * 965-994     Tools and materials for headquarter/storehouse inventory view
-     *
+     * <p>
      * 995-1030    Very small tools and materials. For what??
-     *
+     * <p>
      * 1031-1038   Small building fire
      * 1039-1046   Medium building fire
      * 1047-1054   Large building fire

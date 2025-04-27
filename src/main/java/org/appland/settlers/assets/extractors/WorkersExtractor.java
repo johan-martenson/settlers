@@ -136,8 +136,6 @@ public class WorkersExtractor {
                             maxOrigin.x = Integer.MIN_VALUE;
                             maxOrigin.y = Integer.MIN_VALUE;
 
-                            Point maxPosition = maxOrigin;
-
                             boolean hasPlayerColor = false;
 
                             for (Bitmap bitmap : frame.getBitmaps()) {
@@ -151,16 +149,16 @@ public class WorkersExtractor {
                                 maxOrigin.x = Math.max(maxOrigin.x, bitmapOrigin.x);
                                 maxOrigin.y = Math.max(maxOrigin.y, bitmapOrigin.y);
 
-                                maxPosition.x = Math.max(maxPosition.x, bitmapVisibleArea.width() - bitmapOrigin.x);
-                                maxPosition.y = Math.max(maxPosition.y, bitmapVisibleArea.height() - bitmapOrigin.y);
+                                maxOrigin.x = Math.max(maxOrigin.x, bitmapVisibleArea.width() - bitmapOrigin.x);
+                                maxOrigin.y = Math.max(maxOrigin.y, bitmapVisibleArea.height() - bitmapOrigin.y);
                             }
 
                             for (var playerColor : PlayerColor.values()) {
 
                                 /* Create a bitmap to merge both body and head into */
                                 Bitmap merged = new Bitmap(
-                                        maxOrigin.x + maxPosition.x,
-                                        maxOrigin.y + maxPosition.y,
+                                        maxOrigin.x + maxOrigin.x,
+                                        maxOrigin.y + maxOrigin.y,
                                         maxOrigin.x,
                                         maxOrigin.y,
                                         defaultPalette,

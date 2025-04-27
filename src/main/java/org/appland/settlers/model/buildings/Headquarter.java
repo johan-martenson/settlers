@@ -7,12 +7,11 @@ import org.appland.settlers.model.InvalidGameLogicException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.ResourceLevel;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.StorehouseWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.policy.InitialState;
-import org.appland.settlers.model.ResourceLevel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedSoldiers = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
-    private static final Map<Material, Integer> LOW_RESOURCES = Map.ofEntries(
+    private static final Map<Material, Integer> LOW_RESOURCES = Map.<Material, Integer>ofEntries(
             entry(SHIELD, 0),
             entry(SWORD, 0),
 
@@ -161,7 +160,7 @@ public class Headquarter extends Storehouse {
             entry(DONKEY, 8)
     );
 
-    private static final Map<Material, Integer> HIGH_RESOURCES = Map.ofEntries(
+    private static final Map<Material, Integer> HIGH_RESOURCES = Map.<Material, Integer>ofEntries(
             entry(PRIVATE, 103), // Should be 102 and 1 in reserve
             entry(PRIVATE_FIRST_CLASS, 0),
             entry(SERGEANT, 0),
@@ -288,7 +287,7 @@ public class Headquarter extends Storehouse {
     public void setMap(GameMap map) {
         super.setMap(map);
 
-        Worker storageWorker = new StorehouseWorker(getPlayer(), map);
+        var storageWorker = new StorehouseWorker(getPlayer(), map);
         getMap().placeWorker(storageWorker, this);
         storageWorker.enterBuilding(this);
         assignWorker(storageWorker);
@@ -301,10 +300,16 @@ public class Headquarter extends Storehouse {
             case HIGH -> inventory.putAll(HIGH_RESOURCES);
         }
 
-        getMap().getStatisticsManager()
+        var statisticsManager = getMap().getStatisticsManager();
+
+        statisticsManager
                 .getGeneralStatistics(getPlayer())
                 .workers()
                 .report(getMap().getTime(), GameUtils.countWorkersInInventory(this));
+
+        statisticsManager.getGeneralStatistics(getPlayer())
+                .goods()
+                .report(getMap().getTime(), GameUtils.countGoodsInInventory(this));
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
@@ -497,6 +502,8 @@ public class Headquarter extends Storehouse {
 
     @Override
     void draftMilitary() {
+        System.out.println("Drafting military");
+
         int swords = inventory.getOrDefault(SWORD, 0);
         int shields = inventory.getOrDefault(SHIELD, 0);
         int beer = inventory.getOrDefault(BEER, 0);

@@ -23,7 +23,6 @@ public enum BuildableSite {
 
     static BuildableSite buildableSiteFromInt(short i) {
         return switch (i) {
-            case 0 -> null;
             case 1 -> FLAG;
             case 2 -> HUT;
             case 3 -> HOUSE;

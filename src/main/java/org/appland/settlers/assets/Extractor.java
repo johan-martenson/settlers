@@ -130,8 +130,6 @@ public class Extractor {
     /**
      * TEX5.LBM -- contains vegetation textures
      *
-     * @param fromDir
-     * @param toDir
      */
     private void populateNatureAndUIElements(String fromDir, String toDir) throws InvalidFormatException, UnknownResourceTypeException, IOException {
 

@@ -26,10 +26,10 @@ public class CumulativeDataSeries {
     }
 
     public void increase(long time) {
-        increase(time, 1);
+        increase(1, time);
     }
 
-    public void increase(long time, int amount) {
+    public void increase(int amount, long time) {
         if (measurements.isEmpty()) {
             measurements.add(new Measurement(time, amount));
         } else {
@@ -46,17 +46,21 @@ public class CumulativeDataSeries {
     }
 
     public void decrease(long time) {
+        decrease(1, time);
+    }
+
+    public void decrease(int amount, long time) {
         if (measurements.isEmpty()) {
-            measurements.add(new Measurement(time, -1));
+            measurements.add(new Measurement(time, -amount));
         } else {
             var lastValue = measurements.getLast().value();
             var lastTime = measurements.getLast().time();
 
             if (time == lastTime) {
                 measurements.removeLast();
-                measurements.add(new Measurement(time, lastValue - 1));
+                measurements.add(new Measurement(time, lastValue - amount));
             } else {
-                measurements.add(new Measurement(time, lastValue - 1));
+                measurements.add(new Measurement(time, lastValue - amount));
             }
         }
     }

@@ -59,9 +59,9 @@ public abstract class Worker {
     private State       state = State.IDLE_OUTSIDE;
     private Cargo       carriedCargo;
     private Building    targetBuilding = null;
-    private Point       position = null;
+    protected Point     position = null;
     private Point       target = null;
-    private Building    home = null;
+    protected Building  home = null;
 
     protected Direction direction = Direction.DOWN_RIGHT;
 

@@ -85,7 +85,7 @@ public enum IoDat {
     GOLD_OR_BEER(93), // Weird....
     WATER_FLAG(94),
     WATER_ROAD_IN_NATURE(95),
-    WORKERS(96),
+    SCOUT(96),
     ONE_SWORD(97),
     TWO_SWORDS(98),
     THREE_SWORDS(99),

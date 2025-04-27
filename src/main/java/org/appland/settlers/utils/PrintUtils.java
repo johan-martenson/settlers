@@ -414,7 +414,6 @@ public class PrintUtils {
      *
      * @param point                the central point
      * @param availableHousePoints available house points
-     * @param map                  the game map
      */
     public void printSurroundingAvailableBuildingsFromGameMap(Point point, Map<Point, Size> availableHousePoints) {
         System.out.printf("""

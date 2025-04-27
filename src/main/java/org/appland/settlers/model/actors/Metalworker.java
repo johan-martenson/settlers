@@ -119,7 +119,7 @@ public class Metalworker extends Worker {
             }
         } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
 
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+            if (home.getFlag().hasPlaceForMoreCargo()) {
                 Material nextTool = getNextTool();
 
                 Cargo cargo = new Cargo(nextTool, map);
@@ -128,13 +128,13 @@ public class Metalworker extends Worker {
                 /* Go place the tool at the flag */
                 state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                setTarget(getHome().getFlag().getPosition());
+                setTarget(home.getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo(getCargo());
+                home.getFlag().promiseCargo(getCargo());
             }
 
         } else if (state == MAKING_TOOL) {
-            if (getHome().getAmount(PLANK) > 0 && getHome().getAmount(IRON_BAR) > 0 && getHome().isProductionEnabled()) {
+            if (home.getAmount(PLANK) > 0 && home.getAmount(IRON_BAR) > 0 && home.isProductionEnabled()) {
                 if (countdown.hasReachedZero()) {
 
                     /* Wait if all tool quotas are zero */
@@ -152,8 +152,8 @@ public class Metalworker extends Worker {
                     }
 
                     /* Consume the ingredients */
-                    getHome().consumeOne(PLANK);
-                    getHome().consumeOne(IRON_BAR);
+                    home.consumeOne(PLANK);
+                    home.consumeOne(IRON_BAR);
 
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
@@ -161,7 +161,7 @@ public class Metalworker extends Worker {
                     map.getStatisticsManager().toolProduced(player, map.getTime());
 
                     /* Handle transportation of the produced tool */
-                    if (!getHome().getFlag().hasPlaceForMoreCargo()) {
+                    if (!home.getFlag().hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
                         Material nextTool = getNextTool();
@@ -172,9 +172,9 @@ public class Metalworker extends Worker {
                         /* Go place the tool at the flag */
                         state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
+                        setTarget(home.getFlag().getPosition());
 
-                        getHome().getFlag().promiseCargo(getCargo());
+                        home.getFlag().promiseCargo(getCargo());
                     }
                 } else {
                     countdown.step();
@@ -196,11 +196,11 @@ public class Metalworker extends Worker {
     @Override
     protected void onArrival() {
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = map.getFlagAtPoint(getPosition());
+            Flag flag = map.getFlagAtPoint(position);
 
             Cargo cargo = getCargo();
 
-            cargo.setPosition(getPosition());
+            cargo.setPosition(position);
             cargo.transportToStorage();
 
             flag.putCargo(getCargo());
@@ -211,19 +211,19 @@ public class Metalworker extends Worker {
 
             returnHome();
         } else if (state == State.GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
+            enterBuilding(home);
 
             state = RESTING_IN_HOUSE;
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(position);
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, METALWORKER);
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, METALWORKER);
 
             if (storehouse != null) {
 
@@ -248,7 +248,7 @@ public class Metalworker extends Worker {
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, METALWORKER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, METALWORKER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -256,7 +256,7 @@ public class Metalworker extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), METALWORKER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), METALWORKER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -265,7 +265,7 @@ public class Metalworker extends Worker {
             } else {
                 Point point = findPlaceToDie();
 
-                setOffroadTarget(point, getPosition().downRight());
+                setOffroadTarget(point, position.downRight());
 
                 state = GOING_TO_DIE;
             }
@@ -277,8 +277,8 @@ public class Metalworker extends Worker {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
-                map.isFlagAtPoint(getPosition()) &&
-                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                map.isFlagAtPoint(position) &&
+                !map.arePointsConnectedByRoads(position, getTarget())) {
 
             /* Don't try to enter upon arrival */
             clearTargetBuilding();

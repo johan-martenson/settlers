@@ -151,9 +151,6 @@ public class GameMap {
         /* Set grass as vegetation on all tiles */
         constructDefaultTiles();
 
-        /* Add initial measurement */
-        statisticsManager.addZeroInitialMeasurementForPlayers(players);
-
         /* Give the players a reference to the map */
         players.forEach(player -> player.setMap(this));
 
@@ -441,13 +438,6 @@ public class GameMap {
         }
 
         duration.after("Manage winning");
-
-        /* Collect statistics */
-        if (time % statisticsCollectionPeriod == 0) {
-            statisticsManager.collectFromPlayers(time, players);
-        }
-
-        duration.after("Collect statistics");
 
         /* Notify the players that one more step has been done */
         players.forEach(Player::manageTreeConservationProgram);
@@ -1001,9 +991,6 @@ public class GameMap {
 
         /* Remove the roads */
         roadsToRemove.forEach(this::doRemoveRoad);
-
-        /* Update statistics collection of land per player */
-        statisticsManager.collectLandStatisticsFromPlayers(time, players);
     }
 
     private Road placeDriveWay(Building building) {
@@ -1620,11 +1607,11 @@ public class GameMap {
 
     /**
      * Creates an array with all Map Point instances. They are indexed like this:
-     *
+     * <p>
      * 4     5
      *    2     3
      * 0     1
-     *
+     * <p>
      * To address a Map Point:
      *  - Data row length depends on the width of the game map
      *     - For even width: dataRowLength = width / 2
@@ -2026,7 +2013,6 @@ public class GameMap {
      * Places a crop at the given point
      *
      * @param point    The point to place the crop on
-     * @param cropType
      * @return The placed crop
      * @throws InvalidUserActionException Thrown if the crop cannot be placed
      */
@@ -2191,6 +2177,9 @@ public class GameMap {
         flag.onRemove();
 
         removeFlagWithoutSideEffects(flag);
+
+        // Update statistics
+        statisticsManager.flagRemoved(flag, time);
     }
 
     private void removeFlagWithoutSideEffects(Flag flag) {

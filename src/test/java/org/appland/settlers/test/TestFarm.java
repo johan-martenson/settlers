@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.test;
 
 import org.appland.settlers.assets.Nation;
@@ -52,21 +46,21 @@ public class TestFarm {
     @Test
     public void testFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place farm */
+        // Place farm
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver three plank and three stone */
+        // Deliver three plank and three stone
         Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo = new Cargo(STONE, map);
 
@@ -77,10 +71,10 @@ public class TestFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(farm0);
 
-        /* Verify that this is enough to construct the farm */
+        // Verify that this is enough to construct the farm
         for (int i = 0; i < 200; i++) {
             assertTrue(farm0.isUnderConstruction());
 
@@ -93,21 +87,21 @@ public class TestFarm {
     @Test
     public void testFarmCannotBeConstructedWithTooFewPlanks() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place farm */
+        // Place farm
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver two plank and three stone */
+        // Deliver two plank and three stone
         Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo = new Cargo(STONE, map);
 
@@ -117,10 +111,10 @@ public class TestFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(farm0);
 
-        /* Verify that this is not enough to construct the farm */
+        // Verify that this is not enough to construct the farm
         for (int i = 0; i < 500; i++) {
             assertTrue(farm0.isUnderConstruction());
 
@@ -133,21 +127,21 @@ public class TestFarm {
     @Test
     public void testFarmCannotBeConstructedWithTooFewStones() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Place farm */
+        // Place farm
         Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver three planks and two stones */
+        // Deliver three planks and two stones
         Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo = new Cargo(STONE, map);
 
@@ -157,10 +151,10 @@ public class TestFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
-        /* Assign builder */
+        // Assign builder
         Utils.assignBuilder(farm0);
 
-        /* Verify that this is not enough to construct the farm */
+        // Verify that this is not enough to construct the farm
         for (int i = 0; i < 500; i++) {
             assertTrue(farm0.isUnderConstruction());
 
@@ -173,13 +167,13 @@ public class TestFarm {
     @Test
     public void testPlaceCrop() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        /* Place crop */
+        // Place crop
         Point point0 = new Point(3, 3);
         Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
@@ -190,13 +184,13 @@ public class TestFarm {
     @Test
     public void testCropGrowsOverTime() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        /* Place crop */
+        // Place crop
         Point point0 = new Point(3, 3);
         Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
@@ -230,17 +224,17 @@ public class TestFarm {
     @Test
     public void testUnfinishedFarmNeedsNoFarmer() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
@@ -251,18 +245,18 @@ public class TestFarm {
     @Test
     public void testFinishedFarmNeedsFarmer() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
@@ -275,30 +269,30 @@ public class TestFarm {
     @Test
     public void testFarmerIsAssignedToFinishedFarm() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish the farm */
+        // Finish the farm
         Utils.constructHouse(farm);
 
-        /* Run game logic twice, once to place courier and once to place forester */
+        // Run game logic twice, once to place courier and once to place forester
         Utils.fastForward(2, map);
 
-        /* Verify that there was a farmer added */
+        // Verify that there was a farmer added
         assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
@@ -307,30 +301,30 @@ public class TestFarm {
     @Test
     public void testFarmerIsNotASoldier() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish the forester hut */
+        // Finish the forester hut
         Utils.constructHouse(farm);
 
-        /* Run game logic twice, once to place courier and once to place forester */
+        // Run game logic twice, once to place courier and once to place forester
         Utils.fastForward(2, map);
 
-        /* Wait for a farm to walk out */
+        // Wait for a farm to walk out
         Farmer farmer0 = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         assertNotNull(farmer0);
@@ -340,35 +334,35 @@ public class TestFarm {
     @Test
     public void testFarmerIsCreatedFromScythe() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Remove all farmers from the headquarter and add one scythe */
+        // Remove all farmers from the headquarter and add one scythe
         Utils.adjustInventoryTo(headquarter, FARMER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SCYTHE, 1);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish the forester hut */
+        // Finish the forester hut
         Utils.constructHouse(farm);
 
-        /* Run game logic twice, once to place courier and once to place forester */
+        // Run game logic twice, once to place courier and once to place forester
         Utils.fastForward(2, map);
 
-        /* Verify that there was a farmer added */
+        // Verify that there was a farmer added
         assertTrue(map.getWorkers().size() >= 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
@@ -377,34 +371,34 @@ public class TestFarm {
     @Test
     public void testFarmerRestsInFarmThenLeaves() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Construct house */
+        // Construct house
         Utils.constructHouse(farm);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
+        // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
             map.stepTime();
@@ -412,7 +406,7 @@ public class TestFarm {
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -421,34 +415,34 @@ public class TestFarm {
     @Test
     public void testFarmerGoesOutViaFlag() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Construct the house */
+        // Construct the house
         Utils.constructHouse(farm);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
+        // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
             map.stepTime();
@@ -456,49 +450,49 @@ public class TestFarm {
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        /* Verify that the farmer goes out via the flag */
+        // Verify that the farmer goes out via the flag
         assertTrue(farmer.getPlannedPath().contains(farm.getFlag().getPosition()));
     }
 
     @Test
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -507,7 +501,7 @@ public class TestFarm {
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -524,7 +518,7 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* Verify that the farmer stopped planting and there is a crop */
+        // Verify that the farmer stopped planting and there is a crop
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertNull(farmer.getCargo());
@@ -534,39 +528,39 @@ public class TestFarm {
     @Test
     public void testFarmerReturnsViaFlagAfterPlanting() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Assign a farmer to the farm */
+        // Assign a farmer to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to rest */
+        // Wait for the farmer to rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once to let the farmer go out to plant */
+        // Step once to let the farmer go out to plant
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -575,14 +569,14 @@ public class TestFarm {
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the intended spot and start to plant */
+        // Let the farmer reach the intended spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isPlanting());
 
-        /* Wait for the farmer to plant */
+        // Wait for the farmer to plant
         Utils.fastForward(19, map);
 
         assertTrue(farmer.isPlanting());
@@ -590,7 +584,7 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* Verify that the farmer stopped planting and is walking back to the farm */
+        // Verify that the farmer stopped planting and is walking back to the farm
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertTrue(farmer.isTraveling());
@@ -606,42 +600,42 @@ public class TestFarm {
     @Test
     public void testFarmerHarvestsWhenPossible() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place crop */
+        // Place crop
         Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Wait for the crop to grow */
+        // Wait for the crop to grow
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
-        /* Assign a farmer to the farm */
+        // Assign a farmer to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to rest */
+        // Wait for the farmer to rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once to let the farmer go out to harvest */
+        // Step once to let the farmer go out to harvest
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -651,7 +645,7 @@ public class TestFarm {
         assertTrue(farmer.isTraveling());
         assertEquals(point, crop.getPosition());
 
-        /* Let the farmer reach the crop and start harvesting */
+        // Let the farmer reach the crop and start harvesting
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -671,7 +665,7 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* Verify that the farmer harvested successfully */
+        // Verify that the farmer harvested successfully
         assertFalse(farmer.isHarvesting());
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
@@ -681,53 +675,53 @@ public class TestFarm {
     @Test
     public void testWheatCargoIsDeliveredToMillWhichIsCloserThanHeadquarters() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        /* Remove all wheat from the headquarters */
+        // Remove all wheat from the headquarters
         Utils.adjustInventoryTo(headquarter, WHEAT, 0);
 
-        /* Place mill */
+        // Place mill
         Point point4 = new Point(10, 4);
         Mill mill = map.placeBuilding(new Mill(player0), point4);
 
-        /* Connect the mill to the headquarters */
+        // Connect the mill to the headquarters
         Road road2 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
-        /* Wait for the mill to get constructed and occupied */
+        // Wait for the mill to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(mill);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
 
-        /* Place the farm */
+        // Place the farm
         Point point1 = new Point(14, 4);
         Farm farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the mill */
+        // Connect the farm with the mill
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), mill.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm);
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
-        /* Wait for the courier on the road between the mill and the farm hut to have a wheat cargo */
+        // Wait for the courier on the road between the mill and the farm hut to have a wheat cargo
         Utils.waitForFlagToGetStackedCargo(map, farm.getFlag(), 1);
 
         assertEquals(farm.getFlag().getStackedCargo().getFirst().getMaterial(), WHEAT);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier());
 
-        /* Verify that the courier delivers the cargo to the mill (and not the headquarters) */
+        // Verify that the courier delivers the cargo to the mill (and not the headquarters)
         assertEquals(farm.getAmount(WHEAT), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), mill.getPosition());
@@ -738,40 +732,40 @@ public class TestFarm {
     @Test
     public void testFarmerReturnsViaFlagAfterHarvesting() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm);
 
-        /* Wait for the crop to grow */
+        // Wait for the crop to grow
         Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
-        /* Assign a farmer to the farm */
+        // Assign a farmer to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and to let the farmer go out to plant */
+        // Step once and to let the farmer go out to plant
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -781,7 +775,7 @@ public class TestFarm {
         assertTrue(farmer.isTraveling());
         assertEquals(point, crop.getPosition());
 
-        /* Let the farmer reach the intended spot */
+        // Let the farmer reach the intended spot
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -789,18 +783,18 @@ public class TestFarm {
         assertTrue(farmer.isHarvesting());
         assertFalse(farmer.isPlanting());
 
-        /* Wait for the farmer to plant a new crop */
+        // Wait for the farmer to plant a new crop
         Utils.fastForward(19, map);
 
         assertTrue(farmer.isHarvesting());
 
         map.stepTime();
 
-        /* Farmer is walking back to farm with cargo of wheat */
+        // Farmer is walking back to farm with cargo of wheat
         assertFalse(farmer.isHarvesting());
         assertEquals(farmer.getTarget(), farm.getPosition());
 
-        /* Let the farmer reach the farm */
+        // Let the farmer reach the farm
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -808,7 +802,7 @@ public class TestFarm {
         assertTrue(farm.getFlag().getStackedCargo().isEmpty());
         assertNotNull(farmer.getCargo());
 
-        /* Farmer leaves the building to place the cargo at the flag */
+        // Farmer leaves the building to place the cargo at the flag
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
@@ -816,13 +810,13 @@ public class TestFarm {
         assertNotNull(farmer.getCargo());
         assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
 
-        /* Let the farmer reach the flag */
+        // Let the farmer reach the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
 
         assertFalse(farm.getFlag().getStackedCargo().isEmpty());
         assertNull(farmer.getCargo());
 
-        /* The farmer goes back to the building */
+        // The farmer goes back to the building
         assertEquals(farmer.getTarget(), farm.getPosition());
 
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
@@ -833,30 +827,30 @@ public class TestFarm {
     @Test
     public void testFarmWithoutFarmerProducesNothing() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Place crop */
+        // Place crop
         Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm);
 
-        /* Verify that the farm does not produce any wheat */
+        // Verify that the farm does not produce any wheat
         for (int i = 0; i < 200; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
 
@@ -869,26 +863,26 @@ public class TestFarm {
     @Test
     public void testFarmerPlantsOnHarvestedCrops() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Place road */
+        // Place road
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(farm);
 
-        /* Fill all available points to plant with harvested crops */
+        // Fill all available points to plant with harvested crops
         Set<Point> possibleSpotsToPlant = new HashSet<>();
 
         possibleSpotsToPlant.addAll(Arrays.asList(point3.getAdjacentPoints()));
@@ -901,33 +895,33 @@ public class TestFarm {
 
         List<Crop> crops = new ArrayList<>();
 
-        /*      ... place crops  */
+        //      ... place crops 
         for (Point point : possibleSpotsToPlant) {
             crops.add(map.placeCrop(point, Crop.CropType.TYPE_1));
         }
 
-        /*      ... harvest crops  */
+        //      ... harvest crops 
         for (Crop crop : crops) {
             crop.harvest();
             assertEquals(crop.getGrowthState(), HARVESTED);
         }
 
-        /* Assign a farmer to the farm */
+        // Assign a farmer to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to rest */
+        // Wait for the farmer to rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer go out to plant */
+        // Let the farmer go out to plant
         map.stepTime();
 
-        /* Check that the farmer goes out to plant */
+        // Check that the farmer goes out to plant
         assertFalse(farmer.isInsideBuilding());
 
         Point point = farmer.getTarget();
@@ -936,14 +930,14 @@ public class TestFarm {
         assertEquals(map.getCropAtPoint(point).getGrowthState(), HARVESTED);
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot to plant */
+        // Let the farmer reach the spot to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isPlanting());
 
-        /* Verify that the farmer plants */
+        // Verify that the farmer plants
         for (int i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
             map.stepTime();
@@ -954,7 +948,7 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* Verify that the farmer stops planting at the correct time */
+        // Verify that the farmer stops planting at the correct time
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertEquals(map.getCropAtPoint(point).getGrowthState(), JUST_PLANTED);
@@ -963,7 +957,7 @@ public class TestFarm {
     @Test
     public void testCropCanBePlacedOnHarvestedCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -971,13 +965,13 @@ public class TestFarm {
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
 
-        /* Place a crop */
+        // Place a crop
         Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
-        /* Harvest the crop */
+        // Harvest the crop
         crop.harvest();
 
-        /* Verify that it's possible to place a new crop on the harvested crop */
+        // Verify that it's possible to place a new crop on the harvested crop
         Crop crop1 = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         assertTrue(map.isCropAtPoint(point0));
@@ -987,7 +981,7 @@ public class TestFarm {
     @Test
     public void testHarvestedCropDisappearsEventually() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -995,16 +989,16 @@ public class TestFarm {
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
 
-        /* Place a crop */
+        // Place a crop
         Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
-        /* Harvest the crop */
+        // Harvest the crop
         crop.harvest();
 
-        /* Verify that the harvested crop disappears after a specific time */
+        // Verify that the harvested crop disappears after a specific time
         for (int i = 0; i < 200; i++) {
 
-            /* Verify that the crop is still there */
+            // Verify that the crop is still there
             assertTrue(map.isCropAtPoint(point0));
 
             map.stepTime();
@@ -1017,17 +1011,17 @@ public class TestFarm {
     @Test
     public void testCanNotPlaceCropOnNotHarvestedCrop() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place crop */
+        // Place crop
         Point point0 = new Point(5, 5);
         Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
-        /* Verify that it's not possible to place a second crop at the same place */
+        // Verify that it's not possible to place a second crop at the same place
         try {
             map.placeCrop(point0, Crop.CropType.TYPE_1);
 
@@ -1038,30 +1032,30 @@ public class TestFarm {
     @Test
     public void testFarmWithoutConnectedStorageKeepsProducing() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(8, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(100, map);
 
-        /* Wait for the farmer to plant and harvest a new crop */
+        // Wait for the farmer to plant and harvest a new crop
         Worker farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
@@ -1074,12 +1068,12 @@ public class TestFarm {
 
         assertNotNull(farmer.getCargo());
 
-        /* Wait one tick for the farmer to start walking to the flag */
+        // Wait one tick for the farmer to start walking to the flag
         map.stepTime();
 
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
 
-        /* Verify that the farmer puts the wheat cargo at the flag */
+        // Verify that the farmer puts the wheat cargo at the flag
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
@@ -1088,12 +1082,12 @@ public class TestFarm {
         assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait for the worker to go back to the farm */
+        // Wait for the worker to go back to the farm
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getPosition());
 
-        /* Wait for the worker to rest and produce another cargo */
+        // Wait for the worker to rest and produce another cargo
         for (int i = 0; i < 1000; i++) {
             if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
                 break;
@@ -1104,7 +1098,7 @@ public class TestFarm {
 
         assertNotNull(farmer.getCargo());
 
-        /* Verify that the second cargo is put at the flag */
+        // Verify that the second cargo is put at the flag
         map.stepTime();
 
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
@@ -1118,30 +1112,30 @@ public class TestFarm {
     @Test
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(8, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(100, map);
 
-        /* Wait for the farmer to produce a new wheat cargo */
+        // Wait for the farmer to produce a new wheat cargo
         Worker farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
@@ -1154,7 +1148,7 @@ public class TestFarm {
 
         assertNotNull(farmer.getCargo());
 
-        /* Verify that the farmer puts the wheat cargo at the flag */
+        // Verify that the farmer puts the wheat cargo at the flag
         map.stepTime();
 
         assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
@@ -1165,22 +1159,22 @@ public class TestFarm {
         assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
 
-        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        // Wait to let the cargo remain at the flag without any connection to the storage
         Cargo cargo = farm0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), farm0.getFlag().getPosition());
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
-        /* Assign a courier to the road */
+        // Assign a courier to the road
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
-        /* Wait for the courier to reach the idle point of the road */
+        // Wait for the courier to reach the idle point of the road
         assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
         assertNotEquals(courier.getTarget(), farm0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
@@ -1188,25 +1182,25 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier walks to pick up the cargo */
+        // Verify that the courier walks to pick up the cargo
         map.stepTime();
 
         assertEquals(courier.getTarget(), farm0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        /* Verify that the courier has picked up the cargo */
+        // Verify that the courier has picked up the cargo
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier delivers the cargo to the headquarter */
+        // Verify that the courier delivers the cargo to the headquarter
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(WHEAT);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier has delivered the cargo to the headquarter */
+        // Verify that the courier has delivered the cargo to the headquarter
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WHEAT), amount + 1);
     }
@@ -1214,27 +1208,27 @@ public class TestFarm {
     @Test
     public void testFarmerGoesBackToStorageWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(8, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
@@ -1242,7 +1236,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
@@ -1250,37 +1244,37 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
-        /* Verify that the farmer is stored correctly in the headquarter */
+        // Verify that the farmer is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
     }
 
     @Test
     public void testFarmerGoesBackOnToStorageOnRoadsIfPossibleWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(8, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
@@ -1288,11 +1282,11 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
-        /* Verify that the worker plans to use the roads */
+        // Verify that the worker plans to use the roads
         boolean firstStep = true;
         for (Point point : farmer.getPlannedPath()) {
             if (firstStep) {
@@ -1307,37 +1301,37 @@ public class TestFarm {
     @Test
     public void testProductionInFarmCanBeStopped() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(12, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm and the headquarter */
+        // Connect the farm and the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
 
-        /* Finish the farm */
+        // Finish the farm
         Utils.constructHouse(farm0);
 
-        /* Assign a worker to the farm */
+        // Assign a worker to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm0);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the farmer to produce leave the farm */
+        // Wait for the farmer to produce leave the farm
         for (int i = 0; i < 100; i++) {
             if (!farmer.isInsideBuilding()) {
                 break;
@@ -1348,7 +1342,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to return to the farm */
+        // Wait for the farmer to return to the farm
         for (int i = 0; i < 200; i++) {
             if (farmer.isInsideBuilding()) {
                 break;
@@ -1359,7 +1353,7 @@ public class TestFarm {
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Stop production and verify that the farmer stays in the farm */
+        // Stop production and verify that the farmer stays in the farm
         farm0.stopProduction();
 
         assertFalse(farm0.isProductionEnabled());
@@ -1374,37 +1368,37 @@ public class TestFarm {
     @Test
     public void testProductionInFarmCanBeResumed() throws Exception {
 
-        /* Create game map */
+        // Create game map
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(12, 8);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm and the headquarter */
+        // Connect the farm and the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
 
-        /* Finish the farm */
+        // Finish the farm
         Utils.constructHouse(farm0);
 
-        /* Assign a worker to the farm */
+        // Assign a worker to the farm
         Farmer farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm0);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the worker rest */
+        // Let the worker rest
         Utils.fastForward(100, map);
 
-        /* Wait for the farmer to produce leave the farm */
+        // Wait for the farmer to produce leave the farm
         for (int i = 0; i < 100; i++) {
             if (!farmer.isInsideBuilding()) {
                 break;
@@ -1415,7 +1409,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to return to the farm */
+        // Wait for the farmer to return to the farm
         for (int i = 0; i < 200; i++) {
             if (farmer.isInsideBuilding()) {
                 break;
@@ -1426,7 +1420,7 @@ public class TestFarm {
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Stop production */
+        // Stop production
         farm0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
@@ -1435,7 +1429,7 @@ public class TestFarm {
             map.stepTime();
         }
 
-        /* Resume production and verify that the farmer leaves the farm */
+        // Resume production and verify that the farmer leaves the farm
         farm0.resumeProduction();
 
         assertTrue(farm0.isProductionEnabled());
@@ -1454,35 +1448,35 @@ public class TestFarm {
     @Test
     public void testAssignedFarmerHasCorrectlySetPlayer() throws Exception {
 
-        /* Create players */
+        // Create players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
+        // Create game map
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(20, 14);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
-        /* Wait for farmer to get assigned and leave the headquarter */
+        // Wait for farmer to get assigned and leave the headquarter
         List<Farmer> workers = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
-        /* Verify that the player is set correctly in the worker */
+        // Verify that the player is set correctly in the worker
         Farmer worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
@@ -1491,7 +1485,7 @@ public class TestFarm {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        /* Create player list with two players */
+        // Create player list with two players
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
         Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
@@ -1502,42 +1496,42 @@ public class TestFarm {
         players.add(player1);
         players.add(player2);
 
-        /* Create game map choosing two players */
+        // Create game map choosing two players
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Place player 2's headquarter */
+        // Place player 2's headquarter
         Point point10 = new Point(70, 70);
         Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
-        /* Place player 0's headquarter */
+        // Place player 0's headquarter
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place player 1's headquarter */
+        // Place player 1's headquarter
         Point point1 = new Point(45, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place fortress for player 0 */
+        // Place fortress for player 0
         Point point2 = new Point(21, 9);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
-        /* Finish construction of the fortress */
+        // Finish construction of the fortress
         Utils.constructHouse(fortress0);
 
-        /* Occupy the fortress */
+        // Occupy the fortress
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        /* Place farm close to the new border */
+        // Place farm close to the new border
         Point point4 = new Point(28, 18);
         Farm farm0 = map.placeBuilding(new Farm(player0), point4);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer worker = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Verify that the worker goes back to its own storage when the fortress is torn down */
+        // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -1546,7 +1540,7 @@ public class TestFarm {
     @Test
     public void testCannotPlaceBuildingOnGrowingCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1554,14 +1548,14 @@ public class TestFarm {
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
 
-        /* Place headquarter */
+        // Place headquarter
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a crop */
+        // Place a crop
         Point point1 = new Point(10, 10);
         Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
-        /* Verify that it's not possible to place a building on the growing crop */
+        // Verify that it's not possible to place a building on the growing crop
         try {
             Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
             fail();
@@ -1573,59 +1567,59 @@ public class TestFarm {
     @Test
     public void testNoAvailableBuildingSpaceOnGrowingCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a crop */
+        // Place a crop
         Point point1 = new Point(10, 10);
         Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
-        /* Verify that there is no available building space on the growing crop */
+        // Verify that there is no available building space on the growing crop
         assertNull(map.isAvailableHousePoint(player0, point0));
     }
 
     @Test
     public void testCannotPlaceBuildingOnNewlyHarvestedCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(5, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-        /* Let the crop grow fully */
+        // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the crop to get harvested */
+        // Wait for the crop to get harvested
         Utils.waitForCropToGetHarvested(map, crop);
 
-        /* Verify that it's possible to place a building on the growing crop */
+        // Verify that it's possible to place a building on the growing crop
         try {
             Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), crop.getPosition());
             fail();
@@ -1636,71 +1630,71 @@ public class TestFarm {
     @Test
     public void testNotAvailableBuildingSpaceOnNewlyHarvestedCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(5, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-        /* Let the crop grow fully */
+        // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the crop to get harvested */
+        // Wait for the crop to get harvested
         Utils.waitForCropToGetHarvested(map, crop);
 
-        /* Verify that there is available building space on the growing crop */
+        // Verify that there is available building space on the growing crop
         assertNull(map.isAvailableHousePoint(player0, crop.getPosition()));
     }
 
     @Test
     public void testCanPlaceFlagOnNewlyHarvestedCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(5, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-            /* Look for a point where there is no flag too close */
+            // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
             for (Point point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
@@ -1715,47 +1709,47 @@ public class TestFarm {
 
         assertNotNull(crop);
 
-        /* Let the crop grow fully */
+        // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the crop to get harvested */
+        // Wait for the crop to get harvested
         Utils.waitForCropToGetHarvested(map, crop);
 
-        /* Verify that it's possible to place a flag on the growing crop */
+        // Verify that it's possible to place a flag on the growing crop
         Flag flag0 = map.placeFlag(player0, crop.getPosition());
     }
 
     @Test
     public void testCannotPlaceFlagOnGrowingCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(15, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-            /* Look for a point where there is no flag too close */
+            // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
             for (Point point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
@@ -1772,7 +1766,7 @@ public class TestFarm {
         assertTrue(map.isCropAtPoint(crop.getPosition()));
         assertNotEquals(crop.getGrowthState(), HARVESTED);
 
-        /* Verify that it's possible to place a flag on the growing crop */
+        // Verify that it's possible to place a flag on the growing crop
         try {
             Flag flag0 = map.placeFlag(player0, crop.getPosition());
 
@@ -1783,34 +1777,34 @@ public class TestFarm {
     @Test
     public void testNoAvailableFlagOnGrowingCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(5, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-            /* Look for a point where there is no flag too close */
+            // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
             for (Point point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
@@ -1827,41 +1821,41 @@ public class TestFarm {
         assertTrue(map.isCropAtPoint(crop.getPosition()));
         assertNotEquals(crop.getGrowthState(), HARVESTED);
 
-        /* Verify that it's possible to place a flag on the growing crop */
+        // Verify that it's possible to place a flag on the growing crop
         assertFalse(map.isAvailableFlagPoint(player0, crop.getPosition()));
     }
 
     @Test
     public void testAvailableFlagSpaceOnNewlyHarvestedCrop() throws Exception {
 
-        /* Create new game map with one player */
+        // Create new game map with one player
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a farm */
+        // Place a farm
         Point point1 = new Point(5, 15);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Crop crop = null;
 
         for (int i = 0; i < 1000; i++) {
             crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
-            /* Look for a point where there is no flag too close */
+            // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
             for (Point point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
@@ -1876,13 +1870,13 @@ public class TestFarm {
 
         assertNotNull(crop);
 
-        /* Let the crop grow fully */
+        // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the crop to get harvested */
+        // Wait for the crop to get harvested
         Utils.waitForCropToGetHarvested(map, crop);
 
-        /* Verify that there is available building space on the growing crop */
+        // Verify that there is available building space on the growing crop
         assertTrue(map.isAvailableFlagPoint(player0, crop.getPosition()));
     }
 
@@ -1893,37 +1887,38 @@ public class TestFarm {
 
     place crop on building
     place crop on flag
-
     */
+
+   
 
     @Test
     public void testFarmerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place farm */
+        // Place farm
         Point point2 = new Point(14, 4);
         Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
-        /* Wait for the farmer to be on the second road on its way to the flag */
+        // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
@@ -1941,18 +1936,18 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* See that the farmer has started walking */
+        // See that the farmer has started walking
         assertFalse(farmer.isExactlyAtPoint());
 
-        /* Remove the next road */
+        // Remove the next road
         map.removeRoad(road1);
 
-        /* Verify that the farmer continues walking to the flag */
+        // Verify that the farmer continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
 
         assertEquals(farmer.getPosition(), flag0.getPosition());
 
-        /* Verify that the farmer returns to the headquarter when it reaches the flag */
+        // Verify that the farmer returns to the headquarter when it reaches the flag
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
@@ -1961,31 +1956,31 @@ public class TestFarm {
     @Test
     public void testFarmerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place farm */
+        // Place farm
         Point point2 = new Point(14, 4);
         Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
-        /* Wait for the farmer to be on the second road on its way to the flag */
+        // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
@@ -2003,54 +1998,54 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* See that the farmer has started walking */
+        // See that the farmer has started walking
         assertFalse(farmer.isExactlyAtPoint());
 
-        /* Remove the current road */
+        // Remove the current road
         map.removeRoad(road0);
 
-        /* Verify that the farmer continues walking to the flag */
+        // Verify that the farmer continues walking to the flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
 
         assertEquals(farmer.getPosition(), flag0.getPosition());
 
-        /* Verify that the farmer continues to the final flag */
+        // Verify that the farmer continues to the final flag
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
 
-        /* Verify that the farmer goes out to farmer instead of going directly back */
+        // Verify that the farmer goes out to farmer instead of going directly back
         assertNotEquals(farmer.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testFarmerReturnsToStorageIfFarmIsDestroyed() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place first flag */
+        // Place first flag
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Place farm */
+        // Place farm
         Point point2 = new Point(14, 4);
         Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
-        /* Connect headquarter and first flag */
+        // Connect headquarter and first flag
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the first flag with the second flag */
+        // Connect the first flag with the second flag
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
-        /* Wait for the farmer to be on the second road on its way to the flag */
+        // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
@@ -2064,57 +2059,57 @@ public class TestFarm {
         assertNotNull(farmer);
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
-        /* Wait for the farmer to reach the first flag */
+        // Wait for the farmer to reach the first flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, flag0.getPosition());
 
         map.stepTime();
 
-        /* See that the farmer has started walking */
+        // See that the farmer has started walking
         assertFalse(farmer.isExactlyAtPoint());
 
-        /* Tear down the farm */
+        // Tear down the farm
         farm0.tearDown();
 
-        /* Verify that the farmer continues walking to the next flag */
+        // Verify that the farmer continues walking to the next flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
 
         assertEquals(farmer.getPosition(), farm0.getFlag().getPosition());
 
-        /* Verify that the farmer goes back to storage */
+        // Verify that the farmer goes back to storage
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
     }
 
     @Test
     public void testFarmerGoesOffroadBackToClosestStorageWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(17, 17);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Place a second storage closer to the farm */
+        // Place a second storage closer to the farm
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         Utils.waitForWorkerToBeInside(farmer, map);
@@ -2124,7 +2119,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), storehouse0.getPosition());
 
@@ -2132,44 +2127,44 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, storehouse0.getPosition());
 
-        /* Verify that the farmer is stored correctly in the headquarter */
+        // Verify that the farmer is stored correctly in the headquarter
         assertEquals(storehouse0.getAmount(FARMER), amount + 1);
     }
 
     @Test
     public void testFarmerReturnsOffroadAndAvoidsBurningStorageWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(17, 17);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Place a second storage closer to the farm */
+        // Place a second storage closer to the farm
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         Utils.waitForWorkerToBeInside(farmer, map);
@@ -2179,7 +2174,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
@@ -2187,47 +2182,47 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
-        /* Verify that the farmer is stored correctly in the headquarter */
+        // Verify that the farmer is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
     }
 
     @Test
     public void testFarmerReturnsOffroadAndAvoidsDestroyedStorageWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(17, 17);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Place a second storage closer to the farm */
+        // Place a second storage closer to the farm
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Finish construction of the storage */
+        // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the storage */
+        // Destroy the storage
         storehouse0.tearDown();
 
-        /* Wait for the storage to burn down */
+        // Wait for the storage to burn down
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
@@ -2235,7 +2230,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
@@ -2243,38 +2238,38 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
-        /* Verify that the farmer is stored correctly in the headquarter */
+        // Verify that the farmer is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
     }
 
     @Test
     public void testFarmerReturnsOffroadAndAvoidsUnfinishedStorageWhenFarmIsDestroyed() throws Exception {
 
-        /* Creating new game map with size 40x40 */
+        // Creating new game map with size 40x40
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place farm */
+        // Place farm
         Point point26 = new Point(17, 17);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Occupy the farm */
+        // Occupy the farm
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Place a second storage closer to the farm */
+        // Place a second storage closer to the farm
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Destroy the farm */
+        // Destroy the farm
         Worker farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
@@ -2282,7 +2277,7 @@ public class TestFarm {
 
         farm0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter */
+        // Verify that the worker leaves the building and goes back to the headquarter
         assertFalse(farmer.isInsideBuilding());
         assertEquals(farmer.getTarget(), headquarter0.getPosition());
 
@@ -2290,43 +2285,43 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
-        /* Verify that the farmer is stored correctly in the headquarter */
+        // Verify that the farmer is stored correctly in the headquarter
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
     }
 
     @Test
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place fam */
+        // Place fam
         Point point26 = new Point(17, 17);
         Building farm0 = map.placeBuilding(new Farm(player0), point26);
 
-        /* Place road to connect the headquarter and the farm */
+        // Place road to connect the headquarter and the farm
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm0);
 
-        /* Wait for a worker to start walking to the building */
+        // Wait for a worker to start walking to the building
         Worker worker = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0).getFirst();
 
-        /* Wait for the worker to get to the building's flag */
+        // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getFlag().getPosition());
 
-        /* Tear down the building */
+        // Tear down the building
         farm0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
+        // Verify that the worker goes to the building and then returns to the headquarter instead of entering
         assertEquals(worker.getTarget(), farm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getPosition());
@@ -2339,31 +2334,31 @@ public class TestFarm {
     @Test
     public void testFarmWithoutResourcesHasZeroProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Populate the farm */
+        // Populate the farm
         Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
         assertEquals(farm.getWorker(), farmer0);
 
-        /* Verify that the productivity is 0% when the farm doesn't produce anything */
+        // Verify that the productivity is 0% when the farm doesn't produce anything
         for (int i = 0; i < 500; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
             assertNull(farmer0.getCargo());
@@ -2375,39 +2370,39 @@ public class TestFarm {
     @Test
     public void testFarmWithAbundantResourcesHasFullProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Populate the farm */
+        // Populate the farm
         Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
         assertEquals(farm.getWorker(), farmer0);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
-        /* Make the farm create some wheat with full resources available */
+        // Make the farm create some wheat with full resources available
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
         }
 
-        /* Verify that the productivity is 100% and stays there */
+        // Verify that the productivity is 100% and stays there
         assertEquals(farm.getProductivity(), 100);
 
         for (int i = 0; i < 1000; i++) {
@@ -2420,34 +2415,34 @@ public class TestFarm {
     @Test
     public void testFarmLosesProductivityWhenResourcesRunOut() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Populate the farm */
+        // Populate the farm
         Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
         assertEquals(farm.getWorker(), farmer0);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
-        /* Make the farm create some wheat with full space to plant on available */
+        // Make the farm create some wheat with full space to plant on available
         for (int i = 0; i < 3000; i++) {
             map.stepTime();
 
@@ -2456,12 +2451,12 @@ public class TestFarm {
             }
         }
 
-        /* Verify that the productivity goes down when there is no space to plant on */
+        // Verify that the productivity goes down when there is no space to plant on
         assertEquals(farm.getProductivity(), 100);
 
         map.stepTime();
 
-        /* Put stones all over the map so there is nowhere to plant crops */
+        // Put stones all over the map so there is nowhere to plant crops
         for (Point point : Utils.getAllPointsOnMap(map)) {
             if (point.equals(point1)) {
                 continue;
@@ -2489,24 +2484,24 @@ public class TestFarm {
     @Test
     public void testUnoccupiedFarmHasNoProductivity() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Verify that the unoccupied farm is unproductive */
+        // Verify that the unoccupied farm is unproductive
         for (int i = 0; i < 1000; i++) {
             assertEquals(farm.getProductivity(), 0);
 
@@ -2517,51 +2512,51 @@ public class TestFarm {
     @Test
     public void testFarmCanProduce() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(7, 9);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Finish construction of the farm */
+        // Finish construction of the farm
         Utils.constructHouse(farm);
 
-        /* Populate the farm */
+        // Populate the farm
         Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
-        /* Verify that the farm can produce */
+        // Verify that the farm can produce
         assertTrue(farm.canProduce());
     }
 
     @Test
     public void testFarmReportsCorrectOutput() throws Exception {
 
-        /* Starting new game */
+        // Starting new game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Construct the farm */
+        // Construct the farm
         Utils.constructHouse(farm0);
 
-        /* Verify that the reported output is correct */
+        // Verify that the reported output is correct
         assertEquals(farm0.getProducedMaterial().length, 1);
         assertEquals(farm0.getProducedMaterial()[0], WHEAT);
     }
@@ -2569,35 +2564,35 @@ public class TestFarm {
     @Test
     public void testFarmWaitsWhenFlagIsFull() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(14, 6);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the farm to get constructed and assigned a worker */
+        // Wait for the farm to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(farm);
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
-        /* Fill the flag with flour cargos */
+        // Fill the flag with flour cargos
         Utils.placeCargos(map, FLOUR, 8, farm.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* Verify that the farm waits for the flag to get empty and produces nothing */
+        // Verify that the farm waits for the flag to get empty and produces nothing
         for (int i = 0; i < 800; i++) {
             assertEquals(farm.getFlag().getStackedCargo().size(), 8);
             assertNotEquals(farm.getWorker().getTarget(), farm.getFlag().getPosition());
@@ -2605,13 +2600,13 @@ public class TestFarm {
             map.stepTime();
         }
 
-        /* Reconnect the farm with the headquarter */
+        // Reconnect the farm with the headquarter
         assertTrue(map.isFlagAtPoint(farm.getFlag().getPosition()));
         assertTrue(map.isFlagAtPoint(headquarter.getFlag().getPosition()));
 
         Road road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2627,42 +2622,42 @@ public class TestFarm {
 
         assertEquals(farm.getFlag().getStackedCargo().size(), 7);
 
-        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        // Verify that the worker produces a cargo of flour and puts it on the flag
         Utils.fastForwardUntilWorkerCarriesCargo(map, farm.getWorker(), WHEAT);
     }
 
     @Test
     public void testFarmDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
-        /* Create single player game */
+        // Create single player game
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(14, 6);
         Farm farm = map.placeBuilding(new Farm(player0), point1);
 
-        /* Connect the farm with the headquarter */
+        // Connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the farm to get constructed and assigned a worker */
+        // Wait for the farm to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(farm);
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
-        /* Fill the flag with cargos */
+        // Fill the flag with cargos
         Utils.placeCargos(map, FLOUR, 8, farm.getFlag(), headquarter);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road0);
 
-        /* The farm waits for the flag to get empty and produces nothing */
+        // The farm waits for the flag to get empty and produces nothing
         for (int i = 0; i < 300; i++) {
             assertEquals(farm.getFlag().getStackedCargo().size(), 8);
             assertNull(farm.getWorker().getCargo());
@@ -2670,10 +2665,10 @@ public class TestFarm {
             map.stepTime();
         }
 
-        /* Reconnect the farm with the headquarter */
+        // Reconnect the farm with the headquarter
         Road road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
-        /* Wait for the courier to pick up one of the cargos */
+        // Wait for the courier to pick up one of the cargos
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
@@ -2690,23 +2685,23 @@ public class TestFarm {
 
         assertEquals(farm.getFlag().getStackedCargo().size(), 7);
 
-        /* Remove the road */
+        // Remove the road
         map.removeRoad(road1);
 
-        /* The worker produces a cargo and puts it on the flag */
+        // The worker produces a cargo and puts it on the flag
         Utils.waitForWorkerToSetTarget(map, farm.getWorker(), farm.getFlag().getPosition());
 
         assertNotNull(farm.getWorker().getCargo());
         assertEquals(farm.getWorker().getCargo().getMaterial(), WHEAT);
 
-        /* Wait for the worker to put the cargo on the flag */
+        // Wait for the worker to put the cargo on the flag
         assertEquals(farm.getWorker().getTarget(), farm.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farm.getWorker(), farm.getFlag().getPosition());
 
         assertEquals(farm.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the farm doesn't produce anything because the flag is full */
+        // Verify that the farm doesn't produce anything because the flag is full
         for (int i = 0; i < 800; i++) {
             assertEquals(farm.getFlag().getStackedCargo().size(), 8);
 
@@ -2717,24 +2712,24 @@ public class TestFarm {
     @Test
     public void testWhenWheatDeliveryAreBlockedFarmFillsUpFlagAndThenStops() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place Farm */
+        // Place Farm
         Point point1 = new Point(7, 9);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Place road to connect the farm with the headquarter */
+        // Place road to connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
@@ -2746,10 +2741,10 @@ public class TestFarm {
         assertEquals(farmer0.getHome(), farm0);
         assertEquals(farm0.getWorker(), farmer0);
 
-        /* Block storage of wheat */
+        // Block storage of wheat
         headquarter0.blockDeliveryOfMaterial(WHEAT);
 
-        /* Verify that the farm puts eight wheats on the flag and then stops */
+        // Verify that the farm puts eight wheats on the flag and then stops
         Utils.waitForFlagToGetStackedCargo(map, farm0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, farm0.getPosition());
@@ -2768,38 +2763,38 @@ public class TestFarm {
     @Test
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndFarmIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place farm */
+        // Place farm
         Point point2 = new Point(18, 4);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the farm */
+        // Place road to connect the headquarter with the farm
         Road road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the farm and the storehouse to get constructed */
+        // Wait for the farm and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, farm0);
 
-        /* Wait for the farm and the storage to get occupied */
+        // Wait for the farm and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, farm0);
 
         Worker farmer0 = farm0.getWorker();
@@ -2808,7 +2803,7 @@ public class TestFarm {
         assertEquals(farmer0.getHome(), farm0);
         assertEquals(farm0.getWorker(), farmer0);
 
-        /* Verify that the worker goes to the storage when the farm is torn down */
+        // Verify that the worker goes to the storage when the farm is torn down
         headquarter0.blockDeliveryOfMaterial(FARMER);
 
         farm0.tearDown();
@@ -2829,38 +2824,38 @@ public class TestFarm {
     @Test
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndFarmIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place storehouse */
+        // Place storehouse
         Point point1 = new Point(5, 5);
         Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
-        /* Place farm */
+        // Place farm
         Point point2 = new Point(18, 6);
         Farm farm0 = map.placeBuilding(new Farm(player0), point2);
 
-        /* Place road to connect the storehouse with the headquarter */
+        // Place road to connect the storehouse with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
-        /* Place road to connect the headquarter with the farm */
+        // Place road to connect the headquarter with the farm
         Road road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
-        /* Add a lot of planks and stones to the headquarter */
+        // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the farm and the storehouse to get constructed */
+        // Wait for the farm and the storehouse to get constructed
         Utils.waitForBuildingsToBeConstructed(storehouse, farm0);
 
-        /* Wait for the farm and the storage to get occupied */
+        // Wait for the farm and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, farm0);
 
         Worker farmer0 = farm0.getWorker();
@@ -2869,7 +2864,7 @@ public class TestFarm {
         assertEquals(farmer0.getHome(), farm0);
         assertEquals(farm0.getWorker(), farmer0);
 
-        /* Verify that the worker goes to the storage off-road when the farm is torn down */
+        // Verify that the worker goes to the storage off-road when the farm is torn down
         headquarter0.blockDeliveryOfMaterial(FARMER);
 
         Utils.waitForWorkerToBeInside(farm0.getWorker(), map);
@@ -2897,17 +2892,17 @@ public class TestFarm {
     @Test
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, FARMER, 1);
 
         assertEquals(headquarter0.getAmount(FARMER), 1);
@@ -2935,17 +2930,17 @@ public class TestFarm {
     @Test
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, FARMER, 1);
 
         headquarter0.blockDeliveryOfMaterial(FARMER);
@@ -2980,33 +2975,33 @@ public class TestFarm {
     @Test
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(7, 9);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Place road to connect the farm with the headquarter */
+        // Place road to connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the farm to get constructed and occupied */
+        // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm0);
         Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
         /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
-           blocked in the headquarter
-        */
+           blocked in the headquarter */
+       
         headquarter0.blockDeliveryOfMaterial(FARMER);
 
         Worker worker = farm0.getWorker();
@@ -3040,38 +3035,38 @@ public class TestFarm {
     @Test
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
-        /* Start new game with one player only */
+        // Start new game with one player only
         Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place headquarter */
+        // Place headquarter
         Point point0 = new Point(12, 6);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
+        // Place farm
         Point point1 = new Point(7, 9);
         Farm farm0 = map.placeBuilding(new Farm(player0), point1);
 
-        /* Place road to connect the farm with the headquarter */
+        // Place road to connect the farm with the headquarter
         Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm0);
 
-        /* Wait for a farmer to start walking to the farm */
+        // Wait for a farmer to start walking to the farm
         Farmer farmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
-        /* Wait for the farmer to go past the headquarter's flag */
+        // Wait for the farmer to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
-        /* Verify that the farmer goes away and dies when the house has been torn down and storage is not possible */
+        // Verify that the farmer goes away and dies when the house has been torn down and storage is not possible
         assertEquals(farmer.getTarget(), farm0.getPosition());
 
         headquarter0.blockDeliveryOfMaterial(FARMER);

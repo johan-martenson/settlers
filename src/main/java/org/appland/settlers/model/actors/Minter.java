@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.buildings.Building;
@@ -75,31 +69,31 @@ public class Minter extends Worker {
                 countdown.step();
             }
         } else if (state == MAKING_COIN) {
-            if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
+            if (home.getAmount(GOLD) > 0 && home.getAmount(COAL) > 0 && home.isProductionEnabled()) {
                 if (countdown.hasReachedZero()) {
 
-                    /* Consume resources */
-                    getHome().consumeOne(GOLD);
-                    getHome().consumeOne(COAL);
+                    // Consume resources
+                    home.consumeOne(GOLD);
+                    home.consumeOne(COAL);
 
-                    /* Report that the minter produced a coin */
+                    // Report that the minter produced a coin
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
 
                     map.getStatisticsManager().coinProduced(player, map.getTime());
 
-                    /* Handle transportation */
-                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    // Handle transportation
+                    if (home.getFlag().hasPlaceForMoreCargo()) {
                         Cargo cargo = new Cargo(COIN, map);
 
                         setCargo(cargo);
 
-                        /* Go out to the flag to deliver the coin */
+                        // Go out to the flag to deliver the coin
                         state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
+                        setTarget(home.getFlag().getPosition());
 
-                        getHome().getFlag().promiseCargo(getCargo());
+                        home.getFlag().promiseCargo(getCargo());
                     } else {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     }
@@ -108,22 +102,22 @@ public class Minter extends Worker {
                 }
             } else {
 
-                /* Report that the minter lacked resources and couldn't produce a coin */
+                // Report that the minter lacked resources and couldn't produce a coin
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+            if (home.getFlag().hasPlaceForMoreCargo()) {
 
                 Cargo cargo = new Cargo(COIN, map);
 
                 setCargo(cargo);
 
-                /* Go out to the flag to deliver the coin */
+                // Go out to the flag to deliver the coin
                 state = GOING_TO_FLAG_WITH_CARGO;
 
-                setTarget(getHome().getFlag().getPosition());
+                setTarget(home.getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo(getCargo());
+                home.getFlag().promiseCargo(getCargo());
             }
         } else if (state == State.DEAD) {
             if (countdown.hasReachedZero()) {
@@ -150,11 +144,11 @@ public class Minter extends Worker {
     @Override
     protected void onArrival() {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag flag = map.getFlagAtPoint(getPosition());
+            Flag flag = map.getFlagAtPoint(position);
 
             Cargo cargo = getCargo();
 
-            cargo.setPosition(getPosition());
+            cargo.setPosition(position);
             cargo.transportToReceivingBuilding(this::isCoinReceiver);
 
             flag.putCargo(getCargo());
@@ -165,19 +159,19 @@ public class Minter extends Worker {
 
             returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
+            enterBuilding(home);
 
             state = RESTING_IN_HOUSE;
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(position);
 
             storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINTER);
+            // Go to the closest storage
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
 
             if (storehouse != null) {
                 state = RETURNING_TO_STORAGE;
@@ -202,15 +196,15 @@ public class Minter extends Worker {
     @Override
     public String toString() {
         if (isExactlyAtPoint()) {
-            return "Minter " + getPosition();
+            return "Minter " + position;
         } else {
-            return "Minter " + getPosition() + " - " + getNextPoint();
+            return "Minter " + position + " - " + getNextPoint();
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINTER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, MINTER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -218,7 +212,7 @@ public class Minter extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINTER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), MINTER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -227,7 +221,7 @@ public class Minter extends Worker {
             } else {
                 Point point = findPlaceToDie();
 
-                setOffroadTarget(point, getPosition().downRight());
+                setOffroadTarget(point, position.downRight());
 
                 state = State.GOING_TO_DIE;
             }
@@ -237,15 +231,15 @@ public class Minter extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Don't try to enter the mint upon arrival */
+            // Don't try to enter the mint upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -253,7 +247,7 @@ public class Minter extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

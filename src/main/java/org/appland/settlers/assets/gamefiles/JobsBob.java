@@ -15,7 +15,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 24-31 - Walk west
  * 32-39 - Walk north-west
  * 40-47 - Walk east (south-east?)
- *
+ * <p>
  * FAT GUY (no head)
  * 48-55 - Walk east
  * 56-63 - Walk north-east (?)
@@ -23,7 +23,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 72-79 - Walk west
  * 80-87 - Walk north-west
  * 88-95 - Walk south-east
- *
+ * <p>
  * HEAD 1
  * 96 - East
  * 97 - South-east (?)
@@ -31,7 +31,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 99 - West
  * 100 - North-west
  * 101 - North-east
- *
+ * <p>
  * HEAD 2
  * 102 - East
  * 103 - South-east
@@ -39,7 +39,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 105 - West
  * 106 - North-west
  * 107 - North-east
- *
+ * <p>
  * HEAD 3
  * 108 - East
  * 109 - South-east
@@ -47,7 +47,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 111 - West
  * 112 - North-west
  * 113 - North-east
- *
+ * <p>
  * HEAD 4
  * 114 - East
  * 115 - South-east
@@ -55,7 +55,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 117 - West
  * 118 - North-west
  * 119 - North-east
- *
+ * <p>
  * HEAD 5
  * 120 - East
  * 121 - South-east
@@ -63,7 +63,7 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 123 - West
  * 124 - North-west
  * 125 - North-east
- *
+ * <p>
  * HEAD 6
  * 126 - East
  * 127 - South-east
@@ -71,68 +71,68 @@ import static org.appland.settlers.model.actors.Courier.BodyType.THIN;
  * 129 - West
  * 130 - North-west
  * 131 - North-east
- *
+ * <p>
  * HEAD 7
  * 132-137 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 8
  * 138-142 - E, SE, SW, (W missing) NW, NE
- *
+ * <p>
  * HEAD 9
  * 143-148 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 10
  * 149-152 - E, SE, W, NE
- *
+ * <p>
  * HEAD 11
  * 153-156 - E, SE, W, NE
- *
+ * <p>
  * HEAD 12
  * 157-158 - E, NE
- *
+ * <p>
  * HEAD 13
  * 159-162 - E, SE, NW, NE
- *
+ * <p>
  * HEAD 14
  * 163-167 - E, SE, SW, NW, NE
- *
+ * <p>
  * HEAD 15
  * 168-172 - E, SE, W, NW, NE
- *
+ * <p>
  * HEAD 16
  * 173-178 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 17
  * 179-184 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * VERY MINOR DETAIL (overlay?)
  * 185-189
- *
+ * <p>
  * HEAD 18
  * 190-195 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 19
  * 196-201 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 20
  * 202-207 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * HEAD 21
  * 208-213 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * ... more heads ...
- *
+ * <p>
  * HEAD WITH AXE OR HAMMER
  * 278-283 - E, SE, SW, W, NW, NE
- *
+ * <p>
  * ...
- *
+ * <p>
  * WOODCUTTER HEAD
  * 310-315 - E, SE, SW, W, NW, NE
  * 316-17 - W - animation(?)
- *
+ * <p>
  * ... more heads and sometimes a bit of body ...
- *
+ * <p>
  * MILITARY
  * 859-906 - Roman private (?)
  * 907-1098 - Other roman soldiers

@@ -16,8 +16,6 @@ import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.actors.Miller;
-import org.appland.settlers.model.statistics.StatisticsListener;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Vegetation;
@@ -29,6 +27,7 @@ import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Fisherman;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Hunter;
+import org.appland.settlers.model.actors.Miller;
 import org.appland.settlers.model.actors.Ship;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Stonemason;
@@ -40,6 +39,7 @@ import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.statistics.StatisticsListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -707,17 +707,14 @@ public class Utils {
 
     public static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
         GameMap map = catapult.getMap();
-
         Projectile projectile = null;
 
         assertTrue(map.getProjectiles().isEmpty());
 
         for (int i = 0; i < 1000; i++) {
-
             map.stepTime();
 
             if (!map.getProjectiles().isEmpty()) {
-
                 projectile = map.getProjectiles().getFirst();
 
                 break;
@@ -1106,13 +1103,10 @@ public class Utils {
         Cargo cargo = null;
 
         for (int i = 0; i < 10_000; i++) {
-            for (Cargo cargoCandidate : flag.getStackedCargo()) {
-                if (cargoCandidate.getMaterial() == material) {
-                    cargo = cargoCandidate;
-
-                    break;
-                }
-            }
+            cargo = flag.getStackedCargo().stream()
+                    .filter(cargoCandidate -> cargoCandidate.getMaterial() == material)
+                    .findFirst()
+                    .orElse(null);
 
             if (cargo != null) {
                 break;
@@ -3105,6 +3099,18 @@ public class Utils {
         }
 
         assertFalse(miller.isWorking());
+    }
+
+    public static void waitForFarmerToStartHarvesting(GameMap map, Farmer farmer) throws InvalidUserActionException {
+        for (int i = 0; i < 2000; i++) {
+            if (farmer.isHarvesting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(farmer.isHarvesting());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {

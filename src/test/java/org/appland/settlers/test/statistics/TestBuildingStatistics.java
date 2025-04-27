@@ -22,17 +22,14 @@ public class TestBuildingStatistics {
     @Test
     public void testBuildingStatisticsAtStartForTwoPlayers() throws InvalidUserActionException {
 
-        // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 100, 100);
+        // Start a new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
 
         // Place headquarters
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         var point1 = new Point(40, 40);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
@@ -277,12 +274,14 @@ public class TestBuildingStatistics {
 
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        assertEquals(monitor.getStatisticsEvents().size(), 1);
+        assertTrue(monitor.getStatisticsEvents().size() > 1);
+
+        var nrStatisticsEvents = monitor.getStatisticsEvents().size();
 
         // Verify that the event is only sent once
         map.stepTime();
 
-        assertEquals(monitor.getStatisticsEvents().size(), 1);
+        assertEquals(monitor.getStatisticsEvents().size(), nrStatisticsEvents);
     }
 
     @Test

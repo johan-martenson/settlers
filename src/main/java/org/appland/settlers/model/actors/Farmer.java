@@ -170,8 +170,9 @@ public class Farmer extends Worker {
 
                 /* Report the productivity */
                 productivityMeasurer.reportProductivity();
-
                 productivityMeasurer.nextProductivityCycle();
+
+                map.getStatisticsManager().wheatHarvested(getPlayer(), map.getTime());
             } else {
                 countdown.step();
             }

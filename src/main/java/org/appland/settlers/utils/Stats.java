@@ -203,9 +203,7 @@ public class Stats {
     }
 
     public Group createVariableGroupIfAbsent(String name) {
-        GroupImpl group = groups.computeIfAbsent(name, n -> new GroupImpl(n, this));
-
-        return group;
+        return groups.computeIfAbsent(name, n -> new GroupImpl(n, this));
     }
 
     public Collection<String> getVariablesInGroup(String groupName) {

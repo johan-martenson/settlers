@@ -11,9 +11,6 @@ import org.appland.settlers.assets.resources.Palette;
 import java.io.IOException;
 
 import static org.appland.settlers.assets.CompassDirection.*;
-import static org.appland.settlers.assets.CompassDirection.NORTH_EAST;
-import static org.appland.settlers.assets.CompassDirection.NORTH_WEST;
-import static org.appland.settlers.assets.CompassDirection.WEST;
 import static org.appland.settlers.assets.Utils.getImageAt;
 
 public class ShipExtractor {

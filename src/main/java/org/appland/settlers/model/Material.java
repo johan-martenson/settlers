@@ -100,6 +100,40 @@ public enum Material {
     HAMMER,
     SHIPWRIGHT, BOAT, PLANER, HELPER;
 
+    public static final Set<? extends Material> GOODS = EnumSet.copyOf(Arrays.asList(
+            WOOD,
+            PLANK,
+            STONE,
+            PIG,
+            WHEAT,
+            FLOUR,
+            FISH,
+            MEAT,
+            BREAD,
+            WATER,
+            BEER,
+            COAL,
+            IRON,
+            GOLD,
+            IRON_BAR,
+            COIN,
+            TONGS,
+            AXE,
+            SAW,
+            PICK_AXE,
+            HAMMER,
+            SHOVEL,
+            CRUCIBLE,
+            FISHING_ROD,
+            SCYTHE,
+            CLEAVER,
+            ROLLING_PIN,
+            BOW,
+            SWORD,
+            SHIELD,
+            BOAT
+    ));
+
     public static final Set<? extends Material> TRANSPORTABLE_GOODS = EnumSet.copyOf(Arrays.asList(
             SWORD,
             SHIELD,

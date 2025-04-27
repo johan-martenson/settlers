@@ -75,7 +75,7 @@ public class Storehouse extends Building {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), 1);
+        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), privatesToDraft);
     }
 
     @Override

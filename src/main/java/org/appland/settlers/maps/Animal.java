@@ -44,7 +44,6 @@ public enum Animal {
 
     static Animal animalFromInt(short i) {
         return switch (i) {
-            case 0 -> NO_ANIMAL;
             case 1 -> RABBIT;
             case 2 -> FOX;
             case 3 -> STAG;

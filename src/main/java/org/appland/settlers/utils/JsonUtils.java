@@ -1640,13 +1640,20 @@ public class JsonUtils {
         return new JSONObject(Map.of(
                 "houses", totalHousesStatisticsForPlayerToJson(player, statisticsManager),
                 "workers", workerStatisticsForPlayerToJson(player, statisticsManager),
-                "goods", new JSONArray(),
+                "goods", goodsStatisticsForPlayerToJson(player, statisticsManager),
                 "military", militaryStrengthStatisticsForPlayerToJson(player, statisticsManager),
                 "coins", coinStatisticsForPlayerToJson(player, statisticsManager),
                 "production", new JSONArray(),
                 "killedEnemies", killedEnemiesStatisticsForPlayerToJson(player, statisticsManager),
                 "land", landStatisticsForPlayerToJson(player, statisticsManager)
         ));
+    }
+
+    private JSONArray goodsStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
+        return toJsonArray(
+                statisticsManager.getGeneralStatistics(player).goods().getMeasurements(),
+                this::measurementToJson
+        );
     }
 
     private JSONArray measurementToJson(Measurement measurement) {
@@ -1690,13 +1697,12 @@ public class JsonUtils {
 
     private JSONArray landStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         var jsonLandStatisticsForPlayer = new JSONArray();
-        var playerIndex = player.getMap().getPlayers().indexOf(player);
 
-        for (var measurement : statisticsManager.getLandStatistics().getDataPoints()) {
+        for (var measurement : statisticsManager.getGeneralStatistics(player).land().getMeasurements()) {
             var jsonMeasurement = new JSONArray();
 
-            jsonMeasurement.add(measurement.getTime());
-            jsonMeasurement.add(measurement.getValues()[playerIndex]);
+            jsonMeasurement.add(measurement.time());
+            jsonMeasurement.add(measurement.value());
 
             jsonLandStatisticsForPlayer.add(jsonMeasurement);
         }
