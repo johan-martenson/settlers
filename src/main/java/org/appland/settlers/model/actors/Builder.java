@@ -39,7 +39,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    void onIdle() {
+    protected void onIdle() {
         if ((state == State.HAMMERING || state == State.GOING_TO_HAMMER) && building.isReady()) {
             if (map.findWayOffroad(getPosition(), building.getFlag().getPosition(), null) != null) {
                 setOffroadTarget(building.getFlag().getPosition());
@@ -88,7 +88,7 @@ public class Builder extends Worker {
     }
 
     @Override
-    void onArrival() {
+    protected void onArrival() {
         switch (state) {
             case WALKING_TO_BUILDING_TO_CONSTRUCT -> {
                 building = map.getBuildingAtPoint(getPosition());

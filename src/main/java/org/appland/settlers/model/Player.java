@@ -65,7 +65,6 @@ public class Player {
     private static final int MAX_PRODUCTION_QUOTA = 10;
     private static final int MIN_PRODUCTION_QUOTA = 0;
 
-    private final PlayerType  playerType;
     private GameMap     map;
     private PlayerColor color;
     private Nation      nation;
@@ -81,6 +80,7 @@ public class Player {
     private int         amountSoldiersAvailableForAttack;
     private boolean     transportPriorityChanged = false;
 
+    private final PlayerType  playerType;
     private final List<BorderChange> changedBorders = new ArrayList<>();
     private final List<Building> buildings = new ArrayList<>();
     private final Set<Point> discoveredLand = new HashSet<>();
@@ -148,7 +148,7 @@ public class Player {
         this.nation = nation;
         this.playerType = playerType;
 
-        /* Create the food quota and set it to equal distribution */
+        // Create the food quota and set it to equal distribution
         foodAllocation.putAll(Map.ofEntries(
                 entry(GoldMine.class, 1),
                 entry(IronMine.class, 1),
@@ -156,14 +156,14 @@ public class Player {
                 entry(GraniteMine.class, 1)
         ));
 
-        /* Create the coal quota and set it to equal distribution */
+        // Create the coal quota and set it to equal distribution
         coalAllocation.putAll(Map.ofEntries(
                 entry(IronSmelter.class, 1),
                 entry(Mint.class, 1),
                 entry(Armory.class, 1)
         ));
 
-        /* Create the wheat quota and set it to equal distribution */
+        // Create the wheat quota and set it to equal distribution
         wheatAllocation.putAll(Map.ofEntries(
                 entry(Mill.class, 1),
                 entry(DonkeyFarm.class, 1),
@@ -171,7 +171,7 @@ public class Player {
                 entry(Brewery.class, 1)
         ));
 
-        /* Create the water quota and set it to equal distribution */
+        // Create the water quota and set it to equal distribution
         waterAllocation.putAll(Map.ofEntries(
                 entry(Bakery.class, 1),
                 entry(DonkeyFarm.class, 1),
@@ -179,22 +179,22 @@ public class Player {
                 entry(Brewery.class, 1)
         ));
 
-        /* Create the iron bar quota and set it to equal distribution */
+        // Create the iron bar quota and set it to equal distribution
         ironBarAllocation.put(Armory.class, 1);
         ironBarAllocation.put(Metalworks.class, 1);
 
-        /* Set the initial transport priority */
+        // Set the initial transport priority
         transportCategoryPriorities.addAll(Arrays.asList(TransportCategory.values()));
 
         setTransportPriorityForMaterials();
 
-        /* The tree conservation program is not active at start */
+        // The tree conservation program is not active at start
         treeConservationProgramActive = false;
 
-        /* The tree conservation program is enabled by default */
+        // The tree conservation program is enabled by default
         treeConservationProgramEnabled = true;
 
-        /* Set default military settings */
+        // Set default military settings
         strengthWhenPopulatingMilitaryBuildings = 5;
         defenseStrength = 5;
         defenseFromSurroundingBuildings = 5;
@@ -203,14 +203,14 @@ public class Player {
         amountWhenPopulatingFarFromBorder = 10;
         amountSoldiersAvailableForAttack = 10;
 
-        /* Set default production of all tools */
+        // Set default production of all tools
         TOOLS.forEach(tool -> toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA));
     }
 
     private void setTransportPriorityForMaterials() {
         transportPriorities.clear();
 
-        for (TransportCategory transportCategory : transportCategoryPriorities) {
+        for (var transportCategory : transportCategoryPriorities) {
             transportPriorities.addAll(Arrays.asList(transportCategory.getMaterials()));
         }
     }
@@ -247,7 +247,6 @@ public class Player {
         if (!discoveredLand.contains(point)) {
             discoveredLand.add(point);
 
-            /* Report that this is a newly discovered point */
             if (hasMonitor()) {
                 newDiscoveredLand.add(point);
             }
@@ -263,7 +262,7 @@ public class Player {
             throw new InvalidUserActionException("Cannot get available attackers for own building");
         }
 
-        /* Count soldiers in military buildings that can reach the building */
+        // Count soldiers in military buildings that can reach the building
         return (int) (getBuildings().stream()
                 .filter(Building::isMilitaryBuilding)
                 .filter(building -> building.canAttack(buildingToAttack))
@@ -286,16 +285,16 @@ public class Player {
         }
 
         // Find buildings that can support the attack
-        List<Building> eligibleBuildings = getBuildings().stream()
+        var eligibleBuildings = getBuildings().stream()
                 .filter(building -> building.isMilitaryBuilding()
                         && building.canAttack(buildingToAttack)
                         && building.getNumberOfHostedSoldiers() >= 2)
                 .toList();
 
         // Find soldiers that can do the attack
-        List<Soldier> availableAttackers = new ArrayList<>();
+        var availableAttackers = new ArrayList<Soldier>();
 
-        for (Building building : eligibleBuildings) {
+        for (var building : eligibleBuildings) {
             if (building.getNumberOfHostedSoldiers() < 2) {
                 continue;
             }
@@ -310,7 +309,7 @@ public class Player {
 
                 GameUtils.strengthToRank(attackStrengthInt).forEach(rank -> {
                     for (int i = 0; i < headquarter.getAmount(rank.toMaterial()); i++) {
-                        Soldier attacker = new Soldier(this, rank, map);
+                        var attacker = new Soldier(this, rank, map);
 
                         attacker.setHome(headquarter);
                         attacker.setPosition(headquarter.getPosition());
@@ -327,7 +326,7 @@ public class Player {
                 continue;
             }
 
-            /* Leave one soldier so it can guard the military building */
+            // Leave one soldier so it can guard the military building
             if (strength == AttackStrength.STRONG) {
                 availableAttackersFromBuilding.removeFirst();
             } else {
@@ -339,13 +338,13 @@ public class Player {
 
         var limitedAttackers = availableAttackers.subList(0, (int)((amountSoldiersAvailableForAttack / 10.0) * availableAttackers.size()));
 
-        /* It's not possible to attack if there are no available attackers */
+        // It's not possible to attack if there are no available attackers
         if (limitedAttackers.isEmpty()) {
             throw new InvalidUserActionException("Player '%s' can't attack building '%s'".formatted(this, buildingToAttack));
         }
 
-        /* Sort primarily by strength and secondarily by distance */
-        List<GameUtils.SoldierAndDistance> availableAttackersWithDistance = new ArrayList<>(limitedAttackers
+        // Sort primarily by strength and secondarily by distance
+        var availableAttackersWithDistance = new ArrayList<>(limitedAttackers
                 .stream()
                 .map(soldier -> new GameUtils.SoldierAndDistance(
                         soldier,
@@ -358,12 +357,10 @@ public class Player {
             availableAttackersWithDistance.sort(GameUtils.weakerAndShorterDistanceSorter);
         }
 
-        /* Run the attack with the most suitable soldiers */
+        // Run the attack with the most suitable soldiers
         availableAttackersWithDistance.stream().limit(nrAttackers).forEach(soldierAndDistance -> {
             var soldier = soldierAndDistance.soldier();
-
             soldier.getHome().retrieveHostedSoldier(soldier);
-
             soldier.attack(buildingToAttack);
         });
 
@@ -376,24 +373,24 @@ public class Player {
 
     void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
 
-        /* Remember how the owned land & border was before the update */
-        Set<Point> oldOwnedLand = new HashSet<>(ownedLand);
-        Set<Point> oldBorder = new HashSet<>(borderPoints);
+        // Remember how the owned land & border was before the update
+        var oldOwnedLand = new HashSet<Point>(ownedLand);
+        var oldBorder = new HashSet<Point>(borderPoints);
 
-        /* Figure out the new land & border */
-        Set<Point> newBorder = new HashSet<>();
-        Set<Point> newOwnedLand = new HashSet<>();
+        // Figure out the new land & border
+        var newBorder = new HashSet<Point>();
+        var newOwnedLand = new HashSet<Point>();
 
-        for (Land land : updatedLands) {
+        for (var land : updatedLands) {
             land.getBorders().forEach(newBorder::addAll);
             newOwnedLand.addAll(land.getPointsInLand());
         }
 
-        /* Figure out the border & land that has been added & removed */
-        Set<Point> addedBorder = new HashSet<>(newBorder);
-        Set<Point> addedOwnedLand = new HashSet<>(newOwnedLand);
-        Set<Point> removedBorder = new HashSet<>(oldBorder);
-        Set<Point> removedOwnedLand = new HashSet<>(oldOwnedLand);
+        // Figure out the border & land that has been added & removed
+        var addedBorder = new HashSet<Point>(newBorder);
+        var addedOwnedLand = new HashSet<Point>(newOwnedLand);
+        var removedBorder = new HashSet<Point>(oldBorder);
+        var removedOwnedLand = new HashSet<Point>(oldOwnedLand);
 
         addedBorder.removeAll(oldBorder);
         addedOwnedLand.removeAll(oldOwnedLand);
@@ -407,7 +404,7 @@ public class Player {
         this.addedBorder.addAll(addedBorder);
         this.removedBorder.addAll(removedBorder);
 
-        /* Update full list of owned land and the list of borders */
+        // Update full list of owned land and the list of borders
         this.borderPoints.clear();
         this.ownedLand.clear();
 
@@ -417,7 +414,7 @@ public class Player {
         if (!addedOwnedLand.isEmpty()) {
             var previousDiscoveredLand = new HashSet<>(discoveredLand);
 
-            /* Update field of view */
+            // Update field of view
             buildings.stream()
                     .filter(b -> b.isMilitaryBuilding() && b.isOccupied())
                     .flatMap(b -> b.getDiscoveredLand().stream())
@@ -430,12 +427,12 @@ public class Player {
             }
         }
 
-        /* Report lost land */
+        // Report lost land
         if (!removedOwnedLand.isEmpty() && cause == BorderChangeCause.MILITARY_BUILDING_OCCUPIED) {
             reportThisBuildingHasCausedLostLand(building);
         }
 
-        /* Monitor the added/lost land */
+        // Monitor the added/lost land
         if (hasMonitor()) {
             this.newOwnedLand.clear();
             this.newOwnedLand.addAll(addedOwnedLand);
@@ -462,12 +459,12 @@ public class Player {
         Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 
-        for (Building building : getBuildings()) {
+        for (var building : getBuildings()) {
             if (building.equals(avoid)) {
                 continue;
             }
 
-            /* Filter storage buildings that are not fully constructed */
+            // Filter storage buildings that are not fully constructed
             if (!building.isReady()) {
                 continue;
             }
@@ -485,7 +482,7 @@ public class Player {
                 return (Storehouse)building;
             }
 
-            List<Point> path = map.findWayWithExistingRoads(position, building.getFlag().getPosition());
+            var path = map.findWayWithExistingRoads(position, building.getFlag().getPosition());
 
             if (path == null) {
                 continue;
@@ -501,7 +498,7 @@ public class Player {
     }
 
     public Map<Material, Integer> getInventory() {
-        Map<Material, Integer> result = new EnumMap<>(Material.class);
+        var result = new EnumMap<Material, Integer>(Material.class);
 
         buildings.stream()
                 .filter(building -> !building.isStorehouse())
@@ -535,7 +532,7 @@ public class Player {
 
     public void setTransportPriority(int priority, TransportCategory category) throws InvalidUserActionException {
 
-        /* Throw an exception if the priority is negative or too large */
+        // Throw an exception if the priority is negative or too large
         if (priority < 0) {
             throw new InvalidUserActionException("Cannot set a negative transport priority (%d) for %s".formatted(priority, category));
         } else if (priority >= TransportCategory.values().length) {
@@ -555,7 +552,7 @@ public class Player {
     public int getTransportPriority(Cargo cargo) {
         int i = 0;
 
-        for (Material material : transportPriorities) {
+        for (var material : transportPriorities) {
             if (cargo.getMaterial() == material) {
                 return i;
             }
@@ -576,19 +573,19 @@ public class Player {
 
     public Player getPlayerAtPoint(Point point) {
 
-        /* Don't allow lookup of points the player hasn't discovered yet */
+        // Don't allow lookup of points the player hasn't discovered yet
         if (!discoveredLand.contains(point)) {
             return null;
         }
 
-        /* Check each player if they own the point and return the player that does */
+        // Check each player if they own the point and return the player that does
         for (Player player : map.getPlayers()) {
             if (player.isWithinBorder(point)) {
                 return player;
             }
         }
 
-        /* Return null if no player owns the point */
+        // Return null if no player owns the point
         return null;
     }
 
@@ -596,9 +593,9 @@ public class Player {
         Building storage = null;
         double distance = Double.MAX_VALUE;
 
-        for (Building building : buildings) {
+        for (var building : buildings) {
 
-            /* Filter non-storage buildings */
+            // Filter non-storage buildings
             if (!building.isStorehouse()) {
                 continue;
             }
@@ -633,9 +630,7 @@ public class Player {
     }
 
     public void reportProduction(Material material, Building building) {
-        int amount = producedMaterials.getOrDefault(material, 0);
-
-        producedMaterials.put(material, amount + 1);
+        producedMaterials.merge(material, 1, Integer::sum);
 
         if (detailedMonitoring.contains(building)) {
             changedBuildings.add(building);
@@ -647,8 +642,7 @@ public class Player {
     }
 
     public void reportMilitaryBuildingReady(Building building) {
-        MilitaryBuildingReadyMessage message = new MilitaryBuildingReadyMessage(building);
-
+        var message = new MilitaryBuildingReadyMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -657,8 +651,7 @@ public class Player {
     }
 
     public void reportMilitaryBuildingOccupied(Building building) {
-        MilitaryBuildingOccupiedMessage message = new MilitaryBuildingOccupiedMessage(building);
-
+        var message = new MilitaryBuildingOccupiedMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -667,8 +660,7 @@ public class Player {
     }
 
     public void reportNoMoreResourcesForBuilding(Building building) {
-        NoMoreResourcesMessage message = new NoMoreResourcesMessage(building);
-
+        var message = new NoMoreResourcesMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -677,8 +669,7 @@ public class Player {
     }
 
     public void reportGeologicalFinding(Point point, Material foundMaterial) {
-        GeologistFindMessage message = new GeologistFindMessage(point, foundMaterial);
-
+        var message = new GeologistFindMessage(point, foundMaterial);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -687,8 +678,7 @@ public class Player {
     }
 
     public void reportBuildingLost(Building building) {
-        BuildingLostMessage message = new BuildingLostMessage(building);
-
+        var message = new BuildingLostMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -697,8 +687,7 @@ public class Player {
     }
 
     public void reportBuildingCaptured(Building building) {
-        BuildingCapturedMessage message = new BuildingCapturedMessage(building);
-
+        var message = new BuildingCapturedMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -707,8 +696,7 @@ public class Player {
     }
 
     void reportUnderAttack(Building building) {
-        UnderAttackMessage message = new UnderAttackMessage(building);
-
+        var message = new UnderAttackMessage(building);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -717,8 +705,7 @@ public class Player {
     }
 
     public void reportStorageReady(Storehouse storehouse) {
-        StoreHouseIsReadyMessage message = new StoreHouseIsReadyMessage(storehouse);
-
+        var message = new StoreHouseIsReadyMessage(storehouse);
         messages.add(message);
 
         if (hasMonitor()) {
@@ -728,8 +715,7 @@ public class Player {
 
     public void activateTreeConservationProgram() {
         if (!treeConservationProgramActive) {
-            TreeConservationProgramActivatedMessage message = new TreeConservationProgramActivatedMessage();
-
+            var message = new TreeConservationProgramActivatedMessage();
             messages.add(message);
 
             if (hasMonitor()) {
@@ -746,8 +732,7 @@ public class Player {
 
     public void deactivateTreeConservationProgram() {
         if (treeConservationProgramActive) {
-            TreeConservationProgramDeactivatedMessage message = new TreeConservationProgramDeactivatedMessage();
-
+            var message = new TreeConservationProgramDeactivatedMessage();
             messages.add(message);
 
             if (hasMonitor()) {
@@ -813,7 +798,7 @@ public class Player {
 
     public void sendMonitoringEvents(long time) {
 
-        /* Don't send an event if there is no new information */
+        // Don't send an event if there is no new information
         // Missing discoveredDeadTrees, newWorkers
         if (GameUtils.allCollectionsEmpty(newFlags, removedFlags, newBuildings, newRoads, removedRoads, removedWorkers,
                 changedBuildings, removedBuildings, newTrees, removedTrees, removedStones, newSigns,
@@ -826,18 +811,18 @@ public class Player {
             return;
         }
 
-        /* Don't send reports about changes in the old building when an upgrade is finished */
+        // Don't send reports about changes in the old building when an upgrade is finished
         upgradedBuildings.forEach(newAndOldBuilding -> {
             changedBuildings.remove(newAndOldBuilding.oldBuilding);
             changedBuildings.remove(newAndOldBuilding.newBuilding);
         });
 
-        /* If the player has discovered new land - find out what is on that land */
+        // If the player has discovered new land - find out what is on that land
         if (!newDiscoveredLand.isEmpty()) {
 
             // Find out what's on the newly discovered land
             newDiscoveredLand.forEach(point -> {
-                MapPoint mapPoint = map.getMapPoint(point);
+                var mapPoint = map.getMapPoint(point);
 
                 // Collect information based on mapPoint properties
                 if (mapPoint.isDeadTree()) {
@@ -945,7 +930,7 @@ public class Player {
         // Update available construction when stones have been removed
         removedStones.forEach(this::addChangedAvailableConstructionForStone);
 
-        /* Add changed available construction if the border has been extended */
+        // Add changed available construction if the border has been extended
         if (!addedBorder.isEmpty()) {
 
             // Report changed available construction because of the border change
@@ -959,8 +944,8 @@ public class Player {
                     .forEach(changedAvailableConstruction::add);
         }
 
-        /* Create the event message */
-        GameChangesList gameChangesToReport = new GameChangesList(time,
+        // Create the event message
+        var gameChangesToReport = new GameChangesList(time,
                 workersWithNewTargets,
                 newFlags,
                 removedFlags,
@@ -1002,10 +987,10 @@ public class Player {
                 readMessages,
                 toolQuotasChanged);
 
-        /* Send the event to all monitors */
+        // Send the event to all monitors
         gameViewMonitors.forEach(monitor -> monitor.onViewChangesForPlayer(this, gameChangesToReport));
 
-        /* Clear out the lists to not pollute the next event with old information */
+        // Clear out the lists to not pollute the next event with old information
         newFlags.clear();
         removedFlags.clear();
         newBuildings.clear();
@@ -1053,7 +1038,7 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
-        Point point = stone.getPosition();
+        var point = stone.getPosition();
 
         changedAvailableConstruction.add(point);
         changedAvailableConstruction.add(point.upLeft()); // Is only flag when stone exists
@@ -1065,14 +1050,14 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForCrop(Crop crop) {
-        Point point = crop.getPosition();
+        var point = crop.getPosition();
 
         changedAvailableConstruction.add(point); // Nothing can be constructed on the crop
         changedAvailableConstruction.add(point.upLeft()); // Can't place a building up-left because the flag would be on the crop
     }
 
     private void addChangedAvailableConstructionForLargeBuilding(Building building) {
-        Point point = building.getPosition();
+        var point = building.getPosition();
 
         changedAvailableConstruction.add(point.downLeftLeft()); // Only medium building or flag
         changedAvailableConstruction.add(point.leftLeft()); // Only medium building or flag
@@ -1095,9 +1080,9 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForSmallBuilding(Building building) {
-        Point point = building.getPosition();
+        var point = building.getPosition();
 
-        /* Handle small building first */
+        // Handle small building first
         changedAvailableConstruction.add(point);
         changedAvailableConstruction.add(point.left()); // Only flag
         changedAvailableConstruction.add(point.upLeft()); // Only flag
@@ -1113,7 +1098,7 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForTree(Tree newTree) {
-        Point point = newTree.getPosition();
+        var point = newTree.getPosition();
 
         changedAvailableConstruction.add(point);
         changedAvailableConstruction.add(point.upLeft()); // From building to only flag
@@ -1133,7 +1118,7 @@ public class Player {
     }
 
     private void addChangedAvailableConstructionForFlag(Flag flag) {
-        Point point = flag.getPosition();
+        var point = flag.getPosition();
 
         changedAvailableConstruction.add(point);
         changedAvailableConstruction.add(point.downRight()); // From flag to no flag, large building still ok
@@ -1212,9 +1197,9 @@ public class Player {
     }
 
     public void reportChangedBorders(List<BorderChange> borderChanges) {
-        for (BorderChange borderChange : borderChanges) {
-            List<Point> added = new ArrayList<>();
-            List<Point> removed = new ArrayList<>();
+        for (var borderChange : borderChanges) {
+            var added = new ArrayList<Point>();
+            var removed = new ArrayList<Point>();
 
             if (borderChange.getPlayer().equals(this)) {
                 changedBorders.add(borderChange);
@@ -1254,7 +1239,7 @@ public class Player {
 
     void manageTreeConservationProgram() {
 
-        /* Enable/disable the tree conservation program if needed */
+        // Enable/disable the tree conservation program if needed
         if (shouldConserveTrees()) {
 
             if (!treeConservationProgramActive && treeConservationProgramEnabled) {
@@ -1270,15 +1255,15 @@ public class Player {
     private boolean shouldConserveTrees() {
         int amountPlanks = 0;
 
-        /* Go through each Storehouse and count the amount of planks */
-        for (Building building : buildings) {
+        // Go through each Storehouse and count the amount of planks
+        for (var building : buildings) {
 
-            /* Filter other houses */
+            // Filter other houses
             if (!building.isStorehouse()) {
                 continue;
             }
 
-            /* Filter non-ready store houses */
+            // Filter non-ready store houses
             if (!building.isReady()) {
                 continue;
             }
@@ -1295,22 +1280,22 @@ public class Player {
 
     public boolean canAttack(Building building) throws InvalidUserActionException {
 
-        /* Can only attack military buildings */
+        // Can only attack military buildings
         if (!building.isMilitaryBuilding()) {
             return false;
         }
 
-        /* Can not attack itself */
+        // Can not attack itself
         if (equals(building.getPlayer())) {
             return false;
         }
 
-        /* Can only attack buildings that are occupied */
+        // Can only attack buildings that are occupied
         if (!building.isOccupied()) {
             return false;
         }
 
-        /* Check that there are available attackers */
+        // Check that there are available attackers
         if (getAvailableAttackersForBuilding(building) == 0) {
             return false;
         }
@@ -1376,21 +1361,15 @@ public class Player {
     }
 
     public void reportShipReadyForExpedition(Ship ship) {
-        ShipReadyForExpeditionMessage message = new ShipReadyForExpeditionMessage(ship);
-
-        messages.add(message);
+        messages.add(new ShipReadyForExpeditionMessage(ship));
     }
 
     public void reportShipReachedDestination(Ship ship) {
-        ShipHasReachedDestinationMessage message = new ShipHasReachedDestinationMessage(ship, ship.getPosition());
-
-        messages.add(message);
+        messages.add(new ShipHasReachedDestinationMessage(ship, ship.getPosition()));
     }
 
     public void reportHarborReady(Harbor harbor) {
-        HarborIsFinishedMessage message = new HarborIsFinishedMessage(harbor);
-
-        messages.add(message);
+        messages.add(new HarborIsFinishedMessage(harbor));
     }
 
     public void reportHarvestedCrop(Crop crop) {
@@ -1454,10 +1433,10 @@ public class Player {
             changedBuildings.add(building);
         }
 
-        /* Does this soldier affect the number of available attackers in another building? */
+        // Does this soldier affect the number of available attackers in another building?
         if (building.isMilitaryBuilding() && building.getHostedSoldiers().size() > 1) {
 
-            for (Object monitoredObject : detailedMonitoring) {
+            for (var monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
                         continue;
@@ -1529,9 +1508,9 @@ public class Player {
 
     public void reportSoldierLeftBuilding(Building building) {
 
-        /* Does this soldier affect the number of available attackers in another building? */
+        // Does this soldier affect the number of available attackers in another building?
         if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
-            for (Object monitoredObject : detailedMonitoring) {
+            for (var monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
                     if (!monitoredBuilding.isMilitaryBuilding()) {
                         continue;
@@ -1555,7 +1534,7 @@ public class Player {
 
     public void reportBuildingTornDown(Building building) {
 
-        /* Does this soldier affect the number of available attackers in another building? */
+        // Does this soldier affect the number of available attackers in another building?
         if (building.isMilitaryBuilding() && !building.getHostedSoldiers().isEmpty()) {
             for (Object monitoredObject : detailedMonitoring) {
                 if (monitoredObject instanceof Building monitoredBuilding) {
@@ -1714,7 +1693,6 @@ public class Player {
 
     public void setPlayerColor(PlayerColor playerColor) {
         color = playerColor;
-
         playerChangeListeners.forEach(PlayerChangeListener::onPlayerChanged);
     }
 

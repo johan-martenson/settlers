@@ -256,16 +256,16 @@ public class Headquarter extends Storehouse {
 
     private void putCargos(Material material, int amount) {
         for (int i = 0; i < amount; i++) {
-            putCargo(new Cargo(material, getMap()));
+            putCargo(new Cargo(material, map));
         }
     }
 
     @Override
     public void putCargo(Cargo cargo) {
-        Material material = cargo.getMaterial();
+        var material = cargo.getMaterial();
 
         if (material.isMilitary()) {
-            Soldier.Rank rank = material.toRank();
+            var rank = material.toRank();
             int reservedSoldiers = actualReservedSoldiers.get(rank);
 
             if (wantedReservedSoldiers.getOrDefault(rank, 0) > reservedSoldiers) {
@@ -279,7 +279,7 @@ public class Headquarter extends Storehouse {
 
     @Override
     public boolean isSpaceAvailableToHostSoldier(Soldier soldier) {
-        Soldier.Rank rank = soldier.getRank();
+        var rank = soldier.getRank();
         return wantedReservedSoldiers.getOrDefault(rank, 0) > getHostedSoldiersWithRank(rank);
     }
 
@@ -288,7 +288,7 @@ public class Headquarter extends Storehouse {
         super.setMap(map);
 
         var storageWorker = new StorehouseWorker(getPlayer(), map);
-        getMap().placeWorker(storageWorker, this);
+        map.placeWorker(storageWorker, this);
         storageWorker.enterBuilding(this);
         assignWorker(storageWorker);
     }
@@ -300,16 +300,15 @@ public class Headquarter extends Storehouse {
             case HIGH -> inventory.putAll(HIGH_RESOURCES);
         }
 
-        var statisticsManager = getMap().getStatisticsManager();
+        var statisticsManager = map.getStatisticsManager();
 
-        statisticsManager
-                .getGeneralStatistics(getPlayer())
+        statisticsManager.getPlayerStatistics(getPlayer())
                 .workers()
-                .report(getMap().getTime(), GameUtils.countWorkersInInventory(this));
+                .report(map.getTime(), GameUtils.countWorkersInInventory(this));
 
-        statisticsManager.getGeneralStatistics(getPlayer())
+        statisticsManager.getPlayerStatistics(getPlayer())
                 .goods()
-                .report(getMap().getTime(), GameUtils.countGoodsInInventory(this));
+                .report(map.getTime(), GameUtils.countGoodsInInventory(this));
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
@@ -370,8 +369,7 @@ public class Headquarter extends Storehouse {
     }
 
     private <K> String mapToString(Map<K, Integer> map) {
-        StringBuilder s = new StringBuilder("{");
-
+        var s = new StringBuilder("{");
         var first = true;
 
         for (var entry : map.entrySet()) {
@@ -395,8 +393,6 @@ public class Headquarter extends Storehouse {
 
     @Override
     public void capture(Player player) throws InvalidUserActionException {
-
-        // Destroy the headquarters if it's captured
         super.tearDown();
     }
 
@@ -450,11 +446,11 @@ public class Headquarter extends Storehouse {
 
     @Override
     public List<Soldier> getHostedSoldiers() {
-        List<Soldier> hostedSoldiers = new ArrayList<>();
+        var hostedSoldiers = new ArrayList<Soldier>();
 
-        for (Soldier.Rank rank : Soldier.Rank.values()) {
+        for (var rank : Soldier.Rank.values()) {
             for (int i = 0; i < inventory.getOrDefault(rank.toMaterial(), 0); i++) {
-                var soldier = new Soldier(getPlayer(), rank, getMap());
+                var soldier = new Soldier(getPlayer(), rank, map);
 
                 soldier.setPosition(getPosition());
                 soldier.setHome(this);
@@ -470,7 +466,7 @@ public class Headquarter extends Storehouse {
     public Soldier retrieveHostedSoldier(Soldier soldier) {
         inventory.merge(soldier.getRank().toMaterial(), -1, Integer::sum);
         soldier.setHome(this);
-        getMap().placeWorkerFromStepTime(soldier, this);
+        map.placeWorkerFromStepTime(soldier, this);
 
         return soldier;
     }
@@ -485,7 +481,7 @@ public class Headquarter extends Storehouse {
 
             if (isInStock(material)) {
                 Soldier defender = (Soldier) retrieveWorker(material, null);
-                getMap().placeWorker(defender, this);
+                map.placeWorker(defender, this);
                 defender.setHome(this);
                 defender.setPosition(getPosition());
 
@@ -502,8 +498,6 @@ public class Headquarter extends Storehouse {
 
     @Override
     void draftMilitary() {
-        System.out.println("Drafting military");
-
         int swords = inventory.getOrDefault(SWORD, 0);
         int shields = inventory.getOrDefault(SHIELD, 0);
         int beer = inventory.getOrDefault(BEER, 0);
@@ -520,7 +514,7 @@ public class Headquarter extends Storehouse {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), privatesToDraft);
+        map.getStatisticsManager().soldiersDrafted(getPlayer(), map.getTime(), privatesToDraft);
     }
 
     public boolean hasAny(Material... materials) {

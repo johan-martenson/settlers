@@ -15,14 +15,12 @@ import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.actors.Builder;
 import org.appland.settlers.model.actors.Soldier;
 import org.appland.settlers.model.actors.Soldier.Rank;
 import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.utils.Duration;
-import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
 import java.util.ArrayList;
@@ -39,10 +37,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toCollection;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
 
 public class Building implements EndPoint {
+
     public record PlanksAndStones(int planks, int stones) {
         public boolean contains(Material material) {
             return (material == PLANK && planks > 0) || (material == STONE && stones > 0);
@@ -66,8 +67,6 @@ public class Building implements EndPoint {
     private static final int TIME_TO_UPGRADE = 99;
 
     private final PlanksAndStones materialsToBuildHouse = getMaterialsToBuildHouse();
-
-    //private final Map<Material, Integer> materialsToBuildHouse = getMaterialsToBuildHouse();
     private final Map<Material, Integer> totalAmountNeededForProduction = getMaterialNeededForProduction();
     private final int maxHostedSoldiers = initMaxHostedSoldiers();
     private final int defenceRadius = initDefenceRadius();
@@ -76,7 +75,6 @@ public class Building implements EndPoint {
     private final Material workerType = initWorkerType();
     private final Map<Material, Integer> upgradeCost = initUpgradeCost();
     private final Map<Material, Integer> requiredGoodsForProduction = initRequiredGoodsForProduction();
-
     private final List<Soldier> attackers = new LinkedList<>();
     private final Set<Soldier> waitingAttackers = new HashSet<>();
     private final Set<Soldier> remoteDefenders = new HashSet<>();
@@ -97,12 +95,13 @@ public class Building implements EndPoint {
         DESTROYED
     }
 
+    protected GameMap map = null;
+    protected Player player;
+
     private Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
-    private GameMap map = null;
-    private Player player;
-    public State state;
+    private State state = State.PLANNED;
     private Worker worker = null;
     private Worker promisedWorker = null;
     private Point position = null;
@@ -114,17 +113,13 @@ public class Building implements EndPoint {
     private Soldier primaryAttacker = null;
     private boolean outOfResources = false;
     private Builder builder = null;
-    private DoorState door;
+    private DoorState door = DoorState.CLOSED;
     private int doorClosing = 0;
 
     public Building(Player player) {
         this.player = player;
 
-        state = State.PLANNED;
         countdown.countFrom(getConstructionCountdown());
-
-        door = DoorState.CLOSED;
-
         flag.setPlayer(player);
     }
 
@@ -140,11 +135,11 @@ public class Building implements EndPoint {
 
     private Map<Material, Integer> initRequiredGoodsForProduction() {
         var requiredGoods = new EnumMap<Material, Integer>(Material.class);
-        Production production = getClass().getAnnotation(Production.class);
+        var production = getClass().getAnnotation(Production.class);
 
         if (production != null) {
-            for (Material material : production.requiredGoods()) {
-                requiredGoods.put(material, requiredGoods.getOrDefault(material, 0) + 1);
+            for (var material : production.requiredGoods()) {
+                requiredGoods.merge(material, 1, Integer::sum);
             }
         }
 
@@ -152,8 +147,8 @@ public class Building implements EndPoint {
     }
 
     private Map<Material, Integer> initUpgradeCost() {
-        Map<Material, Integer> materialNeeded = new EnumMap<>(Material.class);
-        UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
+        var materialNeeded = new EnumMap<Material, Integer>(Material.class);
+        var upgradeCost = getClass().getAnnotation(UpgradeCost.class);
 
         if (upgradeCost != null) {
             materialNeeded.put(STONE, upgradeCost.stones());
@@ -185,8 +180,7 @@ public class Building implements EndPoint {
     }
 
     public void consumeOne(Material material) {
-        int amount = getAmount(material);
-        receivedMaterial.put(material, amount - 1);
+        receivedMaterial.merge(material, -1, Integer::sum);
     }
 
     private int initDiscoveryRadius() {
@@ -250,11 +244,11 @@ public class Building implements EndPoint {
 
     public void promiseWorker(Worker worker) {
         if (state != State.UNOCCUPIED) {
-            throw new InvalidGameLogicException(String.format("Can't promise worker to building in state %s", state));
+            throw new InvalidGameLogicException(format("Can't promise worker to building in state %s", state));
         }
 
         if (promisedWorker != null) {
-            throw new InvalidGameLogicException(String.format("Building %s is already promised worker %s", this, promisedWorker));
+            throw new InvalidGameLogicException(format("Building %s is already promised worker %s", this, promisedWorker));
         }
 
         promisedWorker = worker;
@@ -288,7 +282,7 @@ public class Building implements EndPoint {
                 onBuildingOccupied();
             }
             default ->
-                    throw new InvalidGameLogicException(String.format("Can't assign %s to building in state %s", worker, state));
+                    throw new InvalidGameLogicException(format("Can't assign %s to building in state %s", worker, state));
         }
     }
 
@@ -302,7 +296,7 @@ public class Building implements EndPoint {
         }
 
         if (!isSpaceAvailableToHostSoldier(soldier)) {
-            throw new InvalidGameLogicException(String.format("Cannot host military, %s already hosting %d soldiers", this, hostedSoldiers.size()));
+            throw new InvalidGameLogicException(format("Cannot host military, %s already hosting %d soldiers", this, hostedSoldiers.size()));
         }
 
         State previousState = state;
@@ -338,7 +332,7 @@ public class Building implements EndPoint {
 
     @Override
     public void putCargo(Cargo cargo) {
-        Material material = cargo.getMaterial();
+        var material = cargo.getMaterial();
 
         switch (state) {
             case PLANNED, UNDER_CONSTRUCTION -> {
@@ -347,7 +341,7 @@ public class Building implements EndPoint {
                 }
 
                 if (getAmount(material) >= getCanHoldAmount(material)) {
-                    throw new InvalidGameLogicException(String.format("Can't accept delivery of %s", material));
+                    throw new InvalidGameLogicException(format("Can't accept delivery of %s", material));
                 }
             }
             case BURNING, DESTROYED -> throw new InvalidStateForProduction(this);
@@ -367,14 +361,11 @@ public class Building implements EndPoint {
             default -> throw new InvalidGameLogicException("Invalid building state for delivery");
         }
 
-        /* Update the list of received materials and the list of promised deliveries */
-        int received = receivedMaterial.getOrDefault(material, 0);
-        receivedMaterial.put(material, received + 1);
+        // Update the list of received materials and the list of promised deliveries
+        receivedMaterial.merge(material, 1, Integer::sum);
+        promisedDeliveries.merge(material, -1, Integer::sum);
 
-        int promised = promisedDeliveries.getOrDefault(material, 0);
-        promisedDeliveries.put(material, promised - 1);
-
-        /* Start the promotion countdown if it's a coin */
+        // Start the promotion countdown if it's a coin
         if (material == COIN && isMilitaryBuilding()) {
             countdown.countFrom(TIME_TO_PROMOTE_SOLDIER - 1);
         }
@@ -394,174 +385,127 @@ public class Building implements EndPoint {
 
     @Override
     public String toString() {
-        return String.format("%s %s state: %s", getClass().getSimpleName(), buildingToString(), state);
-    }
-
-    private String buildingToString() {
-        StringBuilder stringBuilder = new StringBuilder(String.format(" at %s with ", flag));
-
-        if (receivedMaterial.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)) {
-            stringBuilder.append("in queue and ");
-        } else {
-            stringBuilder.append("nothing in queue and");
-        }
-
-        return stringBuilder.toString();
+        return receivedMaterial.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)
+                ? format("%s at %s with %s in queue and state: %s", getClass().getSimpleName(), flag, flag.getStackedCargo(), state)
+                : format("%s at %s with nothing in queue and state: %s", getClass().getSimpleName(), flag, state);
     }
 
     public void promiseDelivery(Material material) {
-        int amount = promisedDeliveries.getOrDefault(material, 0);
-
-        promisedDeliveries.put(material, amount + 1);
+        promisedDeliveries.merge(material, 1, Integer::sum);
     }
 
     public void stepTime() {
-        Stats stats = map.getStats();
-
-        String counterName = String.format("Building.%s.stepTime", getClass().getSimpleName());
+        var stats = map.getStats();
+        var counterName = format("Building.%s.stepTime", getClass().getSimpleName());
 
         stats.addPeriodicCounterVariableIfAbsent(counterName);
         stats.addVariableToGroup(counterName, StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
 
-        Duration duration = new Duration(counterName);
+        var duration = new Duration(counterName);
 
-        // Handle closing the door after a while
         if (door == DoorState.OPEN_CLOSE_SOON) {
             if (doorClosing == 0) {
                 door = DoorState.CLOSED;
-
                 map.reportChangedBuilding(this);
             } else {
-                doorClosing -= 1;
+                doorClosing--;
             }
         }
 
         if (isUnderAttack()) {
-
-            // Fight the attacker at the flag
             if (ownDefender == null &&
-                getNumberOfHostedSoldiers() > 0 &&
-                primaryAttacker != null &&
-                primaryAttacker.isWaitingForFight()) {
-
-                // Pick a local defender and send it out
+                    getNumberOfHostedSoldiers() > 0 &&
+                    primaryAttacker != null &&
+                    primaryAttacker.isWaitingForFight()) {
                 ownDefender = retrieveHostedSoldier();
                 ownDefender.defendOwnBuilding(this);
             }
 
-            // Request remote defenders
             if (remoteDefenders.isEmpty()) {
-                List<Soldier> potentialDefenders = new ArrayList<>();
+                var potentialDefenders = player.getBuildings().stream()
+                        .filter(b -> !b.equals(this) && b.isReady() && b.isMilitaryBuilding())
+                        .filter(b -> b instanceof Headquarter hq && hq.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)
+                                || b.getHostedSoldiers().size() > 1)
+                        .filter(b -> b.getAttackRadius() >= GameUtils.distanceInGameSteps(position, b.getPosition()))
+                        .flatMap(b -> {
+                            var sorted = GameUtils.sortSoldiersByPreferredStrength(b.getHostedSoldiers(), player.getDefenseStrength());
+                            return sorted.subList(0, sorted.size() - 1).stream();
+                        })
+                        .collect(toCollection(ArrayList::new));
 
-                player.getBuildings()
-                        .stream()
-                        .filter(building -> !building.equals(this))
-                        .filter(Building::isReady)
-                        .filter(Building::isMilitaryBuilding)
-                        .filter(building ->
-                                (building instanceof Headquarter headquarter &&
-                                        headquarter.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)) ||
-                                        building.getHostedSoldiers().size() > 1)
-                        .filter(building -> building.getAttackRadius() >= GameUtils.distanceInGameSteps(position, building.getPosition()))
-                        .forEach(building -> {
-                            var hostedSoldiersSorted = GameUtils.sortSoldiersByPreferredStrength(building.getHostedSoldiers(), player.getDefenseStrength());
-
-                            potentialDefenders.addAll(hostedSoldiersSorted.subList(0, hostedSoldiersSorted.size() - 1));
-                        });
-
-                // Sort by rank, then distance to this building
                 GameUtils.sortSoldiersByPreferredStrengthAndDistance(potentialDefenders, player.getDefenseStrength(), getPosition());
 
-                // Pick defender(s) to come and help defending
                 if (!potentialDefenders.isEmpty()) {
-                    var nrDefendersToPick = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
-
-                    potentialDefenders.subList(0, nrDefendersToPick).forEach(soldier -> soldier.defendOtherBuilding(this));
+                    int count = (int) Math.round(potentialDefenders.size() * (player.getDefenseFromSurroundingBuildings() / 10.0));
+                    potentialDefenders.subList(0, count).forEach(soldier -> soldier.defendOtherBuilding(this));
                 }
             }
         }
 
-        if (state == State.UNDER_CONSTRUCTION) {
-            if (countdown.hasReachedZero()) {
-                if (isMaterialForConstructionAvailable()) {
-                    consumeConstructionMaterial();
-
-                    state = State.UNOCCUPIED;
-
-                    // Unoccupied buildings have open doors
-                    door = DoorState.OPEN;
-
-                    /* For military buildings, report the construction */
-                    if (isMilitaryBuilding()) {
-                        player.reportMilitaryBuildingReady(this);
-                    }
-
-                    /* Give subclasses a chance to add behavior */
-                    onConstructionFinished();
-
-                    /* Report that the construction is done */
-                    map.reportBuildingConstructed(this);
-                }
-            } else {
-                countdown.step();
-
-                if (countdown.getCount() % 10 == 0) {
-                    player.reportChangedBuilding(this);
-                }
-            }
-        } else if (state == State.BURNING) {
-            if (countdown.hasReachedZero()) {
-                state = State.DESTROYED;
-
-                countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
-
-                /* Report that the building has burned down */
-                map.reportBuildingBurnedDown(this);
-            } else {
-                countdown.step();
-            }
-        } else if (state == State.OCCUPIED) {
-
-            // Send out soldiers if there are too many compared to the settings
-            if (isMilitaryBuilding() &&
-                    !isHeadquarter() &&
-                    getHostedSoldiers().size() > getWantedAmountHostedSoldiers()) {
-                var sortedHostedSoldiers = GameUtils.sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
-                var soldier = sortedHostedSoldiers.getLast();
-
-                hostedSoldiers.remove(soldier);
-
-                soldier.returnToStorage();
-            }
-
-            // Handle promotions
-            if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
+        switch (state) {
+            case UNDER_CONSTRUCTION -> {
                 if (countdown.hasReachedZero()) {
-                    doPromotion();
+                    if (isMaterialForConstructionAvailable()) {
+                        consumeConstructionMaterial();
+                        state = State.UNOCCUPIED;
+                        door = DoorState.OPEN;
+
+                        if (isMilitaryBuilding()) {
+                            player.reportMilitaryBuildingReady(this);
+                        }
+
+                        onConstructionFinished();
+                        map.reportBuildingConstructed(this);
+                    }
+                } else {
+                    countdown.step();
+                    if (countdown.getCount() % 10 == 0) {
+                        player.reportChangedBuilding(this);
+                    }
+                }
+            }
+
+            case BURNING -> {
+                if (countdown.hasReachedZero()) {
+                    state = State.DESTROYED;
+                    countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
+                    map.reportBuildingBurnedDown(this);
                 } else {
                     countdown.step();
                 }
             }
-        } else if (state == State.DESTROYED) {
-            if (countdown.hasReachedZero()) {
-                map.removeBuilding(this);
 
-                /* Report that the building is removed */
-                map.reportBuildingRemoved(this);
-            } else {
-                countdown.step();
+            case OCCUPIED -> {
+                if (isMilitaryBuilding() && !isHeadquarter() && getHostedSoldiers().size() > getWantedAmountHostedSoldiers()) {
+                    var sorted = GameUtils.sortSoldiersByPreferredStrength(getHostedSoldiers(), player.getStrengthOfSoldiersPopulatingBuildings());
+                    var soldier = sorted.getLast();
+                    hostedSoldiers.remove(soldier);
+                    soldier.returnToStorage();
+                }
+
+                if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
+                    if (countdown.hasReachedZero()) {
+                        doPromotion();
+                    } else {
+                        countdown.step();
+                    }
+                }
+            }
+
+            case DESTROYED -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeBuilding(this);
+                    map.reportBuildingRemoved(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
 
-        if (isUpgrading()) {
-
+        if (upgrading) {
             if (upgradeCountdown.hasReachedZero()) {
                 if (isMaterialForUpgradeAvailable()) {
-
-                    /* Replace the current building from the map */
                     doUpgradeBuilding();
-
-                    /* Re-calculate the border after the upgrade */
                     map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_UPGRADED);
                 }
             } else {
@@ -569,12 +513,10 @@ public class Building implements EndPoint {
             }
         }
 
-        /* Give buildings a chance to add additional logic on step time */
         onStepTime();
 
         duration.after("stepTime");
-
-        map.getStats().reportVariableValue(counterName, duration.getFullDuration());
+        stats.reportVariableValue(counterName, duration.getFullDuration());
     }
 
     public Flag getFlag() {
@@ -583,33 +525,34 @@ public class Building implements EndPoint {
 
     public void tearDown() throws InvalidUserActionException {
 
-        /* A building cannot be torn down if it's already burning or destroyed */
+        // A building cannot be torn down if it's already burning or destroyed
         if (state == State.BURNING || state == State.DESTROYED) {
             throw new InvalidUserActionException("The building has already been torn down.");
         }
 
-        /* Clear up after the attack */
+        // Update statistics
+        map.getStatisticsManager().houseTornDown(this, map.getTime());
+
+        // Clear up after the attack
         attackers.clear();
         waitingAttackers.clear();
         remoteDefenders.clear();
         ownDefender = null;
 
-        /* Change building state */
-        var stateWhenTornDown = state;
-
+        // Change building state
         if (state != State.PLANNED) {
             state = State.BURNING;
         }
 
-        /* Start countdown for burning */
+        // Start countdown for burning
         countdown.countFrom(TIME_TO_BURN_DOWN);
 
-        /* Update the border if this was a military building */
+        // Update the border if this was a military building
         if (isMilitaryBuilding()) {
             map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_TORN_DOWN);
         }
 
-        /* Send home the worker and builder (if any) */
+        // Send home the worker and builder (if any)
         if (worker != null) {
             worker.returnToStorage();
         }
@@ -618,27 +561,23 @@ public class Building implements EndPoint {
             builder.returnToStorage();
         }
 
-        /* Send home deployed soldiers */
-        for (Soldier military : hostedSoldiers) {
+        // Send home deployed soldiers
+        for (var military : hostedSoldiers) {
             military.returnToStorage();
         }
 
-        /* Remove driveway */
-        Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
+        // Remove driveway
+        var driveway = map.getRoad(getPosition(), getFlag().getPosition());
 
         map.doRemoveRoad(driveway);
 
-        /* Report that the building has been torn down */
+        // Report that the building has been torn down
         if (state == State.PLANNED) {
             map.removeBuilding(this);
 
             map.reportBuildingRemoved(this);
         } else {
             map.reportTornDownBuilding(this);
-        }
-
-        if (stateWhenTornDown == State.UNOCCUPIED || stateWhenTornDown == State.OCCUPIED) {
-            map.getStatisticsManager().houseRemoved(this, map.getTime());
         }
 
         player.reportBuildingTornDown(this);
@@ -749,12 +688,12 @@ public class Building implements EndPoint {
     private void doPromotion() {
         Collection<Soldier> promoted = new LinkedList<>();
 
-        for (Rank rank : Rank.values()) {
+        for (var rank : Rank.values()) {
             if (rank == GENERAL_RANK) {
                 continue;
             }
 
-            for (Soldier military : hostedSoldiers) {
+            for (var military : hostedSoldiers) {
                 if (promoted.contains(military)) {
                     continue;
                 }
@@ -859,9 +798,7 @@ public class Building implements EndPoint {
     }
 
     private int getAttackRadius() {
-        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
-
-        return mb.attackRadius();
+        return getClass().getAnnotation(MilitaryBuilding.class).attackRadius();
     }
 
     public Soldier retrieveHostedSoldier(Soldier soldier) {
@@ -871,7 +808,7 @@ public class Building implements EndPoint {
     }
 
     public Soldier retrieveHostedSoldier() {
-        for (Rank rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
+        for (var rank : GameUtils.strengthToRank(player.getDefenseStrength())) {
             Optional<Soldier> maybeSoldier = hostedSoldiers.stream().filter(soldier -> soldier.getRank() == rank).findFirst();
 
             if (maybeSoldier.isPresent()) {
@@ -913,8 +850,6 @@ public class Building implements EndPoint {
     }
 
     public void registerAttacker(Soldier attacker) {
-
-        /* Register the attacker */
         if (!attackers.contains(attacker)) {
             attackers.add(attacker);
         }
@@ -941,7 +876,6 @@ public class Building implements EndPoint {
 
     public Soldier pickWaitingSecondaryAttacker() {
         var attacker = getWaitingSecondaryAttackers().iterator().next();
-
         waitingAttackers.remove(attacker);
 
         return attacker;
@@ -980,25 +914,23 @@ public class Building implements EndPoint {
 
     public void capture(Player player) throws InvalidUserActionException {
 
-        /* Change the ownership of the building */
+        // Change the ownership of the building
         setPlayer(player);
 
-        /* Reset the number of promised soldiers */
+        // Reset the number of promised soldiers
         promisedSoldier.clear();
 
-        /* Remove traces of the attack */
+        // Remove traces of the attack
         attackers.clear();
         remoteDefenders.clear();
         ownDefender = null;
 
-        /* Stop the evacuation if it is enabled */
+        // Stop the evacuation if it is enabled
         evacuated = false;
     }
 
     public void cancelPromisedDelivery(Cargo cargo) {
-        int amount = promisedDeliveries.getOrDefault(cargo.getMaterial(), 0);
-
-        promisedDeliveries.put(cargo.getMaterial(), amount - 1);
+        promisedDeliveries.merge(cargo.getMaterial(), -1, Integer::sum);
     }
 
     /**
@@ -1018,28 +950,27 @@ public class Building implements EndPoint {
      * @return the total need for the material
      */
     public int getCanHoldAmount(Material material) {
-        switch (state) {
-            case PLANNED:
-            case UNDER_CONSTRUCTION:
-                return materialsToBuildHouse.getAmount(material);
+        return switch (state) {
+            case PLANNED, UNDER_CONSTRUCTION -> materialsToBuildHouse.getAmount(material);
 
-            case UNOCCUPIED:
-            case OCCUPIED:
+            case UNOCCUPIED, OCCUPIED -> {
                 if (isMilitaryBuilding()) {
                     if (material == COIN) {
-                        return maxCoins;
+                        yield  maxCoins;
                     }
 
                     if (isUpgrading()) {
-                        return upgradeCost.getOrDefault(material, 0);
+                        yield  upgradeCost.getOrDefault(material, 0);
                     }
-                } else {
-                    return requiredGoodsForProduction.getOrDefault(material, 0);
-                }
 
-            default:
-                return 0;
-        }
+                    yield 0;
+                } else {
+                    yield  requiredGoodsForProduction.getOrDefault(material, 0);
+                }
+            }
+
+            default -> 0;
+        };
     }
 
     private int getLackingAmountWithProjected(Material material) {
@@ -1063,11 +994,11 @@ public class Building implements EndPoint {
 
                     int total = 0;
 
-                    /* Handle coins for promotions */
+                    // Handle coins for promotions
                     if (material == COIN && enablePromotions) {
                         total = maxCoins;
 
-                        /* Handle planks and stones for upgrades */
+                        // Handle planks and stones for upgrades
                     } else if (isUpgrading()) {
                         total = upgradeCost.getOrDefault(material, 0);
                     }
@@ -1114,27 +1045,27 @@ public class Building implements EndPoint {
 
     public void upgrade() throws InvalidUserActionException {
 
-        /* Refuse to upgrade non-upgradable buildings */
+        // Refuse to upgrade non-upgradable buildings
         if (!isUpgradable()) {
-            throw new InvalidUserActionException(String.format("Cannot upgrade %s", getClass().getSimpleName()));
+            throw new InvalidUserActionException(format("Cannot upgrade %s", getClass().getSimpleName()));
         }
 
-        /* Refuse to upgrade while under construction */
+        // Refuse to upgrade while under construction
         if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
             throw new InvalidUserActionException("Cannot upgrade while under construction.");
         }
 
-        /* Refuse to upgrade while being torn down */
+        // Refuse to upgrade while being torn down
         if (isBurningDown()) {
             throw new InvalidUserActionException("Cannot upgrade while burning down.");
         }
 
-        /* Refuse to upgrade while already being upgraded */
+        // Refuse to upgrade while already being upgraded
         if (isUpgrading()) {
             throw new InvalidUserActionException("Cannot upgrade while being upgraded.");
         }
 
-        /* Start the upgrade */
+        // Start the upgrade
         upgrading = true;
 
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
@@ -1148,17 +1079,17 @@ public class Building implements EndPoint {
 
     private boolean isMaterialForUpgradeAvailable() {
 
-        /* Get the cost for upgrade */
+        // Get the cost for upgrade
         UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
 
         int planksNeeded = upgradeCost.planks();
         int stoneNeeded = upgradeCost.stones();
 
-        /* Get available resources */
+        // Get available resources
         int plankAvailable = receivedMaterial.getOrDefault(PLANK, 0);
         int stoneAvailable = receivedMaterial.getOrDefault(STONE, 0);
 
-        /* Determine if an upgrade is possible */
+        // Determine if an upgrade is possible
         if (planksNeeded <= plankAvailable && stoneNeeded <= stoneAvailable) {
             return true;
         } else {
@@ -1169,17 +1100,17 @@ public class Building implements EndPoint {
     private int getTotalAmountNeededForUpgrade(Material material) {
         UpgradeCost upgrade = getClass().getAnnotation(UpgradeCost.class);
 
-        /* Only need material for upgrades if the building is actually being upgraded */
+        // Only need material for upgrades if the building is actually being upgraded
         if (!isUpgrading()) {
             return 0;
         }
 
-        /* Only require material for upgrades if the building is capable of upgrades */
+        // Only require material for upgrades if the building is capable of upgrades
         if (upgrade == null) {
             return 0;
         }
 
-        /* Only planks and stones are used for upgrades */
+        // Only planks and stones are used for upgrades
         return switch (material) {
             case PLANK -> upgrade.planks();
             case STONE -> upgrade.stones();
@@ -1204,7 +1135,7 @@ public class Building implements EndPoint {
             return 0;
         }
 
-        /* An unoccupied building has no productivity */
+        // An unoccupied building has no productivity
         if (worker == null) {
             return 0;
         }
@@ -1213,33 +1144,28 @@ public class Building implements EndPoint {
     }
 
     public boolean canProduce() {
-        Production production = getClass().getAnnotation(Production.class);
-
-        return production != null;
+        return getClass().getAnnotation(Production.class) != null;
     }
 
     public Material[] getProducedMaterial() {
         Production production = getClass().getAnnotation(Production.class);
 
-        return production == null ?
-                new Material[]{} :
-                getClass().getAnnotation(Production.class).output();
-
+        return production == null
+                ? new Material[]{}
+                : getClass().getAnnotation(Production.class).output();
     }
 
     private Map<Material, Integer> getMaterialNeededForProduction() {
-        Map<Material, Integer> materialNeeded = new EnumMap<>(Material.class);
+        var production = getClass().getAnnotation(Production.class);
 
-        Production production = getClass().getAnnotation(Production.class);
+        if (production == null) {
+            return Map.of(); // immutable empty map
+        }
 
-        if (production != null) {
-            for (Material material : production.requiredGoods()) {
-                int amount = materialNeeded.getOrDefault(material, 0);
+        var materialNeeded = new EnumMap<Material, Integer>(Material.class);
 
-                amount = amount + 1;
-
-                materialNeeded.put(material, amount);
-            }
+        for (var material : production.requiredGoods()) {
+            materialNeeded.merge(material, 1, Integer::sum);
         }
 
         return materialNeeded;
@@ -1258,12 +1184,10 @@ public class Building implements EndPoint {
      * @return the set of materials the building type needs
      */
     public Collection<Material> getTypesOfMaterialNeeded() {
-
-        Set<Material> result = EnumSet.noneOf(Material.class);
+        var result = EnumSet.noneOf(Material.class);
 
         if (state == State.UNDER_CONSTRUCTION || state == State.PLANNED) {
             HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
-
             result.addAll(Arrays.asList(houseSize.material()));
         } else if (isReady()) {
             Production production = getClass().getAnnotation(Production.class);
@@ -1291,7 +1215,7 @@ public class Building implements EndPoint {
         return (int) (((fullConstructionTime - countdown.getCount()) / (double) fullConstructionTime) * 100);
     }
 
-    /* Intended to be overridden by subclasses if needed */
+    // Intended to be overridden by subclasses if needed
     public void onConstructionFinished() {
         // Empty - available for subclasses to implement
     }
@@ -1306,11 +1230,6 @@ public class Building implements EndPoint {
 
     public String getSimpleName() {
         return getClass().getSimpleName();
-        /*String className = getClass().getSimpleName();
-        String nameWithSpaces = className.replace("_", " ");
-        String nameLowerCase = nameWithSpaces.toLowerCase();
-
-        return nameLowerCase.substring(0, 1).toUpperCase() + nameLowerCase.substring(1);*/
     }
 
     public boolean isStorehouse() {
@@ -1335,7 +1254,6 @@ public class Building implements EndPoint {
 
     public void startConstruction() {
         state = State.UNDER_CONSTRUCTION;
-
         countdown.countFrom(getConstructionCountdown());
 
         map.reportBuildingUnderConstruction(this);
@@ -1383,7 +1301,6 @@ public class Building implements EndPoint {
 
     private int getWantedAmountHostedSoldiers() {
         int distanceToBorder = player.getBorderPoints().stream().mapToInt(point -> GameUtils.distanceInGameSteps(position, point)).min().getAsInt();
-
         int populationSetting = player.getAmountOfSoldiersWhenPopulatingFarFromBorder();
 
         if (distanceToBorder <= getDefenceRadius()) {
@@ -1403,7 +1320,6 @@ public class Building implements EndPoint {
 
     public void openDoor(int time) {
         door = DoorState.OPEN_CLOSE_SOON;
-
         doorClosing = time;
 
         map.reportChangedBuilding(this);
@@ -1435,5 +1351,9 @@ public class Building implements EndPoint {
 
     public PlanksAndStones getMaterialNeededForConstruction() {
         return materialsToBuildHouse;
+    }
+
+    public Map<Material, Integer> getInventory() {
+        return receivedMaterial;
     }
 }

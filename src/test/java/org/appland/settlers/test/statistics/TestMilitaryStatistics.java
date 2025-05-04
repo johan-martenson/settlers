@@ -47,8 +47,8 @@ public class TestMilitaryStatistics {
                 headquarter.getAmount(GENERAL);
 
         assertTrue(totalSoldiers > 0);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), totalSoldiers);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().value(), totalSoldiers);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().time(), 1);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TestMilitaryStatistics {
 
         var statisticsManager = map.getStatisticsManager();
 
-        var soldiersBeforeCreation = statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast();
+        var soldiersBeforeCreation = statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast();
 
         assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates);
         assertEquals(storehouse0.getAmount(Material.BEER), 1);
@@ -95,8 +95,8 @@ public class TestMilitaryStatistics {
         assertEquals(storehouse0.getAmount(Material.BEER), 0);
         assertEquals(storehouse0.getAmount(Material.SWORD), 1);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
     }
 
     @Test
@@ -138,16 +138,16 @@ public class TestMilitaryStatistics {
         // Verify that a monitoring event is sent when a soldier is drafted
         var statisticsManager = map.getStatisticsManager();
 
-        var soldiersBeforeCreation = statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast();
+        var soldiersBeforeCreation = statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast();
 
         assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates);
         assertEquals(storehouse0.getAmount(Material.BEER), 1);
         assertEquals(storehouse0.getAmount(Material.SWORD), 2);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 3);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 1);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
-        var soldiersBeforeDraft = statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value();
+        var soldiersBeforeDraft = statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value();
 
         Utils.waitForBuildingToHave(storehouse0, PRIVATE, numberOfPrivates + 1);
 
@@ -155,9 +155,9 @@ public class TestMilitaryStatistics {
         assertEquals(storehouse0.getAmount(Material.BEER), 0);
         assertEquals(storehouse0.getAmount(Material.SWORD), 1);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 2);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().value(), soldiersBeforeCreation.value() + 1);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().time() > soldiersBeforeCreation.time());
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 2);
         assertEquals(monitor.getStatisticsEvents().size(), 1);
     }
 }

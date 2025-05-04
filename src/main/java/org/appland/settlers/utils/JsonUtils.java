@@ -980,13 +980,10 @@ public class JsonUtils {
     }
 
     private JSONObject shipToJson(Ship ship) {
-        Map<Material, Integer> cargos = new EnumMap<>(Material.class);
+        var cargos = new EnumMap<Material, Integer>(Material.class);
 
-        for (Cargo cargo : ship.getCargos()) {
-            Material material = cargo.getMaterial();
-            int amount = cargos.getOrDefault(cargo.getMaterial(), 0);
-
-            cargos.put(material, amount + 1);
+        for (var cargo : ship.getCargos()) {
+            cargos.merge(cargo.getMaterial(), 1, Integer::sum);
         }
 
         return new JSONObject(Map.of(
@@ -1616,7 +1613,7 @@ public class JsonUtils {
     }
 
     private JSONObject merchandiseToJson(Player player, StatisticsManager statisticsManager) {
-        var mer = statisticsManager.getMerchandiseStatistics(player);
+        var mer = statisticsManager.getPlayerStatistics(player);
 
         return new JSONObject(Map.ofEntries(
                 entry("WOOD", toJsonArray(mer.wood().getMeasurements(), this::measurementToJson)),
@@ -1651,7 +1648,7 @@ public class JsonUtils {
 
     private JSONArray goodsStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).goods().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).goods().getMeasurements(),
                 this::measurementToJson
         );
     }
@@ -1667,38 +1664,38 @@ public class JsonUtils {
 
     private JSONArray militaryStrengthStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).soldiers().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).soldiers().getMeasurements(),
                 this::measurementToJson);
     }
 
     private JSONArray killedEnemiesStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).killedEnemies().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).killedEnemies().getMeasurements(),
                 this::measurementToJson);
     }
 
     private JSONArray coinStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).coins().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).coins().getMeasurements(),
                 this::measurementToJson);
     }
 
     private JSONArray workerStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).workers().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).workers().getMeasurements(),
                 this::measurementToJson);
     }
 
     private JSONArray totalHousesStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         return toJsonArray(
-                statisticsManager.getGeneralStatistics(player).totalAmountBuildings().getMeasurements(),
+                statisticsManager.getPlayerStatistics(player).totalAmountBuildings().getMeasurements(),
                 this::measurementToJson);
     }
 
     private JSONArray landStatisticsForPlayerToJson(Player player, StatisticsManager statisticsManager) {
         var jsonLandStatisticsForPlayer = new JSONArray();
 
-        for (var measurement : statisticsManager.getGeneralStatistics(player).land().getMeasurements()) {
+        for (var measurement : statisticsManager.getPlayerStatistics(player).land().getMeasurements()) {
             var jsonMeasurement = new JSONArray();
 
             jsonMeasurement.add(measurement.time());

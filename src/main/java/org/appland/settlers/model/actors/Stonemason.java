@@ -1,23 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.OffroadOption;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.WorkerAction;
-
-import java.util.List;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Catapult;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
@@ -32,11 +25,11 @@ public class Stonemason extends Worker {
     private static final int TIME_TO_GET_STONE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_GET_STONE, null);
 
-    private State state;
-    private Point stoneTarget;
+    private State state = State.WALKING_TO_TARGET;
+    private Point stoneTarget = null;
 
     private enum State {
         WALKING_TO_TARGET,
@@ -56,13 +49,6 @@ public class Stonemason extends Worker {
 
     public Stonemason(Player player, GameMap map) {
         super(player, map);
-
-        state = State.WALKING_TO_TARGET;
-
-        countdown = new Countdown();
-        stoneTarget = null;
-
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_GET_STONE, null);
     }
 
     public boolean isGettingStone() {
@@ -72,119 +58,123 @@ public class Stonemason extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
-
         countdown.countFrom(TIME_TO_REST);
-
         productivityMeasurer.setBuilding(building);
     }
 
     // FIXME: HOTSPOT - allocations
     @Override
     protected void onIdle() {
-        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.hasReachedZero()) {
-                double distance = Integer.MAX_VALUE;
-                Point homePoint = getHome().getPosition();
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (home.isProductionEnabled()) {
+                    if (countdown.hasReachedZero()) {
+                        var distance = Double.MAX_VALUE;
+                        var homePoint = home.getPosition();
 
-                /* Look for stones within range */
-                for (Point point : map.getPointsWithinRadius(homePoint, 8)) {
+                        // Look for stones within range
+                        for (var point : map.getPointsWithinRadius(homePoint, 8)) {
 
-                    /* Filter points without stones */
-                    if (!map.isStoneAtPoint(point)) {
-                        continue;
-                    }
+                            // Filter points without stones
+                            if (!map.isStoneAtPoint(point)) {
+                                continue;
+                            }
 
-                    /* Is the stone reachable? */
-                    List<Point> path = map.findWayOffroad(getHome().getPosition(), null, point, null, OffroadOption.CAN_END_ON_STONE);
+                            // Is the stone reachable?
+                            var path = map.findWayOffroad(home.getPosition(), null, point, null, OffroadOption.CAN_END_ON_STONE);
 
-                    if (path == null) {
-                        continue;
-                    }
+                            if (path == null) {
+                                continue;
+                            }
 
-                    int distanceToStone = path.size();
+                            var distanceToStone = path.size();
 
-                    /* Check if this is the closest access point this far */
-                    if (distanceToStone < distance) {
-                        distance = distanceToStone;
+                            // Check if this is the closest access point this far
+                            if (distanceToStone < distance) {
+                                distance = distanceToStone;
+                                stoneTarget = point;
+                            }
+                        }
 
-                        stoneTarget = point;
+                        // Report that there are no resources if no point is found
+                        if (stoneTarget == null) {
+                            productivityMeasurer.reportUnproductivity();
+
+                            // Only report once
+                            if (!home.isOutOfNaturalResources()) {
+                                home.reportNoMoreNaturalResources();
+                                player.reportNoMoreResourcesForBuilding(home);
+                            }
+
+                            return;
+                        }
+
+                        state = State.GOING_OUT_TO_GET_STONE;
+                        setOffroadTarget(stoneTarget, OffroadOption.CAN_END_ON_STONE);
+                    } else {
+                        countdown.step();
                     }
                 }
-
-                /* Report that there are no resources if no point is found */
-                if (stoneTarget == null) {
-
-                    productivityMeasurer.reportUnproductivity();
-
-                    /* Only report once */
-                    if (!getHome().isOutOfNaturalResources()) {
-                        getHome().reportNoMoreNaturalResources();
-                        getPlayer().reportNoMoreResourcesForBuilding(getHome());
-                    }
-
-                    return;
-                }
-
-                setOffroadTarget(stoneTarget, OffroadOption.CAN_END_ON_STONE);
-
-                state = State.GOING_OUT_TO_GET_STONE;
-            } else {
-                countdown.step();
             }
-        } else if (state == State.GETTING_STONE) {
-            if (countdown.hasReachedZero()) {
 
-                /* Remove a piece of the stone if it still exists */
-                if (map.isStoneAtPoint(stoneTarget)) {
-                    map.removePartOfStone(stoneTarget);
+            case GETTING_STONE -> {
+                if (countdown.hasReachedZero()) {
 
-                    setCargo(new Cargo(STONE, map));
-                    state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                    // Remove a piece of the stone if it still exists
+                    if (map.isStoneAtPoint(stoneTarget)) {
+                        map.removePartOfStone(stoneTarget);
 
-                    map.getStatisticsManager().stoneProduced(player, map.getTime());
+                        setCargo(new Cargo(STONE, map));
+                        state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+
+                        map.getStatisticsManager().stoneProduced(player, map.getTime());
+                    } else {
+                        state = State.GOING_BACK_TO_HOUSE;
+                    }
+
+                    stoneTarget = null;
+
+                    returnHomeOffroad();
                 } else {
-                    state = State.GOING_BACK_TO_HOUSE;
+                    countdown.step();
                 }
-
-                stoneTarget = null;
-
-                returnHomeOffroad();
-            } else {
-                countdown.step();
             }
-        } else if (state == State.IN_HOUSE_WITH_CARGO) {
+            case IN_HOUSE_WITH_CARGO -> {
 
-            /* Report that the stonemason produced a stone */
-            productivityMeasurer.reportProductivity();
-            productivityMeasurer.nextProductivityCycle();
+                // Report that the stonemason produced a stone
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
 
-            /* Handle transportation */
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                // Handle transportation
+                if (home.getFlag().hasPlaceForMoreCargo()) {
 
-                /* Go out to the flag to deliver the stone */
-                setTarget(getHome().getFlag().getPosition());
+                    // Go out to the flag to deliver the stone
+                    state = State.GOING_OUT_TO_PUT_CARGO;
+                    setTarget(home.getFlag().getPosition());
 
-                state = State.GOING_OUT_TO_PUT_CARGO;
-
-                getHome().getFlag().promiseCargo(getCargo());
-            } else {
-                state = Stonemason.State.WAITING_FOR_SPACE_ON_FLAG;
+                    home.getFlag().promiseCargo(getCargo());
+                } else {
+                    state = Stonemason.State.WAITING_FOR_SPACE_ON_FLAG;
+                }
             }
-        } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
 
-                /* Go out to the flag to deliver the stone */
-                setTarget(getHome().getFlag().getPosition());
+            case WAITING_FOR_SPACE_ON_FLAG -> {
+                if (home.getFlag().hasPlaceForMoreCargo()) {
 
-                state = State.GOING_OUT_TO_PUT_CARGO;
+                    // Go out to the flag to deliver the stone
+                    state = State.GOING_OUT_TO_PUT_CARGO;
+                    setTarget(home.getFlag().getPosition());
 
-                getHome().getFlag().promiseCargo(getCargo());
+                    home.getFlag().promiseCargo(getCargo());
+                }
             }
-        } else if (state == State.DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
@@ -207,84 +197,76 @@ public class Stonemason extends Worker {
 
     @Override
     public void onArrival() {
-        if (state == State.GOING_OUT_TO_PUT_CARGO) {
-            Cargo cargo = getCargo();
+        switch (state) {
+            case GOING_OUT_TO_PUT_CARGO -> {
+                carriedCargo.setPosition(position);
+                carriedCargo.transportToReceivingBuilding(this::isReceiverForStone);
+                home.getFlag().putCargo(carriedCargo);
+                carriedCargo = null;
 
-            cargo.setPosition(getPosition());
-            cargo.transportToReceivingBuilding(this::isReceiverForStone);
-            getHome().getFlag().putCargo(cargo);
-
-            setCargo(null);
-
-            setTarget(getHome().getPosition());
-
-            state = State.GOING_BACK_TO_HOUSE;
-        } else if (state == State.GOING_BACK_TO_HOUSE) {
-            state = State.RESTING_IN_HOUSE;
-
-            enterBuilding(getHome());
-
-            countdown.countFrom(TIME_TO_REST);
-        } else if (state == State.GOING_OUT_TO_GET_STONE) {
-            state = State.GETTING_STONE;
-
-            map.reportWorkerStartedAction(this, WorkerAction.HACKING_STONE);
-
-            countdown.countFrom(TIME_TO_GET_STONE);
-        } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            enterBuilding(getHome());
-
-            state = State.IN_HOUSE_WITH_CARGO;
-        } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
-
-            if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = State.GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                state = State.GOING_BACK_TO_HOUSE;
+                setTarget(home.getPosition());
             }
-        } else if (state == State.GOING_TO_DIE) {
-            setDead();
 
-            state = State.DEAD;
+            case GOING_BACK_TO_HOUSE -> {
+                state = State.RESTING_IN_HOUSE;
+                enterBuilding(home);
+                countdown.countFrom(TIME_TO_REST);
+            }
 
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            case GOING_OUT_TO_GET_STONE -> {
+                state = State.GETTING_STONE;
+                map.reportWorkerStartedAction(this, WorkerAction.HACKING_STONE);
+                countdown.countFrom(TIME_TO_GET_STONE);
+            }
+
+            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
+                enterBuilding(home);
+                state = State.IN_HOUSE_WITH_CARGO;
+            }
+
+            case RETURNING_TO_STORAGE -> {
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                storehouse.depositWorker(this);
+            }
+
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+
+                // Go to the closest storage
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
+
+                if (storehouse != null) {
+                    state = State.RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = State.GOING_TO_DIE;
+                    setOffroadTarget(findPlaceToDie());
+                }
+            }
+
+            case GOING_TO_DIE -> {
+                setDead();
+                state = State.DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, STONEMASON);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), STONEMASON);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, STONEMASON);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
             }
         }
@@ -293,15 +275,15 @@ public class Stonemason extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Don't try to enter the quarry upon arrival */
+            // Don't try to enter the quarry upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -309,7 +291,7 @@ public class Stonemason extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);

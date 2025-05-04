@@ -83,7 +83,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.wood().getMeasurements().getFirst().time(), 1);
@@ -102,7 +102,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.plank().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().time(), 1);
@@ -121,7 +121,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.stone().getMeasurements().getFirst().time(), 1);
@@ -140,7 +140,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -159,7 +159,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
@@ -178,7 +178,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.beer().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().time(), 1);
@@ -197,7 +197,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.coal().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().time(), 1);
@@ -216,7 +216,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.iron().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().time(), 1);
@@ -235,7 +235,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.gold().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().time(), 1);
@@ -254,7 +254,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().time(), 1);
@@ -273,7 +273,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.coin().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().time(), 1);
@@ -292,7 +292,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.tools().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().time(), 1);
@@ -311,7 +311,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.weapons().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.weapons().getMeasurements().getFirst().time(), 1);
@@ -330,7 +330,7 @@ public class TestMerchandise {
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that the initial merchandise is correct
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.boats().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().time(), 1);
@@ -372,7 +372,7 @@ public class TestMerchandise {
         Utils.waitForWoodcutterToStartCuttingTree(wcWorker, map);
 
         // Verify that the merchandise statistics for wood are updated when the tree is cut down
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 1);
 
@@ -409,7 +409,7 @@ public class TestMerchandise {
         assertEquals(sawmill.getWorker(), sawmillWorker0);
 
         // Verify that merchandise statistics for planks are updated when a plank is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.plank().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().time(), 1);
@@ -453,7 +453,7 @@ public class TestMerchandise {
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
         // Verify that merchandise statistics for stones are updated when the stone is cut
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 1);
 
@@ -500,7 +500,7 @@ public class TestMerchandise {
         Utils.waitForFishermanToStartFishing(fisherman, map);
 
         // Verify that the merchandise statistics for food are updated when a fish is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -543,7 +543,7 @@ public class TestMerchandise {
         // Verify that the merchandise statistics for food are updated when meat is produced
         Utils.deliverCargos(slaughterHouse, PIG);
 
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -585,7 +585,7 @@ public class TestMerchandise {
         Utils.waitForWildAnimalCloseToPoint(hunterHut.getPosition(), map);
 
         // Verify that merchandise statistics for food are updated when the hunter picks up the meat
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -630,7 +630,7 @@ public class TestMerchandise {
         bakery.putCargo(new Cargo(FLOUR, map));
 
         // Verify that merchandise statistics are updated when the bakery produces a bread
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -669,7 +669,7 @@ public class TestMerchandise {
         assertTrue(worker.isInsideBuilding());
 
         // Verify that the merchandise statistics for water are updated when water is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.water().getMeasurements().getFirst().time(), 1);
@@ -715,7 +715,7 @@ public class TestMerchandise {
         brewery.putCargo(new Cargo(Material.WATER, map));
 
         // Verify that the merchandise statistics are updated when beer is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.beer().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.beer().getMeasurements().getFirst().time(), 1);
@@ -758,7 +758,7 @@ public class TestMerchandise {
         assertTrue(miner.isInsideBuilding());
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.coal().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.coal().getMeasurements().getFirst().time(), 1);
@@ -801,7 +801,7 @@ public class TestMerchandise {
         assertTrue(miner.isInsideBuilding());
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.iron().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.iron().getMeasurements().getFirst().time(), 1);
@@ -844,7 +844,7 @@ public class TestMerchandise {
         assertTrue(miner.isInsideBuilding());
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.gold().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.gold().getMeasurements().getFirst().time(), 1);
@@ -887,7 +887,7 @@ public class TestMerchandise {
         // Verify that merchandise statistics are updated when an iron bar is produced
         Utils.deliverCargos(ironSmelter, COAL, IRON);
 
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().getFirst().time(), 1);
@@ -934,7 +934,7 @@ public class TestMerchandise {
         mint.putCargo(new Cargo(COAL, map));
 
         // Verify that merchandise statistics are updated when a coin is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.coin().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.coin().getMeasurements().getFirst().time(), 1);
@@ -988,7 +988,7 @@ public class TestMerchandise {
             metalworks.putCargo(new Cargo(IRON_BAR, map));
 
             // Verify that merchandise statistics are updated when a tool is produced
-            var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+            var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
             assertEquals(merchandiseStatistics.tools().getMeasurements().size(), 1);
             assertEquals(merchandiseStatistics.tools().getMeasurements().getFirst().time(), 1);
@@ -1039,7 +1039,7 @@ public class TestMerchandise {
         assertEquals(armory0.getAmount(COAL), 1);
 
         // Verify that merchandise statistics are updated when a weapon is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.weapons().getMeasurements().size(), 1);
 
@@ -1083,7 +1083,7 @@ public class TestMerchandise {
         Utils.deliverCargos(shipyard, PLANK, 2);
 
         // Verify that the merchandise statistics are updated when a boat is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.boats().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.boats().getMeasurements().getFirst().time(), 1);
@@ -1139,7 +1139,7 @@ public class TestMerchandise {
         Utils.waitForWoodcutterToStartCuttingTree(wcWorker, map);
 
         // Verify that a listening event is sent
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.wood().getMeasurements().size(), 1);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
@@ -1183,7 +1183,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that listening
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.plank().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.plank().getMeasurements().getFirst().time(), 1);
@@ -1234,7 +1234,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that listening
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.stone().getMeasurements().size(), 1);
         assertEquals(monitor.getStatisticsEvents().size() ,0);
@@ -1288,7 +1288,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify listening
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
@@ -1340,7 +1340,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the listener gets an event when bread is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
         assertEquals(merchandiseStatistics.food().getMeasurements().getFirst().time(), 1);
@@ -1396,7 +1396,7 @@ public class TestMerchandise {
         // Verify that the merchandise statistics for food are updated when meat is produced
         Utils.deliverCargos(slaughterHouse, PIG);
 
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
@@ -1445,7 +1445,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics for food are updated when the hunter picks up the meat
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.food().getMeasurements().size(), 1);
@@ -1491,7 +1491,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the merchandise statistics for water are updated when water is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.water().getMeasurements().size(), 1);
@@ -1544,7 +1544,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the merchandise statistics are updated when beer is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.beer().getMeasurements().size(), 1);
@@ -1594,7 +1594,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.coal().getMeasurements().size(), 1);
@@ -1644,7 +1644,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.iron().getMeasurements().size(), 1);
@@ -1694,7 +1694,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics are updated when the miner produces coal
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.gold().getMeasurements().size(), 1);
@@ -1744,7 +1744,7 @@ public class TestMerchandise {
         // Verify that merchandise statistics are updated when an iron bar is produced
         Utils.deliverCargos(ironSmelter, COAL, IRON);
 
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.ironBar().getMeasurements().size(), 1);
@@ -1798,7 +1798,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics are updated when a coin is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size() , 0);
         assertEquals(merchandiseStatistics.coin().getMeasurements().size(), 1);
@@ -1859,7 +1859,7 @@ public class TestMerchandise {
             map.getStatisticsManager().addListener(monitor);
 
             // Verify that merchandise statistics are updated when a tool is produced
-            var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+            var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
             assertEquals(monitor.getStatisticsEvents().size(), 0);
             assertEquals(merchandiseStatistics.tools().getMeasurements().size(), 1);
@@ -1917,7 +1917,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that merchandise statistics are updated when a weapon is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.weapons().getMeasurements().size(), 1);
@@ -1967,7 +1967,7 @@ public class TestMerchandise {
         map.getStatisticsManager().addListener(monitor);
 
         // Verify that the merchandise statistics are updated when a boat is produced
-        var merchandiseStatistics = map.getStatisticsManager().getMerchandiseStatistics(player0);
+        var merchandiseStatistics = map.getStatisticsManager().getPlayerStatistics(player0);
 
         assertEquals(monitor.getStatisticsEvents().size(), 0);
         assertEquals(merchandiseStatistics.boats().getMeasurements().size(), 1);

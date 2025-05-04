@@ -16,6 +16,7 @@ import org.appland.settlers.model.buildings.Barracks;
 import org.appland.settlers.model.buildings.Catapult;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Storehouse;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
@@ -48,9 +49,9 @@ public class TestMilitaryStrengthStatistics {
         // Verify that the initial measurement of military strength is correct.
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
     }
 
     @Test
@@ -74,18 +75,18 @@ public class TestMilitaryStrengthStatistics {
         // Verify that military statistics are updated when a soldier is drafted
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
 
         Utils.waitForBuildingToHave(headquarter0, Material.PRIVATE, 52);
 
         assertEquals(headquarter0.getAmount(Material.PRIVATE), 52);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), 52);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 2);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().value(), 52);
     }
 
     @Test
@@ -121,18 +122,18 @@ public class TestMilitaryStrengthStatistics {
         // Verify that military statistics are updated when a soldier is drafted
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
 
         Utils.waitForBuildingToHave(storehouse0, Material.PRIVATE, 1);
 
         assertEquals(storehouse0.getAmount(Material.PRIVATE), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().size(), 2);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).soldiers().getMeasurements().getLast().value(), 52);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().size(), 2);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getFirst().value(), 51);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).soldiers().getMeasurements().getLast().value(), 52);
     }
 
     @Test
@@ -215,9 +216,9 @@ public class TestMilitaryStrengthStatistics {
         // Verify that the military strength for player 1 is updated when its soldier dies.
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getFirst().value(), 51);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getFirst().value(), 51);
 
         for (int i = 0; i < 1000; i++) {
             if (defender.isDead()) {
@@ -230,9 +231,9 @@ public class TestMilitaryStrengthStatistics {
             map.stepTime();
         }
 
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getLast().value(), 50);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getLast().value(), 50);
 
         map.stepTime();
 
@@ -287,7 +288,8 @@ public class TestMilitaryStrengthStatistics {
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         // Verify that the military strength is updated when the catapult kills a soldier.
-        var generalStatistics = map.getStatisticsManager().getGeneralStatistics(player1);
+        StatisticsManager statisticsManager = map.getStatisticsManager();
+        var generalStatistics = statisticsManager.getPlayerStatistics(player1);
 
         var soldiersBeforeHit = generalStatistics.soldiers().getMeasurements().getLast().value();
 
@@ -400,9 +402,9 @@ public class TestMilitaryStrengthStatistics {
         // Verify that a monitoring event is sent when a soldier dies and the military statistics changes.
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getFirst().value(), 51);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getFirst().value(), 51);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
         for (int i = 0; i < 1000; i++) {
@@ -416,9 +418,9 @@ public class TestMilitaryStrengthStatistics {
             map.stepTime();
         }
 
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player1).soldiers().getMeasurements().getLast().value(), 50);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).soldiers().getMeasurements().getLast().value(), 50);
         assertTrue(monitor.getStatisticsEvents().size() >= 1); // Player0: killed enemies++, Player1: militaryStrength--
 
         map.stepTime();

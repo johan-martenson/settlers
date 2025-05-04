@@ -40,7 +40,7 @@ public class TestWorkerStatistics {
 
         // Verify that the initial resource statistics are correct
         var statisticsManager = map.getStatisticsManager();
-        var resourceMeasurement = statisticsManager.getGeneralStatistics(player0).workers();
+        var resourceMeasurement = statisticsManager.getPlayerStatistics(player0).workers();
 
         assertEquals(resourceMeasurement.getMeasurements().size(), 1);
         assertEquals(resourceMeasurement.getMeasurements().getFirst().time(), 1);
@@ -98,7 +98,7 @@ public class TestWorkerStatistics {
 
         // Verify that a builder is created - six builders leave the headquarters
         var statisticsManager = map.getStatisticsManager();
-        var workerStatistics = statisticsManager.getGeneralStatistics(player0).workers();
+        var workerStatistics = statisticsManager.getPlayerStatistics(player0).workers();
 
         assertEquals(workerStatistics.getMeasurements().size(), 1);
         assertEquals(workerStatistics.getMeasurements().getFirst().time(), 1);
@@ -176,7 +176,7 @@ public class TestWorkerStatistics {
 
         // Verify that a builder is created - six builders leave the headquarters
         var statisticsManager = map.getStatisticsManager();
-        var workerStatistics = statisticsManager.getGeneralStatistics(player0).workers();
+        var workerStatistics = statisticsManager.getPlayerStatistics(player0).workers();
 
         assertEquals(workerStatistics.getMeasurements().size(), 1);
         assertEquals(workerStatistics.getMeasurements().getFirst().time(), 1);
@@ -193,6 +193,7 @@ public class TestWorkerStatistics {
             map.stepTime();
         }
 
+        System.out.println(workerStatistics.getMeasurements());
         assertEquals(monitor.getStatisticsEvents().size(), 1);
         assertEquals(map.getWorkers().stream().filter(worker -> worker instanceof Builder).count(), 6);
         assertEquals(workerStatistics.getMeasurements().size(), 2);

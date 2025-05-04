@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.model.actors;
 
 import org.appland.settlers.model.Cargo;
@@ -19,7 +14,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.utils.Duration;
-import org.appland.settlers.utils.Stats;
 import org.appland.settlers.utils.StatsConstants;
 
 import java.util.ArrayList;
@@ -49,21 +43,20 @@ public abstract class Worker {
     private static final int SPEED_ADJUST = 1;
 
     protected final Player player;
+    protected final GameMap map;
+
+    protected Point     position = null;
+    protected Building  home = null;
+    protected Cargo     carriedCargo;
+    protected Direction direction = Direction.DOWN_RIGHT;
 
     private final Countdown walkCountdown = new Countdown();
-
-    final GameMap map;
 
     private boolean     dead = false;
     private List<Point> path = null;
     private State       state = State.IDLE_OUTSIDE;
-    private Cargo       carriedCargo;
     private Building    targetBuilding = null;
-    protected Point     position = null;
     private Point       target = null;
-    protected Building  home = null;
-
-    protected Direction direction = Direction.DOWN_RIGHT;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;
@@ -134,25 +127,25 @@ public abstract class Worker {
     }
 
     public void stepTime() throws InvalidUserActionException {
-        Stats stats = map.getStats();
-
-        String counterName = "Worker." + getClass().getSimpleName() + ".stepTime";
+        var stats = map.getStats();
+        var counterName = format("Worker.%s.stepTime", getClass().getSimpleName());
 
         stats.createVariableGroupIfAbsent(StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
         stats.addPeriodicCounterVariableIfAbsent(counterName);
         stats.addVariableToGroup(counterName, StatsConstants.AGGREGATED_EACH_STEP_TIME_GROUP);
 
-        Duration duration = new Duration(counterName);
+        var duration = new Duration(counterName);
 
         switch (state) {
             case WALKING_AND_EXACTLY_AT_POINT -> {
-                /* Arrival at target is already handled. In this branch the worker is at a fixed point but not the target */
+                // Arrival at target is already handled.
+                // In this branch the worker is at a fixed point but not the target.
 
                 walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-                Point next = path.getFirst();
+                var next = path.getFirst();
 
-                if (position.x == next.x && position.y == next.y) {
+                if (position.equals(next)) {
                     throw new RuntimeException(format("They are the same! I am %s", this));
                 }
 
@@ -161,36 +154,26 @@ public abstract class Worker {
                 }
 
                 direction = GameUtils.getDirectionBetweenPoints(position, next);
-
                 state = State.WALKING_BETWEEN_POINTS;
             }
+
             case WALKING_BETWEEN_POINTS -> {
                 walkCountdown.step();
 
                 if (walkCountdown.hasReachedZero()) {
-                    state = State.WALKING_AND_EXACTLY_AT_POINT;
-
-                    /* Update the worker's position */
-                    position = path.getFirst();
-                    path.removeFirst();
+                    position = path.removeFirst();
                     var upLeft = position.upLeft();
-
-                    /* Update the cargo's position */
                     updateCargoPosition();
 
-                    /* Call the subclass to let it react */
+                    state = State.WALKING_AND_EXACTLY_AT_POINT;
                     onWalkingAndAtFixedPoint();
 
-                    /* Handle the arrival if the worker is at the target */
+                    // Handle the arrival if the worker is at the target
                     if (position.equals(target)) {
-
-                        /* Set the state to idle and outside */
                         state = State.IDLE_OUTSIDE;
-
-                        /* Enter buildings if required and give the subclasses a change to act */
                         handleArrival();
 
-                    /* Open the door if the worker is about to go to a house */
+                    // Open the door if the worker is about to go to a house
                     } else if (upLeft.equals(target)) {
                         var house = map.getBuildingAtPoint(upLeft);
 
@@ -200,21 +183,21 @@ public abstract class Worker {
                     }
                 }
             }
+
             case WALKING_HALFWAY_AND_EXACTLY_AT_POINT -> {
                 walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
-
                 state = State.WALKING_HALF_WAY;
             }
+
             case WALKING_HALF_WAY -> {
                 walkCountdown.step();
 
-                /* The worker has walked half way */
                 if (getPercentageOfDistanceTraveled() >= 50) {
                     onWalkedHalfWay();
-
                     state = State.IDLE_HALF_WAY;
                 }
             }
+
             case IDLE_INSIDE, IDLE_OUTSIDE, IDLE_HALF_WAY -> onIdle();
         }
 
@@ -226,67 +209,58 @@ public abstract class Worker {
     @Override
     public String toString() {
         if (isTraveling()) {
-            StringBuilder stringBuffer = new StringBuilder();
-            if (isExactlyAtPoint()) {
-                stringBuffer.append(format("Worker at %s traveling to %s", position, target));
-            } else {
-                stringBuffer.append(format("Worker latest at %s traveling to %s", getLastPoint(), target));
-            }
+            var builder = new StringBuilder();
+            builder.append(isExactlyAtPoint()
+                    ? format("Worker at %s traveling to %s", position, target)
+                    : format("Worker latest at %s traveling to %s", getLastPoint(), target));
 
             if (targetBuilding != null) {
-                stringBuffer.append(format(" for %s", targetBuilding));
+                builder.append(format(" for %s", targetBuilding));
             }
 
             if (carriedCargo != null) {
-                stringBuffer.append(format(" carrying %s", carriedCargo));
+                builder.append(format(" carrying %s", carriedCargo));
             }
 
-            return stringBuffer.toString();
+            return builder.toString();
         }
 
         return "Idle worker at %s".formatted(position);
     }
 
-    void onArrival() throws InvalidUserActionException {
+    protected void onArrival() throws InvalidUserActionException {
         // Empty method for subclasses to override if needed
     }
 
-    void onIdle() throws InvalidUserActionException {
+    protected void onIdle() throws InvalidUserActionException {
         // Empty method for subclasses to override if needed
     }
 
-    void onEnterBuilding(Building building) {
+    protected void onEnterBuilding(Building building) {
         // Empty method for subclasses to override if needed
     }
 
     private void handleArrival() {
-
-        /* Just enter the storage and do nothing more */
         if (targetBuilding instanceof Storehouse storehouse && targetBuilding.isOccupied()) {
             storehouse.depositWorker(this);
-
             return;
         }
 
-        /* If there is a building set as target, enter it */
         else if (targetBuilding != null) {
-            Building building = targetBuilding;
 
             /* Enter the building unless it's a soldier or a builder.
              * Soldiers enter on their own and builders should not enter.
              * */
             if (!isSoldier() && !(this instanceof Builder)) {
+                Building building = targetBuilding;
 
-                /* Go back to storage if the building is not ok to enter */
+                // Go back to storage if the building is not ok to enter
                 if (building.isBurningDown() || building.isDestroyed()) {
-
                     targetBuilding = null;
-
                     returnToStorage();
-
                     return;
 
-                /* Enter the building */
+                // Enter the building
                 } else {
                     building.assignWorker(this);
                     enterBuilding(building);
@@ -296,7 +270,7 @@ public abstract class Worker {
             targetBuilding = null;
         }
 
-        /* This lets subclasses add their own logic */
+        // This lets subclasses add their own logic
         try {
             onArrival();
         } catch (InvalidUserActionException e) {
@@ -384,10 +358,10 @@ public abstract class Worker {
 
         building.closeDoor();
 
-        /* Allow subclasses to add logic */
+        // Allow subclasses to add logic
         onEnterBuilding(building);
 
-        /* Report that the worker entered a building */
+        // Report that the worker entered a building
         map.reportWorkerEnteredBuilding(this);
     }
 
@@ -450,7 +424,7 @@ public abstract class Worker {
 
             direction = GameUtils.getDirection(position, path.getFirst());
 
-            /* Report the new target so it can be monitored */
+            // Report the new target so it can be monitored
             map.reportWorkerWithNewTarget(this);
         }
     }
@@ -473,7 +447,7 @@ public abstract class Worker {
 
             state = State.WALKING_AND_EXACTLY_AT_POINT;
 
-            /* Report the new target so it can be monitored */
+            // Report the new target so it can be monitored
             map.reportWorkerWithNewTarget(this);
         }
     }
@@ -497,7 +471,7 @@ public abstract class Worker {
 
             direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
 
-            /* Report the new target so it can be monitored */
+            // Report the new target so it can be monitored
             map.reportWorkerWithNewTarget(this);
         }
     }
@@ -515,7 +489,7 @@ public abstract class Worker {
     }
 
     void setTarget(Point point, Point via) {
-        target = point;
+        this.target = point;
 
         if (state == State.IDLE_INSIDE) {
             if (!map.isBuildingAtPoint(position)) {
@@ -540,40 +514,27 @@ public abstract class Worker {
 
         if (position.equals(point)) {
             state = State.IDLE_OUTSIDE;
-
             handleArrival();
         } else {
-            Point start = position;
-
-            if (via != null) {
-                path = map.findWayWithExistingRoads(start, target, via);
-            } else  {
-                path = map.findWayWithExistingRoads(start, target);
-            }
+            path = (via == null)
+                    ? map.findWayWithExistingRoads(position, target)
+                    : map.findWayWithExistingRoads(position, target, via);
 
             if (path == null) {
-                throw new InvalidGameLogicException("No way on existing roads from " + start + " to " + target);
+                throw new InvalidGameLogicException("No way on existing roads from " + position + " to " + target);
             }
 
-            /* Remove the current point from the path */
             path.removeFirst();
-
             state = State.WALKING_AND_EXACTLY_AT_POINT;
-
             direction = GameUtils.getDirectionBetweenPoints(position, path.getFirst());
-
-            /* Report the new target so it can be monitored */
             map.reportWorkerWithNewTarget(this);
         }
     }
 
     void stopWalkingToTarget() {
         state = State.IDLE_OUTSIDE;
-
         path.clear();
         target = null;
-
-        /* Report that this worker stopped walking */
         map.reportWorkerWithNewTarget(this);
     }
 
@@ -637,7 +598,7 @@ public abstract class Worker {
 
     void walkHalfWayOffroadTo(Point point, OffroadOption offroadOption) {
 
-        /* Walk halfway to the given target */
+        // Walk halfway to the given target
         setOffroadTarget(point, OffroadOption.CAN_END_ON_STONE);
 
         state = State.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
@@ -648,20 +609,20 @@ public abstract class Worker {
     }
 
     void returnToFixedPoint() {
-        Point previousTarget = target;
-        Point previousLastPoint = getLastPoint();
+        var previousTarget = target;
+        var previousLastPoint = getLastPoint();
 
-        /* Change the previous position to make the worker leave the previous target */
+        // Change the previous position to make the worker leave the previous target
         position = previousTarget;
 
-        /* Change the target to make the worker walk back */
+        // Change the target to make the worker walk back
         target = previousLastPoint;
 
-        /* Change the planned path */
+        // Change the planned path
         path.clear();
         path.add(previousLastPoint);
 
-        /* Set the state to be walking between two fixed points */
+        // Set the state to be walking between two fixed points
         state = State.WALKING_BETWEEN_POINTS;
     }
 
@@ -703,13 +664,11 @@ public abstract class Worker {
 
     protected void setDead() {
         dead = true;
-
         map.placeDecoration(position, DecorationType.ANIMAL_SKELETON_1);
     }
 
     public void goToStorehouse(Storehouse storehouse) {
         setTarget(storehouse.getPosition());
-
         targetBuilding = storehouse;
     }
 

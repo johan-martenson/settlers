@@ -1,21 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Storehouse;
-import org.appland.settlers.utils.CumulativeDuration;
-import org.appland.settlers.utils.Stats;
+import org.appland.settlers.model.buildings.Building;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,41 +25,40 @@ import static org.appland.settlers.utils.StatsConstants.AGGREGATED_EACH_STEP_TIM
  */
 @Walker(speed = 10)
 public class Scout extends Worker {
-
     private static final int DISCOVERY_RADIUS = 4;
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private static final int MINIMUM_DISTANCE_TO_BORDER = 6;
-    private static final Random random = new Random(4);
+    private static final Random RANDOM = new Random(4);
     private static final int LENGTH_TO_WALK = 30;
 
     protected enum State {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_POINT,
         RETURNING_TO_FLAG,
-        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WALKING_TO_ASSIGNED_LOOKOUT_TOWER,
+        WORKING_IN_LOOKOUT_TOWER,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
-    private State state;
+    private State state = WALKING_TO_TARGET;
     private Point flagPoint;
-    private int   segmentCount;
+    private int   segmentCount = 0;
     private int   directionX;
     private int   directionY;
     private Point previousPosition;
 
     public Scout(Player player, GameMap map) {
         super(player, map);
-
-        state = WALKING_TO_TARGET;
-        segmentCount = 0;
-
-        countdown = new Countdown();
     }
 
     @Override
-    void onIdle() {
+    protected void onIdle() {
          if (state == DEAD) {
             if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
@@ -80,164 +70,132 @@ public class Scout extends Worker {
 
     @Override
     protected void onArrival() {
-        Stats stats = map.getStats();
+        var stats = map.getStats();
+        var duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
 
-        CumulativeDuration duration = stats.measureCumulativeDuration("Scout.onArrival", AGGREGATED_EACH_STEP_TIME_GROUP);
+        map.discoverPointsWithinRadius(getPlayer(), position, DISCOVERY_RADIUS);
 
-        map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
-
-        if (state == State.WALKING_TO_ASSIGNED_LOOKOUT_TOWER) {
-            enterBuilding(getTargetBuilding());
-
-            duration.after("Enter lookout tower");
-        } else if (state == WALKING_TO_TARGET) {
-
-            /* Remember where the scouting started so the scout can go back */
-            flagPoint = getPosition();
-
-            /* Calculate direction */
-            Point borderPoint = findDirectionToBorder();
-
-            duration.after("Find direction to border");
-
-            calculateDirection(borderPoint);
-
-            duration.after("Calculate direction");
-
-            /* Update direction if the scout is too close to the border */
-            avoidGoingTooCloseToBorder();
-
-            duration.after("Avoid going too close to border");
-
-            /* Find the first point to go to */
-            Point point = findNextPoint();
-
-            duration.after("Find next point");
-
-            if (!map.isWithinMap(point)) {
-                state = RETURNING_TO_FLAG;
-
-                setOffroadTarget(flagPoint);
-            } else {
-                state = GOING_TO_NEXT_POINT;
-
-                setOffroadTarget(point);
+        switch (state) {
+            case WALKING_TO_ASSIGNED_LOOKOUT_TOWER -> {
+                enterBuilding(getTargetBuilding());
+                duration.after("Enter lookout tower");
             }
 
-            previousPosition = getPosition();
+            case WALKING_TO_TARGET -> {
+                flagPoint = position;
+                var borderPoint = findDirectionToBorder();
+                duration.after("Find direction to border");
 
-            duration.after("Set offroad target 0");
-        } else if (state == GOING_TO_NEXT_POINT) {
+                calculateDirection(borderPoint);
+                duration.after("Calculate direction");
 
-            segmentCount++;
+                avoidGoingTooCloseToBorder();
+                duration.after("Avoid going too close to border");
 
-            if (segmentCount == LENGTH_TO_WALK) {
-                state = RETURNING_TO_FLAG;
+                var point = findNextPoint();
+                duration.after("Find next point");
 
-                setOffroadTarget(flagPoint);
-
-                return;
+                if (!map.isWithinMap(point)) {
+                    state = RETURNING_TO_FLAG;
+                    setOffroadTarget(flagPoint);
+                } else {
+                    state = GOING_TO_NEXT_POINT;
+                    setOffroadTarget(point);
+                }
+                previousPosition = position;
+                duration.after("Set offroad target 0");
             }
 
-            avoidGoingTooCloseToBorder();
+            case GOING_TO_NEXT_POINT -> {
+                segmentCount++;
 
-            duration.after("Avoid going too close to border");
+                if (segmentCount == LENGTH_TO_WALK) {
+                    state = RETURNING_TO_FLAG;
+                    setOffroadTarget(flagPoint);
+                    return;
+                }
 
-            Point point = findNextPoint();
+                avoidGoingTooCloseToBorder();
+                duration.after("Avoid going too close to border");
 
-            duration.after("Find next point");
+                var point = findNextPoint();
+                duration.after("Find next point");
 
-            if (point == null) {
-                state = RETURNING_TO_FLAG;
+                if (point == null) {
+                    state = RETURNING_TO_FLAG;
+                    setOffroadTarget(flagPoint);
+                } else {
+                    state = GOING_TO_NEXT_POINT;
+                    setOffroadTarget(point);
+                }
 
-                setOffroadTarget(flagPoint);
-            } else {
-                state = GOING_TO_NEXT_POINT;
-
-                setOffroadTarget(point);
+                previousPosition = position;
+                duration.after("Set offroad target 1");
             }
 
-            previousPosition = getPosition();
-
-            duration.after("Set offroad target 1");
-        } else if (state == RETURNING_TO_FLAG) {
-
-            state = RETURNING_TO_STORAGE;
-
-            // FIXME: add test and fix so returning scout can't go to storage where storage is not allowed
-            Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
-
-            duration.after("Find closest storage connected by roads");
-
-            if (storage != null) {
-                setTarget(storage.getPosition());
-            } else {
-                storage = GameUtils.getClosestStorageOffroad(getPlayer(), flagPoint);
-
-                setOffroadTarget(storage.getPosition(), storage.getFlag().getPosition());
-            }
-
-            duration.after("Set offroad target 2");
-        } else if (state == RETURNING_TO_STORAGE) {
-            Building storage = map.getBuildingAtPoint(getPosition());
-
-            storage.putCargo(new Cargo(SCOUT, map));
-
-            enterBuilding(storage);
-
-            map.removeWorker(this);
-
-            duration.after("Enter storage");
-        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
-
-            duration.after("Find closest storage connected by roads and delivery is possible");
-
-            if (storehouse != null) {
+            case RETURNING_TO_FLAG -> {
                 state = RETURNING_TO_STORAGE;
+                var storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+                duration.after("Find closest storage connected by roads");
 
-                setTarget(storehouse.getPosition());
-            } else {
-                state = GOING_TO_DIE;
+                if (storage != null) {
+                    setTarget(storage.getPosition());
+                } else {
+                    storage = GameUtils.getClosestStorageOffroad(getPlayer(), flagPoint);
+                    setOffroadTarget(storage.getPosition(), storage.getFlag().getPosition());
+                }
 
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+                duration.after("Set offroad target 2");
             }
 
-            duration.after("Set offroad target 3");
-        } else if (state == GOING_TO_DIE) {
-            setDead();
+            case RETURNING_TO_STORAGE -> {
+                var storage = map.getBuildingAtPoint(position);
+                storage.putCargo(new Cargo(SCOUT, map));
+                enterBuilding(storage);
+                map.removeWorker(this);
+                duration.after("Enter storage");
+            }
 
-            state = DEAD;
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SCOUT);
+                duration.after("Find closest storage connected by roads and delivery is possible");
 
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+                if (storehouse != null) {
+                    state = RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = GOING_TO_DIE;
+                    var point = findPlaceToDie();
+                    setOffroadTarget(point);
+                }
+
+                duration.after("Set offroad target 3");
+            }
+
+            case GOING_TO_DIE -> {
+                setDead();
+                state = DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
 
         duration.after("End of method");
-
         duration.report();
     }
 
     private void calculateDirection(Point borderPoint) {
-        directionX = borderPoint.x - getPosition().x;
-        directionY = borderPoint.y - getPosition().y;
+        directionX = borderPoint.x - position.x;
+        directionY = borderPoint.y - position.y;
     }
 
     private void avoidGoingTooCloseToBorder() {
-        Point position = getPosition();
-
-        if (position.x < MINIMUM_DISTANCE_TO_BORDER && directionX < 0) {
-            directionX = -directionX;
-        } else if (map.getWidth() - position.x < MINIMUM_DISTANCE_TO_BORDER && directionX > 0) {
+        if ((position.x < MINIMUM_DISTANCE_TO_BORDER && directionX < 0) ||
+            (map.getWidth() - position.x < MINIMUM_DISTANCE_TO_BORDER && directionX > 0)) {
             directionX = -directionX;
         }
 
-        if (position.y < MINIMUM_DISTANCE_TO_BORDER && directionY < 0) {
-            directionY = -directionY;
-        } else if (map.getHeight() - position.y < MINIMUM_DISTANCE_TO_BORDER && directionY > 0) {
+        if ((position.y < MINIMUM_DISTANCE_TO_BORDER && directionY < 0) ||
+            (map.getHeight() - position.y < MINIMUM_DISTANCE_TO_BORDER && directionY > 0)) {
             directionY = -directionY;
         }
     }
@@ -245,16 +203,16 @@ public class Scout extends Worker {
     @Override
     public void onSetTargetBuilding(Building building) {
 
-        /* If this is called it means that the scout will be assigned to a lookout tower and will not walk around exploring */
+        // If this is called it means that the scout will be assigned to a lookout tower and will not walk around exploring
         state = WALKING_TO_ASSIGNED_LOOKOUT_TOWER;
     }
 
     @Override
-    void onEnterBuilding(Building building) {
+    protected void onEnterBuilding(Building building) {
 
-        /* Discover the area around the tower */
-        for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
-            getPlayer().discover(point);
+        // Discover the area around the tower
+        for (var point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
+            player.discover(point);
         }
 
         state = WORKING_IN_LOOKOUT_TOWER;
@@ -262,29 +220,23 @@ public class Scout extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() {
-
-        /* Discover each point the scout walks on */
-        map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
+        map.discoverPointsWithinRadius(getPlayer(), position, DISCOVERY_RADIUS);
 
         if (state == RETURNING_TO_STORAGE ||
             state == WALKING_TO_TARGET ||
             state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER ||
             state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
-            /* Return to storage if the planned path no longer exists */
-            if (map.isFlagAtPoint(getPosition()) && !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            // Return to storage if the planned path no longer exists
+            if (map.isFlagAtPoint(position) && !map.arePointsConnectedByRoads(position, getTarget())) {
                 returnToStorage();
             }
 
-            /* Return to storage if the planned path no longer exists */
+            // Return to storage if the planned path no longer exists
             if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER &&
-                    map.isFlagAtPoint(getPosition()) &&
-                    !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
-
-                /* Don't try to enter upon arrival */
+                    map.isFlagAtPoint(position) &&
+                    !map.arePointsConnectedByRoads(position, getTarget())) {
                 clearTargetBuilding();
-
-                /* Go back to the storage */
                 returnToStorage();
             }
         }
@@ -298,99 +250,77 @@ public class Scout extends Worker {
 
     private Point findNextPoint() {
 
-        /* 1. Get list of available next adjacent off-road points */
-        Collection<Point> possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(getPosition());
+        // 1. Get list of available next adjacent off-road points
+        Collection<Point> possibleAdjacentNextSteps = map.getPossibleAdjacentOffRoadConnections(position);
 
-        /* 2. Calculate scores for each point based on how closely they match the existing direction */
+        // 2. Calculate scores for each point based on how closely they match the existing direction
         List<EntityAndScore<Point>> pointsAndScores = new ArrayList<>();
 
         double angleForExistingDirection = calculateAngle(directionX, directionY);
 
-        Point position = getPosition();
+        for (var point : possibleAdjacentNextSteps) {
+            var candidateDirectionX = point.x - position.x;
+            var candidateDirectionY = point.y - position.y;
 
-        for (Point point : possibleAdjacentNextSteps) {
-            int candidateDirectionX = point.x - position.x;
-            int candidateDirectionY = point.y - position.y;
+            var angleForCandidateDirection = calculateAngle(candidateDirectionX, candidateDirectionY);
 
-            double angleForCandidateDirection = calculateAngle(candidateDirectionX, candidateDirectionY);
-
-            /* Calculate score - lower is better */
+            // Calculate score - lower is better
             // FIXME: this doesn't correctly score angles that are close but on opposite side of the positive X axis
-            double score = Math.abs(angleForExistingDirection - angleForCandidateDirection);
+            var score = Math.abs(angleForExistingDirection - angleForCandidateDirection);
 
             pointsAndScores.add(new EntityAndScore<>(point, score));
         }
 
-        /* 3. Sort by how closely they match the existing direction */
+        // 3. Sort by how closely they match the existing direction
         pointsAndScores.sort(Comparator.comparingDouble(pointEntityAndScore -> pointEntityAndScore.score));
 
-        /* 4. Go through the points and select which one to pick */
+        // 4. Go through the points and select which one to pick
         for (int i = 0; i < pointsAndScores.size(); i++) {
-            Point point = pointsAndScores.get(i).entity;
-
+            var point = pointsAndScores.get(i).entity;
             boolean isLastOption = i == pointsAndScores.size() - 1;
 
-            /* Don't go backwards unless it's the only option */
+            // Don't go backwards unless it's the only option
             if (point.equals(previousPosition) && !isLastOption) {
                 continue;
             }
 
-            /* If it's the last option - take it */
+            // If it's the last option - take it
             if (isLastOption) {
                 return point;
             }
 
-            /* Select the point in the right direction most of the time but sometimes skip to a less suitable point */
-            if (random.nextInt(11) < 8) {
+            // Select the point in the right direction most of the time but sometimes skip to a less suitable point
+            if (RANDOM.nextInt(11) < 8) {
                 return point;
             }
         }
 
-        /* 5. Return null if there is no point to go to */
+        // 5. Return null if there is no point to go to
         return null;
     }
 
     private Point findDirectionToBorder() {
-        Point position = getPosition();
-        Point closestPointOnBorder = null;
-        double distanceToBorder = Integer.MAX_VALUE;
-
-        for (Point point : getPlayer().getBorderPoints()) {
-            double distanceForPoint = position.distance(point);
-
-            if (distanceForPoint < distanceToBorder) {
-                distanceToBorder = distanceForPoint;
-                closestPointOnBorder = point;
-            }
-        }
-
-        return closestPointOnBorder;
+        return getPlayer().getBorderPoints().stream()
+                .min(Comparator.comparingDouble(position::distance))
+                .orElse(null);
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
-
-        state = RETURNING_TO_STORAGE;
-
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, SCOUT);
         clearTargetBuilding();
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SCOUT);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), SCOUT);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = GOING_TO_DIE;
             }
         }
@@ -399,7 +329,6 @@ public class Scout extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 }

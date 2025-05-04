@@ -1,6 +1,6 @@
 package org.appland.settlers.model.statistics;
 
-public record MerchandiseStatistics(
+public record PlayerStatistics(
         CumulativeDataSeries wood,
         CumulativeDataSeries plank,
         CumulativeDataSeries stone,
@@ -14,5 +14,12 @@ public record MerchandiseStatistics(
         CumulativeDataSeries coin,
         CumulativeDataSeries tools,
         CumulativeDataSeries weapons,
-        CumulativeDataSeries boats
+        CumulativeDataSeries boats,
+        CumulativeDataSeries totalAmountBuildings,
+        SnapshotDataSeries land,
+        CumulativeDataSeries coins,
+        CumulativeDataSeries soldiers,
+        CumulativeDataSeries workers,
+        CumulativeDataSeries killedEnemies,
+        CumulativeDataSeries goods
 ) { }

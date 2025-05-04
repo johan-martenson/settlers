@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -34,6 +33,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @RequiresWorker(workerType = STOREHOUSE_WORKER)
 public class Storehouse extends Building {
     private static final int TIME_TO_CREATE_NEW_SOLDIER = 100;
+    private static final Set<Material> CAN_CREATE_WORKER_WITHOUT_TOOL = Set.of(WELL_WORKER, HELPER, BREWER, PIG_BREEDER);
     private static final Map<Material, Material> WORKER_TO_TOOL_MAP = Map.ofEntries(
             entry(WOODCUTTER_WORKER, AXE),
             entry(FORESTER, SHOVEL),
@@ -50,7 +50,9 @@ public class Storehouse extends Building {
             entry(MINER, PICK_AXE),
             entry(FARMER, SCYTHE),
             entry(BUILDER, HAMMER),
-            entry(SHIPWRIGHT, HAMMER)
+            entry(SHIPWRIGHT, HAMMER),
+            entry(GEOLOGIST, PICK_AXE),
+            entry(METALWORKER, HAMMER)
     );
 
     private final Countdown draftCountdown = new Countdown();
@@ -75,7 +77,7 @@ public class Storehouse extends Building {
         inventory.merge(SHIELD, -privatesToDraft, Integer::sum);
         inventory.merge(SWORD, -privatesToDraft, Integer::sum);
 
-        getMap().getStatisticsManager().soldiersDrafted(getPlayer(), getMap().getTime(), privatesToDraft);
+        map.getStatisticsManager().soldiersDrafted(getPlayer(), map.getTime(), privatesToDraft);
     }
 
     @Override
@@ -103,7 +105,7 @@ public class Storehouse extends Building {
                     .findFirst()
                     .map(material -> {
                         Worker worker = retrieveWorker(material, null);
-                        getMap().placeWorker(worker, this);
+                        map.placeWorker(worker, this);
                         worker.goToOtherStorage(this);
 
                         return true;
@@ -123,7 +125,7 @@ public class Storehouse extends Building {
                             .findFirst() // Find the first suitable storehouse
                             .ifPresent(storehouse -> {
                                 Worker worker = retrieveWorker(workerType, null);
-                                getMap().placeWorker(worker, this);
+                                map.placeWorker(worker, this);
                                 worker.goToStorehouse((Storehouse) storehouse);
                                 storehouse.promiseDelivery(workerType);
                             })
@@ -143,7 +145,7 @@ public class Storehouse extends Building {
 
         return getPlayer().getBuildings().stream()
                 .filter(building -> !building.equals(this))
-                .filter(building -> building.needsBuilder() && getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) != null)
+                .filter(building -> building.needsBuilder() && map.findWayWithExistingRoads(getPosition(), building.getPosition()) != null)
                 .filter(building -> {
                     Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
                     return storehouse == null || equals(storehouse) || !storehouse.hasAtLeastOne(BUILDER);
@@ -151,7 +153,7 @@ public class Storehouse extends Building {
                 .findFirst()
                 .map(building -> {
                     Worker builder = retrieveWorker(BUILDER, null);
-                    getMap().placeWorker(builder, this);
+                    map.placeWorker(builder, this);
                     builder.setTargetBuilding(building);
                     building.promiseBuilder((Builder) builder);
                     return true;
@@ -162,19 +164,19 @@ public class Storehouse extends Building {
     private boolean assignGeologists() {
 
         // Leave if there are no scouts in this storage.
-        if (!hasAtLeastOne(GEOLOGIST)) {
+        if (!hasAtLeastOne(GEOLOGIST) && !hasAtLeastOne(WORKER_TO_TOOL_MAP.get(GEOLOGIST))) {
             return false;
         }
 
         // Go through the flags and look for flags waiting for geologists.
-        return getMap().getFlags().stream()
+        return map.getFlags().stream()
                 .filter(Flag::needsGeologist)
-                .filter(flag -> getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition()))
+                .filter(flag -> map.arePointsConnectedByRoads(getPosition(), flag.getPosition()))
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
-                    Geologist geologist = (Geologist) retrieveWorker(GEOLOGIST, null);
-                    getMap().placeWorker(geologist, this);
+                    var geologist = (Geologist) retrieveWorker(GEOLOGIST, null);
+                    map.placeWorker(geologist, this);
                     geologist.setTarget(flag.getPosition());
                     flag.geologistSent();
                     return true;
@@ -183,28 +185,30 @@ public class Storehouse extends Building {
     }
 
     private boolean assignScouts() {
-
-        // Leave if there are no scouts in this storage.
         if (!hasAtLeastOne(SCOUT)) {
             if (hasAtLeastOne(BOW)) {
+                System.out.println("Created scout");
                 inventory.merge(BOW, -1, Integer::sum);
                 inventory.merge(SCOUT, 1, Integer::sum);
+
+                map.getStatisticsManager().workerCreated(player, map.getTime());
             } else {
                 return false;
             }
         }
 
         // Go through flags and look for flags that are waiting for scouts.
-        return getMap().getFlags().stream()
+        return map.getFlags().stream()
                 .filter(Flag::needsScout)
-                .filter(flag -> getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition()))
+                .filter(flag -> map.arePointsConnectedByRoads(getPosition(), flag.getPosition()))
                 .filter(flag -> isClosestStorage(this))
                 .findFirst()
                 .map(flag -> {
                     Scout scout = (Scout) retrieveWorker(SCOUT, null);
-                    getMap().placeWorker(scout, this);
+                    map.placeWorker(scout, this);
                     scout.setTarget(flag.getPosition());
                     flag.scoutSent();
+
                     return true;
                 })
                 .orElse(false);
@@ -223,7 +227,7 @@ public class Storehouse extends Building {
                             return false;
                         }
 
-                        if (getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                        if (map.findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
                             return false;
                         }
 
@@ -232,17 +236,15 @@ public class Storehouse extends Building {
                     } else if (building.needsWorker()) {
                         var material = building.getWorkerType();
                         var toolForWorker = WORKER_TO_TOOL_MAP.get(material);
-
                         var hasWorker = hasAtLeastOne(material);
                         var canMakeWorker = (toolForWorker != null && hasAtLeastOne(toolForWorker))
-                                || material == WELL_WORKER
-                                || material == HELPER;
+                                || CAN_CREATE_WORKER_WITHOUT_TOOL.contains(material);
 
                         if (!hasWorker && !canMakeWorker) {
                             return false;
                         }
 
-                        if (getMap().findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
+                        if (map.findWayWithExistingRoads(getPosition(), building.getPosition()) == null) {
                             return false;
                         }
 
@@ -256,12 +258,12 @@ public class Storehouse extends Building {
                 .map(building -> {
                     if (building.isMilitaryBuilding() && !building.isHarbor()) {
                         Soldier military = retrieveSoldierToPopulateBuilding();
-                        getMap().placeWorker(military, this);
+                        map.placeWorker(military, this);
                         military.setTargetBuilding(building);
                         building.promiseSoldier(military);
                     } else if (building.needsWorker()) {
                         Worker worker = retrieveWorker(building.getWorkerType(), building);
-                        getMap().placeWorker(worker, this);
+                        map.placeWorker(worker, this);
                         worker.setTargetBuilding(building);
                         building.promiseWorker(worker);
                     }
@@ -271,7 +273,7 @@ public class Storehouse extends Building {
     }
 
     private boolean assignCouriers() {
-        return hasAtLeastOne(COURIER) && getMap().getRoads().stream()
+        return hasAtLeastOne(COURIER) && map.getRoads().stream()
                     .filter(road -> road.getPlayer().equals(getPlayer()) && road.needsCourier())
                     .filter(road -> {
                         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
@@ -280,7 +282,7 @@ public class Storehouse extends Building {
                     .findFirst()
                     .map(road -> {
                         Courier courier = retrieveCourier();
-                        getMap().placeWorker(courier, this);
+                        map.placeWorker(courier, this);
                         courier.assignToRoad(road);
                         return true;
                     }).orElse(false);
@@ -309,9 +311,9 @@ public class Storehouse extends Building {
 
         retrieveOneFromInventory(material);
 
-        Cargo cargo = new Cargo(material, getMap());
+        var cargo = new Cargo(material, map);
         cargo.setPosition(getFlag().getPosition());
-        getPlayer().reportChangedInventory(this);
+        player.reportChangedInventory(this);
 
         return cargo;
     }
@@ -321,28 +323,33 @@ public class Storehouse extends Building {
     }
 
     public void depositWorker(Worker worker) {
-        Material material = Material.workerToMaterial(worker);
+        var material = Material.workerToMaterial(worker);
 
         storeOneInInventory(material);
-        getMap().removeWorker(worker);
+        map.removeWorker(worker);
         getPlayer().reportChangedInventory(this);
     }
 
     public Worker retrieveWorker(Material workerType, Building building) {
-        if (workerType != HELPER && !hasAtLeastOne(workerType)) {
-            var tool = WORKER_TO_TOOL_MAP.get(workerType);
+        var hasWorker = hasAtLeastOne(workerType);
+        var canMakeWorkerWithoutTool = CAN_CREATE_WORKER_WITHOUT_TOOL.contains(workerType);
+        var tool = WORKER_TO_TOOL_MAP.get(workerType);
+        var canMakeWorkerWithTool = tool != null && hasAtLeastOne(WORKER_TO_TOOL_MAP.get(workerType));
 
-            if (hasAtLeastOne(tool)) {
-                inventory.merge(tool, -1, Integer::sum);
-                inventory.merge(workerType, 1, Integer::sum);
-
-                getMap().getStatisticsManager().workerCreated(getPlayer(), getMap().getTime());
-            } else if (workerType != WELL_WORKER) {
-                throw new InvalidGameLogicException(String.format("There are no %s to retrieve", workerType));
-            }
+        if (!hasWorker && !canMakeWorkerWithoutTool && !canMakeWorkerWithTool) {
+            throw new InvalidGameLogicException(String.format("Can't retrieve %s", workerType));
         }
 
-        var worker = GameUtils.createWorker(workerType, building, getPlayer(), getMap());
+        if (!hasWorker && canMakeWorkerWithoutTool) {
+            map.getStatisticsManager().workerCreatedWithoutTool(player, map.getTime());
+        } else if (!hasWorker && canMakeWorkerWithTool) {
+            inventory.merge(tool, -1, Integer::sum);
+            inventory.merge(workerType, 1, Integer::sum);
+
+            map.getStatisticsManager().workerCreated(player, map.getTime());
+        }
+
+        var worker = GameUtils.createWorker(workerType, building, player, map);
         worker.setPosition(getFlag().getPosition());
         retrieveOneFromInventory(workerType);
 
@@ -355,23 +362,23 @@ public class Storehouse extends Building {
 
     public Soldier retrieveSoldierFromInventory(Material material) {
         if (!hasAtLeastOne(material)) {
-            throw new InvalidGameLogicException(String.format("Can't retrieve military %s", material));
+            throw new InvalidGameLogicException(String.format("Can't retrieve soldier %s", material));
         }
 
         retrieveOneFromInventory(material);
 
-        Soldier.Rank rank = material.toRank();
+        var rank = material.toRank();
 
-        Soldier military = new Soldier(getPlayer(), rank, getMap());
+        var soldier = new Soldier(getPlayer(), rank, map);
 
-        military.setPosition(getFlag().getPosition());
+        soldier.setPosition(getFlag().getPosition());
 
-        return military;
+        return soldier;
     }
 
     public Courier retrieveCourier() {
         // The storage never runs out of couriers
-        Courier courier = new Courier(getPlayer(), getMap());
+        var courier = new Courier(getPlayer(), map);
         courier.setPosition(getFlag().getPosition());
         return courier;
     }
@@ -379,16 +386,16 @@ public class Storehouse extends Building {
     public Soldier retrieveSoldierToPopulateBuilding() {
 
         /* Go through the list in order of preference and try to retrieve a soldier */
-        for (Soldier.Rank rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
-            Material preferredSoldierType = rank.toMaterial();
+        for (var rank : GameUtils.strengthToRank(getPlayer().getStrengthOfSoldiersPopulatingBuildings())) {
+            var preferredSoldierType = rank.toMaterial();
 
             if (hasAtLeastOne(preferredSoldierType)) {
                 retrieveOneFromInventory(preferredSoldierType);
 
-                Soldier military = new Soldier(getPlayer(), rank, getMap());
-                military.setPosition(getFlag().getPosition());
+                var soldier = new Soldier(getPlayer(), rank, map);
+                soldier.setPosition(getFlag().getPosition());
 
-                return military;
+                return soldier;
             }
         }
 
@@ -409,7 +416,7 @@ public class Storehouse extends Building {
             return;
         }
 
-        getPlayer().reportChangedInventory(this);
+        player.reportChangedInventory(this);
 
         inventory.merge(material, -1, Integer::sum);
     }
@@ -438,8 +445,7 @@ public class Storehouse extends Building {
     }
 
     private boolean isClosestStorage(Building building) {
-        Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
-
+        var storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
         return equals(storehouse);
     }
 
@@ -448,7 +454,7 @@ public class Storehouse extends Building {
             return false;
         }
 
-        return getMap().getRoads().stream()
+        return map.getRoads().stream()
                 .filter(road -> road.getPlayer().equals(getPlayer())) // Filter roads that belong to the player
                 .filter(Road::isMainRoad) // Filter only main roads
                 .filter(Road::needsDonkey) // Filter roads that need a donkey
@@ -459,7 +465,7 @@ public class Storehouse extends Building {
                 .findFirst() // Find the first suitable road
                 .map(road -> {
                     Donkey donkey = retrieveDonkey();
-                    getMap().placeWorker(donkey, getFlag());
+                    map.placeWorker(donkey, getFlag());
                     donkey.assignToRoad(road);
                     return true;
                 })
@@ -470,7 +476,7 @@ public class Storehouse extends Building {
         if (hasAtLeastOne(DONKEY)) {
             retrieveOneFromInventory(DONKEY);
 
-            return new Donkey(getPlayer(), getMap());
+            return new Donkey(getPlayer(), map);
         }
 
         return null;
@@ -513,7 +519,7 @@ public class Storehouse extends Building {
     }
 
     public Collection<Cargo> retrieve(Material material, int amount) {
-        List<Cargo> cargos = new ArrayList<>();
+        var cargos = new ArrayList<Cargo>();
 
         int cargosToReturn = Math.min(amount, getAmount(material));
 
@@ -522,5 +528,14 @@ public class Storehouse extends Building {
         }
 
         return cargos;
+    }
+
+    @Override
+    public Map<Material, Integer> getInventory() {
+        if (isReady()) {
+            return inventory;
+        }
+
+        return super.getInventory();
     }
 }

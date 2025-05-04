@@ -38,8 +38,8 @@ public class TestKilledEnemiesStatistics {
         // Verify that killed enemies statistics is zero at start
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().getLast().value(), 0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().getLast().value(), 0);
     }
 
     @Test
@@ -122,9 +122,9 @@ public class TestKilledEnemiesStatistics {
         // Verify that a monitoring event is sent when a soldier dies and the military statistics changes.
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().getFirst().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().getFirst().value(), 0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().getFirst().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().getFirst().value(), 0);
 
         for (int i = 0; i < 1000; i++) {
             if (defender.isDead()) {
@@ -137,9 +137,9 @@ public class TestKilledEnemiesStatistics {
             map.stepTime();
         }
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).killedEnemies().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).killedEnemies().getMeasurements().getLast().value(), 1);
 
         map.stepTime();
 

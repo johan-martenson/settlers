@@ -9,6 +9,7 @@ import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Woodcutter;
+import org.appland.settlers.model.statistics.StatisticsManager;
 import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
@@ -38,8 +39,8 @@ public class TestBuildingStatistics {
         var statisticsManager = map.getStatisticsManager();
 
         var buildingStatsForAllPlayers = statisticsManager.getBuildingStatistics();
-        var generalStatisticsForPlayer0 = statisticsManager.getGeneralStatistics(player0);
-        var generalStatisticsForPlayer1 = statisticsManager.getGeneralStatistics(player1);
+        var generalStatisticsForPlayer0 = statisticsManager.getPlayerStatistics(player0);
+        var generalStatisticsForPlayer1 = statisticsManager.getPlayerStatistics(player1);
 
         assertEquals(buildingStatsForAllPlayers.size(), 2);
         assertEquals(buildingStatsForAllPlayers.get(player0).size(), 1);
@@ -118,7 +119,8 @@ public class TestBuildingStatistics {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(map.getStatisticsManager().getGeneralStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
+        StatisticsManager statisticsManager5 = map.getStatisticsManager();
+        assertEquals(statisticsManager5.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
 
         var point1 = new Point(40, 40);
         var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
@@ -129,20 +131,24 @@ public class TestBuildingStatistics {
 
         var road = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
-        assertEquals(map.getStatisticsManager().getGeneralStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
-        assertEquals(map.getStatisticsManager().getGeneralStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 1);
+        StatisticsManager statisticsManager4 = map.getStatisticsManager();
+        assertEquals(statisticsManager4.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 1);
+        StatisticsManager statisticsManager3 = map.getStatisticsManager();
+        assertEquals(statisticsManager3.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 1);
 
 
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        assertEquals(map.getStatisticsManager().getGeneralStatistics(player0).totalAmountBuildings().getMeasurements().size(), 2);
-        assertEquals(map.getStatisticsManager().getGeneralStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 2);
+        StatisticsManager statisticsManager2 = map.getStatisticsManager();
+        assertEquals(statisticsManager2.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), 2);
+        StatisticsManager statisticsManager1 = map.getStatisticsManager();
+        assertEquals(statisticsManager1.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), 2);
 
         // Verify that burning down the house impacts the building statistics
         var statisticsManager = map.getStatisticsManager();
 
         var buildingStatsForAllPlayers = statisticsManager.getBuildingStatistics();
-        var generalStatisticsForPlayer0 = statisticsManager.getGeneralStatistics(player0);
+        var generalStatisticsForPlayer0 = statisticsManager.getPlayerStatistics(player0);
 
         System.out.println(buildingStatsForAllPlayers);
 

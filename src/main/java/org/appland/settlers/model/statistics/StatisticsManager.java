@@ -17,70 +17,62 @@ public class StatisticsManager {
 
     private final Map<Player, Map<Class<? extends Building>, CumulativeDataSeries>> buildingStatistics = new HashMap<>();
     private final Set<StatisticsListener> listeners = new HashSet<>();
-    private final Map<Player, GeneralStatistics> generalStatistics = new HashMap<>();
-    private final Map<Player, MerchandiseStatistics> merchandiseStatistics = new HashMap<>();
-
-    public StatisticsManager() { }
-
-    public GeneralStatistics getGeneralStatistics(Player player) {
-        return generalStatistics.computeIfAbsent(player, p -> new GeneralStatistics(
-                new CumulativeDataSeries("Total houses"),
-                new SnapshotDataSeries("Land"),
-                new CumulativeDataSeries("Produced coins", 0),
-                new CumulativeDataSeries("Soldiers"),
-                new CumulativeDataSeries("Workers"),
-                new CumulativeDataSeries("Killed enemies", 0),
-                new CumulativeDataSeries("Goods")));
-    }
+    private final Map<Player, PlayerStatistics> playerStatistics = new HashMap<>();
 
     public Map<Player, Map<Class<? extends Building>, CumulativeDataSeries>> getBuildingStatistics() {
         return buildingStatistics;
     }
 
-    public <T extends Building> void houseRemoved(T building, long time) {
+    public <T extends Building> void houseTornDown(T building, long time) {
         var player = building.getPlayer();
+        var playerStatistics = getPlayerStatistics(player);
 
-        listeners.forEach(listener -> listener.buildingStatisticsChanged(building));
+        if (building.isUnderConstruction()) {
+            playerStatistics.goods().decrease(building.getAmount(Material.PLANK), time);
+            playerStatistics.goods().decrease(building.getAmount(Material.STONE), time);
 
-        buildingStatistics.get(player).get(building.getClass()).decrease(time);
+            listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+        } else if (building.isReady()) {
+            buildingStatistics.get(player).get(building.getClass()).decrease(time);
+            playerStatistics.totalAmountBuildings().decrease(time);
+            playerStatistics.goods().decrease(
+                    building.getInventory().values().stream().mapToInt(value -> value).sum(),
+                    time);
 
-        generalStatistics.get(player).totalAmountBuildings().decrease(time);
+            listeners.forEach(listener -> listener.buildingStatisticsChanged(building));
+        }
     }
 
     public <T extends Building> void houseAdded(T house, long time) {
         var player = house.getPlayer();
 
-        // Maintain detailed building statistics
         var dataSeries = buildingStatistics
                 .computeIfAbsent(player, k -> new HashMap<>())
                 .computeIfAbsent(house.getClass(), k -> new CumulativeDataSeries(house.getClass().getSimpleName()));
 
-        if (dataSeries.getMeasurements().isEmpty()) {
-            if (! (house instanceof Headquarter) && time > START_TIME) {
-                dataSeries.report(START_TIME, 0);
-            }
+        if (dataSeries.getMeasurements().isEmpty() && !(house instanceof Headquarter) && time > START_TIME) {
+            dataSeries.report(START_TIME, 0);
         }
 
         dataSeries.increase(time);
-
-        // Maintain statistics on total amount of houses
-        getGeneralStatistics(player).totalAmountBuildings().increase(time);
+        getPlayerStatistics(player).totalAmountBuildings().increase(time);
 
         listeners.forEach(listener -> listener.buildingStatisticsChanged(house));
     }
 
     public void coinProduced(Player player, long time) {
-        getGeneralStatistics(player).coins().increase(time);
-        getGeneralStatistics(player).goods().decrease(time);
-        getMerchandiseStatistics(player).coin().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.coins().increase(time);
+        playerStatistics.coin().increase(time);
+        playerStatistics.goods().decrease(time);
 
-        // TODO: should consolidate and only measure coins once
+        // TODO: should consolidate and only measure coins once? Is it tracking different things? E.g. current inventory vs produced coins?
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void soldiersDrafted(Player player, long time, int amount) {
-        var generalStatistics = getGeneralStatistics(player);
+        var generalStatistics = getPlayerStatistics(player);
         generalStatistics.soldiers().increase(amount, time);
         generalStatistics.goods().decrease(3, time);
 
@@ -92,31 +84,33 @@ public class StatisticsManager {
     }
 
     public void workerCreated(Player player, long time) {
-        getGeneralStatistics(player).workers().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.workers().increase(time);
+        playerStatistics.goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void soldierDied(Player player, Player enemyPlayer, long time) {
-        getGeneralStatistics(player).soldiers().decrease(time);
-        getGeneralStatistics(enemyPlayer).killedEnemies().increase(time);
+        getPlayerStatistics(player).soldiers().decrease(time);
+        getPlayerStatistics(enemyPlayer).killedEnemies().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
         listeners.forEach(listener -> listener.generalStatisticsChanged(enemyPlayer));
     }
 
     public void landUpdated(Player player, long time, int amount) {
-        getGeneralStatistics(player).land().report(time, amount);
+        getPlayerStatistics(player).land().report(time, amount);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void soldiersAtStart(Player player, long time, int amount) {
-        getGeneralStatistics(player).soldiers().report(time, amount);
+        getPlayerStatistics(player).soldiers().report(time, amount);
     }
 
-    public MerchandiseStatistics getMerchandiseStatistics(Player player) {
-        return merchandiseStatistics.computeIfAbsent(player, k -> new MerchandiseStatistics(
+    public PlayerStatistics getPlayerStatistics(Player player) {
+        return playerStatistics.computeIfAbsent(player, k -> new PlayerStatistics(
                 new CumulativeDataSeries("Wood", 0),
                 new CumulativeDataSeries("Plank", 0),
                 new CumulativeDataSeries("Stone", 0),
@@ -130,18 +124,26 @@ public class StatisticsManager {
                 new CumulativeDataSeries("Coin", 0),
                 new CumulativeDataSeries("Tools", 0),
                 new CumulativeDataSeries("Weapons", 0),
-                new CumulativeDataSeries("Boats", 0)));
+                new CumulativeDataSeries("Boats", 0),
+                new CumulativeDataSeries("Total houses"),
+                new SnapshotDataSeries("Land"),
+                new CumulativeDataSeries("Produced coins", 0),
+                new CumulativeDataSeries("Soldiers"),
+                new CumulativeDataSeries("Workers"),
+                new CumulativeDataSeries("Killed enemies", 0),
+                new CumulativeDataSeries("Goods")));
     }
 
     public void treeCutDown(Player player, long time) {
-        getMerchandiseStatistics(player).wood().increase(time);
-        getGeneralStatistics(player).goods().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.wood().increase(time);
+        playerStatistics.goods().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void plankProduced(Player player, long time) {
-        getMerchandiseStatistics(player).plank().increase(time);
+        getPlayerStatistics(player).plank().increase(time);
 
         // Don't update goods statistics. Producing a plank means consuming a piece of wood
 
@@ -149,40 +151,43 @@ public class StatisticsManager {
     }
 
     public void stoneProduced(Player player, long time) {
-        getMerchandiseStatistics(player).stone().increase(time);
-        getGeneralStatistics(player).goods().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.stone().increase(time);
+        playerStatistics.goods().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void caughtFish(Player player, long time) {
-        getMerchandiseStatistics(player).food().increase(time);
-        getGeneralStatistics(player).goods().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.food().increase(time);
+        playerStatistics.goods().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void meatProduced(Player player, long time) {
-        getMerchandiseStatistics(player).food().increase(time);
+        getPlayerStatistics(player).food().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void waterProduced(Player player, long time) {
-        getMerchandiseStatistics(player).water().increase(time);
-        getGeneralStatistics(player).goods().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.water().increase(time);
+        playerStatistics.goods().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void beerProduced(Player player, long time) {
-        getMerchandiseStatistics(player).beer().increase(time);
+        getPlayerStatistics(player).beer().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void mined(Player player, long time, Material mineral) {
-        var merchandiseStatistics = getMerchandiseStatistics(player);
+        var merchandiseStatistics = getPlayerStatistics(player);
 
         switch (mineral) {
             case COAL -> merchandiseStatistics.coal().increase(time);
@@ -195,48 +200,52 @@ public class StatisticsManager {
     }
 
     public void ironBarProduced(Player player, long time) {
-        getMerchandiseStatistics(player).ironBar().increase(time);
-        getGeneralStatistics(player).goods().decrease(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.ironBar().increase(time);
+        playerStatistics.goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void toolProduced(Player player, long time) {
-        getMerchandiseStatistics(player).tools().increase(time);
-        getGeneralStatistics(player).goods().decrease(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.tools().increase(time);
+        playerStatistics.goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void weaponProduced(Player player, long time) {
-        getMerchandiseStatistics(player).weapons().increase(time);
-        getGeneralStatistics(player).goods().decrease(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.weapons().increase(time);
+        playerStatistics.goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void boatProduced(Player player, long time) {
-        getMerchandiseStatistics(player).boats().increase(time);
+        getPlayerStatistics(player).boats().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void breadProduced(Player player, long time) {
-        getMerchandiseStatistics(player).food().increase(time);
-        getGeneralStatistics(player).goods().decrease(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.food().increase(time);
+        playerStatistics.goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void flagRemoved(Flag flag, long time) {
-        getGeneralStatistics(flag.getPlayer()).goods().decrease(flag.getStackedCargo().size(), time);
+        getPlayerStatistics(flag.getPlayer()).goods().decrease(flag.getStackedCargo().size(), time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(flag.getPlayer()));
     }
 
     public void buildingConstructed(Building building, long time) {
         var material = building.getMaterialNeededForConstruction();
-        var goods = getGeneralStatistics(building.getPlayer()).goods();
+        var goods = getPlayerStatistics(building.getPlayer()).goods();
 
         if (material.planks() > 0) {
             goods.decrease(material.planks(), time);
@@ -250,30 +259,37 @@ public class StatisticsManager {
     }
 
     public void stoneThrown(Catapult catapult, long time) {
-        getGeneralStatistics(catapult.getPlayer()).goods().decrease(time);
+        getPlayerStatistics(catapult.getPlayer()).goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(catapult.getPlayer()));
     }
 
     public void wheatHarvested(Player player, long time) {
-        getGeneralStatistics(player).goods().increase(time);
+        getPlayerStatistics(player).goods().increase(time);
     }
 
     public void caughtWildAnimal(Player player, long time) {
-        getGeneralStatistics(player).goods().increase(time);
-        getMerchandiseStatistics(player).food().increase(time);
+        var playerStatistics = getPlayerStatistics(player);
+        playerStatistics.goods().increase(time);
+        playerStatistics.food().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void pigGrown(Player player, long time) {
-        getGeneralStatistics(player).goods().decrease(time);
+        getPlayerStatistics(player).goods().decrease(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }
 
     public void donkeyGrown(Player player, long time) {
-        getGeneralStatistics(player).goods().decrease(2, time);
+        getPlayerStatistics(player).goods().decrease(2, time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
+    public void workerCreatedWithoutTool(Player player, long time) {
+        getPlayerStatistics(player).workers().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
     }

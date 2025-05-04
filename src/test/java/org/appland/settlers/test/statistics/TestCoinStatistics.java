@@ -37,8 +37,8 @@ public class TestCoinStatistics {
         // Verify that the initial statistics for coins are correct.
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), headquarter.getAmount(COIN));
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), headquarter.getAmount(COIN));
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time(), 1);
     }
 
     @Test
@@ -83,18 +83,18 @@ public class TestCoinStatistics {
             assertNull(minter.getCargo());
         }
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 0);
 
         map.stepTime();
 
         assertNotNull(minter.getCargo());
         assertEquals(minter.getCargo().getMaterial(), COIN);
         assertTrue(mint.getFlag().getStackedCargo().isEmpty());
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
     }
 
     @Test
@@ -145,9 +145,9 @@ public class TestCoinStatistics {
         // Wait for a coin to get produced
         var statisticsManager = map.getStatisticsManager();
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 0);
 
         for (int i = 0; i < 149; i++) {
             map.stepTime();
@@ -163,9 +163,9 @@ public class TestCoinStatistics {
         assertNotNull(minter.getCargo());
         assertEquals(minter.getCargo().getMaterial(), COIN);
         assertTrue(mint.getFlag().getStackedCargo().isEmpty());
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
 
         // Wait for the barracks to receive the coin
         Utils.waitForBuildingToHave(barracks, COIN, 1);
@@ -173,17 +173,17 @@ public class TestCoinStatistics {
         // Wait for the coin to get consumed when a soldier gets promoted
         assertEquals(barracks.getHostedSoldiers().size(), 1);
         assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Soldier.Rank.PRIVATE_RANK);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
 
         Utils.waitForBuildingToHave(barracks, COIN, 0);
 
         assertEquals(barracks.getHostedSoldiers().size(), 1);
         assertEquals(barracks.getHostedSoldiers().getFirst().getRank(), Soldier.Rank.PRIVATE_FIRST_CLASS_RANK);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
     }
 
     @Test
@@ -233,9 +233,9 @@ public class TestCoinStatistics {
             assertNull(minter.getCargo());
         }
 
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time(), 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 0);
         assertEquals(monitor.getStatisticsEvents().size(), 0);
 
         map.stepTime();
@@ -243,9 +243,9 @@ public class TestCoinStatistics {
         assertNotNull(minter.getCargo());
         assertEquals(minter.getCargo().getMaterial(), COIN);
         assertTrue(mint.getFlag().getStackedCargo().isEmpty());
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().size(), 2);
-        assertTrue(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().time() > 1);
-        assertEquals(statisticsManager.getGeneralStatistics(player0).coins().getMeasurements().getLast().value(), 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), 2);
+        assertTrue(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().time() > 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), 1);
         assertEquals(monitor.getStatisticsEvents().size(), 1);
     }
 }

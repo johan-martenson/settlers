@@ -247,8 +247,7 @@ public class GameUtils {
          * @param building The building for which the allocation is tracked.
          */
         public void trackAllocation(Building building) {
-            int amount = consumed.getOrDefault(building.getClass(), 0);
-            consumed.put(building.getClass(), amount + 1);
+            consumed.merge(building.getClass(), 1, Integer::sum);
         }
 
         /**
@@ -1661,6 +1660,10 @@ public class GameUtils {
         public boolean isRoad() {
             return road != null;
         }
+
+        public boolean isStorehouse() {
+            return building != null && building.isStorehouse();
+        }
     }
 
     // Comparator for sorting soldiers by strength
@@ -1721,6 +1724,7 @@ public class GameUtils {
         if (material == HELPER) {
             return switch (building) {
                 case Mill mill -> new Miller(player, map);
+                case DonkeyFarm donkeyFarm -> new DonkeyBreeder(player, map);
                 default -> throw new InvalidGameLogicException(format("Can't create helper for %s", building));
             };
         }

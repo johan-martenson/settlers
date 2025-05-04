@@ -1,23 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model.actors;
 
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Countdown;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.WorkerAction;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Storehouse;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
@@ -40,17 +32,17 @@ import static org.appland.settlers.model.actors.Farmer.State.*;
  */
 @Walker(speed = 10)
 public class Farmer extends Worker {
-    private static final int TIME_TO_REST    = 99;
-    private static final int TIME_TO_PLANT   = 19;
+    private static final int TIME_TO_REST = 99;
+    private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_HARVEST = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private static final Random random = new Random(0);
+    private static final Random RANDOM = new Random(0);
 
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
-    private Optional<GameUtils.AllocationTracker> wheatAllocationTracker;
+    private final Countdown countdown = new Countdown();
+    private final ProductivityMeasurer productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);
 
-    private State state;
+    private Optional<GameUtils.AllocationTracker> wheatAllocationTracker = Optional.empty();
+    private State state = WALKING_TO_TARGET;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -72,12 +64,6 @@ public class Farmer extends Worker {
 
     public Farmer(Player player, GameMap map) {
         super(player, map);
-
-        state = WALKING_TO_TARGET;
-        countdown = new Countdown();
-
-        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT, null);
-        wheatAllocationTracker = Optional.empty();
     }
 
     public boolean isHarvesting() {
@@ -91,118 +77,85 @@ public class Farmer extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         state = RESTING_IN_HOUSE;
-
         countdown.countFrom(TIME_TO_REST);
-
         productivityMeasurer.setBuilding(building);
 
-        if (wheatAllocationTracker.isEmpty()) {
-            wheatAllocationTracker = Optional.of(new GameUtils.AllocationTracker(GameUtils.AllocationType.WHEAT_ALLOCATION, player, building.getPosition()));
-        }
+        wheatAllocationTracker = wheatAllocationTracker.or(() -> Optional.of(new GameUtils.AllocationTracker(GameUtils.AllocationType.WHEAT_ALLOCATION, player, building.getPosition())));
     }
 
     @Override
     protected void onIdle() throws InvalidUserActionException {
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (countdown.hasReachedZero() && home.isProductionEnabled()) {
+                    var cropToHarvest = findCropToHarvest();
+                    if (cropToHarvest != null) {
+                        state = GOING_OUT_TO_HARVEST;
+                        setOffroadTarget(cropToHarvest.getPosition());
+                    } else if (getSurroundingNonHarvestedCrops().size() < 5) {
+                        var point = getFreeSpotToPlant();
 
-        if (state == RESTING_IN_HOUSE) {
-            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
-                Crop cropToHarvest = findCropToHarvest();
+                        if (point == null) {
+                            productivityMeasurer.reportUnproductivity();
+                            return;
+                        }
 
-                if (cropToHarvest != null) {
-                    state = GOING_OUT_TO_HARVEST;
-
-                    setOffroadTarget(cropToHarvest.getPosition());
-                } else if (getSurroundingNonHarvestedCrops().size() < 5) {
-                    Point point = getFreeSpotToPlant();
-
-                    if (point == null) {
-
-                        /* Report that it's not possible to harvest or plant */
-                        productivityMeasurer.reportUnproductivity();
-
-                        return;
+                        setOffroadTarget(point);
+                        state = GOING_OUT_TO_PLANT;
                     }
-
-                    setOffroadTarget(point);
-
-                    state = GOING_OUT_TO_PLANT;
+                } else if (home.isProductionEnabled()) {
+                    countdown.step();
+                } else {
+                    productivityMeasurer.reportUnproductivity();
                 }
-            } else if (getHome().isProductionEnabled()) {
-                countdown.step();
-            } else {
-
-                /* Report that the farmer isn't working (or resting) */
-                productivityMeasurer.reportUnproductivity();
             }
-        } else if (state == PLANTING) {
-            if (countdown.hasReachedZero()) {
 
-                var cropType = Crop.CropType.TYPE_1;
+            case PLANTING -> {
+                if (countdown.hasReachedZero()) {
+                    var cropType = RANDOM.nextInt(10) % 2 == 0
+                            ? Crop.CropType.TYPE_2
+                            : Crop.CropType.TYPE_1;
+                    map.placeCrop(position, cropType);
 
-                if (random.nextInt(10) % 2 == 0) {
-                    cropType = Crop.CropType.TYPE_2;
+                    state = GOING_BACK_TO_HOUSE;
+                    returnHomeOffroad();
+                } else {
+                    countdown.step();
                 }
-
-                map.placeCrop(getPosition(), cropType);
-
-                state = GOING_BACK_TO_HOUSE;
-
-                returnHomeOffroad();
-            } else {
-                countdown.step();
             }
-        } else if (state == HARVESTING) {
-            if (countdown.hasReachedZero()) {
 
-                Crop crop = map.getCropAtPoint(getPosition());
-                crop.harvest();
+            case HARVESTING -> {
+                if (countdown.hasReachedZero()) {
+                    var crop = map.getCropAtPoint(position);
+                    crop.harvest();
+                    map.reportHarvestedCrop(crop);
+                    carriedCargo = new Cargo(WHEAT, map);
 
-                /* Report the harvested crop */
-                map.reportHarvestedCrop(crop);
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
+                    map.getStatisticsManager().wheatHarvested(player, map.getTime());
 
-                /* Create a crop cargo to make sure the map is set correctly */
-                setCargo(new Cargo(WHEAT, map));
-
-                /* Go back to the farm with the wheat */
-                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
-
-                returnHomeOffroad();
-
-                /* Report the productivity */
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
-
-                map.getStatisticsManager().wheatHarvested(getPlayer(), map.getTime());
-            } else {
-                countdown.step();
+                    state = GOING_BACK_TO_HOUSE_WITH_CARGO;
+                    returnHomeOffroad();
+                } else {
+                    countdown.step();
+                }
             }
-        } else if (state == IN_HOUSE_WITH_CARGO) {
 
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-
-                setTarget(getHome().getFlag().getPosition());
-
-                state = GOING_OUT_TO_PUT_CARGO;
-
-                /* Tell the flag that the cargo will be delivered */
-                getHome().getFlag().promiseCargo(getCargo());
-            } else {
-                state = WAITING_FOR_SPACE_ON_FLAG;
+            case IN_HOUSE_WITH_CARGO, WAITING_FOR_SPACE_ON_FLAG -> {
+                if (home.getFlag().hasPlaceForMoreCargo()) {
+                    setTarget(home.getFlag().getPosition());
+                    state = GOING_OUT_TO_PUT_CARGO;
+                    home.getFlag().promiseCargo(getCargo());
+                }
             }
-        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                state = GOING_OUT_TO_PUT_CARGO;
 
-                setTarget(getHome().getFlag().getPosition());
-
-                /* Tell the flag that the cargo will be delivered */
-                getHome().getFlag().promiseCargo(getCargo());
-            }
-        } else if (state == DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
@@ -241,102 +194,82 @@ public class Farmer extends Worker {
 
     @Override
     public void onArrival() {
+        switch (state) {
+            case GOING_OUT_TO_PUT_CARGO -> {
+                var cargo = getCargo();
+                cargo.setPosition(position);
+                var receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, this::isWheatReceiverAndAllocationAllowed);
 
-        if (state == GOING_OUT_TO_PUT_CARGO) {
-            Cargo cargo = getCargo();
+                if (receivingBuilding != null) {
+                    cargo.setTarget(receivingBuilding);
+                    receivingBuilding.promiseDelivery(cargo.getMaterial());
+                    wheatAllocationTracker.ifPresent(at -> at.trackAllocation(receivingBuilding));
+                }
 
-            cargo.setPosition(getPosition());
-
-            Building receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(getPosition(), null, map, this::isWheatReceiverAndAllocationAllowed);
-
-            if (receivingBuilding != null) {
-                cargo.setTarget(receivingBuilding);
-                receivingBuilding.promiseDelivery(cargo.getMaterial());
-
-                GameUtils.AllocationTracker at = wheatAllocationTracker.get();
-
-                at.trackAllocation(receivingBuilding);
+                home.getFlag().putCargo(cargo);
+                setCargo(null);
+                state = GOING_BACK_TO_HOUSE;
+                setTarget(home.getPosition());
             }
-
-            getHome().getFlag().putCargo(cargo);
-
-            setCargo(null);
-
-            state = GOING_BACK_TO_HOUSE;
-
-            setTarget(getHome().getPosition());
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            state = RESTING_IN_HOUSE;
-
-            enterBuilding(getHome());
-
-            countdown.countFrom(TIME_TO_REST);
-        } else if (state == GOING_OUT_TO_PLANT) {
-            state = PLANTING;
-
-            map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
-
-            countdown.countFrom(TIME_TO_PLANT);
-        } else if (state == GOING_OUT_TO_HARVEST) {
-            state = HARVESTING;
-
-            map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
-
-            countdown.countFrom(TIME_TO_HARVEST);
-        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            enterBuilding(getHome());
-
-            state = IN_HOUSE_WITH_CARGO;
-        } else if (state == RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FARMER);
-
-            if (storehouse != null) {
-                state = RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+            case GOING_BACK_TO_HOUSE -> {
+                state = RESTING_IN_HOUSE;
+                enterBuilding(home);
+                countdown.countFrom(TIME_TO_REST);
             }
-        } else if (state == GOING_TO_DIE) {
-            setDead();
+            case GOING_OUT_TO_PLANT -> {
+                state = PLANTING;
+                map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
+                countdown.countFrom(TIME_TO_PLANT);
+            }
+            case GOING_OUT_TO_HARVEST -> {
+                state = HARVESTING;
+                map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
+                countdown.countFrom(TIME_TO_HARVEST);
+            }
+            case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
+                enterBuilding(home);
+                state = IN_HOUSE_WITH_CARGO;
+            }
+            case RETURNING_TO_STORAGE -> {
+                var storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                storehouse.depositWorker(this);
+            }
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+                var storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FARMER);
 
-            state = DEAD;
-
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+                if (storehouse != null) {
+                    state = RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = GOING_TO_DIE;
+                    var point = findPlaceToDie();
+                    setOffroadTarget(point);
+                }
+            }
+            case GOING_TO_DIE -> {
+                setDead();
+                state = DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FARMER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FARMER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), FARMER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, player, FARMER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = GOING_TO_DIE;
             }
         }
@@ -345,15 +278,15 @@ public class Farmer extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Don't try to enter the farm upon arrival */
+            // Don't try to enter the farm upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }
@@ -361,7 +294,7 @@ public class Farmer extends Worker {
     @Override
     public int getProductivity() {
 
-        /* Measure productivity across the length of four rest-work periods */
+        // Measure productivity across the length of four rest-work periods
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (productivityMeasurer.getNumberOfCycles())) * 100);
@@ -370,14 +303,12 @@ public class Farmer extends Worker {
     @Override
     public void goToOtherStorage(Building building) {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-
         setTarget(building.getFlag().getPosition());
     }
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
-        Point hutPoint = getHome().getPosition();
-
-        Set<Point> possibleSpotsToPlant = new HashSet<>();
+        var hutPoint = home.getPosition();
+        var possibleSpotsToPlant = new HashSet<Point>();
 
         possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.getAdjacentPoints()));
         possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.upLeft().getAdjacentPoints()));
@@ -391,15 +322,15 @@ public class Farmer extends Worker {
     }
 
     private Point getFreeSpotToPlant() {
-        for (Point point : getSurroundingSpotsForCrops()) {
-            MapPoint mapPoint = map.getMapPoint(point);
+        for (var point : getSurroundingSpotsForCrops()) {
+            var mapPoint = map.getMapPoint(point);
 
-            /* Filter points that's not possible to plant on */
+            // Filter points that's not possible to plant on
             if (mapPoint.isBuilding() || mapPoint.isFlag() || mapPoint.isRoad() ||  mapPoint.isTree() || mapPoint.isStone()) {
                 continue;
             }
 
-            /* Filter previous crops that aren't harvested yet. It is possible to plant on harvested crops. */
+            // Filter previous crops that aren't harvested yet. It is possible to plant on harvested crops.
             if (mapPoint.isCrop()) {
                 Crop crop = map.getCropAtPoint(point);
 
@@ -408,8 +339,8 @@ public class Farmer extends Worker {
                 }
             }
 
-            /* Filter points the farmer can't walk to */
-            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+            // Filter points the farmer can't walk to
+            if (map.findWayOffroad(home.getFlag().getPosition(), point, null) == null) {
                 continue;
             }
 
@@ -420,17 +351,17 @@ public class Farmer extends Worker {
     }
 
     private Crop findCropToHarvest() {
-        for (Point point : getSurroundingSpotsForCrops()) {
+        for (var point : getSurroundingSpotsForCrops()) {
             if (map.isCropAtPoint(point)) {
-                Crop crop = map.getCropAtPoint(point);
+                var crop = map.getCropAtPoint(point);
 
-                /* Filter crops that aren't full-grown */
+                // Filter crops that aren't full-grown
                 if (crop.getGrowthState() != FULL_GROWN) {
                     continue;
                 }
 
-                /* Filter crops that can't be reached */
-                if (map.findWayOffroad(crop.getPosition(), getPosition(), null) == null) {
+                // Filter crops that can't be reached
+                if (map.findWayOffroad(crop.getPosition(), position, null) == null) {
                     continue;
                 }
 
