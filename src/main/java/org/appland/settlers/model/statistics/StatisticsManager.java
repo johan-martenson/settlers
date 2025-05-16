@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.appland.settlers.model.Material.COIN;
+
 public class StatisticsManager {
     private static final long START_TIME = 1;
 
@@ -292,5 +294,23 @@ public class StatisticsManager {
         getPlayerStatistics(player).workers().increase(time);
 
         listeners.forEach(listener -> listener.generalStatisticsChanged(player));
+    }
+
+    public void militaryBuildingCaptured(Building building, Player previousOwner, long time) {
+        var newOwnerPlayerStatistics = getPlayerStatistics(building.getPlayer());
+        var previousOwnerPlayerStatistics = getPlayerStatistics(previousOwner);
+        var coins = building.getAmount(COIN);
+
+        newOwnerPlayerStatistics.goods().increase(coins, time);
+        newOwnerPlayerStatistics.coin().increase(coins, time);
+        newOwnerPlayerStatistics.coins().increase(coins, time);
+        newOwnerPlayerStatistics.totalAmountBuildings().increase(time);
+
+        previousOwnerPlayerStatistics.goods().decrease(coins, time);
+        previousOwnerPlayerStatistics.coin().decrease(coins, time);
+        previousOwnerPlayerStatistics.coins().decrease(coins, time);
+        previousOwnerPlayerStatistics.totalAmountBuildings().decrease(time);
+
+        listeners.forEach(listener -> listener.generalStatisticsChanged(building.getPlayer()));
     }
 }

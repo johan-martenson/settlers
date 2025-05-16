@@ -1,6 +1,7 @@
 package org.appland.settlers.test.statistics;
 
 import org.appland.settlers.assets.Nation;
+import org.appland.settlers.model.AttackStrength;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
@@ -46,6 +47,7 @@ import org.appland.settlers.model.buildings.DonkeyFarm;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.Fishery;
 import org.appland.settlers.model.buildings.ForesterHut;
+import org.appland.settlers.model.buildings.GuardHouse;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.HunterHut;
 import org.appland.settlers.model.buildings.IronSmelter;
@@ -69,6 +71,8 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.Vegetation.WATER;
+import static org.appland.settlers.model.actors.Soldier.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.actors.Soldier.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.*;
 
@@ -2613,7 +2617,6 @@ public class TestGoodsStatistics {
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore - 3);
     }
 
-
     @Test
     public void testGoodsStatisticsUpdatedWhenStorehouseIsTornDown() throws InvalidUserActionException {
 
@@ -2660,6 +2663,304 @@ public class TestGoodsStatistics {
         assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore - 8);
     }
 
+    @Test
+    public void testGoodsStatisticsUpdatedWhenUpgradingMilitaryBuildingIsTornDown() throws InvalidUserActionException {
+
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+
+        // Place headquarters
+        var point0 = new Point(15, 9);
+        var headquarters = map.placeBuilding(new Headquarter(player0), point0);
+
+        headquarters.setInitialResources(ResourceLevel.MEDIUM);
+
+        // Start monitoring
+        var monitor = new Utils.GameViewMonitor();
+        map.getStatisticsManager().addListener(monitor);
+
+        // Place guardHouse and connect it to the headquarters
+        var point1 = new Point(10, 4);
+        var guardHouse = map.placeBuilding(new GuardHouse(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarters.getFlag(), guardHouse.getFlag());
+
+        // Wait for the house to get constructed and occupied
+        Utils.waitForBuildingToBeConstructed(guardHouse);
+        Utils.waitForMilitaryBuildingsToGetPopulated(guardHouse);
+
+        // Start upgrading the building
+        guardHouse.upgrade();
+
+        // Wait for the building to have two stones
+        Utils.waitForBuildingToHave(guardHouse, STONE, 2);
+
+        // Verify goods statistics when the guardHouse is torn down
+        var statisticsManager = map.getStatisticsManager();
+
+        var nrMeasurementsBefore = statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size();
+        var goodsBefore = statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
+
+        guardHouse.tearDown();
+
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore - 2);
+
+        map.stepTime();
+
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore - 2);
+    }
+
+    @Test
+    public void testGoodsAndCoinsAndBuildingStatisticsWhenPlayerTakesOverMilitaryBuildingWithCoin() throws InvalidUserActionException {
+
+        // Create game with two players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
+
+        // Place player 0's headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Remove the soldiers from the inventory of both headquarters
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        // Place barracks for player 0
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        // Place barracks for player 1
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        // Finish construction
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        // Populate player 0's barracks
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        // Populate player 1's barracks
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        // Order an attack
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        // Find the military that was chosen to attack
+        map.stepTime();
+
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        // Wait for a soldier to leave the attacked building to defend when the attacker reaches the flag
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
+
+        // Wait for the defender to go to the attacker
+        var defender = Utils.findSoldierOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        // Wait for the attacking general to beat the defending private
+        Utils.waitForSoldierToBeDying(defender, map);
+
+        Utils.waitForSoldierToWinFight(attacker, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+
+        // Wait for the attacker to go back to the fixed point
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+
+        // Start monitoring statistics
+        var monitor = new Utils.GameViewMonitor();
+        map.getStatisticsManager().addListener(monitor);
+
+        // Place a coin in the military building
+        Utils.deliverCargo(barracks1, COIN);
+
+        // Verify the goods statistics when the attacker takes over the building with a coin
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+
+        var statisticsManager = map.getStatisticsManager();
+        var nrMeasurementsBefore = statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size();
+        var nrCoinsMeasurementsBefore = statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size();
+        var nrTotalHousesMeasurementsBefore = statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size();
+        var goodsBefore = statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value();
+        var coinsBefore = statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value();
+        var totalAmountsBuildingsBefore = statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value();
+        var nrEventsBefore = monitor.getStatisticsEvents().size();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertEquals(barracks1.getPlayer(), player0);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), nrCoinsMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), nrTotalHousesMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), coinsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), totalAmountsBuildingsBefore + 1);
+
+        map.stepTime();
+
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().size(), nrCoinsMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().size(), nrTotalHousesMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).goods().getMeasurements().getLast().value(), goodsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).coins().getMeasurements().getLast().value(), coinsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player0).totalAmountBuildings().getMeasurements().getLast().value(), totalAmountsBuildingsBefore + 1);
+        assertTrue(monitor.getStatisticsEvents().size() > nrEventsBefore);
+    }
+
+    @Test
+    public void testGoodsAndCoinsAndBuildingStatisticsWhenPlayerLosesMilitaryBuildingWithCoin() throws InvalidUserActionException {
+
+        // Create game with two players
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 100, 100);
+
+        // Place player 0's headquarters
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place player 1's headquarters
+        var point1 = new Point(37, 15);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        // Remove the soldiers from the inventory of both headquarters
+        Utils.clearInventory(headquarter0, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+        Utils.clearInventory(headquarter1, PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL);
+
+        // Place barracks for player 0
+        var point2 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point2);
+
+        // Place barracks for player 1
+        var point3 = new Point(23, 15);
+        var barracks1 = map.placeBuilding(new Barracks(player1), point3);
+
+        // Finish construction
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        // Populate player 0's barracks
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        // Populate player 1's barracks
+        assertTrue(barracks1.isReady());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
+
+        // Order an attack
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1, AttackStrength.STRONG);
+
+        // Find the military that was chosen to attack
+        map.stepTime();
+
+        var attacker = Utils.findSoldierOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        // Wait for a soldier to leave the attacked building to defend when the attacker reaches the flag
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getNumberOfHostedSoldiers(), 0);
+
+        // Wait for the defender to go to the attacker
+        var defender = Utils.findSoldierOutsideBuilding(player1);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        // Wait for the attacking general to beat the defending private
+        Utils.waitForSoldierToBeDying(defender, map);
+
+        Utils.waitForSoldierToWinFight(attacker, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+
+        // Wait for the attacker to go back to the fixed point
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+
+        // Start monitoring statistics
+        var monitor = new Utils.GameViewMonitor();
+        map.getStatisticsManager().addListener(monitor);
+
+        // Place a coin in the military building
+        Utils.deliverCargo(barracks1, COIN);
+
+        // Verify the goods statistics when the attacker takes over the building with a coin
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+
+        var statisticsManager = map.getStatisticsManager();
+        var nrMeasurementsBefore = statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().size();
+        var nrCoinsMeasurementsBefore = statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().size();
+        var nrTotalHousesMeasurementsBefore = statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().size();
+        var goodsBefore = statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().getLast().value();
+        var coinsBefore = statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().getLast().value();
+        var totalAmountsBuildingsBefore = statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().getLast().value();
+        var nrEventsBefore = monitor.getStatisticsEvents().size();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertEquals(barracks1.getPlayer(), player0);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().size(), nrCoinsMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().size(), nrTotalHousesMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().getLast().value(), goodsBefore - 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().getLast().value(), coinsBefore - 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().getLast().value(), totalAmountsBuildingsBefore - 1);
+
+        map.stepTime();
+
+        assertEquals(statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().size(), nrMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().size(), nrCoinsMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().size(), nrTotalHousesMeasurementsBefore + 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).goods().getMeasurements().getLast().value(), goodsBefore - 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).coins().getMeasurements().getLast().value(), coinsBefore - 1);
+        assertEquals(statisticsManager.getPlayerStatistics(player1).totalAmountBuildings().getMeasurements().getLast().value(), totalAmountsBuildingsBefore - 1);
+        assertTrue(monitor.getStatisticsEvents().size() > nrEventsBefore);
+    }
 
     // Test for worker carrying when land is taken over and the worker dies (in case it can't go to a storehouse)
 }

@@ -83,7 +83,6 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> promisedDeliveries = new EnumMap<>(Material.class);
     private final List<Soldier> hostedSoldiers = new ArrayList<>();
     private final List<Soldier> promisedSoldier = new ArrayList<>();
-    private final Map<Material, Integer> receivedMaterial = new EnumMap<>(Material.class);
     private final Set<Soldier> waitingDefenders = new HashSet<>();
 
     private enum State {
@@ -95,6 +94,7 @@ public class Building implements EndPoint {
         DESTROYED
     }
 
+    protected final Map<Material, Integer> inventory = new EnumMap<>(Material.class);
     protected GameMap map = null;
     protected Player player;
 
@@ -176,11 +176,11 @@ public class Building implements EndPoint {
     }
 
     public int getAmount(Material material) {
-        return receivedMaterial.getOrDefault(material, 0);
+        return inventory.getOrDefault(material, 0);
     }
 
     public void consumeOne(Material material) {
-        receivedMaterial.merge(material, -1, Integer::sum);
+        inventory.merge(material, -1, Integer::sum);
     }
 
     private int initDiscoveryRadius() {
@@ -362,7 +362,7 @@ public class Building implements EndPoint {
         }
 
         // Update the list of received materials and the list of promised deliveries
-        receivedMaterial.merge(material, 1, Integer::sum);
+        inventory.merge(material, 1, Integer::sum);
         promisedDeliveries.merge(material, -1, Integer::sum);
 
         // Start the promotion countdown if it's a coin
@@ -385,7 +385,7 @@ public class Building implements EndPoint {
 
     @Override
     public String toString() {
-        return receivedMaterial.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)
+        return inventory.entrySet().stream().anyMatch(pair -> pair.getValue() != 0)
                 ? format("%s at %s with %s in queue and state: %s", getClass().getSimpleName(), flag, flag.getStackedCargo(), state)
                 : format("%s at %s with nothing in queue and state: %s", getClass().getSimpleName(), flag, state);
     }
@@ -590,8 +590,8 @@ public class Building implements EndPoint {
     }
 
     private void consumeConstructionMaterial() {
-        receivedMaterial.merge(PLANK, materialsToBuildHouse.planks(), (currentValue, newValues) -> currentValue - newValues);
-        receivedMaterial.merge(STONE, materialsToBuildHouse.stones(), (currentValue, newValues) -> currentValue - newValues);
+        inventory.merge(PLANK, materialsToBuildHouse.planks(), (currentValue, newValues) -> currentValue - newValues);
+        inventory.merge(STONE, materialsToBuildHouse.stones(), (currentValue, newValues) -> currentValue - newValues);
 
         map.getStatisticsManager().buildingConstructed(this, map.getTime());
     }
@@ -625,8 +625,8 @@ public class Building implements EndPoint {
     }
 
     private boolean isMaterialForConstructionAvailable() {
-        return receivedMaterial.getOrDefault(PLANK, 0) >= materialsToBuildHouse.planks() &&
-                receivedMaterial.getOrDefault(STONE, 0) >= materialsToBuildHouse.stones();
+        return inventory.getOrDefault(PLANK, 0) >= materialsToBuildHouse.planks() &&
+                inventory.getOrDefault(STONE, 0) >= materialsToBuildHouse.stones();
     }
 
     private boolean isAccepted(Material material) {
@@ -913,19 +913,12 @@ public class Building implements EndPoint {
     }
 
     public void capture(Player player) throws InvalidUserActionException {
-
-        // Change the ownership of the building
         setPlayer(player);
 
-        // Reset the number of promised soldiers
         promisedSoldier.clear();
-
-        // Remove traces of the attack
         attackers.clear();
         remoteDefenders.clear();
         ownDefender = null;
-
-        // Stop the evacuation if it is enabled
         evacuated = false;
     }
 
@@ -982,7 +975,7 @@ public class Building implements EndPoint {
 
                 int total = materialsToBuildHouse.getAmount(material);
                 int promised = promisedDeliveries.getOrDefault(material, 0);
-                int received = receivedMaterial.getOrDefault(material, 0);
+                int received = inventory.getOrDefault(material, 0);
 
                 yield total - promised - received;
             }
@@ -1005,7 +998,7 @@ public class Building implements EndPoint {
 
                     if (total > 0) {
                         int promised = promisedDeliveries.getOrDefault(material, 0);
-                        int received = receivedMaterial.getOrDefault(material, 0);
+                        int received = inventory.getOrDefault(material, 0);
 
                         yield total - promised - received;
                     }
@@ -1014,7 +1007,7 @@ public class Building implements EndPoint {
                 } else {
                     int total = totalAmountNeededForProduction.getOrDefault(material, 0);
                     int promised = promisedDeliveries.getOrDefault(material, 0);
-                    int received = receivedMaterial.getOrDefault(material, 0);
+                    int received = inventory.getOrDefault(material, 0);
 
                     yield total - promised - received;
                 }
@@ -1086,8 +1079,8 @@ public class Building implements EndPoint {
         int stoneNeeded = upgradeCost.stones();
 
         // Get available resources
-        int plankAvailable = receivedMaterial.getOrDefault(PLANK, 0);
-        int stoneAvailable = receivedMaterial.getOrDefault(STONE, 0);
+        int plankAvailable = inventory.getOrDefault(PLANK, 0);
+        int stoneAvailable = inventory.getOrDefault(STONE, 0);
 
         // Determine if an upgrade is possible
         if (planksNeeded <= plankAvailable && stoneNeeded <= stoneAvailable) {
@@ -1354,6 +1347,6 @@ public class Building implements EndPoint {
     }
 
     public Map<Material, Integer> getInventory() {
-        return receivedMaterial;
+        return inventory;
     }
 }

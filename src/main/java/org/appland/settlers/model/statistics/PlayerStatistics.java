@@ -1,6 +1,8 @@
 package org.appland.settlers.model.statistics;
 
 public record PlayerStatistics(
+
+        // Measures produced goods. Start at 0
         CumulativeDataSeries wood,
         CumulativeDataSeries plank,
         CumulativeDataSeries stone,
@@ -15,6 +17,8 @@ public record PlayerStatistics(
         CumulativeDataSeries tools,
         CumulativeDataSeries weapons,
         CumulativeDataSeries boats,
+
+        // Measures current stock of goods. Start with initial inventory
         CumulativeDataSeries totalAmountBuildings,
         SnapshotDataSeries land,
         CumulativeDataSeries coins,

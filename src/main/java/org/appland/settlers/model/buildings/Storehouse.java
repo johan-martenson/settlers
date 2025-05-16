@@ -19,7 +19,6 @@ import org.appland.settlers.model.actors.Worker;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Objects;
@@ -58,8 +57,6 @@ public class Storehouse extends Building {
     private final Countdown draftCountdown = new Countdown();
     private final Set<Material> materialToPushOut = EnumSet.noneOf(Material.class);
     private final Set<Material> materialBlockedForDelivery = EnumSet.noneOf(Material.class);
-
-    final Map<Material, Integer> inventory = new EnumMap<>(Material.class);
 
     public Storehouse(Player player) {
         super(player);
@@ -528,14 +525,5 @@ public class Storehouse extends Building {
         }
 
         return cargos;
-    }
-
-    @Override
-    public Map<Material, Integer> getInventory() {
-        if (isReady()) {
-            return inventory;
-        }
-
-        return super.getInventory();
     }
 }
