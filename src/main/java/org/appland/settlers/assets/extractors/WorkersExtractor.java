@@ -36,7 +36,6 @@ import java.util.Set;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
 import static org.appland.settlers.assets.Utils.getImagesAt;
-import static org.appland.settlers.assets.Utils.getPlayerImagesAt;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
@@ -268,61 +267,61 @@ public class WorkersExtractor {
                 bob
         );
 
-        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.CUTTING, 8));
+        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, cbobRomBobsLst, CbobRomBobsLst.CUTTING);
 
         // Add roman military attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_EAST, 8));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_WEST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_WEST, 8));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_EAST);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_WEST);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_EAST);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_WEST);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_EAST);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_WEST);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_EAST);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_WEST);
 
         // Add roman military getting hit
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_SHIELD_UP_EAST, 8));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_SHIELD_UP_WEST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_STAND_ASIDE_EAST, 6));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_STAND_ASIDE_WEST, 7));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_JUMP_BACK_EAST, 7));
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_JUMP_BACK_WEST, 7));
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_SHIELD_UP);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_SHIELD_UP);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_STAND_ASIDE);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_STAND_ASIDE);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_JUMP_BACK);
+        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_JUMP_BACK);
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST, 8));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_FLINCH_HIT_EAST, 6));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_FLINCH_HIT_WEST, 6));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_GETTING_HIT_EAST, 7));
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_GETTING_HIT_WEST, 7));
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_FLINCH_HIT);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_FLINCH_HIT);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_GETTING_HIT);
+        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_GETTING_HIT);
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_AVOIDING_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_AVOIDING_HIT_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_FLINCH_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_FLINCH_HIT_WEST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_GETTING_HIT_EAST, 8));
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_GETTING_HIT_WEST, 8));
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_AVOIDING_HIT);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_AVOIDING_HIT);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_FLINCH_HIT);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_FLINCH_HIT);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_GETTING_HIT);
+        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_GETTING_HIT);
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_AVOIDING_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_AVOIDING_HIT_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_FLINCH_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_FLINCH_HIT_WEST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_GETTING_HIT_EAST, 8));
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_GETTING_HIT_WEST, 7));
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_AVOIDING_HIT);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_AVOIDING_HIT);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_FLINCH_HIT);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_FLINCH_HIT);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_GETTING_HIT);
+        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_GETTING_HIT);
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_AVOIDING_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_AVOIDING_HIT_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_FLINCH_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_FLINCH_HIT_WEST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_GETTING_HIT_EAST, 8));
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_GETTING_HIT_WEST, 8));
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_AVOIDING_HIT);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_AVOIDING_HIT);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_FLINCH_HIT);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_FLINCH_HIT);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_GETTING_HIT);
+        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_GETTING_HIT);
 
-        privateWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        privateFirstClassWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        sergeantWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        officerWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
-        generalWorkerImageCollector.addAnimation(DIE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING, 12));
+        privateWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        privateFirstClassWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        sergeantWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        officerWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        generalWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
 
         // Add Japanese soldiers attacking
         privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_ATTACKING);
@@ -479,7 +478,7 @@ public class WorkersExtractor {
                 bob
         );
 
-        carpenterImageCollector.addAnimation(WorkerAction.SAWING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SAWING, 6));
+        carpenterImageCollector.addAnimation(WorkerAction.SAWING, cbobRomBobsLst, CbobRomBobsLst.SAWING);
 
         stonemasonImageCollector.readCargoImagesFromBob(
                 STONE,
@@ -488,16 +487,12 @@ public class WorkersExtractor {
                 bob
         );
 
-        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE, 8));
-
-        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING, 36));
-
-        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING, 26));
-
-        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING, 16));
-
-        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW, 8));
-        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION, 4));
+        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE);
+        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING);
+        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING);
+        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING);
+        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW);
+        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION);
 
         minterImageCollector.readCargoImagesFromBob(
                 COIN,
@@ -551,94 +546,94 @@ public class WorkersExtractor {
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 SOUTH_EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 SOUTH_WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.LOWER_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_EAST);
 
         // Keep fishing
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 SOUTH_EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 SOUTH_WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.FISHING,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_EAST);
 
         // Pull up fish
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 SOUTH_EAST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_EAST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 SOUTH_WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_WEST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_WEST);
 
         fishermanImageCollector.addWorkAnimationInDirection(
                 WorkerAction.PULL_UP_FISHING_ROD,
                 WEST,
-                getImagesAt(cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_EAST, 8));
+                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_EAST);
 
         farmerImageCollector.readCargoImagesFromBob(
                 WHEAT,
@@ -647,8 +642,8 @@ public class WorkersExtractor {
                 bob
         );
 
-        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SOWING, 8));
-        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HARVESTING, 8));
+        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, cbobRomBobsLst, CbobRomBobsLst.SOWING);
+        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, cbobRomBobsLst, CbobRomBobsLst.HARVESTING);
 
         pigBreederImageCollector.readCargoImagesFromBob(
                 PIG,
@@ -671,11 +666,11 @@ public class WorkersExtractor {
                 bob
         );
 
-        bakerImageCollector.addAnimation(WorkerAction.BAKING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.BAKING, 8));
+        bakerImageCollector.addAnimation(WorkerAction.BAKING, cbobRomBobsLst, CbobRomBobsLst.BAKING);
 
         // TODO: Handle brewer and/or well worker
 
-        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER, 8));
+        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER);
 
         // TODO: Handle metalworker carrying "shift gear". Assume it's tongs
 
@@ -766,8 +761,8 @@ public class WorkersExtractor {
                 bob
         );
 
-        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.HUNTING, 13));
-        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT, 12));
+        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, cbobRomBobsLst, CbobRomBobsLst.HUNTING);
+        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT);
 
         shipwrightWorkerImageCollector.readCargoImagesFromBob(
                 BOAT,
@@ -851,11 +846,11 @@ public class WorkersExtractor {
         fatCarrierWithCargo.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
 
         // Add animations for when the couriers are bored
-        fatCarrier.addAnimation(CHEW_GUM, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM, 8));
-        fatCarrier.addAnimation(SIT_DOWN, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN, 5));
-        thinCarrier.addAnimation(READ_NEWSPAPER, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER, 7));
-        thinCarrier.addAnimation(TOUCH_NOSE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE, 5));
-        thinCarrier.addAnimation(JUMP_SKIP_ROPE, getPlayerImagesAt(cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE, 7));
+        fatCarrier.addAnimation(CHEW_GUM, cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM);
+        fatCarrier.addAnimation(SIT_DOWN, cbobRomBobsLst, CbobRomBobsLst.SIT_DOWN);
+        thinCarrier.addAnimation(READ_NEWSPAPER, cbobRomBobsLst, CbobRomBobsLst.READ_NEWSPAPER);
+        thinCarrier.addAnimation(TOUCH_NOSE, cbobRomBobsLst, CbobRomBobsLst.TOUCH_NOSE);
+        thinCarrier.addAnimation(JUMP_SKIP_ROPE, cbobRomBobsLst, CbobRomBobsLst.JUMP_SKIP_ROPE);
 
         // Write the image atlases to files
         thinCarrier.writeImageAtlas(toDir + "/", defaultPalette);

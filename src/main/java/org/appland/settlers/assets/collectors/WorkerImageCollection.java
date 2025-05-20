@@ -352,6 +352,14 @@ public class WorkerImageCollection {
         }
     }
 
+    public void addAnimation(WorkerAction action, List<GameResource> resources, Animation animation) {
+        addAnimation(action, getPlayerBitmapImagesFromResources(resources, animation));
+    }
+
+    public void addWorkAnimationInDirection(WorkerAction action, CompassDirection compassDirection, List<GameResource> resources, Animation animation) {
+        addWorkAnimationInDirection(action, compassDirection, getImagesFromResources(resources, animation));
+    }
+
     /**
      * Adds a work animation in a specific direction for a specific action.
      *
@@ -449,5 +457,26 @@ public class WorkerImageCollection {
         }
 
         addNationSpecificAnimationInDirection(nation, compassDirection, workerAction, images);
+    }
+
+    List<PlayerBitmap> getPlayerBitmapImagesFromResources(List<GameResource> resources, Animation animation) {
+        return getPlayerBitmapImagesFromResources(resources, animation.index(), animation.length());
+    }
+
+    List<PlayerBitmap> getPlayerBitmapImagesFromResources(List<GameResource> resources, int start, int length) {
+        var images = new ArrayList<PlayerBitmap>();
+
+        for (int i = start; i < start + length; i++) {
+            images.add((PlayerBitmap) ImageUtils.getBitmapFromResource(resources.get(i)));
+        }
+        return images;
+    }
+
+    List<Bitmap> getImagesFromResources(List<GameResource> resources, Animation animation) {
+        return getImagesFromResources(resources, animation.index(), animation.length());
+    }
+
+    List<Bitmap> getImagesFromResources(List<GameResource> resources, int start, int length) {
+        return resources.subList(start, start + length).stream().map(ImageUtils::getBitmapFromResource).toList();
     }
 }

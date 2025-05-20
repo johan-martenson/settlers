@@ -5,84 +5,77 @@ import org.appland.settlers.assets.utils.Animation;
 public class CbobRomBobsLst {
     public static final String FILENAME = "DATA/CBOB/ROM_BOBS.LST";
 
-    public static final int CUTTING = 24;
-    public static final int SAWING = 160;
-    public static final int HACKING_STONE = 40;
-    public static final int LOWERING_FISHING_ROD_EAST = 108;
-    public static final int LOWERING_FISHING_ROD_SOUTH_EAST = 116;
-    public static final int LOWERING_FISHING_ROD_SOUTH_WEST = 124;
-    public static final int SOWING = 132;
-    public static final int HARVESTING = 140;
-    public static final int DRINKING_BEER = 0;
-    public static final int DIGGING_AND_PLANTING = 48;
-    public static final int BAKING = 182;
-    public static final int HUNTING = 219;
-    public static final int PICKING_UP_MEAT = 232;
-    public static final int DIGGING_AND_STOMPING = 253;
-    public static final int INVESTIGATING = 314;
-    public static final int HAMMERING_HOUSE_HIGH_AND_LOW = 279;
-    public static final int INSPECTING_HOUSE_CONSTRUCTION = 287;
-    public static final int LOWERING_FISHING_ROD_WEST = 1566;
-    public static final int LOWERING_FISHING_ROD_NORTH_WEST = 1574;
-    public static final int LOWERING_FISHING_ROD_NORTH_EAST = 1582;
-    public static final int FISHING_EAST = 1590;
-    public static final int FISHING_SOUTH_EAST = 1598;
-    public static final int FISHING_SOUTH_WEST = 1606;
-    public static final int FISHING_WEST = 1614;
-    public static final int FISHING_NORTH_WEST = 1622;
-    public static final int FISHING_NORTH_EAST = 1630;
-    public static final int PULL_UP_FISH_EAST = 1638;
-    public static final int PULL_UP_FISH_SOUTH_EAST = 1646;
-    public static final int PULL_UP_FISH_SOUTH_WEST = 1654;
-    public static final int PULL_UP_FISH_WEST = 1662;
-    public static final int PULL_UP_FISH_NORTH_WEST = 1670;
-    public static final int PULL_UP_FISH_NORTH_EAST = 1678;
-    public static final int SIT_DOWN = 1726;
-    public static final int CHEW_GUM = 1737;
-    public static final int JUMP_SKIP_ROPE = 1745;
-    public static final int READ_NEWSPAPER = 1759;
-    public static final int TOUCH_NOSE = 1770;
-    public static final int ROMAN_PRIVATE_ATTACKING_EAST = 364;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST = 372;
-    public static final int ROMAN_SERGEANT_ATTACKING_EAST = 380;
-    public static final int ROMAN_OFFICER_ATTACKING_EAST = 388;
-    public static final int ROMAN_GENERAL_ATTACKING_EAST = 396;
-    public static final int ROMAN_PRIVATE_ATTACKING_WEST = 404;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST = 412;
-    public static final int ROMAN_SERGEANT_ATTACKING_WEST = 420;
-    public static final int ROMAN_OFFICER_ATTACKING_WEST = 428;
-    public static final int ROMAN_GENERAL_ATTACKING_WEST = 436;
-    public static final int ROMAN_PRIVATE_SHIELD_UP_EAST = 670;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_GETTING_HIT_EAST = 705;
-    public static final int ROMAN_SERGEANT_GETTING_HIT_EAST = 728;
-    public static final int ROMAN_PRIVATE_JUMP_BACK_EAST = 684;
-    public static final int ROMAN_PRIVATE_STAND_ASIDE_EAST = 678;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_AVOIDING_HIT_EAST = 691;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_FLINCH_HIT_EAST = 699;
-    public static final int ROMAN_SERGEANT_AVOIDING_HIT_EAST = 712;
-    public static final int ROMAN_SERGEANT_FLINCH_HIT_EAST = 720;
-    public static final int ROMAN_OFFICER_AVOIDING_HIT_EAST = 736;
-    public static final int ROMAN_OFFICER_FLINCH_HIT_EAST = 744;
-    public static final int ROMAN_OFFICER_GETTING_HIT_EAST = 752;
-    public static final int ROMAN_GENERAL_AVOIDING_HIT_EAST = 760;
-    public static final int ROMAN_GENERAL_FLINCH_HIT_EAST = 768;
-    public static final int ROMAN_GENERAL_GETTING_HIT_EAST = 776;
-    public static final int ROMAN_PRIVATE_SHIELD_UP_WEST = 784;
-    public static final int ROMAN_PRIVATE_STAND_ASIDE_WEST = 790;
-    public static final int ROMAN_PRIVATE_JUMP_BACK_WEST = 796;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_AVOIDING_HIT_WEST = 803;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_FLINCH_HIT_WEST = 811;
-    public static final int ROMAN_PRIVATE_FIRST_CLASS_GETTING_HIT_WEST = 817;
-    public static final int ROMAN_SERGEANT_AVOIDING_HIT_WEST = 824;
-    public static final int ROMAN_SERGEANT_FLINCH_HIT_WEST = 832;
-    public static final int ROMAN_SERGEANT_GETTING_HIT_WEST = 840;
-    public static final int ROMAN_OFFICER_AVOIDING_HIT_WEST = 848;
-    public static final int ROMAN_OFFICER_FLINCH_HIT_WEST = 856;
-    public static final int ROMAN_OFFICER_GETTING_HIT_WEST = 864;
-    public static final int ROMAN_GENERAL_AVOIDING_HIT_WEST = 871;
-    public static final int ROMAN_GENERAL_FLINCH_HIT_WEST = 879;
-    public static final int ROMAN_GENERAL_GETTING_HIT_WEST = 887;
-    public static final int SOLDIER_DYING = 903;
+    public static final Animation DRINKING_BEER = new Animation(0, 8);
+    public static final Animation CUTTING = new Animation(24, 8);
+    public static final Animation HACKING_STONE = new Animation(40, 8);
+    public static final Animation DIGGING_AND_PLANTING = new Animation(48, 36);
+    public static final Animation LOWERING_FISHING_ROD_EAST = new Animation(108, 8);
+    public static final Animation LOWERING_FISHING_ROD_SOUTH_EAST = new Animation(116, 8);
+    public static final Animation LOWERING_FISHING_ROD_SOUTH_WEST = new Animation(124, 8);
+    public static final Animation SOWING = new Animation(132, 8);
+    public static final Animation HARVESTING = new Animation(140, 8);
+    public static final Animation SAWING = new Animation(160, 6);
+    public static final Animation BAKING = new Animation(182, 8);
+    public static final Animation HUNTING = new Animation(219, 13);
+    public static final Animation PICKING_UP_MEAT = new Animation(232, 12);
+    public static final Animation DIGGING_AND_STOMPING = new Animation(253, 26);
+    public static final Animation HAMMERING_HOUSE_HIGH_AND_LOW = new Animation(279, 8);
+    public static final Animation INSPECTING_HOUSE_CONSTRUCTION = new Animation(287, 4);
+    public static final Animation INVESTIGATING = new Animation(314, 16);
+
+    public static final Animation ROMAN_PRIVATE_ATTACKING_EAST = new Animation(364, 8);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST = new Animation(372, 8);
+    public static final Animation ROMAN_SERGEANT_ATTACKING_EAST = new Animation(380, 8);
+    public static final Animation ROMAN_OFFICER_ATTACKING_EAST = new Animation(388, 8);
+    public static final Animation ROMAN_GENERAL_ATTACKING_EAST = new Animation(396, 8);
+
+    public static final Animation ROMAN_PRIVATE_ATTACKING_WEST = new Animation(404, 8);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST = new Animation(412, 8);
+    public static final Animation ROMAN_SERGEANT_ATTACKING_WEST = new Animation(420, 8);
+    public static final Animation ROMAN_OFFICER_ATTACKING_WEST = new Animation(428, 8);
+    public static final Animation ROMAN_GENERAL_ATTACKING_WEST = new Animation(436, 8);
+
+    public static final Animation ROMAN_PRIVATE_EAST_SHIELD_UP = new Animation(670, 8);
+    public static final Animation ROMAN_PRIVATE_EAST_JUMP_BACK = new Animation(684, 7);
+    public static final Animation ROMAN_PRIVATE_EAST_STAND_ASIDE = new Animation(678, 6);
+
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK = new Animation(691, 8);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_EAST_FLINCH_HIT = new Animation(699, 6);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_EAST_GETTING_HIT = new Animation(705, 7);
+
+    public static final Animation ROMAN_SERGEANT_EAST_AVOIDING_HIT = new Animation(712, 8);
+    public static final Animation ROMAN_SERGEANT_EAST_FLINCH_HIT = new Animation(720, 8);
+    public static final Animation ROMAN_SERGEANT_EAST_GETTING_HIT = new Animation(728, 8);
+
+    public static final Animation ROMAN_OFFICER_EAST_AVOIDING_HIT = new Animation(736, 8);
+    public static final Animation ROMAN_OFFICER_EAST_FLINCH_HIT = new Animation(744, 8);
+    public static final Animation ROMAN_OFFICER_EAST_GETTING_HIT = new Animation(752, 8);
+
+    public static final Animation ROMAN_GENERAL_EAST_AVOIDING_HIT = new Animation(760, 8);
+    public static final Animation ROMAN_GENERAL_EAST_FLINCH_HIT = new Animation(768, 8);
+    public static final Animation ROMAN_GENERAL_EAST_GETTING_HIT = new Animation(776, 8);
+
+    public static final Animation ROMAN_PRIVATE_WEST_SHIELD_UP = new Animation(784, 6);
+    public static final Animation ROMAN_PRIVATE_WEST_STAND_ASIDE = new Animation(790, 7);
+    public static final Animation ROMAN_PRIVATE_WEST_JUMP_BACK = new Animation(796, 7);
+
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK = new Animation(803, 8);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_WEST_FLINCH_HIT = new Animation(811, 6);
+    public static final Animation ROMAN_PRIVATE_FIRST_CLASS_WEST_GETTING_HIT = new Animation(817, 7);
+
+    public static final Animation ROMAN_SERGEANT_WEST_AVOIDING_HIT = new Animation(824, 8);
+    public static final Animation ROMAN_SERGEANT_WEST_FLINCH_HIT = new Animation(832, 8);
+    public static final Animation ROMAN_SERGEANT_WEST_GETTING_HIT = new Animation(840, 8);
+
+    public static final Animation ROMAN_OFFICER_WEST_AVOIDING_HIT = new Animation(848, 8);
+    public static final Animation ROMAN_OFFICER_WEST_FLINCH_HIT = new Animation(856, 8);
+    public static final Animation ROMAN_OFFICER_WEST_GETTING_HIT = new Animation(864, 7);
+
+    public static final Animation ROMAN_GENERAL_WEST_AVOIDING_HIT = new Animation(871, 8);
+    public static final Animation ROMAN_GENERAL_WEST_FLINCH_HIT = new Animation(879, 8);
+    public static final Animation ROMAN_GENERAL_WEST_GETTING_HIT = new Animation(887, 8);
+
+    public static final Animation SOLDIER_DYING = new Animation(903, 12);
 
     // Japanese soldiers attacking
     public static final Animation JAPANESE_PRIVATE_EAST_ATTACKING = new Animation(444, 5);
@@ -252,4 +245,26 @@ public class CbobRomBobsLst {
     public static final Animation AFRICAN_GENERAL_WEST_SHIELD_UP = new Animation(1537, 7);
     public static final Animation AFRICAN_GENERAL_WEST_STAND_ASIDE = new Animation(1544, 4);
     public static final Animation AFRICAN_GENERAL_WEST_JUMPING_BACK = new Animation(1548, 8);
+
+
+    public static final Animation LOWERING_FISHING_ROD_WEST = new Animation(1566, 8);
+    public static final Animation LOWERING_FISHING_ROD_NORTH_WEST = new Animation(1574, 8);
+    public static final Animation LOWERING_FISHING_ROD_NORTH_EAST = new Animation(1582, 8);
+    public static final Animation FISHING_EAST = new Animation(1590, 8);
+    public static final Animation FISHING_SOUTH_EAST = new Animation(1598, 8);
+    public static final Animation FISHING_SOUTH_WEST = new Animation(1606, 8);
+    public static final Animation FISHING_WEST = new Animation(1614, 8);
+    public static final Animation FISHING_NORTH_WEST = new Animation(1622, 8);
+    public static final Animation FISHING_NORTH_EAST = new Animation(1630, 8);
+    public static final Animation PULL_UP_FISH_EAST = new Animation(1638, 8);
+    public static final Animation PULL_UP_FISH_SOUTH_EAST = new Animation(1646, 8);
+    public static final Animation PULL_UP_FISH_SOUTH_WEST = new Animation(1654, 8);
+    public static final Animation PULL_UP_FISH_WEST = new Animation(1662, 8);
+    public static final Animation PULL_UP_FISH_NORTH_WEST = new Animation(1670, 8);
+    public static final Animation PULL_UP_FISH_NORTH_EAST = new Animation(1678, 8);
+    public static final Animation SIT_DOWN = new Animation(1726, 5);
+    public static final Animation CHEW_GUM = new Animation(1737, 8);
+    public static final Animation JUMP_SKIP_ROPE = new Animation(1745, 7);
+    public static final Animation READ_NEWSPAPER = new Animation(1759, 7);
+    public static final Animation TOUCH_NOSE = new Animation(1770, 5);
 }
