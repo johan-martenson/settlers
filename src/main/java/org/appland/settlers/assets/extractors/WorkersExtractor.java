@@ -1,14 +1,11 @@
 package org.appland.settlers.assets.extractors;
 
-import org.appland.settlers.assets.Area;
 import org.appland.settlers.assets.BobResource;
 import org.appland.settlers.assets.CarrierCargo;
 import org.appland.settlers.assets.CompassDirection;
 import org.appland.settlers.assets.InvalidFormatException;
 import org.appland.settlers.assets.JobType;
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.assets.RenderedWorker;
-import org.appland.settlers.assets.StackedBitmaps;
 import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.UnknownResourceTypeException;
 import org.appland.settlers.assets.WorkerDetails;
@@ -20,22 +17,20 @@ import org.appland.settlers.assets.gamefiles.CbobRomBobsLst;
 import org.appland.settlers.assets.gamefiles.JobsBob;
 import org.appland.settlers.assets.gamefiles.Map0ZLst;
 import org.appland.settlers.assets.resources.Bitmap;
-import org.appland.settlers.assets.resources.Bob;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.resources.PlayerBitmap;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.WorkerAction;
 
 import java.awt.Point;
 import java.io.IOException;
 import java.util.EnumMap;
-import java.util.Map;
 import java.util.Set;
 
+import static java.lang.String.format;
 import static org.appland.settlers.assets.CompassDirection.*;
 import static org.appland.settlers.assets.Nation.*;
-import static org.appland.settlers.assets.Utils.getImagesAt;
+import static org.appland.settlers.assets.gamefiles.JobsBob.*;
 import static org.appland.settlers.model.Material.*;
 import static org.appland.settlers.model.WorkerAction.*;
 import static org.appland.settlers.model.actors.Courier.BodyType.FAT;
@@ -49,24 +44,12 @@ public class WorkersExtractor {
             JobType.OFFICER,
             JobType.GENERAL);
 
-
     public static void extractWorkerAssets(String fromDir, String toDir, Palette defaultPalette) throws IOException, UnknownResourceTypeException, InvalidFormatException {
-
-        /* Load worker image parts */
-        var jobsBobList = LstDecoder.loadLstFile(fromDir + "/" + JobsBob.FILENAME, defaultPalette);
-        var map0ZLst = LstDecoder.loadLstFile(fromDir + "/" + Map0ZLst.FILENAME, defaultPalette);
-        var cbobRomBobsLst = LstDecoder.loadLstFile(fromDir + "/" + CbobRomBobsLst.FILENAME, defaultPalette);
-
-        if (jobsBobList.size() != 1) {
-            throw new RuntimeException("Wrong size of game resources in bob file. Must be 1, but was: " + jobsBobList.size());
-        }
-
-        if (! (jobsBobList.getFirst() instanceof BobResource jobsBobResource)) {
-            throw new RuntimeException("Element must be Bob game resource. Was: " + jobsBobList.getFirst().getClass().getName());
-        }
-
-        /* Construct the worker details map */
-        Map<JobType, WorkerDetails> workerDetailsMap = new EnumMap<>(JobType.class);
+        var jobsBobList = LstDecoder.loadLstFile(format("%s/%s",fromDir, JobsBob.FILENAME), defaultPalette);
+        var map0ZLst = LstDecoder.loadLstFile(format("%s/%s", fromDir, Map0ZLst.FILENAME), defaultPalette);
+        var cbobRomBobsLst = LstDecoder.loadLstFile(format("%s/%s", fromDir, CbobRomBobsLst.FILENAME), defaultPalette);
+        var jobsBobResource = (BobResource) jobsBobList.getFirst();
+        var workerDetailsMap = new EnumMap<JobType, WorkerDetails>(JobType.class);
 
         // FIXME: assume RANGER == FORESTER
 
@@ -78,8 +61,9 @@ public class WorkersExtractor {
          *  - 3 (Vikings)  -> 1
          * */
 
+        // Construct the worker details map
         workerDetailsMap.put(JobType.HELPER, new WorkerDetails(false, JobsBob.HELPER_BOB_ID));
-        workerDetailsMap.put(JobType.WOODCUTTER, JobsBob.WOODCUTTER_BOB);
+        workerDetailsMap.put(JobType.WOODCUTTER, WOODCUTTER_BOB);
         workerDetailsMap.put(JobType.FISHER, new WorkerDetails(false, JobsBob.FISHERMAN_BOB_ID));
         workerDetailsMap.put(JobType.FORESTER, new WorkerDetails(false, JobsBob.FORESTER_BOB_ID));
         workerDetailsMap.put(JobType.CARPENTER, new WorkerDetails(false, JobsBob.CARPENTER_BOB_ID));
@@ -111,39 +95,36 @@ public class WorkersExtractor {
         workerDetailsMap.put(JobType.BOAT_CARRIER, new WorkerDetails(false, JobsBob.BOAT_CARRIER_BOB_ID));
         workerDetailsMap.put(JobType.CHAR_BURNER, new WorkerDetails(false, JobsBob.CHAR_BURNER_BOB_ID));
 
-        /* Composite the worker images and animations */
-        Map<JobType, RenderedWorker> renderedWorkers = BobDecoder.renderWorkerImages(jobsBobResource.getBob(), workerDetailsMap);
-        Map<JobType, WorkerImageCollection> workerImageCollectors = new EnumMap<>(JobType.class);
+        // Compose the worker images and animations
+        var renderedWorkers = BobDecoder.renderWorkerImages(jobsBobResource.getBob(), workerDetailsMap);
+        var workerCollectors = new EnumMap<JobType, WorkerImageCollection>(JobType.class);
 
-        for (JobType jobType : JobType.values()) {
-            RenderedWorker renderedWorker = renderedWorkers.get(jobType);
+        for (var jobType : JobType.values()) {
+            var renderedWorker = renderedWorkers.get(jobType);
+            var workerImageCollection = new WorkerImageCollection(jobType.name().toLowerCase());
 
-            WorkerImageCollection workerImageCollection = new WorkerImageCollection(jobType.name().toLowerCase());
+            for (var nation : Nation.values()) {
+                for (var direction : CompassDirection.values()) {
+                    var stackedBitmaps = renderedWorker.getAnimation(nation, direction);
 
-            for (Nation nation : Nation.values()) {
-                for (CompassDirection direction : CompassDirection.values()) {
-                    StackedBitmaps[] stackedBitmaps = renderedWorker.getAnimation(nation, direction);
+                    for (var frame : stackedBitmaps) {
+                        var body = frame.getPlayerBitmaps().getFirst();
+                        var head = frame.getPlayerBitmaps().get(1);
 
-                    for (StackedBitmaps frame : stackedBitmaps) {
-                        PlayerBitmap body = frame.getBitmaps().getFirst();
-                        PlayerBitmap head = frame.getBitmaps().get(1);
+                        // Calculate the dimension
+                        var maxOrigin = new Point(0, 0);
 
-                        /* Calculate the dimension */
-                        Point maxOrigin = new Point(0, 0);
-
-                        if (!frame.getBitmaps().isEmpty()) {
+                        if (!frame.getPlayerBitmaps().isEmpty()) {
                             maxOrigin.x = Integer.MIN_VALUE;
                             maxOrigin.y = Integer.MIN_VALUE;
 
                             boolean hasPlayerColor = false;
 
-                            for (Bitmap bitmap : frame.getBitmaps()) {
-                                if (bitmap instanceof PlayerBitmap) {
-                                    hasPlayerColor = true;
-                                }
+                            for (var bitmap : frame.getPlayerBitmaps()) {
+                                hasPlayerColor = true;
 
-                                Area bitmapVisibleArea = bitmap.getVisibleArea();
-                                Point bitmapOrigin = bitmap.getOrigin();
+                                var bitmapVisibleArea = bitmap.getVisibleArea();
+                                var bitmapOrigin = bitmap.getOrigin();
 
                                 maxOrigin.x = Math.max(maxOrigin.x, bitmapOrigin.x);
                                 maxOrigin.y = Math.max(maxOrigin.y, bitmapOrigin.y);
@@ -154,43 +135,10 @@ public class WorkersExtractor {
 
                             for (var playerColor : PlayerColor.values()) {
 
-                                /* Create a bitmap to merge both body and head into */
-                                Bitmap merged = new Bitmap(
-                                        maxOrigin.x + maxOrigin.x,
-                                        maxOrigin.y + maxOrigin.y,
-                                        maxOrigin.x,
-                                        maxOrigin.y,
-                                        defaultPalette,
-                                        TextureFormat.BGRA);
+                                // Create a bitmap to merge both body and head into
+                                var merged = mergeBodyAndHead(body, head, playerColor, hasPlayerColor, maxOrigin, defaultPalette);
 
-                                /* Draw the body */
-                                Area bodyVisibleArea = body.getVisibleArea();
-                                Point bodyToUpperLeft = new Point(maxOrigin.x - body.getOrigin().x, maxOrigin.y - body.getOrigin().y);
-                                Point bodyFromUpperLeft = bodyVisibleArea.getUpperLeftCoordinate();
-
-                                if (hasPlayerColor) {
-                                    merged.copyNonTransparentPixels(
-                                            body.getBitmapForPlayer(playerColor),
-                                            bodyToUpperLeft,
-                                            bodyFromUpperLeft,
-                                            bodyVisibleArea.getDimension());
-                                } else {
-                                    merged.copyNonTransparentPixels(
-                                            body,
-                                            bodyToUpperLeft,
-                                            bodyFromUpperLeft,
-                                            bodyVisibleArea.getDimension());
-                                }
-
-                                /* Draw the head */
-                                Area headVisibleArea = head.getVisibleArea();
-
-                                Point headToUpperLeft = new Point(maxOrigin.x - head.getOrigin().x, maxOrigin.y - head.getOrigin().y);
-                                Point headFromUpperLeft = headVisibleArea.getUpperLeftCoordinate();
-
-                                merged.copyNonTransparentPixels(head, headToUpperLeft, headFromUpperLeft, headVisibleArea.getDimension());
-
-                                /* Store the image in the worker image collection */
+                                // Store the image in the worker image collection
                                 if (nationSpecificWorkers.contains(jobType)) {
                                     if (hasPlayerColor) {
                                         System.out.println("Adding " + jobType + nation + ", " + playerColor + ", " + direction);
@@ -222,575 +170,358 @@ public class WorkersExtractor {
                 }
             }
 
-            workerImageCollection.addShadowImages(EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_EAST_SHADOW_ANIMATION, 8));
-            workerImageCollection.addShadowImages(SOUTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW_ANIMATION, 8));
-            workerImageCollection.addShadowImages(SOUTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW_ANIMATION, 8));
-            workerImageCollection.addShadowImages(WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_WEST_SHADOW_ANIMATION, 8));
-            workerImageCollection.addShadowImages(NORTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW_ANIMATION, 8));
-            workerImageCollection.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
+            workerImageCollection.addShadowImages(EAST, map0ZLst, Map0ZLst.WALKING_EAST_SHADOW);
+            workerImageCollection.addShadowImages(SOUTH_EAST, map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW);
+            workerImageCollection.addShadowImages(SOUTH_WEST, map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW);
+            workerImageCollection.addShadowImages(WEST, map0ZLst, Map0ZLst.WALKING_WEST_SHADOW);
+            workerImageCollection.addShadowImages(NORTH_WEST, map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW);
+            workerImageCollection.addShadowImages(NORTH_EAST, map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW);
 
             // Store the worker image collector
-            workerImageCollectors.put(jobType, workerImageCollection);
+            workerCollectors.put(jobType, workerImageCollection);
         }
 
         // Add cargo carrying images and animations
-        WorkerImageCollection woodcutterImageCollector = workerImageCollectors.get(JobType.WOODCUTTER);
-        WorkerImageCollection carpenterImageCollector = workerImageCollectors.get(JobType.CARPENTER);
-        WorkerImageCollection fishermanImageCollector = workerImageCollectors.get(JobType.FISHER);
-        WorkerImageCollection stonemasonImageCollector = workerImageCollectors.get(JobType.STONEMASON);
-        WorkerImageCollection minterImageCollector = workerImageCollectors.get(JobType.MINTER);
-        WorkerImageCollection minerImageCollector = workerImageCollectors.get(JobType.MINER);
-        WorkerImageCollection farmerImageCollector = workerImageCollectors.get(JobType.FARMER);
-        WorkerImageCollection pigBreederImageCollector = workerImageCollectors.get(JobType.PIG_BREEDER);
-        WorkerImageCollection millerImageCollector = workerImageCollectors.get(JobType.MILLER);
-        WorkerImageCollection bakerImageCollector = workerImageCollectors.get(JobType.BAKER);
-        WorkerImageCollection metalWorkerImageCollector = workerImageCollectors.get(JobType.METALWORKER);
-        WorkerImageCollection hunterWorkerImageCollector = workerImageCollectors.get(JobType.HUNTER);
-        WorkerImageCollection shipwrightWorkerImageCollector = workerImageCollectors.get(JobType.SHIP_WRIGHT);
-        WorkerImageCollection brewerWorkerImageCollector = workerImageCollectors.get(JobType.BREWER);
-        WorkerImageCollection foresterWorkerImageCollector = workerImageCollectors.get(JobType.FORESTER);
-        WorkerImageCollection planerWorkerImageCollector = workerImageCollectors.get(JobType.PLANER);
-        WorkerImageCollection geologistWorkerImageCollector = workerImageCollectors.get(JobType.GEOLOGIST);
-        WorkerImageCollection builderWorkerImageCollector = workerImageCollectors.get(JobType.BUILDER);
-        WorkerImageCollection privateWorkerImageCollector = workerImageCollectors.get(JobType.PRIVATE);
-        WorkerImageCollection privateFirstClassWorkerImageCollector = workerImageCollectors.get(JobType.PRIVATE_FIRST_CLASS);
-        WorkerImageCollection sergeantWorkerImageCollector = workerImageCollectors.get(JobType.SERGEANT);
-        WorkerImageCollection officerWorkerImageCollector = workerImageCollectors.get(JobType.OFFICER);
-        WorkerImageCollection generalWorkerImageCollector = workerImageCollectors.get(JobType.GENERAL);
+        WorkerImageCollection woodcutterCollector = workerCollectors.get(JobType.WOODCUTTER);
+        WorkerImageCollection carpenterCollector = workerCollectors.get(JobType.CARPENTER);
+        WorkerImageCollection fishermanCollector = workerCollectors.get(JobType.FISHER);
+        WorkerImageCollection stonemasonCollector = workerCollectors.get(JobType.STONEMASON);
+        WorkerImageCollection minterCollector = workerCollectors.get(JobType.MINTER);
+        WorkerImageCollection minerCollector = workerCollectors.get(JobType.MINER);
+        WorkerImageCollection farmerCollector = workerCollectors.get(JobType.FARMER);
+        WorkerImageCollection pigBreederCollector = workerCollectors.get(JobType.PIG_BREEDER);
+        WorkerImageCollection millerCollector = workerCollectors.get(JobType.MILLER);
+        WorkerImageCollection bakerCollector = workerCollectors.get(JobType.BAKER);
+        WorkerImageCollection metalWorkerCollector = workerCollectors.get(JobType.METALWORKER);
+        WorkerImageCollection hunterCollector = workerCollectors.get(JobType.HUNTER);
+        WorkerImageCollection shipwrightCollector = workerCollectors.get(JobType.SHIP_WRIGHT);
+        WorkerImageCollection brewerCollector = workerCollectors.get(JobType.BREWER);
+        WorkerImageCollection foresterCollector = workerCollectors.get(JobType.FORESTER);
+        WorkerImageCollection planerCollector = workerCollectors.get(JobType.PLANER);
+        WorkerImageCollection geologistCollector = workerCollectors.get(JobType.GEOLOGIST);
+        WorkerImageCollection builderCollector = workerCollectors.get(JobType.BUILDER);
+        WorkerImageCollection privateCollector = workerCollectors.get(JobType.PRIVATE);
+        WorkerImageCollection privateFirstClassCollector = workerCollectors.get(JobType.PRIVATE_FIRST_CLASS);
+        WorkerImageCollection sergeantCollector = workerCollectors.get(JobType.SERGEANT);
+        WorkerImageCollection officerCollector = workerCollectors.get(JobType.OFFICER);
+        WorkerImageCollection generalCollector = workerCollectors.get(JobType.GENERAL);
 
-        Bob bob = jobsBobResource.getBob();
+        var bob = jobsBobResource.getBob();
 
-        woodcutterImageCollector.readCargoImagesFromBob(
-                WOOD,
-                JobsBob.WOODCUTTER_BOB.getBodyType(),
-                JobsBob.WOODCUTTER_WITH_WOOD_CARGO_BOB_ID,
-                bob
-        );
-
-        woodcutterImageCollector.addAnimation(WorkerAction.CUTTING, cbobRomBobsLst, CbobRomBobsLst.CUTTING);
+        woodcutterCollector.readCargoImagesFromBob(WOOD, WOODCUTTER_BOB.getBodyType(), WOODCUTTER_WITH_WOOD_CARGO_BOB_ID, bob);
+        woodcutterCollector.addAnimation(WorkerAction.CUTTING, cbobRomBobsLst, CbobRomBobsLst.CUTTING);
 
         // Add roman military attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_EAST);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_WEST);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_EAST);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_WEST);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_EAST);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_WEST);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_EAST);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_WEST);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_EAST);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_ATTACKING_WEST);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_EAST);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_ATTACKING_WEST);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_EAST);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_ATTACKING_WEST);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_EAST);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_ATTACKING_WEST);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_EAST);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_ATTACKING_WEST);
 
         // Add roman military getting hit
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_SHIELD_UP);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_SHIELD_UP);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_JUMP_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_JUMP_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_EAST_JUMP_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_WEST_JUMP_BACK);
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_FLINCH_HIT);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_FLINCH_HIT);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_GETTING_HIT);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_GETTING_HIT);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_FLINCH_HIT);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_FLINCH_HIT);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_EAST_GETTING_HIT);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_PRIVATE_FIRST_CLASS_WEST_GETTING_HIT);
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_AVOIDING_HIT);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_AVOIDING_HIT);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_FLINCH_HIT);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_FLINCH_HIT);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_GETTING_HIT);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_GETTING_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_AVOIDING_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_AVOIDING_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_FLINCH_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_FLINCH_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_EAST_GETTING_HIT);
+        sergeantCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_SERGEANT_WEST_GETTING_HIT);
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_AVOIDING_HIT);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_AVOIDING_HIT);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_FLINCH_HIT);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_FLINCH_HIT);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_GETTING_HIT);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_GETTING_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_AVOIDING_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_AVOIDING_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_FLINCH_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_FLINCH_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_EAST_GETTING_HIT);
+        officerCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_OFFICER_WEST_GETTING_HIT);
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_AVOIDING_HIT);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_AVOIDING_HIT);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_FLINCH_HIT);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_FLINCH_HIT);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_GETTING_HIT);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_GETTING_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_AVOIDING_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_AVOIDING_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_FLINCH_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_FLINCH_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, EAST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_EAST_GETTING_HIT);
+        generalCollector.addNationSpecificAnimationInDirection(ROMANS, WEST, GET_HIT, cbobRomBobsLst, CbobRomBobsLst.ROMAN_GENERAL_WEST_GETTING_HIT);
 
-        privateWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
-        privateFirstClassWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
-        sergeantWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
-        officerWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
-        generalWorkerImageCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        privateCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        privateFirstClassCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        sergeantCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        officerCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
+        generalCollector.addAnimation(DIE, cbobRomBobsLst, CbobRomBobsLst.SOLDIER_DYING);
 
         // Add Japanese soldiers attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_ATTACKING);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_ATTACKING);
 
         // Add other actions for Japanese soldiers
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_SHIELD_UP);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_EAST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_WEST_SHIELD_UP);
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_SHIELD_UP);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_EAST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_SERGEANT_WEST_SHIELD_UP);
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_SHIELD_UP);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_EAST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_OFFICER_WEST_SHIELD_UP);
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_SHIELD_UP);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_EAST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(JAPANESE, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.JAPANESE_GENERAL_WEST_SHIELD_UP);
 
 
         // Add Viking soldiers attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_ATTACKING);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_ATTACKING);
 
         // Add other actions for Viking soldiers
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_SHIELD_UP);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_EAST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_WEST_SHIELD_UP);
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_SHIELD_UP);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_EAST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_SERGEANT_WEST_SHIELD_UP);
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_SHIELD_UP);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_EAST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_OFFICER_WEST_SHIELD_UP);
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_SHIELD_UP);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_EAST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(VIKINGS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.VIKING_GENERAL_WEST_SHIELD_UP);
 
 
         // Add African soldiers attacking
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_ATTACKING);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_ATTACKING);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_ATTACKING);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_ATTACKING);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_ATTACKING);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_ATTACKING);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_ATTACKING);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_ATTACKING);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_ATTACKING);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, HIT, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_ATTACKING);
 
         // Add other actions for African soldiers
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_JUMPING_BACK);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_STAND_ASIDE);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_SHIELD_UP);
-        privateWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_JUMPING_BACK);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_STAND_ASIDE);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_EAST_SHIELD_UP);
+        privateCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_WEST_SHIELD_UP);
 
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
-        privateFirstClassWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_JUMPING_BACK);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_STAND_ASIDE);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_EAST_SHIELD_UP);
+        privateFirstClassCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_PRIVATE_FIRST_CLASS_WEST_SHIELD_UP);
 
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_JUMPING_BACK);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_STAND_ASIDE);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_SHIELD_UP);
-        sergeantWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_JUMPING_BACK);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_STAND_ASIDE);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_EAST_SHIELD_UP);
+        sergeantCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_SERGEANT_WEST_SHIELD_UP);
 
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_JUMPING_BACK);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_STAND_ASIDE);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_SHIELD_UP);
-        officerWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_JUMPING_BACK);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_STAND_ASIDE);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_EAST_SHIELD_UP);
+        officerCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_OFFICER_WEST_SHIELD_UP);
 
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_JUMPING_BACK);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_STAND_ASIDE);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_SHIELD_UP);
-        generalWorkerImageCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, JUMP_BACK, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_JUMPING_BACK);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, STAND_ASIDE, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_STAND_ASIDE);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, EAST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_EAST_SHIELD_UP);
+        generalCollector.addNationSpecificAnimationInDirection(AFRICANS, WEST, SHIELD_UP, cbobRomBobsLst, CbobRomBobsLst.AFRICAN_GENERAL_WEST_SHIELD_UP);
 
 
         // Add regular worker animations
-        carpenterImageCollector.readCargoImagesFromBob(
-                PLANK,
-                JobsBob.CARPENTER_BOB.getBodyType(),
-                JobsBob.CARPENTER_WITH_PLANK_BOB_ID,
-                bob
-        );
+        carpenterCollector.readCargoImagesFromBob(PLANK, CARPENTER_BOB.getBodyType(), CARPENTER_WITH_PLANK_BOB_ID, bob);
 
-        carpenterImageCollector.addAnimation(WorkerAction.SAWING, cbobRomBobsLst, CbobRomBobsLst.SAWING);
+        carpenterCollector.addAnimation(WorkerAction.SAWING, cbobRomBobsLst, CbobRomBobsLst.SAWING);
 
-        stonemasonImageCollector.readCargoImagesFromBob(
-                STONE,
-                JobsBob.STONEMASON_BOB.getBodyType(),
-                JobsBob.STONEMASON_WITH_STONE_CARGO_BOB_ID,
-                bob
-        );
+        stonemasonCollector.readCargoImagesFromBob(STONE, STONEMASON_BOB.getBodyType(), STONEMASON_WITH_STONE_CARGO_BOB_ID, bob);
 
-        stonemasonImageCollector.addAnimation(WorkerAction.HACKING_STONE, cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE);
-        foresterWorkerImageCollector.addAnimation(WorkerAction.PLANTING_TREE, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING);
-        planerWorkerImageCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING);
-        geologistWorkerImageCollector.addAnimation(WorkerAction.INVESTIGATING, cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING);
-        builderWorkerImageCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW);
-        builderWorkerImageCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION);
+        stonemasonCollector.addAnimation(WorkerAction.HACKING_STONE, cbobRomBobsLst, CbobRomBobsLst.HACKING_STONE);
+        foresterCollector.addAnimation(WorkerAction.PLANTING_TREE, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_PLANTING);
+        planerCollector.addAnimation(WorkerAction.DIGGING_AND_STOMPING, cbobRomBobsLst, CbobRomBobsLst.DIGGING_AND_STOMPING);
+        geologistCollector.addAnimation(WorkerAction.INVESTIGATING, cbobRomBobsLst, CbobRomBobsLst.INVESTIGATING);
+        builderCollector.addAnimation(WorkerAction.HAMMERING_HOUSE_HIGH_AND_LOW, cbobRomBobsLst, CbobRomBobsLst.HAMMERING_HOUSE_HIGH_AND_LOW);
+        builderCollector.addAnimation(WorkerAction.INSPECTING_HOUSE_CONSTRUCTION, cbobRomBobsLst, CbobRomBobsLst.INSPECTING_HOUSE_CONSTRUCTION);
 
-        minterImageCollector.readCargoImagesFromBob(
-                COIN,
-                JobsBob.MINTER_BOB.getBodyType(),
-                JobsBob.MINTER_WITH_COIN_CARGO_BOB_ID,
-                bob
-        );
+        minterCollector.readCargoImagesFromBob(COIN, MINTER_BOB.getBodyType(), MINTER_WITH_COIN_CARGO_BOB_ID, bob);
 
         // TODO: add work animation for minter
 
-        minerImageCollector.readCargoImagesFromBob(
-                GOLD,
-                JobsBob.MINER_BOB.getBodyType(),
-                JobsBob.MINER_WITH_GOLD_CARGO_BOB_ID,
-                bob
-        );
-
-        minerImageCollector.readCargoImagesFromBob(
-                IRON,
-                JobsBob.MINER_BOB.getBodyType(),
-                JobsBob.MINER_WITH_IRON_CARGO_BOB_ID,
-                bob
-        );
-
-        minerImageCollector.readCargoImagesFromBob(
-                COAL,
-                JobsBob.MINER_BOB.getBodyType(),
-                JobsBob.MINER_WITH_COAL_CARGO_BOB_ID,
-                bob
-        );
-
-        minerImageCollector.readCargoImagesFromBob(
-                STONE,
-                JobsBob.MINER_BOB.getBodyType(),
-                JobsBob.MINER_WITH_STONE_CARGO_BOB_ID,
-                bob
-        );
+        minerCollector.readCargoImagesFromBob(GOLD, MINER_BOB.getBodyType(), MINER_WITH_GOLD_CARGO_BOB_ID, bob);
+        minerCollector.readCargoImagesFromBob(IRON, MINER_BOB.getBodyType(), MINER_WITH_IRON_CARGO_BOB_ID, bob);
+        minerCollector.readCargoImagesFromBob(COAL, MINER_BOB.getBodyType(), MINER_WITH_COAL_CARGO_BOB_ID, bob);
+        minerCollector.readCargoImagesFromBob(STONE, MINER_BOB.getBodyType(), MINER_WITH_STONE_CARGO_BOB_ID, bob);
 
         // TODO: add work animation for miner
 
         // TODO: job id 69 == carrying crucible/anvil?
 
-        fishermanImageCollector.readCargoImagesFromBob(
-                FISH,
-                JobsBob.FISHERMAN_BOB.getBodyType(),
-                JobsBob.FISHERMAN_WITH_FISH_CARGO_BOB_ID,
-                bob
-        );
+        fishermanCollector.readCargoImagesFromBob(FISH, FISHERMAN_BOB.getBodyType(), FISHERMAN_WITH_FISH_CARGO_BOB_ID, bob);
 
         // Lower fishing rod
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                EAST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_EAST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                SOUTH_EAST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_EAST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                SOUTH_WEST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.LOWER_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, EAST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_EAST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, SOUTH_EAST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, SOUTH_WEST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_SOUTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_WEST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(LOWER_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.LOWERING_FISHING_ROD_NORTH_EAST);
 
         // Keep fishing
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                EAST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_EAST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                SOUTH_EAST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_EAST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                SOUTH_WEST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_WEST);
-
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.FISHING,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, EAST, cbobRomBobsLst, CbobRomBobsLst.FISHING_EAST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, SOUTH_EAST, cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, SOUTH_WEST, cbobRomBobsLst, CbobRomBobsLst.FISHING_SOUTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, WEST, cbobRomBobsLst, CbobRomBobsLst.FISHING_WEST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, WEST, cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(FISHING, WEST, cbobRomBobsLst, CbobRomBobsLst.FISHING_NORTH_EAST);
 
         // Pull up fish
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                EAST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, EAST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, SOUTH_EAST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_EAST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, SOUTH_WEST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_WEST);
+        fishermanCollector.addWorkAnimationInDirection(PULL_UP_FISHING_ROD, WEST, cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_EAST);
 
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                SOUTH_EAST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_EAST);
+        farmerCollector.readCargoImagesFromBob(WHEAT, FARMER_BOB.getBodyType(), FARMER_WITH_WHEAT_CARGO_BOB_ID, bob);
 
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                SOUTH_WEST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_SOUTH_WEST);
+        farmerCollector.addAnimation(PLANTING_WHEAT, cbobRomBobsLst, CbobRomBobsLst.SOWING);
+        farmerCollector.addAnimation(HARVESTING, cbobRomBobsLst, CbobRomBobsLst.HARVESTING);
 
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_WEST);
+        pigBreederCollector.readCargoImagesFromBob(PIG, PIG_BREEDER_BOB.getBodyType(), PIG_BREEDER_WITH_PIG_CARGO_BOB_ID, bob);
 
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_WEST);
+        millerCollector.readCargoImagesFromBob(FLOUR, MILLER_BOB.getBodyType(), MILLER_WITH_FLOUR_CARGO_BOB_ID, bob);
 
-        fishermanImageCollector.addWorkAnimationInDirection(
-                WorkerAction.PULL_UP_FISHING_ROD,
-                WEST,
-                cbobRomBobsLst, CbobRomBobsLst.PULL_UP_FISH_NORTH_EAST);
+        bakerCollector.readCargoImagesFromBob(BREAD, BAKER_BOB.getBodyType(), BAKER_WITH_BREAD_CARGO_BOB_ID, bob);
 
-        farmerImageCollector.readCargoImagesFromBob(
-                WHEAT,
-                JobsBob.FARMER_BOB.getBodyType(),
-                JobsBob.FARMER_WITH_WHEAT_CARGO_BOB_ID,
-                bob
-        );
-
-        farmerImageCollector.addAnimation(WorkerAction.PLANTING_WHEAT, cbobRomBobsLst, CbobRomBobsLst.SOWING);
-        farmerImageCollector.addAnimation(WorkerAction.HARVESTING, cbobRomBobsLst, CbobRomBobsLst.HARVESTING);
-
-        pigBreederImageCollector.readCargoImagesFromBob(
-                PIG,
-                JobsBob.PIG_BREEDER_BOB.getBodyType(),
-                JobsBob.PIG_BREEDER_WITH_PIG_CARGO_BOB_ID,
-                bob
-        );
-
-        millerImageCollector.readCargoImagesFromBob(
-                FLOUR,
-                JobsBob.MILLER_BOB.getBodyType(),
-                JobsBob.MILLER_WITH_FLOUR_CARGO_BOB_ID,
-                bob
-        );
-
-        bakerImageCollector.readCargoImagesFromBob(
-                BREAD,
-                JobsBob.BAKER_BOB.getBodyType(),
-                JobsBob.BAKER_WITH_BREAD_CARGO_BOB_ID,
-                bob
-        );
-
-        bakerImageCollector.addAnimation(WorkerAction.BAKING, cbobRomBobsLst, CbobRomBobsLst.BAKING);
+        bakerCollector.addAnimation(BAKING, cbobRomBobsLst, CbobRomBobsLst.BAKING);
 
         // TODO: Handle brewer and/or well worker
 
-        brewerWorkerImageCollector.addAnimation(WorkerAction.DRINKING_BEER, cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER);
+        brewerCollector.addAnimation(DRINKING_BEER, cbobRomBobsLst, CbobRomBobsLst.DRINKING_BEER);
 
         // TODO: Handle metalworker carrying "shift gear". Assume it's tongs
 
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                TONGS,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_TONGS_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                HAMMER,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_HAMMER_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                AXE,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_AXE_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                PICK_AXE,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_PICK_AXE_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                SHOVEL,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_SHOVEL_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                CRUCIBLE,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_CRUCIBLE_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                FISHING_ROD,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_FISHING_ROD_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                SCYTHE,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_SCYTHE_CARGO_BOB_ID,
-                bob
-        );
+        metalWorkerCollector.readCargoImagesFromBob(TONGS, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_TONGS_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(HAMMER, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_HAMMER_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(AXE, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_AXE_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(PICK_AXE, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_PICK_AXE_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(SHOVEL, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_SHOVEL_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(CRUCIBLE, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_CRUCIBLE_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(FISHING_ROD, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_FISHING_ROD_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(SCYTHE, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_SCYTHE_CARGO_BOB_ID, bob);
 
         // TODO: bucket
 
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                CLEAVER,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_CLEAVER_CARGO_BOB_ID,
-                bob
-        );
-
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                ROLLING_PIN,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_ROLLING_PIN_CARGO_BOB_ID,
-                bob
-        );
+        metalWorkerCollector.readCargoImagesFromBob(CLEAVER, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_CLEAVER_CARGO_BOB_ID, bob);
+        metalWorkerCollector.readCargoImagesFromBob(ROLLING_PIN, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_ROLLING_PIN_CARGO_BOB_ID, bob);
 
         // TODO: Is 2330-2335 a saw or a bow?
-        metalWorkerImageCollector.readCargoImagesFromBob(
-                SAW,
-                JobsBob.METAL_WORKER_BOB.getBodyType(),
-                JobsBob.METAL_WORKER_WITH_SAW_CARGO_BOB_ID,
-                bob
-        );
+        metalWorkerCollector.readCargoImagesFromBob(SAW, METAL_WORKER_BOB.getBodyType(), METAL_WORKER_WITH_SAW_CARGO_BOB_ID, bob);
 
-        hunterWorkerImageCollector.readCargoImagesFromBob(
-                MEAT,
-                JobsBob.HUNTER_BOB.getBodyType(),
-                JobsBob.HUNTER_WITH_MEAT_CARGO_BOB_ID,
-                bob
-        );
+        hunterCollector.readCargoImagesFromBob(MEAT, HUNTER_BOB.getBodyType(), HUNTER_WITH_MEAT_CARGO_BOB_ID, bob);
 
-        hunterWorkerImageCollector.addAnimation(WorkerAction.SHOOTING, cbobRomBobsLst, CbobRomBobsLst.HUNTING);
-        hunterWorkerImageCollector.addAnimation(WorkerAction.PICKING_UP_MEAT, cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT);
+        hunterCollector.addAnimation(SHOOTING, cbobRomBobsLst, CbobRomBobsLst.HUNTING);
+        hunterCollector.addAnimation(PICKING_UP_MEAT, cbobRomBobsLst, CbobRomBobsLst.PICKING_UP_MEAT);
 
-        shipwrightWorkerImageCollector.readCargoImagesFromBob(
-                BOAT,
-                JobsBob.SHIPWRIGHT_BOB.getBodyType(),
-                JobsBob.SHIPWRIGHT_WITH_BOAT_CARGO_BOB_ID,
-                bob
-        );
-
-        shipwrightWorkerImageCollector.readCargoImagesFromBob(
-                PLANK,
-                JobsBob.SHIPWRIGHT_BOB.getBodyType(),
-                JobsBob.SHIPWRIGHT_WITH_PLANK_CARGO_BOB_ID,
-                bob
-        );
+        shipwrightCollector.readCargoImagesFromBob(BOAT, SHIPWRIGHT_BOB.getBodyType(), SHIPWRIGHT_WITH_BOAT_CARGO_BOB_ID, bob);
+        shipwrightCollector.readCargoImagesFromBob(PLANK, SHIPWRIGHT_BOB.getBodyType(), SHIPWRIGHT_WITH_PLANK_CARGO_BOB_ID, bob);
 
         // Write each worker image collection to file
-        for (WorkerImageCollection workerImageCollection : workerImageCollectors.values()) {
+        for (var workerImageCollection : workerCollectors.values()) {
             workerImageCollection.writeImageAtlas(toDir + "/", defaultPalette);
         }
 
         // Extract couriers
-        Bob jobsBob = jobsBobResource.getBob();
-        Bob carrierBob = BobDecoder.loadBobFile(fromDir + "/" + CarrierBob.FILENAME, defaultPalette);
+        var jobsBob = jobsBobResource.getBob();
+        var carrierBob = BobDecoder.loadBobFile(fromDir + "/" + CarrierBob.FILENAME, defaultPalette);
 
-        WorkerImageCollection thinCarrier = new WorkerImageCollection("thin-carrier-no-cargo");
-        WorkerImageCollection fatCarrier = new WorkerImageCollection("fat-carrier-no-cargo");
-        WorkerImageCollection thinCarrierWithCargo = new WorkerImageCollection("thin-carrier-with-cargo");
-        WorkerImageCollection fatCarrierWithCargo = new WorkerImageCollection("fat-carrier-with-cargo");
+        var thinCarrier = new WorkerImageCollection("thin-carrier-no-cargo");
+        var fatCarrier = new WorkerImageCollection("fat-carrier-no-cargo");
+        var thinCarrierWithCargo = new WorkerImageCollection("thin-carrier-with-cargo");
+        var fatCarrierWithCargo = new WorkerImageCollection("fat-carrier-with-cargo");
 
         // Read body images
         thinCarrier.readBodyImagesFromBob(THIN, jobsBob);
@@ -799,15 +530,15 @@ public class WorkersExtractor {
         fatCarrierWithCargo.readBodyImagesFromBob(FAT, carrierBob);
 
         // Read walking images without cargo
-        thinCarrier.readHeadImagesWithoutCargoFromBob(THIN, JobsBob.HELPER_BOB_ID, jobsBob);
-        fatCarrier.readHeadImagesWithoutCargoFromBob(FAT, JobsBob.HELPER_BOB_ID, jobsBob);
+        thinCarrier.readHeadImagesWithoutCargoFromBob(THIN, HELPER_BOB_ID, jobsBob);
+        fatCarrier.readHeadImagesWithoutCargoFromBob(FAT, HELPER_BOB_ID, jobsBob);
 
         thinCarrier.mergeBodyAndHeadImages(defaultPalette);
         fatCarrier.mergeBodyAndHeadImages(defaultPalette);
 
         // Read walking animation for each type of cargo
-        for (CarrierCargo carrierCargo : CarrierCargo.values()) {
-            Material material = CarrierBob.CARGO_BOB_ID_TO_MATERIAL_MAP.get(carrierCargo.ordinal());
+        for (var carrierCargo : CarrierCargo.values()) {
+            var material = CarrierBob.CARGO_BOB_ID_TO_MATERIAL_MAP.get(carrierCargo.ordinal());
 
             if (material == null) {
                 continue;
@@ -817,33 +548,33 @@ public class WorkersExtractor {
             fatCarrierWithCargo.readCargoImagesFromBob(material, FAT, carrierCargo.ordinal(), carrierBob);
         }
 
-        thinCarrier.addShadowImages(EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_EAST_SHADOW_ANIMATION, 8));
-        thinCarrier.addShadowImages(SOUTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW_ANIMATION, 8));
-        thinCarrier.addShadowImages(SOUTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW_ANIMATION, 8));
-        thinCarrier.addShadowImages(WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_WEST_SHADOW_ANIMATION, 8));
-        thinCarrier.addShadowImages(NORTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW_ANIMATION, 8));
-        thinCarrier.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
+        thinCarrier.addShadowImages(EAST, map0ZLst, Map0ZLst.WALKING_EAST_SHADOW);
+        thinCarrier.addShadowImages(SOUTH_EAST, map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW);
+        thinCarrier.addShadowImages(SOUTH_WEST, map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW);
+        thinCarrier.addShadowImages(WEST, map0ZLst, Map0ZLst.WALKING_WEST_SHADOW);
+        thinCarrier.addShadowImages(NORTH_WEST, map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW);
+        thinCarrier.addShadowImages(NORTH_EAST, map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW);
 
-        fatCarrier.addShadowImages(EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_EAST_SHADOW_ANIMATION, 8));
-        fatCarrier.addShadowImages(SOUTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW_ANIMATION, 8));
-        fatCarrier.addShadowImages(SOUTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW_ANIMATION, 8));
-        fatCarrier.addShadowImages(WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_WEST_SHADOW_ANIMATION, 8));
-        fatCarrier.addShadowImages(NORTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW_ANIMATION, 8));
-        fatCarrier.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
+        fatCarrier.addShadowImages(EAST, map0ZLst, Map0ZLst.WALKING_EAST_SHADOW);
+        fatCarrier.addShadowImages(SOUTH_EAST, map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW);
+        fatCarrier.addShadowImages(SOUTH_WEST, map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW);
+        fatCarrier.addShadowImages(WEST, map0ZLst, Map0ZLst.WALKING_WEST_SHADOW);
+        fatCarrier.addShadowImages(NORTH_WEST, map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW);
+        fatCarrier.addShadowImages(NORTH_EAST, map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW);
 
-        thinCarrierWithCargo.addShadowImages(EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_EAST_SHADOW_ANIMATION, 8));
-        thinCarrierWithCargo.addShadowImages(SOUTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW_ANIMATION, 8));
-        thinCarrierWithCargo.addShadowImages(SOUTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW_ANIMATION, 8));
-        thinCarrierWithCargo.addShadowImages(WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_WEST_SHADOW_ANIMATION, 8));
-        thinCarrierWithCargo.addShadowImages(NORTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW_ANIMATION, 8));
-        thinCarrierWithCargo.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
+        thinCarrierWithCargo.addShadowImages(EAST, map0ZLst, Map0ZLst.WALKING_EAST_SHADOW);
+        thinCarrierWithCargo.addShadowImages(SOUTH_EAST, map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW);
+        thinCarrierWithCargo.addShadowImages(SOUTH_WEST, map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW);
+        thinCarrierWithCargo.addShadowImages(WEST, map0ZLst, Map0ZLst.WALKING_WEST_SHADOW);
+        thinCarrierWithCargo.addShadowImages(NORTH_WEST, map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW);
+        thinCarrierWithCargo.addShadowImages(NORTH_EAST, map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW);
 
-        fatCarrierWithCargo.addShadowImages(EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_EAST_SHADOW_ANIMATION, 8));
-        fatCarrierWithCargo.addShadowImages(SOUTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW_ANIMATION, 8));
-        fatCarrierWithCargo.addShadowImages(SOUTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW_ANIMATION, 8));
-        fatCarrierWithCargo.addShadowImages(WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_WEST_SHADOW_ANIMATION, 8));
-        fatCarrierWithCargo.addShadowImages(NORTH_WEST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW_ANIMATION, 8));
-        fatCarrierWithCargo.addShadowImages(NORTH_EAST, getImagesAt(map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW_ANIMATION, 8));
+        fatCarrierWithCargo.addShadowImages(EAST, map0ZLst, Map0ZLst.WALKING_EAST_SHADOW);
+        fatCarrierWithCargo.addShadowImages(SOUTH_EAST, map0ZLst, Map0ZLst.WALKING_SOUTH_EAST_SHADOW);
+        fatCarrierWithCargo.addShadowImages(SOUTH_WEST, map0ZLst, Map0ZLst.WALKING_SOUTH_WEST_SHADOW);
+        fatCarrierWithCargo.addShadowImages(WEST, map0ZLst, Map0ZLst.WALKING_WEST_SHADOW);
+        fatCarrierWithCargo.addShadowImages(NORTH_WEST, map0ZLst, Map0ZLst.WALKING_NORTH_WEST_SHADOW);
+        fatCarrierWithCargo.addShadowImages(NORTH_EAST, map0ZLst, Map0ZLst.WALKING_NORTH_EAST_SHADOW);
 
         // Add animations for when the couriers are bored
         fatCarrier.addAnimation(CHEW_GUM, cbobRomBobsLst, CbobRomBobsLst.CHEW_GUM);
@@ -857,5 +588,44 @@ public class WorkersExtractor {
         fatCarrier.writeImageAtlas(toDir + "/", defaultPalette);
         thinCarrierWithCargo.writeImageAtlas(toDir + "/", defaultPalette);
         fatCarrierWithCargo.writeImageAtlas(toDir + "/", defaultPalette);
+    }
+
+    static Bitmap mergeBodyAndHead(PlayerBitmap body, PlayerBitmap head, PlayerColor playerColor, boolean hasPlayerColor, Point maxOrigin, Palette defaultPalette) {
+        var merged = new Bitmap(
+                maxOrigin.x + maxOrigin.x,
+                maxOrigin.y + maxOrigin.y,
+                maxOrigin.x,
+                maxOrigin.y,
+                defaultPalette,
+                TextureFormat.BGRA);
+
+        // Draw the body
+        var bodyVisibleArea = body.getVisibleArea();
+        var bodyToUpperLeft = new Point(maxOrigin.x - body.getOrigin().x, maxOrigin.y - body.getOrigin().y);
+        var bodyFromUpperLeft = bodyVisibleArea.getUpperLeftCoordinate();
+
+        if (hasPlayerColor) {
+            merged.copyNonTransparentPixels(
+                    body.getBitmapForPlayer(playerColor),
+                    bodyToUpperLeft,
+                    bodyFromUpperLeft,
+                    bodyVisibleArea.getDimension());
+        } else {
+            merged.copyNonTransparentPixels(
+                    body,
+                    bodyToUpperLeft,
+                    bodyFromUpperLeft,
+                    bodyVisibleArea.getDimension());
+        }
+
+        // Draw the head
+        var headVisibleArea = head.getVisibleArea();
+
+        var headToUpperLeft = new Point(maxOrigin.x - head.getOrigin().x, maxOrigin.y - head.getOrigin().y);
+        var headFromUpperLeft = headVisibleArea.getUpperLeftCoordinate();
+
+        merged.copyNonTransparentPixels(head, headToUpperLeft, headFromUpperLeft, headVisibleArea.getDimension());
+
+        return merged;
     }
 }

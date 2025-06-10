@@ -428,14 +428,17 @@ public class Soldier extends Worker {
 
             case WALKING_TO_TAKE_OVER_BUILDING -> {
                 if (buildingToAttack.isReady()) {
+                    System.out.println("Soldier taking over building: " + this + ", " + buildingToAttack);
+                    System.out.println(map.getBuildings().contains(buildingToAttack));
+
                     var previousOwner = buildingToAttack.getPlayer();
 
                     // Capture the building
-                    buildingToAttack.capture(getPlayer());
+                    buildingToAttack.capture(player);
 
                     // Report the takeover
                     previousOwner.reportBuildingLost(buildingToAttack);
-                    getPlayer().reportBuildingCaptured(buildingToAttack);
+                    player.reportBuildingCaptured(buildingToAttack);
 
                     // Return home if it's a headquarters
                     if (buildingToAttack.isHeadquarter()) {

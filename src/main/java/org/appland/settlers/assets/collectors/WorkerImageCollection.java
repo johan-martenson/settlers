@@ -193,6 +193,10 @@ public class WorkerImageCollection {
         shadowImages.put(compassDirection, images);
     }
 
+    public void addShadowImages(CompassDirection compassDirection, List<GameResource> resources, Animation animation) {
+        addShadowImages(compassDirection, getImagesFromResources(resources, animation));
+    }
+
     /**
      * Reads cargo images from a BOB resource for a specific material and body type.
      *

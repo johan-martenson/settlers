@@ -422,7 +422,7 @@ public class Building implements EndPoint {
             }
 
             if (remoteDefenders.isEmpty()) {
-                var potentialDefenders = player.getBuildings().stream()
+                List<Soldier> potentialDefenders = player.getBuildings().stream()
                         .filter(b -> !b.equals(this) && b.isReady() && b.isMilitaryBuilding())
                         .filter(b -> b instanceof Headquarter hq && hq.hasAny(PRIVATE, PRIVATE_FIRST_CLASS, SERGEANT, OFFICER, GENERAL)
                                 || b.getHostedSoldiers().size() > 1)
@@ -524,6 +524,8 @@ public class Building implements EndPoint {
     }
 
     public void tearDown() throws InvalidUserActionException {
+        System.out.println("Tearing down: " + this);
+
 
         // A building cannot be torn down if it's already burning or destroyed
         if (state == State.BURNING || state == State.DESTROYED) {
@@ -549,6 +551,8 @@ public class Building implements EndPoint {
 
         // Update the border if this was a military building
         if (isMilitaryBuilding()) {
+            System.out.println("This is a military building");
+            System.out.println(map.getBuildings().contains(this));
             map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_TORN_DOWN);
         }
 

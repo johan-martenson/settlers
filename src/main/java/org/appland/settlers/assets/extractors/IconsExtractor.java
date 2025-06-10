@@ -106,7 +106,10 @@ public class IconsExtractor {
             IoDat.UP_ARROW,
             IoDat.DOWN_ARROW,
             IoDat.ARROW_TO_TOP,
-            IoDat.ARROW_TO_BOTTOM
+            IoDat.ARROW_TO_BOTTOM,
+            IoDat.TRASHCAN,
+            IoDat.SPRAY_CAN,
+            IoDat.RIGHT_ARROW
     );
 
     public static void extractIcons(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {

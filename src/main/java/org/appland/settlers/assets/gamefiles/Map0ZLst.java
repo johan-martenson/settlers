@@ -1,14 +1,17 @@
 package org.appland.settlers.assets.gamefiles;
 
+import org.appland.settlers.assets.utils.Animation;
+
 public class Map0ZLst {
     public static final String FILENAME = "DATA/MAP_0_Z.LST";
 
-    public static final int WALKING_EAST_SHADOW_ANIMATION = 451;
-    public static final int WALKING_SOUTH_EAST_SHADOW_ANIMATION = 459;
-    public static final int WALKING_SOUTH_WEST_SHADOW_ANIMATION = 467;
-    public static final int WALKING_WEST_SHADOW_ANIMATION = 475;
-    public static final int WALKING_NORTH_WEST_SHADOW_ANIMATION = 483;
-    public static final int WALKING_NORTH_EAST_SHADOW_ANIMATION = 491;
+    public static final Animation WALKING_EAST_SHADOW = new Animation(451, 8);
+    public static final Animation WALKING_SOUTH_EAST_SHADOW = new Animation(459, 8);
+    public static final Animation WALKING_SOUTH_WEST_SHADOW = new Animation(467, 8);
+    public static final Animation WALKING_WEST_SHADOW = new Animation(475, 8);
+    public static final Animation WALKING_NORTH_WEST_SHADOW = new Animation(483, 8);
+    public static final Animation WALKING_NORTH_EAST_SHADOW = new Animation(491, 8);
+
     public static final int DONKEY_BEER = 1029;
     public static final int DONKEY_TONGS = 1030;
     public static final int DONKEY_HAMMER = 1031;

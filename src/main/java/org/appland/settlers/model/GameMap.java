@@ -15,6 +15,7 @@ import org.appland.settlers.utils.Stats;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -786,13 +787,19 @@ public class GameMap {
     }
 
     public void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) {
+        System.out.println();
+        System.out.println();
+        System.out.println("Update border");
+        System.out.println("Buildings: " + buildings);
+        System.out.println("Caused update: " + buildingCausedUpdate + ", " + cause);
+
 
         // Build map Point->Building, picking buildings with the highest claim
         var claims = new HashMap<Point, Building>();
         var updatedLands = new HashMap<Player, List<Land>>();
         var allBuildings = new HashSet<Building>();
 
-        allBuildings.addAll(getBuildings());
+        allBuildings.addAll(buildings);
         allBuildings.addAll(buildingsToAdd);
 
         // Written this way to improve performance
@@ -952,6 +959,8 @@ public class GameMap {
         playersToUpdate.forEach(player -> player.setLands(new ArrayList<>(), buildingCausedUpdate, cause));
 
         // Destroy buildings now outside their player's borders
+        buildings.stream().forEach(System.out::println);
+
         buildings.stream()
                 .filter(building -> !building.isBurningDown())
                 .filter(building -> !building.isDestroyed())
@@ -1376,7 +1385,7 @@ public class GameMap {
      * @return All buildings on the map
      */
     public List<Building> getBuildings() {
-        return buildings;
+        return Collections.unmodifiableList(buildings);
     }
 
     /**

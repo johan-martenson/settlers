@@ -16,7 +16,7 @@ public class StackedBitmaps {
         bitmaps.add(body);
     }
 
-    public List<PlayerBitmap> getBitmaps() {
+    public List<PlayerBitmap> getPlayerBitmaps() {
         return bitmaps;
     }
 }
