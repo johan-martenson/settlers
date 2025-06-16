@@ -1206,31 +1206,31 @@ public class Player {
             var addedOwnedLand = new ArrayList<Point>();
             var removedOwnedLand = new ArrayList<Point>();
 
-            if (borderChange.getPlayer().equals(this)) {
+            if (borderChange.player().equals(this)) {
                 changedBorders.add(borderChange);
 
                 continue;
             }
 
-            for (var point : borderChange.getNewBorder()) {
+            for (var point : borderChange.newBorder()) {
                 if (discoveredLand.contains(point)) {
                     addedBorder.add(point);
                 }
             }
 
-            for (var point : borderChange.getRemovedBorder()) {
+            for (var point : borderChange.removedBorder()) {
                 if (discoveredLand.contains(point)) {
                     removedBorder.add(point);
                 }
             }
 
-            for (var point : borderChange.getNewOwnedLand()) {
+            for (var point : borderChange.newOwnedLand()) {
                 if (discoveredLand.contains(point)) {
                     addedOwnedLand.add(point);
                 }
             }
 
-            for (var point : borderChange.getRemovedOwnedLand()) {
+            for (var point : borderChange.removedOwnedLand()) {
                 if (discoveredLand.contains(point)) {
                     removedOwnedLand.add(point);
                 }
@@ -1240,7 +1240,7 @@ public class Player {
                 continue;
             }
 
-            var borderChangeToAdd = new BorderChange(borderChange.getPlayer(), addedBorder, removedBorder, addedOwnedLand, removedOwnedLand);
+            var borderChangeToAdd = new BorderChange(borderChange.player(), addedBorder, removedBorder, addedOwnedLand, removedOwnedLand);
 
             changedBorders.add(borderChangeToAdd);
         }

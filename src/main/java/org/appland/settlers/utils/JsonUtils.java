@@ -1163,11 +1163,11 @@ public class JsonUtils {
         return toJsonArray(
                 changedBorders,
                 borderChange -> new JSONObject(Map.of(
-                        "playerId", idManager.getId(borderChange.getPlayer()),
-                        "newBorder", pointsToJson(borderChange.getNewBorder()),
-                        "removedBorder", pointsToJson(borderChange.getRemovedBorder()),
-                        "newOwnedLand", pointsToJson(borderChange.getNewOwnedLand()),
-                        "removedOwnedLand", pointsToJson(borderChange.getRemovedOwnedLand())
+                        "playerId", idManager.getId(borderChange.player()),
+                        "newBorder", pointsToJson(borderChange.newBorder()),
+                        "removedBorder", pointsToJson(borderChange.removedBorder()),
+                        "newOwnedLand", pointsToJson(borderChange.newOwnedLand()),
+                        "removedOwnedLand", pointsToJson(borderChange.removedOwnedLand())
                 ))
         );
     }

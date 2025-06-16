@@ -4170,30 +4170,30 @@ public class TestGameMonitoring {
 
         var borderChange = borderChanges.getFirst();
 
-        assertEquals(borderChange.getPlayer(), player0);
-        assertEquals(borderChange.getNewBorder().size(), newBorder.size());
-        assertEquals(borderChange.getRemovedBorder().size(), removedBorder.size());
-        assertEquals(borderChange.getNewOwnedLand().size(), newOwnedLand.size());
-        assertEquals(borderChange.getRemovedOwnedLand().size(), removedOwnedLand.size());
+        assertEquals(borderChange.player(), player0);
+        assertEquals(borderChange.newBorder().size(), newBorder.size());
+        assertEquals(borderChange.removedBorder().size(), removedBorder.size());
+        assertEquals(borderChange.newOwnedLand().size(), newOwnedLand.size());
+        assertEquals(borderChange.removedOwnedLand().size(), removedOwnedLand.size());
 
         for (var point : newBorder) {
-            assertTrue(borderChange.getNewBorder().contains(point));
-            assertFalse(borderChange.getRemovedBorder().contains(point));
+            assertTrue(borderChange.newBorder().contains(point));
+            assertFalse(borderChange.removedBorder().contains(point));
         }
 
         for (var point : removedBorder) {
-            assertFalse(borderChange.getNewBorder().contains(point));
-            assertTrue(borderChange.getRemovedBorder().contains(point));
+            assertFalse(borderChange.newBorder().contains(point));
+            assertTrue(borderChange.removedBorder().contains(point));
         }
 
         for (var point : newOwnedLand) {
-            assertTrue(borderChange.getNewOwnedLand().contains(point));
-            assertFalse(borderChange.getRemovedOwnedLand().contains(point));
+            assertTrue(borderChange.newOwnedLand().contains(point));
+            assertFalse(borderChange.removedOwnedLand().contains(point));
         }
 
         for (var point : removedOwnedLand) {
-            assertFalse(borderChange.getNewOwnedLand().contains(point));
-            assertTrue(borderChange.getRemovedOwnedLand().contains(point));
+            assertFalse(borderChange.newOwnedLand().contains(point));
+            assertTrue(borderChange.removedOwnedLand().contains(point));
         }
 
         // Verify that no more events are sent for discovered land
@@ -4968,24 +4968,24 @@ public class TestGameMonitoring {
         removedBorder.forEach(point -> {
             assertFalse(newBorder.contains(point));
             assertTrue(oldBorder.contains(point));
-            assertTrue(borderChange.getRemovedBorder().contains(point));
+            assertTrue(borderChange.removedBorder().contains(point));
         });
         addedBorder.forEach(point -> {
             assertTrue(newBorder.contains(point));
             assertFalse(oldBorder.contains(point));
-            assertTrue(borderChange.getNewBorder().contains(point));
+            assertTrue(borderChange.newBorder().contains(point));
         });
         removedOwnedLand.forEach(point -> {
             assertFalse(newOwnedLand.contains(point));
             assertTrue(oldOwnedLand.contains(point));
-            assertTrue(borderChange.getRemovedOwnedLand().contains(point));
+            assertTrue(borderChange.removedOwnedLand().contains(point));
         });
         addedOwnedLand.forEach(point -> {
             assertTrue(newOwnedLand.contains(point));
             assertFalse(oldOwnedLand.contains(point));
-            assertTrue(borderChange.getNewOwnedLand().contains(point));
+            assertTrue(borderChange.newOwnedLand().contains(point));
         });
-        assertEquals(borderChange.getPlayer(), player0);
+        assertEquals(borderChange.player(), player0);
     }
 
     @Test
@@ -5587,7 +5587,7 @@ public class TestGameMonitoring {
         BorderChange borderChangePlayer1 = null;
 
         for (var borderChange : borderChanges) {
-            if (borderChange.getPlayer().equals(player1)) {
+            if (borderChange.player().equals(player1)) {
                 borderChangePlayer1 = borderChange;
 
                 break;
@@ -5595,25 +5595,25 @@ public class TestGameMonitoring {
         }
 
         assertNotNull(borderChangePlayer1);
-        assertEquals(borderChangePlayer1.getPlayer(), player1);
-        assertTrue(borderChangePlayer1.getNewBorder().size() > 0);
-        assertTrue(borderChangePlayer1.getRemovedBorder().size() > 0);
+        assertEquals(borderChangePlayer1.player(), player1);
+        assertTrue(borderChangePlayer1.newBorder().size() > 0);
+        assertTrue(borderChangePlayer1.removedBorder().size() > 0);
 
         for (var point : visibleBorderBeforeChange) {
             if (player1.getBorderPoints().contains(point)) {
-                assertFalse(borderChangePlayer1.getNewBorder().contains(point));
-                assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
+                assertFalse(borderChangePlayer1.newBorder().contains(point));
+                assertFalse(borderChangePlayer1.removedBorder().contains(point));
             } else {
-                assertTrue(borderChangePlayer1.getRemovedBorder().contains(point));
+                assertTrue(borderChangePlayer1.removedBorder().contains(point));
             }
         }
 
         for (var point : visibleBorderAfterChange) {
             if (visibleBorderBeforeChange.contains(point)) {
-                assertFalse(borderChangePlayer1.getNewBorder().contains(point));
-                assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
+                assertFalse(borderChangePlayer1.newBorder().contains(point));
+                assertFalse(borderChangePlayer1.removedBorder().contains(point));
             } else {
-                assertTrue(borderChangePlayer1.getNewBorder().contains(point));
+                assertTrue(borderChangePlayer1.newBorder().contains(point));
             }
         }
     }

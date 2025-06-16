@@ -16,7 +16,8 @@ public class BorderChange {
             Collection<Point> newBorder,
             Collection<Point> removedBorder,
             Collection<Point> newOwnedLand,
-            Collection<Point> removedOwnedLand) {
+            Collection<Point> removedOwnedLand
+    ) {
         this.player = player;
         this.newBorder = new ArrayList<>(newBorder);
         this.removedBorder = new ArrayList<>(removedBorder);
@@ -24,28 +25,28 @@ public class BorderChange {
         this.removedOwnedLand = new ArrayList<>(removedOwnedLand);
     }
 
-    public Player getPlayer() {
+    public Player player() {
         return player;
     }
 
-    public List<Point> getNewBorder() {
+    public List<Point> newBorder() {
         return newBorder;
     }
 
-    public List<Point> getRemovedBorder() {
+    public List<Point> removedBorder() {
         return removedBorder;
+    }
+
+    public List<Point> newOwnedLand() {
+        return newOwnedLand;
+    }
+
+    public List<Point> removedOwnedLand() {
+        return removedOwnedLand;
     }
 
     @Override
     public String toString() {
         return "Border change for " + player + ", added " + newBorder + ", removed " + removedBorder;
-    }
-
-    public List<Point> getNewOwnedLand() {
-        return newOwnedLand;
-    }
-
-    public List<Point> getRemovedOwnedLand() {
-        return removedOwnedLand;
     }
 }

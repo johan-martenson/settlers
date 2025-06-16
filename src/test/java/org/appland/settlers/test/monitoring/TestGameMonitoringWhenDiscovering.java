@@ -727,19 +727,19 @@ public class TestGameMonitoringWhenDiscovering {
 
         BorderChange borderChange = gameChangesList.changedBorders().getFirst();
 
-        assertTrue(borderChange.getNewBorder().size() > 0);
-        assertEquals(borderChange.getRemovedBorder().size(), 0);
-        assertEquals(borderChange.getPlayer(), player1);
+        assertTrue(borderChange.newBorder().size() > 0);
+        assertEquals(borderChange.removedBorder().size(), 0);
+        assertEquals(borderChange.player(), player1);
 
         for (Point point : player1.getBorderPoints()) {
             if (player0.getDiscoveredLand().contains(point)) {
-                assertTrue(borderChange.getNewBorder().contains(point));
+                assertTrue(borderChange.newBorder().contains(point));
             } else {
-                assertFalse(borderChange.getNewBorder().contains(point));
+                assertFalse(borderChange.newBorder().contains(point));
             }
         }
 
-        for (Point point : borderChange.getNewBorder()) {
+        for (Point point : borderChange.newBorder()) {
             assertTrue(player1.getBorderPoints().contains(point));
         }
     }
@@ -800,11 +800,11 @@ public class TestGameMonitoringWhenDiscovering {
         boolean otherBorderFound = false;
 
         for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
-            if (borderChange.getPlayer().equals(player1)) {
+            if (borderChange.player().equals(player1)) {
                 otherBorderFound = true;
 
-                assertTrue(borderChange.getNewBorder().contains(point2));
-                assertEquals(borderChange.getRemovedBorder().size(), 0);
+                assertTrue(borderChange.newBorder().contains(point2));
+                assertEquals(borderChange.removedBorder().size(), 0);
 
                 break;
             }
@@ -1240,7 +1240,7 @@ public class TestGameMonitoringWhenDiscovering {
         boolean otherBorderFound = false;
 
         for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
-            if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
+            if (borderChange.player().equals(player1) && !borderChange.newBorder().isEmpty()) {
                 otherBorderFound = true;
 
                 break;
@@ -1307,7 +1307,7 @@ public class TestGameMonitoringWhenDiscovering {
         boolean otherBorderFound = false;
 
         for (BorderChange borderChange : monitor.getLastEvent().changedBorders()) {
-            if (borderChange.getPlayer().equals(player1) && !borderChange.getNewBorder().isEmpty()) {
+            if (borderChange.player().equals(player1) && !borderChange.newBorder().isEmpty()) {
                 otherBorderFound = true;
 
                 break;
