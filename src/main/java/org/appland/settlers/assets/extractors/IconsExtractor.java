@@ -12,7 +12,9 @@ import org.appland.settlers.assets.gamefiles.MapBobsLst;
 import org.appland.settlers.assets.resources.Palette;
 import org.appland.settlers.assets.utils.ImageUtils;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Set;
 
 import static org.appland.settlers.assets.Utils.getImageAt;
@@ -68,7 +70,6 @@ public class IconsExtractor {
             IoDat.ANGEL_WITH_QUESTION_MARK,
             IoDat.WREATH_ON_MAP,
             IoDat.GOODS_ON_MAP,
-            IoDat.OWNED_BUILDINGS_ON_MAP,
             IoDat.WORKERS_GOODS_AND_QUESTION_MARK,
             IoDat.TRANSPORT_PRIORITY,
             IoDat.TOOLS_WITH_QUESTION_MARK,
@@ -109,7 +110,14 @@ public class IconsExtractor {
             IoDat.ARROW_TO_BOTTOM,
             IoDat.TRASHCAN,
             IoDat.SPRAY_CAN,
-            IoDat.RIGHT_ARROW
+            IoDat.RIGHT_ARROW,
+            IoDat.GLOBE_WITH_MAGNIFYING_GLASS,
+            IoDat.OWNED_AREA_ON_MAP,
+            IoDat.OWNED_BUILDINGS_ON_MAP,
+            IoDat.OWNED_ROADS_ON_MAP,
+            IoDat.GRAPH_OF_OWNED_AREA_ON_MAP,
+            IoDat.FORWARD,
+            IoDat.REVERSE
     );
 
     public static void extractIcons(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
@@ -143,6 +151,31 @@ public class IconsExtractor {
         for (var icon : ICONS_TO_EXTRACT) {
             collector.addIcon(icon, ImageUtils.getBitmapFromResource(ioDat.get(icon.index)));
         }
+
+        try (InputStream in = IconsExtractor.class.getResourceAsStream("/pause.png")) {
+            if (in == null) {
+                throw new IOException("Resource not found: /pause.png");
+            }
+            var img = ImageIO.read(in);
+
+            ImageUtils.toBitmap(img).writeToFile("keso.png");
+            collector.addUiElement(UiIcon.PAUSE, ImageUtils.toBitmap(img));
+        }
+
+        try (InputStream in = IconsExtractor.class.getResourceAsStream("/play.png")) {
+            if (in == null) {
+                throw new IOException("Resource not found: /play.png");
+            }
+
+            var img = ImageIO.read(in);
+
+            ImageUtils.toBitmap(img).writeToFile("keso.png");
+
+            collector.addUiElement(UiIcon.PLAY, ImageUtils.toBitmap(img));
+        }
+
+        //collector.addUiElement(UiIcon.PAUSE, ImageUtils.toBitmap(ImageIO.read(new File("pause.png"))));
+        //collector.addUiElement(UiIcon.PLAY, ImageUtils.toBitmap(ImageIO.read(new File("play.png"))));
 
         collector.writeImageAtlas(toDir, defaultPalette);
     }

@@ -9,6 +9,8 @@ import org.appland.settlers.assets.TextureFormat;
 import org.appland.settlers.assets.resources.Bitmap;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,5 +188,40 @@ public class ImageUtils {
         }
 
         return bgra;
+    }
+
+    public static Bitmap toBitmap(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        BufferedImage argbImage = new BufferedImage(
+                image.getWidth(),
+                image.getHeight(),
+                BufferedImage.TYPE_4BYTE_ABGR
+        );
+
+        argbImage.getGraphics().drawImage(image, 0, 0, null);
+
+        // Extract raw BGRA bytes (ABGR layout in memory)
+        byte[] abgr = ((DataBufferByte) argbImage.getRaster().getDataBuffer()).getData();
+        byte[] bgra = new byte[abgr.length];
+
+        // Convert ABGR to BGRA
+        for (int i = 0; i < abgr.length; i += 4) {
+            byte a = abgr[i];
+            byte b = abgr[i + 1];
+            byte g = abgr[i + 2];
+            byte r = abgr[i + 3];
+
+            bgra[i]     = b;
+            bgra[i + 1] = g;
+            bgra[i + 2] = r;
+            bgra[i + 3] = a;
+        }
+
+        var bitmap = new Bitmap(width, height, 0, 0, null, TextureFormat.BGRA);
+        bitmap.setImageDataFromBuffer(bgra);
+
+        return bitmap;
     }
 }

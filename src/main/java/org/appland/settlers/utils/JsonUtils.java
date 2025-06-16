@@ -184,7 +184,8 @@ public class JsonUtils {
                 "color", player.getColor().name().toUpperCase(),
                 "nation", player.getNation().name(),
                 "type", gameResource.isComputerPlayer(player) ? "COMPUTER" : "HUMAN",
-                "discoveredPoints", pointsToJson(player.getDiscoveredLand())
+                "discoveredPoints", pointsToJson(player.getDiscoveredLand()),
+                "ownedLand", pointsToJson(player.getOwnedLand())
         ));
 
         // Get the player's "center spot"
@@ -1164,7 +1165,9 @@ public class JsonUtils {
                 borderChange -> new JSONObject(Map.of(
                         "playerId", idManager.getId(borderChange.getPlayer()),
                         "newBorder", pointsToJson(borderChange.getNewBorder()),
-                        "removedBorder", pointsToJson(borderChange.getRemovedBorder())
+                        "removedBorder", pointsToJson(borderChange.getRemovedBorder()),
+                        "newOwnedLand", pointsToJson(borderChange.getNewOwnedLand()),
+                        "removedOwnedLand", pointsToJson(borderChange.getRemovedOwnedLand())
                 ))
         );
     }

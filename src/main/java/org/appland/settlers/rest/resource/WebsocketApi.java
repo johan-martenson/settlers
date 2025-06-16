@@ -440,6 +440,15 @@ public class WebsocketApi implements PlayerGameViewMonitor,
                         "gameInformation", jsonUtils.gameToJson(newGame)
                 )));
             }
+            case GET_MAP -> {
+                System.out.println("mapId");
+                System.out.println(idManager.getObject((String) jsonBody.get("mapId")));
+                sendToSession(session,
+                        new JSONObject(Map.of(
+                                "requestId", jsonBody.get("requestId"),
+                                "map", jsonUtils.mapFileToJson((MapFile) idManager.getObject((String) jsonBody.get("mapId")))
+                        )));
+            }
             case GET_MAPS -> {
                 sendToSession(session,
                         new JSONObject(Map.of(

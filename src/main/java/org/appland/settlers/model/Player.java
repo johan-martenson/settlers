@@ -50,7 +50,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Map.entry;
@@ -858,13 +857,17 @@ public class Player {
             map.getPlayers().stream()
                     .filter(player -> !player.equals(this))
                     .forEach(player -> {
-                        Set<Point> borderForPlayer = player.getBorderPoints();
+                        var borderForPlayer = player.getBorderPoints();
+                        var landForPlayer = player.getOwnedLand();
                         List<Point> discoveredBorder = newDiscoveredLand.stream()
                                 .filter(borderForPlayer::contains)
-                                .collect(Collectors.toList());
+                                .toList();
+                        List<Point> ownedLand = newDiscoveredLand.stream()
+                                .filter(landForPlayer::contains)
+                                .toList();
 
                         if (!discoveredBorder.isEmpty()) {
-                            changedBorders.add(new BorderChange(player, discoveredBorder, new ArrayList<>()));
+                            changedBorders.add(new BorderChange(player, discoveredBorder, new ArrayList<>(), ownedLand, new ArrayList<>()));
                         }
                     });
 
@@ -1198,8 +1201,10 @@ public class Player {
 
     public void reportChangedBorders(List<BorderChange> borderChanges) {
         for (var borderChange : borderChanges) {
-            var added = new ArrayList<Point>();
-            var removed = new ArrayList<Point>();
+            var addedBorder = new ArrayList<Point>();
+            var removedBorder = new ArrayList<Point>();
+            var addedOwnedLand = new ArrayList<Point>();
+            var removedOwnedLand = new ArrayList<Point>();
 
             if (borderChange.getPlayer().equals(this)) {
                 changedBorders.add(borderChange);
@@ -1207,34 +1212,46 @@ public class Player {
                 continue;
             }
 
-            for (Point point : borderChange.getNewBorder()) {
+            for (var point : borderChange.getNewBorder()) {
                 if (discoveredLand.contains(point)) {
-                    added.add(point);
+                    addedBorder.add(point);
                 }
             }
 
-            for (Point point : borderChange.getRemovedBorder()) {
+            for (var point : borderChange.getRemovedBorder()) {
                 if (discoveredLand.contains(point)) {
-                    removed.add(point);
+                    removedBorder.add(point);
                 }
             }
 
-            if (added.isEmpty() && removed.isEmpty()) {
+            for (var point : borderChange.getNewOwnedLand()) {
+                if (discoveredLand.contains(point)) {
+                    addedOwnedLand.add(point);
+                }
+            }
+
+            for (var point : borderChange.getRemovedOwnedLand()) {
+                if (discoveredLand.contains(point)) {
+                    removedOwnedLand.add(point);
+                }
+            }
+
+            if (addedBorder.isEmpty() && removedBorder.isEmpty() && addedOwnedLand.isEmpty() && removedOwnedLand.isEmpty()) {
                 continue;
             }
 
-            BorderChange borderChangeToAdd = new BorderChange(borderChange.getPlayer(), added, removed);
+            var borderChangeToAdd = new BorderChange(borderChange.getPlayer(), addedBorder, removedBorder, addedOwnedLand, removedOwnedLand);
 
             changedBorders.add(borderChangeToAdd);
         }
     }
 
     public BorderChange getBorderChange() {
-        if (addedBorder.isEmpty() && removedBorder.isEmpty()) {
+        if (addedBorder.isEmpty() && removedBorder.isEmpty() && newOwnedLand.isEmpty() && newLostLand.isEmpty()) {
             return null;
         }
 
-        return new BorderChange(this, addedBorder, removedBorder);
+        return new BorderChange(this, addedBorder, removedBorder, newOwnedLand, newLostLand);
     }
 
     void manageTreeConservationProgram() {

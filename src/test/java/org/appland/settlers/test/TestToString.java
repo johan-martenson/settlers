@@ -475,7 +475,7 @@ public class TestToString {
         List<Point> newBorder = Arrays.asList(new Point(10, 10), new Point(12, 10));
         List<Point> removedBorder = Arrays.asList(new Point(8, 10), new Point(10, 12));
 
-        BorderChange borderChange = new BorderChange(player, newBorder, removedBorder);
+        BorderChange borderChange = new BorderChange(player, newBorder, removedBorder, new ArrayList<>(), new ArrayList<>());
 
         /* Verify that the toString() method returns the correct string */
         assertEquals(borderChange.toString(), "Border change for Player 0, added [(10, 10), (12, 10)], removed [(8, 10), (10, 12)]");

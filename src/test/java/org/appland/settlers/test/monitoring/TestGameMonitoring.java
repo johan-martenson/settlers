@@ -1,24 +1,17 @@
 package org.appland.settlers.test.monitoring;
 
 import org.appland.settlers.assets.Nation;
-import org.appland.settlers.model.StoneAmount;
 import org.appland.settlers.model.BorderChange;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.StoneAmount;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Builder;
-import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Farmer;
 import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.actors.Geologist;
@@ -26,9 +19,7 @@ import org.appland.settlers.model.actors.Scout;
 import org.appland.settlers.model.actors.Stonemason;
 import org.appland.settlers.model.actors.WildAnimal;
 import org.appland.settlers.model.actors.WoodcutterWorker;
-import org.appland.settlers.model.actors.Worker;
 import org.appland.settlers.model.buildings.Barracks;
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Farm;
 import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
@@ -39,10 +30,8 @@ import org.appland.settlers.test.Utils;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
@@ -153,37 +142,35 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFlagIsAddedOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place a flag and get the corresponding event */
+        // Place a flag and get the corresponding event
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.newFlags().size(), 1);
 
-        /* Verify that the event is not sent again */
+        // Verify that the event is not sent again
         Utils.fastForward(100, map);
 
         assertEquals(monitor.getEvents().size(), 1);
@@ -192,33 +179,30 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenFlagIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent when a flag is placed for player 0 */
+        // Verify that no event is sent when a flag is placed for player 0
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point2 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
+        var point2 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
@@ -232,29 +216,27 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFlagIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Verify an event is sent when a flag is removed */
+        // Verify an event is sent when a flag is removed
         assertEquals(monitor.getEvents().size(), 1);
 
         map.removeFlag(flag0);
@@ -263,7 +245,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 2);
 
-        GameChangesList gameChanges = monitor.getEvents().get(1);
+        var gameChanges = monitor.getEvents().get(1);
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.removedFlags().size(), 1);
@@ -281,35 +263,32 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenFlagIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place flag */
-        Point point2 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player 1 */
+        // Set up monitoring subscription for the player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent when a flag is removed for player 0 */
+        // Verify that no event is sent when a flag is removed for player 0
         assertEquals(monitor.getEvents().size(), 0);
 
         map.removeFlag(flag0);
@@ -326,29 +305,27 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFlagIsRemovedOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Remove a flag and get the event sent */
+        // Remove a flag and get the event sent
         assertEquals(monitor.getEvents().size(), 1);
 
         map.removeFlag(flag0);
@@ -357,7 +334,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 2);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(100, map);
 
         assertEquals(monitor.getEvents().size(), 2);
@@ -366,40 +343,38 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenRoadIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
-        Flag flag1 = map.placeFlag(player0, point2);
+        // Place flags
+        var point1 = new Point(10, 10);
+        var point2 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify an event is sent when a road is placed */
+        // Verify an event is sent when a road is placed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newRoads().size(), 1);
@@ -417,45 +392,43 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenRoadIsAddedOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
-        Flag flag1 = map.placeFlag(player0, point2);
+        // Place flags
+        var point1 = new Point(10, 10);
+        var point2 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place a road and get the event */
+        // Place a road and get the event
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Verify that no more events are sent */
+        // Verify that no more events are sent
         Utils.fastForward(100, map);
 
         assertEquals(monitor.getEvents().size(), 1);
@@ -464,40 +437,37 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point2 = new Point(10, 10);
-        Point point3 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        // Place flags
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent when a road is placed for player 0 */
+        // Verify that no event is sent when a road is placed for player 0
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
@@ -511,42 +481,40 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
-        Flag flag1 = map.placeFlag(player0, point2);
+        // Place flags
+        var point1 = new Point(10, 10);
+        var point2 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place a road */
+        // Place a road
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Remove the road and verify that an event is sent */
+        // Remove the road and verify that an event is sent
         map.removeRoad(road0);
 
         map.stepTime();
@@ -568,44 +536,42 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenRoadIsRemovedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point1 = new Point(10, 10);
-        Point point2 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
-        Flag flag1 = map.placeFlag(player0, point2);
+        // Place flags
+        var point1 = new Point(10, 10);
+        var point2 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point1);
+        var flag1 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place a road */
+        // Place a road
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Remove the road and get an event */
+        // Remove the road and get an event
         map.removeRoad(road0);
 
         map.stepTime();
@@ -616,7 +582,7 @@ public class TestGameMonitoring {
 
         assertEquals(gameChanges.removedRoads().size(), 1);
 
-        /* Verify that no more messages are sent */
+        // Verify that no more messages are sent
         Utils.fastForward(100, map);
 
         assertEquals(monitor.getEvents().size(), 2);
@@ -629,49 +595,46 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsRemoved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point2 = new Point(10, 10);
-        Point point3 = new Point(14, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
-        Flag flag1 = map.placeFlag(player0, point3);
+        // Place flags
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var flag0 = map.placeFlag(player0, point2);
+        var flag1 = map.placeFlag(player0, point3);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Place a road */
+        // Place a road
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         map.stepTime();
 
-        /* Remove the road and verify that no event is sent to player 1 */
+        // Remove the road and verify that no event is sent to player 1
         map.removeRoad(road0);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.removedRoads().isEmpty());
         }
     }
@@ -679,33 +642,31 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that three events are sent when a house is placed - for the house, the road, and the flag */
+        // Verify that three events are sent when a house is placed - for the house, the road, and the flag
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newBuildings().size(), 1);
@@ -724,43 +685,41 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsAddedIsSentOnlyOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that three events are sent when a house is placed - for the house, the road, and the flag */
+        // Verify that three events are sent when a house is placed - for the house, the road, and the flag
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newBuildings().size(), 1);
         assertEquals(gameChanges.newFlags().size(), 1);
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Verify that the events are only sent once */
+        // Verify that the events are only sent once
         Utils.fastForward(10, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
             assertTrue(gameChangesList.newBuildings().isEmpty());
             assertTrue(gameChangesList.newFlags().isEmpty());
             assertTrue(gameChangesList.newRoads().isEmpty());
@@ -770,40 +729,38 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstruction() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
-        /* Connect the woodcutter with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the woodcutter with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for a builder to start walking to the woodcutter */
-        Builder builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        // Wait for a builder to start walking to the woodcutter
+        var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when a house changes from planned to under construction */
+        // Verify that an event is sent when a house changes from planned to under construction
         assertEquals(monitor.getEvents().size(), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
 
         map.stepTime();
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
@@ -820,40 +777,38 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseChangesFromPlannedToUnderConstructionIsSentOnlyOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         assertTrue(woodcutter0.isPlanned());
 
-        /* Connect the woodcutter with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the woodcutter with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for a builder to start walking to the woodcutter */
-        Builder builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
+        // Wait for a builder to start walking to the woodcutter
+        var builder = Utils.waitForWorkerOutsideBuilding(Builder.class, player0);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when a house changes from planned to under construction */
+        // Verify that an event is sent when a house changes from planned to under construction
         assertEquals(monitor.getEvents().size(), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, builder, woodcutter0.getPosition());
 
         map.stepTime();
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
@@ -866,10 +821,10 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedBuildings().size(), 0);
         assertEquals(gameChanges.removedRoads().size(), 0);
 
-        /* Verify that the events are only sent once */
+        // Verify that the events are only sent once
         Utils.fastForward(1, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(gameChangesList.changedBuildings().size(), 0);
             assertTrue(gameChangesList.newFlags().isEmpty());
             assertTrue(gameChangesList.newRoads().isEmpty());
@@ -879,37 +834,34 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no events are sent when a house is placed - for the house, the road, and the flag */
+        // Verify that no events are sent when a house is placed - for the house, the road, and the flag
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point2 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var point2 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.newBuildings().isEmpty());
             assertTrue(gameChangesList.newFlags().isEmpty());
             assertTrue(gameChangesList.newRoads().isEmpty());
@@ -919,32 +871,30 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsTornDown() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+        var road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
 
         woodcutter0.tearDown();
 
@@ -952,7 +902,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
@@ -972,32 +922,30 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsTornDownIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the woodcutter */
+        // Construct the woodcutter
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+        var road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
 
         woodcutter0.tearDown();
 
@@ -1005,16 +953,16 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
 
-        /* Verify that no more changed building messages are sent before the building burns down */
+        // Verify that no more changed building messages are sent before the building burns down
         Utils.fastForward(30, map);
 
-        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newGameChanges.changedBuildings().size(), 0);
         }
     }
@@ -1022,29 +970,27 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenPlannedHouseIsTornDown() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+        var road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
 
         woodcutter0.tearDown();
 
@@ -1052,7 +998,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.removedBuildings().size(), 1);
@@ -1071,29 +1017,27 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenPlannedHouseIsTornDownIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
-        Road road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
+        var road0 = map.getRoad(woodcutter0.getFlag().getPosition(), woodcutter0.getPosition());
 
         woodcutter0.tearDown();
 
@@ -1101,7 +1045,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.removedBuildings().size(), 1);
@@ -1116,10 +1060,10 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.changedBuildings().size(), 0);
         assertEquals(gameChanges.newRoads().size(), 0);
 
-        /* Verify that no more changed building messages are sent before the building burns down */
+        // Verify that no more changed building messages are sent before the building burns down
         Utils.fastForward(30, map);
 
-        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newGameChanges.removedBuildings().size(), 0);
             assertEquals(newGameChanges.changedBuildings().size(), 0);
 
@@ -1129,33 +1073,31 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsConstructed() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the woodcutter with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Verify that the event is sent when the house is constructed */
+        // Verify that the event is sent when the house is constructed
         assertEquals(monitor.getEvents().size(), 0);
 
         Utils.waitForBuildingToBeConstructed(woodcutter0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
@@ -1165,44 +1107,42 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsConstructedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the woodcutter with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Verify that the event is sent when the house is constructed */
+        // Verify that the event is sent when the house is constructed
         assertEquals(monitor.getEvents().size(), 0);
 
         Utils.waitForBuildingToBeConstructed(woodcutter0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(10, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.changedBuildings().size(), 0);
         }
     }
@@ -1210,34 +1150,31 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsConstructed() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place woodcutter */
-        Point point2 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        // Place woodcutter
+        var point2 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Connect the woodcutter with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the woodcutter with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Verify that no event is sent to player 1 when the house is constructed */
+        // Verify that no event is sent to player 1 when the house is constructed
         for (int i = 0; i < 2000; i++) {
             if (woodcutter0.isReady()) {
                 break;
@@ -1254,40 +1191,37 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsTornDown() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place woodcutter */
-        Point point2 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        // Place woodcutter
+        var point2 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent to player 1 when the house is removed */
+        // Verify that no event is sent to player 1 when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
@@ -1295,35 +1229,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsDestroyed() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         assertEquals(monitor.getEvents().size(), 1);
 
         Utils.waitForBuildingToBurnDown(woodcutter0);
@@ -1332,7 +1264,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
 
@@ -1351,35 +1283,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsDestroyedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         assertEquals(monitor.getEvents().size(), 1);
 
         Utils.waitForBuildingToBurnDown(woodcutter0);
@@ -1388,13 +1318,13 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
 
-        /* Verify that no more messages are sent before the house disappears */
+        // Verify that no more messages are sent before the house disappears
         Utils.fastForward(10, map);
 
         assertEquals(monitor.getEventsAfterEvent(gameChanges).size(), 0);
@@ -1403,47 +1333,44 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsDestroyed() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place woodcutter */
-        Point point2 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        // Place woodcutter
+        var point2 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         Utils.waitForBuildingToBurnDown(woodcutter0);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.changedBuildings().isEmpty());
         }
     }
@@ -1451,35 +1378,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseDisappears() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         assertEquals(monitor.getEvents().size(), 1);
 
         Utils.waitForBuildingToBurnDown(woodcutter0);
@@ -1488,13 +1413,13 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
 
-        /* Verify that an event is sent when the building disappears */
+        // Verify that an event is sent when the building disappears
         assertTrue(woodcutter0.isDestroyed());
         assertTrue(monitor.getEvents().size() >= 2);
 
@@ -1520,35 +1445,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseDisappearsIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        var point1 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that the event is sent when the house is removed */
+        // Verify that the event is sent when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         assertEquals(monitor.getEvents().size(), 1);
 
         Utils.waitForBuildingToBurnDown(woodcutter0);
@@ -1557,13 +1480,13 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 2);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.changedBuildings().size(), 1);
         assertEquals(gameChanges.changedBuildings().iterator().next(), woodcutter0);
 
-        /* Verify that an event is sent when the building disappears */
+        // Verify that an event is sent when the building disappears
         assertTrue(woodcutter0.isDestroyed());
         assertTrue(monitor.getEvents().size() >= 2);
 
@@ -1577,10 +1500,10 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedBuildings().size(), 1);
         assertEquals(gameChanges.removedBuildings().getFirst(), woodcutter0);
 
-        /* Verify that no more message is sent */
+        // Verify that no more message is sent
         Utils.fastForward(100, map);
 
-        for (GameChangesList newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newGameChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newGameChanges.removedBuildings().size(), 0);
         }
     }
@@ -1588,52 +1511,49 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseDisappears() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place woodcutter */
-        Point point2 = new Point(10, 10);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        // Place woodcutter
+        var point2 = new Point(10, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         Utils.constructHouse(woodcutter0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent to player 1 when the house is removed */
+        // Verify that no event is sent to player 1 when the house is removed
         assertEquals(monitor.getEvents().size(), 0);
 
         woodcutter0.tearDown();
 
         map.stepTime();
 
-        /* Wait for the house to burn down */
+        // Wait for the house to burn down
         Utils.waitForBuildingToBurnDown(woodcutter0);
 
         map.stepTime();
 
-        /* Verify that no event is sent when the building disappears */
+        // Verify that no event is sent when the building disappears
         assertTrue(woodcutter0.isDestroyed());
 
         Utils.waitForBuildingToDisappear(woodcutter0);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.removedBuildings().isEmpty());
             assertTrue(gameChangesList.removedRoads().isEmpty());
         }
@@ -1642,36 +1562,34 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Verify an event is sent when the courier and the storage worker appear */
+        // Verify an event is sent when the courier and the storage worker appear
         map.stepTime();
 
         assertEquals(map.getWorkers().size(), 2);
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.time() > 0);
@@ -1691,34 +1609,32 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerIsAddedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place road and get the events for the road and the courier */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road and get the events for the road and the courier
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.time() > 0);
@@ -1726,12 +1642,12 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.workersWithNewTargets().getFirst(), road0.getCourier());
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        GameChangesList lastEvent = monitor.getLastEvent();
+        var lastEvent = monitor.getLastEvent();
 
-        /* Verify that no more events are sent when nothing happens */
+        // Verify that no more events are sent when nothing happens
         Utils.fastForward(100, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(lastEvent)) {
+        for (var newChanges : monitor.getEventsAfterEvent(lastEvent)) {
             assertFalse(newChanges.workersWithNewTargets().contains(road0.getCourier()));
         }
     }
@@ -1739,39 +1655,36 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenWorkerIsAdded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place flag */
-        Point point2 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Place road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Verify an event is sent when the courier and the storage worker appear */
+        // Verify an event is sent when the courier and the storage worker appear
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertFalse(gameChangesList.workersWithNewTargets().contains(road0.getCourier()));
         }
     }
@@ -1779,48 +1692,46 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerGoesBackToStorage() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place road and get the events for the road and the courier */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road and get the events for the road and the courier
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Wait for the courier walk onto the road */
-        Courier courier0 = road0.getCourier();
+        // Wait for the courier walk onto the road
+        var courier0 = road0.getCourier();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        /* Verify that an event is sent when the worker goes back to storage */
+        // Verify that an event is sent when the worker goes back to storage
         assertEquals(monitor.getEvents().size(), 1);
         assertEquals(road0.getCourier(), courier0);
 
@@ -1861,48 +1772,46 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerGoesBackToStorageIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place road and get the events for the road and the courier */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road and get the events for the road and the courier
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
         assertEquals(gameChanges.newRoads().size(), 1);
 
-        /* Wait for the courier walk onto the road */
-        Courier courier0 = road0.getCourier();
+        // Wait for the courier walk onto the road
+        var courier0 = road0.getCourier();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        /* Remove the road and get an event when the worker goes back to the storage */
+        // Remove the road and get an event when the worker goes back to the storage
         assertEquals(monitor.getEvents().size(), 1);
         assertEquals(road0.getCourier(), courier0);
 
@@ -1930,7 +1839,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedWorkers().size(), 1);
         assertEquals(gameChanges.removedWorkers().getFirst(), courier0);
 
-        /* Verify that no more messages are sent */
+        // Verify that no more messages are sent
         Utils.fastForward(100, map);
 
         assertEquals(monitor.getEvents().size(), 3);
@@ -1939,45 +1848,42 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenWorkerGoesBackToStorage() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place flag */
-        Point point2 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Place road and get the events for the road and the courier */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place road and get the events for the road and the courier
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         map.stepTime();
 
         assertTrue(headquarter0.getWorker().isInsideBuilding());
 
-        /* Wait for the courier walk onto the road */
-        Courier courier0 = road0.getCourier();
+        // Wait for the courier walk onto the road
+        var courier0 = road0.getCourier();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getFlag().getPosition());
 
-        /* Verify that no event is sent to player 1 when the worker goes back to storage */
+        // Verify that no event is sent to player 1 when the worker goes back to storage
         assertEquals(road0.getCourier(), courier0);
 
         map.removeRoad(road0);
@@ -1988,7 +1894,7 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.removedWorkers().size(), 0);
         }
     }
@@ -1996,30 +1902,28 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenRoadIsSplit() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point1 = new Point(14, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flags
+        var point1 = new Point(14, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        /* Place a road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place a road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for a courier to come out and go to the road */
-        Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
-        Point point3 = new Point(10, 4);
+        // Wait for a courier to come out and go to the road
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var point3 = new Point(10, 4);
 
         assertEquals(courier0.getTarget(), point3);
 
@@ -2027,19 +1931,19 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target */
-        Flag flag2 = map.placeFlag(player0, point3);
+        // Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target
+        var flag2 = map.placeFlag(player0, point3);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.newFlags().size(), 1);
         assertEquals(gameChanges.newFlags().getFirst(), flag2);
@@ -2058,36 +1962,33 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenRoadIsSplit() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
-        /* Place flags */
-        Point point2 = new Point(14, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flags
+        var point2 = new Point(14, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Place a road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Place a road
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Wait for a courier to come out and go to the road */
-        Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
-        Point point3 = new Point(10, 4);
+        // Wait for a courier to come out and go to the road
+        var courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        var point3 = new Point(10, 4);
 
         assertEquals(courier0.getTarget(), point3);
 
@@ -2095,18 +1996,18 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target */
-        Flag flag2 = map.placeFlag(player0, point3);
+        // Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target
+        var flag2 = map.placeFlag(player0, point3);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.newFlags().size(), 0);
             assertEquals(gameChangesList.removedRoads().size(), 0);
             assertEquals(gameChangesList.newRoads().size(), 0);
@@ -2116,46 +2017,44 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenForesterPlantsTree() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 5);
+        // Place headquarters
+        var point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place forester hut */
-        Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+        // Place forester hut
+        var point1 = new Point(10, 4);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(foresterHut);
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        // Manually place forester
+        var forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
-        /* Let the forester rest */
+        // Let the forester rest
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(forester.isInsideBuilding());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(forester.isTraveling());
 
-        Point point = forester.getTarget();
+        var point = forester.getTarget();
 
-        /* Wait for the forester to reach the spot for the tree */
+        // Wait for the forester to reach the spot for the tree
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());
@@ -2166,7 +2065,7 @@ public class TestGameMonitoring {
             assertTrue(monitor.getLastEvent().newTrees().isEmpty());
         }
 
-        /* Wait for the forester to plant a tree */
+        // Wait for the forester to plant a tree
         Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
@@ -2174,7 +2073,7 @@ public class TestGameMonitoring {
         assertNull(forester.getCargo());
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newTrees().size(), 1);
         assertEquals(gameChanges.newTrees().getFirst(), map.getTreeAtPoint(point));
@@ -2193,51 +2092,48 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenForesterPlantsTree() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place forester hut */
-        Point point2 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        // Place forester hut
+        var point2 = new Point(10, 4);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(foresterHut);
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        // Manually place forester
+        var forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
-        /* Let the forester rest */
+        // Let the forester rest
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(forester.isInsideBuilding());
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(forester.isTraveling());
 
-        /* Wait for the forester to reach the spot for the tree */
-        Point point = forester.getTarget();
+        // Wait for the forester to reach the spot for the tree
+        var point = forester.getTarget();
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
@@ -2249,14 +2145,14 @@ public class TestGameMonitoring {
             assertTrue(monitor.getLastEvent().newTrees().isEmpty());
         }
 
-        /* Wait for the forester to plant the tree */
+        // Wait for the forester to plant the tree
         Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
         assertNull(forester.getCargo());
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.newTrees().size(), 0);
         }
     }
@@ -2264,45 +2160,43 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenForesterPlantsTreeIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 5);
+        // Place headquarters
+        var point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place forester hut */
-        Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+        // Place forester hut
+        var point1 = new Point(10, 4);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(foresterHut);
 
-        /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
+        // Manually place forester
+        var forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
-        /* Let the forester rest */
+        // Let the forester rest
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(forester.isInsideBuilding());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(forester.isTraveling());
 
-        /* Wait for the forester to reach the spot for the tree */
-        Point point = forester.getTarget();
+        // Wait for the forester to reach the spot for the tree
+        var point = forester.getTarget();
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
@@ -2310,7 +2204,7 @@ public class TestGameMonitoring {
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
-        /* Wait for the forester to finish planting the tree */
+        // Wait for the forester to finish planting the tree
         Utils.waitForForesterToStopPlantingTree(forester, map);
 
         assertFalse(forester.isPlanting());
@@ -2318,20 +2212,20 @@ public class TestGameMonitoring {
         assertNull(forester.getCargo());
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newTrees().size(), 1);
         assertEquals(gameChanges.newTrees().getFirst(), map.getTreeAtPoint(point));
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
-        /* Verify that there is no more event sent before the forester plants a new tree */
+        // Verify that there is no more event sent before the forester plants a new tree
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.newTrees().size(), 0);
                 }
             }
@@ -2341,54 +2235,52 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWoodcutterCutsDownTree() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        Point point0 = new Point(10, 10);
+        // Place headquarters
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        // Place and grow the tree
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
-        /* Place the woodcutter */
-        Point point1 = new Point(10, 4);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place the woodcutter
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(woodcutter);
 
-        /* Manually place forester */
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        // Manually place forester
+        var wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
 
-
-        /* Wait for the woodcutter to rest */
+        // Wait for the woodcutter to rest
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
 
         assertEquals(point, point2);
         assertTrue(wcWorker.isTraveling());
 
-        /* Let the woodcutter reach the tree and start cutting */
+        // Let the woodcutter reach the tree and start cutting
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2401,19 +2293,18 @@ public class TestGameMonitoring {
 
         monitor.clearEvents();
 
-        /* Wait for the woodcutter to finish cutting the tree */
-        Tree tree0 = map.getTreeAtPoint(point);
+        // Wait for the woodcutter to finish cutting the tree
+        var tree0 = map.getTreeAtPoint(point);
 
         Utils.waitForTreeToDisappearFromMap(tree0, map);
 
         map.stepTime();
 
-        /* Verify that the woodcutter stopped cutting */
+        // Verify that the woodcutter stopped cutting
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
         assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
-
 
         var sumRemovedTrees = monitor.getEvents().stream().mapToInt(gcl -> gcl.removedTrees().size()).sum();
 
@@ -2424,60 +2315,57 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenWoodcutterCutsDownTree() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        // Place and grow the tree
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
-        /* Place the woodcutter */
-        Point point3 = new Point(10, 4);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
+        // Place the woodcutter
+        var point3 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(woodcutter);
 
-        /* Manually place forester */
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        // Manually place forester
+        var wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
 
-        /* Wait for the woodcutter to rest */
+        // Wait for the woodcutter to rest
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
 
         assertEquals(point, point2);
         assertTrue(wcWorker.isTraveling());
 
-        /* Let the woodcutter reach the tree and start cutting */
+        // Let the woodcutter reach the tree and start cutting
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
@@ -2488,12 +2376,12 @@ public class TestGameMonitoring {
         assertTrue(wcWorker.isCuttingTree());
         assertNull(wcWorker.getCargo());
 
-        /* Wait for the woodcutter to finish cutting the tree */
-        Tree tree0 = map.getTreeAtPoint(point);
+        // Wait for the woodcutter to finish cutting the tree
+        var tree0 = map.getTreeAtPoint(point);
 
         Utils.waitForTreeToDisappearFromMap(tree0, map);
 
-        /* Verify that the woodcutter stopped cutting */
+        // Verify that the woodcutter stopped cutting
         map.stepTime();
 
         assertFalse(wcWorker.isCuttingTree());
@@ -2501,7 +2389,7 @@ public class TestGameMonitoring {
         assertNotNull(wcWorker.getCargo());
         assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.removedTrees().size(), 0);
         }
     }
@@ -2509,54 +2397,51 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWoodcutterCutsDownTreeIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place and grow the tree */
-        Point point2 = new Point(12, 4);
-        Tree tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        // Place and grow the tree
+        var point2 = new Point(12, 4);
+        var tree = map.placeTree(point2, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
-        /* Place the woodcutter */
-        Point point1 = new Point(10, 4);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place the woodcutter
+        var point1 = new Point(10, 4);
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Construct the forester hut */
+        // Construct the forester hut
         Utils.constructHouse(woodcutter);
 
-        /* Manually place forester */
-        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        // Manually place forester
+        var wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
 
-
-        /* Wait for the woodcutter to rest */
+        // Wait for the woodcutter to rest
         Utils.fastForward(99, map);
 
         assertTrue(wcWorker.isInsideBuilding());
 
-        /* Step once and make sure the forester goes out of the hut */
+        // Step once and make sure the forester goes out of the hut
         map.stepTime();
 
         assertFalse(wcWorker.isInsideBuilding());
 
-        Point point = wcWorker.getTarget();
+        var point = wcWorker.getTarget();
 
         assertEquals(point, point2);
         assertTrue(wcWorker.isTraveling());
 
-        /* Let the woodcutter reach the tree and start cutting */
+        // Let the woodcutter reach the tree and start cutting
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
 
         assertTrue(wcWorker.isArrived());
         assertTrue(wcWorker.isAt(point));
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2569,8 +2454,8 @@ public class TestGameMonitoring {
 
         monitor.clearEvents();
 
-        /* Wait for the woodcutter to finish cutting the tree */
-        Tree tree0 = map.getTreeAtPoint(point);
+        // Wait for the woodcutter to finish cutting the tree
+        var tree0 = map.getTreeAtPoint(point);
 
         for (int i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
@@ -2579,16 +2464,16 @@ public class TestGameMonitoring {
             map.stepTime();
         }
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.newTrees().size(), 0);
         }
 
-        /* Wait for the tree to fall */
+        // Wait for the tree to fall
         Utils.waitForTreeToDisappearFromMap(map.getTreeAtPoint(point), map);
 
         map.stepTime();
 
-        /* Verify that the woodcutter stopped cutting */
+        // Verify that the woodcutter stopped cutting
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
@@ -2599,7 +2484,7 @@ public class TestGameMonitoring {
         assertEquals(sumRemovedTrees, 1);
         assertTrue(monitor.getEvents().stream().anyMatch(gcl -> gcl.removedTrees().contains(tree0)));
 
-        /* Verify that no more messages are sent before the worker gets home */
+        // Verify that no more messages are sent before the worker gets home
         monitor.clearEvents();
 
         assertEquals(monitor.getEvents().stream().mapToInt(gcl -> gcl.removedTrees().size()).sum(), 0);
@@ -2609,39 +2494,38 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenStoneChangesSize() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
-        /* Place headquarters */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+        // Connect the quarry to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
-        /* Set up monitoring subscription for the player */
+        // Place stone
+        var point1 = new Point(12, 4);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
+
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none) */
+        // Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none)
         assertEquals(stone0.getStoneAmount(), StoneAmount.FULL);
 
-        StoneAmount stoneAmount = stone0.getStoneAmount();
+        var stoneAmount = stone0.getStoneAmount();
         for (int i = 0; i < 5000; i++) {
             if (stoneAmount != stone0.getStoneAmount()) {
                 stoneAmount = stone0.getStoneAmount();
@@ -2660,7 +2544,7 @@ public class TestGameMonitoring {
 
         assertEquals(stone0.getStoneAmount(), StoneAmount.MINI);
 
-        /* Verify that an event is sent when the stone is removed but it's not a stone-changed event */
+        // Verify that an event is sent when the stone is removed but it's not a stone-changed event
         monitor.clearEvents();
 
         for (int i = 0; i < 5000; i++) {
@@ -2681,39 +2565,37 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenStoneChangesSizeIsSentOnlyOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
-        /* Place headquarters */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+        // Connect the quarry to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
-        /* Set up monitoring subscription for the player */
+        // Place stone
+        var point1 = new Point(12, 4);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 6);
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none) */
+        // Verify that an event is sent each time the stone changes size (i.e., large - medium - small - none)
         assertEquals(stone0.getStoneAmount(), StoneAmount.FULL);
 
-        StoneAmount stoneAmount = stone0.getStoneAmount();
+        var stoneAmount = stone0.getStoneAmount();
         for (int i = 0; i < 5000; i++) {
             if (stoneAmount != stone0.getStoneAmount()) {
                 stoneAmount = stone0.getStoneAmount();
@@ -2742,31 +2624,29 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
-        /* Place headquarters */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+        // Connect the quarry to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        // Place stone
+        var point1 = new Point(12, 4);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Remove all except the last part of the stone */
+        // Remove all except the last part of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -2775,12 +2655,12 @@ public class TestGameMonitoring {
 
         assertEquals(stone0.getAmount(), 1);
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
+        var stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2792,7 +2672,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.removedStones().size(), 1);
         assertEquals(gameChanges.removedStones().getFirst(), stone0);
@@ -2813,31 +2693,29 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenStoneDisappearsAfterAllHasBeenRetrievedIsSentOnlyOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 15, 15);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 15, 15);
 
-        /* Place headquarters */
-        Point point0 = new Point(10, 10);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(10, 10);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
+        // Connect the quarry to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point1 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
+        // Place stone
+        var point1 = new Point(12, 4);
+        var stone0 = map.placeStone(point1, Stone.StoneType.STONE_1, 7);
 
-        /* Remove all except the last part of the stone */
+        // Remove all except the last part of the stone
         for (int i = 0; i < 6; i++) {
             stone0.removeOnePart();
 
@@ -2846,12 +2724,12 @@ public class TestGameMonitoring {
 
         assertEquals(stone0.getAmount(), 1);
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
+        var stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -2863,20 +2741,20 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.removedStones().size(), 1);
         assertEquals(gameChanges.removedStones().getFirst(), stone0);
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
-        /* Verify that no more messages are sent before the stonemason is back in the quarry */
+        // Verify that no more messages are sent before the stonemason is back in the quarry
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.removedStones().size(), 0);
                 }
             }
@@ -2886,60 +2764,57 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place quarry */
-        Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(player0), point2);
+        // Place quarry
+        var point2 = new Point(10, 4);
+        var quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        /* Construct the quarry */
+        // Construct the quarry
         Utils.constructHouse(quarry);
 
-        /* Connect the quarry to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry.getFlag());
+        // Connect the quarry to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry.getFlag());
 
-        /* Place stone */
-        Point point3 = new Point(12, 4);
-        Stone stone0 = map.placeStone(point3, Stone.StoneType.STONE_1, 7);
+        // Place stone
+        var point3 = new Point(12, 4);
+        var stone0 = map.placeStone(point3, Stone.StoneType.STONE_1, 7);
 
-        /* Remove all except the last part of the stone */
+        // Remove all except the last part of the stone
         for (int i = 0; i < 9; i++) {
             stone0.removeOnePart();
 
             assertTrue(map.isStoneAtPoint(point3));
         }
 
-        /* Let the stonemason remove the final part of the stone and verify that an event is sent */
-        Stonemason stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
+        // Let the stonemason remove the final part of the stone and verify that an event is sent
+        var stonemason = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).getFirst();
 
         Utils.waitForStonemasonToStartGettingStone(map, stonemason);
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that no message is sent to player 1 when the stone is gone */
+        // Verify that no message is sent to player 1 when the stone is gone
         Utils.waitForStonemasonToFinishGettingStone(map, stonemason);
 
         assertFalse(map.isStoneAtPoint(point1));
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.removedStones().size(), 0);
         }
     }
@@ -2947,35 +2822,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenGeologistDoesResearchAndPutsUpSign() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call geologist from the flag */
+        // Call geologist from the flag
         flag.callGeologist();
 
-        /* Wait for the geologist to go to the flag */
+        // Wait for the geologist to go to the flag
         map.stepTime();
 
         Geologist geologist = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = (Geologist) worker;
             }
@@ -2986,17 +2859,17 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Wait for the geologist to reach the first site to investigate */
+        // Wait for the geologist to reach the first site to investigate
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the geologist investigates the point */
-        Point site = geologist.getPosition();
+        // Verify that an event is sent when the geologist investigates the point
+        var site = geologist.getPosition();
 
         for (int i = 0; i < 20; i++) {
             assertTrue(geologist.isInvestigating());
@@ -3009,7 +2882,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newSigns().size(), 1);
         assertEquals(gameChanges.newSigns().getFirst(), map.getSignAtPoint(site));
@@ -3031,35 +2904,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenGeologistDoesResearchAndPutsUpSignIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call geologist from the flag */
+        // Call geologist from the flag
         flag.callGeologist();
 
-        /* Wait for the geologist to go to the flag */
+        // Wait for the geologist to go to the flag
         map.stepTime();
 
         Geologist geologist = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = (Geologist) worker;
             }
@@ -3070,17 +2941,17 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Wait for the geologist to reach the first site to investigate */
+        // Wait for the geologist to reach the first site to investigate
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the geologist investigates the point */
-        Point site = geologist.getPosition();
+        // Verify that an event is sent when the geologist investigates the point
+        var site = geologist.getPosition();
 
         for (int i = 0; i < 20; i++) {
             assertTrue(geologist.isInvestigating());
@@ -3093,20 +2964,20 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newSigns().size(), 1);
         assertEquals(gameChanges.newSigns().getFirst(), map.getSignAtPoint(site));
         assertEquals(gameChanges.workersWithNewTargets().size(), 1);
 
-        /* Verify that no more messages are sent before the geologist places a new sign */
+        // Verify that no more messages are sent before the geologist places a new sign
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 6; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.newSigns().size(), 0);
                 }
             }
@@ -3116,41 +2987,38 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenGeologistDoesResearchAndPutsUpSign() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place flag */
-        Point point2 = new Point(10, 10);
-        Flag flag = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(10, 10);
+        var flag = map.placeFlag(player0, point2);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call geologist from the flag */
+        // Call geologist from the flag
         flag.callGeologist();
 
-        /* Wait for the geologist to go to the flag */
+        // Wait for the geologist to go to the flag
         map.stepTime();
 
         Geologist geologist = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Geologist) {
                 geologist = (Geologist) worker;
             }
@@ -3161,17 +3029,17 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Wait for the geologist to reach the first site to investigate */
+        // Wait for the geologist to reach the first site to investigate
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the geologist investigates the point */
-        Point site = geologist.getPosition();
+        // Verify that an event is sent when the geologist investigates the point
+        var site = geologist.getPosition();
 
         for (int i = 0; i < 20; i++) {
             assertTrue(geologist.isInvestigating());
@@ -3182,7 +3050,7 @@ public class TestGameMonitoring {
         assertFalse(geologist.isInvestigating());
         assertNotNull(map.getSignAtPoint(site));
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.removedSigns().size(), 0);
         }
     }
@@ -3190,37 +3058,35 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenSignExpires() throws Exception {
 
-        /* Create a new game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create a new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 15);
+        // Place headquarters
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sign */
-        Point point1 = new Point(6, 6);
+        // Place sign
+        var point1 = new Point(6, 6);
         map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that a monitoring event is sent when the sign disappears */
-        Sign sign0 = map.getSignAtPoint(point1);
+        // Verify that a monitoring event is sent when the sign disappears
+        var sign0 = map.getSignAtPoint(point1);
 
         Utils.waitForSignToDisappear(map, sign0);
 
         assertFalse(map.isSignAtPoint(point1));
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.removedSigns().size(), 1);
         assertEquals(gameChanges.removedSigns().getFirst(), sign0);
@@ -3242,49 +3108,47 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenSignExpiresIsSentOnlyOnce() throws Exception {
 
-        /* Create a new game map */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create a new game map
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(15, 15);
+        // Place headquarters
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sign */
-        Point point1 = new Point(6, 6);
+        // Place sign
+        var point1 = new Point(6, 6);
         map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that a monitoring event is sent when the sign disappears */
-        Sign sign0 = map.getSignAtPoint(point1);
+        // Verify that a monitoring event is sent when the sign disappears
+        var sign0 = map.getSignAtPoint(point1);
 
         Utils.waitForSignToDisappear(map, sign0);
 
         assertFalse(map.isSignAtPoint(point1));
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.removedSigns().size(), 1);
         assertEquals(gameChanges.removedSigns().getFirst(), sign0);
 
-        /* Verify that no more events are sent */
+        // Verify that no more events are sent
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.removedSigns().size(), 0);
                 }
             }
@@ -3294,42 +3158,39 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenSignExpires() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place sign */
-        Point point2 = new Point(6, 6);
+        // Place sign
+        var point2 = new Point(6, 6);
         map.placeSign(IRON, SMALL, point2);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that a monitoring event is sent when the sign disappears */
-        Sign sign0 = map.getSignAtPoint(point2);
+        // Verify that a monitoring event is sent when the sign disappears
+        var sign0 = map.getSignAtPoint(point2);
 
         Utils.waitForSignToDisappear(map, sign0);
 
         assertFalse(map.isSignAtPoint(point0));
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertEquals(gameChangesList.removedSigns().size(), 0);
         }
     }
@@ -3337,35 +3198,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsPlacedOnSign() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sign */
-        Point point1 = new Point(10, 4);
-        Sign sign0 = map.placeSign(IRON, SMALL, point1);
+        // Place sign
+        var point1 = new Point(10, 4);
+        var sign0 = map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that placing a house on the sign sends an event where the sign is gone */
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        // Verify that placing a house on the sign sends an event where the sign is gone
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.removedSigns().size(), 1);
         assertEquals(gameChanges.removedSigns().getFirst(), sign0);
@@ -3385,41 +3244,39 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenHouseIsPlacedOnSignIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        Point point0 = new Point(10, 10);
+        var point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place sign */
-        Point point1 = new Point(10, 4);
-        Sign sign0 = map.placeSign(IRON, SMALL, point1);
+        // Place sign
+        var point1 = new Point(10, 4);
+        var sign0 = map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that placing a house on the sign sends an event where the sign is gone */
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+        // Verify that placing a house on the sign sends an event where the sign is gone
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertEquals(gameChanges.removedSigns().size(), 1);
         assertEquals(gameChanges.removedSigns().getFirst(), sign0);
 
-        /* Verify that the event is not sent again */
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
+        // Verify that the event is not sent again
+        for (var gameChangesList : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(gameChangesList.removedSigns().size(), 0);
         }
     }
@@ -3427,40 +3284,37 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenHouseIsPlacedOnSign() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place sign */
-        Point point3 = new Point(10, 4);
-        Sign sign0 = map.placeSign(IRON, SMALL, point3);
+        // Place sign
+        var point3 = new Point(10, 4);
+        var sign0 = map.placeSign(IRON, SMALL, point3);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that placing a house on the sign sends an event where the sign is gone */
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
+        // Verify that placing a house on the sign sends an event where the sign is gone
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point3);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.removedSigns().isEmpty());
         }
     }
@@ -3468,46 +3322,44 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -3516,16 +3368,16 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the crop has been planted */
+        // Verify that an event is sent when the crop has been planted
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Verify that the farmer stopped planting and there is a crop */
+        // Verify that the farmer stopped planting and there is a crop
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertNull(farmer.getCargo());
@@ -3533,7 +3385,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newCrops().size(), 1);
         assertEquals(gameChanges.newCrops().getFirst(), map.getCropAtPoint(point));
@@ -3555,73 +3407,71 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFarmerHarvestsCrop() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isPlanting());
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
         assertTrue(map.isCropAtPoint(farmer.getPosition()));
 
-        Crop crop = map.getCropAtPoint(farmer.getPosition());
+        var crop = map.getCropAtPoint(farmer.getPosition());
 
-        /* Wait for the crop to get fully grown */
+        // Wait for the crop to get fully grown
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the farmer to walk to the crop */
+        // Wait for the farmer to walk to the crop
         Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(farmer.isHarvesting());
 
-        /* Verify that an event is sent when the farmer harvests the crop */
+        // Verify that an event is sent when the farmer harvests the crop
         Utils.waitForFarmerToHarvestCrop(map, farmer, crop);
 
         assertFalse(farmer.isHarvesting());
@@ -3630,7 +3480,7 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.harvestedCrops().size(), 1);
         assertEquals(gameChanges.harvestedCrops().getFirst(), crop);
@@ -3652,85 +3502,83 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFarmerHarvestsCropIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isPlanting());
 
-        /* Wait for the farmer to plant a crop */
+        // Wait for the farmer to plant a crop
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
         assertTrue(map.isCropAtPoint(farmer.getPosition()));
 
-        Crop crop = map.getCropAtPoint(farmer.getPosition());
+        var crop = map.getCropAtPoint(farmer.getPosition());
 
-        /* Wait for the crop to get fully grown */
+        // Wait for the crop to get fully grown
         Utils.waitForCropToGetReady(map, crop);
 
-        /* Wait for the farmer to walk to the crop */
+        // Wait for the farmer to walk to the crop
         Utils.waitForWorkerToGoToPoint(map, farmer, crop.getPosition());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
         assertTrue(farmer.isHarvesting());
 
-        /* An event is sent when the farmer harvests the crop */
+        // An event is sent when the farmer harvests the crop
         Utils.waitForFarmerToHarvestCrop(map, farmer, crop);
 
         assertFalse(farmer.isHarvesting());
         assertNotNull(farmer.getCargo());
         assertEquals(map.getCropAtPoint(point).getGrowthState(), HARVESTED);
 
-        /* Tell the farmer to stop working */
+        // Tell the farmer to stop working
         farm.stopProduction();
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.harvestedCrops().size(), 1);
         assertEquals(gameChanges.harvestedCrops().getFirst(), crop);
@@ -3748,14 +3596,14 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.removedFlags().size(), 0);
         assertEquals(gameChanges.removedBuildings().size(), 0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.harvestedCrops().size(), 0);
                 }
             }
@@ -3765,46 +3613,44 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvestIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -3813,16 +3659,16 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the crop has been planted */
+        // Verify that an event is sent when the crop has been planted
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Verify that the farmer stopped planting and there is a crop */
+        // Verify that the farmer stopped planting and there is a crop
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertNull(farmer.getCargo());
@@ -3830,21 +3676,21 @@ public class TestGameMonitoring {
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertEquals(gameChanges.newCrops().size(), 1);
         assertEquals(gameChanges.newCrops().getFirst(), map.getCropAtPoint(point));
         assertTrue(gameChanges.workersWithNewTargets().size() > 0);
         assertTrue(gameChanges.workersWithNewTargets().contains(farmer));
 
-        /* Verify that no more messages are sent before the farmer enters the farm */
+        // Verify that no more messages are sent before the farmer enters the farm
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.newCrops().size(), 0);
                 }
             }
@@ -3854,52 +3700,49 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Let the farmer rest */
+        // Let the farmer rest
         Utils.fastForward(99, map);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Step once and make sure the farmer goes out of the farm */
+        // Step once and make sure the farmer goes out of the farm
         map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
-        /* Let the farmer reach the spot and start to plant */
+        // Let the farmer reach the spot and start to plant
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
         assertTrue(farmer.isArrived());
@@ -3908,19 +3751,19 @@ public class TestGameMonitoring {
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the crop has been planted */
+        // Verify that an event is sent when the crop has been planted
         Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Verify that the farmer stopped planting and there is a crop */
+        // Verify that the farmer stopped planting and there is a crop
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.newCrops().isEmpty());
         }
     }
@@ -3928,67 +3771,65 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventFarmerHarvestsWhenPossible() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to place a crop */
-        Crop crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
+        // Wait for the farmer to place a crop
+        var crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Wait for the crop to grow */
+        // Wait for the crop to grow
         Utils.waitForCropToGetReady(map, crop0);
 
-        /* Wait for the worker to walk to the crop and start harvesting */
+        // Wait for the worker to walk to the crop and start harvesting
         Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
 
         map.stepTime();
 
-        /* Wait for the farmer to harvest the crop */
+        // Wait for the farmer to harvest the crop
         Utils.waitForFarmerToHarvestCrop(map, farmer, crop0);
 
-        /* Stop production in the farm */
+        // Stop production in the farm
         farm.stopProduction();
 
-        /* Wait for the farmer to go back to the farm */
+        // Wait for the farmer to go back to the farm
         assertEquals(farmer.getTarget(), farm.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the crop disappears */
+        // Verify that an event is sent when the crop disappears
         Utils.waitForHarvestedCropToDisappear(map, crop0);
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.removedCrops().size(), 1);
         assertEquals(gameChanges.removedCrops().getFirst(), crop0);
@@ -4009,81 +3850,79 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventFarmerHarvestsWhenPossibleIsOnlySentOnce() throws Exception {
 
-        /* Create single player game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        // Create single player game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place farm */
-        Point point3 = new Point(10, 4);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 4);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to place a crop */
-        Crop crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
+        // Wait for the farmer to place a crop
+        var crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Wait for the crop to grow */
+        // Wait for the crop to grow
         Utils.waitForCropToGetReady(map, crop0);
 
-        /* Wait for the worker to walk to the crop and start harvesting */
+        // Wait for the worker to walk to the crop and start harvesting
         Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
 
         map.stepTime();
 
-        /* Wait for the farmer to harvest the crop */
+        // Wait for the farmer to harvest the crop
         Utils.waitForFarmerToHarvestCrop(map, farmer, crop0);
 
-        /* Stop production in the farm */
+        // Stop production in the farm
         farm.stopProduction();
 
-        /* Cut up the road between the farm and the headquarters */
+        // Cut up the road between the farm and the headquarters
         map.removeRoad(road0);
 
-        /* Wait for the farmer to go back to the farm */
+        // Wait for the farmer to go back to the farm
         assertEquals(farmer.getTarget(), farm.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the crop disappears */
+        // Verify that an event is sent when the crop disappears
         Utils.waitForHarvestedCropToDisappear(map, crop0);
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.removedCrops().size(), 1);
         assertEquals(gameChanges.removedCrops().getFirst(), crop0);
 
-        /* Verify that no more messages are sent */
+        // Verify that no more messages are sent
         int amountEvents = monitor.getEvents().size();
 
         Utils.fastForward(10, map);
 
         if (monitor.getEvents().size() > amountEvents) {
-            for (GameChangesList changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
+            for (var changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
                 assertTrue(changes.removedCrops().isEmpty());
             }
         }
@@ -4092,73 +3931,70 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenFarmerHarvestsWhenPossible() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place farm */
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        // Place farm
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
-        /* Connect the farm with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
+        // Connect the farm with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm.getFlag());
 
-        /* Wait for the farm to get constructed */
+        // Wait for the farm to get constructed
         Utils.waitForBuildingToBeConstructed(farm);
 
-        /* Wait for the farm to get occupied */
-        Farmer farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
+        // Wait for the farm to get occupied
+        var farmer = (Farmer) Utils.waitForNonMilitaryBuildingToGetPopulated(farm);
 
         assertTrue(farmer.isInsideBuilding());
 
-        /* Wait for the farmer to place a crop */
-        Crop crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
+        // Wait for the farmer to place a crop
+        var crop0 = Utils.waitForFarmerToPlantCrop(map, farmer);
 
-        /* Wait for the crop to grow */
+        // Wait for the crop to grow
         Utils.waitForCropToGetReady(map, crop0);
 
-        /* Wait for the worker to walk to the crop and start harvesting */
+        // Wait for the worker to walk to the crop and start harvesting
         Utils.waitForWorkerToSetTarget(map, farmer, crop0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, crop0.getPosition());
 
         map.stepTime();
 
-        /* Wait for the farmer to harvest the crop */
+        // Wait for the farmer to harvest the crop
         Utils.waitForFarmerToHarvestCrop(map, farmer, crop0);
 
-        /* Stop production in the farm */
+        // Stop production in the farm
         farm.stopProduction();
 
-        /* Wait for the farmer to go back to the farm */
+        // Wait for the farmer to go back to the farm
         assertEquals(farmer.getTarget(), farm.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that no event is sent to player 1 when the crop disappears */
+        // Verify that no event is sent to player 1 when the crop disappears
         Utils.waitForHarvestedCropToDisappear(map, crop0);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.removedCrops().isEmpty());
         }
     }
@@ -4166,56 +4002,52 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the barracks get populated and the player discovers new land */
-        Set<Point> discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
+        // Verify that an event is sent when the barracks get populated and the player discovers new land
+        var discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        Set<Point> newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
+        var newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
 
         newlyDiscovered.removeAll(discoveredAtStart);
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertTrue(gameChanges.newDiscoveredLand().size() > 1);
 
-        for (Point point : newlyDiscovered) {
+        for (var point : newlyDiscovered) {
             assertTrue(gameChanges.newDiscoveredLand().contains(point));
         }
 
-        for (Point point : discoveredAtStart) {
+        for (var point : discoveredAtStart) {
             assertFalse(gameChanges.newDiscoveredLand().contains(point));
         }
 
@@ -4236,46 +4068,43 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land */
+        // Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
         map.stepTime();
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.newDiscoveredLand().isEmpty());
         }
     }
@@ -4283,84 +4112,98 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenBorderIsExtendedWhenBarracksIsOccupied() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the barracks get populated and the player discovers new land */
-        Set<Point> borderAtStart = new HashSet<>(player0.getBorderPoints());
+        // Verify that an event is sent when the barracks get populated and the player discovers new land
+        var borderAtStart = new HashSet<Point>(player0.getBorderPoints());
+        var landAtStart = new HashSet<Point>(player0.getOwnedLand());
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        Set<Point> newBorder = new HashSet<>(player0.getBorderPoints());
-        Set<Point> fullNewBorder = new HashSet<>(newBorder);
+        var newBorder = new HashSet<>(player0.getBorderPoints());
+        var fullNewBorder = new HashSet<>(newBorder);
+        var newOwnedLand = new HashSet<>(player0.getOwnedLand());
+        var fullNewOwnedLand = new HashSet<>(player0.getOwnedLand());
 
         newBorder.removeAll(borderAtStart);
+        newOwnedLand.removeAll(landAtStart);
 
-        Set<Point> removedBorder = new HashSet<>(borderAtStart);
+        var removedBorder = new HashSet<>(borderAtStart);
+        var removedOwnedLand = new HashSet<>(landAtStart);
 
         removedBorder.removeAll(fullNewBorder);
+        removedOwnedLand.removeAll(fullNewOwnedLand);
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertEquals(1, gameChanges.changedBorders().size());
 
-        List<BorderChange> borderChanges = gameChanges.changedBorders();
+        var borderChanges = gameChanges.changedBorders();
 
         assertEquals(borderChanges.size(), 1);
 
-        BorderChange borderChange = borderChanges.getFirst();
+        var borderChange = borderChanges.getFirst();
 
         assertEquals(borderChange.getPlayer(), player0);
         assertEquals(borderChange.getNewBorder().size(), newBorder.size());
         assertEquals(borderChange.getRemovedBorder().size(), removedBorder.size());
+        assertEquals(borderChange.getNewOwnedLand().size(), newOwnedLand.size());
+        assertEquals(borderChange.getRemovedOwnedLand().size(), removedOwnedLand.size());
 
-        for (Point point : newBorder) {
+        for (var point : newBorder) {
             assertTrue(borderChange.getNewBorder().contains(point));
             assertFalse(borderChange.getRemovedBorder().contains(point));
         }
 
-        for (Point point : removedBorder) {
+        for (var point : removedBorder) {
             assertFalse(borderChange.getNewBorder().contains(point));
             assertTrue(borderChange.getRemovedBorder().contains(point));
         }
 
-        /* Verify that no more events are sent for discovered land */
+        for (var point : newOwnedLand) {
+            assertTrue(borderChange.getNewOwnedLand().contains(point));
+            assertFalse(borderChange.getRemovedOwnedLand().contains(point));
+        }
+
+        for (var point : removedOwnedLand) {
+            assertFalse(borderChange.getNewOwnedLand().contains(point));
+            assertTrue(borderChange.getRemovedOwnedLand().contains(point));
+        }
+
+        // Verify that no more events are sent for discovered land
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
+                for (var changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
                     assertEquals(changes.changedBorders().size(), 0);
                 }
             }
@@ -4370,67 +4213,63 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupiedIsOnlySentOnce() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the barracks get populated and the player discovers new land */
-        Set<Point> discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
+        // Verify that an event is sent when the barracks get populated and the player discovers new land
+        var discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        Set<Point> newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
+        var newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
 
         newlyDiscovered.removeAll(discoveredAtStart);
 
         assertTrue(monitor.getEvents().size() >= 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertTrue(gameChanges.newDiscoveredLand().size() > 1);
 
-        for (Point point : newlyDiscovered) {
+        for (var point : newlyDiscovered) {
             assertTrue(gameChanges.newDiscoveredLand().contains(point));
         }
 
-        for (Point point : discoveredAtStart) {
+        for (var point : discoveredAtStart) {
             assertFalse(gameChanges.newDiscoveredLand().contains(point));
         }
 
-        /* Verify that no more events are sent for discovered land */
+        // Verify that no more events are sent for discovered land
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
+                for (var changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
                     assertEquals(changes.newDiscoveredLand().size(), 0);
                 }
             }
@@ -4440,46 +4279,43 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenBorderIsExtendedWhenBarracksIsOccupied() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(75, 75);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(75, 75);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
-        /* Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land */
+        // Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        for (Point point : player0.getBorderPoints()) {
+        for (var point : player0.getBorderPoints()) {
             assertFalse(player1.getDiscoveredLand().contains(point));
         }
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.changedBorders().isEmpty());
         }
     }
@@ -4487,47 +4323,43 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerEntersBuilding() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
-
-        /* Construct the house */
+        // Construct the house
         Utils.constructHouse(woodcutter0);
 
-        /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
+        // Wait for a worker to start walking to the house
+        var woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the worker enters the building */
+        // Verify that an event is sent when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.removedWorkers().size(), 1);
         assertEquals(gameChanges.removedWorkers().getFirst(), woodcutterWorker);
@@ -4548,58 +4380,54 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWorkerEntersBuildingIsSentOnlyOnce() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
-
-        /* Construct the house */
+        // Construct the house
         Utils.constructHouse(woodcutter0);
 
-        /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
+        // Wait for a worker to start walking to the house
+        var woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the worker enters the building */
+        // Verify that an event is sent when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        GameChangesList gameChanges = monitor.getEvents().getLast();
+        var gameChanges = monitor.getEvents().getLast();
 
         assertEquals(gameChanges.removedWorkers().size(), 1);
         assertEquals(gameChanges.removedWorkers().getFirst(), woodcutterWorker);
 
-        /* Verify that the event is sent only once */
-        GameChangesList lastGameChangesList = monitor.getLastEvent();
+        // Verify that the event is sent only once
+        var lastGameChangesList = monitor.getLastEvent();
 
         for (int i = 0; i < 10; i++) {
             map.stepTime();
 
-            for (GameChangesList changes : monitor.getEventsAfterEvent(lastGameChangesList)) {
+            for (var changes : monitor.getEventsAfterEvent(lastGameChangesList)) {
                 assertFalse(changes.removedWorkers().contains(woodcutterWorker));
             }
         }
@@ -4608,51 +4436,48 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenWorkerEntersBuilding() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
-        /* Construct the house */
+        // Construct the house
         Utils.constructHouse(woodcutter0);
 
-        /* Wait for a worker to start walking to the house */
-        WoodcutterWorker woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
+        // Wait for a worker to start walking to the house
+        var woodcutterWorker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).getFirst();
 
         map.stepTime();
 
-        /* Set up monitoring subscription for player 1 */
+        // Set up monitoring subscription for player 1
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that no event is sent to player 1 when the worker enters the building */
+        // Verify that no event is sent to player 1 when the worker enters the building
         assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getPosition());
 
         assertTrue(woodcutterWorker.isInsideBuilding());
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.removedWorkers().isEmpty());
         }
     }
@@ -4660,42 +4485,38 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupiedBeforeMonitoringStarts() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place headquarters */
-        Point point25 = new Point(7, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
-        /* Place barracks */
-        Point point26 = new Point(21, 5);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+        // Connect the barracks with the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Connect the barracks with the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
-
-        /* Finish construction of the barracks */
+        // Finish construction of the barracks
         Utils.constructHouse(barracks0);
 
         map.stepTime();
 
-        /* Wait for the barracks to get populated so the discovered area expands */
-        Set<Point> discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
+        // Wait for the barracks to get populated so the discovered area expands
+        var discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        Set<Point> newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
+        var newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
 
         newlyDiscovered.removeAll(discoveredAtStart);
 
         assertTrue(newlyDiscovered.size() > 0);
 
-        /* Verify that no message is sent for the new discovered area when the monitoring starts after */
+        // Verify that no message is sent for the new discovered area when the monitoring starts after
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -4712,35 +4533,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenScoutDiscoversNewGround() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(19, 5);
-        Flag flag = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(19, 5);
+        var flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call scout from the flag */
+        // Call scout from the flag
         flag.callScout();
 
-        /* Wait for the scout to go to the flag */
+        // Wait for the scout to go to the flag
         map.stepTime();
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -4751,7 +4570,7 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that an event is sent when the scout discovers new ground */
+        // Verify that an event is sent when the scout discovers new ground
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -4762,10 +4581,10 @@ public class TestGameMonitoring {
 
         Point discoveredPoint = null;
 
-        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
+        var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
-            Point target = scout.getTarget();
+            var target = scout.getTarget();
 
             if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
@@ -4792,7 +4611,7 @@ public class TestGameMonitoring {
         assertTrue(monitor.getEvents().size() >= 1);
 
         boolean discoveryReported = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newDiscoveredLand().contains(discoveredPoint)) {
                 discoveryReported = true;
 
@@ -4806,35 +4625,33 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenScoutDiscoversNewGroundIsSentOnlyOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(19, 5);
-        Flag flag = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(19, 5);
+        var flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call scout from the flag */
+        // Call scout from the flag
         flag.callScout();
 
-        /* Wait for the scout to go to the flag */
+        // Wait for the scout to go to the flag
         map.stepTime();
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -4845,7 +4662,7 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that an event is sent when the scout discovers new ground */
+        // Verify that an event is sent when the scout discovers new ground
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -4856,11 +4673,10 @@ public class TestGameMonitoring {
 
         Point discoveredPoint = null;
 
-
-        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
+        var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
-            Point target = scout.getTarget();
+            var target = scout.getTarget();
 
             if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
@@ -4887,7 +4703,7 @@ public class TestGameMonitoring {
         assertTrue(monitor.getEvents().size() >= 1);
 
         boolean discoveryReported = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.newDiscoveredLand().contains(discoveredPoint)) {
                 discoveryReported = true;
 
@@ -4897,16 +4713,16 @@ public class TestGameMonitoring {
 
         assertTrue(discoveryReported);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
-        /* Verify that the event is sent only once */
+        // Verify that the event is sent only once
         int amountEvents = monitor.getEvents().size();
 
         for (int i = 0; i < 5; i++) {
             map.stepTime();
 
             if (monitor.getEvents().size() > amountEvents) {
-                for (GameChangesList changes : monitor.getEventsAfterEvent(gameChanges)) {
+                for (var changes : monitor.getEventsAfterEvent(gameChanges)) {
                     assertEquals(changes.newDiscoveredLand().size(), 0);
                 }
             }
@@ -4916,35 +4732,33 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventWhenScoutDiscoversNewGroundBeforeMonitoringStarts() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 50, 50);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
-        Point point1 = new Point(21, 5);
-        Flag flag = map.placeFlag(player0, point1);
+        // Place flag
+        var point1 = new Point(21, 5);
+        var flag = map.placeFlag(player0, point1);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call scout from the flag */
+        // Call scout from the flag
         flag.callScout();
 
-        /* Wait for the scout to go to the flag */
+        // Wait for the scout to go to the flag
         map.stepTime();
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -4958,10 +4772,10 @@ public class TestGameMonitoring {
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
+        var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
-            Point target = scout.getTarget();
+            var target = scout.getTarget();
 
             if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
@@ -4984,10 +4798,10 @@ public class TestGameMonitoring {
         assertTrue(foundNewGround);
         assertTrue(wentToNewGround);
 
-        /* Wait for the scout to go back to the flag */
+        // Wait for the scout to go back to the flag
         Utils.waitForWorkerToSetTarget(map, scout, flag.getPosition());
 
-        /* Verify that there is no message about discovered land when starting monitoring */
+        // Verify that there is no message about discovered land when starting monitoring
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
@@ -5005,41 +4819,38 @@ public class TestGameMonitoring {
     @Test
     public void testNoMonitoringEventForOtherPlayerWhenScoutDiscoversNewGround() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
-        GameMap map = new GameMap(players, 80, 80);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 80, 80);
 
-        /* Place headquarters for player 0 */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for player 0
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for player 1 */
-        Point point1 = new Point(65, 65);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place headquarters for player 1
+        var point1 = new Point(65, 65);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place flag */
-        Point point2 = new Point(19, 5);
-        Flag flag = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(19, 5);
+        var flag = map.placeFlag(player0, point2);
 
-        /* Connect headquarters and flag */
+        // Connect headquarters and flag
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Wait for the road to get occupied */
+        // Wait for the road to get occupied
         Utils.fastForward(30, map);
 
-        /* Call scout from the flag */
+        // Call scout from the flag
         flag.callScout();
 
-        /* Wait for the scout to go to the flag */
+        // Wait for the scout to go to the flag
         map.stepTime();
 
         Scout scout = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Scout) {
                 scout = (Scout) worker;
             }
@@ -5050,17 +4861,17 @@ public class TestGameMonitoring {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that no event is sent to player 1 when the scout discovers new ground */
+        // Verify that no event is sent to player 1 when the scout discovers new ground
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player1.monitorGameView(monitor);
 
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
 
-        Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
+        var discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         for (int i = 0; i < 30; i++) {
-            Point target = scout.getTarget();
+            var target = scout.getTarget();
 
             if (!discoveredLandBefore.contains(target)) {
                 foundNewGround = true;
@@ -5083,7 +4894,7 @@ public class TestGameMonitoring {
         assertTrue(foundNewGround);
         assertTrue(wentToNewGround);
 
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.newDiscoveredLand().isEmpty());
         }
     }
@@ -5091,46 +4902,45 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenMilitaryBuildingIsUpgraded() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place barracks */
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the barracks to get constructed and populated */
+        // Wait for the barracks to get constructed and populated
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the barracks is upgraded */
-        Set<Point> oldBorder = new HashSet<>(player0.getBorderPoints());
+        // Verify that an event is sent when the barracks is upgraded
+        var oldBorder = new HashSet<>(player0.getBorderPoints());
+        var oldOwnedLand = new HashSet<>(player0.getOwnedLand());
 
         barracks0.upgrade();
 
         Utils.waitForUpgradeToFinish(barracks0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.upgradedBuildings().size(), 1);
@@ -5138,15 +4948,22 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.upgradedBuildings().iterator().next().oldBuilding, barracks0);
         assertEquals(gameChanges.changedBorders().size(), 1);
 
-        Set<Point> newBorder = new HashSet<>(player0.getBorderPoints());
+        var newBorder = new HashSet<>(player0.getBorderPoints());
+        var newOwnedLand = new HashSet<>(player0.getOwnedLand());
 
-        Set<Point> addedBorder = new HashSet<>(newBorder);
+        var addedBorder = new HashSet<>(newBorder);
         addedBorder.removeAll(oldBorder);
 
-        Set<Point> removedBorder = new HashSet<>(oldBorder);
+        var removedBorder = new HashSet<>(oldBorder);
         removedBorder.removeAll(newBorder);
 
-        BorderChange borderChange = gameChanges.changedBorders().getFirst();
+        var addedOwnedLand = new HashSet<>(newOwnedLand);
+        addedOwnedLand.removeAll(oldOwnedLand);
+
+        var removedOwnedLand = new HashSet<>(oldOwnedLand);
+        removedOwnedLand.removeAll(newOwnedLand);
+
+        var borderChange = gameChanges.changedBorders().getFirst();
 
         removedBorder.forEach(point -> {
             assertFalse(newBorder.contains(point));
@@ -5158,58 +4975,66 @@ public class TestGameMonitoring {
             assertFalse(oldBorder.contains(point));
             assertTrue(borderChange.getNewBorder().contains(point));
         });
+        removedOwnedLand.forEach(point -> {
+            assertFalse(newOwnedLand.contains(point));
+            assertTrue(oldOwnedLand.contains(point));
+            assertTrue(borderChange.getRemovedOwnedLand().contains(point));
+        });
+        addedOwnedLand.forEach(point -> {
+            assertTrue(newOwnedLand.contains(point));
+            assertFalse(oldOwnedLand.contains(point));
+            assertTrue(borderChange.getNewOwnedLand().contains(point));
+        });
         assertEquals(borderChange.getPlayer(), player0);
     }
 
     @Test
     public void testMonitoringEventWhenMilitaryBuildingIsUpgradedIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Place barracks */
-        Point point1 = new Point(10, 10);
-        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+        // Place barracks
+        var point1 = new Point(10, 10);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        /* Connect the barracks to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+        // Connect the barracks to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
-        /* Wait for the barracks to get constructed */
+        // Wait for the barracks to get constructed
         Utils.waitForBuildingToBeConstructed(barracks0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that three events are sent when a house is placed - for the house, the road, and the flag */
+        // Verify that three events are sent when a house is placed - for the house, the road, and the flag
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Verify that an event is sent when the barracks is upgraded */
+        // Verify that an event is sent when the barracks is upgraded
         barracks0.upgrade();
 
         Utils.waitForUpgradeToFinish(barracks0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.upgradedBuildings().size(), 1);
         assertEquals(gameChanges.upgradedBuildings().iterator().next().newBuilding, map.getBuildingAtPoint(point1));
 
-        /* Verify that the message is only sent once */
+        // Verify that the message is only sent once
         Utils.fastForward(10, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.changedBuildings().size(), 0);
         }
     }
@@ -5217,34 +5042,32 @@ public class TestGameMonitoring {
     @Test
     public void testMonitorOnlyGetsOneMessage() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player, start subscription twice */
+        // Set up monitoring subscription for the player, start subscription twice
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
         player0.monitorGameView(monitor);
 
-        /* Verify that only one event is sent when a flag is placed, even if the monitor called subscribe twice */
+        // Verify that only one event is sent when a flag is placed, even if the monitor called subscribe twice
         assertEquals(monitor.getEvents().size(), 0);
 
-        Point point1 = new Point(10, 10);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 10);
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
 
-        GameChangesList gameChanges = monitor.getEvents().getFirst();
+        var gameChanges = monitor.getEvents().getFirst();
 
         assertTrue(gameChanges.time() > 0);
         assertEquals(gameChanges.newFlags().size(), 1);
@@ -5254,66 +5077,63 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenRoadBecomesPromotedToMainRoad() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point38 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        // Place headquarters
+        var point38 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
-        /* Place flag */
-        Point point2 = new Point(5, 9);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(5, 9);
+        var flag0 = map.placeFlag(player0, point2);
 
-        /* Place road between the headquarters and the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+        // Place road between the headquarters and the flag
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
-        /* Place a worker on the road */
-        Courier courier = Utils.occupyRoad(road0, map);
+        // Place a worker on the road
+        var courier = Utils.occupyRoad(road0, map);
 
-        /* Deliver 99 cargo - the road does not become a main road */
+        // Deliver 99 cargo - the road does not become a main road
         for (int i = 0; i < 99; i++) {
-            Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+            var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
-            /* Wait for the courier to pick up the cargo */
+            // Wait for the courier to pick up the cargo
             assertNull(courier.getCargo());
 
             Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-            /* Wait for the courier to deliver the cargo */
+            // Wait for the courier to deliver the cargo
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
-
             assertFalse(road0.isMainRoad());
         }
 
-        /* Deliver one more cargo and make it a main road */
-        Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+        // Deliver one more cargo and make it a main road
+        var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         assertNull(courier.getCargo());
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-        /* Start monitoring the player */
+        // Start monitoring the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the courier to deliver the cargo */
+        // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
         assertTrue(road0.isMainRoad());
 
-        /* Verify that an event is sent when the road becomes a main road */
-        GameChangesList gameChangesList = monitor.getLastEvent();
+        // Verify that an event is sent when the road becomes a main road
+        var gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.promotedRoads().size(), 1);
         assertEquals(gameChangesList.promotedRoads().iterator().next(), road0);
@@ -5322,74 +5142,71 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenRoadBecomesPromotedToMainRoadIsOnlySentOnce() throws Exception {
 
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point38 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        // Place headquarters
+        var point38 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
-        /* Place flag */
-        Point point2 = new Point(5, 9);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag
+        var point2 = new Point(5, 9);
+        var flag0 = map.placeFlag(player0, point2);
 
-        /* Place road between the headquarters and the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+        // Place road between the headquarters and the flag
+        var road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
 
-        /* Place a worker on the road */
-        Courier courier = Utils.occupyRoad(road0, map);
+        // Place a worker on the road
+        var courier = Utils.occupyRoad(road0, map);
 
-        /* Deliver 99 cargo - the road does not become a main road */
+        // Deliver 99 cargo - the road does not become a main road
         for (int i = 0; i < 99; i++) {
-            Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+            var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
-            /* Wait for the courier to pick up the cargo */
+            // Wait for the courier to pick up the cargo
             assertNull(courier.getCargo());
 
             Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-            /* Wait for the courier to deliver the cargo */
+            // Wait for the courier to deliver the cargo
             assertEquals(courier.getTarget(), headquarter0.getPosition());
 
             Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
             assertNull(courier.getCargo());
-
             assertFalse(road0.isMainRoad());
         }
 
-        /* Deliver one more cargo and make it a main road */
-        Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+        // Deliver one more cargo and make it a main road
+        var cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
-        /* Wait for the courier to pick up the cargo */
+        // Wait for the courier to pick up the cargo
         assertNull(courier.getCargo());
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-        /* Start monitoring the player */
+        // Start monitoring the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Wait for the courier to deliver the cargo */
+        // Wait for the courier to deliver the cargo
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
 
         assertTrue(road0.isMainRoad());
 
-        /* Verify that an event is sent when the road becomes a main road */
-        GameChangesList gameChangesList = monitor.getLastEvent();
+        // Verify that an event is sent when the road becomes a main road
+        var gameChangesList = monitor.getLastEvent();
 
         assertEquals(gameChangesList.promotedRoads().size(), 1);
         assertEquals(gameChangesList.promotedRoads().iterator().next(), road0);
 
-        /* Verify that the road promotion is only reported once */
+        // Verify that the road promotion is only reported once
         Utils.fastForward(20, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
             assertFalse(newChanges.promotedRoads().contains(road0));
         }
     }
@@ -5397,50 +5214,48 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenFlagGetsCargo() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(13, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(13, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place flag between the buildings */
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag between the buildings
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Connect the headquarters with the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect the headquarters with the flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the woodcutter with the flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        // Connect the woodcutter with the flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        /* Wait for the first road to get populated */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        // Wait for the first road to get populated
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier of the first road to carry planks for the woodcutter */
+        // Wait for the courier of the first road to carry planks for the woodcutter
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when the courier puts the cargo down by the flag */
+        // Verify that an event is sent when the courier puts the cargo down by the flag
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
         assertFalse(monitor.getEvents().isEmpty());
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertFalse(gameChanges.changedFlags().isEmpty());
@@ -5453,50 +5268,48 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenFlagGetsCargoIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(13, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(13, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place flag between the buildings */
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag between the buildings
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Connect the headquarters with the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect the headquarters with the flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the woodcutter with the flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        // Connect the woodcutter with the flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        /* Wait for the first road to get populated */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        // Wait for the first road to get populated
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier of the first road to carry planks for the woodcutter */
+        // Wait for the courier of the first road to carry planks for the woodcutter
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when the courier puts the cargo down by the flag */
+        // Verify that an event is sent when the courier puts the cargo down by the flag
         assertEquals(courier.getTarget(), flag0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
         assertTrue(monitor.getEvents().size() > 0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.changedFlags().size() > 0);
@@ -5505,10 +5318,10 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.newFlags().size(), 0);
         assertEquals(gameChanges.removedFlags().size(), 0);
 
-        /* Verify that the event is only sent once */
+        // Verify that the event is only sent once
         Utils.fastForward(5, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.changedFlags().size(), 0);
         }
     }
@@ -5516,48 +5329,46 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenCargoGetsPickedUpFromFlag() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(13, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(13, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place flag between the buildings */
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag between the buildings
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Change so there is only one plank in the headquarters */
+        // Change so there is only one plank in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
-        /* Connect the headquarters with the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect the headquarters with the flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the woodcutter with the flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        // Connect the woodcutter with the flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        /* Wait for the first road to get populated */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        // Wait for the first road to get populated
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier of the first road to go to the headquarter's flag to pick up a plank */
+        // Wait for the courier of the first road to go to the headquarter's flag to pick up a plank
         Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
 
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that a monitoring event is sent when the courier picks up the plank from the flag */
+        // Verify that a monitoring event is sent when the courier picks up the plank from the flag
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
         assertNull(monitor.getLastEvent());
 
@@ -5567,7 +5378,7 @@ public class TestGameMonitoring {
         assertEquals(courier.getCargo().getMaterial(), PLANK);
         assertTrue(monitor.getEvents().size() > 0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.changedFlags().size() > 0);
@@ -5581,48 +5392,46 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenCargoGetsPickedUpFromFlagIsOnlySentOnce() throws Exception {
 
-        /* Starting new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Starting new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place woodcutter */
-        Point point1 = new Point(13, 5);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+        // Place woodcutter
+        var point1 = new Point(13, 5);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place flag between the buildings */
-        Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point2);
+        // Place flag between the buildings
+        var point2 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point2);
 
         map.stepTime();
 
-        /* Change so there is only one plank in the headquarters */
+        // Change so there is only one plank in the headquarters
         Utils.adjustInventoryTo(headquarter0, PLANK, 1);
 
-        /* Connect the headquarters with the flag */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        // Connect the headquarters with the flag
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
-        /* Connect the woodcutter with the flag */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
+        // Connect the woodcutter with the flag
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
-        /* Wait for the first road to get populated */
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+        // Wait for the first road to get populated
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        /* Wait for the courier of the first road to go to the headquarter's flag to pick up a plank */
+        // Wait for the courier of the first road to go to the headquarter's flag to pick up a plank
         Utils.waitForWorkerToSetTarget(map, courier, headquarter0.getFlag().getPosition());
 
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that a monitoring event is sent when the courier picks up the plank from the flag */
+        // Verify that a monitoring event is sent when the courier picks up the plank from the flag
         assertEquals(headquarter0.getFlag().getStackedCargo().size(), 1);
         assertNull(monitor.getLastEvent());
 
@@ -5632,7 +5441,7 @@ public class TestGameMonitoring {
         assertEquals(courier.getCargo().getMaterial(), PLANK);
         assertTrue(monitor.getEvents().size() > 0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.changedFlags().size() > 0);
@@ -5642,10 +5451,10 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.newFlags().size(), 0);
         assertEquals(gameChanges.removedFlags().size(), 0);
 
-        /* Verify that the message is only sent once */
+        // Verify that the message is only sent once
         Utils.fastForward(5, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.changedFlags().size(), 0);
         }
     }
@@ -5653,65 +5462,63 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenCourierWaitsToDeliverWhenFlagIsFull() throws Exception {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag far away from the headquarters */
-        Point point1 = new Point(21, 5);
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Place flag far away from the headquarters
+        var point1 = new Point(21, 5);
+        var flag0 = map.placeFlag(player0, point1);
 
-        /* Place flag closer to the headquarters */
-        Point point2 = new Point(17, 5);
-        Flag flag1 = map.placeFlag(player0, point2);
+        // Place flag closer to the headquarters
+        var point2 = new Point(17, 5);
+        var flag1 = map.placeFlag(player0, point2);
 
-        /* Place a short road to make a courier wait on */
-        Road road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
+        // Place a short road to make a courier wait on
+        var road0 = map.placeRoad(player0, flag0.getPosition(), flag0.getPosition().left(), flag1.getPosition());
 
-        /* Place a long road to the headquarters */
-        Road road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
+        // Place a long road to the headquarters
+        var road1 = map.placeAutoSelectedRoad(player0, flag1, headquarter0.getFlag());
 
-        /* Wait for both roads to get their couriers assigned and standing idle */
-        Collection<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
+        // Wait for both roads to get their couriers assigned and standing idle
+        var couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1);
 
         Utils.waitForCouriersToBeIdle(map, couriers);
 
-        /* Place eight cargos on the flag between the roads targeting the headquarters */
+        // Place eight cargos on the flag between the roads targeting the headquarters
         Utils.placeCargos(map, WATER, 8, flag1, headquarter0);
 
-        /* Place two cargos on the other flag */
+        // Place two cargos on the other flag
         Utils.placeCargo(map, IRON, flag0, headquarter0);
 
         map.stepTime();
 
-        /* Wait for the courier of the short road to pick up a cargo */
+        // Wait for the courier of the short road to pick up a cargo
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
         Utils.fastForwardUntilWorkerProducesCargo(map, road0.getCourier());
 
-        /* Wait for the courier for the short road to be one step away from the middle flag */
+        // Wait for the courier for the short road to be one step away from the middle flag
         assertEquals(road1.getCourier().getTarget(), flag1.getPosition());
         assertNull(road1.getCourier().getCargo());
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition().right());
 
-        /* Verify that an event is sent when the courier waits because there is no space on the flag for more cargo */
+        // Verify that an event is sent when the courier waits because there is no space on the flag for more cargo
         assertEquals(flag1.getStackedCargo().size(), 8);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.workersWithNewTargets().size() > 0);
@@ -5721,38 +5528,34 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEnemyBorderChanges() throws InvalidUserActionException {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        players.add(player1);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1), 40, 40);
 
-        GameMap map = new GameMap(players, 40, 40);
+        // Place headquarters for the first player
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place headquarters for the first player */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters for the second player
+        var point1 = new Point(25, 25);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
-        /* Place headquarters for the second player */
-        Point point1 = new Point(25, 25);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        // Place fortress for the second player
+        var point2 = new Point(18, 18);
+        var fortress0 = map.placeBuilding(new Fortress(player1), point2);
 
-        /* Place fortress for the second player */
-        Point point2 = new Point(18, 18);
-        Fortress fortress0 = map.placeBuilding(new Fortress(player1), point2);
+        // Connect the fortress to the headquarters
+        var road0 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), fortress0.getFlag());
 
-        /* Connect the fortress to the headquarters */
-        Road road0 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), fortress0.getFlag());
-
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that a monitoring event is sent when the second player's border changes */
+        // Verify that a monitoring event is sent when the second player's border changes
         List<Point> visibleBorderBeforeChange = new ArrayList<>();
 
-        for (Point point : player1.getBorderPoints()) {
+        for (var point : player1.getBorderPoints()) {
             if (!player0.getDiscoveredLand().contains(point)) {
                 continue;
             }
@@ -5764,14 +5567,14 @@ public class TestGameMonitoring {
 
         Utils.waitForMilitaryBuildingToGetPopulated(fortress0);
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.changedBorders().size() > 0);
 
         List<Point> visibleBorderAfterChange = new ArrayList<>();
 
-        for (Point point : player1.getBorderPoints()) {
+        for (var point : player1.getBorderPoints()) {
             if (!player0.getDiscoveredLand().contains(point)) {
                 continue;
             }
@@ -5779,11 +5582,11 @@ public class TestGameMonitoring {
             visibleBorderAfterChange.add(point);
         }
 
-        List<BorderChange> borderChanges = gameChanges.changedBorders();
+        var borderChanges = gameChanges.changedBorders();
 
         BorderChange borderChangePlayer1 = null;
 
-        for (BorderChange borderChange : borderChanges) {
+        for (var borderChange : borderChanges) {
             if (borderChange.getPlayer().equals(player1)) {
                 borderChangePlayer1 = borderChange;
 
@@ -5796,8 +5599,7 @@ public class TestGameMonitoring {
         assertTrue(borderChangePlayer1.getNewBorder().size() > 0);
         assertTrue(borderChangePlayer1.getRemovedBorder().size() > 0);
 
-        for (Point point : visibleBorderBeforeChange) {
-
+        for (var point : visibleBorderBeforeChange) {
             if (player1.getBorderPoints().contains(point)) {
                 assertFalse(borderChangePlayer1.getNewBorder().contains(point));
                 assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
@@ -5806,7 +5608,7 @@ public class TestGameMonitoring {
             }
         }
 
-        for (Point point : visibleBorderAfterChange) {
+        for (var point : visibleBorderAfterChange) {
             if (visibleBorderBeforeChange.contains(point)) {
                 assertFalse(borderChangePlayer1.getNewBorder().contains(point));
                 assertFalse(borderChangePlayer1.getRemovedBorder().contains(point));
@@ -5819,32 +5621,30 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenDeadTreeIsRemoved() throws Exception {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place dead tree */
-        Point point1 = new Point(21, 5);
+        // Place dead tree
+        var point1 = new Point(21, 5);
         map.placeDeadTree(point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when the dead tree is removed */
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Verify that an event is sent when the dead tree is removed
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.removedDeadTrees().size() > 0);
@@ -5854,41 +5654,39 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenDeadTreeIsRemovedIsOnlySentOnce() throws Exception {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place dead tree */
-        Point point1 = new Point(21, 5);
+        // Place dead tree
+        var point1 = new Point(21, 5);
         map.placeDeadTree(point1);
 
         map.stepTime();
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Verify that an event is sent when the dead tree is removed */
-        Flag flag0 = map.placeFlag(player0, point1);
+        // Verify that an event is sent when the dead tree is removed
+        var flag0 = map.placeFlag(player0, point1);
 
         map.stepTime();
 
-        GameChangesList gameChanges = monitor.getLastEvent();
+        var gameChanges = monitor.getLastEvent();
 
         assertTrue(gameChanges.time() > 0);
         assertTrue(gameChanges.removedDeadTrees().size() > 0);
         assertTrue(gameChanges.removedDeadTrees().contains(point1));
 
-        /* Verify that the message is only sent once */
+        // Verify that the message is only sent once
         Utils.fastForward(20, map);
 
-        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+        for (var newChanges : monitor.getEventsAfterEvent(gameChanges)) {
             assertEquals(newChanges.removedDeadTrees().size(), 0);
         }
     }
@@ -5896,25 +5694,23 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringWhenWildAnimalMoves() throws Exception {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place wild animal */
-        Point point1 = new Point(21, 5);
-        WildAnimal wildAnimal0 = map.placeWildAnimal(point1);
+        // Place wild animal
+        var point1 = new Point(21, 5);
+        var wildAnimal0 = map.placeWildAnimal(point1);
 
-        /* Verify that an event is sent when the wild animal moves */
+        // Verify that an event is sent when the wild animal moves
         Utils.waitForWorkerToHaveTargetSet(wildAnimal0, map);
 
         map.stepTime();
@@ -5923,7 +5719,7 @@ public class TestGameMonitoring {
         assertFalse(wildAnimal0.isExactlyAtPoint());
 
         boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.workersWithNewTargets().contains(wildAnimal0)) {
                 foundEvent = true;
 
@@ -5937,25 +5733,23 @@ public class TestGameMonitoring {
     @Test
     public void testMonitoringEventWhenWildAnimalMovesIsOnlySentOnce() throws Exception {
 
-        /* Start new game */
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        // Start new game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
-        /* Place headquarters */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        // Place headquarters
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Set up monitoring subscription for the player */
+        // Set up monitoring subscription for the player
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
         player0.monitorGameView(monitor);
 
-        /* Place wild animal */
-        Point point1 = new Point(21, 5);
-        WildAnimal wildAnimal0 = map.placeWildAnimal(point1);
+        // Place wild animal
+        var point1 = new Point(21, 5);
+        var wildAnimal0 = map.placeWildAnimal(point1);
 
-        /* Verify that an event is sent when the wild animal moves */
+        // Verify that an event is sent when the wild animal moves
         Utils.waitForWorkerToHaveTargetSet(wildAnimal0, map);
 
         map.stepTime();
@@ -5964,7 +5758,7 @@ public class TestGameMonitoring {
         assertFalse(wildAnimal0.isExactlyAtPoint());
 
         boolean foundEvent = false;
-        for (GameChangesList gameChangesList : monitor.getEvents()) {
+        for (var gameChangesList : monitor.getEvents()) {
             if (gameChangesList.workersWithNewTargets().contains(wildAnimal0)) {
                 foundEvent = true;
 
@@ -5974,12 +5768,12 @@ public class TestGameMonitoring {
 
         assertTrue(foundEvent);
 
-        /* Verify that the event is only sent once */
-        GameChangesList lastEvent = monitor.getLastEvent();
+        // Verify that the event is only sent once
+        var lastEvent = monitor.getLastEvent();
 
         Utils.fastForward(5, map);
 
-        for (GameChangesList gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
+        for (var gameChangesList : monitor.getEventsAfterEvent(lastEvent)) {
             assertFalse(gameChangesList.workersWithNewTargets().contains(wildAnimal0));
         }
     }
