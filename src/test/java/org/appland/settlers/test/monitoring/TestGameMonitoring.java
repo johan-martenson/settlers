@@ -4211,6 +4211,108 @@ public class TestGameMonitoring {
     }
 
     @Test
+    public void testMonitoringEventWhenBorderIsExtendedWhenBarracksIsTornDown() throws InvalidUserActionException {
+
+        // Creating new game map with size 40x40
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point25 = new Point(7, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        // Place barracks
+        var point26 = new Point(21, 5);
+        var barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        // Connect the barracks with the headquarters, wait for it to get constructed and occupied
+        var road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        Utils.waitForBuildingToBeConstructed(barracks0);
+        Utils.waitForMilitaryBuildingsToGetPopulated(barracks0);
+
+        // Set up monitoring subscription for the player
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+
+        // Verify that an event is sent when the barracks is torn down and the player loses land
+        var borderAtStart = new HashSet<>(player0.getBorderPoints());
+        var landAtStart = new HashSet<>(player0.getOwnedLand());
+
+        barracks0.tearDown();
+
+        map.stepTime();
+
+        var newBorder = new HashSet<>(player0.getBorderPoints());
+        var fullNewBorder = new HashSet<>(newBorder);
+        var newOwnedLand = new HashSet<>(player0.getOwnedLand());
+        var fullNewOwnedLand = new HashSet<>(player0.getOwnedLand());
+
+        newBorder.removeAll(borderAtStart);
+        newOwnedLand.removeAll(landAtStart);
+
+        var removedBorder = new HashSet<>(borderAtStart);
+        var removedOwnedLand = new HashSet<>(landAtStart);
+
+        removedBorder.removeAll(fullNewBorder);
+        removedOwnedLand.removeAll(fullNewOwnedLand);
+
+        assertTrue(monitor.getEvents().size() >= 1);
+
+        var gameChanges = monitor.getEvents().getLast();
+
+        assertEquals(1, gameChanges.changedBorders().size());
+
+        var borderChanges = gameChanges.changedBorders();
+
+        assertEquals(borderChanges.size(), 1);
+
+        var borderChange = borderChanges.getFirst();
+
+        assertEquals(borderChange.player(), player0);
+        assertEquals(borderChange.newBorder().size(), newBorder.size());
+        assertEquals(borderChange.removedBorder().size(), removedBorder.size());
+        assertEquals(borderChange.newOwnedLand().size(), newOwnedLand.size());
+        assertEquals(borderChange.removedOwnedLand().size(), removedOwnedLand.size());
+
+        for (var point : newBorder) {
+            assertTrue(borderChange.newBorder().contains(point));
+            assertFalse(borderChange.removedBorder().contains(point));
+        }
+
+        for (var point : removedBorder) {
+            assertFalse(borderChange.newBorder().contains(point));
+            assertTrue(borderChange.removedBorder().contains(point));
+        }
+
+        for (var point : newOwnedLand) {
+            assertTrue(borderChange.newOwnedLand().contains(point));
+            assertFalse(borderChange.removedOwnedLand().contains(point));
+        }
+
+        for (var point : removedOwnedLand) {
+            assertFalse(borderChange.newOwnedLand().contains(point));
+            assertTrue(borderChange.removedOwnedLand().contains(point));
+        }
+
+        // Verify that no more events are sent for discovered land
+        int amountEvents = monitor.getEvents().size();
+
+        for (int i = 0; i < 10; i++) {
+            map.stepTime();
+
+            if (monitor.getEvents().size() > amountEvents) {
+                for (var changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
+                    assertEquals(changes.changedBorders().size(), 0);
+                }
+            }
+        }
+
+    }
+
+    @Test
     public void testMonitoringEventWhenFieldOfViewIsExtendedWhenBarracksIsOccupiedIsOnlySentOnce() throws Exception {
 
         // Creating new game map with size 40x40

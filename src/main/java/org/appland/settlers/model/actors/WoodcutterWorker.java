@@ -132,6 +132,14 @@ public class WoodcutterWorker extends Worker {
 
             case IN_HOUSE_WITH_CARGO -> {
                 if (home.getFlag().hasPlaceForMoreCargo()) {
+                    System.out.println();
+                    System.out.println("Woodcutter worker going out to place cargo on flag");
+                    System.out.println("Home: " + home);
+                    System.out.println("Home state: " + home.state);
+                    System.out.println("State: " + state);
+                    System.out.println("Position: " + position);
+                    System.out.println("Path to flag: " + map.findWayWithExistingRoads(position, home.getFlag().getPosition()));
+
                     state = State.GOING_OUT_TO_PUT_CARGO;
                     setTarget(home.getFlag().getPosition());
 

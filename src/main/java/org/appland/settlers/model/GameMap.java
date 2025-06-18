@@ -959,9 +959,14 @@ public class GameMap {
         playersToUpdate.forEach(player -> player.setLands(new ArrayList<>(), buildingCausedUpdate, cause));
 
         // Destroy buildings now outside their player's borders
+        System.out.println();
+        System.out.println("Buildings before stream:");
         buildings.stream().forEach(System.out::println);
 
+        System.out.println();
+        System.out.println("Streaming");
         buildings.stream()
+                .peek(System.out::println)
                 .filter(building -> !building.isBurningDown())
                 .filter(building -> !building.isDestroyed())
                 .filter(building -> !(building.isMilitaryBuilding() && building.isOccupied()))

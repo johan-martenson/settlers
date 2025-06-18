@@ -117,7 +117,8 @@ public class IconsExtractor {
             IoDat.OWNED_ROADS_ON_MAP,
             IoDat.GRAPH_OF_OWNED_AREA_ON_MAP,
             IoDat.FORWARD,
-            IoDat.REVERSE
+            IoDat.REVERSE,
+            IoDat.PLUS_RETURN_TO_HEADQUARTERS
     );
 
     public static void extractIcons(String fromDir, String toDir, Palette defaultPalette) throws UnknownResourceTypeException, IOException, InvalidFormatException {
@@ -158,7 +159,6 @@ public class IconsExtractor {
             }
             var img = ImageIO.read(in);
 
-            ImageUtils.toBitmap(img).writeToFile("keso.png");
             collector.addUiElement(UiIcon.PAUSE, ImageUtils.toBitmap(img));
         }
 
@@ -169,13 +169,8 @@ public class IconsExtractor {
 
             var img = ImageIO.read(in);
 
-            ImageUtils.toBitmap(img).writeToFile("keso.png");
-
             collector.addUiElement(UiIcon.PLAY, ImageUtils.toBitmap(img));
         }
-
-        //collector.addUiElement(UiIcon.PAUSE, ImageUtils.toBitmap(ImageIO.read(new File("pause.png"))));
-        //collector.addUiElement(UiIcon.PLAY, ImageUtils.toBitmap(ImageIO.read(new File("play.png"))));
 
         collector.writeImageAtlas(toDir, defaultPalette);
     }

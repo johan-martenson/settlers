@@ -101,7 +101,7 @@ public class Building implements EndPoint {
     private Flag flag = new Flag(null);
     private Set<Point> defendedLand = null;
     private long generation;
-    private State state = State.PLANNED;
+    public State state = State.PLANNED;
     private Worker worker = null;
     private Worker promisedWorker = null;
     private Point position = null;
@@ -334,31 +334,33 @@ public class Building implements EndPoint {
     public void putCargo(Cargo cargo) {
         var material = cargo.getMaterial();
 
-        switch (state) {
-            case PLANNED, UNDER_CONSTRUCTION -> {
-                if (!materialsToBuildHouse.contains(material)) {
-                    throw new InvalidMaterialException(material);
-                }
+        if (promisedDeliveries.getOrDefault(material, 0) == 0) {
+            switch (state) {
+                case PLANNED, UNDER_CONSTRUCTION -> {
+                    if (!materialsToBuildHouse.contains(material)) {
+                        throw new InvalidMaterialException(material);
+                    }
 
-                if (getAmount(material) >= getCanHoldAmount(material)) {
-                    throw new InvalidGameLogicException(format("Can't accept delivery of %s", material));
+                    if (getAmount(material) >= getCanHoldAmount(material)) {
+                        throw new InvalidGameLogicException(format("Can't accept delivery of %s", material));
+                    }
                 }
+                case BURNING, DESTROYED -> throw new InvalidStateForProduction(this);
+                case UNOCCUPIED, OCCUPIED -> {
+                    if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= maxCoins) {
+                        throw new InvalidGameLogicException("This building doesn't need any more coins");
+                    }
+
+                    if (!canAcceptGoods()) {
+                        throw new DeliveryNotPossibleException(this, cargo);
+                    }
+
+                    if (!isAccepted(material)) {
+                        throw new InvalidMaterialException(material);
+                    }
+                }
+                default -> throw new InvalidGameLogicException("Invalid building state for delivery");
             }
-            case BURNING, DESTROYED -> throw new InvalidStateForProduction(this);
-            case UNOCCUPIED, OCCUPIED -> {
-                if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= maxCoins) {
-                    throw new InvalidGameLogicException("This building doesn't need any more coins");
-                }
-
-                if (!canAcceptGoods()) {
-                    throw new DeliveryNotPossibleException(this, cargo);
-                }
-
-                if (!isAccepted(material)) {
-                    throw new InvalidMaterialException(material);
-                }
-            }
-            default -> throw new InvalidGameLogicException("Invalid building state for delivery");
         }
 
         // Update the list of received materials and the list of promised deliveries
