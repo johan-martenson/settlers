@@ -332,7 +332,7 @@ public class Farmer extends Worker {
 
             // Filter previous crops that aren't harvested yet. It is possible to plant on harvested crops.
             if (mapPoint.isCrop()) {
-                Crop crop = map.getCropAtPoint(point);
+                var crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() != HARVESTED) {
                     continue;
