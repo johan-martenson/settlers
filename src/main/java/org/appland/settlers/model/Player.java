@@ -373,8 +373,8 @@ public class Player {
     void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
 
         // Remember how the owned land & border was before the update
-        var oldOwnedLand = new HashSet<Point>(ownedLand);
-        var oldBorder = new HashSet<Point>(borderPoints);
+        var oldOwnedLand = new HashSet<>(ownedLand);
+        var oldBorder = new HashSet<>(borderPoints);
 
         // Figure out the new land & border
         var newBorder = new HashSet<Point>();
@@ -386,10 +386,10 @@ public class Player {
         }
 
         // Figure out the border & land that has been added & removed
-        var addedBorder = new HashSet<Point>(newBorder);
-        var addedOwnedLand = new HashSet<Point>(newOwnedLand);
-        var removedBorder = new HashSet<Point>(oldBorder);
-        var removedOwnedLand = new HashSet<Point>(oldOwnedLand);
+        var addedBorder = new HashSet<>(newBorder);
+        var addedOwnedLand = new HashSet<>(newOwnedLand);
+        var removedBorder = new HashSet<>(oldBorder);
+        var removedOwnedLand = new HashSet<>(oldOwnedLand);
 
         addedBorder.removeAll(oldBorder);
         addedOwnedLand.removeAll(oldOwnedLand);
