@@ -380,15 +380,15 @@ public class TestDecorations {
 
         /* Verify that a skeleton is placed when the defender dies */
         assertFalse(map.isDecoratedAtPoint(defender.getPosition()));
-        assertNotEquals(map.getDecorations().get(defender.getPosition()), DecorationType.ANIMAL_SKELETON_1);
-        assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), ANIMAL_SKELETON_1);
+        assertNotEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_1);
+        assertNotEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_1);
 
         Utils.waitForWorkerToDie(map, defender);
 
         assertFalse(map.getWorkers().contains(defender));
         assertTrue(map.isDecoratedAtPoint(defender.getPosition()));
-        assertEquals(map.getDecorations().get(defender.getPosition()), DecorationType.ANIMAL_SKELETON_1);
-        assertEquals(map.getDecorationAtPoint(defender.getPosition()), ANIMAL_SKELETON_1);
+        assertEquals(map.getDecorations().get(defender.getPosition()), HUMAN_SKELETON_1);
+        assertEquals(map.getDecorationAtPoint(defender.getPosition()), HUMAN_SKELETON_1);
     }
 
     @Test

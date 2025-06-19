@@ -664,7 +664,7 @@ public abstract class Worker {
 
     protected void setDead() {
         dead = true;
-        map.placeDecoration(position, DecorationType.ANIMAL_SKELETON_1);
+        map.placeDecoration(position, DecorationType.HUMAN_SKELETON_1);
     }
 
     public void goToStorehouse(Storehouse storehouse) {
