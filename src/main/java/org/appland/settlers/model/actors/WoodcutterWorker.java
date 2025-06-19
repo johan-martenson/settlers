@@ -139,6 +139,9 @@ public class WoodcutterWorker extends Worker {
                     System.out.println("State: " + state);
                     System.out.println("Position: " + position);
                     System.out.println("Path to flag: " + map.findWayWithExistingRoads(position, home.getFlag().getPosition()));
+                    System.out.println("I belong to player: " + player.getName());
+                    System.out.println("Home belongs to" + home.getPlayer().getName());
+                    System.out.println("Flag belongs to: " + home.getFlag().getPlayer().getName());
 
                     state = State.GOING_OUT_TO_PUT_CARGO;
                     setTarget(home.getFlag().getPosition());
