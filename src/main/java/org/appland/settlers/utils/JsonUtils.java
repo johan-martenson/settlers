@@ -161,6 +161,7 @@ public class JsonUtils {
             var gameSpeed = gameResource.getGameSpeed();
 
             int tick = switch (gameSpeed) {
+                case VERY_FAST -> 50;
                 case FAST -> 100;
                 case NORMAL -> 200;
                 case SLOW -> 400;

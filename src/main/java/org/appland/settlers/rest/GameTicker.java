@@ -23,26 +23,18 @@ import java.util.concurrent.TimeUnit;
 
 public class GameTicker {
 
-    private static final int MIN_GAME_TICK_LENGTH = 100;
+    private static final int MIN_GAME_TICK_LENGTH = 50;
     private static final int COMPUTER_PLAYER_FREQUENCY = 20;
     private static final String FULL_TICK_TIME = "GameTicker.tick.total";
     public static final GameTicker GAME_TICKER = new GameTicker();
 
-    private final ScheduledExecutorService scheduler;
-    private final Set<GameResource> games;
-    private final Stats stats;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+    private final Set<GameResource> games = new HashSet<>();
+    private final Stats stats = new Stats();
     ScheduledFuture<?> handle;
-    private int counter;
+    private int counter = 0;
 
     GameTicker() {
-        games = new HashSet<>();
-
-        scheduler = Executors.newScheduledThreadPool(2);
-
-        counter = 0;
-
-        stats = new Stats();
-
         stats.setUpperThreshold(FULL_TICK_TIME, 150);
     }
 
@@ -71,16 +63,20 @@ public class GameTicker {
                 runComputers = true;
             }
 
-            for (GameResource game : games) {
+            for (var game : games) {
                 if (game.isPaused()) {
                     continue;
                 }
 
-                if (game.getGameSpeed() == GameSpeed.NORMAL && counter % 2 != 0) {
+                if (game.getGameSpeed() == GameSpeed.FAST && counter % 2 != 0) {
                     continue;
                 }
 
-                if (game.getGameSpeed() == GameSpeed.SLOW && counter % 4 != 0) {
+                if (game.getGameSpeed() == GameSpeed.NORMAL && counter % 4 != 0) {
+                    continue;
+                }
+
+                if (game.getGameSpeed() == GameSpeed.SLOW && counter % 8 != 0) {
                     continue;
                 }
 
