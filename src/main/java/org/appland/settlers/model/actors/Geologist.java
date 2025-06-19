@@ -17,7 +17,6 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 
-import java.util.List;
 import java.util.Random;
 
 import static org.appland.settlers.model.Material.GEOLOGIST;
@@ -42,23 +41,18 @@ public class Geologist extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    private static final int TIME_TO_INVESTIGATE   = 19;
+    private static final int TIME_TO_INVESTIGATE = 19;
     private static final int RADIUS_TO_INVESTIGATE = 7;
     private static final Random RANDOM = new Random(1);
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
-    private State state;
-    private int   nrSitesInvestigated;
+    private State state = WALKING_TO_TARGET;
+    private int nrSitesInvestigated = 0;
     private Point flagPoint;
 
     public Geologist(Player player, GameMap map) {
         super(player, map);
-
-        countdown           = new Countdown();
-        nrSitesInvestigated = 0;
-
-        state = WALKING_TO_TARGET;
     }
 
     public boolean isInvestigating() {
@@ -152,7 +146,6 @@ public class Geologist extends Worker {
         if (CAN_USE_WELL.containsAll(surroundingVegetation)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
-
             foundMaterial = WATER;
         } else if (MINABLE_MOUNTAIN.containsAll(surroundingVegetation)) {
             for (Material mineral: Material.getMinerals()) {
@@ -192,8 +185,8 @@ public class Geologist extends Worker {
      * @return The point to examine or null if no suitable point is found.
      */
     private Point findSiteToExamine() {
-        List<Point> points = map.getPointsWithinRadius(flagPoint, RADIUS_TO_INVESTIGATE);
-        int offset = RANDOM.nextInt(points.size());
+        var points = map.getPointsWithinRadius(flagPoint, RADIUS_TO_INVESTIGATE);
+        var offset = RANDOM.nextInt(points.size());
 
         // Iterate over the points with a random offset
         var filteredPoints = points.stream()
@@ -202,8 +195,11 @@ public class Geologist extends Worker {
                     MapPoint mapPoint = map.getMapPoint(point);
 
                     // Check if the point is clear of any signs, trees, stones, flags, or buildings
-                    return !(mapPoint.isSign() || mapPoint.isTree() || mapPoint.isStone()
-                            || mapPoint.isFlag() || mapPoint.isBuilding());
+                    return !mapPoint.isSign() &&
+                           !mapPoint.isTree() &&
+                           !mapPoint.isStone() &&
+                           !mapPoint.isFlag() &&
+                           !mapPoint.isBuilding();
                 })
                 .filter(point -> map.findWayOffroad(getPosition(), point, null) != null) // Ensure a path is available
                 .toList();
