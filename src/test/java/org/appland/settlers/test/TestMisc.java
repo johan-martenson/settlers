@@ -2215,4 +2215,44 @@ public class TestMisc {
         assertEquals(barracks.getAmount(COIN), 1);
         assertNull(courier.getCargo());
     }
+
+    @Test
+    public void testTearDownMilitaryBuildingWithPlannedBuildingCloseBy() throws InvalidUserActionException {
+
+        // Create game
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 100, 100);
+
+        // Place headquarters
+        var point0 = new Point(68, 68);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place barracks, connect it to the headquarters, and wait for it to get constructed and occupied
+        var point1 = new Point(58, 68);
+        var barracks = map.placeBuilding(new Barracks(player0), point1);
+
+        var road = map.placeAutoSelectedRoad(player0, barracks.getFlag(), headquarter.getFlag());
+
+        var point2 = new Point(50, 68);
+
+        assertFalse(player0.getOwnedLand().contains(point2));
+
+        Utils.waitForBuildingToBeConstructed(barracks);
+        Utils.waitForMilitaryBuildingToGetPopulated(barracks);
+
+        assertTrue(player0.getOwnedLand().contains(point2));
+
+        // Place a planned building
+        var woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
+
+        // Verify that the planned building disappears when the barracks is torn down (and no exception is thrown)
+        assertTrue(map.isBuildingAtPoint(point2));
+        assertEquals(map.getBuildingAtPoint(point2), woodcutter);
+
+        barracks.tearDown();
+
+        assertFalse(player0.getOwnedLand().contains(point2));
+        assertFalse(map.isBuildingAtPoint(point2));
+        assertNotEquals(map.getBuildingAtPoint(point2), woodcutter);
+    }
 }

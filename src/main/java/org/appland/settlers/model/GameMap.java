@@ -57,26 +57,25 @@ public class GameMap {
     private final Countdown animalCountdown = new Countdown();
     private final List<Crop> crops = new ArrayList<>();
     private final List<Building> buildings = new ArrayList<>();
-    private final List<Building> buildingsToRemove = new LinkedList<>();
-    private final List<Building> buildingsToAdd = new LinkedList<>();
-    private final List<Projectile> projectilesToRemove = new LinkedList<>();
-    private final List<WildAnimal> animalsToRemove = new LinkedList<>();
+    private final List<Building> buildingsToRemove = new ArrayList<>();
+    private final List<Building> buildingsToAdd = new ArrayList<>();
+    private final List<Projectile> projectilesToRemove = new ArrayList<>();
+    private final List<WildAnimal> animalsToRemove = new ArrayList<>();
     private final List<Flag> flags = new ArrayList<>();
     private final List<Sign> signs = new ArrayList<>();
     private final List<Projectile> projectiles = new ArrayList<>();
     private final List<WildAnimal> wildAnimals = new ArrayList<>();
-    private final List<Sign> signsToRemove = new LinkedList<>();
-    private final List<Worker> workersToRemove = new LinkedList<>();
-    private final List<Crop> cropsToRemove = new LinkedList<>();
+    private final List<Sign> signsToRemove = new ArrayList<>();
+    private final List<Worker> workersToRemove = new ArrayList<>();
+    private final List<Crop> cropsToRemove = new ArrayList<>();
     private final MapPoint[] pointToGameObject;
     private final List<Tree> trees = new ArrayList<>();
     private final List<Stone> stones = new ArrayList<>();
-    final List<Worker> workersToAdd = new LinkedList<>();
+    final List<Worker> workersToAdd = new ArrayList<>();
     private final List<Player> players;
     private final Random random = new Random(1);
     private final List<Point> startingPoints = new ArrayList<>();
     private final ConnectionsProvider pathOnExistingRoadsProvider;
-    private final int statisticsCollectionPeriod = 500;
     private final Map<Integer, Vegetation> tileBelowMap = new HashMap<>();
     private final Map<Integer, Vegetation> tileDownRightMap = new HashMap<>();
 
@@ -115,13 +114,13 @@ public class GameMap {
     private final Set<GameChangesList.NewAndOldBuilding> upgradedBuildings = new HashSet<>();
     private final Set<Stone> changedStones = new HashSet<>();
     private final Set<Tree> treesToRemove = new HashSet<>();
+    private final Map<Point, DecorationType> addedDecorations = new HashMap<>();
+    private final Set<Tree> newFallingTrees = new HashSet<>();
 
     private Player winner = null;
     private long time = 1;
     private boolean winnerReported = false;
     private boolean isBorderUpdated = false;
-    private final Map<Point, DecorationType> addedDecorations = new HashMap<>();
-    private final Set<Tree> newFallingTrees = new HashSet<>();
 
     /**
      * Creates a new game map
@@ -787,12 +786,6 @@ public class GameMap {
     }
 
     public void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) {
-        System.out.println();
-        System.out.println();
-        System.out.println("Update border");
-        System.out.println("Buildings: " + buildings);
-        System.out.println("Caused update: " + buildingCausedUpdate + ", " + cause);
-
 
         // Build map Point->Building, picking buildings with the highest claim
         var claims = new HashMap<Point, Building>();
@@ -941,7 +934,7 @@ public class GameMap {
         }
 
         // Update lands in each player
-        var playersToUpdate = new ArrayList<Player>(players);
+        var playersToUpdate = new ArrayList<>(players);
 
         // This iterates over a set and the order may be non-deterministic
         updatedLands.forEach((player, lands) -> {
@@ -959,21 +952,19 @@ public class GameMap {
         playersToUpdate.forEach(player -> player.setLands(new ArrayList<>(), buildingCausedUpdate, cause));
 
         // Destroy buildings now outside their player's borders
-        System.out.println();
-        System.out.println("Buildings before stream:");
-        buildings.stream().forEach(System.out::println);
 
-        System.out.println();
-        System.out.println("Streaming");
-        buildings.stream()
-                .peek(System.out::println)
+        // Go through all buildings and tear down those that are outside of their player's land
+        // Note: this is done in two steps to avoid modifying the 'buildings' list while iterating over it
+        var buildingsToTearDown = buildings.stream()
                 .filter(building -> !building.isBurningDown())
                 .filter(building -> !building.isDestroyed())
                 .filter(building -> !(building.isMilitaryBuilding() && building.isOccupied()))
                 .filter(building -> !building.isHarbor() || !((Harbor) building).isOwnSettlement())
                 .filter(building -> !building.getPlayer().isWithinBorder(building.getPosition()))
                 .filter(building -> !building.getPlayer().isWithinBorder(building.getFlag().getPosition()))
-                .forEach(building -> {
+                        .toList();
+
+        buildingsToTearDown.forEach(building -> {
                     try {
                         building.tearDown();
                     } catch (InvalidUserActionException e) {
@@ -2022,18 +2013,18 @@ public class GameMap {
     /**
      * Places a crop at the given point
      *
-     * @param point    The point to place the crop on
+     * @param point The point to place the crop on
      * @return The placed crop
-     * @throws InvalidUserActionException Thrown if the crop cannot be placed
+     * @throws InvalidGameLogicException Thrown if the crop cannot be placed
      */
-    public Crop placeCrop(Point point, Crop.CropType cropType) throws InvalidUserActionException {
+    public Crop placeCrop(Point point, Crop.CropType cropType) throws InvalidGameLogicException {
         var mapPoint = getMapPoint(point);
 
         if (mapPoint.isUnHarvestedCrop()) {
-            throw new InvalidUserActionException(String.format("Can't place crop on non-harvested crop at %s", point));
+            throw new InvalidGameLogicException(String.format("Can't place crop on non-harvested crop at %s", point));
         }
 
-        Crop crop = new Crop(point, this, cropType);
+        var crop = new Crop(point, this, cropType);
 
         mapPoint.setCrop(crop);
         crops.add(crop);
@@ -2827,7 +2818,6 @@ public class GameMap {
         upgradedBuilding.setFlag(oldBuilding.getFlag());
 
         // Update the map point
-        mapPoint.removeBuilding();
         mapPoint.setBuilding(upgradedBuilding);
 
         // Update the player's list of buildings
