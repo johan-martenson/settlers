@@ -12,11 +12,9 @@ import org.appland.settlers.model.WorkerAction;
 import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.buildings.Storehouse;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -36,6 +34,7 @@ public class Farmer extends Worker {
     private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_HARVEST = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final int MAX_NON_HARVESTED_CROPS = 5;
     private static final Random RANDOM = new Random(0);
 
     private final Countdown countdown = new Countdown();
@@ -93,8 +92,8 @@ public class Farmer extends Worker {
                     if (cropToHarvest != null) {
                         state = GOING_OUT_TO_HARVEST;
                         setOffroadTarget(cropToHarvest.getPosition());
-                    } else if (getSurroundingNonHarvestedCrops().size() < 5) {
-                        var point = getFreeSpotToPlant();
+                    } else if (getSurroundingNonHarvestedCrops().size() < MAX_NON_HARVESTED_CROPS) {
+                        var point = getFreePointToPlant();
 
                         if (point == null) {
                             productivityMeasurer.reportUnproductivity();
@@ -163,19 +162,10 @@ public class Farmer extends Worker {
     }
 
     private Collection<Crop> getSurroundingNonHarvestedCrops() {
-        List<Crop> result = new ArrayList<>();
-
-        for (Point point : getSurroundingSpotsForCrops()) {
-            if (map.isCropAtPoint(point)) {
-                Crop crop = map.getCropAtPoint(point);
-
-                if (crop.getGrowthState() != HARVESTED) {
-                    result.add(map.getCropAtPoint(point));
-                }
-            }
-        }
-
-        return result;
+        return getSurroundingSpotsForCrops().stream()
+                .filter(point -> map.isCropAtPoint(point) && map.getCropAtPoint(point).getGrowthState() != HARVESTED)
+                .map(map::getCropAtPoint)
+                .toList();
     }
 
     public boolean isWheatReceiverAndAllocationAllowed(Building building) {
@@ -318,7 +308,7 @@ public class Farmer extends Worker {
         setTarget(building.getFlag().getPosition());
     }
 
-    private Iterable<Point> getSurroundingSpotsForCrops() {
+    private Collection<Point> getSurroundingSpotsForCrops() {
         var hutPoint = home.getPosition();
         var possibleSpotsToPlant = new HashSet<Point>();
 
@@ -333,7 +323,7 @@ public class Farmer extends Worker {
         return possibleSpotsToPlant;
     }
 
-    private Point getFreeSpotToPlant() {
+    private Point getFreePointToPlant() {
         for (var point : getSurroundingSpotsForCrops()) {
             var mapPoint = map.getMapPoint(point);
 
@@ -370,33 +360,18 @@ public class Farmer extends Worker {
     }
 
     private Crop findCropToHarvest() {
-        for (var point : getSurroundingSpotsForCrops()) {
-            if (map.isCropAtPoint(point)) {
-                var crop = map.getCropAtPoint(point);
-
-                // Filter crops that aren't full-grown
-                if (crop.getGrowthState() != FULL_GROWN) {
-                    continue;
-                }
-
-                // Filter crops that can't be reached
-                if (map.findWayOffroad(crop.getPosition(), position, null) == null) {
-                    continue;
-                }
-
-                return crop;
-            }
-        }
-
-        return null;
+        return getSurroundingSpotsForCrops().stream()
+                .filter(map::isCropAtPoint)
+                .map(map::getCropAtPoint)
+                .filter(crop -> crop.getGrowthState() == FULL_GROWN)
+                .filter(crop -> map.findWayOffroad(position, crop.getPosition(), null) != null)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public String toString() {
-        return "Farmer{" +
-                "countdown=" + countdown.getCount() +
-                ", state=" + state +
-                ", position=" + position +
-                '}';
+        return String.format("Farmer{countdown=%d, state=%s, position=%s}",
+                countdown.getCount(), state, position);
     }
 }
