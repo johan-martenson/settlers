@@ -133,7 +133,26 @@ public class MapPoint {
      */
     @Override
     public String toString() {
-        return String.format("Map point %s with %s and %s", point, building, flag);
+        return "MapPoint{" +
+                "point=" + point +
+                ", connectedNeighbors=" + connectedNeighbors +
+                ", connectedRoads=" + connectedRoads +
+                ", connectedFlagsAndBuildings=" + connectedFlagsAndBuildings +
+                ", building=" + building +
+                ", flag=" + flag +
+                ", tree=" + tree +
+                ", stone=" + stone +
+                ", crop=" + crop +
+                ", sign=" + sign +
+                ", height=" + height +
+                ", mineralAmount=" + mineralAmount +
+                ", mineral=" + mineral +
+                ", fishAmount=" + fishAmount +
+                ", isDeadTree=" + isDeadTree +
+                ", isShipyardAvailable=" + isShipyardAvailable +
+                ", isShip=" + isShip +
+                ", decoration=" + decoration +
+                '}';
     }
 
     /**

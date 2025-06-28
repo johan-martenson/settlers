@@ -89,6 +89,7 @@ public class Farmer extends Worker {
             case RESTING_IN_HOUSE -> {
                 if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                     var cropToHarvest = findCropToHarvest();
+
                     if (cropToHarvest != null) {
                         state = GOING_OUT_TO_HARVEST;
                         setOffroadTarget(cropToHarvest.getPosition());
@@ -97,6 +98,7 @@ public class Farmer extends Worker {
 
                         if (point == null) {
                             productivityMeasurer.reportUnproductivity();
+
                             return;
                         }
 
@@ -196,18 +198,17 @@ public class Farmer extends Worker {
     public void onArrival() {
         switch (state) {
             case GOING_OUT_TO_PUT_CARGO -> {
-                var cargo = getCargo();
-                cargo.setPosition(position);
+                carriedCargo.setPosition(position);
                 var receivingBuilding = GameUtils.getClosestBuildingConnectedByRoads(position, null, map, this::isWheatReceiverAndAllocationAllowed);
 
                 if (receivingBuilding != null) {
-                    cargo.setTarget(receivingBuilding);
-                    receivingBuilding.promiseDelivery(cargo.getMaterial());
+                    carriedCargo.setTarget(receivingBuilding);
+                    receivingBuilding.promiseDelivery(carriedCargo.getMaterial());
                     wheatAllocationTracker.ifPresent(at -> at.trackAllocation(receivingBuilding));
                 }
 
-                home.getFlag().putCargo(cargo);
-                setCargo(null);
+                home.getFlag().putCargo(carriedCargo);
+                carriedCargo = null;
                 state = GOING_BACK_TO_HOUSE;
                 setTarget(home.getPosition());
             }
@@ -217,9 +218,20 @@ public class Farmer extends Worker {
                 countdown.countFrom(TIME_TO_REST);
             }
             case GOING_OUT_TO_PLANT -> {
-                state = PLANTING;
-                map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
-                countdown.countFrom(TIME_TO_PLANT);
+                if (map.getWorkers().stream()
+                        .anyMatch(worker ->
+                                worker instanceof Farmer farmer && farmer.getPosition().equals(position) && farmer.isPlanting() ||
+                                worker instanceof Forester forester && forester.getPosition().equals(position) && forester.isPlanting()) ||
+                        map.isFlagAtPoint(position)
+                ) {
+                    state = GOING_BACK_TO_HOUSE;
+                    returnHomeOffroad();
+                } else {
+                    state = PLANTING;
+                    map.reportWorkerStartedAction(this, WorkerAction.PLANTING_WHEAT);
+                    countdown.countFrom(TIME_TO_PLANT);
+
+                }
             }
             case GOING_OUT_TO_HARVEST -> {
                 state = HARVESTING;
@@ -339,6 +351,13 @@ public class Farmer extends Worker {
                 }
             }
 
+            // Filter points where someone else is already planting
+            if (map.getWorkers().stream()
+                    .anyMatch(worker -> ((worker instanceof Farmer farmer) && farmer.isPlanting() && farmer.getPosition().equals(point)) ||
+                            ((worker instanceof Forester forester) && forester.getPosition().equals(point) && forester.isPlanting()))) {
+                continue;
+            }
+
             // Filter points the farmer can't walk to
             if (map.findWayOffroad(home.getFlag().getPosition(), point, null) == null) {
                 continue;
@@ -370,5 +389,14 @@ public class Farmer extends Worker {
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Farmer{" +
+                "countdown=" + countdown.getCount() +
+                ", state=" + state +
+                ", position=" + position +
+                '}';
     }
 }

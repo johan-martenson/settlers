@@ -3,32 +3,33 @@ package org.appland.settlers.test;
 import org.appland.settlers.assets.Nation;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Crop;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.PlayerColor;
 import org.appland.settlers.model.PlayerType;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.actors.Courier;
 import org.appland.settlers.model.actors.Farmer;
-import org.appland.settlers.model.actors.Worker;
-import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.actors.Forester;
 import org.appland.settlers.model.buildings.Farm;
+import org.appland.settlers.model.buildings.ForesterHut;
 import org.appland.settlers.model.buildings.Fortress;
 import org.appland.settlers.model.buildings.Headquarter;
 import org.appland.settlers.model.buildings.Mill;
 import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.buildings.Woodcutter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
@@ -47,22 +48,20 @@ public class TestFarm {
     public void testFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place farm
-        Point point22 = new Point(6, 12);
-        Building farm0 = map.placeBuilding(new Farm(player0), point22);
+        var point22 = new Point(6, 12);
+        var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver three plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -88,22 +87,20 @@ public class TestFarm {
     public void testFarmCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place farm
-        Point point22 = new Point(6, 12);
-        Building farm0 = map.placeBuilding(new Farm(player0), point22);
+        var point22 = new Point(6, 12);
+        var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver two plank and three stone
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -128,22 +125,20 @@ public class TestFarm {
     public void testFarmCannotBeConstructedWithTooFewStones() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        var point21 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         // Place farm
-        Point point22 = new Point(6, 12);
-        Building farm0 = map.placeBuilding(new Farm(player0), point22);
+        var point22 = new Point(6, 12);
+        var farm0 = map.placeBuilding(new Farm(player0), point22);
 
         // Deliver three planks and two stones
-        Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo = new Cargo(STONE, map);
+        var plankCargo = new Cargo(PLANK, map);
+        var stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -168,14 +163,12 @@ public class TestFarm {
     public void testPlaceCrop() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 10, 10);
 
         // Place crop
-        Point point0 = new Point(3, 3);
-        Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var point0 = new Point(3, 3);
+        var crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         assertNotNull(crop);
         assertTrue(map.isCropAtPoint(point0));
@@ -185,14 +178,12 @@ public class TestFarm {
     public void testCropGrowsOverTime() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 10, 10);
 
         // Place crop
-        Point point0 = new Point(3, 3);
-        Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var point0 = new Point(3, 3);
+        var crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         assertEquals(crop.getGrowthState(), JUST_PLANTED);
 
@@ -225,18 +216,16 @@ public class TestFarm {
     public void testUnfinishedFarmNeedsNoFarmer() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         assertTrue(farm.isPlanned());
         assertFalse(farm.needsWorker());
@@ -246,19 +235,16 @@ public class TestFarm {
     public void testFinishedFarmNeedsFarmer() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
+        var point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         Utils.constructHouse(farm);
 
@@ -270,21 +256,19 @@ public class TestFarm {
     public void testFarmerIsAssignedToFinishedFarm() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish the farm
         Utils.constructHouse(farm);
@@ -302,21 +286,19 @@ public class TestFarm {
     public void testFarmerIsNotASoldier() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish the forester hut
         Utils.constructHouse(farm);
@@ -325,7 +307,7 @@ public class TestFarm {
         Utils.fastForward(2, map);
 
         // Wait for a farm to walk out
-        Farmer farmer0 = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+        var farmer0 = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         assertNotNull(farmer0);
         assertFalse(farmer0.isSoldier());
@@ -335,26 +317,23 @@ public class TestFarm {
     public void testFarmerIsCreatedFromScythe() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Remove all farmers from the headquarter and add one scythe
         Utils.adjustInventoryTo(headquarter, FARMER, 0);
         Utils.adjustInventoryTo(headquarter, Material.SCYTHE, 1);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish the forester hut
         Utils.constructHouse(farm);
@@ -372,27 +351,25 @@ public class TestFarm {
     public void testFarmerRestsInFarmThenLeaves() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Construct house
         Utils.constructHouse(farm);
 
         // Occupy the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -401,6 +378,7 @@ public class TestFarm {
         // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
+
             map.stepTime();
         }
 
@@ -416,27 +394,25 @@ public class TestFarm {
     public void testFarmerGoesOutViaFlag() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Construct the house
         Utils.constructHouse(farm);
 
         // Occupy the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -445,6 +421,7 @@ public class TestFarm {
         // Run the game logic 99 times and make sure the forester stays in the hut
         for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
+
             map.stepTime();
         }
 
@@ -463,27 +440,25 @@ public class TestFarm {
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Occupy the farm
-        Farmer farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
+        var farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer.isInsideBuilding());
 
@@ -497,7 +472,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
@@ -529,27 +504,25 @@ public class TestFarm {
     public void testFarmerReturnsViaFlagAfterPlanting() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Assign a farmer to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -565,7 +538,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
 
@@ -601,21 +574,19 @@ public class TestFarm {
     public void testFarmerHarvestsWhenPossible() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place crop
-        Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
+        var crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
@@ -624,7 +595,7 @@ public class TestFarm {
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
         // Assign a farmer to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -640,7 +611,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
         assertEquals(point, crop.getPosition());
@@ -676,25 +647,22 @@ public class TestFarm {
     public void testWheatCargoIsDeliveredToMillWhichIsCloserThanHeadquarters() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point3 = new Point(6, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
+        var point3 = new Point(6, 4);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         // Remove all wheat from the headquarters
         Utils.adjustInventoryTo(headquarter, WHEAT, 0);
 
         // Place mill
-        Point point4 = new Point(10, 4);
-        Mill mill = map.placeBuilding(new Mill(player0), point4);
+        var point4 = new Point(10, 4);
+        var mill = map.placeBuilding(new Mill(player0), point4);
 
         // Connect the mill to the headquarters
-        Road road2 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
 
         // Wait for the mill to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(mill);
@@ -702,11 +670,11 @@ public class TestFarm {
         Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
 
         // Place the farm
-        Point point1 = new Point(14, 4);
-        Farm farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(14, 4);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Connect the farm with the mill
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), mill.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), mill.getFlag());
 
         // Wait for the farm to get constructed and occupied
         Utils.waitForBuildingToBeConstructed(farm);
@@ -733,28 +701,26 @@ public class TestFarm {
     public void testFarmerReturnsViaFlagAfterHarvesting() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Construct the farm
         Utils.constructHouse(farm);
 
         // Wait for the crop to grow
-        Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
+        var crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
         // Assign a farmer to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -770,7 +736,7 @@ public class TestFarm {
 
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(farmer.isTraveling());
         assertEquals(point, crop.getPosition());
@@ -828,24 +794,22 @@ public class TestFarm {
     public void testFarmWithoutFarmerProducesNothing() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Place crop
-        Crop crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
+        var crop = map.placeCrop(point3.upRight().upRight(), Crop.CropType.TYPE_1);
 
         // Construct the farm
         Utils.constructHouse(farm);
@@ -864,21 +828,19 @@ public class TestFarm {
     public void testFarmerPlantsOnHarvestedCrops() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        var point3 = new Point(10, 6);
+        var farm = map.placeBuilding(new Farm(player0), point3);
 
         // Place road
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(farm);
 
@@ -896,18 +858,18 @@ public class TestFarm {
         List<Crop> crops = new ArrayList<>();
 
         //      ... place crops 
-        for (Point point : possibleSpotsToPlant) {
+        for (var point : possibleSpotsToPlant) {
             crops.add(map.placeCrop(point, Crop.CropType.TYPE_1));
         }
 
         //      ... harvest crops 
-        for (Crop crop : crops) {
+        for (var crop : crops) {
             crop.harvest();
             assertEquals(crop.getGrowthState(), HARVESTED);
         }
 
         // Assign a farmer to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm);
 
@@ -924,7 +886,7 @@ public class TestFarm {
         // Check that the farmer goes out to plant
         assertFalse(farmer.isInsideBuilding());
 
-        Point point = farmer.getTarget();
+        var point = farmer.getTarget();
 
         assertTrue(map.isCropAtPoint(point));
         assertEquals(map.getCropAtPoint(point).getGrowthState(), HARVESTED);
@@ -958,21 +920,18 @@ public class TestFarm {
     public void testCropCanBePlacedOnHarvestedCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+        var point0 = new Point(5, 5);
 
         // Place a crop
-        Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         // Harvest the crop
         crop.harvest();
 
         // Verify that it's possible to place a new crop on the harvested crop
-        Crop crop1 = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var crop1 = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         assertTrue(map.isCropAtPoint(point0));
         assertEquals(map.getCropAtPoint(point0), crop1);
@@ -982,15 +941,12 @@ public class TestFarm {
     public void testHarvestedCropDisappearsEventually() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+        var point0 = new Point(5, 5);
 
         // Place a crop
-        Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         // Harvest the crop
         crop.harvest();
@@ -1012,14 +968,12 @@ public class TestFarm {
     public void testCanNotPlaceCropOnNotHarvestedCrop() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place crop
-        Point point0 = new Point(5, 5);
-        Crop crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
+        var point0 = new Point(5, 5);
+        var crop = map.placeCrop(point0, Crop.CropType.TYPE_1);
 
         // Verify that it's not possible to place a second crop at the same place
         try {
@@ -1033,18 +987,16 @@ public class TestFarm {
     public void testFarmWithoutConnectedStorageKeepsProducing() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(8, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(8, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -1056,7 +1008,7 @@ public class TestFarm {
         Utils.fastForward(100, map);
 
         // Wait for the farmer to plant and harvest a new crop
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
             if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
@@ -1113,18 +1065,16 @@ public class TestFarm {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(8, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(8, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -1136,7 +1086,7 @@ public class TestFarm {
         Utils.fastForward(100, map);
 
         // Wait for the farmer to produce a new wheat cargo
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
             if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
@@ -1160,17 +1110,17 @@ public class TestFarm {
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
 
         // Wait to let the cargo remain at the flag without any connection to the storage
-        Cargo cargo = farm0.getFlag().getStackedCargo().getFirst();
+        var cargo = farm0.getFlag().getStackedCargo().getFirst();
 
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), farm0.getFlag().getPosition());
 
         // Connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
         // Assign a courier to the road
-        Courier courier = new Courier(player0, map);
+        var courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
@@ -1209,18 +1159,16 @@ public class TestFarm {
     public void testFarmerGoesBackToStorageWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(8, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(8, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -1229,7 +1177,7 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());
@@ -1252,18 +1200,16 @@ public class TestFarm {
     public void testFarmerGoesBackOnToStorageOnRoadsIfPossibleWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(8, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(8, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Connect the farm with the headquarter
         map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
@@ -1275,7 +1221,7 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());
@@ -1288,7 +1234,7 @@ public class TestFarm {
 
         // Verify that the worker plans to use the roads
         boolean firstStep = true;
-        for (Point point : farmer.getPlannedPath()) {
+        for (var point : farmer.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1302,27 +1248,25 @@ public class TestFarm {
     public void testProductionInFarmCanBeStopped() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(12, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(12, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Connect the farm and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
 
         // Finish the farm
         Utils.constructHouse(farm0);
 
         // Assign a worker to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm0);
 
@@ -1369,27 +1313,25 @@ public class TestFarm {
     public void testProductionInFarmCanBeResumed() throws Exception {
 
         // Create game map
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(12, 8);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(12, 8);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Connect the farm and the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter.getFlag());
 
         // Finish the farm
         Utils.constructHouse(farm0);
 
         // Assign a worker to the farm
-        Farmer farmer = new Farmer(player0, map);
+        var farmer = new Farmer(player0, map);
 
         Utils.occupyBuilding(farmer, farm0);
 
@@ -1449,35 +1391,31 @@ public class TestFarm {
     public void testAssignedFarmerHasCorrectlySetPlayer() throws Exception {
 
         // Create players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        // Create game map
-        GameMap map = new GameMap(players, 50, 50);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 50, 50);
 
         // Place headquarter
-        Point point0 = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(15, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(20, 14);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(20, 14);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
 
         // Connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
         // Wait for farmer to get assigned and leave the headquarter
-        List<Farmer> workers = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
+        var workers = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
 
         // Verify that the player is set correctly in the worker
-        Farmer worker = workers.getFirst();
+        var worker = workers.getFirst();
 
         assertEquals(worker.getPlayer(), player0);
     }
@@ -1486,34 +1424,26 @@ public class TestFarm {
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
         // Create player list with two players
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        Player player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
-        Player player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
-
-        List<Player> players = new LinkedList<>();
-
-        players.add(player0);
-        players.add(player1);
-        players.add(player2);
-
-        // Create game map choosing two players
-        GameMap map = new GameMap(players, 100, 100);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var player1 = new Player("Player 1", PlayerColor.GREEN, Nation.ROMANS, PlayerType.HUMAN);
+        var player2 = new Player("Player 2", PlayerColor.RED, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0, player1, player2), 100, 100);
 
         // Place player 2's headquarter
-        Point point10 = new Point(70, 70);
-        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
+        var point10 = new Point(70, 70);
+        var headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         // Place player 0's headquarter
-        Point point0 = new Point(9, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place player 1's headquarter
-        Point point1 = new Point(45, 5);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+        var point1 = new Point(45, 5);
+        var headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         // Place fortress for player 0
-        Point point2 = new Point(21, 9);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+        var point2 = new Point(21, 9);
+        var fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         // Finish construction of the fortress
         Utils.constructHouse(fortress0);
@@ -1522,14 +1452,14 @@ public class TestFarm {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         // Place farm close to the new border
-        Point point4 = new Point(28, 18);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point4);
+        var point4 = new Point(28, 18);
+        var farm0 = map.placeBuilding(new Farm(player0), point4);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer worker = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var worker = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Verify that the worker goes back to its own storage when the fortress is torn down
         fortress0.tearDown();
@@ -1541,23 +1471,21 @@ public class TestFarm {
     public void testCannotPlaceBuildingOnGrowingCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
+        var point0 = new Point(5, 5);
 
         // Place headquarter
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a crop
-        Point point1 = new Point(10, 10);
-        Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
+        var point1 = new Point(10, 10);
+        var crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
         // Verify that it's not possible to place a building on the growing crop
         try {
-            Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+            var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
             fail();
         } catch (Exception e) {
 
@@ -1568,19 +1496,16 @@ public class TestFarm {
     public void testNoAvailableBuildingSpaceOnGrowingCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a crop
-        Point point1 = new Point(10, 10);
-        Crop crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
+        var point1 = new Point(10, 10);
+        var crop = map.placeCrop(point1, Crop.CropType.TYPE_1);
 
         // Verify that there is no available building space on the growing crop
         assertNull(map.isAvailableHousePoint(player0, point0));
@@ -1590,28 +1515,25 @@ public class TestFarm {
     public void testCannotPlaceBuildingOnNewlyHarvestedCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(5, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(5, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+        var crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
         // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
@@ -1621,38 +1543,35 @@ public class TestFarm {
 
         // Verify that it's possible to place a building on the growing crop
         try {
-            Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), crop.getPosition());
+            var woodcutter0 = map.placeBuilding(new Woodcutter(player0), crop.getPosition());
+
             fail();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { }
     }
 
     @Test
     public void testNotAvailableBuildingSpaceOnNewlyHarvestedCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(5, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(5, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
-        Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+        var crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
 
         // Let the crop grow fully
         Utils.waitForCropToGetReady(map, crop);
@@ -1668,25 +1587,22 @@ public class TestFarm {
     public void testCanPlaceFlagOnNewlyHarvestedCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(5, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(5, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
         Crop crop = null;
@@ -1696,7 +1612,7 @@ public class TestFarm {
 
             // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
-            for (Point point : crop.getPosition().getAdjacentPoints()) {
+            for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
@@ -1716,32 +1632,29 @@ public class TestFarm {
         Utils.waitForCropToGetHarvested(map, crop);
 
         // Verify that it's possible to place a flag on the growing crop
-        Flag flag0 = map.placeFlag(player0, crop.getPosition());
+        var flag0 = map.placeFlag(player0, crop.getPosition());
     }
 
     @Test
     public void testCannotPlaceFlagOnGrowingCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 15);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(15, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(15, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
         Crop crop = null;
@@ -1751,7 +1664,7 @@ public class TestFarm {
 
             // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
-            for (Point point : crop.getPosition().getAdjacentPoints()) {
+            for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
@@ -1768,7 +1681,7 @@ public class TestFarm {
 
         // Verify that it's possible to place a flag on the growing crop
         try {
-            Flag flag0 = map.placeFlag(player0, crop.getPosition());
+            var flag0 = map.placeFlag(player0, crop.getPosition());
 
             fail();
         } catch (Exception e) {}
@@ -1778,25 +1691,22 @@ public class TestFarm {
     public void testNoAvailableFlagOnGrowingCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(5, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(5, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
         Crop crop = null;
@@ -1806,7 +1716,7 @@ public class TestFarm {
 
             // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
-            for (Point point : crop.getPosition().getAdjacentPoints()) {
+            for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
@@ -1829,25 +1739,22 @@ public class TestFarm {
     public void testAvailableFlagSpaceOnNewlyHarvestedCrop() throws Exception {
 
         // Create new game map with one player
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place a farm
-        Point point1 = new Point(5, 15);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(5, 15);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
 
         // Occupy the farm
-        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Wait for the farmer to plant a crop
         Crop crop = null;
@@ -1857,7 +1764,7 @@ public class TestFarm {
 
             // Look for a point where there is no flag too close
             boolean noCloseFlag = true;
-            for (Point point : crop.getPosition().getAdjacentPoints()) {
+            for (var point : crop.getPosition().getAdjacentPoints()) {
                 if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
@@ -1895,35 +1802,33 @@ public class TestFarm {
     public void testFarmerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place farm
-        Point point2 = new Point(14, 4);
-        Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {
                 farmer = (Farmer) worker;
             }
@@ -1957,35 +1862,33 @@ public class TestFarm {
     public void testFarmerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place farm
-        Point point2 = new Point(14, 4);
-        Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {
                 farmer = (Farmer) worker;
             }
@@ -2022,35 +1925,33 @@ public class TestFarm {
     public void testFarmerReturnsToStorageIfFarmIsDestroyed() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place first flag
-        Point point1 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point1);
+        var point1 = new Point(10, 4);
+        var flag0 = map.placeFlag(player0, point1);
 
         // Place farm
-        Point point2 = new Point(14, 4);
-        Building farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
+        var point2 = new Point(14, 4);
+        var farm0 = map.placeBuilding(new Farm(player0), point2.upLeft());
 
         // Connect headquarter and first flag
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         // Connect the first flag with the second flag
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, flag0, farm0.getFlag());
 
         // Wait for the farmer to be on the second road on its way to the flag
         Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0);
 
         Farmer farmer = null;
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Farmer) {
                 farmer = (Farmer) worker;
             }
@@ -2083,18 +1984,16 @@ public class TestFarm {
     public void testFarmerGoesOffroadBackToClosestStorageWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(17, 17);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(17, 17);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -2103,14 +2002,14 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Place a second storage closer to the farm
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         Utils.waitForWorkerToBeInside(farmer, map);
 
@@ -2135,18 +2034,16 @@ public class TestFarm {
     public void testFarmerReturnsOffroadAndAvoidsBurningStorageWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(17, 17);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(17, 17);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -2155,8 +2052,8 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Place a second storage closer to the farm
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -2165,7 +2062,7 @@ public class TestFarm {
         storehouse0.tearDown();
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         Utils.waitForWorkerToBeInside(farmer, map);
 
@@ -2190,18 +2087,16 @@ public class TestFarm {
     public void testFarmerReturnsOffroadAndAvoidsDestroyedStorageWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(17, 17);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(17, 17);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -2210,8 +2105,8 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Place a second storage closer to the farm
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Finish construction of the storage
         Utils.constructHouse(storehouse0);
@@ -2223,7 +2118,7 @@ public class TestFarm {
         Utils.waitForBuildingToBurnDown(storehouse0);
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());
@@ -2246,18 +2141,16 @@ public class TestFarm {
     public void testFarmerReturnsOffroadAndAvoidsUnfinishedStorageWhenFarmIsDestroyed() throws Exception {
 
         // Creating new game map with size 40x40
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place farm
-        Point point26 = new Point(17, 17);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(17, 17);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
@@ -2266,11 +2159,11 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
         // Place a second storage closer to the farm
-        Point point2 = new Point(13, 13);
-        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
+        var point2 = new Point(13, 13);
+        var storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         // Destroy the farm
-        Worker farmer = farm0.getWorker();
+        var farmer = farm0.getWorker();
 
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());
@@ -2293,27 +2186,25 @@ public class TestFarm {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point25 = new Point(9, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        var point25 = new Point(9, 9);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         // Place fam
-        Point point26 = new Point(17, 17);
-        Building farm0 = map.placeBuilding(new Farm(player0), point26);
+        var point26 = new Point(17, 17);
+        var farm0 = map.placeBuilding(new Farm(player0), point26);
 
         // Place road to connect the headquarter and the farm
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
 
         // Finish construction of the farm
         Utils.constructHouse(farm0);
 
         // Wait for a worker to start walking to the building
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0).getFirst();
+        var worker = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0).getFirst();
 
         // Wait for the worker to get to the building's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, farm0.getFlag().getPosition());
@@ -2335,24 +2226,22 @@ public class TestFarm {
     public void testFarmWithoutResourcesHasZeroProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Populate the farm
-        Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
@@ -2363,6 +2252,7 @@ public class TestFarm {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
             assertNull(farmer0.getCargo());
             assertEquals(farm.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -2371,24 +2261,22 @@ public class TestFarm {
     public void testFarmWithAbundantResourcesHasFullProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Populate the farm
-        Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
@@ -2416,24 +2304,22 @@ public class TestFarm {
     public void testFarmLosesProductivityWhenResourcesRunOut() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Populate the farm
-        Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm);
@@ -2457,7 +2343,7 @@ public class TestFarm {
         map.stepTime();
 
         // Put stones all over the map so there is nowhere to plant crops
-        for (Point point : Utils.getAllPointsOnMap(map)) {
+        for (var point : Utils.getAllPointsOnMap(map)) {
             if (point.equals(point1)) {
                 continue;
             }
@@ -2470,7 +2356,6 @@ public class TestFarm {
         }
 
         for (int i = 0; i < 5000; i++) {
-
             map.stepTime();
 
             if (farm.getProductivity() == 0) {
@@ -2485,18 +2370,16 @@ public class TestFarm {
     public void testUnoccupiedFarmHasNoProductivity() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(10, 10);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
@@ -2513,24 +2396,22 @@ public class TestFarm {
     public void testFarmCanProduce() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(7, 9);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(7, 9);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Finish construction of the farm
         Utils.constructHouse(farm);
 
         // Populate the farm
-        Worker farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
+        var farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         // Verify that the farm can produce
         assertTrue(farm.canProduce());
@@ -2540,18 +2421,16 @@ public class TestFarm {
     public void testFarmReportsCorrectOutput() throws Exception {
 
         // Starting new game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(6, 12);
-        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(6, 12);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Construct the farm
         Utils.constructHouse(farm0);
@@ -2565,22 +2444,19 @@ public class TestFarm {
     public void testFarmWaitsWhenFlagIsFull() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(14, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(14, 6);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the farm to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(farm);
@@ -2604,10 +2480,10 @@ public class TestFarm {
         assertTrue(map.isFlagAtPoint(farm.getFlag().getPosition()));
         assertTrue(map.isFlagAtPoint(headquarter.getFlag().getPosition()));
 
-        Road road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2630,22 +2506,19 @@ public class TestFarm {
     public void testFarmDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         // Create single player game
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-
-        GameMap map = new GameMap(players, 20, 20);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 20, 20);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(14, 6);
-        Farm farm = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(14, 6);
+        var farm = map.placeBuilding(new Farm(player0), point1);
 
         // Connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the farm to get constructed and assigned a worker
         Utils.waitForBuildingToBeConstructed(farm);
@@ -2666,10 +2539,10 @@ public class TestFarm {
         }
 
         // Reconnect the farm with the headquarter
-        Road road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         // Wait for the courier to pick up one of the cargos
-        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+        var courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
@@ -2713,21 +2586,19 @@ public class TestFarm {
     public void testWhenWheatDeliveryAreBlockedFarmFillsUpFlagAndThenStops() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(5, 5);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place Farm
-        Point point1 = new Point(7, 9);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(7, 9);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Place road to connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         // Wait for the farm to get constructed and occupied
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2735,7 +2606,7 @@ public class TestFarm {
 
         Utils.waitForBuildingToBeConstructed(farm0);
 
-        Worker farmer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
+        var farmer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(farm0);
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm0);
@@ -2764,28 +2635,26 @@ public class TestFarm {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndFarmIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place farm
-        Point point2 = new Point(18, 4);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+        var point2 = new Point(18, 4);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the farm
-        Road road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2797,7 +2666,7 @@ public class TestFarm {
         // Wait for the farm and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, farm0);
 
-        Worker farmer0 = farm0.getWorker();
+        var farmer0 = farm0.getWorker();
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm0);
@@ -2825,28 +2694,26 @@ public class TestFarm {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndFarmIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place storehouse
-        Point point1 = new Point(5, 5);
-        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+        var point1 = new Point(5, 5);
+        var storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         // Place farm
-        Point point2 = new Point(18, 6);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point2);
+        var point2 = new Point(18, 6);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
 
         // Place road to connect the storehouse with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
 
         // Place road to connect the headquarter with the farm
-        Road road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+        var road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         // Add a lot of planks and stones to the headquarter
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
@@ -2858,7 +2725,7 @@ public class TestFarm {
         // Wait for the farm and the storage to get occupied
         Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, farm0);
 
-        Worker farmer0 = farm0.getWorker();
+        var farmer0 = farm0.getWorker();
 
         assertTrue(farmer0.isInsideBuilding());
         assertEquals(farmer0.getHome(), farm0);
@@ -2893,14 +2760,12 @@ public class TestFarm {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, FARMER, 1);
@@ -2910,7 +2775,7 @@ public class TestFarm {
         headquarter0.pushOutAll(FARMER);
 
         for (int i = 0; i < 10; i++) {
-            Worker worker = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+            var worker = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
             assertEquals(headquarter0.getAmount(FARMER), 0);
             assertEquals(worker.getPosition(), headquarter0.getPosition());
@@ -2931,14 +2796,12 @@ public class TestFarm {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Verify that worker goes out and in continuously when sent out without being blocked
         Utils.adjustInventoryTo(headquarter0, FARMER, 1);
@@ -2946,7 +2809,7 @@ public class TestFarm {
         headquarter0.blockDeliveryOfMaterial(FARMER);
         headquarter0.pushOutAll(FARMER);
 
-        Worker worker = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+        var worker = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         assertEquals(worker.getPosition(), headquarter0.getPosition());
         assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
@@ -2976,21 +2839,19 @@ public class TestFarm {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(7, 9);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(7, 9);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Place road to connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3004,7 +2865,7 @@ public class TestFarm {
        
         headquarter0.blockDeliveryOfMaterial(FARMER);
 
-        Worker worker = farm0.getWorker();
+        var worker = farm0.getWorker();
 
         farm0.tearDown();
 
@@ -3036,21 +2897,19 @@ public class TestFarm {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         // Start new game with one player only
-        Player player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarter
-        Point point0 = new Point(12, 6);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         // Place farm
-        Point point1 = new Point(7, 9);
-        Farm farm0 = map.placeBuilding(new Farm(player0), point1);
+        var point1 = new Point(7, 9);
+        var farm0 = map.placeBuilding(new Farm(player0), point1);
 
         // Place road to connect the farm with the headquarter
-        Road road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
+        var road0 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), headquarter0.getFlag());
 
         Utils.adjustInventoryTo(headquarter0, PLANK, 30);
         Utils.adjustInventoryTo(headquarter0, STONE, 30);
@@ -3059,7 +2918,7 @@ public class TestFarm {
         Utils.waitForBuildingToBeConstructed(farm0);
 
         // Wait for a farmer to start walking to the farm
-        Farmer farmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+        var farmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
 
         // Wait for the farmer to go past the headquarter's flag
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getFlag().getPosition());
@@ -3083,7 +2942,7 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
 
-        Point point = farmer.getPosition();
+        var point = farmer.getPosition();
         for (int i = 0; i < 100; i++) {
             assertTrue(farmer.isDead());
             assertEquals(farmer.getPosition(), point);
@@ -3094,4 +2953,588 @@ public class TestFarm {
 
         assertFalse(map.getWorkers().contains(farmer));
     }
+
+    @Test
+    public void testFarmerGoesBackWithoutPlantingIfOtherFarmerCameFirst() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
+        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
+
+        // Place two farms and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var point3 = new Point(16, 10);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
+        var farm1 = map.placeBuilding(new Farm(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), flag);
+        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
+
+        // Wait for the farms to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(farm0, farm1);
+
+        // Place trees all over the map except for one open point
+        var point4 = new Point(14, 12);
+
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        map.stepTime();
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
+
+        // Wait for the farms to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm0, farm1);
+
+        // Wait for both the first farmer to go out
+        var firstFarmer = Utils.waitForWorkerOutsideBuilding(Farmer.class, player0);
+
+        assertFalse(firstFarmer.isInsideBuilding());
+        assertTrue(farm0.getWorker().isInsideBuilding() || farm1.getWorker().isInsideBuilding());
+
+        var secondFarmer = (Farmer) farm0.getWorker();
+
+        if (Objects.equals(firstFarmer, secondFarmer)) {
+            secondFarmer = (Farmer) farm1.getWorker();
+        }
+
+        // Wait for the first farmer to start planting
+        Utils.waitForFarmerToStartPlanting(map, firstFarmer);
+
+        assertTrue(firstFarmer.isPlanting());
+        assertFalse(secondFarmer.isPlanting());
+        assertEquals(secondFarmer.getTarget(), firstFarmer.getPosition());
+        assertNotEquals(firstFarmer, secondFarmer);
+
+        // Verify that the second farmer goes back to its farm again without planting anything
+        Utils.fastForwardUntilWorkerReachesPoint(map, secondFarmer, firstFarmer.getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (secondFarmer.getPosition().equals(secondFarmer.getHome().getPosition())) {
+                break;
+            }
+
+            assertEquals(secondFarmer.getTarget(), secondFarmer.getHome().getPosition());
+            assertFalse(secondFarmer.isPlanting());
+
+            map.stepTime();
+        }
+
+        assertTrue(secondFarmer.isInsideBuilding());
+        assertFalse(secondFarmer.isPlanting());
+    }
+
+    @Test
+    public void testFarmerDoesNotGoOutToPlantIfOtherFarmerIsAlreadyPlanting() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
+        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
+
+        // Place two farms and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var point3 = new Point(16, 10);
+        var farm0 = map.placeBuilding(new Farm(player0), point2);
+        var farm1 = map.placeBuilding(new Farm(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, farm0.getFlag(), flag);
+        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
+
+        // Wait for the farms to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(farm0, farm1);
+
+        // Place trees all over the map except for one open point
+        var point4 = new Point(14, 12);
+
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        map.stepTime();
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
+
+        // Wait for the farms to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm0, farm1);
+
+        // Let the first farmer go out and start planting. Cheat by only stepping the first farmer's time
+        var firstFarmer = (Farmer) farm0.getWorker();
+        var secondFarmer = (Farmer) farm1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (firstFarmer.isPlanting()) {
+                break;
+            }
+
+            firstFarmer.stepTime();
+        }
+
+        // Verify that the second farmer doesn't go out when the first farmer is planting on the only available point to plant
+        for (int i = 0; i < 2_000; i++) {
+            assertTrue(secondFarmer.isInsideBuilding());
+            assertFalse(secondFarmer.isPlanting());
+            assertTrue(firstFarmer.isPlanting());
+
+            secondFarmer.stepTime();
+        }
+    }
+
+    @Test
+    public void testFarmerDoesNotGoOutToPlantIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
+        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
+
+        // Place a farm and a forester hut and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var point3 = new Point(16, 10);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var farm1 = map.placeBuilding(new Farm(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
+        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
+
+        // Wait for the houses to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
+
+        // Place trees all over the map except for one open point
+        var point4 = new Point(14, 12);
+
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        map.stepTime();
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
+
+        // Wait for the farms to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
+
+        // Let the first farmer go out and start planting. Cheat by only stepping the first farmer's time
+        var forester = (Forester) foresterHut.getWorker();
+        var farmer = (Farmer) farm1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (forester.isPlanting()) {
+                break;
+            }
+
+            forester.stepTime();
+        }
+
+        // Verify that the second farmer doesn't go out when the first farmer is planting on the only available point to plant
+        for (int i = 0; i < 2_000; i++) {
+            assertTrue(farmer.isInsideBuilding());
+            assertFalse(farmer.isPlanting());
+            assertTrue(forester.isPlanting());
+
+            farmer.stepTime();
+        }
+    }
+
+    @Test
+    public void testFarmerDoesNotStartPlantingIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
+        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
+
+        // Place a farm and a forester hut and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var point3 = new Point(16, 10);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var farm1 = map.placeBuilding(new Farm(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
+        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
+
+        // Wait for the houses to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
+
+        // Place trees all over the map except for one open point
+        var point4 = new Point(14, 12);
+
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        map.stepTime();
+
+        // Adjust the inventory so it's not possible to send out farmers
+        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
+
+        // Wait for the houses to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
+
+        // Let the first farmer go out and start planting. Cheat by only stepping the first farmer's time
+        var forester = (Forester) foresterHut.getWorker();
+        var farmer = (Farmer) farm1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (forester.isPlanting()) {
+                break;
+            }
+
+            forester.stepTime();
+        }
+
+        // Verify that the second farmer doesn't go out when the forester is planting on the only available point to plant
+        for (int i = 0; i < 2_000; i++) {
+            assertTrue(farmer.isInsideBuilding());
+            assertFalse(farmer.isPlanting());
+            assertTrue(forester.isPlanting());
+
+            farmer.stepTime();
+        }
+    }
+
+    @Test
+    public void testFarmerGoesBackWithoutPlantingIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Place two farms and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var point3 = new Point(16, 10);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var farm1 = map.placeBuilding(new Farm(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
+        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
+
+        // Wait for the farms to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
+
+        // Place trees all over the map except for one open point
+        var point4 = new Point(14, 12);
+
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        map.stepTime();
+
+        // Wait for the farms to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
+
+        // Let the farmer go out to plant. Cheat by only stepping its time
+        var farmer = (Farmer) farm1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (!farmer.isInsideBuilding()) {
+                break;
+            }
+
+            farmer.stepTime();
+        }
+
+        assertFalse(farmer.isInsideBuilding());
+
+        // Let the forester go out and start planting. Cheat by only stepping its time
+        var forester = (Forester) foresterHut.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (forester.isPlanting()) {
+                break;
+            }
+
+            forester.stepTime();
+        }
+
+        assertTrue(forester.isPlanting());
+        assertEquals(forester.getPosition(), point4);
+
+        // Let the farmer reach the point to plant at. Cheat by only stepping its time
+        for (int i = 0; i < 2_000; i++) {
+            if (!farmer.isInsideBuilding()) {
+                break;
+            }
+
+            farmer.stepTime();
+        }
+
+        assertFalse(farmer.isInsideBuilding());
+        assertEquals(farmer.getTarget(), point4);
+
+        for (int i = 0; i < 2_000; i++) {
+            if (farmer.getPosition().equals(point4)) {
+                break;
+            }
+
+            farmer.stepTime();
+        }
+
+        // Verify that the farmer goes home and doesn't plant
+        assertFalse(farmer.isInsideBuilding());
+        assertFalse(farmer.isPlanting());
+        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
+                break;
+            }
+
+            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+            assertFalse(farmer.isPlanting());
+
+            map.stepTime();
+        }
+
+        assertTrue(farmer.isInsideBuilding());
+        assertFalse(farmer.isPlanting());
+    }
+
+    @Test
+    public void testFarmerGoesBackWithoutPlantingIfFlagHasBeenPlaced() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Place two farms and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var farm = map.placeBuilding(new Farm(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), flag);
+
+        // Wait for the farm to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(farm);
+
+        // Wait for the farm to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+
+        // Wait for the farmer to go out to plant at a point where a flag can be placed
+        var farmer = (Farmer) farm.getWorker();
+
+        for (int i = 0; i < 20_000; i++) {
+            if (!farmer.isInsideBuilding() && map.isAvailableFlagPoint(player0, farmer.getTarget())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isAvailableFlagPoint(player0, farmer.getTarget()));
+        assertFalse(farmer.isInsideBuilding());
+
+        // Place a flag on the point where the farmer is planning to plant
+        map.placeFlag(player0, farmer.getTarget());
+
+        // Verify that the farmer doesn't start planting and instead goes back to its home
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+
+        assertFalse(farmer.isPlanting());
+        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
+                break;
+            }
+
+            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+            assertFalse(farmer.isPlanting());
+
+            map.stepTime();
+        }
+
+        assertTrue(farmer.isInsideBuilding());
+        assertFalse(farmer.isPlanting());
+    }
+
+    @Test
+    @Ignore // For now there is no possibility to place a building where a farmer may go out to plant
+    public void testFarmerGoesBackWithoutPlantingIfHouseHasBeenPlaced() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarter
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place flag and connect it to the headquarters
+        var point1 = new Point(15, 7);
+        var flag = map.placeFlag(player0, point1);
+        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        // Place two farms and connect them to the headquarters
+        var point2 = new Point(12, 10);
+        var farm = map.placeBuilding(new Farm(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), flag);
+
+        // Wait for the farm to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(farm);
+
+        // Wait for the farm to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+
+        // Wait for the farmer to go out to plant at a point where a flag can be placed
+        var farmer = (Farmer) farm.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (!farmer.isInsideBuilding() && map.isAvailableHousePoint(player0, farmer.getTarget()) != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(map.isAvailableHousePoint(player0, farmer.getTarget()));
+        assertFalse(farmer.isInsideBuilding());
+
+        // Place a house on the point where the farmer is planning to plant
+        map.placeBuilding(new Woodcutter(player0), farmer.getTarget());
+
+        // Verify that the farmer doesn't start planting and instead goes back to its home
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+
+        assertFalse(farmer.isPlanting());
+        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
+                break;
+            }
+
+            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+            assertFalse(farmer.isPlanting());
+
+            map.stepTime();
+        }
+
+        assertTrue(farmer.isInsideBuilding());
+        assertFalse(farmer.isPlanting());
+    }
+
+
+    /**
+     * When going out:
+     *  - Crop being planted (ok)
+     *  - Tree being planted (ok)
+     *  - All static checks: tree, crop, flag, building, stone, road, large-ish decoration
+     * When reaching point:
+     *  - Crop being planted (ok)
+     *  - Tree being planted (ok)
+     *  - Flag placed (ok)
+     *  - Building placed (never seems to happen)
+     *  - Road placed
+     * When done planting:
+     *  - Flag placed
+     *  - Building placed
+     *  - Road placed
+     */
+
 }

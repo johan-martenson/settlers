@@ -173,7 +173,7 @@ public class Utils {
     }
 
     public static <T extends Worker> T occupyBuilding(T worker, Building building) {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         map.placeWorker(worker, building);
         building.assignWorker(worker);
@@ -211,7 +211,7 @@ public class Utils {
     public static void verifyListContainsWorkerOfType(List<Worker> workers, Class<? extends Worker> workerClass) {
         boolean found = false;
 
-        for (Worker worker : workers) {
+        for (var worker : workers) {
             if (worker.getClass().equals(workerClass)) {
                 found = true;
 
@@ -235,7 +235,7 @@ public class Utils {
     }
 
     public static void fastForwardUntilBuildingIsConstructed(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.isReady()) {
@@ -249,7 +249,7 @@ public class Utils {
     }
 
     public static void fastForwardUntilBuildingIsOccupied(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (building.getWorker() != null) {
@@ -302,7 +302,7 @@ public class Utils {
     }
 
     public static void adjustInventoryTo(Storehouse storehouse, Material material, int amount) {
-        GameMap map = storehouse.getMap();
+        var map = storehouse.getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (storehouse.getAmount(material) == amount) {
@@ -348,7 +348,7 @@ public class Utils {
     }
 
     public static void constructHouse(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         /* Assign builder */
         Builder builder = new Builder(building.getPlayer(), building.getMap());
@@ -442,7 +442,7 @@ public class Utils {
     }
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         boolean populated = false;
 
@@ -461,7 +461,7 @@ public class Utils {
     }
 
     public static void waitForMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         assertFalse(building.isOccupied());
 
@@ -523,10 +523,10 @@ public class Utils {
     }
 
     public static Soldier occupyMilitaryBuilding(Soldier.Rank rank, Building building) {
-        GameMap map = building.getMap();
-        Player player = building.getPlayer();
+        var map = building.getMap();
+        var player = building.getPlayer();
 
-        Soldier military = new Soldier(player, rank, map);
+        var military = new Soldier(player, rank, map);
 
         map.placeWorker(military, building);
 
@@ -538,10 +538,10 @@ public class Utils {
     }
 
     public static Soldier findSoldierOutsideBuilding(Player player) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         Soldier soldier = null;
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier soldier1 && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 soldier = soldier1;
 
@@ -553,10 +553,10 @@ public class Utils {
     }
 
     public static List<Soldier> findSoldiersOutsideBuilding(Player player) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
         List<Soldier> result = new LinkedList<>();
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker instanceof Soldier && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 result.add((Soldier)worker);
             }
@@ -578,10 +578,10 @@ public class Utils {
     }
 
     public static Soldier waitForSoldierOutsideBuilding(Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
-            Soldier military = findSoldierOutsideBuilding(player);
+            var military = findSoldierOutsideBuilding(player);
 
             if (military != null) {
                 assertEquals(military.getPlayer(), player);
@@ -598,10 +598,10 @@ public class Utils {
     }
 
     public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player) {
-        GameMap map = player.getMap();
+        var map = player.getMap();
         List<T> workersFound = new LinkedList<>();
 
-        for (Worker worker : map.getWorkers()) {
+        for (var worker : map.getWorkers()) {
             if (worker.getClass().equals(aClass) && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
                 workersFound.add(aClass.cast(worker));
             }
@@ -611,14 +611,13 @@ public class Utils {
     }
 
     public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
         List<T> workers = new LinkedList<>();
 
         for (int i = 0; i < 5000; i++) {
-
             workers.clear();
 
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
                     workers.add(type.cast(worker));
                 }
@@ -637,10 +636,10 @@ public class Utils {
     }
 
     public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
-        for (int i = 0; i < 1000; i++) {
-            for (Worker worker : map.getWorkers()) {
+        for (int i = 0; i < 2_000; i++) {
+            for (var worker : map.getWorkers()) {
                 if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
                     return type.cast(worker);
                 }
@@ -655,7 +654,7 @@ public class Utils {
     }
 
     public static <T extends Building> void waitForBuildingToDisappear(T building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         assertTrue(building.isBurningDown() || building.isDestroyed());
 
@@ -686,10 +685,10 @@ public class Utils {
     }
 
     public static Soldier getMainAttacker(Building building, Collection<Soldier> attackers) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
         Soldier firstAttacker = null;
 
-        for (Soldier attacker : attackers) {
+        for (var attacker : attackers) {
             if (attacker.getTarget().equals(building.getFlag().getPosition())) {
                 firstAttacker = attacker;
 
@@ -706,7 +705,7 @@ public class Utils {
     }
 
     public static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws InvalidUserActionException {
-        GameMap map = catapult.getMap();
+        var map = catapult.getMap();
         Projectile projectile = null;
 
         assertTrue(map.getProjectiles().isEmpty());
@@ -823,7 +822,7 @@ public class Utils {
     }
 
     static void waitUntilAmountIs(Building building, Material material, int amount) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
             if (building.getAmount(material) == amount) {
@@ -837,7 +836,7 @@ public class Utils {
     }
 
     public static void deliverCargo(Building building, Material material) {
-        GameMap map = building.getMap();
+        var map = building.getMap();
         Cargo cargo = new Cargo(material, map);
 
         building.promiseDelivery(material);
@@ -897,7 +896,7 @@ public class Utils {
         assertFalse(farmer.isPlanting());
     }
 
-    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
+    public static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws InvalidUserActionException {
         for (int i = 0; i < 10000; i++) {
             if (farmer.isPlanting()) {
                 break;
@@ -946,7 +945,7 @@ public class Utils {
     }
 
     static Building waitForBuildingToGetUpgraded(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (!map.getBuildingAtPoint(building.getPosition()).equals(building)) {
@@ -962,7 +961,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToBurnDown(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.isDestroyed()) {
@@ -1063,7 +1062,7 @@ public class Utils {
     }
 
     public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
         Worker worker = null;
 
         for (int i = 0; i < 1000; i++) {
@@ -1145,7 +1144,7 @@ public class Utils {
     }
 
     public static void waitForNewMessage(Player player0) throws InvalidUserActionException {
-        GameMap map = player0.getMap();
+        var map = player0.getMap();
 
         int amountMessages = player0.getMessages().size();
 
@@ -1161,7 +1160,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToBeConstructed(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.isReady()) {
@@ -1302,7 +1301,7 @@ public class Utils {
     }
 
     public static void waitForUpgradeToFinish(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         assertTrue(building.isUpgrading());
 
@@ -1322,7 +1321,7 @@ public class Utils {
     }
 
     public static void waitForTreeConservationProgramToActivate(Player player0) throws InvalidUserActionException {
-        GameMap map = player0.getMap();
+        var map = player0.getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (player0.isTreeConservationProgramActive()) {
@@ -1499,7 +1498,7 @@ public class Utils {
     }
 
     public static Barracks placeAndOccupyBarracks(Player player, Point point) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
         Barracks barracks = map.placeBuilding(new Barracks(player), point);
 
         /* Finish construction of barracks */
@@ -1582,7 +1581,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.getAmount(material) == targetAmount) {
@@ -1613,12 +1612,12 @@ public class Utils {
     }
 
     public static void waitForBuildingsToBeConstructed(Building... buildings) throws InvalidUserActionException {
-        GameMap map = buildings[0].getMap();
+        var map = buildings[0].getMap();
 
         for (int i = 0; i < 50_000; i++) {
             boolean allDone = true;
 
-            for (Building building : buildings) {
+            for (var building : buildings) {
                 if (!building.isReady()) {
                     allDone = false;
 
@@ -1633,18 +1632,18 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Building building : buildings) {
+        for (var building : buildings) {
             assertTrue(building.isReady());
         }
     }
 
     public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidUserActionException {
-        GameMap map = buildings[0].getMap();
+        var map = buildings[0].getMap();
 
         for (int i = 0; i < 4000; i++) {
             boolean allPopulated = true;
 
-            for (Building building : buildings) {
+            for (var building : buildings) {
                 if (!building.isOccupied()) {
                     allPopulated = false;
 
@@ -1659,7 +1658,7 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Building building : buildings) {
+        for (var building : buildings) {
             assertTrue(building.isOccupied());
             assertNotNull(building.getWorker());
         }
@@ -1777,12 +1776,12 @@ public class Utils {
     }
 
     public static void waitForMilitaryBuildingsToGetPopulated(Building... buildings) throws InvalidUserActionException {
-        GameMap map = buildings[0].getMap();
+        var map = buildings[0].getMap();
 
         for (int i = 0; i < 10000; i++) {
             boolean allPopulated = true;
 
-            for (Building building : buildings) {
+            for (var building : buildings) {
                 if (!building.isOccupied()) {
                     allPopulated = false;
 
@@ -1797,18 +1796,18 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Building building : buildings) {
+        for (var building : buildings) {
             assertTrue(building.isOccupied());
         }
     }
 
     public static void constructHouses(Building... buildings) throws InvalidUserActionException {
-        GameMap map = buildings[0].getMap();
+        var map = buildings[0].getMap();
 
         /* Place builders */
         List<Worker> builders = new ArrayList<>();
-        for (Building building : buildings) {
-            Player player = building.getPlayer();
+        for (var building : buildings) {
+            var player = building.getPlayer();
 
             Builder builder = new Builder(player, map);
             map.placeWorker(builder, building.getFlag());
@@ -1823,7 +1822,7 @@ public class Utils {
         fastForwardUntilWorkersReachTarget(map, builders);
 
         /* Wait for the buildings to get constructed */
-        for (Building building : buildings) {
+        for (var building : buildings) {
             assertTrue(building.isUnderConstruction());
 
             for (int i = 0; i < 20; i++) {
@@ -1914,7 +1913,7 @@ public class Utils {
 
             boolean allWorkersCarryCargo = true;
 
-            for (Worker worker : workers) {
+            for (var worker : workers) {
                 if (worker.getCargo() == null || worker.getCargo().getMaterial() != material) {
                     allWorkersCarryCargo = false;
 
@@ -1929,7 +1928,7 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Worker worker : workers) {
+        for (var worker : workers) {
             assertNotNull(worker.getCargo());
             assertEquals(worker.getCargo().getMaterial(), material);
         }
@@ -1938,14 +1937,14 @@ public class Utils {
     public static void verifyWorkersDoNotMove(GameMap map, Worker... workers) throws InvalidUserActionException {
         Map<Worker, Point> positions = new HashMap<>();
 
-        for (Worker worker : workers) {
+        for (var worker : workers) {
             positions.put(worker, worker.getPosition());
         }
 
         for (int i = 0; i < 500; i++) {
             map.stepTime();
 
-            for (Worker worker : workers) {
+            for (var worker : workers) {
                 assertEquals(worker.getPosition(), positions.get(worker));
             }
         }
@@ -1998,7 +1997,7 @@ public class Utils {
         for (int i = 0; i < 5000; i++) {
             boolean allWorkersCarryCargo = true;
 
-            for (Worker worker : workers) {
+            for (var worker : workers) {
                 if (worker.getCargo() != null) {
                     continue;
                 }
@@ -2015,7 +2014,7 @@ public class Utils {
             map.stepTime();
         }
 
-        for (Worker worker : workers) {
+        for (var worker : workers) {
             assertNotNull(worker.getCargo());
         }
     }
@@ -2128,7 +2127,7 @@ public class Utils {
     }
 
     public static void assignBuilder(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
         Builder builder = new Builder(building.getPlayer(), map);
 
         map.placeWorker(builder, building.getFlag());
@@ -2141,11 +2140,11 @@ public class Utils {
     }
 
     public static Builder waitForBuilderToGetAssignedToBuilding(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
         Builder builder = null;
 
         for (int i = 0; i < 10000; i++) {
-            for (Worker worker : map.getWorkers()) {
+            for (var worker : map.getWorkers()) {
                 if (! (worker instanceof Builder)) {
                     continue;
                 }
@@ -2279,7 +2278,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToGetBuilder(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
             if (building.getBuilder() != null) {
@@ -2293,7 +2292,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToBeUnderConstruction(Building building) throws InvalidUserActionException {
-        GameMap map = building.getMap();
+        var map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
             if (building.isUnderConstruction()) {
@@ -2488,7 +2487,7 @@ public class Utils {
     }
 
     public static void waitForNoWorkerOutsideBuilding(Class<? extends Worker> workerClass, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (var i = 0; i < 20_000; i++) {
             if (map.getWorkers().stream().noneMatch(worker -> worker.getClass().equals(workerClass) && !worker.isInsideBuilding())) {
@@ -2550,7 +2549,7 @@ public class Utils {
         Worker workerWithCargo = null;
 
         for (int j = 0; j < 20000; j++) {
-            for (Worker worker : workers) {
+            for (var worker : workers) {
                 if (worker == null) {
                     continue;
                 }
@@ -2703,7 +2702,7 @@ public class Utils {
     }
 
     public static Soldier waitForSoldierNotDyingOutsideBuilding(Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (map.getWorkers().stream()
@@ -2797,7 +2796,7 @@ public class Utils {
     public static void printPlayerLand(Player player, Collection<Point> points) {
         Map<Point, String> places = new HashMap<>();
 
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         map.getBuildings().stream()
                 .filter(building -> Objects.equals(building.getPlayer(), player))
@@ -2935,7 +2934,7 @@ public class Utils {
     }
 
     public static Soldier waitForAliveSoldierOutsideGivenBuilding(Player player, Building building) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 2000; i++) {
             List<Soldier> result = map.getWorkers().stream()
@@ -2960,7 +2959,7 @@ public class Utils {
     }
 
     public static List<Soldier> waitForAliveSoldiersOutsideBuilding(Player player, int amount) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 2000; i++) {
             List<Soldier> result = map.getWorkers().stream()
@@ -2984,7 +2983,7 @@ public class Utils {
     }
 
     public static <T extends Worker> void verifyNoWorkersOutsideBuildings(Class<T> soldierClass, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 2000; i++) {
             assertTrue(map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
@@ -2996,7 +2995,7 @@ public class Utils {
     }
 
     public static <T extends Worker> void verifyWorkersOutsideBuildings(Class<T> soldierClass, int amount, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 2000; i++) {
             if (map.getWorkers().stream().filter(worker -> Objects.equals(worker.getClass(), soldierClass))
@@ -3130,7 +3129,7 @@ public class Utils {
             gameChanges.add(copiedGameChangesList);
 
             /* Update the monitoring of available construction */
-            GameMap map = player.getMap();
+            var map = player.getMap();
             Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player);
             Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player);
             List<Point> availableMinesOnMap = map.getAvailableMinePoints(player);
@@ -3472,7 +3471,7 @@ public class Utils {
     }
 
     public static <T extends Building> T verifyPlayerPlacesOnlyBuilding(ComputerPlayer computerPlayer, Class<T> aClass) throws Exception {
-        Player player = computerPlayer.getControlledPlayer();
+        var player = computerPlayer.getControlledPlayer();
         int amount = player.getBuildings().size();
 
         T building = waitForComputerPlayerToPlaceBuilding(computerPlayer, aClass);
@@ -3484,14 +3483,14 @@ public class Utils {
 
     public static <T extends Building>
     T waitForComputerPlayerToPlaceBuilding(ComputerPlayer computerPlayer, Class<T> aClass) throws Exception {
-        Player player = computerPlayer.getControlledPlayer();
-        GameMap map = player.getMap();
+        var player = computerPlayer.getControlledPlayer();
+        var map = player.getMap();
         T found = null;
 
         Set<Building> buildingsBefore = new HashSet<>(player.getBuildings());
 
         for (int i = 0; i < 10000; i++) {
-            for (Building building : player.getBuildings()) {
+            for (var building : player.getBuildings()) {
                 if (building.getClass().equals(aClass) && !buildingsBefore.contains(building)) {
                     found = (T)building;
 
@@ -3527,7 +3526,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToGetCapturedByPlayer(Building building, Player player) throws InvalidUserActionException {
-        GameMap map = player.getMap();
+        var map = player.getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.getPlayer().equals(player)) {
@@ -3541,7 +3540,7 @@ public class Utils {
     }
 
     public static void waitForBuildingToGetOccupied(ComputerPlayer computerPlayer, Building building) throws Exception {
-        GameMap map = computerPlayer.getControlledPlayer().getMap();
+        var map = computerPlayer.getControlledPlayer().getMap();
 
         for (int i = 0; i < 10000; i++) {
             if (building.isOccupied()) {
@@ -3557,7 +3556,7 @@ public class Utils {
     }
 
     public static <T extends Building> void waitForBuildingToGetConstructedWithComputerPlayer(ComputerPlayer computerPlayer, T building) throws Exception {
-        GameMap map = computerPlayer.getControlledPlayer().getMap();
+        var map = computerPlayer.getControlledPlayer().getMap();
 
         for (int i = 0; i < 1000; i++) {
             if (building.isReady()) {
@@ -3590,7 +3589,7 @@ public class Utils {
     }
 
     public static void waitForStoneToRunOut(ComputerPlayer computerPlayer, Stone stone) throws Exception {
-        GameMap map = computerPlayer.getControlledPlayer().getMap();
+        var map = computerPlayer.getControlledPlayer().getMap();
 
         for (int i = 0; i < 20000; i++) {
             computerPlayer.turn();
@@ -3606,7 +3605,7 @@ public class Utils {
     }
 
     public static <T extends Building> void waitForBuildingToGetTornDown(ComputerPlayer computerPlayer, T quarry) throws Exception {
-        GameMap map = computerPlayer.getControlledPlayer().getMap();
+        var map = computerPlayer.getControlledPlayer().getMap();
 
         for (int i = 0; i < 1000; i++) {
             computerPlayer.turn();
