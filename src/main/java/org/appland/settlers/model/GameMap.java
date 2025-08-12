@@ -193,7 +193,7 @@ public class GameMap {
      * @param start The start of the road
      * @param goal The end of the road
      * @param avoid Points that the road must avoid
-     * @return A path a new road can follow
+     * @return A path a new road can follow, or null if no path is found.
      */
     public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Set<Point> avoid) {
         return findShortestPath(start, goal, avoid, (point, goal1) -> getPossibleAdjacentRoadConnections(player, point, goal1));
@@ -943,7 +943,7 @@ public class GameMap {
             statisticsManager.landUpdated(
                     player,
                     time, lands.stream()
-                    .mapToInt(land -> land.getPointsInLand().size())
+                    .mapToInt(land -> land.ownedLand().size())
                     .sum());
             playersToUpdate.remove(player);
         });

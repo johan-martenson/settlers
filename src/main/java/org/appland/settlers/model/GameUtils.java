@@ -176,6 +176,11 @@ public class GameUtils {
         return Material.GOODS.stream().mapToInt(storage::getAmount).sum();
     }
 
+    public static <T> void setAll(Collection<T> collectionToSet, Collection<T> source) {
+        collectionToSet.clear();
+        collectionToSet.addAll(source);
+    }
+
     /**
      * Enum for types of allocation that can be controlled.
      */

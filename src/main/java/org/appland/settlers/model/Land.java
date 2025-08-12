@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
@@ -12,28 +7,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-/**
- *
- * @author johan
- */
 public class Land {
+    private final Set<Point> points;
+    private final List<List<Point>> borders;
 
-    private final Set<Point>        points;
-    private final List<List<Point>> border;
+    public Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
+        this.points = new HashSet<>(pointsInLand);
+        this.borders = calculateBorders(pointsInLand, new HashSet<>(borderPoints));
+    }
 
-    Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
-        points = new HashSet<>();
-        border = new ArrayList<>();
+    private static List<List<Point>> calculateBorders(Collection<Point> pointsInLand, Set<Point> borderPoints) {
+        List<List<Point>> calculatedBorders = new ArrayList<>();
 
-        points.addAll(pointsInLand);
-
+        // Prune outliers
         List<Point> borderPointsToPrune = new LinkedList<>();
 
-        /* Prune outliers */
-        for (Point borderPoint : borderPoints) {
+        for (var borderPoint : borderPoints) {
             boolean keepPoint = false;
 
-            for (Point point : borderPoint.getAdjacentPoints()) {
+            for (var point : borderPoint.getAdjacentPoints()) {
                 if (pointsInLand.contains(point) && !borderPoints.contains(point)) {
                     keepPoint = true;
 
@@ -50,7 +42,7 @@ public class Land {
 
         /* Separate border points into consistent borders */
         while (!borderPoints.isEmpty()) {
-            Point root = borderPoints.iterator().next();
+            var root = borderPoints.iterator().next();
             List<Point> collectingBorder = new LinkedList<>();
 
             collectingBorder.add(root);
@@ -88,22 +80,23 @@ public class Land {
             }
 
             if (collectingBorder.size() > 2) {
-                border.add(collectingBorder);
+                calculatedBorders.add(collectingBorder);
             }
         }
 
+        return calculatedBorders;
     }
 
-    List<List<Point>> getBorders() {
-        return border;
-    }
-
-    public Set<Point> getPointsInLand() {
+    public Set<Point> ownedLand() {
         return points;
+    }
+
+    public List<List<Point>> borders() {
+        return borders;
     }
 
     @Override
     public String toString() {
-        return "Border: " + border + ", containing " + points;
+        return "Border: " + borders + ", containing " + points;
     }
 }

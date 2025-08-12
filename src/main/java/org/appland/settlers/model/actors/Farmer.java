@@ -89,7 +89,10 @@ public class Farmer extends Worker {
                 if (countdown.hasReachedZero() && home.isProductionEnabled()) {
                     var cropToHarvest = findCropToHarvest();
 
-                    if (cropToHarvest != null) {
+                    if (cropToHarvest != null &&
+                            map.getWorkers().stream()
+                                    .noneMatch(worker -> worker instanceof Farmer farmer &&
+                                            (farmer.position.equals(cropToHarvest.getPosition()) && farmer.isHarvesting()))) {
                         state = GOING_OUT_TO_HARVEST;
                         setOffroadTarget(cropToHarvest.getPosition());
                     } else if (getSurroundingNonHarvestedCrops().size() < MAX_NON_HARVESTED_CROPS) {
@@ -113,10 +116,15 @@ public class Farmer extends Worker {
 
             case PLANTING -> {
                 if (countdown.hasReachedZero()) {
-                    var cropType = RANDOM.nextInt(10) % 2 == 0
-                            ? Crop.CropType.TYPE_2
-                            : Crop.CropType.TYPE_1;
-                    map.placeCrop(position, cropType);
+                    var mapPoint = map.getMapPoint(position);
+
+                    if (!mapPoint.isFlag() &&
+                        !mapPoint.isRoad()) {
+                        var cropType = RANDOM.nextInt(10) % 2 == 0
+                                ? Crop.CropType.TYPE_2
+                                : Crop.CropType.TYPE_1;
+                        map.placeCrop(position, cropType);
+                    }
 
                     state = GOING_BACK_TO_HOUSE;
                     returnHomeOffroad();
@@ -162,13 +170,13 @@ public class Farmer extends Worker {
     }
 
     private Collection<Crop> getSurroundingNonHarvestedCrops() {
-        return getSurroundingSpotsForCrops().stream()
+        return getPointsForCrops().stream()
                 .filter(point -> map.isCropAtPoint(point) && map.getCropAtPoint(point).getGrowthState() != HARVESTED)
                 .map(map::getCropAtPoint)
                 .toList();
     }
 
-    public boolean isWheatReceiverAndAllocationAllowed(Building building) {
+    private boolean isWheatReceiverAndAllocationAllowed(Building building) {
         if (building instanceof Storehouse storehouse) {
             return !storehouse.isDeliveryBlocked(WHEAT);
         }
@@ -212,7 +220,8 @@ public class Farmer extends Worker {
                         .anyMatch(worker ->
                                 worker instanceof Farmer farmer && farmer.getPosition().equals(position) && farmer.isPlanting() ||
                                 worker instanceof Forester forester && forester.getPosition().equals(position) && forester.isPlanting()) ||
-                        map.isFlagAtPoint(position)
+                        map.isFlagAtPoint(position) ||
+                        map.isRoadAtPoint(position)
                 ) {
                     state = GOING_BACK_TO_HOUSE;
                     returnHomeOffroad();
@@ -224,9 +233,16 @@ public class Farmer extends Worker {
                 }
             }
             case GOING_OUT_TO_HARVEST -> {
-                state = HARVESTING;
-                map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
-                countdown.countFrom(TIME_TO_HARVEST);
+                if (map.getWorkers().stream()
+                        .noneMatch(worker -> worker instanceof Farmer farmer &&
+                                (farmer.getPosition().equals(position) && farmer.isHarvesting()))) {
+                    state = HARVESTING;
+                    map.reportWorkerStartedAction(this, WorkerAction.HARVESTING);
+                    countdown.countFrom(TIME_TO_HARVEST);
+                } else {
+                    state = GOING_BACK_TO_HOUSE;
+                    setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
+                }
             }
             case GOING_BACK_TO_HOUSE_WITH_CARGO -> {
                 enterBuilding(home);
@@ -308,7 +324,7 @@ public class Farmer extends Worker {
         setTarget(building.getFlag().getPosition());
     }
 
-    private Collection<Point> getSurroundingSpotsForCrops() {
+    private Collection<Point> getPointsForCrops() {
         var hutPoint = home.getPosition();
         var possibleSpotsToPlant = new HashSet<Point>();
 
@@ -324,7 +340,7 @@ public class Farmer extends Worker {
     }
 
     private Point getFreePointToPlant() {
-        for (var point : getSurroundingSpotsForCrops()) {
+        for (var point : getPointsForCrops()) {
             var mapPoint = map.getMapPoint(point);
 
             // Filter points that's not possible to plant on
@@ -360,7 +376,7 @@ public class Farmer extends Worker {
     }
 
     private Crop findCropToHarvest() {
-        return getSurroundingSpotsForCrops().stream()
+        return getPointsForCrops().stream()
                 .filter(map::isCropAtPoint)
                 .map(map::getCropAtPoint)
                 .filter(crop -> crop.getGrowthState() == FULL_GROWN)

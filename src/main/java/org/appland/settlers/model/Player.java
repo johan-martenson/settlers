@@ -381,43 +381,40 @@ public class Player {
         var newOwnedLand = new HashSet<Point>();
 
         for (var land : updatedLands) {
-            land.getBorders().forEach(newBorder::addAll);
-            newOwnedLand.addAll(land.getPointsInLand());
+            land.borders().forEach(newBorder::addAll);
+            newOwnedLand.addAll(land.ownedLand());
         }
 
         // Figure out the border & land that has been added & removed
         var addedBorder = new HashSet<>(newBorder);
-        var addedOwnedLand = new HashSet<>(newOwnedLand);
-        var removedBorder = new HashSet<>(oldBorder);
-        var removedOwnedLand = new HashSet<>(oldOwnedLand);
-
         addedBorder.removeAll(oldBorder);
+
+        var addedOwnedLand = new HashSet<>(newOwnedLand);
         addedOwnedLand.removeAll(oldOwnedLand);
 
+        var removedBorder = new HashSet<>(oldBorder);
         removedBorder.removeAll(newBorder);
+
+        var removedOwnedLand = new HashSet<>(oldOwnedLand);
         removedOwnedLand.removeAll(newOwnedLand);
 
-        this.addedBorder.clear();
-        this.removedBorder.clear();
-
-        this.addedBorder.addAll(addedBorder);
-        this.removedBorder.addAll(removedBorder);
+        GameUtils.setAll(this.addedBorder, addedBorder);
+        GameUtils.setAll(this.removedBorder, removedBorder);
 
         // Update full list of owned land and the list of borders
-        this.borderPoints.clear();
-        this.ownedLand.clear();
-
-        this.borderPoints.addAll(newBorder);
-        this.ownedLand.addAll(newOwnedLand);
+        GameUtils.setAll(borderPoints, newBorder);
+        GameUtils.setAll(ownedLand, newOwnedLand);
 
         if (!addedOwnedLand.isEmpty()) {
             var previousDiscoveredLand = new HashSet<>(discoveredLand);
 
             // Update field of view
-            buildings.stream()
-                    .filter(b -> b.isMilitaryBuilding() && b.isOccupied())
-                    .flatMap(b -> b.getDiscoveredLand().stream())
-                    .forEach(discoveredLand::add);
+            discoveredLand.addAll(
+                    buildings.stream()
+                            .filter(b -> b.isMilitaryBuilding() && b.isOccupied())
+                            .flatMap(b -> b.getDiscoveredLand().stream())
+                            .toList()
+            );
 
             // Notify monitors of new discoveries
             if (hasMonitor()) {

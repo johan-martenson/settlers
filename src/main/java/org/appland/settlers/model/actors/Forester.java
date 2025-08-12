@@ -1,27 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.appland.settlers.model.actors;
 
-/* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
-
-import org.appland.settlers.model.buildings.Building;
 import org.appland.settlers.model.Countdown;
-import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.MapPoint;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Vegetation;
 import org.appland.settlers.model.WorkerAction;
+import org.appland.settlers.model.buildings.Building;
+import org.appland.settlers.model.buildings.Storehouse;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.appland.settlers.model.Material.FORESTER;
@@ -32,14 +23,14 @@ public class Forester extends Worker {
     private static final int TIME_TO_REST = 99;
     private static final int RANGE = 8;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private static final Random random = new Random(1);
+    private static final Random RANDOM = new Random(1);
 
-    private final Countdown countdown;
+    private final Countdown countdown = new Countdown();
 
-    private State state;
+    private State state = State.WALKING_TO_TARGET;
 
-    private boolean spotIsClearForTree(Point point) {
-        MapPoint mapPoint = map.getMapPoint(point);
+    private boolean pointIsClearForTree(Point point) {
+        var mapPoint = map.getMapPoint(point);
 
         if (mapPoint.isBuilding()) {
             return false;
@@ -65,12 +56,12 @@ public class Forester extends Worker {
             return false;
         }
 
-        /* Filter points where the surrounding terrain doesn't allow placing a tree */
-        Collection<Vegetation> surroundingVegetation = map.getSurroundingTiles(point);
+        // Filter points where the surrounding terrain doesn't allow placing a tree
+        var surroundingVegetation = map.getSurroundingTiles(point);
 
-        boolean noVegetationAllowingTrees = true;
+        var noVegetationAllowingTrees = true;
 
-        for (Vegetation vegetation : surroundingVegetation) {
+        for (var vegetation : surroundingVegetation) {
             if (!Vegetation.MINABLE_MOUNTAIN.contains(vegetation) &&
                 !Vegetation.WATER_VEGETATION.contains(vegetation)) {
                 noVegetationAllowingTrees = false;
@@ -83,30 +74,35 @@ public class Forester extends Worker {
             return false;
         }
 
-        /* Filter points that the forester cannot walk to */
-        if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+        // Filter points that the forester cannot walk to
+        if (map.findWayOffroad(home.getFlag().getPosition(), point, null) == null) {
             return false;
         }
 
         return true;
     }
 
-    private Point getTreeSpot() {
-        List<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
-
-        int offset = random.nextInt(adjacentPoints.size());
+    private Point findPointToPlantTree() {
+        var adjacentPoints = map.getPointsWithinRadius(home.getPosition(), RANGE);
+        int offset = RANDOM.nextInt(adjacentPoints.size());
 
         for (int i = 0; i < adjacentPoints.size(); i++) {
             int indexWithOffset = (i + offset) % adjacentPoints.size();
+            var point = adjacentPoints.get(indexWithOffset);
 
-            Point point = adjacentPoints.get(indexWithOffset);
-
-            /* Filter points where trees cannot be placed */
-            if (!spotIsClearForTree(point)) {
+            // Filter points where trees cannot be placed
+            if (!pointIsClearForTree(point)) {
                 continue;
             }
 
-            /* Return the first point that passed the filter */
+            if (map.getWorkers().stream()
+                    .anyMatch(worker -> worker instanceof Forester forester &&
+                            Objects.equals(forester.position, point) &&
+                            forester.isPlanting())) {
+                continue;
+            }
+
+            // Return the first point that passed the filter
             return point;
         }
 
@@ -127,10 +123,6 @@ public class Forester extends Worker {
 
     public Forester(Player player, GameMap map) {
         super(player, map);
-
-        state = State.WALKING_TO_TARGET;
-
-        countdown = new Countdown();
     }
 
     public boolean isPlanting() {
@@ -140,115 +132,120 @@ public class Forester extends Worker {
     @Override
     protected void onEnterBuilding(Building building) {
         state = State.RESTING_IN_HOUSE;
-
         countdown.countFrom(TIME_TO_REST);
     }
 
     @Override
     protected void onIdle() throws InvalidUserActionException {
-        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.hasReachedZero()) {
-                Point point = getTreeSpot();
+        switch (state) {
+            case RESTING_IN_HOUSE -> {
+                if (home.isProductionEnabled()) {
+                    if (countdown.hasReachedZero()) {
+                        var point = findPointToPlantTree();
 
-                if (point == null) {
-                    return;
+                        if (point == null) {
+                            return;
+                        }
+
+                        setOffroadTarget(point);
+                        state = State.GOING_OUT_TO_PLANT;
+                    } else {
+                        countdown.step();
+                    }
                 }
-
-                setOffroadTarget(point);
-
-                state = State.GOING_OUT_TO_PLANT;
-            } else {
-                countdown.step();
             }
-        } else if (state == State.PLANTING) {
-            if (countdown.hasReachedZero()) {
 
-                /* Place a tree if the point is still open */
-                if (spotIsClearForTree(getPosition())) {
-                    Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(random.nextDouble() * Tree.PLANTABLE_TREES.length))];
+            case PLANTING -> {
+                if (countdown.hasReachedZero()) {
 
-                    map.placeTree(getPosition(), treeType, Tree.TreeSize.NEWLY_PLANTED);
+                    // Place a tree if the point is still open
+                    if (pointIsClearForTree(position)) {
+                        Tree.TreeType treeType = Tree.PLANTABLE_TREES[(int)(Math.floor(RANDOM.nextDouble() * Tree.PLANTABLE_TREES.length))];
+
+                        map.placeTree(position, treeType, Tree.TreeSize.NEWLY_PLANTED);
+                    }
+
+                    state = State.GOING_BACK_TO_HOUSE;
+                    returnHomeOffroad();
+                } else {
+                    countdown.step();
                 }
-
-                state = State.GOING_BACK_TO_HOUSE;
-
-                returnHomeOffroad();
-            } else {
-                countdown.step();
             }
-        } else if (state == State.DEAD) {
-            if (countdown.hasReachedZero()) {
-                map.removeWorker(this);
-            } else {
-                countdown.step();
+
+            case DEAD -> {
+                if (countdown.hasReachedZero()) {
+                    map.removeWorker(this);
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
 
     @Override
     protected void onArrival() {
-        if (state == State.GOING_OUT_TO_PLANT) {
-            state = State.PLANTING;
-
-            map.reportWorkerStartedAction(this, WorkerAction.PLANTING_TREE);
-
-            countdown.countFrom(TIME_TO_PLANT);
-        } else if (state == State.GOING_BACK_TO_HOUSE) {
-            state = State.RESTING_IN_HOUSE;
-
-            enterBuilding(getHome());
-
-            countdown.countFrom(TIME_TO_REST);
-        } else if (state == State.RETURNING_TO_STORAGE) {
-            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
-
-            storehouse.depositWorker(this);
-        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
-
-            /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FORESTER);
-
-            if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
-
-                setTarget(storehouse.getPosition());
-            } else {
-                state = State.GOING_TO_DIE;
-
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point);
+        switch (state) {
+            case GOING_OUT_TO_PLANT -> {
+                if (map.getWorkers().stream()
+                        .noneMatch(worker -> worker instanceof Forester forester &&
+                                (forester.isPlanting() && Objects.equals(forester.position, position)))) {
+                    state = State.PLANTING;
+                    map.reportWorkerStartedAction(this, WorkerAction.PLANTING_TREE);
+                    countdown.countFrom(TIME_TO_PLANT);
+                } else {
+                    state = State.GOING_BACK_TO_HOUSE;
+                    setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
+                }
             }
-        } else if (state == State.GOING_TO_DIE) {
-            setDead();
 
-            state = State.DEAD;
+            case GOING_BACK_TO_HOUSE -> {
+                state = State.RESTING_IN_HOUSE;
+                enterBuilding(home);
+                countdown.countFrom(TIME_TO_REST);
+            }
 
-            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            case RETURNING_TO_STORAGE -> {
+                Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(position);
+                storehouse.depositWorker(this);
+            }
+
+            case GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE -> {
+
+                // Go to the closest storage
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
+
+                if (storehouse != null) {
+                    state = State.RETURNING_TO_STORAGE;
+                    setTarget(storehouse.getPosition());
+                } else {
+                    state = State.GOING_TO_DIE;
+                    setOffroadTarget(findPlaceToDie());
+                }
+            }
+
+            case GOING_TO_DIE -> {
+                setDead();
+                state = State.DEAD;
+                countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+            }
         }
     }
 
     @Override
     protected void onReturnToStorage() {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FORESTER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(position, null, map, FORESTER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), FORESTER);
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(position, null, getPlayer(), FORESTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
-
                 setOffroadTarget(storage.getPosition());
             } else {
-                Point point = findPlaceToDie();
-
-                setOffroadTarget(point, getPosition().downRight());
-
+                setOffroadTarget(findPlaceToDie(), position.downRight());
                 state = State.GOING_TO_DIE;
             }
         }
@@ -257,15 +254,15 @@ public class Forester extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() {
 
-        /* Return to storage if the planned path no longer exists */
+        // Return to storage if the planned path no longer exists
         if (state == State.WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            map.isFlagAtPoint(position) &&
+            !map.arePointsConnectedByRoads(position, getTarget())) {
 
-            /* Don't try to enter the forester hut upon arrival */
+            // Don't try to enter the forester hut upon arrival
             clearTargetBuilding();
 
-            /* Go back to the storage */
+            // Go back to the storage
             returnToStorage();
         }
     }

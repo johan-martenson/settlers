@@ -3112,6 +3112,33 @@ public class Utils {
         assertTrue(farmer.isHarvesting());
     }
 
+    public static void fillWithTrees(GameMap map, Point point4) throws InvalidUserActionException {
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (point.equals(point4)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
+                continue;
+            }
+
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+    }
+
+    public static void waitForCropToGetPlantedAtPoint(GameMap map, Point point) throws InvalidUserActionException {
+        for (int i = 0; i < 2_000; i++) {
+            if (map.isCropAtPoint(point)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isCropAtPoint(point));
+        assertNotNull(map.getCropAtPoint(point));
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor, StatisticsListener {
         private final List<GameChangesList> gameChanges;
         private final HashMap<Point, AvailableConstruction> availableConstruction;
