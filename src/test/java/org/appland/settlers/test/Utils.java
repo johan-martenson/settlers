@@ -1641,27 +1641,14 @@ public class Utils {
         var map = buildings[0].getMap();
 
         for (int i = 0; i < 4000; i++) {
-            boolean allPopulated = true;
-
-            for (var building : buildings) {
-                if (!building.isOccupied()) {
-                    allPopulated = false;
-
-                    break;
-                }
-            }
-
-            if (allPopulated) {
+            if (Arrays.stream(buildings).allMatch(Building::isOccupied)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        for (var building : buildings) {
-            assertTrue(building.isOccupied());
-            assertNotNull(building.getWorker());
-        }
+        assertTrue(Arrays.stream(buildings).allMatch(Building::isOccupied));
     }
 
     public static void verifyWorkerWalksToTargetOnRoads(GameMap map, Worker worker, Point point) throws InvalidUserActionException {
@@ -3124,6 +3111,8 @@ public class Utils {
 
             map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
         }
+
+        assertFalse(map.isTreeAtPoint(point4));
     }
 
     public static void waitForCropToGetPlantedAtPoint(GameMap map, Point point) throws InvalidUserActionException {

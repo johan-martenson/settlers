@@ -33,6 +33,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,10 +47,7 @@ import static org.junit.Assert.*;
 
 public class TestForesterHut {
 
-    /*
-    * TODO:
-    *   - test return to storage when forester is out working - doesn't have to use roads then
-    * */
+    // TODO: test return to storage when forester is out working - doesn't have to use roads then
 
     @Test
     public void testForesterHutOnlyNeedsTwoPlanksForConstruction() throws Exception {
@@ -2637,17 +2635,6 @@ public class TestForesterHut {
         assertFalse(map.getWorkers().contains(forester));
     }
 
-
-
-
-
-
-
-
-
-
-
-
     @Test
     public void testForesterGoesBackWithoutPlantingIfOtherForesterCameFirstAndStartedPlanting() throws InvalidUserActionException {
 
@@ -2663,9 +2650,6 @@ public class TestForesterHut {
         var point1 = new Point(15, 7);
         var flag = map.placeFlag(player0, point1);
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
-
-        // Adjust the inventory so it's not possible to send out foresters
-        Utils.adjustInventoryTo(headquarter0, SHOVEL, 0);
 
         // Place two forester huts and connect them to the headquarters
         var point2 = new Point(12, 10);
@@ -2760,10 +2744,6 @@ public class TestForesterHut {
         var flag = map.placeFlag(player0, point1);
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        // Adjust the inventory so it's not possible to send out farmers
-        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
-        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
-
         // Place two forester huts and connect them to the headquarters
         var point2 = new Point(12, 10);
         var point3 = new Point(16, 10);
@@ -2772,8 +2752,10 @@ public class TestForesterHut {
         var road1 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), flag);
         var road2 = map.placeAutoSelectedRoad(player0, foresterHut1.getFlag(), flag);
 
-        // Wait for the forester huts to get constructed but not occupied
+        // Wait for the forester huts to get constructed and occupied
         Utils.waitForBuildingsToBeConstructed(foresterHut0, foresterHut1);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut0, foresterHut1);
 
         // Place trees all over the map except for one open point
         var point4 = new Point(14, 12);
@@ -2782,10 +2764,7 @@ public class TestForesterHut {
 
         map.stepTime();
 
-        // Wait for the forester huts to get occupied
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut0, foresterHut1);
-
-        // Let the first forester go out and start planting. Cheat by only stepping the first forester's time
+        // Make the first forester go out and start planting. Cheat by only stepping its time so the other doesn't move
         var firstForester = (Forester) foresterHut0.getWorker();
         var secondForester = (Forester) foresterHut1.getWorker();
 
@@ -2797,6 +2776,8 @@ public class TestForesterHut {
             firstForester.stepTime();
         }
 
+        assertTrue(firstForester.isPlanting());
+
         // Verify that the second forester doesn't go out when the first forester is planting on the only available point to plant
         for (int i = 0; i < 2_000; i++) {
             assertTrue(secondForester.isInsideBuilding());
@@ -2807,13 +2788,8 @@ public class TestForesterHut {
         }
     }
 
-
-
-
-
-
     @Test
-    public void testFarmerDoesNotGoOutToPlantIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
+    public void testForesterDoesNotGoOutToPlantIfFarmerIsAlreadyPlanting() throws InvalidUserActionException {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -2828,10 +2804,6 @@ public class TestForesterHut {
         var flag = map.placeFlag(player0, point1);
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        // Adjust the inventory so it's not possible to send out farmers
-        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
-        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
-
         // Place a farm and a forester hut and connect them to the headquarters
         var point2 = new Point(12, 10);
         var point3 = new Point(16, 10);
@@ -2840,132 +2812,55 @@ public class TestForesterHut {
         var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
         var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
 
-        // Wait for the houses to get constructed but not occupied
+        // Make it impossible for the headquarters to provide foresters or farmers
+        Utils.clearInventory(headquarter0, FORESTER, FARMER, SHOVEL, SCYTHE);
+
+        // Wait for the houses to get constructed
         Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
+
+        // Let the houses get occupied
+        Utils.adjustInventoryTo(headquarter0, FORESTER, 1);
+        Utils.adjustInventoryTo(headquarter0, FARMER, 1);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
+
+        var forester = (Forester) foresterHut.getWorker();
+        var farmer = (Farmer) farm1.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertTrue(farmer.isInsideBuilding());
 
         // Place trees all over the map except for one open point
         var point4 = new Point(14, 12);
 
-        for (var point : Utils.getAllPointsOnMap(map)) {
-            if (point.equals(point4)) {
-                continue;
-            }
-
-            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
-                continue;
-            }
-
-            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        }
+        Utils.fillWithTrees(map, point4);
 
         map.stepTime();
 
-        // Adjust the inventory so it's not possible to send out farmers
-        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
-
-        // Wait for the farms to get occupied
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
-
-        // Let the first farmer go out and start planting. Cheat by only stepping the first farmer's time
-        var forester = (Forester) foresterHut.getWorker();
-        var farmer = (Farmer) farm1.getWorker();
+        // Let the farmer go out and start planting. Cheat by only stepping the farmer's time
+        assertTrue(forester.isInsideBuilding());
+        assertTrue(farmer.isInsideBuilding());
 
         for (int i = 0; i < 2_000; i++) {
-            if (forester.isPlanting()) {
+            if (farmer.isPlanting()) {
                 break;
             }
 
-            forester.stepTime();
+            farmer.stepTime();
         }
 
-        // Verify that the second farmer doesn't go out when the first farmer is planting on the only available point to plant
+        // Verify that the forester doesn't go out when the farmer is planting on the only available point to plant
         for (int i = 0; i < 2_000; i++) {
-            assertTrue(farmer.isInsideBuilding());
-            assertFalse(farmer.isPlanting());
-            assertTrue(forester.isPlanting());
+            assertTrue(farmer.isPlanting());
+            assertTrue(forester.isInsideBuilding());
+            assertFalse(forester.isPlanting());
 
-            farmer.stepTime();
+            forester.stepTime();
         }
     }
 
     @Test
-    public void testFarmerDoesNotStartPlantingIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
-
-        // Start new game with one player only
-        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
-        var map = new GameMap(List.of(player0), 40, 40);
-
-        // Place headquarters
-        var point0 = new Point(12, 6);
-        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
-
-        // Place flag and connect it to the headquarters
-        var point1 = new Point(15, 7);
-        var flag = map.placeFlag(player0, point1);
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
-
-        // Adjust the inventory so it's not possible to send out farmers
-        Utils.adjustInventoryTo(headquarter0, FARMER, 0);
-        Utils.adjustInventoryTo(headquarter0, SCYTHE, 0);
-
-        // Place a farm and a forester hut and connect them to the headquarters
-        var point2 = new Point(12, 10);
-        var point3 = new Point(16, 10);
-        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
-        var farm1 = map.placeBuilding(new Farm(player0), point3);
-        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
-        var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
-
-        // Wait for the houses to get constructed but not occupied
-        Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
-
-        // Place trees all over the map except for one open point
-        var point4 = new Point(14, 12);
-
-        for (var point : Utils.getAllPointsOnMap(map)) {
-            if (point.equals(point4)) {
-                continue;
-            }
-
-            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
-                continue;
-            }
-
-            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        }
-
-        map.stepTime();
-
-        // Adjust the inventory so it's not possible to send out farmers
-        Utils.adjustInventoryTo(headquarter0, FARMER, 2);
-
-        // Wait for the houses to get occupied
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
-
-        // Let the first farmer go out and start planting. Cheat by only stepping the first farmer's time
-        var forester = (Forester) foresterHut.getWorker();
-        var farmer = (Farmer) farm1.getWorker();
-
-        for (int i = 0; i < 2_000; i++) {
-            if (forester.isPlanting()) {
-                break;
-            }
-
-            forester.stepTime();
-        }
-
-        // Verify that the second farmer doesn't go out when the forester is planting on the only available point to plant
-        for (int i = 0; i < 2_000; i++) {
-            assertTrue(farmer.isInsideBuilding());
-            assertFalse(farmer.isPlanting());
-            assertTrue(forester.isPlanting());
-
-            farmer.stepTime();
-        }
-    }
-
-    @Test
-    public void testFarmerGoesBackWithoutPlantingIfForesterIsAlreadyPlanting() throws InvalidUserActionException {
+    public void testForesterGoesBackWithoutPlantingIfFarmerIsAlreadyPlanting() throws InvalidUserActionException {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -2988,98 +2883,94 @@ public class TestForesterHut {
         var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
         var road2 = map.placeAutoSelectedRoad(player0, farm1.getFlag(), flag);
 
-        // Wait for the farms to get constructed but not occupied
+        // Make the headquarters unable to provide a farmer or a forester
+        Utils.clearInventory(headquarter0, FORESTER, SHOVEL, FARMER, SCYTHE);
+
+        // Wait for the farms to get constructed
         Utils.waitForBuildingsToBeConstructed(foresterHut, farm1);
+
+        // Now, populate the buildings
+        Utils.adjustInventoryTo(headquarter0, FORESTER, 1);
+        Utils.adjustInventoryTo(headquarter0, FARMER, 1);
+
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
+
+        var forester = (Forester) foresterHut.getWorker();
+        var farmer = (Farmer) farm1.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertTrue(farmer.isInsideBuilding());
 
         // Place trees all over the map except for one open point
         var point4 = new Point(14, 12);
 
-        for (var point : Utils.getAllPointsOnMap(map)) {
-            if (point.equals(point4)) {
-                continue;
-            }
-
-            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point)) {
-                continue;
-            }
-
-            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
-        }
+        Utils.fillWithTrees(map, point4);
 
         map.stepTime();
 
-        // Wait for the farms to get occupied
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut, farm1);
-
-        // Let the farmer go out to plant. Cheat by only stepping its time
-        var farmer = (Farmer) farm1.getWorker();
-
+        // Let the forester go out to plant. Cheat by only stepping its time
         for (int i = 0; i < 2_000; i++) {
-            if (!farmer.isInsideBuilding()) {
-                break;
-            }
-
-            farmer.stepTime();
-        }
-
-        assertFalse(farmer.isInsideBuilding());
-
-        // Let the forester go out and start planting. Cheat by only stepping its time
-        var forester = (Forester) foresterHut.getWorker();
-
-        for (int i = 0; i < 2_000; i++) {
-            if (forester.isPlanting()) {
+            if (!forester.isInsideBuilding()) {
                 break;
             }
 
             forester.stepTime();
         }
 
-        assertTrue(forester.isPlanting());
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), point4);
+
+        // Let the farmer go out and start planting. Cheat by only stepping its time
+        for (int i = 0; i < 2_000; i++) {
+            if (farmer.isPlanting()) {
+                break;
+            }
+
+            farmer.stepTime();
+        }
+
+        assertTrue(farmer.isPlanting());
+        assertEquals(farmer.getPosition(), point4);
+        assertFalse(forester.isInsideBuilding());
+
+        // Let the forester reach the point to plant at. Cheat by only stepping its time
+        assertEquals(forester.getTarget(), point4);
+
+        for (int i = 0; i < 2_000; i++) {
+            if (forester.getPosition().equals(point4)) {
+                break;
+            }
+
+            assertEquals(forester.getTarget(), point4);
+
+            forester.stepTime();
+        }
+
         assertEquals(forester.getPosition(), point4);
 
-        // Let the farmer reach the point to plant at. Cheat by only stepping its time
+        // Verify that the forester goes home and doesn't plant
+        assertFalse(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
+        assertEquals(forester.getTarget(), forester.getHome().getPosition());
+        assertTrue(farmer.isPlanting());
+
         for (int i = 0; i < 2_000; i++) {
-            if (!farmer.isInsideBuilding()) {
+            if (forester.getPosition().equals(forester.getHome().getPosition())) {
                 break;
             }
 
-            farmer.stepTime();
-        }
-
-        assertFalse(farmer.isInsideBuilding());
-        assertEquals(farmer.getTarget(), point4);
-
-        for (int i = 0; i < 2_000; i++) {
-            if (farmer.getPosition().equals(point4)) {
-                break;
-            }
-
-            farmer.stepTime();
-        }
-
-        // Verify that the farmer goes home and doesn't plant
-        assertFalse(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
-        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
-
-        for (int i = 0; i < 2_000; i++) {
-            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
-                break;
-            }
-
-            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
-            assertFalse(farmer.isPlanting());
+            assertEquals(forester.getTarget(), forester.getHome().getPosition());
+            assertFalse(forester.isPlanting());
 
             map.stepTime();
         }
 
-        assertTrue(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
     }
 
     @Test
-    public void testFarmerGoesBackWithoutPlantingIfFlagHasBeenPlaced() throws InvalidUserActionException {
+    public void testForesterGoesBackWithoutPlantingIfFlagHasBeenPlaced() throws InvalidUserActionException {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -3094,58 +2985,59 @@ public class TestForesterHut {
         var flag = map.placeFlag(player0, point1);
         var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        // Place two farms and connect them to the headquarters
+        // Place a forester hut and connect it to the headquarters
         var point2 = new Point(12, 10);
-        var farm = map.placeBuilding(new Farm(player0), point2);
-        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), flag);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), flag);
 
-        // Wait for the farm to get constructed but not occupied
-        Utils.waitForBuildingsToBeConstructed(farm);
+        // Wait for the forester hut to get constructed but not occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut);
 
-        // Wait for the farm to get occupied
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+        // Wait for the forester hut to get occupied
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut);
 
-        // Wait for the farmer to go out to plant at a point where a flag can be placed
-        var farmer = (Farmer) farm.getWorker();
+        // Wait for the forester to go out to plant at a point where a flag can be placed
+        var forester = (Forester) foresterHut.getWorker();
 
         for (int i = 0; i < 20_000; i++) {
-            if (!farmer.isInsideBuilding() && map.isAvailableFlagPoint(player0, farmer.getTarget())) {
+            if (!forester.isInsideBuilding() && map.isAvailableFlagPoint(player0, forester.getTarget())) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(map.isAvailableFlagPoint(player0, farmer.getTarget()));
-        assertFalse(farmer.isInsideBuilding());
+        assertTrue(map.isAvailableFlagPoint(player0, forester.getTarget()));
+        assertFalse(forester.isInsideBuilding());
 
-        // Place a flag on the point where the farmer is planning to plant
-        map.placeFlag(player0, farmer.getTarget());
+        // Place a flag on the point where the forester is planning to plant
+        map.placeFlag(player0, forester.getTarget());
 
-        // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        // Verify that the forester doesn't start planting and instead goes back to its home
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
-        assertFalse(farmer.isPlanting());
-        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+        assertFalse(forester.isPlanting());
+        assertEquals(forester.getTarget(), forester.getHome().getPosition());
 
         for (int i = 0; i < 2_000; i++) {
-            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
+            if (forester.getPosition().equals(forester.getHome().getPosition())) {
                 break;
             }
 
-            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
-            assertFalse(farmer.isPlanting());
+            assertEquals(forester.getTarget(), forester.getHome().getPosition());
+            assertFalse(forester.isPlanting());
 
             map.stepTime();
         }
 
-        assertTrue(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
     }
 
+    // TODO: update to be about a forester...
     @Test
-    @Ignore("For now there is no possibility to place a building where a farmer may go out to plant")
-    public void testFarmerGoesBackWithoutPlantingIfHouseHasBeenPlaced() throws InvalidUserActionException {
+    @Ignore("For now there is no possibility to place a building where a forester may go out to plant")
+    public void testForesterGoesBackWithoutPlantingIfHouseHasBeenPlaced() throws InvalidUserActionException {
 
         // Start new game with one player only
         var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
@@ -3217,39 +3109,50 @@ public class TestForesterHut {
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        var point0 = new Point(12, 6);
+        var point0 = new Point(12, 12);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place flag and connect it to the headquarters
-        var point1 = new Point(15, 7);
-        var flag = map.placeFlag(player0, point1);
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+        // Place a forester hut and connect it to the headquarters
+        var point1 = new Point(12, 16);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+        var road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
 
-        // Place a farm and connect it to the headquarters
-        var point2 = new Point(12, 10);
-        var farm = map.placeBuilding(new Farm(player0), point2);
-        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), flag);
+        // Wait for the forester hut to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut);
 
-        // Wait for the farm to get constructed and occupied
-        Utils.waitForBuildingsToBeConstructed(farm);
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+        // Place trees on all points outside the player's land, including the border
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (player0.getOwnedLand().contains(point) && !player0.getBorderPoints().contains(point)) {
+                continue;
+            }
 
-        // Wait for the farmer to go out to plant at a point where a flag can be placed
-        var farmer = (Farmer) farm.getWorker();
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
+
+        // Wait for the forester to go out to plant at a point where a road can be placed
+        var forester = (Forester) foresterHut.getWorker();
 
         for (int i = 0; i < 2_000; i++) {
-            if (!farmer.isInsideBuilding()) {
+            if (!forester.isInsideBuilding()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertFalse(farmer.isInsideBuilding());
+        assertFalse(forester.isInsideBuilding());
 
-        // Place a road that covers the point the farmer is going to
-        var part0 = map.findAutoSelectedRoad(player0, headquarter0.getFlag().getPosition(), farmer.getTarget(), null);
-        var part1 = map.findAutoSelectedRoad(player0, farmer.getTarget(), farm.getFlag().getPosition(), null);
+        // Place a road that covers the point the forester is going to
+        var part0 = map.findAutoSelectedRoad(player0, headquarter0.getFlag().getPosition(), forester.getTarget(), null);
+
+        var avoid = (List<Point>) null;
+
+        if (part0.size() > 2) {
+            avoid = part0.subList(1, part0.size() - 2);
+        }
+
+        var part1 = map.findAutoSelectedRoad(player0, forester.getTarget(), foresterHut.getFlag().getPosition(), new HashSet<>(avoid));
 
         assertNotNull(part0);
         assertNotNull(part1);
@@ -3259,27 +3162,27 @@ public class TestForesterHut {
 
         var road2 = map.placeRoad(player0, part0);
 
-        assertTrue(map.isRoadAtPoint(farmer.getTarget()));
+        assertTrue(map.isRoadAtPoint(forester.getTarget()));
 
-        // Verify that the farmer doesn't start planting and instead goes back to its home
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        // Verify that the forester doesn't start planting and instead goes back to its home
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
-        assertFalse(farmer.isPlanting());
-        assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
+        assertFalse(forester.isPlanting());
+        assertEquals(forester.getTarget(), forester.getHome().getPosition());
 
         for (int i = 0; i < 2_000; i++) {
-            if (farmer.getPosition().equals(farmer.getHome().getPosition())) {
+            if (forester.getPosition().equals(forester.getHome().getPosition())) {
                 break;
             }
 
-            assertEquals(farmer.getTarget(), farmer.getHome().getPosition());
-            assertFalse(farmer.isPlanting());
+            assertEquals(forester.getTarget(), forester.getHome().getPosition());
+            assertFalse(forester.isPlanting());
 
             map.stepTime();
         }
 
-        assertTrue(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
     }
 
     @Test
@@ -3293,49 +3196,57 @@ public class TestForesterHut {
         var point0 = new Point(12, 6);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place a farm and connect it to the headquarters
+        // Place a forester hut and connect it to the headquarters
         var point2 = new Point(12, 10);
-        var farm = map.placeBuilding(new Farm(player0), point2);
-        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter0.getFlag());
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
 
-        // Wait for the farm to get constructed and occupied
-        Utils.waitForBuildingsToBeConstructed(farm);
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+        // Wait for the forester hut to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut);
 
-        // Wait for the farmer to reach the target and start planting
-        var farmer = (Farmer) farm.getWorker();
+        // Place trees on all points outside the player's land, including the border
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (player0.getOwnedLand().contains(point) && !player0.getBorderPoints().contains(point)) {
+                continue;
+            }
 
-        Utils.waitForWorkerToBeOutside(farmer, map);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        // Wait for the forester to reach the target and start planting
+        var forester = (Forester) foresterHut.getWorker();
 
-        assertTrue(farmer.isPlanting());
+        Utils.waitForWorkerToBeOutside(forester, map);
 
-        // Place flag where the farmer is planting
-        var flag1 = map.placeFlag(player0, farmer.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
-        // Verify that the farmer doesn't plant and instead goes back to the farm when it's done planting
+        assertTrue(forester.isPlanting());
+
+        // Place flag where the forester is planting
+        var flag1 = map.placeFlag(player0, forester.getPosition());
+
+        // Verify that the forester doesn't plant and instead goes back to the forester hut when it's done planting
         for (int i = 0; i < 2_000; i++) {
-            assertTrue(map.isFlagAtPoint(farmer.getPosition()));
-            assertFalse(map.isCropAtPoint(farmer.getPosition()));
+            assertTrue(map.isFlagAtPoint(forester.getPosition()));
+            assertFalse(map.isTreeAtPoint(forester.getPosition()));
 
-            if (!farmer.isPlanting()) {
+            if (!forester.isPlanting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(map.isFlagAtPoint(farmer.getPosition()));
-        assertFalse(map.isCropAtPoint(farmer.getPosition()));
-        assertEquals(farmer.getTarget(), farm.getPosition());
+        assertTrue(map.isFlagAtPoint(forester.getPosition()));
+        assertFalse(map.isTreeAtPoint(forester.getPosition()));
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
 
-        assertTrue(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
     }
-
 
     @Test
     public void testRoadIsPlacedDuringPlanting() throws InvalidUserActionException {
@@ -3345,35 +3256,46 @@ public class TestForesterHut {
         var map = new GameMap(List.of(player0), 40, 40);
 
         // Place headquarters
-        var point0 = new Point(12, 6);
+        var point0 = new Point(12, 12);
         var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        // Place flag and connect it to the headquarters
-        var point1 = new Point(15, 7);
-        var flag = map.placeFlag(player0, point1);
-        var road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+        // Place a foresterHut and connect it to the headquarters
+        var point2 = new Point(12, 16);
+        var foresterHut = map.placeBuilding(new ForesterHut(player0), point2);
+        var road1 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter0.getFlag());
 
-        // Place a farm and connect it to the headquarters
-        var point2 = new Point(12, 10);
-        var farm = map.placeBuilding(new Farm(player0), point2);
-        var road1 = map.placeAutoSelectedRoad(player0, farm.getFlag(), flag);
+        // Place trees on all points outside the player's land, including the border
+        for (var point : Utils.getAllPointsOnMap(map)) {
+            if (player0.getOwnedLand().contains(point) && !player0.getBorderPoints().contains(point)) {
+                continue;
+            }
 
-        // Wait for the farm to get constructed and occupied
-        Utils.waitForBuildingsToBeConstructed(farm);
-        Utils.waitForNonMilitaryBuildingsToGetPopulated(farm);
+            map.placeTree(point, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+        }
 
-        // Wait for the farmer to start planting at a point where a road can be placed
-        var farmer = (Farmer) farm.getWorker();
+        // Wait for the foresterHut to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(foresterHut);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(foresterHut);
 
-        Utils.waitForWorkerToBeOutside(farmer, map);
+        // Wait for the forester to start planting at a point where a road can be placed
+        var forester = (Forester) foresterHut.getWorker();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farmer.getTarget());
+        Utils.waitForWorkerToBeOutside(forester, map);
 
-        assertTrue(farmer.isPlanting());
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, forester.getTarget());
 
-        // Place a road that covers the point the farmer is at
-        var part0 = map.findAutoSelectedRoad(player0, headquarter0.getFlag().getPosition(), farmer.getPosition(), null);
-        var part1 = map.findAutoSelectedRoad(player0, farmer.getPosition(), farm.getFlag().getPosition(), null);
+        assertTrue(forester.isPlanting());
+
+        // Place a road that covers the point the forester is at
+        var part0 = map.findAutoSelectedRoad(player0, headquarter0.getFlag().getPosition(), forester.getPosition(), null);
+
+        var avoid = (List<Point>) null;
+
+        if (part0.size() > 2) {
+            avoid = part0.subList(1, part0.size() - 2);
+        }
+
+        var part1 = map.findAutoSelectedRoad(player0, forester.getPosition(), foresterHut.getFlag().getPosition(), new HashSet<>(avoid));
 
         assertNotNull(part0);
         assertNotNull(part1);
@@ -3383,27 +3305,27 @@ public class TestForesterHut {
 
         var road2 = map.placeRoad(player0, part0);
 
-        assertTrue(map.isRoadAtPoint(farmer.getPosition()));
+        assertTrue(map.isRoadAtPoint(forester.getPosition()));
 
-        // Verify that the farmer doesn't plant and instead goes back to the farm when it's done planting
+        // Verify that the forester doesn't plant and instead goes back to the foresterHut when it's done planting
         for (int i = 0; i < 2_000; i++) {
-            assertTrue(map.isRoadAtPoint(farmer.getPosition()));
-            assertFalse(map.isCropAtPoint(farmer.getPosition()));
+            assertTrue(map.isRoadAtPoint(forester.getPosition()));
+            assertFalse(map.isTreeAtPoint(forester.getPosition()));
 
-            if (!farmer.isPlanting()) {
+            if (!forester.isPlanting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(map.isRoadAtPoint(farmer.getPosition()));
-        assertFalse(map.isCropAtPoint(farmer.getPosition()));
-        assertEquals(farmer.getTarget(), farm.getPosition());
+        assertTrue(map.isRoadAtPoint(forester.getPosition()));
+        assertFalse(map.isTreeAtPoint(forester.getPosition()));
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
 
-        assertTrue(farmer.isInsideBuilding());
-        assertFalse(farmer.isPlanting());
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(forester.isPlanting());
     }
 }

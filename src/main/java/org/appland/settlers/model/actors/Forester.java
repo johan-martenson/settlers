@@ -96,9 +96,12 @@ public class Forester extends Worker {
             }
 
             if (map.getWorkers().stream()
-                    .anyMatch(worker -> worker instanceof Forester forester &&
+                    .anyMatch(worker -> (worker instanceof Forester forester &&
                             Objects.equals(forester.position, point) &&
-                            forester.isPlanting())) {
+                            forester.isPlanting()) ||
+                            (worker instanceof Farmer farmer &&
+                            Objects.equals(farmer.position, point) &&
+                            farmer.isPlanting()))) {
                 continue;
             }
 
@@ -187,8 +190,12 @@ public class Forester extends Worker {
         switch (state) {
             case GOING_OUT_TO_PLANT -> {
                 if (map.getWorkers().stream()
-                        .noneMatch(worker -> worker instanceof Forester forester &&
-                                (forester.isPlanting() && Objects.equals(forester.position, position)))) {
+                        .noneMatch(worker -> (worker instanceof Forester forester &&
+                                (forester.isPlanting() && Objects.equals(forester.position, position))) ||
+                                (worker instanceof Farmer farmer &&
+                                farmer.isPlanting() && Objects.equals(farmer.position, position))) &&
+                !map.isFlagAtPoint(position) &&
+                !map.isRoadAtPoint(position)) {
                     state = State.PLANTING;
                     map.reportWorkerStartedAction(this, WorkerAction.PLANTING_TREE);
                     countdown.countFrom(TIME_TO_PLANT);
