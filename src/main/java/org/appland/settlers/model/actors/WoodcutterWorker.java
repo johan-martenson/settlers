@@ -12,6 +12,8 @@ import org.appland.settlers.model.buildings.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WorkerAction;
 
+import java.util.Objects;
+
 import static java.lang.String.format;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
@@ -39,6 +41,10 @@ public class WoodcutterWorker extends Worker {
                 .map(map::getTreeAtPoint)
                 .filter(tree -> TREE_TYPES_THAT_CAN_BE_CUT_DOWN.contains(tree.getTreeType()))
                 .filter(tree -> tree.getSize() == Tree.TreeSize.FULL_GROWN)
+                .filter(tree -> map.getWorkers().stream()
+                        .noneMatch(worker -> worker instanceof WoodcutterWorker woodcutterWorker
+                                && woodcutterWorker.getPosition().equals(tree.getPosition())
+                                && woodcutterWorker.isCuttingTree()))
                 .map(Tree::getPosition)
                 .filter(position -> map.findWayOffroad(position, home.getFlag().getPosition(), null) != null)
                 .findFirst()
@@ -205,9 +211,19 @@ public class WoodcutterWorker extends Worker {
             }
 
             case GOING_OUT_TO_CUT_TREE -> {
-                state = State.CUTTING_TREE;
-                map.reportWorkerStartedAction(this, WorkerAction.CUTTING);
-                countdown.countFrom(TIME_TO_CUT_TREE);
+                if (map.getWorkers().stream()
+                        .noneMatch(worker -> worker instanceof WoodcutterWorker woodcutterWorker
+                        && Objects.equals(woodcutterWorker.position, position)
+                        && woodcutterWorker.isCuttingTree())) {
+                    state = State.CUTTING_TREE;
+                    map.reportWorkerStartedAction(this, WorkerAction.CUTTING);
+                    countdown.countFrom(TIME_TO_CUT_TREE);
+                } else {
+                    state = State.GOING_BACK_TO_HOUSE;
+                    setOffroadTarget(home.getPosition());
+
+                    // TODO: handle productivity reporting
+                }
             }
 
             case GOING_BACK_TO_HOUSE_WITH_CARGO -> {

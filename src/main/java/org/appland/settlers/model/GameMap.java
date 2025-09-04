@@ -953,7 +953,7 @@ public class GameMap {
 
         // Destroy buildings now outside their player's borders
 
-        // Go through all buildings and tear down those that are outside of their player's land
+        // Go through all buildings and tear down those that are outside their player's land
         // Note: this is done in two steps to avoid modifying the 'buildings' list while iterating over it
         var buildingsToTearDown = buildings.stream()
                 .filter(building -> !building.isBurningDown())

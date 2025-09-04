@@ -3466,4 +3466,146 @@ public class TestWoodcutter {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testWoodcutterDoesNotGoOutToCutDownTreeThatIsAlreadyBeingCutDown() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place two woodcutters and connect them to the headquarters
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), headquarter0.getFlag());
+
+        // Place a single tree for both woodcutters
+        var point4 = new Point(12, 10);
+
+        map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+
+        // Wait for the farms to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(woodcutter0, woodcutter1);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(woodcutter0, woodcutter1);
+
+        // Wait for the first woodcutter worker to start cutting down the tree
+        var woodcutterWorker0 = (WoodcutterWorker) woodcutter0.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (woodcutterWorker0.isCuttingTree()) {
+                break;
+            }
+
+            woodcutterWorker0.stepTime();
+        }
+
+        assertTrue(woodcutterWorker0.isCuttingTree());
+
+        // Verify that the second woodcutterWorker0 doesn't go out to cut down the tree. Cheat by only stepping its time.
+        var woodcutterWorker1 = (WoodcutterWorker) woodcutter1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            assertFalse(woodcutterWorker1.isCuttingTree());
+            assertTrue(woodcutterWorker0.isCuttingTree());
+
+            woodcutterWorker1.stepTime();
+        }
+    }
+
+    @Test
+    public void testWoodcutterDoesNotCutDownTreeThatIsAlreadyBeingCutDown() throws InvalidUserActionException {
+
+        // Start new game with one player only
+        var player0 = new Player("Player 0", PlayerColor.BLUE, Nation.ROMANS, PlayerType.HUMAN);
+        var map = new GameMap(List.of(player0), 40, 40);
+
+        // Place headquarters
+        var point0 = new Point(12, 6);
+        var headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        // Place two woodcutters and connect them to the headquarters
+        var point2 = new Point(10, 10);
+        var point3 = new Point(14, 10);
+        var woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        var woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
+        var road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+        var road2 = map.placeAutoSelectedRoad(player0, woodcutter1.getFlag(), headquarter0.getFlag());
+
+        // Place one tree for them to want to cut down
+        var point4 = new Point(12, 10);
+
+        map.placeTree(point4, Tree.TreeType.PINE, Tree.TreeSize.FULL_GROWN);
+
+        // Wait for the woodcutters to get constructed and occupied
+        Utils.waitForBuildingsToBeConstructed(woodcutter0, woodcutter1);
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(woodcutter0, woodcutter1);
+
+        var woodcutterWorker0 = (WoodcutterWorker) woodcutter0.getWorker();
+
+        // Wait for the second woodcutter worker to go out to cut down the tree. Cheat by only stepping its time
+        var woodcutterWorker1 = (WoodcutterWorker) woodcutter1.getWorker();
+
+        for (int i = 0; i < 2_000; i++) {
+            if (!woodcutterWorker1.isInsideBuilding()) {
+                break;
+            }
+
+            woodcutterWorker1.stepTime();
+        }
+
+        assertFalse(woodcutterWorker1.isInsideBuilding());
+        assertEquals(woodcutterWorker1.getTarget(), point4);
+
+        // Wait for the first woodcutter worker to start cutting down the tree. Cheat by only stepping its time
+        for (int i = 0; i < 2_000; i++) {
+            if (woodcutterWorker0.isCuttingTree()) {
+                break;
+            }
+
+            woodcutterWorker0.stepTime();
+        }
+
+        assertTrue(woodcutterWorker0.isCuttingTree());
+        assertEquals(woodcutterWorker0.getPosition(), point4);
+
+        // Verify that the second woodcutter worker doesn't start cutting down the tree and instead goes back home.
+        // Cheat by only stepping its time.
+        for (int i = 0; i < 2_000; i++) {
+            if (woodcutterWorker1.getPosition().equals(point4)) {
+                break;
+            }
+
+            assertEquals(woodcutterWorker1.getTarget(), point4);
+
+            woodcutterWorker1.stepTime();
+        }
+
+        assertTrue(woodcutterWorker0.isCuttingTree());
+        assertEquals(woodcutterWorker0.getPosition(), point4);
+        assertEquals(woodcutterWorker1.getPosition(), point4);
+        assertFalse(woodcutterWorker1.isCuttingTree());
+        assertEquals(woodcutterWorker1.getTarget(), woodcutter1.getPosition());
+
+        for (int i = 0; i < 2_000; i++) {
+            if (woodcutterWorker1.isInsideBuilding()) {
+                break;
+            }
+
+            assertFalse(woodcutterWorker1.isCuttingTree());
+            assertEquals(woodcutterWorker1.getTarget(), woodcutter1.getPosition());
+
+            woodcutterWorker1.stepTime();
+        }
+
+        assertTrue(woodcutterWorker1.isInsideBuilding());
+        assertFalse(woodcutterWorker1.isCuttingTree());
+        assertEquals(woodcutterWorker1.getPosition(), woodcutter1.getPosition());
+    }
 }
